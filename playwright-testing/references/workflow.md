@@ -1,0 +1,103 @@
+# Playwright Workflow
+
+Write → Review → Execute → Heal. The full test automation cycle.
+
+## 1. Code Writer
+
+Generate Playwright test files from architecture design.
+
+**Input:** Architecture Design + Test Structure Blueprint from implementation plan.
+
+**Steps:**
+
+1. Read coding rules from `playwright-rules` skill (api.md or webUi.md + coding-standards.md)
+2. Read architecture and test structure blueprint from implementation plan
+3. Generate fixtures — `[feature]Data.ts` with environment-specific data
+4. Generate schemas — `[feature]Schema.ts` (API mode)
+5. Generate helpers/pages — implement exactly as designed in architecture
+6. Generate spec files — AAA pattern, mandatory tags, test.step()
+7. Update package.json — 4 scripts per feature (SIT/UAT × CLI/GUI)
+
+**Naming:** Folders kebab-case, files lowerCamelCase.
+
+**Folder Structure (MANDATORY):**
+```
+tests/api-testing/
+├── tests-api/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/[systemFeature].spec.ts
+├── helpers/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/[systemFeature]Helper.ts
+├── schemas/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/[systemFeature]Schema.ts
+└── fixtures/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/[systemFeature]Data.ts
+
+tests/web-testing/
+├── tests-web/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/[systemFeature].spec.ts
+├── pages/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/[SystemFeature]Page.ts
+├── helpers/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/[systemFeature]Helper.ts
+└── fixtures/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/[systemFeature]Data.ts
+```
+- `[SYSTEM_KEBAB]` = system name in kebab-case (e.g., `shopee`)
+- `[SYSTEM_FEATURE_KEBAB]` = feature name in kebab-case (e.g., `shopee-payment`)
+- `[systemFeature]` = feature name in lowerCamelCase (e.g., `shopeePayment`)
+- MUST follow this structure — do not flatten or skip levels
+
+**Forbidden:**
+
+- `waitForTimeout()` — use smart waits
+- Hardcoded credentials — use `.env`
+- CSS/XPath in UI mode — use `getByRole` priority
+- `nth()`/`first()` — use `filter({ hasText: '...' })`
+- Hardcoded test data in spec — use fixtures
+
+## 2. Code Review
+
+Static quality audit before execution — no running tests.
+
+**Check against:**
+
+- `playwright-rules` skill compliance (all parts)
+- Architecture matches blueprint
+- DB methods follow strategy (seed/verify/cleanup)
+- No forbidden patterns
+- JSDoc comments present
+- Package.json scripts complete
+
+**Output:** APPROVED or NEEDS_FIX with issue list (severity, file, line, suggestion).
+
+## 3. Test Execution
+
+Run tests and capture results.
+
+**Steps:**
+
+1. Verify test file exists and Playwright is installed
+2. Run with `--reporter=line` (minimal output)
+3. Parse JSON report — total, passed, failed, error messages
+4. If failures → trigger healer (max 3 attempts, extend to 5 if >80% pass)
+5. Record lessons to Reflexion Log — only technical patterns, ignore env issues
+
+## 4. Self-Healing (Reflexion Pattern)
+
+Analyze failures and auto-fix code.
+
+**Process:** Reflect → Hypothesize → Correct → Verify
+
+**Error triage:**
+
+- Environment (skip): 500 errors, VPN, connection refused
+- Code (heal): element not found, assertion failed, timeout (selector)
+
+**Fix by error type:**
+
+| Error | Fix |
+|-------|-----|
+| Element not found | Check locator priority, use Browser Subagent Screenshot to verify case-sensitivity and nested modal layers. |
+| Timeout | Add waitForResponse, increase timeout |
+| Click intercepted | Close modal first, scroll into view |
+| Assertion failed | Verify test data, add waitFor assertion |
+| Flaky | Use fixed seed, mock external APIs |
+
+**Rules:**
+
+- Max 3 attempts per test
+- Never delete functions or change architecture
+- Check impact before fixing shared code
+- Log every fix attempt (healed or failed)
