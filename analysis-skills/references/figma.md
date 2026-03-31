@@ -14,7 +14,14 @@ Extract UI components, interactions, and test implications from Figma designs or
 4. **Map interactions** — click, submit, navigate, hover, drag
 5. **Identify states** — default, loading, error, success, empty
 6. **Map to business rules** — which UI element enforces which rule?
-7. **Simulate errors** — what happens on network failure, slow load, empty data?
+
+| UI Element | Visual State | Business Rule |
+|------------|-------------|---------------|
+| Submit button | Disabled when form invalid | Validation required before submit |
+| Price field | Red when negative | Price must be >= 0 |
+| Status badge | Green/Yellow/Red | Maps to Active/Pending/Inactive |
+
+7. **Simulate errors** — what happens on network failure, slow load, empty data, concurrent edit?
 
 ## Output
 ```

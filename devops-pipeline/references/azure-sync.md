@@ -15,10 +15,17 @@ Auto-create work items, tasks, and test cases in DevOps via MCP.
 6. Validate all items exist via MCP query
 
 ## Field mapping
-- Follow `azureDevOpsFieldMapping.json` for all field transformations
-- Multi-line fields: use `<br>` tags for line breaks
+- Follow `azure-devops-field-mapping.json` (in this skill's references/) for all field transformations
+- Customize field names per project's Azure DevOps process template
 - Priority mapping: Critical=1, High=2, Medium=3, Low=4
 - Automation status: Automatable → Planned
+
+## HTML Formatting Rules (for multi-line fields)
+- `\n` → `<br>`
+- `- item` → `<br>• item`
+- `* item` → `<br>• item`
+- Numbered lists: preserve as-is
+- Never use raw `\n` in field values — always convert to `<br>`
 
 ## Rules
 - MCP required — if unavailable, skip gracefully

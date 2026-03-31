@@ -27,7 +27,7 @@ Structured decision-making with mandatory user approval at every phase.
 
 | User says | Action |
 |-----------|--------|
-| "yes", "proceed", "approved" | Continue |
-| "1", "A", "B" | Use selected option |
-| "yes but..." | Address condition first |
-| "no", "wait" | Stop and clarify |
+| "yes", "proceed", "approved", "ได้", "โอเค", "อนุมัติ", "ตกลง", "เอา" | Continue |
+| "1", "A", "B", "เลือก A", "เอา B" | Use selected option |
+| "yes but...", "ได้ แต่...", "โอเค แต่..." | Address condition first |
+| "no", "wait", "ไม่", "รอก่อน", "ยังไม่", "แก้ก่อน" | Stop and clarify |

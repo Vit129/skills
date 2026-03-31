@@ -1,6 +1,6 @@
 # Logical Design
 
-Transform domain design into technical specifications: API contracts, DB schemas, and frontend specs.
+Transform domain design into technical specifications: service contracts, data storage schemas, and client application specs.
 
 ## When to use
 
@@ -9,21 +9,56 @@ Transform domain design into technical specifications: API contracts, DB schemas
 
 ## How it works
 
-1. **Map user stories to technical components** — API endpoints, UI components, data models. Mark MVP vs future
-2. **Design backend per endpoint:**
-   - Method, path, purpose, user story reference
+1. **Map user stories to technical components** — service endpoints, UI components, data models. Mark MVP vs future
+2. **Design server logic per endpoint/function:**
+   - Method, path/trigger, purpose, user story reference
    - Request schema with validation rules
    - Success response schema
    - Error responses (400, 401, 403, 404, 409, 500)
    - Sequence diagram (mermaid)
    - Test case checklist (success + error cases)
-3. **Design data models** — entities, relationships, constraints
-4. **Design frontend per user story** — components, forms, navigation, state management
+3. **Design data storage** — entities, relationships, constraints (SQL tables, NoSQL collections, spreadsheet tabs, etc.)
+4. **Design client application per user story** — components, forms, navigation, state management
 
-## Output per endpoint
+## Multi-Platform Projects
+
+When project has multiple client platforms (e.g., Web + Mobile):
+
+1. **Shared specs** — API contracts and data storage are shared across platforms (design once)
+2. **Platform-specific specs** — each platform gets its own client application section:
 
 ```text
-POST /api/[resource]
+## Client Application — Web (React)
+- Components: [list per user story]
+- Pages: [list per user story]
+- State management: [approach]
+- Responsive breakpoints: [if applicable]
+
+## Client Application — Mobile (Flutter/React Native)
+- Screens: [list per user story]
+- Navigation: [stack/tab structure]
+- Platform differences: [iOS vs Android specifics]
+- Offline support: [if applicable]
+```
+
+3. **Cross-platform shared logic** — identify reusable logic (validation rules, business calculations, API calls) that should be shared or duplicated
+4. **Test implications** — note which features need testing on which platforms (API-only, Web-only, Mobile-only, or all)
+
+## Adapt to project type
+
+| Project Type | Server Logic | Data Storage | Client Application |
+|---|---|---|---|
+| Traditional (REST + SQL) | API endpoints | DB schemas + migrations | React/Vue/Angular components |
+| Serverless (Cloud Functions) | Function triggers | NoSQL / managed DB | Web or mobile components |
+| Spreadsheet-backed | GAS doGet/doPost | Spreadsheet tab structure | Web components + LocalStorage |
+| Frontend-only | External API calls | LocalStorage / IndexedDB | SPA components |
+
+Use the row that matches your project. Skip sections that don't apply (e.g., no server logic for frontend-only).
+
+## Output per endpoint/function
+
+```text
+POST /api/[resource]  (or GAS doPost action=[action])
 - Purpose: [what it does]
 - Story: US-001
 - Request: { field1: string (required), field2: number }
@@ -44,5 +79,5 @@ POST /api/[resource]
 ## Rules
 
 - Full coverage — no orphan user stories
-- Both backend AND frontend must be specified
+- Both server logic AND client application must be specified (skip server logic only if frontend-only project)
 - MVP scope must be explicit

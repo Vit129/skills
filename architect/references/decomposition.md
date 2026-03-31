@@ -15,13 +15,24 @@ Define bounded contexts and choose the right architecture pattern before any tec
 4. **Choose architecture pattern:**
    - Monolith — single codebase, shared DB (small teams, simple systems)
    - Microservices — multiple services, DB per service (large teams, high scale)
-5. **Choose multi-tenancy strategy:**
-   - Single-tenant — user-level isolation
-   - Multi-tenant shared DB — org-level isolation (typical SaaS)
+5. **Choose multi-tenancy strategy (if applicable):**
+
+| Strategy | Isolation | Cost | Complexity | When to use |
+|----------|-----------|------|------------|-------------|
+| Single-Tenant | Highest | High (1 DB per tenant) | Low per tenant, high ops | Enterprise, strict compliance |
+| Shared DB + Row-Level | Low | Low | Medium (tenant_id everywhere) | SaaS, cost-sensitive |
+| Schema-per-Tenant | Medium | Medium | Medium (migration per schema) | Balance isolation + cost |
+
+If project doesn't need multi-tenancy → skip this step.
    - Multi-tenant schema per tenant — highest isolation (regulatory)
 6. **Define bounded contexts** — name, responsibilities, key entities, data ownership
-7. **Map relationships** — upstream/downstream, shared kernel, anti-corruption layer
-8. **Verify coverage** — every user story must be assigned to a context, no orphans
+7. **Prioritize contexts** — implementation order:
+   - Core Business (revenue-generating) → first
+   - Data-Heavy (complex queries, reporting) → second
+   - Integration (external APIs, third-party) → third
+   - Supporting (admin, config, logging) → last
+8. **Map relationships** — upstream/downstream, shared kernel, anti-corruption layer
+9. **Verify coverage** — every user story must be assigned to a context, no orphans
 
 ## Output
 

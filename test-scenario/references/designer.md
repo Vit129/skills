@@ -23,6 +23,28 @@ Generate detailed test scenarios using AI reasoning (CoT).
 ## Content language
 All content (Title, Pre_conditions, Test Steps, Expected Result) in Thai. Technical terms allowed.
 
+## HTML Format (for Azure DevOps CSV import)
+
+- Pre_conditions: use `<ul><li>...</li></ul>` for lists
+- Test Steps: use `<br>` for line breaks between steps
+- Expected Result: use `<br>` for line breaks
+
+## Tester Assignment
+
+Read `qaAssignTo.json` (if exists in project) for tester email mapping.
+If not found → use default or ask user.
+
+## Edge Case Types
+
+Include these edge case categories in Batch 3:
+- BVA (Boundary Value Analysis): min, max, min-1, max+1
+- Null/Empty: null, empty string, whitespace
+- Special Characters: Thai, emoji, SQL injection, XSS
+- Concurrency: simultaneous edits, race conditions
+- Temporal Mismatch: timezone differences, expired sessions, stale data
+- Semantic Equivalence: different inputs that should produce same result
+- Rollback: what happens if operation fails midway?
+
 ## Rules
 - Never proceed without user approval per batch
 - API + UI scenarios must be separate items (paired design)

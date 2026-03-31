@@ -15,6 +15,19 @@ Map business logic across domains and find reusable patterns.
 5. **Assess impact** — what can be reused in design, data, and implementation?
 6. **Classify logic** — common (works in any industry) vs specific (needs business context)
 
+## Common vs Specific Classification
+
+For each piece of logic, ask 3 questions:
+- Q1: Does this work in any industry without modification? → Common
+- Q2: Does it need business context to make sense? → Specific
+- Q3: Is it tied to company-specific rules or regulations? → Highly Specific
+
+| Answer | Classification | Example |
+|--------|---------------|---------|
+| Q1 = Yes | Common | Auth, CRUD, pagination, file upload |
+| Q2 = Yes | Domain-Specific | Tax calculation, insurance claim, booking rules |
+| Q3 = Yes | Company-Specific | Custom approval workflow, internal pricing formula |
+
 ## Rules
 - Never guess IDs — only cite what's confirmed in actual files
 - Never conclude "no match" based on domain name alone — abstract deeper

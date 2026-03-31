@@ -1,11 +1,15 @@
 ---
 name: aidlc
 description: >
-  This skill should be used when the user asks to "start AIDLC", "start AI-DLC",
-  "create a decision file", "plan the execution", "break down tasks", "resume AI-DLC",
-  "start from domain design", "start from logical design", or needs governance for the
-  AI Development Lifecycle. Covers DECISIONS→PLAN→EXECUTE pattern, DDD/BDD/TDD methodology,
-  phase instructions, templates, guides, and task breakdown.
+  This skill should be used when the user asks to "start AIDLC", "เริ่ม AI-DLC", "start AI-DLC",
+  "create a decision file", "สร้าง decision", "plan the execution", "วางแผน",
+  "break down tasks", "แบ่งงาน", "resume AI-DLC", "ทำต่อ",
+  "start from domain design", "start from logical design",
+  "ทำ web", "ทำ api", "ทำ feature", "สร้าง app", "build",
+  "test scenario", "test case", "สร้าง test", "เขียน test",
+  "automate", "automation", "QA", "testing",
+  or needs governance for the AI Development Lifecycle.
+  ALL development and QA work MUST go through this skill first.
 ---
 
 # AIDLC (AI Development Lifecycle)
@@ -23,6 +27,7 @@ Full governance and planning for the complete development lifecycle.
 
 ## Task Design
 
+- **Task Progress Guide** — Shared rules for progress tracking, file behavior, master index, resume. (Read `references/shared-task-progress-guide.md`)
 - **Dev Task Design** — Break logical design into atomic 1-2 hour dev tasks. (Read `references/dev-task-design.md`)
 - **QA Task Design** — Break test scenarios into atomic 1-2 hour QA tasks. (Read `references/qa-task-design.md`)
 - **Template Creation** — Initialize files from master templates. (Read `references/template-creation.md`)

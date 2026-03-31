@@ -12,7 +12,8 @@ Generate Playwright test files from architecture design.
 
 1. Read coding rules from `playwright-rules` skill (api.md or webUi.md + coding-standards.md)
 2. Read architecture and test structure blueprint from implementation plan
-3. Generate fixtures — `[feature]Data.ts` with environment-specific data
+3. **Check discovery results** — if Resources Discovery found reusable templates, import them instead of creating from scratch
+4. Generate fixtures — `[feature]Data.ts` with environment-specific data
 4. Generate schemas — `[feature]Schema.ts` (API mode)
 5. Generate helpers/pages — implement exactly as designed in architecture
 6. Generate spec files — AAA pattern, mandatory tags, test.step()
@@ -78,7 +79,32 @@ Run tests and capture results.
 
 Analyze failures and auto-fix code.
 
-**Process:** Reflect → Hypothesize → Correct → Verify
+**Impact Analysis (MANDATORY before any fix):**
+
+Before fixing, classify the blast radius:
+
+| Classification | Scope | Action |
+|---|---|---|
+| Isolated | Fix affects only 1 spec file | Fix directly |
+| Shared | Fix affects helper/page used by multiple specs | Check all dependent specs before fixing, ensure backward compatibility |
+| Cross-layer | Fix affects shared-fixtures or auth used by API+Web+Mobile | Warn user, get approval before fixing |
+
+Steps:
+1. Identify which file needs the fix
+2. Search for all files that import/use the affected function
+3. Classify as Isolated/Shared/Cross-layer
+4. If Shared or Cross-layer → list all affected files and warn user
+
+**Visual-First Debugging:**
+
+Before changing code, check visually:
+- Screenshot: is the element actually visible? (opacity, z-index, overlay)
+- Layout: is the page broken? (blank screen, missing content)
+- Text: does the text match exactly? (case-sensitivity, whitespace, Thai characters)
+- Modal: is there an unexpected popup blocking the element?
+- Loading: is the page still loading? (spinner, skeleton)
+
+**Process:** Reflect → Impact Analysis → Visual Debug → Hypothesize → Correct → Verify
 
 **Error triage:**
 
@@ -95,9 +121,18 @@ Analyze failures and auto-fix code.
 | Assertion failed | Verify test data, add waitFor assertion |
 | Flaky | Use fixed seed, mock external APIs |
 
+**Review classification (for each issue found):**
+
+| Type | Description | Priority |
+|------|-------------|----------|
+| logic_bug | Test logic doesn't match requirement | Fix immediately |
+| arch_mismatch | Code doesn't follow architecture design | Fix before next phase |
+| code_quality | Style/naming/pattern violation | Fix during review |
+| forbidden_pattern | Uses forbidden API (waitForTimeout, nth, hardcoded) | Fix immediately |
+
 **Rules:**
 
 - Max 3 attempts per test
 - Never delete functions or change architecture
-- Check impact before fixing shared code
+- MUST run impact analysis before fixing shared code
 - Log every fix attempt (healed or failed)

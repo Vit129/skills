@@ -55,6 +55,14 @@ Run Robot Framework tests and capture results.
 
 Analyze failures and auto-fix mobile test code.
 
+**Impact Analysis (MANDATORY before any fix):**
+
+| Classification | Scope | Action |
+|---|---|---|
+| Isolated | Fix affects only 1 .robot file | Fix directly |
+| Shared | Fix affects keyword used by multiple tests | Check all dependent tests, ensure backward compatibility |
+| Cross-platform | Fix affects keyword shared between Android and iOS | Verify identical naming preserved after fix |
+
 **Error triage:**
 - Environment (skip): Appium not reachable, device not found
 - Code (heal): element not found, keyword not found, assertion failed
@@ -63,4 +71,4 @@ Analyze failures and auto-fix mobile test code.
 - Max 3 attempts per test
 - Never delete keywords or test cases
 - Preserve identical naming across platforms after fix
-- Check impact on shared keywords before fixing
+- MUST run impact analysis before fixing shared keywords

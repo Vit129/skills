@@ -73,11 +73,15 @@
 
 ## Implementation Priority
 
-1. **User Story Driven**: Implement features that complete user stories end-to-end
-2. **Local-First**: Implement for local development first (in-memory storage, console logging)
-3. **MVP Focus**: Implement only what's needed to satisfy MVP user stories
-4. **Feature-Complete**: Each implementation phase should complete specific user stories
-5. **Testable**: Ensure each user story can be validated independently
+1. **TDD Cycle**: Follow Red → Green → Refactor strictly:
+   - RED: Test scripts from Phase 2.3 should fail (they test unimplemented code)
+   - GREEN: Write minimal code to make tests pass — no more, no less
+   - REFACTOR: Clean up code while keeping tests green (extract methods, rename, simplify)
+2. **User Story Driven**: Implement features that complete user stories end-to-end
+3. **Local-First**: Implement for local development first (in-memory storage, console logging acceptable for MVP)
+4. **MVP Focus**: Implement only what's needed to satisfy MVP user stories
+5. **Feature-Complete**: Each implementation phase should complete specific user stories
+6. **Testable**: Ensure each user story can be validated independently
 
 ## Phase Transition Validation
 

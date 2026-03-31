@@ -12,6 +12,48 @@
 - **Apply DDD** (Domain-Driven Design throughout inception)
 - **Apply BDD** (Behavior-Driven Development for test cases)
 - **Apply TDD** (Test-Driven Development: RED → GREEN → REFACTOR)
+- **MANDATORY GATES** (dev-task-design and qa-task-design MUST be completed before any implementation or test scripting — they create the iteration path)
+
+## Routing Rules
+
+ALL work goes through AIDLC. AI determines the correct phase by checking what exists:
+
+1. Scan `.aidlc/[system]/[feature]/` — what files exist?
+2. Find the first phase that has no output yet → start there
+3. If user specifies a phase (e.g., "start from logical design") → verify prerequisites exist first
+
+| .aidlc/ has | Missing | Go to |
+|---|---|---|
+| Nothing | Everything | Phase 0 (Project Detection) → Phase 1.1 or 1.2 |
+| reverse-engineering/ | requirements | Phase 1.2 Requirements |
+| user-stories.md | domain-decomposition | Phase 1.3 Domain Decomposition |
+| domain-decomposition.md | domain-design | Phase 1.4 Domain Design |
+| domain-design.md | logical-design | Phase 1.5 Logical Design |
+| logical-design.md | test-cases | Phase 2.1 Test Case Design |
+| test-cases | QA architecture | Phase 2.2 QA Architecture |
+| QA architecture | test-scripts | Phase 2.3 Test Script Design |
+| test-scripts | task breakdown | Phase 1.7 Dev Task Design or 2.4 QA Task Design |
+| task breakdown | implementation | Phase 3.1 Implementation |
+| implementation | test results | Phase 3.2 Automated Testing |
+| test results passed | PR | Phase 3.3 Create Pull Request |
+
+If user intent is ambiguous (dev vs QA) → ASK: "1. Dev (implement) 2. QA (test) 3. ทั้งสอง (AIDLC full)"
+
+## Anti-Shortcut Rules (ป้องกันลักไก่)
+
+AI MUST NOT skip mandatory prerequisites. Check `.aidlc/[system]/[feature]/` before executing any phase:
+
+| User tries to | Prerequisite missing | Action |
+|---|---|---|
+| "เขียน code เลย" | No logical design, no task breakdown | STOP → "ต้องทำ logical design + dev-task-design ก่อน" |
+| "เขียน test script เลย" | No test scenarios, no QA architecture | STOP → "ต้องทำ test scenario + QA architecture + qa-task-design ก่อน" |
+| "รัน test เลย" | No test scripts exist | STOP → "ยังไม่มี test script — ต้องเขียนก่อน" |
+| "สร้าง pipeline เลย" | No test scripts, no test results | STOP → "ต้องมี test scripts ที่ PASS ก่อนสร้าง pipeline" |
+| "สร้าง PR เลย" | No tests passed | STOP → "ต้องรัน test ให้ PASS ก่อนสร้าง PR" |
+
+Exception: `quick-automation` and `quick-scenario` skills can bypass for small patches (see playwright-testing/quick-automation.md)
+
+How to check: scan `.aidlc/[system]/[feature]/` for required files. If missing → STOP and inform user which phase to do first.
 
 ## Critical Behaviors
 
@@ -113,10 +155,19 @@ Update when: new feature starts (add row), tasks complete (update counts), featu
 ## Multi-Feature Requirements
 
 When requirements contain multiple features (e.g., a PBI with 5 sub-features):
+
 - Related features that share domain logic → group under 1 system, separate feature folders
 - Each feature gets its own `.aidlc/[system]/[feature]/` folder
 - Track all in the same `PROGRESS.md`
 - Execution order: user decides priority, AI suggests based on dependency analysis
+
+### Merge vs Split Decision
+
+- Features that share the same domain entities AND the same UI pages → MERGE into 1 feature folder
+  - Example: Tax Input + PVD + Bonus + Total Income + WHT all modify TaxPlanner page → merge as `port/tax-planner/`
+- Features that have separate UI pages AND separate domain logic → SPLIT into separate folders
+  - Example: Tax Planner vs Google Sheets Sync vs Google Auth → 3 separate folders
+- When unsure → ASK user: "ควรรวมเป็น 1 feature หรือแยก?"
 
 ## Feature Complexity Levels
 

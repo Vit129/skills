@@ -19,6 +19,14 @@ project-root/
 
 **File Organization:** One file per sprint (e.g., test-cases-sprint1.md)
 
+## Regression & Obsolete Analysis
+
+Before creating new test cases, review existing ones:
+1. Check previous sprint test cases — any that are now obsolete due to requirement changes?
+2. Mark obsolete cases with `[OBSOLETE]` tag and reason
+3. Check for regression risks — which existing features might break from new changes?
+4. Add regression test cases for affected areas
+
 **Language:** English only
 
 

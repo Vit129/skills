@@ -15,21 +15,25 @@ Zoom out to see the big picture before diving into details.
 
 ## Questions to ask
 
-**Goal clarity:**
-- What is the actual goal here? What does success look like?
-- Who benefits and how?
+**Business Context:**
+- What is the actual goal? What does success look like?
+- Who benefits and how? What's the business value?
+- What's the scope boundary? What's explicitly out?
 
-**Scope:**
-- What's in scope vs explicitly out of scope?
-- What's the most important thing to get right first?
+**Technical Context:**
+- What's the core pattern? (CRUD / workflow / integration / analysis)
+- What architecture constraints exist? (performance, security, compliance)
+- What's the riskiest technical decision?
 
-**Patterns:**
-- What's the core pattern? (CRUD / workflow / integration / analysis / etc.)
-- What similar problems have been solved before?
+**Domain Context:**
+- What domain concepts are involved? How do they relate?
+- What's reusable from other domains? What's unique?
+- What business rules are hidden in the requirements?
 
-**Risks:**
-- What could go wrong?
-- Where are the unknowns?
+**Asset Reuse Context:**
+- What similar features exist in the codebase?
+- What common patterns can be extracted? (auth, CRUD, validation)
+- What's the reuse ratio? (>60% = cheap feature, <30% = rethink architecture)
 
 ## Tips
 - This takes 30 seconds of thinking but saves hours of rework

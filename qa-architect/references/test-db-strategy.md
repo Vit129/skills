@@ -67,3 +67,33 @@ Files per feature:
 
 ## Environment Variables
 `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`
+
+## Schema Consistency Check
+
+MUST run after logical design and before test script design:
+
+1. **Extract API schema** — from logical-design.md, list all request/response fields per endpoint with types
+2. **Extract DB schema** — from SQL scripts or data storage design, list all columns per table with types
+3. **Compare:**
+
+| API Field | API Type | DB Column | DB Type | Match? |
+|-----------|----------|-----------|---------|--------|
+| userId | string | user_id | UUID | ✅ |
+| amount | number | amount | DECIMAL(10,2) | ✅ |
+| status | string | status | ENUM | ⚠️ Check enum values |
+| createdAt | string | created_at | TIMESTAMP | ✅ |
+| tags | string[] | — | — | ❌ Missing in DB |
+
+4. **Report mismatches:**
+   - Missing fields (API has but DB doesn't, or vice versa)
+   - Type mismatches (string vs number, nullable vs required)
+   - Constraint mismatches (max length, enum values, foreign keys)
+5. **Action:** Fix mismatches before proceeding to test script design
+
+## Mocking Fallback
+
+When DB is unavailable during test execution:
+- API tests: use hardcoded fixture data, tag result as `[PARTIAL_MOCK]`
+- Web UI tests: use `page.route()` to mock API responses
+- Mobile tests: use YAML fixture with mock flag
+- Always log: "⚠️ DB unavailable — using mock data, results may not reflect real behavior"

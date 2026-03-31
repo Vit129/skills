@@ -15,11 +15,17 @@ Add, modify, or delete test scenarios in existing files without running the full
 1. Confirm target file and feature
 2. Load existing `testScenario{id}.md` — extract last TS-ID for sequencing
 3. Generate changes following design guidelines
-4. Show proposed changes → wait for approval
-5. Apply changes to markdown
-6. Review test data — still valid? Need additions?
-7. Self-check: no duplicate IDs, sequential numbering, correct format
-8. Re-generate CSV via validator
+4. **Adversarial review before proposing:**
+   - Title format correct? (`[TestType][Prefix] + Verb + Object`)
+   - No duplicate IDs?
+   - Placed in correct section? (Success/Alternative/Edge)
+   - Priority level appropriate?
+   - Test data consistent with existing scenarios?
+5. Show proposed changes → wait for approval
+6. Apply changes to markdown
+7. Review test data — still valid? Need additions?
+8. Self-check: no duplicate IDs, sequential numbering, correct format
+9. Re-generate CSV via validator
 
 ## Rules
 - Always confirm target before modifying

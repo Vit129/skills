@@ -122,11 +122,13 @@ robot --outputdir results --report mobile_report.html tests/mobile_ui/tests_ui/
 
 ### Bug Report
 - Bug ID and title
-- Steps to reproduce
+- Steps to reproduce (numbered, specific)
 - Expected vs actual results
-- Screenshots/videos
-- Severity and priority
-- Linked test case
+- Screenshots/videos (attach failure evidence)
+- Severity: Critical (app crash) / High (feature broken) / Medium (workaround exists) / Low (cosmetic)
+- Priority: based on business impact
+- Linked test case and user story
+- Environment: browser/device, OS, test data used
 
 ### Summary
 - Update result of 'Automation Status'

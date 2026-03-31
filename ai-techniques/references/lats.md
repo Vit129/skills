@@ -31,3 +31,29 @@ Validation: Happy ✅ / Error ✅ / Edge ✅
 - Criteria depend on context — for architecture: reusability, maintainability, compliance. For UX: usability, performance, accessibility
 - Tie-breaker: whichever scores higher on the most important criterion wins
 - Don't fake diversity — if only 2 real options exist, simulate 2, not 5
+
+## Context-Specific Scoring
+
+| Context | Criteria | Weight |
+|---------|----------|--------|
+| Test Scenario | Risk coverage, effort, business value | Risk > Value > Effort |
+| Architecture | Reusability, maintainability, compliance | Reusability > Maintainability > Compliance |
+| UI/UX | Usability, performance, accessibility | Usability > Accessibility > Performance |
+
+## Resilience Strategy (after hybrid selection)
+
+After selecting the hybrid strategy, MUST design resilience for external dependencies:
+
+1. **List external dependencies** — APIs, databases, third-party services, auth providers
+2. **For each dependency, define:**
+
+| Dependency | Retry Policy | Timeout | Mock Strategy |
+|------------|-------------|---------|---------------|
+| {API name} | {N retries, backoff} | {ms} | {mock response or fixture} |
+| {DB name} | {N retries} | {ms} | {in-memory fallback} |
+| {Auth provider} | {N retries} | {ms} | {storageState or token fixture} |
+
+3. **Locator Strategy (UI only):**
+   - Document locator priority per dynamic element
+   - Justify why each locator was chosen (stability, uniqueness)
+   - Fallback locator for elements that change frequently

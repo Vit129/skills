@@ -48,5 +48,55 @@ tests-api/[system]/[feature]/[feature].spec.ts    — test specs
 - Auth: globalSetup login-once per role, re-login only when role differs
 - SIT as default environment
 
+## Test Structure Blueprint
+
+Generate a blueprint that maps test cases to services:
+
+```text
+describe('[Feature] API Tests', () => {
+  // Lifecycle
+  beforeAll: AuthService.login() → storageState
+  beforeEach: DbService.seed(testId)
+  afterEach: DbService.cleanup(testId)
+
+  // Test Cases → Service Mapping
+  TC-001 (Create): ApiService.create() → verify response + DB
+  TC-002 (Read): ApiService.getById() → verify schema
+  TC-003 (Update): ApiService.update() → verify response + DB
+  TC-004 (Delete): ApiService.delete() → verify cleanup
+  TC-005 (Validation): ApiService.create(invalid) → verify 400
+})
+```
+
+Tags: `@Feature:[name]`, `@Important:[level]`, `@Scenario:[type]`
+
+## Template Integration from Discovery
+
+If Resources Discovery found existing templates/patterns:
+1. Extract reusable templates (AuthService, BasePage, DbService patterns)
+2. Import shared utilities: `import { AuthService } from '../../shared/authService'`
+3. Extend rather than duplicate — add feature-specific methods to base classes
+
+## Shared Fixtures Detection (Cross-Layer)
+
+When a feature has tests across multiple layers (API + Web UI + Mobile):
+
+1. **Detect:** Check if feature has test scenarios for more than 1 platform
+2. **Create shared-fixtures structure:**
+```text
+tests/shared-fixtures/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/
+├── [systemFeature]SharedData.ts    — business data used by all layers
+├── web/                            — web-specific shared data
+└── mobile/                         — mobile-specific shared data
+```
+3. **What goes in shared-fixtures:**
+   - Business data: search keywords, codes, IDs used across API + UI tests
+   - Auth tokens: storageState shared between API setup and UI tests
+   - Seed data results: IDs created by API that UI tests need to verify
+4. **What stays in layer-specific fixtures:**
+   - UI-specific: viewport sizes, browser settings
+   - Mobile-specific: device capabilities, platform locators
+   - API-specific: request headers, schema definitions
+
 ## Approval
 Show architecture summary to user and wait for explicit approval before coding.

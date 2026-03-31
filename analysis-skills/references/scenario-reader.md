@@ -28,4 +28,15 @@ TS-001: [Title]
 ## Tips
 - If no matching test type found, offer to derive cases from available types
 - Always verify both CSV and MD files exist before starting
+
+## Derive Mode
+
+When test scenarios exist for one platform but not another (e.g., UI scenarios exist but no API scenarios):
+
+1. Read existing UI scenarios
+2. For each UI scenario, derive an API equivalent:
+   - UI "fill form and submit" → API "POST with same data"
+   - UI "verify display" → API "GET and verify response"
+3. Tag derived scenarios with `[DERIVED-FROM-UI]` or `[DERIVED-FROM-API]`
+4. Show derived scenarios to user for approval before adding
 - Use simple list format for readability
