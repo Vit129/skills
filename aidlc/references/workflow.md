@@ -14,6 +14,17 @@
 - **Apply TDD** (Test-Driven Development: RED → GREEN → REFACTOR)
 - **MANDATORY GATES** (dev-task-design and qa-task-design MUST be completed before any implementation or test scripting — they create the iteration path)
 
+## Language Policy
+
+| What | Language | Example |
+|------|----------|---------|
+| User communication (questions, approval prompts, status updates) | Thai | "📐 Architecture นี้ถูกต้องหรือไม่?" |
+| Test scenario content (Title, Steps, Expected Result) | Thai | "[UI][Success] แสดงหน้าจองเที่ยวบิน" |
+| AIDLC documents (decision, plan, design, user stories) | English | "Option A: Create missing artifacts" |
+| Code (variables, functions, JSDoc, comments) | English | `async searchFlight(data)` |
+| Test names (describe, test) | English | `test('[TS-001] Search round-trip flight')` |
+| File and folder names | English (kebab/camelCase) | `flight-booking-visa-advice/` |
+
 ## Routing Rules
 
 ALL work goes through AIDLC. AI determines the correct phase by checking what exists:
@@ -181,6 +192,73 @@ Measure by QA impact (not dev effort):
 
 NEVER skip phases regardless of complexity — always run full AIDLC. Only output depth changes.
 AI MUST ask user to confirm complexity level at Phase 1.2 (Requirements Gathering).
+
+### Complexity Examples — เปรียบเทียบความลึกของ output
+
+ตัวอย่างใช้ Domain Decomposition เป็นตัวเทียบ แต่หลักการเดียวกันใช้กับทุก phase
+
+**Lightweight** — สรุปสั้น อย่างละ 1-2 บรรทัด:
+
+```markdown
+## Bounded Contexts
+- **Booking** — ค้นหา, จอง, ชำระเงิน
+
+## Context Map
+Booking → External API (conformist)
+
+## Architecture
+Monolith — React + REST API
+```
+
+**Standard** — เพิ่ม Entities + กฎสำคัญ + ระบุ pattern ของความสัมพันธ์:
+
+```markdown
+## Bounded Contexts
+- **Booking** — ค้นหา, จอง, ชำระเงิน
+  - Entities: Flight, Reservation
+  - กฎสำคัญ: ล็อคที่นั่งหมดอายุ 15 นาที
+- **User** — ยืนยันตัวตน, โปรไฟล์
+  - Entities: User, Preference
+
+## Context Map
+- Booking → User (downstream, ACL)
+- Booking → External API (conformist)
+
+## Architecture
+Monolith — React + Express + PostgreSQL (แยก schema ต่อ context)
+```
+
+**Full** — ลงถึง Value Objects, Aggregates, Domain Events + Sequence Diagram + Regression Checklist:
+
+```markdown
+## Bounded Contexts
+- **Booking**
+  - Entities: Flight, Seat, Reservation, PaymentTransaction
+  - Value Objects: Money, SeatClass
+  - Aggregates: Reservation (root) → Seat + Payment
+  - Domain Events: ReservationCreated, PaymentCompleted
+  - กฎสำคัญ: ไป-กลับ 2 segments, ล็อค 15 นาที, ชำระซ้ำสูงสุด 3 ครั้ง
+- **User** — (รายละเอียดเท่า Booking)
+- **Notification** — (รายละเอียดเท่า Booking)
+
+## Context Map
+- Booking → User (ACL — UserProfileAdapter)
+- Booking → Notification (published language — ReservationEvent)
+
+## Sequence Diagram — Happy Path
+User → SPA → Booking API → DB → RabbitMQ → Notification → Email
+
+## Regression Checklist
+- [ ] จองยังทำงานได้หลังแก้ User schema
+- [ ] Notification รับ event ได้หลังเปลี่ยนชื่อ domain event
+```
+
+หลักง่ายๆ: Lightweight = what, Standard = what + why, Full = what + why + how + ผลกระทบ
+
+ตัวอย่างข้างบนใช้ระบบจองเที่ยวบิน แต่ใช้หลักเดียวกันกับทุกโดเมน เช่น:
+- E-commerce: Product → Order → Payment → Shipping
+- Hospital: Patient → Appointment → Treatment → Billing
+- HR: Employee → Leave → Payroll → Evaluation
 
 ## Standard Process (Every Phase)
 

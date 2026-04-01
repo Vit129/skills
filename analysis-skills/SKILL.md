@@ -10,10 +10,22 @@ description: >
 
 Understand what exists, what's needed, and what's missing.
 
-- **Context Analysis** — Extract goals, requirements, and conflicts from a feature. (Read `references/context.md`)
-- **Figma & UI Analysis** — Extract components, interactions, and test implications from designs. (Read `references/figma.md`)
-- **Gap Analysis** — Compare required vs available logic, prioritize what's missing. (Read `references/gap.md`)
-- **Domain Analysis** — Map business logic across domains, find reusable patterns. (Read `references/domain.md`)
-- **Requirements Gathering** — Transform business needs into structured user stories with BDD. (Read `references/requirements.md`)
-- **Reverse Engineering** — Scan existing codebase to understand architecture before new work. (Read `references/reverse-eng.md`)
-- **Scenario Reader** — Parse test scenario files and extract automatable test cases. (Read `references/scenario-reader.md`)
+## Sub-Skills — Load EXACTLY ONE reference per request
+
+Each sub-skill is fully independent. Match the request to ONE row, load that reference only.
+If the request matches multiple rows → ask the user which analysis to run first.
+
+| User says | Load |
+|-----------|------|
+| "analyze context", "what are the goals", "extract conflicts" | `references/context.md` |
+| "read Figma", "analyze design", "extract UI components" | `references/figma.md` |
+| "gap analysis", "what's missing", "compare required vs actual" | `references/gap.md` |
+| "map domains", "business logic", "find reusable patterns" | `references/domain.md` |
+| "gather requirements", "write user stories", "BDD scenarios" | `references/requirements.md` |
+| "reverse engineer", "scan codebase", "understand architecture" | `references/reverse-eng.md` |
+| "parse test scenarios", "extract test cases", "read CSV scenarios" | `references/scenario-reader.md` |
+
+**Hard rules:**
+- Load ONE reference file — never load multiple in the same turn unless the user explicitly asks for a combined analysis
+- Each reference is self-contained — updating one file has zero effect on others
+- If none of the rows match clearly → ask the user to clarify which analysis they need

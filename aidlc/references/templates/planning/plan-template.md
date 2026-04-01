@@ -33,3 +33,23 @@
 **If pausing work, update this section:**
 - **Paused At**: [Current task or section]
 - **Next Steps**: [What to do when resuming]
+
+## Writing Guide
+
+### Task Description
+Every task MUST specify three things:
+1. **File**: What file to create or modify (full path)
+2. **Content**: What goes in it (key sections, not just a title)
+3. **Source**: Where the information comes from (which existing file to read)
+
+Bad: "Task 1.1: Create user-stories.md"
+Good: "Task 1.1: Create `outputs/inception/user-stories.md` — extract 2 capabilities (flight booking + visa check) from `JapanTravelBookingSystem.md` Section 1. Write user stories with BDD acceptance criteria (Given/When/Then)."
+
+### Phase Descriptions
+Before each phase's task list, write 1-2 sentences explaining:
+- What this phase produces
+- What input it reads
+
+### Language
+- All content in English
+- Task descriptions should be actionable — start with a verb (Create, Read, Extract, Reference, Update)

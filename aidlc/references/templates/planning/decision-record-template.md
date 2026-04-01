@@ -69,6 +69,32 @@ Once all decisions are made:
 
 ---
 
+## Writing Guide
+
+### Background Section (add before Outstanding Decisions)
+Every decision file MUST start with a Background section that explains:
+- What is this feature? (1-2 sentences a new team member can understand)
+- What already exists? (code, docs, tests — be specific)
+- What is missing? (the gap this decision addresses)
+
+A reader who has never seen this project should understand the situation from Background alone.
+
+### Context Field
+- Write as if the reader has no prior knowledge of the project
+- State the problem, not the solution
+- Bad: "We need to decide scope given existing POM code"
+- Good: "PBI-001 has working Playwright tests (6 scenarios, all passing) but no design documents. We need to decide how much documentation to create."
+
+### Options
+- Each option must be understandable without reading other options
+- Rationale: why someone would pick this (not why it's bad)
+- Consequences: what happens after picking this (both good and bad)
+- Avoid jargon — write "test automation code" not "POM architecture"
+
+### Language
+- All content in English (consistent with codebase)
+- Technical terms are fine but explain abbreviations on first use
+
 ## Template Usage Notes
 1. Replace all `[placeholders]` with actual values
 2. Add as many decisions as needed for the phase

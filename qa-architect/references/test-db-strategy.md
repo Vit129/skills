@@ -4,17 +4,22 @@ Design DB seed/verify/cleanup strategy for test automation. Two phases: Phase 1 
 
 ## Phase 1: Requirements Discovery (ask user once)
 
-Ask user:
-1. Does this feature need DB? (Yes with SQL / Yes wait for Dev / Not sure / No)
-2. If Yes → Which test type? (API only / UI only / Mobile only / All shared)
-3. DB type? (PostgreSQL 5432 / MySQL 3306 / Oracle 1521 / Other)
+**Q1:** "Feature นี้ต้องใช้ Database มั้ย?
+1) มี — พร้อมให้ SQL แล้ว
+2) มี — แต่รอ Dev สร้างก่อน
+3) ไม่แน่ใจ — ช่วยวิเคราะห์ให้
+4) ไม่ต้อง — ข้ามไปเลย"
+
+**Q2 (if 1/2/3):** "ใช้กับ test type ไหน? 1) API only 2) UI only 3) Mobile only 4) All shared"
+
+**Q3 (if 1/2/3):** "DB type อะไร? 1) PostgreSQL (5432) 2) MySQL (3306) 3) Oracle (1521) 4) Other"
 
 **If user provides SQL:** Validate syntax, extract tables/operations, show summary, ask to confirm.
 **If user provides context only:** Generate SQL from context + requirements, show for review.
 **If not sure:** Analyze requirements, recommend, generate SQL, show for review.
-**If No:** Skip DB strategy.
+**If No:** "✅ ข้าม DB strategy — ใช้ mock data แทน"
 
-After confirmation: Ask connection details (Host, Port, DB Name, User, Password).
+After confirmation: "ขอข้อมูล connection: Host, Port, DB Name, User, Password (จะเก็บใน .env)"
 
 Write to: `implementation[FEATURE].md` → Database Strategy section
 
