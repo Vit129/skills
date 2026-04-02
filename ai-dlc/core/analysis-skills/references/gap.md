@@ -1,0 +1,55 @@
+# Gap Analysis
+
+Compare what's required vs what's available, then prioritize what's missing.
+
+## When to use
+- After domain analysis — know what's reusable, need to find what's not
+- Before implementation — need to estimate effort for new logic
+- Validating completeness of a design
+
+## How it works
+
+### Step 1: Extract Required Logic
+- Analyze PBI requirements from Context Analysis
+- Extract: business rules, validation rules, UI actions, calculations
+- List all logic items needed for implementation
+
+### Step 2: Match Against Domain Results
+- Input: Domain Analysis results (selected domains, reusable BL/UA items)
+- If Domain Analysis was NOT run → treat all required logic as "No Match"
+- Compare required vs available
+- Classify: Direct Match (100%), Partial Match (50%), No Match (0%)
+
+### Step 3: Calculate Metrics
+- Total Required = count of distinct logic items from Step 1
+- Reusable count = items classified as Direct Match or Partial Match
+- Reusable (%) = Reusable count / Total Required × 100
+- Missing (%) = 100 - Reusable (%)
+- Gap = any item where confidence < 80%
+
+### Step 4: Prioritize Gaps by Impact
+- **Critical** — system can't function without it (authentication, core validation)
+- **High** — wrong business results (calculations, business rules)
+- **Medium** — poor user experience (UI feedback, error handling)
+- **Low** — nice to have (advanced features, shortcuts)
+
+### Step 5: Effort Estimation
+For each gap item:
+- Business impact scoring (1-10)
+- Implementation effort estimation (hours)
+- Risk assessment (High/Medium/Low)
+- Dependency mapping (prerequisite logic)
+
+## Output
+```
+Required Logic: [N] items
+Reusable: [N] ([XX]%)
+Missing: [N] ([XX]%)
+
+Critical: [list with BL_NEW_XXX IDs]
+High: [list]
+Medium: [list]
+Low: [list]
+
+Total estimated effort: [N] hours
+```
