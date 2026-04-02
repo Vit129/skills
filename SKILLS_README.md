@@ -4,17 +4,17 @@ Single source of truth for all AI-assisted development, QA, and Finance analysis
 
 ## 1. AI-DLC Category (`ai-dlc/`)
 
-### Core (Governance, Design, Reasoning) — `ai-dlc/core/`
+### Core (Governance, Design, Reasoning, Tooling) — `ai-dlc/core/`
 | Folder | Purpose |
 |--------|---------|
 | `aidlc/` | Full AI-DLC lifecycle: governance, phases, templates, guides, task design, **Investment Port Context** |
 | `architect/` | DDD Strategic & Tactical, Architecture Patterns, Logical Design, TDD |
-| `brainstorming/` | Idea → spec workflow: explore → question → propose approaches → write design doc |
 | `skill-creator/` | Create, improve, validate Claude Code skills |
 | `ai-techniques/` | CoT, LATS, Step-Back, AoT, Discovery reasoning patterns |
 | `analysis-skills/` | Context, Figma, Gap, Domain, Requirements, Reverse Eng, Scenario Reader |
 | `ui-designer/` | Design system + aesthetic direction, **Sovereign Design System** rules |
-| `commit-message/` | Standardized git commit message generation |
+| `hook-creator/` | Create Kiro agent hooks from templates, event-driven automation |
+| `monitoring/` | Logging, error tracking, performance metrics, tracing, alerts |
 
 ### Dev (Implementation) — `ai-dlc/dev/`
 | Folder | Purpose |
@@ -23,8 +23,6 @@ Single source of truth for all AI-assisted development, QA, and Finance analysis
 | `backend-dev/` | API design, DB, Auth, Node.js, Python, Docker |
 | `devops-pipeline/` | CI/CD pipeline, PRs (Azure DevOps, GitHub Actions, GitLab CI) |
 | `storage/` | Knowledge save, buffer update, **Data Backup & Integrity** standards |
-| `monitoring/` | Logging, error tracking, performance metrics, tracing, alerts |
-| `vercel-react-best-practices/` | 65 React/Next.js performance rules from Vercel Engineering |
 
 ### QA (Testing & Automation) — `ai-dlc/qa/`
 | Folder | Purpose |
@@ -44,6 +42,7 @@ Single source of truth for all AI-assisted development, QA, and Finance analysis
 ### Coding (Claude Code) — `finance/coding/`
 | Folder | Purpose |
 |--------|---------|
+| `investment-architecture/` | React + Tailwind architecture guide for My Investment Port |
 | `financial-algorithms/` | Tax calc, DCA, SMA/EMA, Sharpe Ratio, dividend forecasting |
 | `google-sheets/` | Google Apps Script (GAS) integration for portfolio sync |
 | `tax-optimizer/` | Tax planning logic and optimization code |
@@ -54,6 +53,7 @@ Single source of truth for all AI-assisted development, QA, and Finance analysis
 | `fx-alert/` | FX impact calculation and alerts |
 | `passive/` | Passive income analysis logic |
 | `add-stock/` | Logic for adding new stocks to portfolio |
+| `backup/` | Portfolio data backup and integrity verification |
 
 ### Research (Claude Chat/Cowork) — `finance/research/`
 | Folder | Purpose |
@@ -71,4 +71,4 @@ Folders that store system data, logs, or backups to keep the root directory clea
 ## Maintenance
 - Edit skills in their respective subdirectories — this is the single source of truth.
 - **Project-specific rules** for "My Investment Port" are now consolidated into `ai-dlc/` references.
-- Last updated: 2026-04-02 (Eliminated redundancies)
+- Last updated: 2026-04-02 (Optimized token usage: moved content from SKILL.md to references/)

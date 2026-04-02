@@ -11,40 +11,4 @@ description: >
 
 วิเคราะห์หุ้นไทยและกองทุนลดหย่อนภาษี (RMF/SSF/ThaiESG) ใน My Investment Port
 
-## Source Files
-
-- **Thai fund data:** `src/data/raw/thaiFunds.js`
-- **Tax pages:** `src/pages/TaxPage.jsx`, `src/pages/RmfPage.jsx`
-
-## วงเงินลดหย่อนภาษี (ปี 2026)
-
-| กองทุน | วงเงินสูงสุด | เงื่อนไข |
-|---|---|---|
-| **RMF** | 500,000 THB | ≤30% ของรายได้ |
-| **SSF** | 200,000 THB | ≤30% ของรายได้ |
-| **ThaiESG** | 300,000 THB | ≤30% ของรายได้ |
-| **รวม RMF+SSF+ThaiESG+PVD** | **500,000 THB** | cap รวม |
-
-> ⚠️ วงเงินรวมสูงสุดไม่เกิน 500,000 THB แม้แต่ละกองทุนจะมีวงเงินของตัวเอง
-
-## การวิเคราะห์ที่แสดง
-
-1. **Position ปัจจุบัน** — มูลค่าของแต่ละกองทุนที่ถือ
-2. **วงเงินที่ใช้ไปแล้ว** — แต่ละประเภทและรวม
-3. **วงเงินที่เหลือ** — ซื้อเพิ่มได้อีกเท่าไหร่
-4. **ผลประหยัดภาษี** — ถ้าซื้อเพิ่มจนเต็มวงเงิน ลดภาษีได้เท่าไหร่
-5. **แนะนำ allocation** — ควรซื้อกองทุนไหนก่อนเพื่อ optimize ภาษี
-
-## Output Format
-
-```
-🇹🇭 Thai Fund Summary
-
-RMF:      ฿XXX,XXX / ฿500,000 (ใช้ XX%)  → เหลือ ฿XX,XXX
-SSF:      ฿XXX,XXX / ฿200,000 (ใช้ XX%)  → เหลือ ฿XX,XXX
-ThaiESG:  ฿XXX,XXX / ฿300,000 (ใช้ XX%)  → เหลือ ฿XX,XXX
-รวม cap:  ฿XXX,XXX / ฿500,000
-
-💡 ถ้าซื้อ RMF เพิ่มอีก ฿XX,XXX:
-   ประหยัดภาษีได้ประมาณ ฿X,XXX (อัตรา XX%)
-```
+Source files, วงเงิน, การวิเคราะห์, output format → (Read `references/fund-details.md`)

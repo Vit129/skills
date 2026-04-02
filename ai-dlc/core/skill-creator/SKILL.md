@@ -17,23 +17,9 @@ Create, improve, and validate Claude Code skills.
 skill-name/
 ├── SKILL.md              (required — frontmatter + instructions)
 ├── references/           (optional — detailed docs, loaded as needed)
-├── scripts/              (optional — executable code, deterministic tasks)
-└── assets/               (optional — templates, images, fonts for output)
+├── scripts/              (optional — executable code)
+└── assets/               (optional — templates, images)
 ```
-
-## SKILL.md Format
-
-```yaml
----
-name: skill-name
-description: >
-  This skill should be used when the user asks to "phrase 1", "phrase 2",
-  "phrase 3", or needs [what it provides].
----
-```
-
-Body: concise markdown, imperative form, under 2,000 words ideal.
-Reference bundled resources with `(Read references/xxx.md)` pointers.
 
 ## Progressive Disclosure (3 levels)
 
@@ -43,46 +29,6 @@ Reference bundled resources with `(Read references/xxx.md)` pointers.
 
 Keep SKILL.md lean. Move detailed content to `references/`.
 
-## Description Rules
+## Detailed Guide
 
-The description is the primary trigger mechanism. Write it well.
-
-- Use third-person: `"This skill should be used when the user asks to..."`
-- Include specific trigger phrases users would actually type
-- Be concrete: `"create a pipeline"`, `"design the database"` — not `"helps with pipelines"`
-- Cover edge cases: include phrases where skill should trigger even if user doesn't name it explicitly
-- Lean slightly "pushy" — Claude tends to under-trigger, so be generous with trigger phrases
-
-## Writing Style
-
-- Imperative form: `"Parse the config"` not `"You should parse the config"`
-- Explain the why — Claude responds better to reasoning than rigid MUSTs
-- No second person in body or description
-- Third-person in description only
-
-## Reference Files
-
-For content that's too detailed for SKILL.md:
-
-- `references/` — docs loaded into context as needed (schemas, patterns, guides)
-- Large references (>300 lines): include a table of contents
-- SKILL.md must reference these files so Claude knows they exist
-
-## Validation Checklist
-
-- [ ] SKILL.md has frontmatter with `name` and `description`
-- [ ] Description uses third-person + specific trigger phrases
-- [ ] Body uses imperative form, not second person
-- [ ] Body is lean (<2,000 words), detailed content in references/
-- [ ] All referenced files actually exist
-- [ ] No duplicated information across files
-- [ ] No branding or project-specific paths
-
-## Iteration Process
-
-1. Understand what the skill should do (ask for concrete examples)
-2. Identify reusable resources (scripts, references, assets)
-3. Write SKILL.md draft — frontmatter + lean body
-4. Create references/ for detailed content
-5. Test trigger phrases — does it activate on expected queries?
-6. Improve based on usage feedback
+Format rules, description rules, writing style, validation checklist, iteration process → (Read `references/skill-guide.md`)
