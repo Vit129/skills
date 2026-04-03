@@ -32,9 +32,9 @@ Full governance and planning for the complete development lifecycle.
 - **QA Task Design** — (Read `references/qa-task-design.md`)
 - **Template Creation** — (Read `references/template-creation.md`)
 
-## Phase Instructions
+## Phase Instructions & Routing
 
-For detailed phase steps → (Read `references/phase-index.md`)
+For full phase list, routing table, and anti-shortcut rules → (Read `references/workflow.md`)
 
 ## Templates
 

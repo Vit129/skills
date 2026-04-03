@@ -271,12 +271,15 @@ User → SPA → Booking API → DB → RabbitMQ → Notification → Email
 
 ## Standard Process (Every Phase)
 
-1. **DECISIONS** → Create decision file with options and recommendations
+1. **DECISIONS** → Create decision file (`planning/decisions/{NN}-{phase-name}.md`) with options and recommendations
 2. **USER RESOLVES** → User fills in decision answers
-3. **PLAN** → Create execution plan based on resolved decisions
+3. **PLAN** → Create execution plan (`planning/plans/{NN}-{phase-name}.md`) based on resolved decisions
 4. **USER APPROVES** → User approves the plan
-5. **EXECUTE** → Implement the approved plan incrementally
-6. **AUDIT** → Update audit trail
+5. **EXECUTE** → Implement the approved plan, write output to `outputs/inception/`
+6. **AUDIT** → Update `audit.md` at each phase completion
+7. **PROGRESS** → Update `.aidlc/[SYSTEM_KEBAB]/PROGRESS.md` with current counts
+
+MANDATORY: Steps 1-7 apply to EVERY phase. Do NOT skip decision/plan files even if user says "approve" or "ทำต่อ". Create the files first, then ask for approval.
 
 ## Workflow Phases
 

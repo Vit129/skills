@@ -28,6 +28,21 @@ Can start this phase if:
 - ✅ Includes Final Review task (code review + full test suite)
 - ✅ Lessons Learnt reviewed before task creation
 
+## Platform Routing (MANDATORY — read before creating tasks)
+
+Based on the test platform, MUST read the corresponding skill first:
+
+| Platform | Read skill | Key references |
+|----------|-----------|----------------|
+| Web UI | `playwright-testing` | workflow.md, quick-automation.md, recorder.md |
+| API | `playwright-testing` | workflow.md, quick-automation.md, db-writer.md |
+| Android | `robotframework-testing` | workflow.md, python-db.md |
+| iOS | `robotframework-testing` | workflow.md, python-db.md |
+
+Also read coding rules:
+- Web/API → `playwright-rules` (coding-standards.md + web-ui.md or api.md)
+- Mobile → `robotframework-rules` (standards.md + android.md or ios.md)
+
 ## When to use
 
 - After test case design and QA architecture are done
