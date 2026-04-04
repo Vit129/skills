@@ -79,7 +79,32 @@ Regardless of which agent is used, **the same standards must be followed**:
 
 ---
 
-## 5. Test Coverage Rules (Mandatory)
+## 5. Playwright Skills (Mandatory for All Test Work)
+
+When writing, reviewing, fixing, or running Playwright tests, **both skills must be activated**:
+
+| Skill | When to Use |
+|-------|-------------|
+| **`playwright-rules`** | Always — before writing or reviewing any `.spec.ts` or page object. Enforces coding standards: no `waitForTimeout`, selector priority, AAA pattern, Page Object Model. |
+| **`playwright-cli`** | When running browser automation via terminal (navigate, click, screenshot, extract data). Use YAML snapshots and `eX` references — NOT raw HTML. |
+
+### Activation in Gemini Prompts
+Always include this block in any Gemini prompt that involves Playwright:
+
+```
+Before writing or reviewing any test code:
+1. Read ~/.claude/skills/ai-dlc/qa/playwright-rules/references/coding-standards.md
+2. Read ~/.claude/skills/ai-dlc/qa/playwright-rules/references/web-ui.md
+3. Adhere to all rules strictly — especially:
+   - No waitForTimeout() — use smart waits
+   - Selector priority: getByTestId > getByRole > getByLabel
+   - AAA Pattern: Arrange-Act-Assert in every test
+   - No inline logic: all interactions through Page Objects or Helpers
+```
+
+---
+
+## 6. Test Coverage Rules (Mandatory)
 
 After **every file write or edit**, the agent must run the corresponding test(s):
 
