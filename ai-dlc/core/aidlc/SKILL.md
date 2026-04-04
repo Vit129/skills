@@ -30,7 +30,7 @@ Full governance and planning for the complete development lifecycle.
 - **Task Progress Guide** — (Read `references/shared-task-progress-guide.md`)
 - **Dev Task Design** — (Read `references/dev-task-design.md`)
 - **QA Task Design** — (Read `references/qa-task-design.md`)
-- **Template Creation** — (Read `references/template-creation.md`)
+- **Knowledge Buffer** — Capture and reuse patterns across features. (Read `references/knowledge-buffer.md`)
 
 ## Phase Instructions & Routing
 

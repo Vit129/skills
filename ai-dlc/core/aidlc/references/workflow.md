@@ -278,6 +278,7 @@ User → SPA → Booking API → DB → RabbitMQ → Notification → Email
 5. **EXECUTE** → Implement the approved plan, write output to `outputs/inception/`
 6. **AUDIT** → Update `audit.md` at each phase completion
 7. **PROGRESS** → Update `.aidlc/[SYSTEM_KEBAB]/PROGRESS.md` with current counts
+8. **KNOWLEDGE** → Capture reusable patterns to `audit.md` Knowledge Buffer section (Read `references/knowledge-buffer.md`)
 
 MANDATORY: Steps 1-7 apply to EVERY phase. Do NOT skip decision/plan files even if user says "approve" or "ทำต่อ". Create the files first, then ask for approval.
 
@@ -291,6 +292,8 @@ Brownfield start from 1.1, Greenfield start from 1.2
   → Use `analysis-skills` skill (reverse-eng.md)
 - **1.2** Requirements Gathering → User stories with BDD acceptance criteria
   → Use `analysis-skills` skill (requirements.md)
+  → After user stories: run `analysis-skills` skill (domain.md) for cross-domain reuse analysis
+  → After domain analysis: run `analysis-skills` skill (gap.md) to identify missing logic
 - **1.3** Domain Decomposition → DDD Strategic Design + Architecture Decision
   → Use `architect` skill (decomposition.md, architecture-patterns.md)
 - **1.4** Domain Design → DDD Tactical Patterns (pseudocode)
@@ -365,6 +368,22 @@ For detailed patterns → Use `architect` skill (architecture-patterns.md)
 - `"reset AI-DLC"` — Reset session
 - `"proceed"` or `"1"` — Approve and continue
 
+## Mocking Fallback Strategy
+
+When external dependencies (DB, API, third-party services) are unavailable during test execution:
+
+| Platform | Fallback | How |
+|---|---|---|
+| API tests | Hardcoded fixture data | Return mock JSON from service layer |
+| Web UI tests | `page.route()` mocking | Intercept API calls, return fixture |
+| Mobile tests | YAML fixture with mock flag | Load from local fixture file |
+
+Rules:
+- Always implement a health check in `beforeAll` — if dependency down, switch to mock
+- Tag test results with `[PARTIAL_MOCK]` when using fallback
+- Log: "⚠️ [dependency] unavailable — using mock data"
+- Never silently skip tests — always run with mock and report
+
 ## Core Philosophy
 
 - Local-First: In-memory storage, console logging for MVP
@@ -373,6 +392,22 @@ For detailed patterns → Use `architect` skill (architecture-patterns.md)
 - Decision-Driven: ADR format, cover functional and non-functional requirements
 - Incremental: Update plans during work, not at end
 - Quality Gates: Validate completeness before next phase
+
+## Scope Assessment (before Phase 0)
+
+Before starting any AIDLC workflow, estimate scope from user request:
+
+| Size | Signals | Action |
+|---|---|---|
+| 🟢 Small | 1-2 user stories, 1 page/endpoint, 1 feature | Proceed normally |
+| 🟡 Medium | 3-5 user stories, multi-page, cross-feature | Warn user, confirm before proceed |
+| 🔴 Large | 6+ user stories, system-level, multi-workflow | Suggest breaking into smaller features |
+
+If 🔴 Large detected:
+```
+⚠️ Scope ใหญ่มาก — แนะนำให้แบ่งเป็น sub-features ก่อน เพื่อป้องกัน context overflow
+ต้องการแบ่ง หรือทำทั้งหมดในรอบเดียว?
+```
 
 ## Project Detection (Phase 0)
 

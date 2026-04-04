@@ -123,3 +123,21 @@ Analyze failures and auto-fix code.
 - Never delete functions or change architecture
 - MUST run impact analysis before fixing shared code
 - Log every fix attempt (healed or failed) to Reflexion Log
+
+## Reflexion Log
+
+Every heal attempt (success or fail) MUST be logged to the implementation plan or audit file.
+
+**Format:**
+```
+## [Timestamp] | Type: [ErrorCategory]
+- ❌ Symptom: [brief error description]
+- 🔍 Root Cause: [root cause]
+- 💊 Applied Fix: [code snippet summary]
+- 🏁 Outcome: HEALED / FAILED
+- 📊 Impact: Isolated / Shared / Cross-layer
+```
+
+**Location:** Append to `.aidlc/[system]/[feature]/audit.md` under `## Reflexion Log` section.
+
+**Purpose:** Prevent repeating the same failed fix. Successful heals become reusable patterns for future features.

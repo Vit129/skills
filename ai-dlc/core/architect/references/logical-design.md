@@ -50,7 +50,7 @@ When project has multiple client platforms (e.g., Web + Mobile):
 |---|---|---|---|
 | Traditional (REST + SQL) | API endpoints | DB schemas + migrations | React/Vue/Angular components |
 | Serverless (Cloud Functions) | Function triggers | NoSQL / managed DB | Web or mobile components |
-| Spreadsheet-backed | GAS doGet/doPost | Spreadsheet tab structure | Web components + LocalStorage |
+| Spreadsheet-backed | Spreadsheet tab structure | Web components + LocalStorage |
 | Frontend-only | External API calls | LocalStorage / IndexedDB | SPA components |
 
 Use the row that matches your project. Skip sections that don't apply (e.g., no server logic for frontend-only).
@@ -58,7 +58,7 @@ Use the row that matches your project. Skip sections that don't apply (e.g., no 
 ## Output per endpoint/function
 
 ```text
-POST /api/[resource]  (or GAS doPost action=[action])
+POST /api/[resource]
 - Purpose: [what it does]
 - Story: US-001
 - Request: { field1: string (required), field2: number }
@@ -75,6 +75,17 @@ POST /api/[resource]  (or GAS doPost action=[action])
 - Every endpoint has a sequence diagram
 - Frontend components specified for all user interactions
 - MVP scope clearly defined
+
+## Sensitive Data Classification (mandatory at this phase)
+
+Before implementation, classify every data field:
+
+| Category | Location | Examples |
+|---|---|---|
+| Sensitive → `.env` | Environment variables | Credentials, tokens, passwords, API keys, login emails |
+| Non-sensitive → fixture | Hardcoded in test data files | companyCode, customerCode, invoiceNumber, productCode |
+
+Rule: `process.env.X` in fixture is allowed ONLY for sensitive fields. Business data must be hardcoded in fixture, NOT read from `.env`.
 
 ## Rules
 

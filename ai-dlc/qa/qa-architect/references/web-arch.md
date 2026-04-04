@@ -78,5 +78,26 @@ Before finalizing, verify architecture covers:
 - [ ] Permission/Role boundary scenario (unauthorized page, hidden button)
 - [ ] Form validation scenario (required fields, invalid format)
 
+## Hybrid Action Analysis (mandatory for Web UI)
+
+Before designing page objects, classify each test action:
+
+| Strategy | When to use | Example |
+|---|---|---|
+| UI_ONLY | Must be done via UI (verify layout, click, check toast) | Verify form validation message |
+| API_SETUP | Faster via API (create data, seed state) | Create user, top-up balance |
+| DB_SETUP | Handled by DB strategy (seed/cleanup) | Insert test records |
+
+Rule: IF an action creates/modifies data AND has a corresponding API endpoint → classify as API_SETUP.
+
+Output in architecture doc:
+```
+### ⚡ Hybrid Action Map
+| Test Case | Action | Strategy | Reason |
+|-----------|--------|----------|--------|
+| TC-001 | Create user | API_SETUP | POST /api/users exists |
+| TC-002 | Verify form layout | UI_ONLY | Visual verification |
+```
+
 ## Approval
 Show architecture summary to user and wait for explicit approval before coding.
