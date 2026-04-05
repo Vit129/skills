@@ -1,4 +1,4 @@
-# Global Agent Instructions — Gemini-First Engineering
+# Global Agent Instructions — Right-Tool Engineering
 
 > **Compatible with:** Claude Code · Gemini CLI · Cursor · Codex
 
@@ -6,19 +6,50 @@
 
 ## 1. Agent Selection Decision Matrix
 
-**Before starting any task**, the AI must evaluate and suggest the appropriate agent to the user:
+**Before starting any task**, evaluate the correct tier — always start from the cheapest tier that can do the job:
 
-| Task Type | Recommended Agent | Reasoning |
-|-----------|-------------------|-----------|
-| **Codebase Mapping & Research** | ♊ **Gemini CLI** | 1M Context Window — ideal for reading many files |
-| **Feature Implementation** | ♊ **Gemini CLI** | Autonomous execution — faster and more token-efficient |
-| **Bug Fixing & Refactoring** | ♊ **Gemini CLI** | Better cross-file dependency analysis |
-| **High-Level Architecture** | ❄️ **Claude Code** | Deeper reasoning and precision in design decisions |
-| **Final Review & UX Polish** | ❄️ **Claude Code** | Superior sensitivity to style and user experience |
+### Tier 1 — ♊ Gemini Flash (Free / Cheapest)
+> Use when: wide reading, no logic required, low risk of breaking things
+
+| Task Type | Reasoning |
+|-----------|-----------|
+| **Codebase Mapping & Research** | 1M context — reads 50+ files at once |
+| **Generating boilerplate / scaffold** | Low risk, easy to verify |
+| **Summarizing / documenting** | No code logic involved |
+
+### Tier 2 — ❄️ Claude Haiku (Cheap)
+> Use when: small edits, simple fixes, clear spec — Tab off Extended Thinking
+
+| Task Type | Reasoning |
+|-----------|-----------|
+| **Simple one-file edits** | Known fix, low ambiguity |
+| **Writing test data / fixtures** | Mechanical, easy to verify |
+| **Renaming / restructuring** | Low logic complexity |
+
+### Tier 3 — ❄️ Claude Sonnet (Expensive — use sparingly)
+> Use when: logic is complex, mistakes are costly, precision matters
+
+| Task Type | Reasoning |
+|-----------|-----------|
+| **Bug fixing with logic tracing** | Gemini tends to introduce new bugs |
+| **Architecture decisions** | Requires deep reasoning |
+| **Debugging state/async/race conditions** | Needs precision thinking |
+| **Final review & QA** | Catches subtle UX and logic issues |
+
+> ⚠️ **Escalation Rule:** If Tier 1 or 2 produces incorrect output → escalate to next tier. Do NOT let Gemini's output get handed to Claude to clean up without flagging the cost to the user.
+
+> ⚠️ **Lesson Learned (2026-04-05):** Gemini fixed a test bug but introduced a new one (`null` vs `[]` logic). Claude had to re-trace the entire flow to find it, then needed Kiro to verify the fix. This wasted 2 days and multiple sessions.
+>
+> **Root cause:** Handing off buggy code between agents (Gemini → Claude → Kiro) multiplies the cost.
+>
+> **Prevention:**
+> 1. **Gemini must test locally** before handing to Claude (run: `npm run build && npm test`)
+> 2. **Single-test smoke test** immediately (`playwright test 1 spec only`) to catch regressions fast
+> 3. **NO hand-offs** — one agent owns the fix start-to-finish + commit
 
 ---
 
-## 2. Gemini-First Engineering Workflow (Primary)
+## 2. Right-Tool Engineering Workflow (Primary)
 
 ### Step 1 — Suggest the Agent
 Notify the user immediately if the task should go through Gemini CLI:
@@ -59,12 +90,15 @@ Gemini implemented Sandbox Mode successfully (screenshot showed orange banner �
 
 ---
 
-## 3. Claude-Assisted Workflow (Alternative)
+## 3. Token Cost Control
 
-Use Claude when the user prefers it or when the task requires strategic decision-making:
-- Emphasize Planning before execution
-- Use for Final Quality Check after Gemini completes work
-- Small tasks where Context < 25,000 tokens
+| Action | Saves |
+|--------|-------|
+| Press `Tab` to toggle off Extended Thinking for simple tasks | ลด output tokens มหาศาล |
+| Use **Haiku** model for Tier 2 tasks (`/model claude-haiku-4-5`) | ~20x ถูกกว่า Sonnet |
+| Use Gemini for research before asking Claude to implement | Claude ไม่ต้องอ่านไฟล์เอง |
+| Keep prompts focused — don't dump whole codebase | ลด input tokens |
+| `.claudeignore` excludes build/test artifacts | ลด context scan |
 
 ---
 
@@ -124,3 +158,35 @@ After **every file write or edit**, the agent must run the corresponding test(s)
 | `src/data/services/**` | `cd tests/api-testing && npx cross-env LANG=th ENV=sit npx playwright test --config=playwright.config.ts --reporter=line` |
 
 > ⚠️ **Rule:** Never mark a task as done until all relevant tests pass. If tests fail, fix the root cause — do NOT modify test expectations to force a pass.
+
+---
+
+## 7. Claude Code Optimization Tips (Manual Usage)
+
+### Extended Thinking Token Management
+Extended Thinking (深い思考 mode) consumes **all thinking tokens as output tokens**, making it expensive for simple tasks.
+
+**Usage:**
+- **Toggle on/off:** Press `Tab` in Claude Code CLI to toggle instantly
+- **Global limit:** Set in `~/.zshrc` to cap spending:
+  ```bash
+  export MAX_THINKING_TOKENS=8000
+  ```
+  Then reload: `source ~/.zshrc`
+
+**When to use:**
+- ✅ Complex architectural decisions
+- ✅ Debugging multi-file dependencies
+- ❌ Simple commands (quick fixes, file reads)
+
+### Context Efficiency with .claudeignore
+The `.claudeignore` file (like `.gitignore`) excludes unnecessary files from Claude's context scanning.
+
+**Already configured for this project:**
+- Build artifacts: `dist/`, `assets/`
+- Dependencies: `node_modules/`
+- Test noise: `playwright-report/`, `test-results/`
+- Secrets: `.env`, `.firebase/`
+- OS/Logs: `*.log`, `.DS_Store`
+
+**Benefit:** Faster scanning, lower context usage, faster responses.
