@@ -51,6 +51,22 @@
 
 ## 2. Right-Tool Engineering Workflow (Primary)
 
+### Pre-Flight — Create Feature Branch
+**Always**, even working solo — protects against mistakes and gives easy rollback:
+
+```bash
+git checkout -b feat/description-of-work
+```
+
+Benefits:
+- 🔄 Easy rollback if something breaks (`git reset --hard`)
+- 📋 Clear git history (each PR = one logical change)
+- 🧪 Safe to experiment without affecting main
+- 🛑 Catch mistakes before merging (self-review)
+- ⚡ **Critical when using multiple AI agents** — if Gemini introduces bugs, Claude can revert and retry without polluting main
+
+> 💡 **Note:** Even solo work benefits from branches. Especially with AI assistance where mistakes can be subtle (e.g., Gemini's `h || []` bug was hidden in conditional logic).
+
 ### Step 1 — Suggest the Agent
 Notify the user immediately if the task should go through Gemini CLI:
 > "♊ This task is recommended for **Gemini CLI** (model: `gemini-3-flash-preview`) for maximum efficiency and context savings — would you like me to generate the ready-to-run command?"
@@ -109,7 +125,8 @@ Regardless of which agent is used, **the same standards must be followed**:
 2. **Evidence-First:** Never guess — always `grep` or `glob` for evidence first
 3. **Validation is Finality:** Work is only complete when tests confirm correctness — `npm run build` passing is necessary but NOT sufficient; runtime behavior must also be verified
 4. **Context Efficiency:** Use tools economically (read only necessary lines, batch commands in one turn)
-5. **Commit After Final Review:** After every Final Review, stage all changes and commit with a descriptive message
+5. **Commit Early & Often:** After each logical step (not just at the end) — gives safe checkpoints to revert to if something breaks
+6. **Commit After Final Review:** After every Final Review, stage all changes and commit with a descriptive message
 
 ---
 
