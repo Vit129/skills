@@ -55,6 +55,17 @@ lib/
 - Integration tests for critical user flows
 - Use `mocktail` or `mockito` for mocking
 
+## Cross-Platform Standards
+
+These topics apply to all platforms — see dedicated files for full details:
+
+- **Testability (Semantics / Key):** `testability-standards.md`
+- **UI States (Loading/Empty/Error):** `ui-states-standards.md`
+- **Error Handling:** `error-handling-standards.md`
+- **Environment Config:** `env-config-standards.md`
+- **Logging:** `logging-standards.md`
+- **Navigation & Deep Links:** `navigation-standards.md`
+
 ## Tips
 - Follow effective Dart style guide
 - Use `flutter analyze` before every commit

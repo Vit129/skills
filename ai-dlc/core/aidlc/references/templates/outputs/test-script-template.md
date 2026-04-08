@@ -247,51 +247,52 @@ test.describe('[PBI-001] Feature Name', () => {
 
 ### 5. Element Locator Strategy (Priority Order)
 
-#### 1. getByTestId (Highest Priority - Most Stable)
+#### 1. getByTestId (Highest Priority — containers, lists, dynamic items)
 ```typescript
-// BEST - Test ID locators (most reliable)
-const usernameInput = page.getByTestId('username-input');
-const submitButton = page.getByTestId('submit-btn');
-const errorMessage = page.getByTestId('error-msg');
+// BEST — scope ด้วย testId ก่อนเสมอ
+const resultList = page.getByTestId('flight-result-list')
+const resultItem = page.getByTestId('flight-result-item-FL001')
 ```
 
-#### 2. getByRole (Second Priority - Accessibility Friendly)
+#### 2. Hybrid: getByTestId + getByRole + Labels.ts (Standard pattern)
 ```typescript
-// GOOD - Role-based locators
-const usernameInput = page.getByRole('textbox', { name: 'Username' });
-const submitButton = page.getByRole('button', { name: 'Submit' });
-const loginForm = page.getByRole('form', { name: 'Login Form' });
+// STANDARD — scope ด้วย testId, target ด้วย role + label จาก Labels.ts
+import { flightBookingLabels } from '../fixtures/japan/flight-booking/flightBookingLabels'
+const L = flightBookingLabels[process.env.LANG ?? 'th']
+
+await page.getByTestId('flight-result-item-FL001')
+         .getByRole('button', { name: L.btnSelectFlight }).click()
+
+// container มี button เดียว — ไม่ต้องระบุ name
+await page.getByTestId('flight-search-form').getByRole('button').click()
 ```
 
-#### 3. getByText/getByLabel (Third Priority - User-Friendly)
+#### 3. getByLabel (Form fields with labels)
 ```typescript
-// GOOD - Text and label locators
-const passwordInput = page.getByLabel('Password');
-const loginButton = page.getByText('Login');
-const welcomeText = page.getByText('Welcome back!');
+const passwordInput = page.getByLabel('Password')
 ```
 
-#### 4. CSS Selectors (Fourth Priority - Flexible)
+#### 4. getByPlaceholder / getByText
 ```typescript
-// OK - CSS selectors when above methods not available
-const emailInput = page.locator('#email');
-const submitButton = page.locator('button[type="submit"]');
-const errorMessage = page.locator('.error-message');
+const searchInput = page.getByPlaceholder('Search...')
+const welcomeText = page.getByText('Welcome back!')
 ```
 
-#### 5. XPath (Last Resort - Use Only When Necessary)
+#### 5. CSS/XPath (Last Resort — avoid)
 ```typescript
-// LAST RESORT - XPath locators
-const dynamicElement = page.locator('xpath=//div[contains(@class, "dynamic")]//button[text()="Click Me"]');
-const complexElement = page.locator('xpath=//input[@placeholder="Username"]');
+// LAST RESORT only
+const element = page.locator('#specific-id')
 ```
 
-#### What NOT to Use
+#### Labels.ts Pattern (MANDATORY for Web UI)
 ```typescript
-// WRONG - Generic locators
-const input = page.locator('input');           // Too generic
-const button = page.locator('button');         // Too generic
-const div = page.locator('div');               // Too generic
+// fixtures/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/[systemFeature]Labels.ts
+export const flightBookingLabels = {
+  th: { btnSelectFlight: 'เลือก', btnSearchFlights: 'ค้นหาเที่ยวบิน' },
+  en: { btnSelectFlight: 'Select', btnSearchFlights: 'Search Flights' },
+}
+// ❌ NEVER hardcode text in getByRole
+// ✅ ALWAYS use L.keyName from Labels.ts
 ```
 
 ### 6. API Test Logging

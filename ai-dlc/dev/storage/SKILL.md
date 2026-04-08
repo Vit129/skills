@@ -10,6 +10,16 @@ description: >
 
 Knowledge persistence, data indexing, and backup management.
 
+## When to Load Each Reference
+
+| User says | Load |
+|-----------|------|
+| "save automation pattern", "index API pattern", "save web UI pattern" | `references/automation-save.md` |
+| "save business rule", "save UI action", "save domain config" | `references/business-save.md` |
+| "save test scenario", "index PBI", "extract test data" | `references/scenario-save.md` |
+| "update knowledge buffer", "aggregate findings", "update implementation plan" | `references/buffer-update.md` |
+| "backup data", "data safety", "data integrity" | `references/data-backup.md` |
+
 - **Automation Save** — Save technical automation patterns (API/Web UI/Mobile). (Read `references/automation-save.md`)
 - **Business Save** — Save business rules, UI actions, domain config. (Read `references/business-save.md`)
 - **Scenario Save** — Save test scenario PBIs to index and extract test data. (Read `references/scenario-save.md`)

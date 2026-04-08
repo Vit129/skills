@@ -30,12 +30,19 @@ Transform Playwright Codegen recordings (test-*.spec.ts) into proper Page Object
 6. Replace hard waits with smart waits
 
 ## Locator priority
-1. `getByRole` — semantic elements
-2. `getByLabel` — form fields with labels
-3. `getByPlaceholder` — inputs
-4. `getByText` — non-interactive text
-5. `getByTestId` — last resort
+1. `getByTestId` — containers, lists, dynamic items, translatable elements (most stable)
+2. `getByRole` + `L.keyName` from `Labels.ts` — semantic elements with stable name
+3. `getByLabel` — form fields
+4. `getByPlaceholder` — inputs
+5. `getByText` — non-interactive text
 6. XPath/CSS — avoid
+
+**Hybrid pattern (standard):**
+```typescript
+// scope ด้วย testId, target ด้วย role + label จาก Labels.ts
+page.getByTestId('flight-result-item-FL001')
+    .getByRole('button', { name: L.btnSelectFlight }).click()
+```
 
 ## Pattern Transformations
 

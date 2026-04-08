@@ -40,7 +40,7 @@ helpers/shared-helpers/[system_feature_snake]_helper.py
   - ✅ CORRECT: `tests-mobile/android/shopee/shopee-payment/shopeePayment.robot`
 
 ## Locator priority
-1. `accessibility_id` — most stable, same across platforms
+1. `accessibility_id` — most stable, same across platforms (maps to `data-testid` / `accessibilityIdentifier` from dev)
 2. `id` (Android) / `predicate` (iOS)
 3. `UIAutomator` (Android) / `class chain` (iOS)
 4. `xpath` — avoid
@@ -51,6 +51,34 @@ helpers/shared-helpers/[system_feature_snake]_helper.py
 - No XPath as first resort
 - Hybrid Setup: use API calls for data preparation, not UI navigation
 - All test data from YAML fixtures, not hardcoded
+- All UI labels (button text, heading) in `[systemFeature]Labels.yaml` — never hardcode text in keywords
+
+## Labels File Pattern (Bi-language TH/EN)
+
+Mobile uses YAML labels — same concept as web `Labels.ts`:
+
+```yaml
+# fixtures/[platform]/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/[systemFeature]Labels.yaml
+th:
+  btn_select_flight: "เลือก"
+  btn_search_flights: "ค้นหาเที่ยวบิน"
+  btn_confirm_booking: "ยืนยันการจอง"
+en:
+  btn_select_flight: "Select"
+  btn_search_flights: "Search Flights"
+  btn_confirm_booking: "Confirm Booking"
+```
+
+```robot
+# Usage in Page Object
+${LANG}=    Get Environment Variable    LANG    th
+${L}=       Load Yaml    fixtures/android/japan/flight-booking/flightBookingLabels.yaml
+${LABELS}=  Set Variable    ${L}[${LANG}]
+
+# ✅ scope ด้วย accessibility_id, verify text จาก Labels
+Wait Until Element Is Visible    accessibility_id=flight-result-item-FL001
+Element Text Should Be    accessibility_id=btn-select-flight    ${LABELS}[btn_select_flight]
+```
 
 ## Unified Keyword Mapping Table (Mandatory)
 Must populate before finishing design:

@@ -57,6 +57,15 @@ app.use((err, req, res, next) => {
 - Validate at the edge (middleware/controller) — not deep in services
 - Return 400 with specific field errors
 
+## Cross-Language Standards
+
+These topics apply to all backend languages — see dedicated files for full details:
+
+- **Error Handling:** `error-handling-standards.md`
+- **Logging:** `logging-standards.md`
+- **Environment Config:** `env-config-standards.md`
+- **Input Validation:** `validation-standards.md`
+
 ## Tips
 - TypeScript for all new projects
 - Use `async/await` — avoid callback hell

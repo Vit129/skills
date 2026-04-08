@@ -20,13 +20,15 @@ Save technical automation knowledge (components, test data, lessons) for API/Web
 
 ### Web UI Automation
 1. Save test data: `fixtures/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/[systemFeature]Data.sit.ts`
-2. Save lessons: `ai-agent/knowledge/lessons/webUi/webUiLes[Category].json`
+2. Save UI labels: `fixtures/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/[systemFeature]Labels.ts` (TH/EN)
+3. Save lessons: `ai-agent/knowledge/lessons/webUi/webUiLes[Category].json`
    - Categories: locators, interactions, waits, assertions, components
-3. Update `webUiIndex.json` with components and page_objects
+4. Update `webUiIndex.json` with components and page_objects
 
 ### Mobile Automation
 1. Save test data: `fixtures/[platform]/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/[systemFeature]Data.sit.yaml`
-2. Save lessons: `ai-agent/knowledge/lessons/mobile/mobileLes[Category].json`
+2. Save UI labels: `fixtures/[platform]/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/[systemFeature]Labels.yaml` (TH/EN)
+3. Save lessons: `ai-agent/knowledge/lessons/mobile/mobileLes[Category].json`
    - Categories: locators, app_management, gestures, performance
 
 ## Lesson Schema

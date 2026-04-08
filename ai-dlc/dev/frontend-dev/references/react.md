@@ -83,6 +83,17 @@ src/
 - Return early from functions
 - Defer non-critical work: `requestIdleCallback`
 
+## Cross-Platform Standards
+
+These topics apply to all platforms — see dedicated files for full details:
+
+- **Testability (data-testid):** `testability-standards.md`
+- **UI States (Loading/Empty/Error):** `ui-states-standards.md`
+- **Error Handling:** `error-handling-standards.md`
+- **Environment Config:** `env-config-standards.md`
+- **Logging:** `logging-standards.md`
+- **Navigation & Deep Links:** `navigation-standards.md`
+
 ## Tips
 - Prefer composition over inheritance
 - Lift state up only when needed — keep state as local as possible

@@ -10,7 +10,16 @@ description: >
 
 Full automation cycle for Playwright: write → review → run → heal.
 
-Before writing or reviewing any Playwright code, always read the `playwright-rules` skill first.
+Always read the `playwright-rules` skill before writing or reviewing any Playwright code.
+
+## When to Load Each Reference
+
+| User says | Load |
+|-----------|------|
+| "write tests", "review test code", "run tests", "fix failing tests", "heal failures" | `references/workflow.md` |
+| "add a test", "modify this test", "quick fix", "patch test" | `references/quick-automation.md` |
+| "generate DB config", "create test data service", "seed database" | `references/db-writer.md` |
+| "convert recording", "I recorded with Codegen", "transform this script" | `references/recorder.md` |
 
 - **Workflow** — Write, review, execute, and self-heal Playwright tests. (Read `references/workflow.md`)
 - **Quick Automation** — Add/modify tests without full workflow. (Read `references/quick-automation.md`)

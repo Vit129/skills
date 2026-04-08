@@ -45,7 +45,8 @@ tests/
 │   │   │   └── userProfileData.ts                 # 📦 CORE: Common data (e.g., Global test accounts)
 │   │   └── [SYSTEM_KEBAB]/
 │   │       └── [SYSTEM_FEATURE_KEBAB]/
-│   │           ├── [SYSTEM_FEATURE_CAMEL]Data.ts      # 📄 MAIN: Primary testing data
+│   │           ├── [SYSTEM_FEATURE_CAMEL]Data.ts      # 📄 MAIN: Business test data (search params, expected values)
+│   │           ├── [SYSTEM_FEATURE_CAMEL]Labels.ts    # 🌐 LANG: UI labels TH/EN (button text used in getByRole)
 │   │           ├── [SYSTEM_FEATURE_CAMEL]Data.uat.ts  # 🌐 ENV (Optional): UAT specific data
 │   │           └── [SYSTEM_FEATURE_CAMEL]Data.local.ts# 💻 ENV (Optional): Local specific data
 │   ├── pages/                                     # Page Objects
@@ -711,12 +712,95 @@ test('[TC-002] user cannot access admin panel', async ({ page }) => {
 
 | Priority | Locator | Use Case | Stability |
 |----------|---------|----------|----------|
-| 🥇 #1 | `getByTestId` | All elements (requires dev setup) | ⭐⭐⭐⭐⭐ |
-| 🥈 #2 | `getByRole` | Semantic elements (button, link, textbox) | ⭐⭐⭐⭐ |
+| 🥇 #1 | `getByTestId` | Containers, lists, status indicators, dynamic items | ⭐⭐⭐⭐⭐ |
+| 🥈 #2 | `getByRole` | Semantic elements with stable name (button, link, dialog, heading) | ⭐⭐⭐⭐ |
 | 🥉 #3 | `getByLabel` | Form fields with labels | ⭐⭐⭐⭐ |
 | 🏅 #4 | `getByPlaceholder` | Input with placeholder | ⭐⭐⭐ |
 | 🏅 #5 | `getByText` | Non-interactive text | ⭐⭐⭐ |
 | 🚫 #6 | CSS/XPath | Avoid unless absolutely necessary | ⭐ |
+
+### 🌐 Labels File Pattern (Bi-language TH/EN)
+
+**Purpose:** แยก UI labels (button text, heading) ออกจาก business data เพื่อรองรับ TH/EN
+
+**File:** `fixtures/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/[systemFeature]Labels.ts`
+
+```typescript
+// fixtures/japan/flight-booking/flightBookingLabels.ts
+export const flightBookingLabels = {
+  th: {
+    btnSelectFlight:  'เลือก',
+    btnSearchFlights: 'ค้นหาเที่ยวบิน',
+    btnConfirmBooking:'ยืนยันการจอง',
+    btnCancelBooking: 'ยกเลิก',
+    headingResults:   'เที่ยวบินที่พบ',
+  },
+  en: {
+    btnSelectFlight:  'Select',
+    btnSearchFlights: 'Search Flights',
+    btnConfirmBooking:'Confirm Booking',
+    btnCancelBooking: 'Cancel',
+    headingResults:   'Available Flights',
+  },
+}
+```
+
+**Usage in Page Object:**
+```typescript
+// pages/japan/flight-booking/flightResultPage.ts
+import { flightBookingLabels } from '../../../fixtures/japan/flight-booking/flightBookingLabels'
+
+const LANG = (process.env.LANG ?? 'th') as 'th' | 'en'
+const L = flightBookingLabels[LANG]
+
+export class FlightResultPage {
+  async selectFlight(flightId: string) {
+    // ✅ scope ด้วย testId, target ด้วย role+label
+    await this.page
+      .getByTestId(`flight-result-item-${flightId}`)
+      .getByRole('button', { name: L.btnSelectFlight })
+      .click()
+  }
+}
+```
+
+**Rules:**
+- `Labels.ts` มี `th` และ `en` เสมอ — ห้ามมีแค่ภาษาเดียว
+- key names ใช้ camelCase สื่อความหมาย เช่น `btnSelectFlight` ไม่ใช่ `select`
+- ใช้ `Labels.ts` เฉพาะ text ที่ใช้ใน `getByRole({ name })` เท่านั้น — ไม่ใช่ทุก text ในหน้า
+- `LANG` อ่านจาก `process.env.LANG` — set ใน `.env` ต่อ environment
+
+### 🔀 Hybrid Locator Pattern (Recommended)
+
+Use `getByTestId` to scope, then `getByRole` to target the element within — best of both worlds:
+
+```typescript
+// ✅ Scope with testId, target with role — readable + stable
+await page.getByTestId('flight-search-form').getByRole('button', { name: L.btnSearchFlights }).click()
+await page.getByTestId('booking-confirmation').getByRole('button', { name: L.btnConfirmBooking }).click()
+
+// ✅ getByTestId for containers and dynamic items
+await expect(page.getByTestId('flight-result-list')).toBeVisible()
+await page.getByTestId('flight-result-item-FL001').getByRole('button', { name: L.btnSelectFlight }).click()
+
+// ✅ getByRole alone — only when container has single button
+await page.getByTestId('flight-search-form').getByRole('button').click()
+```
+
+### ⚠️ i18n / Bi-language Consideration
+
+- `getByRole({ name: '...' })` ใช้ visible text — **พังเมื่อภาษา switch**
+- ต้องใช้ `L.keyName` จาก `Labels.ts` เสมอ — ห้าม hardcode text ภาษาใดภาษาหนึ่ง
+
+```typescript
+// ❌ hardcode — พังเมื่อ switch ภาษา
+await page.getByRole('button', { name: 'เลือก' }).click()
+await page.getByRole('button', { name: 'Select' }).click()
+
+// ✅ ใช้ Labels — รองรับทั้ง TH/EN
+await page.getByTestId('flight-result-item-FL001')
+         .getByRole('button', { name: L.btnSelectFlight }).click()
+```
 
 ### 🛑 Anti-Patterns (Zero Tolerance)
 
@@ -727,6 +811,7 @@ test('[TC-002] user cannot access admin panel', async ({ page }) => {
 | `button.click({ force: true })` | Fix visibility issues (scroll/wait) |
 | `waitForLoadState('networkidle')` | `page.waitForResponse('**/api/endpoint')` |
 | XPath (`//div/span`) | `getByTestId`, `getByRole` |
+| `getByRole({ name: 'Thai text' })` on translatable elements | `getByTestId` |
 
 ---
 

@@ -153,6 +153,4 @@ Before proceeding to next phase, validate:
 
 ## Next Phase
 
-When all tasks complete:
-- If AIDLC workflow → go to `references/phases/inception/azure-devops-sync.md`
-- If standalone QA workflow → go to pipeline creation or librarian (save knowledge)
+When all QA tasks complete → return to `workflow.md` routing table to determine next phase.

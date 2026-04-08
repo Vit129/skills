@@ -14,7 +14,6 @@ This folder contains the core scripts for **AI-Enhanced Postman Migration**:
 1. `readPostmanCollection.ts`: Reads Collections → Arrow key folder selection → Generates Markdown + Playwright snippets + Nested describe tree.
 2. `readPostmanEnv.ts`: Reads Environments → Arrow key collection folder selection → Generates Markdown analysis + `.env` snippets.
 3. `postmanMdToPlaywright.ts`: Reads Markdown output from steps 1+2 → Generates ready-to-run `.spec.ts` + `Helper.ts` + `Data.ts` fixture files.
-4. `postmanDebtAnalyzer.ts`: Analyzes generated output for technical debt → Reports HIGH/MEDIUM/LOW issues mapped to skill principles → Outputs DbService stub + Spec lifecycle stub.
 
 ---
 
@@ -38,13 +37,63 @@ This folder contains the core scripts for **AI-Enhanced Postman Migration**:
 
 ---
 
-## 🏗️ Core Features (v6.2)
+---
 
-- **Technical Debt Analyzer:** `postmanDebtAnalyzer.ts` runs automatically after `postmanMdToPlaywright.ts` generates files — reports issues before the `y/v/n` prompt.
-- **Skill-Mapped Checks:** Every issue is tagged with its source skill and rule reference (e.g., `architect-skills / api.md PART 6`, `architect-skills/db-strategy — Step 2.5`).
-- **22 MEDIUM + 6 HIGH checks** covering: testId lifecycle, seedAll orchestration, AJV Schema, Multi-Service Architecture, SLA assertions, self-healing evidence (`test.info().attach`), serial mode, DbConfig.ts, Schema Consistency API↔DB, and more.
-- **Auto Stubs:** Analyzer outputs ready-to-use `DbService` stub and `Spec lifecycle` stub (beforeEach/afterEach) when DB issues are detected.
-- **CWE-117 Safe:** All `console.log` outputs in the analyzer pass through `sanitize()` to prevent log injection.
+## 🔄 Script 4: runAndHeal.ts — Run + Auto-Heal Fix Loop
+
+Runs Playwright tests and automatically attempts to fix code failures in a loop (max 3–5 attempts). Appends a Reflexion Log to `audit.md` after each run.
+
+### Usage
+
+```bash
+npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
+  ~/.claude/skills/ai-dlc/qa/postman/scripts/runAndHeal.ts \
+  --spec "<path/to/spec.ts or tests-api/folder>" \
+  [--config "<playwright.config.ts>"] \
+  [--max-attempts 3] \
+  [--audit "<path/to/audit.md>"] \
+  [--reporter line|json|dot]
+```
+
+### Parameters
+
+| Flag | Required | Default | Description |
+|------|----------|---------|-------------|
+| `--spec` | ✅ | — | Path to spec file or folder |
+| `--config` | ❌ | auto-detect | Playwright config file |
+| `--max-attempts` | ❌ | `3` | Max heal attempts (capped at 5) |
+| `--audit` | ❌ | `<spec-dir>/audit.md` | Reflexion Log output path |
+| `--reporter` | ❌ | `line` | Console reporter style |
+
+### Auto-Heal Patterns
+
+| Fix Type | Trigger | Action |
+|----------|---------|--------|
+| `timeout_selector` | `Timeout waiting for` | Adds `test.setTimeout(60_000)` |
+| `null_response` | `Cannot read prop of undefined` | Wraps `response.json()` with null guard |
+| `http_error` | `status 4xx/5xx` | Adds hint comment to check env/mock |
+| `missing_import` | `Cannot find module` | Adds install hint comment at top |
+| `assertion_failed` | `Expected ... received` | Adds `await response.finished()` before assertion |
+
+### Failure Classification
+
+- **ENV failures** (ECONNREFUSED, 502/503/504, VPN) → skipped, not retried
+- **CODE failures** → auto-fix attempted, re-run triggered
+- If >80% pass rate → extends to 5 attempts automatically
+
+### Reflexion Log Format
+
+Appended to `audit.md` after each run:
+
+```
+## <timestamp> | Spec: <spec-name>
+### Attempt 1 — PARTIAL
+- 📊 Total: 5 | ✅ Passed: 4 | ❌ Failed: 1
+#### 🔧 CODE FIX: [TC-0001] Login API
+- ❌ Symptom: Timeout waiting for selector
+- 💊 Applied Fix: `timeout_selector`
+- 📊 Impact: Isolated
+```
 
 ---
 
@@ -53,7 +102,7 @@ This folder contains the core scripts for **AI-Enhanced Postman Migration**:
 All scripts require the `--project` flag pointing to the `tsconfig.json` in this folder:
 
 ```bash
-# tsconfig.json location: skills/postman/scripts/tsconfig.json
+# tsconfig.json location: ai-agent/scripts/postman-migration/tsconfig.json
 # Uses module: CommonJS so ts-node can run without the --esm flag
 ```
 
@@ -66,8 +115,8 @@ All scripts require the `--project` flag pointing to the `tsconfig.json` in this
 ### 1. Migrating a Collection
 
 ```bash
-npx ts-node --project skills/postman/scripts/tsconfig.json \
-  skills/postman/scripts/readPostmanCollection.ts "<collection.json>" --output "<output-dir>"
+npx ts-node --project ai-agent/scripts/postman-migration/tsconfig.json \
+  ai-agent/scripts/postman-migration/readPostmanCollection.ts "<collection.json>" --output "<output-dir>"
 ```
 
 - Arrow key prompt to select a folder (or convert all)
@@ -75,10 +124,10 @@ npx ts-node --project skills/postman/scripts/tsconfig.json \
 
 **Example:**
 ```bash
-npx ts-node --project skills/postman/scripts/tsconfig.json \
-  skills/postman/scripts/readPostmanCollection.ts \
-  "tests/api-testing/postman/collections/MyCollection.postman_collection.json" \
-  --output tests/api-testing/tests-api
+npx ts-node --project ai-agent/scripts/postman-migration/tsconfig.json \
+  ai-agent/scripts/postman-migration/readPostmanCollection.ts \
+  "Automation/tests/api-testing/postman/collections/Credit Management TS.postman_collection.json" \
+  --output Automation/tests/api-testing/tests-api
 ```
 
 *Output:* `<output-dir>/<collection-name-kebab>/<folder-name-camel>.md`
@@ -88,8 +137,8 @@ npx ts-node --project skills/postman/scripts/tsconfig.json \
 ### 2. Migrating an Environment
 
 ```bash
-npx ts-node --project skills/postman/scripts/tsconfig.json \
-  skills/postman/scripts/readPostmanEnv.ts "<environment.json>"
+npx ts-node --project ai-agent/scripts/postman-migration/tsconfig.json \
+  ai-agent/scripts/postman-migration/readPostmanEnv.ts "<environment.json>"
 ```
 
 - Arrow key prompt to select which collection folder to place the env file in
@@ -99,43 +148,18 @@ npx ts-node --project skills/postman/scripts/tsconfig.json \
 
 **Example:**
 ```bash
-npx ts-node --project skills/postman/scripts/tsconfig.json \
-  skills/postman/scripts/readPostmanEnv.ts \
-  "tests/api-testing/postman/environments/MyEnv.postman_environment.json"
+npx ts-node --project ai-agent/scripts/postman-migration/tsconfig.json \
+  ai-agent/scripts/postman-migration/readPostmanEnv.ts \
+  "Automation/tests/api-testing/postman/environments/CMM_dev.postman_environment 5.json"
 ```
 
 *Output:* `tests-api/<collection-folder>/<envName-camelCase>.md` + `.env.example`
 
 ---
 
-### 4. Analyzing Technical Debt
-
-`postmanDebtAnalyzer.ts` runs **automatically** inside `postmanMdToPlaywright.ts` — no separate command needed.
-
-The report appears after file generation, before the `y/v/n` confirmation prompt:
-
-```
-═══════════════════════════════════════════════════════
-⚠️  Technical Debt Report: <systemName>
-═══════════════════════════════════════════════════════
-   🔴 HIGH: X  🟡 MEDIUM: X  🟢 LOW: X
-───────────────────────────────────────────────────────
-🔴 [databaseStrategySkill — Safety Net / Rollback]
-   ไม่มี testId lifecycle — ถ้า test crash ข้อมูลจะค้างใน DB
-   → เพิ่ม DbService stub + beforeEach/afterEach (ดู stubs ด้านล่าง)
-...
-📋 DbService Stub:
-📋 Spec Lifecycle Stub:
-═══════════════════════════════════════════════════════
-```
-
-Review issues → fix before writing files → press `y` to confirm.
-
----
-
 ```bash
-npx ts-node --project skills/postman/scripts/tsconfig.json \
-  skills/postman/scripts/postmanMdToPlaywright.ts \
+npx ts-node --project ai-agent/scripts/postman-migration/tsconfig.json \
+  ai-agent/scripts/postman-migration/postmanMdToPlaywright.ts \
   --input "<tests-api/collection-folder>" \
   --env-input "<tests-api/collection-folder/env.md>" \
   --output-dir "<project-root>"

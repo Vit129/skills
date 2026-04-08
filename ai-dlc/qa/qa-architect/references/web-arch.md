@@ -32,21 +32,33 @@ pages/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/basePage.ts              — base cl
 pages/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/navigationPage.ts        — layout navigation
 pages/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/[systemFeature]Page.ts   — content pages
 helpers/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/[systemFeature]Helper.ts — main controller
-fixtures/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/[systemFeature]Data.ts  — test data
+fixtures/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/[systemFeature]Data.ts  — test data (business data)
+fixtures/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/[systemFeature]Labels.ts — UI labels (TH/EN)
 tests-web/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/[systemFeature].spec.ts — test specs
 ```
 - Folders: kebab-case. Files: lowerCamelCase
 - MUST use 2-level structure — never flat
   - ❌ WRONG: `pages/shopee/shopeePaymentPage.ts`
   - ✅ CORRECT: `pages/shopee/shopee-payment/shopeePaymentPage.ts`
+- `[systemFeature]Data.ts` — business data (search params, booking data, expected values)
+- `[systemFeature]Labels.ts` — UI labels TH/EN (button text, heading text used in `getByRole`)
 
 ## Locator priority
-1. `getByTestId` — most stable
-2. `getByRole` — semantic elements
-3. `getByLabel` — form fields
+1. `getByTestId` — containers, lists, dynamic items, translatable elements (most stable)
+2. `getByRole` + `L.keyName` — semantic elements, ใช้ label จาก `Labels.ts` เสมอ
+3. `getByLabel` — form fields ที่มี label
 4. `getByPlaceholder` — inputs
 5. `getByText` — non-interactive text
 6. CSS/XPath — avoid
+
+**Hybrid pattern (standard):**
+```typescript
+// scope ด้วย testId, target ด้วย role + label จาก Labels.ts
+page.getByTestId('flight-result-item-FL001').getByRole('button', { name: L.btnSelectFlight }).click()
+
+// container มี button เดียว — ไม่ต้องระบุ name
+page.getByTestId('flight-search-form').getByRole('button').click()
+```
 
 ## Key rules
 - No `waitForTimeout()` — use smart waits
@@ -70,6 +82,8 @@ Same as API architecture — detect if feature has cross-layer tests:
 - ❌ Missing Storage State strategy
 - ❌ Missing Error Simulation patterns
 - ❌ Patterns ignoring Database Strategy
+- ❌ Hardcoded Thai/English text in `getByRole({ name })` — must use `L.keyName` from `Labels.ts`
+- ❌ Missing `Labels.ts` when feature has UI text used in locators
 
 ## Business Edge Cases (Mandatory Check)
 Before finalizing, verify architecture covers:

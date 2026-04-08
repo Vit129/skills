@@ -114,8 +114,9 @@ How to check: scan `.aidlc/[system]/[feature]/` for required files. If missing �
 ### TDD Locator Strategy (QA)
 
 When writing test scripts before UI exists (TDD RED phase):
-- Use `getByTestId` as primary locator — agree testId naming with dev team upfront
-- Use `getByRole` with expected semantic names from design/logical-design
+- Use `getByTestId` as primary locator — agree testId naming with dev team upfront (from logical-design testId map)
+- Use hybrid pattern: `getByTestId` to scope + `getByRole({ name: L.keyName })` to target
+- Create `[feature]Labels.ts` with TH/EN labels upfront — agree with dev on visible text
 - If locator breaks after dev implements → heal using `playwright-testing` skill (visual-first debugging)
 - Never block on "locator doesn't exist yet" — write the test with expected locators, fix after GREEN phase
 

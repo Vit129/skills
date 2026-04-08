@@ -10,6 +10,17 @@ description: >
 
 Design, generate, and export test scenarios for Azure DevOps.
 
+## When to Load Each Reference
+
+| User says | Load |
+|-----------|------|
+| "find existing scenarios", "reuse scenarios", "check before designing" | `references/reuse-analysis.md` |
+| "design test scenarios", "create test cases", "generate scenarios" | `references/designer.md` |
+| "generate test data", "BVA", "pairwise", "data set" | `references/data-gen.md` |
+| "export to CSV", "validate CSV", "23-column" | `references/csv-validator.md` |
+| "add scenario", "quick scenario", "modify scenario" | `references/quick-scenario.md` |
+| "parse scenarios", "extract automatable cases", "read CSV" | `references/test-cases.md` |
+
 - **Reuse Analysis** — Find reusable scenarios before designing new ones. (Read `references/reuse-analysis.md`)
 - **Designer** — Generate test scenarios with AI reasoning (CoT + 2026 standards). (Read `references/designer.md`)
 - **Data Generation** — Smart test data collection with BVA and pairwise. (Read `references/data-gen.md`)

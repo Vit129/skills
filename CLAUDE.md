@@ -49,9 +49,103 @@
 
 ---
 
-## 2. Right-Tool Engineering Workflow (Primary)
+## 2. Tier Selection Strategy (Risk-Based, Pay-Per-Use)
 
-### Pre-Flight — Create Feature Branch
+> **Philosophy:** Default assume all tasks are risky. User controls which tier to use on a per-task basis—no fixed subscription required.
+
+### Workflow: Assess → Recommend → User Chooses
+
+```
+1. Gemini: Read task + summarize findings
+                    ↓
+2. Claude: Assess complexity → recommend tier
+                    ↓
+3. User: Choose [Haiku (risky)] [Sonnet (safe)] [Skip]
+                    ↓
+4. Execute + commit
+```
+
+### Tier Recommendation Matrix
+
+| Complexity | Risk Level | Recommend | Haiku Risk | Cost |
+|-----------|-----------|-----------|-----------|------|
+| 🟢 **Easy** (boilerplate, simple fix, clear spec) | Low | **Haiku** | Safe | $0.01 |
+| 🟡 **Medium** (bug with logic, state change, test coverage exists) | Medium-High | **Sonnet** | 10-15% miss subtle bugs | $0.10 |
+| 🔴 **Hard** (state mutation, async/race conditions, critical path, no tests) | Critical | **Sonnet** (required) | Not recommended | $0.15 |
+
+### Assessment Checklist (Claude Uses)
+
+When recommending tier, Claude checks:
+
+- **Logic complexity**: State mutations? Async? Race conditions?
+- **Test coverage**: Exists? Will catch regressions?
+- **Risk of bug**: If wrong, how bad? (UI broken = low risk; data loss = critical)
+- **Subtlety**: Edge cases? Timing issues? (Haiku misses these)
+
+### Example: Claude Assessment Output
+
+```
+## Task Assessment
+Title: Fix calendar input validation
+Complexity: 🟡 Medium
+
+Analysis:
+  ✓ Tests exist (holdings.spec.ts)
+  ✓ Logic is clear (input min-date validation)
+  ⚠️ Involves state update (calendar selection)
+  ⚠️ Date comparison (off-by-one risk)
+
+Haiku risk:
+  • 10% chance miss off-by-one edge case
+  • 5% chance wrong date comparison
+
+Recommendation:
+  → Sonnet (safer for this)
+  → Or Haiku if you accept 10-15% risk
+
+Your choice:
+  [A] Sonnet ($0.10 — safe)
+  [B] Haiku ($0.01 — risky)
+  [C] Skip for now
+```
+
+### Cost Model (Pay-Per-Use)
+
+No fixed subscription. Sample month:
+
+```
+Task 1 (Easy fix):    Haiku    → $0.01
+Task 2 (Medium bug):  Sonnet   → $0.10
+Task 3 (API work):    Sonnet   → $0.15
+Task 4 (Scaffold):    Haiku    → $0.01
+─────────────────────────────────────
+Monthly total:                    ~$5-15
+
+vs Claude Max ($100/month) = 6-20x cheaper
+vs Claude Pro ($20/month) = Similar cost with more control
+```
+
+### Gemini's Role in This Strategy
+
+✅ **Gemini ONLY for:**
+- Reading code / documentation
+- Summarizing task requirements
+- Listing files / context mapping
+- Finding relevant code sections
+
+❌ **Never Gemini for:**
+- Fixing logic bugs
+- State management changes
+- Async/timing fixes
+- Any task graded 🟡 or 🔴
+
+**Why:** Gemini bug cascade wastes more tokens than just using Sonnet upfront.
+
+---
+
+## 3. Right-Tool Engineering Workflow (Primary)
+
+### Pre-Flight — Create Feature Branch (Always)
 **Always**, even working solo — protects against mistakes and gives easy rollback:
 
 ```bash
@@ -106,7 +200,7 @@ Gemini implemented Sandbox Mode successfully (screenshot showed orange banner �
 
 ---
 
-## 3. Token Cost Control
+## 4. Token Cost Control
 
 | Action | Saves |
 |--------|-------|
@@ -118,7 +212,7 @@ Gemini implemented Sandbox Mode successfully (screenshot showed orange banner �
 
 ---
 
-## 4. Engineering Standards & AIDLC
+## 5. Engineering Standards & AIDLC
 
 Regardless of which agent is used, **the same standards must be followed**:
 1. **Explain Before Acting:** Briefly state intent before invoking any tool
@@ -130,7 +224,7 @@ Regardless of which agent is used, **the same standards must be followed**:
 
 ---
 
-## 5. Playwright Skills (Mandatory for All Test Work)
+## 6. Playwright Skills (Mandatory for All Test Work)
 
 When writing, reviewing, fixing, or running Playwright tests, **both skills must be activated**:
 
@@ -155,7 +249,7 @@ Before writing or reviewing any test code:
 
 ---
 
-## 6. Test Coverage Rules (Mandatory)
+## 7. Test Coverage Rules (Mandatory)
 
 After **every file write or edit**, the agent must run the corresponding test(s):
 
@@ -178,7 +272,7 @@ After **every file write or edit**, the agent must run the corresponding test(s)
 
 ---
 
-## 7. Claude Code Optimization Tips (Manual Usage)
+## 8. Claude Code Optimization Tips (Manual Usage)
 
 ### Extended Thinking Token Management
 Extended Thinking (深い思考 mode) consumes **all thinking tokens as output tokens**, making it expensive for simple tasks.

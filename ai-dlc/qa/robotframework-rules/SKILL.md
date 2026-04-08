@@ -21,3 +21,4 @@ The authoritative coding standards for all Robot Framework mobile automation.
 3. No `Sleep` — use `Wait Until Element Is Visible`
 4. AAA Pattern: Arrange-Act-Assert in every test
 5. All test data from YAML fixtures, not hardcoded
+6. Labels.yaml: TH/EN UI labels in separate file — never hardcode text in keywords

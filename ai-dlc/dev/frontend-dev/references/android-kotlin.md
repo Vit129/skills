@@ -56,6 +56,17 @@ app/src/main/
 - UI tests: Espresso (XML) or Compose Testing (Compose)
 - Use fake repositories for testing — avoid mocking everything
 
+## Cross-Platform Standards
+
+These topics apply to all platforms — see dedicated files for full details:
+
+- **Testability (contentDescription / testTag):** `testability-standards.md`
+- **UI States (Loading/Empty/Error):** `ui-states-standards.md`
+- **Error Handling:** `error-handling-standards.md`
+- **Environment Config:** `env-config-standards.md`
+- **Logging:** `logging-standards.md`
+- **Navigation & Deep Links:** `navigation-standards.md`
+
 ## Tips
 - Kotlin first — no Java for new code
 - Use `sealed class` for UI states: Loading, Success, Error

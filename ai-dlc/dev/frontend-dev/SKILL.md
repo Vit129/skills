@@ -12,10 +12,19 @@ description: >
 
 Build and maintain frontend applications across web and mobile.
 
-## Boundary with `ui-designer`
+Use this skill to implement components in code (React, Tailwind, Flutter, native).
+Use `ui-designer` first if design tokens, visual language, or component specs haven't been defined yet.
 
-> Use **this skill** to implement components in code (React, Tailwind, Flutter, native).
-> Use **`ui-designer`** first if design tokens, visual language, or component specs haven't been defined yet.
+## When to Load Each Reference
+
+| User says | Load |
+|-----------|------|
+| "React component", "hooks", "state management", "folder structure" | `references/react.md` |
+| "Tailwind", "utility classes", "Tailwind v4" | `references/tailwind-standards.md` |
+| "Vite config", "Vite + React", "Tailwind plugin" | `references/vite-config.md` |
+| "Flutter", "widget", "navigation", "networking" | `references/flutter.md` |
+| "Android", "Kotlin", "Jetpack Compose", "Hilt", "Coroutines" | `references/android-kotlin.md` |
+| "iOS", "Swift", "SwiftUI", "async/await", "Combine" | `references/ios-swift.md` |
 
 ## Web
 - **React** — Component design, hooks, state management, folder structure. (Read `references/react.md`)

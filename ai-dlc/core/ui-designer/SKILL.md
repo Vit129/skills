@@ -24,4 +24,4 @@ Build consistent, polished, and distinctive interfaces for any project.
 - Semantic color names (`--color-primary` not `--blue`)
 - Respect accessibility: contrast ratios, focus states, reduced motion
 
-> Use **this skill** for design decisions. Use **`frontend-dev`** to implement in code.
+Use this skill for design decisions. Use `frontend-dev` to implement in code.

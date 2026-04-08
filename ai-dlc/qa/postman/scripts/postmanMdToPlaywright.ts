@@ -20,7 +20,7 @@ function safeResolvePath(base: string, userInput: string): string {
 
 /**
  * 🚀 postmanMdToPlaywright.ts (Postman Markdown to Playwright)
- * @version 4.0 - Structural Fix
+ * @version 5.0 - Multi-Service Architecture
  * @fixes-v4
  *   1. [PARSER]       Stack-based block extractor — แทน testRegex ที่หลุด nested });
  *   2. [ITER_DATA]    pm.iterationData → extract keys จริง + typed interface + test.each
@@ -32,6 +32,10 @@ function safeResolvePath(base: string, userInput: string): string {
  *   8. [COLL_HELPER]  collectionHelpersData → strip code fence ก่อน match
  *   9. [DATA_DETECT]  isDataDriven → detect จาก `data.` pattern + iterationKeys
  *  10. [STATE_STORE]  stateStore → detect + emit test.describe.serial + beforeAll
+ * @fixes-v5
+ *  11. [MULTI_SVC]    Multi-Service Architecture — แยก *Service.ts per label, Helper เป็น entry point
+ *  12. [LIFECYCLE]    beforeEach/afterEach — improved DB strategy stubs with request fixture
+ *  13. [SERIAL_ID]    test.describe.serial ยังคง [PBI-0000] prefix ตาม playwright-rules
  */
 
 // ───────────────────────────────────────────────
@@ -839,28 +843,18 @@ export { expect } from '@playwright/test';
 `;
 
     // ─────────────────────────────────────────
-    // FILE 2: HELPER
+    // FILE 2: SERVICE (domain logic — per label/folder)
     // ─────────────────────────────────────────
-    let helperMethods = '';
-    let needsFs = false;
-
-    testSnippets.forEach((snippet) => {
-        if (snippet.action.includes('fs.')) needsFs = true;
-
-        const methodName = toCamelCase(snippet.testName) + 'Request';
-        const hasResponseDecl = /\bconst response\b/.test(snippet.action) || /\blet response\b/.test(snippet.action);
-        const returnLine = hasResponseDecl ? '        return response;' : '        // TODO: return the response variable';
-
-        helperMethods += `
-    /**
-     * @description ${snippet.label} > ${snippet.testName}
-     */
-    async ${methodName}(data: any = {}) {
-${snippet.action.split('\n').map(l => '        ' + l).join('\n')}
-${returnLine}
-    }
-`;
+    // Group snippets by label → each label = one Service class
+    const labelGroups = new Map<string, typeof testSnippets>();
+    testSnippets.forEach(snippet => {
+        const label = snippet.label || 'General';
+        if (!labelGroups.has(label)) labelGroups.set(label, []);
+        labelGroups.get(label)!.push(snippet);
     });
+
+    let needsFs = false;
+    testSnippets.forEach(s => { if (s.action.includes('fs.')) needsFs = true; });
 
     const fsImport = needsFs ? "import * as fs from 'fs';\n" : '';
     const helperExtraImports = [
@@ -870,17 +864,71 @@ ${returnLine}
         extraImportsStr.trim() && !needsMoment && !needsCheerio && !needsXml2js ? extraImportsStr : '',
     ].filter(Boolean).join('\n');
 
-    const helperFileContent =
-        `${fsImport}import { APIRequestContext } from '@playwright/test';
+    // Generate one *Service.ts per label group
+    const serviceFiles: { path: string; content: string; className: string }[] = [];
+    labelGroups.forEach((snippets, label) => {
+        const serviceLabel = label === 'General' ? systemName : label;
+        const serviceCamel = toCamelCase(serviceLabel);
+        const servicePascal = toPascalCase(serviceLabel);
+        const serviceClassName = `${servicePascal}Service`;
+
+        let serviceMethods = '';
+        snippets.forEach(snippet => {
+            const methodName = toCamelCase(snippet.testName) + 'Request';
+            const hasResponseDecl = /\bconst response\b/.test(snippet.action) || /\blet response\b/.test(snippet.action);
+            const returnLine = hasResponseDecl ? '        return response;' : '        // TODO: return the response variable';
+            serviceMethods += `
+    /**
+     * @description ${snippet.label} > ${snippet.testName}
+     */
+    async ${methodName}(data: any = {}): Promise<any> {
+${snippet.action.split('\n').map(l => '        ' + l).join('\n')}
+${returnLine}
+    }
+`;
+        });
+
+        const serviceContent =
+            `${fsImport}import { APIRequestContext } from '@playwright/test';
 ${helperExtraImports ? helperExtraImports + '\n' : ''}
-// 🔌 Main Controller for ${systemName}
+// ⚙️ Service: ${serviceLabel} — Business actions (endpoint-aware)
+export class ${serviceClassName} {
+    constructor(private readonly request: APIRequestContext) {}
+${serviceMethods}
+}
+`;
+        const servicePath = path.join(targetDir, helperDirName, kebabName, `${serviceCamel}Service.ts`);
+        serviceFiles.push({ path: servicePath, content: serviceContent, className: serviceClassName });
+    });
+
+    // ─────────────────────────────────────────
+    // FILE 2b: HELPER (entry point — composes Services)
+    // ─────────────────────────────────────────
+    const serviceImports = serviceFiles.map(sf =>
+        `import { ${sf.className} } from './${path.basename(sf.path, '.ts')}';`
+    ).join('\n');
+
+    const serviceProperties = serviceFiles.map(sf => {
+        const propName = toCamelCase(sf.className.replace(/Service$/, ''));
+        return `    public readonly ${propName}: ${sf.className};`;
+    }).join('\n');
+
+    const serviceInits = serviceFiles.map(sf => {
+        const propName = toCamelCase(sf.className.replace(/Service$/, ''));
+        return `        this.${propName} = new ${sf.className}(request);`;
+    }).join('\n');
+
+    const helperFileContent =
+        `import { APIRequestContext } from '@playwright/test';
+${serviceImports}
+
+// 🔌 Main Controller for ${systemName} — composes domain Services
 export class ${pascalName}Helper {
-    private request: APIRequestContext;
+${serviceProperties}
 
     constructor(request: APIRequestContext) {
-        this.request = request;
+${serviceInits}
     }
-${helperMethods}
 }
 `;
 
@@ -978,14 +1026,16 @@ ${describeDecorator}('[PBI-0000] ${systemName} API Workflow @regression', () => 
 ${stateStoreDecl}${stateStoreBeforeAll}
     let testId: string;
 
-    test.beforeEach(async () => {
+    test.beforeEach(async ({ request }) => {
         testId = \`${systemName}_\${Date.now()}\`;
-        // Setup initial config if needed
-        // ⚠️ [DB STRATEGY]: Implement your dbHelper.seed(..., testId) here
+        // ⚠️ [DB STRATEGY]: Seed test data before each test
+        // const helper = new ${pascalName}Helper(request);
+        // await dbHelper.seed(testId, { ...${camelName}Data.samplePayload });
     });
 
-    test.afterEach(async () => {
-        // ⚠️ [DB STRATEGY - SAFETY NET]: Always cleanup data to prevent data leakage
+    test.afterEach(async ({ request }) => {
+        // ⚠️ [DB STRATEGY - SAFETY NET]: Always cleanup to prevent data leakage
+        // Even if test crashes, this runs — ensuring DB stays clean
         // await dbHelper.cleanup(testId);
     });
 
@@ -1063,9 +1113,11 @@ import { parseStringPromise } from 'xml2js';
     console.log(`   Test blocks   : ${testSnippets.length}`);
     console.log(`   Data-driven   : ${dataDrivenCount}`);
     console.log(`   Serial        : ${serialCount}`);
+    console.log(`   Services      : ${serviceFiles.length}`);
     console.log(`   Iteration keys: ${sanitizeLog(allIterationKeys.join(', ') || 'none')}`);
     console.log('\n📄 Generating:');
     console.log(`   Fixture : ${sanitizeLog(fixturePath)}`);
+    serviceFiles.forEach(sf => console.log(`   Service : ${sanitizeLog(sf.path)}`));
     console.log(`   Helper  : ${sanitizeLog(helperPath)}`);
     console.log(`   Schema  : ${sanitizeLog(schemaPath)}`);
     console.log(`   Spec    : ${sanitizeLog(specPath)}`);
@@ -1084,6 +1136,7 @@ import { parseStringPromise } from 'xml2js';
         }
     }
     tryWrite(fixturePath, dataFileContent);
+    serviceFiles.forEach(sf => tryWrite(sf.path, sf.content));
     tryWrite(helperPath, helperFileContent);
     tryWrite(schemaPath, schemaFileContent);
     tryWrite(specPath, specFileContent);

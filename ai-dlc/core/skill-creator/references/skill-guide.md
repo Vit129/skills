@@ -39,6 +39,19 @@ For content that's too detailed for SKILL.md:
 - Large references (>300 lines): include a table of contents
 - SKILL.md must reference these files so Claude knows they exist
 
+For skills with multiple references, add a routing table so Claude knows which file to load:
+
+```markdown
+## When to Load Each Reference
+
+| User says | Load |
+|-----------|------|
+| "phrase A", "phrase B" | `references/file-a.md` |
+| "phrase C", "phrase D" | `references/file-b.md` |
+```
+
+Load ONE reference per request unless the user explicitly asks for a combined analysis.
+
 ## Validation Checklist
 
 - [ ] SKILL.md has frontmatter with `name` and `description`

@@ -57,6 +57,15 @@ project/
 - `pytest-django` + `APIClient` for Django REST tests
 - Use factories (`factory_boy`) for test data
 
+## Cross-Language Standards
+
+These topics apply to all backend languages — see dedicated files for full details:
+
+- **Error Handling:** `error-handling-standards.md`
+- **Logging:** `logging-standards.md`
+- **Environment Config:** `env-config-standards.md`
+- **Input Validation:** `validation-standards.md`
+
 ## Tips
 - Type hints everywhere — FastAPI uses them for validation and docs
 - Virtual environments: `venv` or `poetry`

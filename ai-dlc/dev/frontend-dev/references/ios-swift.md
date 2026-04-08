@@ -59,6 +59,17 @@ App/
 - Use `@testable import` for internal access
 - Snapshot testing with `swift-snapshot-testing` for UI regression
 
+## Cross-Platform Standards
+
+These topics apply to all platforms — see dedicated files for full details:
+
+- **Testability (accessibilityIdentifier):** `testability-standards.md`
+- **UI States (Loading/Empty/Error):** `ui-states-standards.md`
+- **Error Handling:** `error-handling-standards.md`
+- **Environment Config:** `env-config-standards.md`
+- **Logging:** `logging-standards.md`
+- **Navigation & Deep Links:** `navigation-standards.md`
+
 ## Tips
 - Swift first — no Objective-C for new code
 - Use `enum` for finite states: `.loading`, `.success(data)`, `.error(message)`

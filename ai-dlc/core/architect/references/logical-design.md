@@ -87,8 +87,52 @@ Before implementation, classify every data field:
 
 Rule: `process.env.X` in fixture is allowed ONLY for sensitive fields. Business data must be hardcoded in fixture, NOT read from `.env`.
 
+## Client Application — data-testid Specification (Mandatory)
+
+Every component in the Client Application section **MUST** include a `data-testid` map so dev and QA are aligned before implementation.
+
+### Format
+
+```text
+## Client Application — Web (React)
+
+### Components & testIds
+// [ComponentName]
+data-testid="[component-root]"
+data-testid="[action-element]"
+data-testid="[result-element]-{id}"   ← use {id} for dynamic lists
+```
+
+### Rules
+- testId names use kebab-case
+- Dynamic items must include `{id}` or `{type}` placeholder
+- Every button, input, result list, status indicator, and modal must have a testId
+- QA uses these testIds directly in `getByTestId()` — names must match exactly
+- Dev must implement these testIds in React components before QA can run Web UI tests
+- If testId needs to change after design, both dev and QA must agree and update together
+
+### Example
+
+```text
+// FlightSearchWidget
+data-testid="flight-search-form"
+data-testid="trip-type-selector"
+data-testid="btn-search-flights"
+
+// FlightResultList
+data-testid="flight-result-list"
+data-testid="flight-result-item-{id}"
+data-testid="btn-select-flight-{id}"
+
+// BookingConfirmation
+data-testid="booking-confirmation"
+data-testid="booking-qr-code"
+data-testid="booking-status"
+```
+
 ## Rules
 
 - Full coverage — no orphan user stories
 - Both server logic AND client application must be specified (skip server logic only if frontend-only project)
 - MVP scope must be explicit
+- Client application section MUST include data-testid map for all components

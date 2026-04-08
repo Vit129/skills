@@ -12,7 +12,7 @@ Generate Robot Framework + Appium test files from architecture design.
 1. Read coding rules from `robotframework-rules` skill (standards.md + android.md or ios.md) — ALL parts
 2. Read architecture and test structure blueprint
 3. Create directory structure (mkdir -p) — folders kebab-case
-4. Generate YAML fixtures — `[feature]Data.yaml` with environment-specific data
+4. Generate YAML fixtures — `[feature]Data.yaml` with environment-specific data and `[feature]Labels.yaml` with TH/EN UI labels
 5. Generate page objects (.robot) — Library imports, locators (accessibility_id priority), Keywords with Thai JSDoc
 6. Generate test robot files — AAA pattern, mandatory tags, [TC-xxxx] prefix, Setup/Teardown using DbService
 7. Integrate Expert Gems: Hybrid API Setup, Self-Healing, Deep Linking
@@ -29,6 +29,7 @@ helpers/shared-services/[system_feature_snake]_db_service.py
 
 **Forbidden:**
 - Hard-coded test data (use `fixtures/*.yaml`)
+- Hard-coded Thai/English text in keywords — use `Labels.yaml` for UI text
 - `Sleep` usage (use `Wait Until Element Is Visible`)
 - `xpath` as first resort (use `accessibility_id` or `id`)
 - Hard-coded credentials (use `.env`)

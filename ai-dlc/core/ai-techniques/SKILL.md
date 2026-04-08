@@ -11,6 +11,16 @@ description: >
 
 Reasoning techniques that improve decision quality across any project.
 
+## When to Load Each Reference
+
+| User says | Load |
+|-----------|------|
+| "think step by step", "break this down", "analyze sequentially" | `references/cot.md` |
+| "compare approaches", "multiple strategies", "pick the best option" | `references/lats.md` |
+| "zoom out", "big picture first", "what's the underlying principle" | `references/step-back.md` |
+| "explore options", "branching decisions", "backtrack", "search tree" | `references/aot.md` |
+| "find existing assets", "what already exists", "discover before building" | `references/discovery.md` |
+
 - **Chain of Thought (CoT)** — Break complex problems into sequential steps. (Read `references/cot.md`)
 - **LATS Simulation** — Compare multiple strategies, pick the best hybrid. (Read `references/lats.md`)
 - **Step-Back Prompting** — Zoom out before zooming in. (Read `references/step-back.md`)

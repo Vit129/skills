@@ -10,6 +10,17 @@ description: >
 
 Build and maintain backend services and APIs.
 
+## When to Load Each Reference
+
+| User says | Load |
+|-----------|------|
+| "design API", "REST endpoint", "GraphQL", "versioning", "error handling" | `references/api-design.md` |
+| "design schema", "normalization", "indexing", "migrations" | `references/database-design.md` |
+| "set up auth", "JWT", "OAuth2", "RBAC", "sessions" | `references/authentication.md` |
+| "Node.js", "Express", "Fastify", "NestJS" | `references/nodejs.md` |
+| "Python", "FastAPI", "Django" | `references/python.md` |
+| "Docker", "Dockerfile", "docker-compose", "multi-stage build" | `references/docker.md` |
+
 ## Core
 - **API Design** — REST/GraphQL/gRPC conventions, versioning, error handling. (Read `references/api-design.md`)
 - **Database Design** — Schema design, normalization, indexing, migrations. (Read `references/database-design.md`)

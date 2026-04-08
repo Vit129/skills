@@ -10,6 +10,16 @@ description: >
 
 Design systems from requirements to implementation-ready blueprints.
 
+## When to Load Each Reference
+
+| User says | Load |
+|-----------|------|
+| "bounded contexts", "strategic design", "architecture pattern" | `references/decomposition.md` |
+| "microservices vs monolith", "file structure", "context routing" | `references/architecture-patterns.md` |
+| "entities", "aggregates", "domain events", "tactical design" | `references/domain-design.md` |
+| "API contracts", "DB schema", "frontend spec", "logical design" | `references/logical-design.md` |
+| "TDD", "Red Green Refactor", "test-driven" | `references/tdd.md` |
+
 - **DDD Strategic Design** — Bounded contexts, architecture pattern selection. (Read `references/decomposition.md`)
 - **Architecture Patterns** — Microservices vs Monolith workflow and file structure. (Read `references/architecture-patterns.md`)
 - **DDD Tactical Design** — Entities, aggregates, domain events in pseudocode. (Read `references/domain-design.md`)
