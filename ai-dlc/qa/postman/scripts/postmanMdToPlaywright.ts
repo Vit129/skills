@@ -39,7 +39,70 @@ function safeResolvePath(base: string, userInput: string): string {
 // ───────────────────────────────────────────────
 const DEFAULT_HELPER_DIR = 'helpers';
 const DEFAULT_FIXTURE_DIR = 'fixtures';
+const DEFAULT_SCHEMA_DIR  = 'schemas';
+const DEFAULT_SPEC_DIR    = 'tests-api';
 const DEFAULT_SYSTEM_NAME = 'api-feature';
+const WORKFLOW_MD_PATH    = path.join(process.cwd(), 'skills/ai-dlc/qa/playwright-testing/references/workflow.md');
+
+// ───────────────────────────────────────────────
+// WORKFLOW STRUCTURE LOADER
+// ───────────────────────────────────────────────
+interface WorkflowStructure {
+    specDir: string;
+    helperDir: string;
+    schemaDir: string;
+    fixtureDir: string;
+}
+
+function loadWorkflowStructure(): WorkflowStructure {
+    const defaults: WorkflowStructure = {
+        specDir:    DEFAULT_SPEC_DIR,
+        helperDir:  DEFAULT_HELPER_DIR,
+        schemaDir:  DEFAULT_SCHEMA_DIR,
+        fixtureDir: DEFAULT_FIXTURE_DIR,
+    };
+
+    if (!fs.existsSync(WORKFLOW_MD_PATH)) {
+        console.warn('⚠️  workflow.md not found — using default folder structure');
+        return defaults;
+    }
+
+    try {
+        const md = fs.readFileSync(WORKFLOW_MD_PATH, 'utf-8');
+
+        // Find the api-testing folder structure fenced block
+        const structureMatch = md.match(/```\n(tests\/api-testing\/[\s\S]*?)\n```/);
+        if (!structureMatch) return defaults;
+
+        const treeLines = structureMatch[1].split('\n')
+            .filter(l => /[├└]──/.test(l));
+
+        // Extract first path segment from each tree line
+        const segments = treeLines
+            .map(l => { const m = l.match(/[├└]──\s+([^/\s]+)\//); return m ? m[1] : null; })
+            .filter((s): s is string => s !== null);
+
+        const result: WorkflowStructure = {
+            specDir:    segments.find(s => s.startsWith('tests-')) ?? defaults.specDir,
+            helperDir:  segments.find(s => s === 'helpers')         ?? defaults.helperDir,
+            schemaDir:  segments.find(s => s === 'schemas')         ?? defaults.schemaDir,
+            fixtureDir: segments.find(s => s === 'fixtures')        ?? defaults.fixtureDir,
+        };
+
+        console.log(`\n📐 Workflow Structure (from workflow.md)`);
+        console.log(`   Spec    : ${result.specDir}/`);
+        console.log(`   Helper  : ${result.helperDir}/`);
+        console.log(`   Schema  : ${result.schemaDir}/`);
+        console.log(`   Fixture : ${result.fixtureDir}/`);
+
+        return result;
+    } catch {
+        console.warn('⚠️  Failed to parse workflow.md — using default folder structure');
+        return defaults;
+    }
+}
+
+const workflowStructure = loadWorkflowStructure();
 
 // ───────────────────────────────────────────────
 // ARG PARSING
@@ -47,7 +110,7 @@ const DEFAULT_SYSTEM_NAME = 'api-feature';
 const args = process.argv.slice(2);
 const inputIndex = args.indexOf('--input');
 if (inputIndex === -1 || !args[inputIndex + 1]) {
-    console.error('❌ Usage: npx ts-node postmanMdToPlaywright.ts --input <directory_or_file.md> [--env-input <env.md>] [--output-dir <directory>] [--spec-dir <name>] [--helper-dir <name>] [--fixture-dir <name>]');
+    console.error('❌ Usage: npx ts-node postmanMdToPlaywright.ts --input <directory_or_file.md> [--env-input <env.md>] [--output-dir <directory>] [--spec-dir <name>] [--helper-dir <name>] [--schema-dir <name>] [--fixture-dir <name>]');
     process.exit(1);
 }
 const inputPath = args[inputIndex + 1];
@@ -60,10 +123,15 @@ const baseOutputDir = outputDirIndex !== -1 && args[outputDirIndex + 1]
     ? args[outputDirIndex + 1]
     : process.cwd();
 
-const helperDirIdx = args.indexOf('--helper-dir');
+const specDirIdx    = args.indexOf('--spec-dir');
+const helperDirIdx  = args.indexOf('--helper-dir');
+const schemaDirIdx  = args.indexOf('--schema-dir');
 const fixtureDirIdx = args.indexOf('--fixture-dir');
-const helperDirName = helperDirIdx !== -1 && args[helperDirIdx + 1] ? args[helperDirIdx + 1] : DEFAULT_HELPER_DIR;
-const fixtureDirName = fixtureDirIdx !== -1 && args[fixtureDirIdx + 1] ? args[fixtureDirIdx + 1] : DEFAULT_FIXTURE_DIR;
+
+const specDirName    = specDirIdx    !== -1 && args[specDirIdx    + 1] ? args[specDirIdx    + 1] : workflowStructure.specDir;
+const helperDirName  = helperDirIdx  !== -1 && args[helperDirIdx  + 1] ? args[helperDirIdx  + 1] : workflowStructure.helperDir;
+const schemaDirName  = schemaDirIdx  !== -1 && args[schemaDirIdx  + 1] ? args[schemaDirIdx  + 1] : workflowStructure.schemaDir;
+const fixtureDirName = fixtureDirIdx !== -1 && args[fixtureDirIdx + 1] ? args[fixtureDirIdx + 1] : workflowStructure.fixtureDir;
 
 // ───────────────────────────────────────────────
 // STRING HELPERS
@@ -432,7 +500,18 @@ function transformAdvancedLogic(code: string, systemCamelName: string): string {
 // ───────────────────────────────────────────────
 // CORE PROCESSING LOGIC (v4)
 // ───────────────────────────────────────────────
-async function processFile(inputFile: string, envInput: string | null, targetDir: string) {
+async function processFile(
+    inputFile: string,
+    envInput: string | null,
+    targetDir: string,
+    opts: { specDir: string; helperDir: string; schemaDir: string; fixtureDir: string } = {
+        specDir:    specDirName,
+        helperDir:  helperDirName,
+        schemaDir:  schemaDirName,
+        fixtureDir: fixtureDirName,
+    }
+) {
+    const { helperDir, schemaDir, fixtureDir } = opts;
     // [SECURITY] validate paths are within cwd
     const cwd = process.cwd();
     try {
@@ -883,13 +962,14 @@ ${snippet.assertions.split('\n').map(l => '                ' + l).join('\n')}
 
     // auto-import CollectionHelpers ถ้าถูกใช้
     const collHelperImport = needsCollectionHelpers
-        ? `import { CollectionHelpers } from '../../${helperDirName}/core/CollectionHelpers';\n`
+        ? `import { CollectionHelpers } from '../../${helperDir}/core/CollectionHelpers';\n`
         : '';
 
     const specFileContent =
-        `import { test, expect } from '../../${fixtureDirName}/${kebabName}/${camelName}Data';
-import { ${pascalName}Helper } from '../../${helperDirName}/${kebabName}/${camelName}Helper';
-import { ${camelName}Data } from '../../${fixtureDirName}/${kebabName}/${camelName}Data';
+        `import { test, expect } from '../../${fixtureDir}/${kebabName}/${camelName}Data';
+import { ${pascalName}Helper } from '../../${helperDir}/${kebabName}/${camelName}Helper';
+import { ${camelName}Data } from '../../${fixtureDir}/${kebabName}/${camelName}Data';
+import { validate${pascalName}Response } from '../../${schemaDir}/${kebabName}/${camelName}Schema';
 ${collHelperImport}
 // ───────────────────────────────────────────────
 // ${systemName} API Spec
@@ -914,7 +994,31 @@ ${specTestCases}
 `;
 
     // ─────────────────────────────────────────
-    // FILE 4: COLLECTION HELPER
+    // FILE 4: SCHEMA (AJV)
+    // ─────────────────────────────────────────
+    const schemaFileContent =
+`import Ajv, { JSONSchemaType } from 'ajv';
+
+const ajv = new Ajv({ allErrors: true });
+
+// TODO: Replace with actual response shape
+export interface ${pascalName}Response {
+    // Add fields here
+    [key: string]: unknown;
+}
+
+export const ${camelName}ResponseSchema: JSONSchemaType<${pascalName}Response> = {
+    type: 'object',
+    properties: {},
+    required: [],
+    additionalProperties: true,
+} as JSONSchemaType<${pascalName}Response>;
+
+export const validate${pascalName}Response = ajv.compile(${camelName}ResponseSchema);
+`;
+
+    // ─────────────────────────────────────────
+    // FILE 5: COLLECTION HELPER
     // ─────────────────────────────────────────
     const helperHeader = `import { APIRequestContext } from '@playwright/test';
 import * as crypto from 'crypto';
@@ -942,10 +1046,11 @@ import { parseStringPromise } from 'xml2js';
     }
 
     const inputDir = path.dirname(inputFile);
-    const specPath = path.join(inputDir, `${camelName}.spec.ts`);
-    const helperPath = path.join(targetDir, helperDirName, kebabName, `${camelName}Helper.ts`);
-    const fixturePath = path.join(targetDir, fixtureDirName, kebabName, `${camelName}Data.ts`);
-    const collHelperPath = path.join(targetDir, helperDirName, 'core', 'CollectionHelpers.ts');
+    const specPath       = path.join(inputDir, `${camelName}.spec.ts`);
+    const helperPath     = path.join(targetDir, helperDir,  kebabName, `${camelName}Helper.ts`);
+    const schemaPath     = path.join(targetDir, schemaDir,  kebabName, `${camelName}Schema.ts`);
+    const fixturePath    = path.join(targetDir, fixtureDir, kebabName, `${camelName}Data.ts`);
+    const collHelperPath = path.join(targetDir, helperDir,  'core',    'CollectionHelpers.ts');
 
     // Summary
     const serialCount = testSnippets.filter(s => s.needsSerial).length;
@@ -962,6 +1067,7 @@ import { parseStringPromise } from 'xml2js';
     console.log('\n📄 Generating:');
     console.log(`   Fixture : ${sanitizeLog(fixturePath)}`);
     console.log(`   Helper  : ${sanitizeLog(helperPath)}`);
+    console.log(`   Schema  : ${sanitizeLog(schemaPath)}`);
     console.log(`   Spec    : ${sanitizeLog(specPath)}`);
     if (collectionHelpersData) console.log(`   Core    : ${sanitizeLog(collHelperPath)}`);
 
@@ -979,6 +1085,7 @@ import { parseStringPromise } from 'xml2js';
     }
     tryWrite(fixturePath, dataFileContent);
     tryWrite(helperPath, helperFileContent);
+    tryWrite(schemaPath, schemaFileContent);
     tryWrite(specPath, specFileContent);
     if (collectionHelpersData) tryWrite(collHelperPath, finalCollectionHelper);
 
