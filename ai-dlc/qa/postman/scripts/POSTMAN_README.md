@@ -2,7 +2,7 @@
 
 > **Description:** A guide for maintaining and utilizing scripts for automated Postman-to-Playwright migration.
 > **Target Audience:** AI Agents & Developers
-> **🔄 Last Update:** 2026-06-10 (v6.2)
+> **🔄 Last Update:** 2026-04-08 (v6.2)
 > **Philosophy:** "Zero Data Loss & Path Consistency" — Ensuring every bit of logic is preserved and correctly structured.
 
 ---
@@ -13,7 +13,8 @@ This folder contains the core scripts for **AI-Enhanced Postman Migration**:
 
 1. `readPostmanCollection.ts`: Reads Collections → Arrow key folder selection → Generates Markdown + Playwright snippets + Nested describe tree.
 2. `readPostmanEnv.ts`: Reads Environments → Arrow key collection folder selection → Generates Markdown analysis + `.env` snippets.
-3. `postmanMdToPlaywright.ts`: Reads Markdown output from steps 1+2 → Generates ready-to-run `.spec.ts` + `Helper.ts` + `Data.ts` fixture files.
+3. `postmanMdToPlaywright.ts`: Reads Markdown output from steps 1+2 → Generates `.spec.ts` + `Helper.ts` + `Service.ts` + `Schema.ts` + `Data.ts`. Reads folder structure from `workflow.md` automatically.
+4. `postmanToPlaywrightRunAndHeal.ts`: Runs generated Playwright tests + auto-heal fix loop (max 3–5 attempts) + writes Reflexion Log to `audit.md`.
 
 ---
 
@@ -37,9 +38,7 @@ This folder contains the core scripts for **AI-Enhanced Postman Migration**:
 
 ---
 
----
-
-## 🔄 Script 4: runAndHeal.ts — Run + Auto-Heal Fix Loop
+## 🔄 Script 4: postmanToPlaywrightRunAndHeal.ts — Run + Auto-Heal Fix Loop
 
 Runs Playwright tests and automatically attempts to fix code failures in a loop (max 3–5 attempts). Appends a Reflexion Log to `audit.md` after each run.
 
@@ -47,7 +46,7 @@ Runs Playwright tests and automatically attempts to fix code failures in a loop 
 
 ```bash
 npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
-  ~/.claude/skills/ai-dlc/qa/postman/scripts/runAndHeal.ts \
+  ~/.claude/skills/ai-dlc/qa/postman/scripts/postmanToPlaywrightRunAndHeal.ts \
   --spec "<path/to/spec.ts or tests-api/folder>" \
   [--config "<playwright.config.ts>"] \
   [--max-attempts 3] \
@@ -102,7 +101,7 @@ Appended to `audit.md` after each run:
 All scripts require the `--project` flag pointing to the `tsconfig.json` in this folder:
 
 ```bash
-# tsconfig.json location: ai-agent/scripts/postman-migration/tsconfig.json
+# tsconfig.json location: ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json
 # Uses module: CommonJS so ts-node can run without the --esm flag
 ```
 
@@ -112,20 +111,23 @@ All scripts require the `--project` flag pointing to the `tsconfig.json` in this
 
 ## 🚀 Usage
 
+> All commands use `~/.claude/skills/ai-dlc/qa/postman/scripts/` as the script root.
+
 ### 1. Migrating a Collection
 
 ```bash
-npx ts-node --project ai-agent/scripts/postman-migration/tsconfig.json \
-  ai-agent/scripts/postman-migration/readPostmanCollection.ts "<collection.json>" --output "<output-dir>"
+npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
+  ~/.claude/skills/ai-dlc/qa/postman/scripts/readPostmanCollection.ts "<collection.json>" --output "<output-dir>"
 ```
 
 - Arrow key prompt to select a folder (or convert all)
 - Optional: `--folder <folder_name>` to skip the prompt
 
 **Example:**
+
 ```bash
-npx ts-node --project ai-agent/scripts/postman-migration/tsconfig.json \
-  ai-agent/scripts/postman-migration/readPostmanCollection.ts \
+npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
+  ~/.claude/skills/ai-dlc/qa/postman/scripts/readPostmanCollection.ts \
   "Automation/tests/api-testing/postman/collections/Credit Management TS.postman_collection.json" \
   --output Automation/tests/api-testing/tests-api
 ```
@@ -137,8 +139,8 @@ npx ts-node --project ai-agent/scripts/postman-migration/tsconfig.json \
 ### 2. Migrating an Environment
 
 ```bash
-npx ts-node --project ai-agent/scripts/postman-migration/tsconfig.json \
-  ai-agent/scripts/postman-migration/readPostmanEnv.ts "<environment.json>"
+npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
+  ~/.claude/skills/ai-dlc/qa/postman/scripts/readPostmanEnv.ts "<environment.json>"
 ```
 
 - Arrow key prompt to select which collection folder to place the env file in
@@ -147,9 +149,10 @@ npx ts-node --project ai-agent/scripts/postman-migration/tsconfig.json \
 - Optional: `--used-vars <comma-separated>` to filter only vars used by the collection
 
 **Example:**
+
 ```bash
-npx ts-node --project ai-agent/scripts/postman-migration/tsconfig.json \
-  ai-agent/scripts/postman-migration/readPostmanEnv.ts \
+npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
+  ~/.claude/skills/ai-dlc/qa/postman/scripts/readPostmanEnv.ts \
   "Automation/tests/api-testing/postman/environments/CMM_dev.postman_environment 5.json"
 ```
 
@@ -157,9 +160,11 @@ npx ts-node --project ai-agent/scripts/postman-migration/tsconfig.json \
 
 ---
 
+### 3. Generate Playwright Files
+
 ```bash
-npx ts-node --project ai-agent/scripts/postman-migration/tsconfig.json \
-  ai-agent/scripts/postman-migration/postmanMdToPlaywright.ts \
+npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
+  ~/.claude/skills/ai-dlc/qa/postman/scripts/postmanMdToPlaywright.ts \
   --input "<tests-api/collection-folder>" \
   --env-input "<tests-api/collection-folder/env.md>" \
   --output-dir "<project-root>"
@@ -167,13 +172,18 @@ npx ts-node --project ai-agent/scripts/postman-migration/tsconfig.json \
 
 - `--input`: path to collection `.md` file or folder containing it
 - `--env-input`: path to env `.md` from `readPostmanEnv` (optional but recommended)
-- `--output-dir`: project root where `tests-api/`, `helpers/`, `fixtures/` will be written
+- `--output-dir`: project root where output folders will be written
 
 *Output:*
+
 - `tests-api/<folder>/<name>.spec.ts`
 - `helpers/<folder>/<name>Helper.ts`
+- `helpers/<folder>/<name>Service.ts` (1 per label group)
+- `schemas/<folder>/<name>Schema.ts` ← AJV skeleton
 - `fixtures/<folder>/<name>Data.ts`
 - `helpers/core/CollectionHelpers.ts` (if collection has function vars)
+
+> Folder names (`tests-api/`, `helpers/`, etc.) are auto-detected from `workflow.md` if available.
 
 ---
 

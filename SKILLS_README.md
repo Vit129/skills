@@ -15,7 +15,6 @@ Single source of truth for all AI-assisted development, QA, and Finance analysis
 | `ui-designer/` | Design system + aesthetic direction, **Sovereign Design System** rules |
 | `hook-creator/` | Create Kiro agent hooks from templates, event-driven automation |
 | `monitoring/` | Logging, error tracking, performance metrics, tracing, alerts |
-| `gemini-cli/` | Senior Engineering standard: AIDLC phases, Context efficiency, Security |
 
 ### Dev (Implementation) — `ai-dlc/dev/`
 | Folder | Purpose |
@@ -36,7 +35,7 @@ Single source of truth for all AI-assisted development, QA, and Finance analysis
 | `robotframework-testing/` | Write/review/run/heal RF mobile tests |
 | `test-scenario/` | Scenario design, data gen, reuse, quick-scenario |
 | `test-scenario-rules/` | Test scenario design guidelines + CSV export |
-| `postman/` | Postman → Playwright conversion + scripts |
+| `postman/` | Postman → Playwright migration: collection/env analysis, code generation (spec+helper+service+schema), run + auto-heal fix loop |
 
 ## 2. Finance Category (`finance/`)
 
@@ -72,4 +71,4 @@ Folders that store system data, logs, or backups to keep the root directory clea
 ## Maintenance
 - Edit skills in their respective subdirectories — this is the single source of truth.
 - **Project-specific rules** for "My Investment Port" are now consolidated into `ai-dlc/` references.
-- Last updated: 2026-04-03 (Optimized token usage: moved content from SKILL.md to references/)
+- Last updated: 2026-04-08 (postman skill: added runAndHeal, schema generation, workflow.md integration)
