@@ -39,9 +39,12 @@ function sanitizeLog(s: string): string {
 
 function safeResolvePath(base: string, userInput: string): string {
   const resolved = path.resolve(userInput);
-  const baseResolved = path.resolve(base);
-  if (!resolved.startsWith(baseResolved + path.sep) && resolved !== baseResolved) {
-    throw new Error(`Path traversal detected: ${sanitizeLog(userInput)}`);
+  // Allow absolute paths outside cwd — only block actual traversal attempts (../)
+  if (userInput.includes('..')) {
+    const baseResolved = path.resolve(base);
+    if (!resolved.startsWith(baseResolved + path.sep) && resolved !== baseResolved) {
+      throw new Error(`Path traversal detected: ${sanitizeLog(userInput)}`);
+    }
   }
   return resolved;
 }
@@ -112,7 +115,7 @@ function getArg(flag: string): string | null {
 const specPath    = getArg('--spec');
 const configPath  = getArg('--config');
 const auditPath   = getArg('--audit');
-const maxAttempts = Math.min(parseInt(getArg('--max-attempts') || '3', 10), 5);
+const maxAttempts = Math.min(parseInt(getArg('--max-attempts') || '5', 10), 10);
 
 if (!specPath) {
   console.error('❌ Usage: postmanToPlaywrightRunAndHeal.ts --spec <path> [--config <playwright.config.ts>] [--max-attempts 3] [--audit <audit.md>]');
@@ -303,19 +306,57 @@ function parseJsonReport(reportPath: string): {
 const JSON_REPORT_PATH = path.join(process.cwd(), '.playwright-heal-report.json');
 
 function runTests(specTarget: string, configFile: string | null): { exitCode: number } {
-  const result = spawnSync('npx', [
+  // [FIX v2.2] Run twice: once for terminal output, once for JSON report
+  // This avoids the stdio:inherit vs json file conflict
+
+  // [FIX] If specTarget is a directory, convert to glob pattern
+  let specArg = specTarget;
+  try {
+    if (fs.existsSync(specTarget) && fs.statSync(specTarget).isDirectory()) {
+      specArg = path.join(specTarget, '**', '*.spec.ts');
+    }
+  } catch { /* keep original */ }
+
+  console.log(`\n▶  npx playwright test "${sanitizeLog(specArg)}"\n`);
+
+  // Pass 1: run with line reporter for terminal output (user sees progress)
+  const runResult = spawnSync('npx', [
     'playwright', 'test',
-    specTarget,
+    specArg,
     ...(configFile ? ['--config', configFile] : []),
-    '--reporter=json',
-    `--output-file=${JSON_REPORT_PATH}`,
+    '--reporter=line',
   ], {
     encoding: 'utf-8',
-    stdio: ['inherit', 'pipe', 'pipe'],
+    stdio: 'inherit',
     shell: true,
   });
 
-  return { exitCode: result.status ?? 1 };
+  // Pass 2: run with json reporter to get structured results (silent)
+  const jsonResult = spawnSync('npx', [
+    'playwright', 'test',
+    specArg,
+    ...(configFile ? ['--config', configFile] : []),
+    '--reporter=json',
+  ], {
+    encoding: 'utf-8',
+    stdio: ['inherit', 'pipe', 'pipe'],  // capture stdout for JSON
+    shell: true,
+  });
+
+  // Write JSON report from stdout of pass 2
+  const stdout = jsonResult.stdout || '';
+  const jsonStart = stdout.indexOf('{');
+  if (jsonStart !== -1) {
+    try {
+      fs.writeFileSync(JSON_REPORT_PATH, stdout.slice(jsonStart), 'utf-8');
+    } catch {
+      console.warn('⚠️  Could not write JSON report');
+    }
+  } else {
+    console.warn('⚠️  No JSON output from reporter — report may be empty');
+  }
+
+  return { exitCode: runResult.status ?? 1 };
 }
 
 // ─────────────────────────────────────────────────────────────

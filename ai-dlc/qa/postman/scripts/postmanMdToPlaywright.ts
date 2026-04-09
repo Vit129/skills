@@ -20,7 +20,7 @@ function safeResolvePath(base: string, userInput: string): string {
 
 /**
  * 🚀 postmanMdToPlaywright.ts (Postman Markdown to Playwright)
- * @version 5.0 - Multi-Service Architecture
+ * @version 7.0 - Auto-Split Per Folder + Skeleton Assertions
  * @fixes-v4
  *   1. [PARSER]       Stack-based block extractor — แทน testRegex ที่หลุด nested });
  *   2. [ITER_DATA]    pm.iterationData → extract keys จริง + typed interface + test.each
@@ -36,6 +36,18 @@ function safeResolvePath(base: string, userInput: string): string {
  *  11. [MULTI_SVC]    Multi-Service Architecture — แยก *Service.ts per label, Helper เป็น entry point
  *  12. [LIFECYCLE]    beforeEach/afterEach — improved DB strategy stubs with request fixture
  *  13. [SERIAL_ID]    test.describe.serial ยังคง [PBI-0000] prefix ตาม playwright-rules
+ * @fixes-v6
+ *  14. [ENV_DECL]     Fix env declaration stripping — handle `const x: type = ...` with type annotations
+ *  15. [DEDUP]        Dedup duplicate method names — append _2, _3 suffix for same-name methods
+ *  16. [UNDECL_VARS]  Auto-declare url, dynamicHeaders, requestBody when used but not declared in Service
+ *  17. [SPEC_ROUTE]   Spec calls helper.serviceProp.method() instead of helper.method() (match Helper pattern)
+ *  18. [CHAI_ASSERT]  40+ Chai→Playwright assertion transforms (pm.expect → expect)
+ *  19. [FOREACH]      forEach + await → for...of loop (prevent SyntaxError)
+ *  20. [JSONDATA]     Auto-declare jsonData, actualData when used but not declared
+ * @fixes-v7
+ *  21. [AUTO_SPLIT]   Auto-detect ## 📁 Folder headers → generate 1 spec + 1 service per top-level folder
+ *  22. [SKELETON]     --skeleton flag → generate clean assertion skeletons instead of raw copied code
+ *  23. [FOLDER_LABEL] extractTestBlocks now tracks folder context from markdown headers
  */
 
 // ───────────────────────────────────────────────
@@ -113,11 +125,7 @@ const workflowStructure = loadWorkflowStructure();
 // ───────────────────────────────────────────────
 const args = process.argv.slice(2);
 const inputIndex = args.indexOf('--input');
-if (inputIndex === -1 || !args[inputIndex + 1]) {
-    console.error('❌ Usage: npx ts-node postmanMdToPlaywright.ts --input <directory_or_file.md> [--env-input <env.md>] [--output-dir <directory>] [--spec-dir <name>] [--helper-dir <name>] [--schema-dir <name>] [--fixture-dir <name>]');
-    process.exit(1);
-}
-const inputPath = args[inputIndex + 1];
+const inputArgPath = inputIndex !== -1 && args[inputIndex + 1] ? args[inputIndex + 1] : null;
 
 const envInputIndex = args.indexOf('--env-input');
 const envInputFile = envInputIndex !== -1 && args[envInputIndex + 1] ? args[envInputIndex + 1] : null;
@@ -132,10 +140,63 @@ const helperDirIdx  = args.indexOf('--helper-dir');
 const schemaDirIdx  = args.indexOf('--schema-dir');
 const fixtureDirIdx = args.indexOf('--fixture-dir');
 
+// ───────────────────────────────────────────────
+// [v7.3] AUTO-DETECT --input from tests-api/ folders
+// ───────────────────────────────────────────────
+function findProjectRootMd(start: string): string | null {
+    let dir = start;
+    while (true) {
+        if (fs.existsSync(path.join(dir, 'package.json'))) return dir;
+        const parent = path.dirname(dir);
+        if (parent === dir) return null;
+        dir = parent;
+    }
+}
+
+async function resolveInputPath(): Promise<string> {
+    if (inputArgPath) return inputArgPath;
+
+    const root = findProjectRootMd(process.cwd()) ?? process.cwd();
+    const testsApiDir = path.join(root, specDirName);
+
+    if (!fs.existsSync(testsApiDir)) {
+        console.error(`❌ --input is required (tests-api/ not found at ${sanitizeLog(testsApiDir)})`);
+        process.exit(1);
+    }
+
+    const folders = fs.readdirSync(testsApiDir)
+        .filter(f => fs.statSync(path.join(testsApiDir, f)).isDirectory());
+
+    if (folders.length === 0) {
+        console.error(`❌ --input is required (no folders found in ${sanitizeLog(testsApiDir)})`);
+        process.exit(1);
+    }
+
+    if (folders.length === 1) {
+        const auto = path.join(testsApiDir, folders[0]);
+        console.log(`\n📂 Auto-detected --input: ${sanitizeLog(auto)}`);
+        return auto;
+    }
+
+    // Multiple folders — interactive select
+    const { select } = await import('@inquirer/prompts');
+    const selected = await select({
+        message: '📂 Select collection folder for --input (Use Arrow Keys):',
+        pageSize: 15,
+        choices: folders.map((f, i) => ({ name: `Option ${i + 1}: ${f}`, value: f })),
+    });
+    return path.join(testsApiDir, selected);
+}
+
 const specDirName    = specDirIdx    !== -1 && args[specDirIdx    + 1] ? args[specDirIdx    + 1] : workflowStructure.specDir;
 const helperDirName  = helperDirIdx  !== -1 && args[helperDirIdx  + 1] ? args[helperDirIdx  + 1] : workflowStructure.helperDir;
 const schemaDirName  = schemaDirIdx  !== -1 && args[schemaDirIdx  + 1] ? args[schemaDirIdx  + 1] : workflowStructure.schemaDir;
 const fixtureDirName = fixtureDirIdx !== -1 && args[fixtureDirIdx + 1] ? args[fixtureDirIdx + 1] : workflowStructure.fixtureDir;
+
+// [v7.0] --skeleton: generate clean assertion skeletons instead of raw copied code
+const skeletonMode = args.includes('--skeleton');
+// [v7.0] --no-split: disable auto-split (legacy single-file mode)
+const noSplitMode = args.includes('--no-split');
 
 // ───────────────────────────────────────────────
 // STRING HELPERS
@@ -210,11 +271,16 @@ function getRecommendation(code: string): string[] {
 
 // ───────────────────────────────────────────────
 // [FIX #1] STACK-BASED BLOCK EXTRACTOR
+// [FIX #23] Now tracks folder context from ## 📁 / ### 📁 headers
 // ───────────────────────────────────────────────
 interface TestBlock {
-    label: string;       // folder path
+    label: string;       // folder path (e.g. "SearchData > Success")
     testName: string;    // request name
     fullBody: string;    // entire body
+    topFolder: string;   // top-level folder (e.g. "AMFW01000")
+    subFolder: string;   // sub-folder path (e.g. "SearchData > Success")
+    endpoint: string;    // endpoint URL if detected
+    httpMethod: string;  // HTTP method if detected
 }
 
 function extractTestBlocks(markdown: string): TestBlock[] {
@@ -228,7 +294,41 @@ function extractTestBlocks(markdown: string): TestBlock[] {
     let currentName = '';
     let inString: string | null = null;
 
-    for (const line of lines) {
+    // [FIX #23] Track folder hierarchy from markdown headers
+    let currentTopFolder = 'General';    // ## 📁 Folder: XXX
+    let currentSubFolders: string[] = []; // ### 📁, #### 📁, ##### 📁
+    let currentEndpoint = '';
+    let currentHttpMethod = '';
+
+    for (let lineIdx = 0; lineIdx < lines.length; lineIdx++) {
+        const line = lines[lineIdx];
+
+        // [FIX #23] Detect folder headers: ## 📁 Folder: NAME
+        const folderMatch = line.match(/^(#{2,6})\s+📁\s+Folder:\s*(.+?)(?:\s*-\s*.+)?$/);
+        if (folderMatch) {
+            const level = folderMatch[1].length; // 2=##, 3=###, 4=####, etc.
+            const folderName = folderMatch[2].trim();
+
+            if (level === 2) {
+                // Top-level folder (e.g. "AMFW01000")
+                currentTopFolder = folderName;
+                currentSubFolders = [];
+            } else {
+                // Sub-folder — truncate stack to current depth then push
+                const subIdx = level - 3; // ### = 0, #### = 1, ##### = 2
+                currentSubFolders = currentSubFolders.slice(0, subIdx);
+                currentSubFolders.push(folderName);
+            }
+            continue;
+        }
+
+        // Detect endpoint from markdown: **Endpoint:** `POST {{url}}/path`
+        const endpointMatch = line.match(/\*\*Endpoint:\*\*\s*`(\w+)\s+(.+?)`/);
+        if (endpointMatch) {
+            currentHttpMethod = endpointMatch[1].toUpperCase();
+            currentEndpoint = endpointMatch[2].trim();
+        }
+
         if (!insideBlock) {
             const headerMatch = line.match(/^test\(['"`](.+?)['"`],\s*async/);
             if (headerMatch) {
@@ -238,7 +338,10 @@ function extractTestBlocks(markdown: string): TestBlock[] {
                     currentName = parts.pop() || '';
                     currentLabel = parts.join(' > ');
                 } else {
-                    currentLabel = 'General';
+                    // [FIX #23] Use sub-folder path as label instead of 'General'
+                    currentLabel = currentSubFolders.length > 0
+                        ? currentSubFolders.join(' > ')
+                        : 'General';
                     currentName = fullName;
                 }
                 insideBlock = true;
@@ -270,7 +373,15 @@ function extractTestBlocks(markdown: string): TestBlock[] {
                 if (ch === '}') depth--;
             }
             if (depth === 0 && line.trim().startsWith('}')) {
-                blocks.push({ label: currentLabel, testName: currentName, fullBody: currentLines.join('\n') });
+                blocks.push({
+                    label: currentLabel,
+                    testName: currentName,
+                    fullBody: currentLines.join('\n'),
+                    topFolder: currentTopFolder,
+                    subFolder: currentSubFolders.join(' > ') || 'General',
+                    endpoint: currentEndpoint,
+                    httpMethod: currentHttpMethod,
+                });
                 insideBlock = false;
             }
         }
@@ -479,6 +590,154 @@ function transformAdvancedLogic(code: string, systemCamelName: string): string {
     // [FIX #2] pm.iterationData.get → data.key
     t = t.replace(/pm\.iterationData\.get\s*\(\s*['"](.+?)['"]\s*\)/g, (_, k) => `data.${getSafeVarName(k)} // 📊 [DATA_DRIVEN]`);
 
+    // ─────────────────────────────────────────
+    // [FIX #18] Chai → Playwright assertion transforms
+    // ─────────────────────────────────────────
+    // pm.response.to.have.status(200) → expect(response.status()).toBe(200)
+    t = t.replace(/pm\.response\.to\.have\.status\((\d+)\)/g, 'expect(response.status()).toBe($1)');
+
+    // pm.expect(x).to.be.eql(y) → expect(x).toEqual(y)
+    t = t.replace(/pm\.expect\((.+?)\)\.to\.be\.eql\((.+?)\)/g, 'expect($1).toEqual($2)');
+
+    // pm.expect(x).to.eql(y) → expect(x).toEqual(y)
+    t = t.replace(/pm\.expect\((.+?)\)\.to\.eql\((.+?)\)/g, 'expect($1).toEqual($2)');
+
+    // pm.expect(x).to.equal(y) → expect(x).toBe(y)
+    t = t.replace(/pm\.expect\((.+?)\)\.to\.equal\((.+?)\)/g, 'expect($1).toBe($2)');
+
+    // pm.expect(x).to.be.true → expect(x).toBe(true)
+    t = t.replace(/pm\.expect\((.+?)\)\.to\.be\.true/g, 'expect($1).toBe(true)');
+
+    // pm.expect(x).to.be.false → expect(x).toBe(false)
+    t = t.replace(/pm\.expect\((.+?)\)\.to\.be\.false/g, 'expect($1).toBe(false)');
+
+    // pm.expect(x).to.be.null → expect(x).toBeNull()
+    t = t.replace(/pm\.expect\((.+?)\)\.to\.be\.null/g, 'expect($1).toBeNull()');
+
+    // pm.expect(x).to.be.not.null → expect(x).not.toBeNull()
+    t = t.replace(/pm\.expect\((.+?)\)\.to\.be\.not\.null/g, 'expect($1).not.toBeNull()');
+
+    // pm.expect(x).to.not.be.null → expect(x).not.toBeNull()
+    t = t.replace(/pm\.expect\((.+?)\)\.to\.not\.be\.null/g, 'expect($1).not.toBeNull()');
+
+    // pm.expect(x).to.be.undefined → expect(x).toBeUndefined()
+    t = t.replace(/pm\.expect\((.+?)\)\.to\.be\.undefined/g, 'expect($1).toBeUndefined()');
+
+    // pm.expect(x).to.be.a('string') → expect(typeof x).toBe('string')
+    t = t.replace(/pm\.expect\((.+?)\)\.to\.be\.a\(['"](\w+)['"]\)/g, "expect(typeof $1).toBe('$2')");
+
+    // pm.expect(x).to.be.an('array') → expect(Array.isArray(x)).toBe(true)
+    t = t.replace(/pm\.expect\((.+?)\)\.to\.be\.an\(['"]array['"]\)/g, 'expect(Array.isArray($1)).toBe(true)');
+
+    // pm.expect(x).to.have.property('y') → expect(x).toHaveProperty('y')
+    t = t.replace(/pm\.expect\((.+?)\)\.to\.have\.property\((.+?)\)/g, 'expect($1).toHaveProperty($2)');
+
+    // pm.expect(x).to.include(y) → expect(x).toContain(y)
+    t = t.replace(/pm\.expect\((.+?)\)\.to\.include\((.+?)\)/g, 'expect($1).toContain($2)');
+
+    // pm.expect(x).to.have.lengthOf(n) → expect(x).toHaveLength(n)
+    t = t.replace(/pm\.expect\((.+?)\)\.to\.have\.lengthOf\((.+?)\)/g, 'expect($1).toHaveLength($2)');
+
+    // pm.expect(x).to.be.above(n) → expect(x).toBeGreaterThan(n)
+    t = t.replace(/pm\.expect\((.+?)\)\.to\.be\.above\((.+?)\)/g, 'expect($1).toBeGreaterThan($2)');
+
+    // pm.expect(x).to.be.below(n) → expect(x).toBeLessThan(n)
+    t = t.replace(/pm\.expect\((.+?)\)\.to\.be\.below\((.+?)\)/g, 'expect($1).toBeLessThan($2)');
+
+    // pm.expect(x).to.be.at.least(n) → expect(x).toBeGreaterThanOrEqual(n)
+    t = t.replace(/pm\.expect\((.+?)\)\.to\.be\.at\.least\((.+?)\)/g, 'expect($1).toBeGreaterThanOrEqual($2)');
+
+    // pm.expect(x).to.be.at.most(n) → expect(x).toBeLessThanOrEqual(n)
+    t = t.replace(/pm\.expect\((.+?)\)\.to\.be\.at\.most\((.+?)\)/g, 'expect($1).toBeLessThanOrEqual($2)');
+
+    // pm.expect(x).to.have.length.above(0) → expect(x.length).toBeGreaterThan(0)
+    t = t.replace(/pm\.expect\((.+?)\)\.to\.have\.length\.above\((.+?)\)/g, 'expect($1.length).toBeGreaterThan($2)');
+
+    // pm.expect(x).to.not.be.empty → expect(x.length).toBeGreaterThan(0)
+    t = t.replace(/pm\.expect\((.+?)\)\.to\.not\.be\.empty/g, 'expect($1.length).toBeGreaterThan(0)');
+
+    // Catch-all: remaining pm.expect(x).to.be.xxx → comment for manual fix
+    t = t.replace(/pm\.expect\((.+?)\)\.(to\.[\w.]+(?:\(.+?\))?)/g, '/* ⚠️ Manual: pm.expect($1).$2 */');
+
+    // pm.response.json() → responseJson (already declared in spec)
+    t = t.replace(/pm\.response\.json\(\)/g, 'responseJson');
+
+    // pm.response.text() → responseText
+    t = t.replace(/pm\.response\.text\(\)/g, 'responseText');
+
+    // pm.response.code → response.status()
+    t = t.replace(/pm\.response\.code/g, 'response.status()');
+
+    // pm.response.headers → response.headers()
+    t = t.replace(/pm\.response\.headers/g, 'response.headers()');
+
+    // Strip Chai chaining leftovers: .that.is.not.empty, .that.has.lengthOf(0), etc.
+    t = t.replace(/\.that\.is\.not\.empty/g, '');
+    t = t.replace(/\.that\.has\.lengthOf\((\d+)\)/g, '');
+    t = t.replace(/\.that\.is\.an?\(['"](\w+)['"]\)/g, '');
+    // [FIX #21] Additional Chai chaining leftovers after Playwright assertions
+    t = t.replace(/\.that\.is\.empty/g, '');
+    t = t.replace(/\.and\.not\.empty/g, '');
+    t = t.replace(/\.above\((\d+)\)/g, '');
+    t = t.replace(/\.with\.lengthOf\((\d+)\)/g, '');
+    t = t.replace(/\.and\.not\.be\.empty/g, '');
+
+    // ─────────────────────────────────────────
+    // [FIX #19] forEach + await → for...of
+    // ─────────────────────────────────────────
+    // Pattern: xxx.forEach(item => { ... await ... }) or xxx.forEach(async (item) => { ... })
+    t = t.replace(
+        /(\w[\w.[\]]*?)\.forEach\s*\(\s*(?:async\s+)?\(?(\w+)\)?\s*=>\s*\{/g,
+        'for (const $2 of $1) {'
+    );
+    // Handle: xxx.forEach((item, index) => { — 2 params (keep index as let)
+    t = t.replace(
+        /(\w[\w.[\]]*?)\.forEach\s*\(\s*(?:async\s+)?\((\w+)\s*,\s*(\w+)\)\s*=>\s*\{/g,
+        'for (const [$2, $3] of $1.entries()) {'
+    );
+    // Also handle: xxx.forEach(function(item) { or xxx.forEach(async function(item) {
+    t = t.replace(
+        /(\w[\w.[\]]*?)\.forEach\s*\(\s*(?:async\s+)?function\s*\(\s*(\w+)\s*\)\s*\{/g,
+        'for (const $2 of $1) {'
+    );
+    // Handle: xxx.forEach(function(item, index) {
+    t = t.replace(
+        /(\w[\w.[\]]*?)\.forEach\s*\(\s*(?:async\s+)?function\s*\(\s*(\w+)\s*,\s*(\w+)\s*\)\s*\{/g,
+        'for (const [$2, $3] of $1.entries()) {'
+    );
+
+    // ─────────────────────────────────────────
+    // [FIX #20] jsonData → declare from responseJson
+    // ─────────────────────────────────────────
+    // If code uses `jsonData` but doesn't declare it, add declaration
+    if (/\bjsonData\b/.test(t) && !/\b(?:const|let|var)\s+jsonData\b/.test(t)) {
+        // Replace first bare assignment `jsonData = responseJson;` with `let jsonData = responseJson;`
+        if (/jsonData\s*=\s*responseJson/.test(t)) {
+            t = t.replace(/jsonData\s*=\s*responseJson/, 'let jsonData = responseJson');
+        } else {
+            // Add declaration at the top
+            t = 'let jsonData: any;\n' + t;
+        }
+    }
+
+    // [FIX #20b] actualData → declare if undeclared
+    if (/\bactualData\b/.test(t) && !/\b(?:const|let|var)\s+actualData\b/.test(t)) {
+        if (/actualData\s*=/.test(t)) {
+            t = t.replace(/actualData\s*=/, 'let actualData =');
+        } else {
+            t = 'let actualData: any;\n' + t;
+        }
+    }
+
+    // [FIX #20c] requestBody → declare if undeclared (used in assertions like JSON.parse(requestBody))
+    if (/\brequestBody\b/.test(t) && !/\b(?:const|let|var)\s+requestBody\b/.test(t)) {
+        t = 'const requestBody = JSON.stringify(data.body ?? data);\n' + t;
+    }
+
+    // [FIX #20d] iuserConvertTestData / xxxTestData → these come from fixture but spec doesn't destructure
+    // Replace bare iuserConvertTestData with fixture import reference
+    // (This is handled at spec level, not here)
+
     // Fixture refs
     t = t.replace(/process\.env\['([^']+)'\]/g, (_, k) => `${systemCamelName}TestData.env.${getSafeVarName(k)}`);
 
@@ -502,7 +761,616 @@ function transformAdvancedLogic(code: string, systemCamelName: string): string {
 }
 
 // ───────────────────────────────────────────────
-// CORE PROCESSING LOGIC (v4)
+// [v7.0] SKELETON ASSERTION BUILDER
+// ───────────────────────────────────────────────
+function buildSkeletonAssertions(snippet: { action: string; assertions: string; testName: string; httpMethod: string; endpoint: string }): string {
+    const combined = snippet.action + '\n' + snippet.assertions;
+
+    // Detect response type from original code
+    const needsJson = combined.includes('responseJson') || combined.includes('.json()') || combined.includes('jsonData');
+    const needsText = combined.includes('responseText') || combined.includes('.text()');
+
+    // Detect status code from original assertions
+    const statusMatch = combined.match(/expect\(response\.status\(\)\)\.toBe\((\d+)\)/);
+    const expectedStatus = statusMatch ? statusMatch[1] : '200';
+
+    // Count original assertion lines to give a hint
+    const assertionLineCount = snippet.assertions.split('\n').filter(l => l.trim().includes('expect(')).length;
+
+    const lines: string[] = [];
+    lines.push(`                await test.step('Status code is ${expectedStatus}', async () => {`);
+    lines.push(`                    expect(response.status()).toBe(${expectedStatus});`);
+    lines.push(`                });`);
+
+    if (needsJson) {
+        lines.push(`                await test.step('Response body validation', async () => {`);
+        lines.push(`                    const responseJson = await response.json();`);
+        lines.push(`                    // TODO: Add assertions (~${assertionLineCount} from Postman)`);
+        lines.push(`                    expect(responseJson).toBeTruthy();`);
+        lines.push(`                });`);
+    } else if (needsText) {
+        lines.push(`                await test.step('Response body validation', async () => {`);
+        lines.push(`                    const responseText = await response.text();`);
+        lines.push(`                    // TODO: Add assertions (~${assertionLineCount} from Postman)`);
+        lines.push(`                    expect(responseText).toBeTruthy();`);
+        lines.push(`                });`);
+    }
+
+    return lines.join('\n');
+}
+
+// ───────────────────────────────────────────────
+// [v7.0] GROUP BLOCKS BY TOP-LEVEL FOLDER
+// ───────────────────────────────────────────────
+interface FolderGroup {
+    topFolder: string;       // e.g. "AMFW01000"
+    blocks: TestBlock[];     // all test blocks in this folder
+    subFolders: string[];    // unique sub-folder names
+}
+
+function groupByTopFolder(blocks: TestBlock[]): FolderGroup[] {
+    const map = new Map<string, TestBlock[]>();
+    const order: string[] = [];
+
+    for (const block of blocks) {
+        const key = block.topFolder || 'General';
+        if (!map.has(key)) {
+            map.set(key, []);
+            order.push(key);
+        }
+        map.get(key)!.push(block);
+    }
+
+    return order.map(key => {
+        const folderBlocks = map.get(key)!;
+        const subFolders = [...new Set(folderBlocks.map(b => b.subFolder).filter(s => s && s !== 'General'))];
+        return { topFolder: key, blocks: folderBlocks, subFolders };
+    });
+}
+
+// ───────────────────────────────────────────────
+// [v7.0] PROCESS FOLDER GROUP — generates 1 spec + services per top-level folder
+// ───────────────────────────────────────────────
+interface FolderGroupContext {
+    group: FolderGroup;
+    inputFile: string;
+    targetDir: string;
+    kebabName: string;              // parent collection kebab name
+    collectionSystemName: string;   // parent collection system name
+    envMarkdownRaw: string;
+    markdownRaw: string;
+    collectionHelpersData: string;
+    extraImports: string[];
+    extraImportsStr: string;
+    needsCollectionHelpers: boolean;
+    needsXml2js: boolean;
+    needsCrypto: boolean;
+    needsCheerio: boolean;
+    needsMoment: boolean;
+    helperDir: string;
+    schemaDir: string;
+    fixtureDir: string;
+}
+
+async function processFolderGroup(ctx: FolderGroupContext) {
+    const { group, inputFile, targetDir, kebabName: parentKebab } = ctx;
+    const { helperDir, schemaDir, fixtureDir } = ctx;
+
+    // Naming: use topFolder as the system name for this split
+    const folderSystemName = group.topFolder;
+    const folderKebab = toKebabCase(folderSystemName) || 'api-feature';
+    const folderCamel = toCamelCase(folderSystemName);
+    const folderPascal = toPascalCase(folderSystemName);
+
+    // Output under parent kebab folder: tests-api/<parentKebab>/<folderKebab>.spec.ts
+    const specSubDir = path.join(path.dirname(inputFile), folderKebab);
+
+    console.log(`\n📦 Processing folder: ${sanitizeLog(folderSystemName)} (${group.blocks.length} requests)`);
+
+    // ─────────────────────────────────────────
+    // Parse blocks into snippets
+    // ─────────────────────────────────────────
+    interface SplitSnippet {
+        label: string;
+        testName: string;
+        action: string;
+        assertions: string;
+        isDataDriven: boolean;
+        iterationKeys: string[];
+        needsSerial: boolean;
+        needsStateStore: boolean;
+        hasControlFlow: boolean;
+        endpoint: string;
+        httpMethod: string;
+    }
+
+    const testSnippets: SplitSnippet[] = group.blocks.map(block => {
+        const body = block.fullBody;
+
+        const actionMatch = body.match(
+            /\/\/ ━━━ 🎬 Action ━━━\s*([\s\S]+?)(?=\/\/ ━━━ ✅ Assertions|\/\/ ━━━|$)/
+        );
+        const assertMatch = body.match(
+            /\/\/ ━━━ ✅ Assertions ━━━\s*([\s\S]+?)(?=\}\);?\s*$|$)/
+        );
+
+        let action = actionMatch ? actionMatch[1].trim() : '// TODO: Action';
+        let assertions = assertMatch ? assertMatch[1].trim() : '// TODO: Assertions';
+
+        action = transformAdvancedLogic(action, folderCamel);
+        assertions = transformAdvancedLogic(assertions, folderCamel);
+
+        const iterationKeys = extractIterationKeys(body);
+        const isDataDriven = iterationKeys.length > 0 || body.includes('pm.iterationData');
+        const needsStateStore = detectStateStore(body);
+        const hasControlFlow = body.includes('setNextRequest') || body.includes('CONTROL_FLOW');
+        const needsSerial = needsStateStore || hasControlFlow;
+
+        return {
+            // [v7.1 FIX] Use only first sub-folder level as service grouping key
+            // e.g. "SearchData > Success > ค้นหา..." → "SearchData"
+            label: (block.subFolder || block.label || 'General').split(' > ')[0],
+            testName: block.testName,
+            action,
+            assertions,
+            isDataDriven,
+            iterationKeys,
+            needsSerial,
+            needsStateStore,
+            hasControlFlow,
+            endpoint: block.endpoint,
+            httpMethod: block.httpMethod,
+        };
+    });
+
+    // ─────────────────────────────────────────
+    // ENV PARSING (reuse from parent context)
+    // ─────────────────────────────────────────
+    const extractedEnvKeys: Record<string, string> = {};
+    if (ctx.envMarkdownRaw) {
+        const dotEnvMatch = ctx.envMarkdownRaw.match(
+            /## 📝 \.env Snippet[\s\S]*?```properties\n([\s\S]*?)\n```/
+        );
+        if (dotEnvMatch) {
+            dotEnvMatch[1].split('\n').forEach(l => {
+                if (l.trim() && !l.startsWith('#')) {
+                    const [k, ...rest] = l.split('=');
+                    if (k?.trim()) extractedEnvKeys[k.trim()] = rest.join('=').trim();
+                }
+            });
+        }
+    }
+
+    const machineDecls: Record<string, string> = {};
+    if (ctx.envMarkdownRaw) {
+        const machineMatch = ctx.envMarkdownRaw.match(
+            /## 🔌 Machine-Readable Declarations[\s\S]*?```env-declarations\n([\s\S]*?)\n```/
+        );
+        if (machineMatch) {
+            machineMatch[1].split('\n').forEach(line => {
+                const sepIdx = line.indexOf(':::');
+                if (sepIdx !== -1) {
+                    const k = line.slice(0, sepIdx).trim();
+                    const decl = line.slice(sepIdx + 3).trim();
+                    if (k && decl) machineDecls[k] = decl;
+                }
+            });
+        }
+    }
+
+    const playwrightDecls: Record<string, string> = {};
+    if (ctx.envMarkdownRaw && Object.keys(machineDecls).length === 0) {
+        const pwDeclMatch = ctx.envMarkdownRaw.match(
+            /## 🎭 Playwright Variable Declarations[\s\S]*?```typescript\n([\s\S]*?)\n```/
+        );
+        if (pwDeclMatch) {
+            pwDeclMatch[1].split('\n').forEach(line => {
+                const declMatch = line.match(/^const\s+\w+\s*=.*process\.env\['([^']+)'\]/);
+                if (declMatch) playwrightDecls[declMatch[1]] = line.trim();
+            });
+        }
+    }
+
+    const allEnvDecls: Record<string, string> = { ...playwrightDecls, ...machineDecls };
+    const envEntries: string[] = [];
+    const allEnvKeys = new Set([...Object.keys(extractedEnvKeys), ...Object.keys(allEnvDecls)]);
+
+    allEnvKeys.forEach(k => {
+        const rawVal = extractedEnvKeys[k];
+        const decl = allEnvDecls[k];
+        if (decl) {
+            const valExpr = decl.replace(/^const\s+\w+\s*(?::\s*\S+\s*)?=\s*/, '').replace(/;.*$/, '').trim();
+            envEntries.push(`        ${getSafeVarName(k)}: ${valExpr},`);
+        } else if (rawVal !== undefined) {
+            envEntries.push(`        ${k}: ${rawVal ? JSON.stringify(rawVal) : '""'},`);
+        }
+    });
+
+    const envProperties = envEntries.length > 0
+        ? envEntries.join('\n')
+        : `        // No environment variables found\n        placeholder: true`;
+
+    const allIterationKeys = [...new Set(testSnippets.flatMap(s => s.iterationKeys))];
+    const iterationInterface = allIterationKeys.length > 0
+        ? `\nexport interface ${folderPascal}IterationRow {\n` +
+          allIterationKeys.map(k => `    ${k}: string; // TODO: update type`).join('\n') +
+          '\n}\n'
+        : '';
+    const iterationDataType = allIterationKeys.length > 0 ? `${folderPascal}IterationRow` : '{ placeholder: string }';
+    const iterationDataRows = allIterationKeys.length > 0
+        ? `[\n        // TODO: fill iteration rows — keys: ${allIterationKeys.join(', ')}\n        { ${allIterationKeys.map(k => `${k}: ''`).join(', ')} },\n    ]`
+        : `[\n        { placeholder: 'value1' },\n    ]`;
+
+    // ─────────────────────────────────────────
+    // FILE 1: DATA FIXTURE
+    // ─────────────────────────────────────────
+    const fixtureExtraImports = [
+        ctx.needsCrypto ? `import * as crypto from 'crypto';` : '',
+    ].filter(Boolean).join('\n');
+
+    const dataFileContent = [
+        `import { test as base } from '@playwright/test';`,
+        fixtureExtraImports,
+        iterationInterface.trimEnd(),
+    ].filter(Boolean).join('\n') + `
+// 📦 Data kept in Fixtures (AAA Pattern)
+export const ${folderCamel}Data = {
+    env: {
+${envProperties}
+    },
+    iterationData: ${iterationDataRows},
+    samplePayload: {
+        placeholder: true
+    }
+};
+
+export type ${folderPascal}Fixtures = {
+    ${folderCamel}TestData: typeof ${folderCamel}Data;
+};
+
+export const test = base.extend<${folderPascal}Fixtures>({
+    ${folderCamel}TestData: async ({}, use) => {
+        await use(${folderCamel}Data);
+    }
+});
+export { expect } from '@playwright/test';
+`;
+
+    // ─────────────────────────────────────────
+    // FILE 2: SERVICES (per sub-folder label)
+    // ─────────────────────────────────────────
+    const labelGroups = new Map<string, typeof testSnippets>();
+    testSnippets.forEach(snippet => {
+        const label = snippet.label || 'General';
+        if (!labelGroups.has(label)) labelGroups.set(label, []);
+        labelGroups.get(label)!.push(snippet);
+    });
+
+    let needsFs = false;
+    testSnippets.forEach(s => { if (s.action.includes('fs.')) needsFs = true; });
+    const fsImport = needsFs ? "import * as fs from 'fs';\n" : '';
+
+    const helperExtraImports = [
+        ctx.needsMoment ? `import moment from 'moment';` : '',
+        ctx.needsCheerio ? `import * as cheerio from 'cheerio';` : '',
+        ctx.needsXml2js ? `import { parseStringPromise } from 'xml2js';` : '',
+    ].filter(Boolean).join('\n');
+
+    const serviceFiles: { path: string; content: string; className: string }[] = [];
+
+    labelGroups.forEach((snippets, label) => {
+        const serviceLabel = label === 'General' ? folderSystemName : label;
+        const serviceCamel = toCamelCase(serviceLabel);
+        const servicePascal = toPascalCase(serviceLabel);
+        const serviceClassName = `${servicePascal}Service`;
+
+        let serviceMethods = '';
+        const methodNameCounts = new Map<string, number>();
+        const needsCollHelperInService = snippets.some(s =>
+            s.action.includes('CollectionHelpers.') || s.assertions.includes('CollectionHelpers.')
+        );
+
+        snippets.forEach(snippet => {
+            let methodName = toCamelCase(snippet.testName) + 'Request';
+
+            const count = methodNameCounts.get(methodName) || 0;
+            methodNameCounts.set(methodName, count + 1);
+            if (count > 0) methodName = `${methodName}_${count + 1}`;
+
+            // [v7.0 SKELETON] — generate clean method with only the HTTP call
+            if (skeletonMode) {
+                const method = (snippet.httpMethod || 'post').toLowerCase();
+                const endpointHint = snippet.endpoint
+                    ? `'${snippet.endpoint}'`
+                    : `data.endpoint || ''`;
+
+                serviceMethods += `
+    /**
+     * @description ${snippet.label} > ${snippet.testName}
+     * @endpoint ${snippet.httpMethod || 'POST'} ${snippet.endpoint || 'TODO'}
+     */
+    async ${methodName}(data: any = {}): Promise<any> {
+        const url = data.endpoint || ${endpointHint};
+        const headers: Record<string, string> = {
+            'Content-Type': 'application/json',
+            ...data.headers,
+        };
+        const response = await this.request.${method}(url, {
+            headers,
+            ${method !== 'get' && method !== 'delete' ? 'data: data.body ?? data,' : ''}
+        });
+        return response;
+    }
+`;
+            } else {
+                // Full mode — existing logic
+                let actionInClass = snippet.action
+                    .replace(/(?<![.\w])request\.(get|post|put|patch|delete|head|fetch|dispose|storageState)\b/g, 'this.request.$1');
+
+                const httpMethodMatch = actionInClass.match(/this\.request\.(get|post|put|patch|delete)\s*\(/);
+                const httpMethod = httpMethodMatch ? httpMethodMatch[1] : 'post';
+
+                const usesUrl = /\burl\b/.test(actionInClass) && !/\b(?:const|let|var)\s+url\b/.test(actionInClass);
+                const usesDynamicHeaders = /\bdynamicHeaders\b/.test(actionInClass) && !/\b(?:const|let|var)\s+dynamicHeaders\b/.test(actionInClass);
+                const usesRequestBody = /\brequestBody\b/.test(actionInClass) && !/\b(?:const|let|var)\s+requestBody\b/.test(actionInClass);
+
+                const varDecls: string[] = [];
+                if (usesUrl) varDecls.push(`const url = new URL(data.endpoint || '', data.baseUrl || process.env['BASE_URL'] || '');`);
+                if (usesDynamicHeaders) varDecls.push(`const dynamicHeaders: Record<string, string> = {\n            'Content-Type': 'application/json',\n            ...data.headers,\n        };`);
+                if (usesRequestBody) varDecls.push(`const requestBody = data.body ?? data;`);
+                if (varDecls.length > 0) actionInClass = varDecls.map(d => '  ' + d).join('\n') + '\n' + actionInClass;
+
+                const hasResponseDecl = /\bconst response\b/.test(actionInClass) || /\blet response\b/.test(actionInClass);
+                const returnLine = hasResponseDecl ? '        return response;' : '        // TODO: return the response variable';
+
+                serviceMethods += `
+    /**
+     * @description ${snippet.label} > ${snippet.testName}
+     */
+    async ${methodName}(data: any = {}): Promise<any> {
+${actionInClass.split('\n').map(l => '        ' + l).join('\n')}
+${returnLine}
+    }
+`;
+            }
+        });
+
+        const collHelperServiceImport = needsCollHelperInService && !skeletonMode
+            ? `import { CollectionHelpers } from '../core/CollectionHelpers';\n`
+            : '';
+
+        const serviceContent =
+            `${fsImport}import { APIRequestContext } from '@playwright/test';
+${helperExtraImports ? helperExtraImports + '\n' : ''}${collHelperServiceImport}
+// ⚙️ Service: ${serviceLabel} — Business actions (endpoint-aware)
+export class ${serviceClassName} {
+    constructor(private readonly request: APIRequestContext) {}
+${serviceMethods}
+}
+`;
+        const servicePath = path.join(targetDir, helperDir, parentKebab, folderKebab, `${serviceCamel}Service.ts`);
+        serviceFiles.push({ path: servicePath, content: serviceContent, className: serviceClassName });
+    });
+
+    // ─────────────────────────────────────────
+    // FILE 2b: HELPER (entry point — composes Services)
+    // ─────────────────────────────────────────
+    const serviceImports = serviceFiles.map(sf =>
+        `import { ${sf.className} } from './${path.basename(sf.path, '.ts')}';`
+    ).join('\n');
+
+    const serviceProperties = serviceFiles.map(sf => {
+        const propName = toCamelCase(sf.className.replace(/Service$/, ''));
+        return `    public readonly ${propName}: ${sf.className};`;
+    }).join('\n');
+
+    const serviceInits = serviceFiles.map(sf => {
+        const propName = toCamelCase(sf.className.replace(/Service$/, ''));
+        return `        this.${propName} = new ${sf.className}(request);`;
+    }).join('\n');
+
+    const helperFileContent =
+        `import { APIRequestContext } from '@playwright/test';
+${serviceImports}
+
+// 🔌 Main Controller for ${folderSystemName} — composes domain Services
+export class ${folderPascal}Helper {
+${serviceProperties}
+
+    constructor(request: APIRequestContext) {
+${serviceInits}
+    }
+}
+`;
+
+    // ─────────────────────────────────────────
+    // FILE 3: SPEC
+    // ─────────────────────────────────────────
+    const anySerial = testSnippets.some(s => s.needsSerial);
+    const anyStateStore = testSnippets.some(s => s.needsStateStore);
+    const stateStoreDecl = anyStateStore
+        ? `\n    // ⚠️ PARALLEL RISK: ใช้ stateStore สำหรับ shared runtime state\n    const stateStore: Record<string, string> = {};\n`
+        : '';
+    const describeDecorator = anySerial ? 'test.describe.serial' : 'test.describe';
+
+    let specTestCases = '';
+    // [v7.2 FIX] Per-service dedup counter — must match service method naming exactly
+    const specMethodNameCountsPerService = new Map<string, Map<string, number>>();
+
+    testSnippets.forEach((snippet, index) => {
+        const tcId = `[TC-${String(index + 1).padStart(4, '0')}]`;
+        let methodName = toCamelCase(snippet.testName) + 'Request';
+
+        const snippetLabel = snippet.label || 'General';
+        const serviceLabel = snippetLabel === 'General' ? folderSystemName : snippetLabel;
+        const servicePropName = toCamelCase(toPascalCase(serviceLabel).replace(/Service$/, ''));
+
+        // Per-service counter — matches how service file generates method names
+        if (!specMethodNameCountsPerService.has(servicePropName)) {
+            specMethodNameCountsPerService.set(servicePropName, new Map());
+        }
+        const svcCounts = specMethodNameCountsPerService.get(servicePropName)!;
+        const count = svcCounts.get(methodName) || 0;
+        svcCounts.set(methodName, count + 1);
+        if (count > 0) methodName = `${methodName}_${count + 1}`;
+
+        // [v7.2 FIX] Escape single quotes in test title to prevent syntax errors
+        const testTitle = `${tcId} ${snippet.testName}`.replace(/'/g, "\\'");
+
+        const ctrlComment = snippet.hasControlFlow
+            ? `\n        // ⚠️ [CONTROL_FLOW] Request มี setNextRequest — ตรวจสอบลำดับ test.step ด้วยมือ`
+            : '';
+
+        if (skeletonMode) {
+            // [v7.0 SKELETON] — clean test case with TODO assertions
+            const skeletonAssertions = buildSkeletonAssertions(snippet);
+            const safeTestName = snippet.testName.replace(/'/g, "\\'");
+            specTestCases += `
+    test('${testTitle}', async ({ request, ${folderCamel}TestData }) => {
+        const helper = new ${folderPascal}Helper(request);${ctrlComment}
+        await test.step('API: ${safeTestName}', async () => {
+            const response = await helper.${servicePropName}.${methodName}();
+
+${skeletonAssertions}
+        });
+    });
+`;
+        } else if (snippet.isDataDriven) {
+            const rowType = allIterationKeys.length > 0 ? iterationDataType : '{ placeholder: string }';
+            const respSnippet = buildResponseSnippet(snippet.action, snippet.assertions);
+            specTestCases += `
+    test('${testTitle}', async ({ request, ${folderCamel}TestData }) => {
+        const helper = new ${folderPascal}Helper(request);${ctrlComment}
+        for (const data of ${folderCamel}Data.iterationData as ${rowType}[]) {
+            await test.step(\`API: ${snippet.testName} — \${JSON.stringify(data)}\`, async () => {
+                const response = await helper.${servicePropName}.${methodName}(data);
+
+${respSnippet}
+${snippet.assertions.split('\n').map(l => '                ' + l).join('\n')}
+            });
+        }
+    });
+`;
+        } else {
+            const respSnippet = buildResponseSnippet(snippet.action, snippet.assertions);
+            specTestCases += `
+    test('${testTitle}', async ({ request, ${folderCamel}TestData }) => {
+        const helper = new ${folderPascal}Helper(request);${ctrlComment}
+        await test.step('API: ${snippet.testName}', async () => {
+            const response = await helper.${servicePropName}.${methodName}();
+
+${respSnippet}
+${snippet.assertions.split('\n').map(l => '                ' + l).join('\n')}
+        });
+    });
+`;
+        }
+    });
+
+    const stateStoreBeforeAll = anyStateStore
+        ? `\n    test.beforeAll(async () => {\n        // ⚠️ PARALLEL RISK: pre-seed stateStore from env if needed\n        // Object.assign(stateStore, { myVar: process.env['myVar'] || '' });\n    });\n`
+        : '';
+
+    const collHelperImport = ctx.needsCollectionHelpers && !skeletonMode
+        ? `import { CollectionHelpers } from '../../../${helperDir}/core/CollectionHelpers';\n`
+        : '';
+
+    // Relative path from spec to fixtures/helpers — spec is in tests-api/<parentKebab>/<folderKebab>/
+    const specFileContent =
+        `import { test, expect } from '../../../${fixtureDir}/${parentKebab}/${folderKebab}/${folderCamel}Data';
+import { ${folderPascal}Helper } from '../../../${helperDir}/${parentKebab}/${folderKebab}/${folderCamel}Helper';
+import { ${folderCamel}Data } from '../../../${fixtureDir}/${parentKebab}/${folderKebab}/${folderCamel}Data';
+import { validate${folderPascal}Response } from '../../../${schemaDir}/${parentKebab}/${folderKebab}/${folderCamel}Schema';
+${collHelperImport}
+// ───────────────────────────────────────────────
+// ${folderSystemName} API Spec (auto-split from ${ctx.collectionSystemName})
+// ───────────────────────────────────────────────
+${describeDecorator}('[PBI-0000] ${folderSystemName} API Workflow @regression', () => {
+${stateStoreDecl}${stateStoreBeforeAll}
+    let testId: string;
+
+    test.beforeEach(async ({ request }) => {
+        testId = \`${folderSystemName}_\${Date.now()}\`;
+    });
+
+    test.afterEach(async ({ request }) => {
+        // cleanup if needed
+    });
+
+${specTestCases}
+});
+`;
+
+    // ─────────────────────────────────────────
+    // FILE 4: SCHEMA
+    // ─────────────────────────────────────────
+    const schemaFileContent =
+`import Ajv, { JSONSchemaType } from 'ajv';
+
+const ajv = new Ajv({ allErrors: true });
+
+export interface ${folderPascal}Response {
+    [key: string]: unknown;
+}
+
+export const ${folderCamel}ResponseSchema: JSONSchemaType<${folderPascal}Response> = {
+    type: 'object',
+    properties: {},
+    required: [],
+    additionalProperties: true,
+} as JSONSchemaType<${folderPascal}Response>;
+
+export const validate${folderPascal}Response = ajv.compile(${folderCamel}ResponseSchema);
+`;
+
+    // ─────────────────────────────────────────
+    // WRITE FILES
+    // ─────────────────────────────────────────
+    function ensureAndWrite(fPath: string, content: string) {
+        const cwd = process.cwd();
+        const safePath = safeResolvePath(cwd, fPath);
+        const dir = path.dirname(safePath);
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+        fs.writeFileSync(safePath, content, 'utf-8');
+        console.log(`   ✅ ${sanitizeLog(path.relative(cwd, safePath))}`);
+    }
+
+    const specPath    = path.join(specSubDir, `${folderCamel}.spec.ts`);
+    const helperPath  = path.join(targetDir, helperDir, parentKebab, folderKebab, `${folderCamel}Helper.ts`);
+    const schemaPath  = path.join(targetDir, schemaDir, parentKebab, folderKebab, `${folderCamel}Schema.ts`);
+    const fixturePath = path.join(targetDir, fixtureDir, parentKebab, folderKebab, `${folderCamel}Data.ts`);
+
+    const serialCount = testSnippets.filter(s => s.needsSerial).length;
+    const dataDrivenCount = testSnippets.filter(s => s.isDataDriven).length;
+
+    console.log(`\n   ─── ${folderSystemName} ───`);
+    console.log(`   Tests: ${testSnippets.length} | Data-driven: ${dataDrivenCount} | Serial: ${serialCount} | Services: ${serviceFiles.length}`);
+    if (skeletonMode) console.log(`   Mode: SKELETON (clean assertions, compiles immediately)`);
+
+    const written: string[] = [];
+    const failed: string[] = [];
+    function tryWrite(fPath: string, content: string) {
+        try {
+            ensureAndWrite(fPath, content);
+            written.push(path.basename(fPath));
+        } catch (e: any) {
+            failed.push(path.basename(fPath));
+            console.error(`   ❌ Failed: ${sanitizeLog(path.basename(fPath))}: ${sanitizeLog(e.message)}`);
+        }
+    }
+
+    tryWrite(fixturePath, dataFileContent);
+    serviceFiles.forEach(sf => tryWrite(sf.path, sf.content));
+    tryWrite(helperPath, helperFileContent);
+    tryWrite(schemaPath, schemaFileContent);
+    tryWrite(specPath, specFileContent);
+
+    if (written.length > 0) console.log(`   PASS (${written.length}): ${written.join(', ')}`);
+    if (failed.length > 0)  console.log(`   FAIL (${failed.length}): ${failed.join(', ')}`);
+}
+
+// ───────────────────────────────────────────────
+// CORE PROCESSING LOGIC (v7)
 // ───────────────────────────────────────────────
 async function processFile(
     inputFile: string,
@@ -601,6 +1469,7 @@ async function processFile(
 
     // ─────────────────────────────────────────
     // [FIX #1] Extract test blocks (stack-based)
+    // [v7.0] Now includes folder context
     // ─────────────────────────────────────────
     const rawBlocks = extractTestBlocks(markdownRaw);
 
@@ -608,6 +1477,72 @@ async function processFile(
         console.warn(`⚠️ No test blocks found in ${sanitizeLog(inputFile)}. Skipping...`);
         return;
     }
+
+    // ─────────────────────────────────────────
+    // [v7.0] AUTO-SPLIT: detect top-level folders
+    // ─────────────────────────────────────────
+    const folderGroups = groupByTopFolder(rawBlocks);
+    const hasMultipleFolders = folderGroups.length > 1 ||
+        (folderGroups.length === 1 && folderGroups[0].topFolder !== 'General');
+
+    if (hasMultipleFolders && !noSplitMode) {
+        console.log(`\n🔀 AUTO-SPLIT: Detected ${folderGroups.length} top-level folders`);
+        folderGroups.forEach(fg => {
+            console.log(`   📁 ${sanitizeLog(fg.topFolder)}: ${fg.blocks.length} requests, sub-folders: [${fg.subFolders.join(', ')}]`);
+        });
+
+        // Process each folder group as a separate spec
+        for (const group of folderGroups) {
+            await processFolderGroup({
+                group,
+                inputFile,
+                targetDir,
+                kebabName,
+                collectionSystemName: systemName,
+                envMarkdownRaw,
+                markdownRaw,
+                collectionHelpersData,
+                extraImports,
+                extraImportsStr,
+                needsCollectionHelpers,
+                needsXml2js,
+                needsCrypto,
+                needsCheerio,
+                needsMoment,
+                helperDir: helperDirName,
+                schemaDir: schemaDirName,
+                fixtureDir: fixtureDirName,
+            });
+        }
+
+        // Write CollectionHelpers once (shared across all split folders)
+        if (collectionHelpersData && !skeletonMode) {
+            const collHelperPath = path.join(targetDir, helperDirName, 'core', 'CollectionHelpers.ts');
+            const helperHeader = `import { APIRequestContext } from '@playwright/test';\nimport * as crypto from 'crypto';\nimport { parseStringPromise } from 'xml2js';\n\n/**\n * 💡 CoE Global Helpers\n * common functions migrated from Postman Collection Variables\n */\n`;
+            const finalCollectionHelper = `${helperHeader}\n${collectionHelpersData.replace('export const CollectionHelpers = {', 'export const CollectionHelpers = {\n    // 🔄 XML Wrapper for Postman compatibility\n    xml2Json: async (xml: string) => await parseStringPromise(xml),')}\n`;
+            const cwd = process.cwd();
+            const safePath = safeResolvePath(cwd, collHelperPath);
+            const dir = path.dirname(safePath);
+            if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+            fs.writeFileSync(safePath, finalCollectionHelper, 'utf-8');
+            console.log(`\n   ✅ CollectionHelpers.ts (shared)`);
+        }
+
+        // Summary
+        const totalBlocks = folderGroups.reduce((sum, fg) => sum + fg.blocks.length, 0);
+        console.log(`\n=========================================`);
+        console.log(`✅ AUTO-SPLIT COMPLETE: ${systemName}`);
+        console.log(`=========================================`);
+        console.log(`   Total requests : ${totalBlocks}`);
+        console.log(`   Folders split  : ${folderGroups.length}`);
+        console.log(`   Mode           : ${skeletonMode ? 'SKELETON' : 'FULL'}`);
+        console.log(`=========================================`);
+        return;
+    }
+
+    // ─────────────────────────────────────────
+    // LEGACY: single-file mode (--no-split or single folder)
+    // ─────────────────────────────────────────
 
     // ─────────────────────────────────────────
     // Parse each block into structured snippet
@@ -748,8 +1683,8 @@ async function processFile(
 
         if (decl) {
             // มี typed declaration จาก readPostmanEnv v4 — ใช้เลย
-            // strip `const varName =` ออก เอาแค่ส่วน value expression
-            const valExpr = decl.replace(/^const\s+\w+\s*=\s*/, '').replace(/;.*$/, '').trim();
+            // [FIX #14] strip `const varName: type =` ออก (รวม type annotation)
+            const valExpr = decl.replace(/^const\s+\w+\s*(?::\s*\S+\s*)?=\s*/, '').replace(/;.*$/, '').trim();
             envEntries.push(`        ${getSafeVarName(k)}: ${valExpr},`);
         } else if (rawVal !== undefined) {
             // fallback — raw string value
@@ -873,24 +1808,73 @@ export { expect } from '@playwright/test';
         const serviceClassName = `${servicePascal}Service`;
 
         let serviceMethods = '';
+        // [FIX #15] Track method names to dedup duplicates
+        const methodNameCounts = new Map<string, number>();
+        const needsCollHelperInService = snippets.some(s =>
+            s.action.includes('CollectionHelpers.') || s.assertions.includes('CollectionHelpers.')
+        );
         snippets.forEach(snippet => {
-            const methodName = toCamelCase(snippet.testName) + 'Request';
-            const hasResponseDecl = /\bconst response\b/.test(snippet.action) || /\blet response\b/.test(snippet.action);
+            let methodName = toCamelCase(snippet.testName) + 'Request';
+
+            // [FIX #15] Dedup: append _2, _3, etc. for duplicate method names
+            const count = methodNameCounts.get(methodName) || 0;
+            methodNameCounts.set(methodName, count + 1);
+            if (count > 0) {
+                methodName = `${methodName}_${count + 1}`;
+            }
+
+            // Replace bare `request.` with `this.request.` inside class methods
+            let actionInClass = snippet.action
+                .replace(/(?<![.\w])request\.(get|post|put|patch|delete|head|fetch|dispose|storageState)\b/g, 'this.request.$1');
+
+            // [FIX #16] Detect HTTP method from action to build proper url/headers/body
+            const httpMethodMatch = actionInClass.match(/this\.request\.(get|post|put|patch|delete)\s*\(/);
+            const httpMethod = httpMethodMatch ? httpMethodMatch[1] : 'post';
+
+            // [FIX #16] Check if url, dynamicHeaders, requestBody are used but not declared
+            const usesUrl = /\burl\b/.test(actionInClass) && !/\b(?:const|let|var)\s+url\b/.test(actionInClass);
+            const usesDynamicHeaders = /\bdynamicHeaders\b/.test(actionInClass) && !/\b(?:const|let|var)\s+dynamicHeaders\b/.test(actionInClass);
+            const usesRequestBody = /\brequestBody\b/.test(actionInClass) && !/\b(?:const|let|var)\s+requestBody\b/.test(actionInClass);
+
+            // Build variable declarations for undeclared references
+            const varDecls: string[] = [];
+            if (usesUrl) {
+                varDecls.push(`const url = new URL(data.endpoint || '', data.baseUrl || process.env['BASE_URL'] || '');`);
+            }
+            if (usesDynamicHeaders) {
+                varDecls.push(`const dynamicHeaders: Record<string, string> = {
+            'Content-Type': 'application/json',
+            ...data.headers,
+        };`);
+            }
+            if (usesRequestBody) {
+                varDecls.push(`const requestBody = data.body ?? data;`);
+            }
+
+            if (varDecls.length > 0) {
+                actionInClass = varDecls.map(d => '  ' + d).join('\n') + '\n' + actionInClass;
+            }
+
+            const hasResponseDecl = /\bconst response\b/.test(actionInClass) || /\blet response\b/.test(actionInClass);
             const returnLine = hasResponseDecl ? '        return response;' : '        // TODO: return the response variable';
             serviceMethods += `
     /**
      * @description ${snippet.label} > ${snippet.testName}
      */
     async ${methodName}(data: any = {}): Promise<any> {
-${snippet.action.split('\n').map(l => '        ' + l).join('\n')}
+${actionInClass.split('\n').map(l => '        ' + l).join('\n')}
 ${returnLine}
     }
 `;
         });
 
+        const collHelperServiceImport = needsCollHelperInService
+            ? `import { CollectionHelpers } from '../core/CollectionHelpers';\n`
+            : '';
+
         const serviceContent =
             `${fsImport}import { APIRequestContext } from '@playwright/test';
-${helperExtraImports ? helperExtraImports + '\n' : ''}
+${helperExtraImports ? helperExtraImports + '\n' : ''}${collHelperServiceImport}
 // ⚙️ Service: ${serviceLabel} — Business actions (endpoint-aware)
 export class ${serviceClassName} {
     constructor(private readonly request: APIRequestContext) {}
@@ -946,10 +1930,24 @@ ${serviceInits}
 
     let specTestCases = '';
 
+    // [FIX #15] Track method names in spec to match service dedup
+    const specMethodNameCounts = new Map<string, number>();
+
     testSnippets.forEach((snippet, index) => {
         const tcId = `[TC-${String(index + 1).padStart(4, '0')}]`;
-        const methodName = toCamelCase(snippet.testName) + 'Request';
-        const testTitle = `${tcId} ${snippet.testName}`;
+        let methodName = toCamelCase(snippet.testName) + 'Request';
+
+        // [FIX #15] Dedup: must match service method naming
+        const count = specMethodNameCounts.get(methodName) || 0;
+        specMethodNameCounts.set(methodName, count + 1);
+        if (count > 0) {
+            methodName = `${methodName}_${count + 1}`;
+        }
+
+        const testTitle = `${tcId} ${snippet.testName}`.replace(/'/g, "\\'");
+        const snippetLabel = snippet.label || 'General';
+        const serviceLabel = snippetLabel === 'General' ? systemName : snippetLabel;
+        const servicePropName = toCamelCase(toPascalCase(serviceLabel).replace(/Service$/, ''));
 
         // [FIX #6] response snippet — check action + assertions combined
         const respSnippet = buildResponseSnippet(snippet.action, snippet.assertions);
@@ -965,7 +1963,7 @@ ${serviceInits}
             specTestCases +=
                 `
     // 📊 [DATA_DRIVEN] for...of loop — migrated from Postman Runner IterationData
-    test('${testTitle}', async ({ request }) => {
+    test('${testTitle}', async ({ request, ${camelName}TestData }) => {
         const helper = new ${pascalName}Helper(request);${ctrlComment}
         for (const data of ${camelName}Data.iterationData as ${rowType}[]) {
             await test.step(\`API: ${snippet.testName} — \${JSON.stringify(data)}\`, async () => {
@@ -973,7 +1971,7 @@ ${serviceInits}
                 // const reqData = data;
 
                 // 🎬 Act: Execute the API call
-                const response = await helper.${methodName}(data);
+                const response = await helper.${servicePropName}.${methodName}(data);
 
                 // ✅ Assert: Status and Response validation
 ${respSnippet}
@@ -985,14 +1983,14 @@ ${snippet.assertions.split('\n').map(l => '                ' + l).join('\n')}
         } else {
             specTestCases +=
                 `
-    test('${testTitle}', async ({ request }) => {
+    test('${testTitle}', async ({ request, ${camelName}TestData }) => {
         const helper = new ${pascalName}Helper(request);${ctrlComment}
         await test.step('API: ${snippet.testName}', async () => {
             // 📝 Arrange: Prepare data from Fixtures (Do not hardcode here)
             // const reqData = ${camelName}Data.samplePayload;
 
             // 🎬 Act: Execute the API call
-            const response = await helper.${methodName}();
+            const response = await helper.${servicePropName}.${methodName}();
 
             // ✅ Assert: Status and Response validation
 ${respSnippet}
@@ -1155,6 +2153,9 @@ import { parseStringPromise } from 'xml2js';
 // MAIN EXECUTION
 // ───────────────────────────────────────────────
 (async () => {
+    // [v7.3] Resolve --input (auto-detect if not provided)
+    const inputPath = await resolveInputPath();
+
     // [SECURITY] validate top-level input paths
     try {
         const cwd = process.cwd();
@@ -1188,7 +2189,15 @@ import { parseStringPromise } from 'xml2js';
             }
             await processFile(fullPath, localEnvInput, baseOutputDir);
         } else {
-            const mdFiles = files.filter(f => f.endsWith('.md') && !f.toLowerCase().includes('.env.md') && f.toLowerCase() !== 'readme.md');
+            const mdFiles = files.filter(f => {
+                const fullF = path.join(inputPath, f);
+                return f.endsWith('.md')
+                    && !f.toLowerCase().includes('.env.md')
+                    && f.toLowerCase() !== 'readme.md'
+                    && f.toLowerCase() !== 'env.md'
+                    && f.toLowerCase() !== 'environment.md'
+                    && fs.statSync(fullF).isFile(); // [FIX] skip directories named *.md
+            });
             if (mdFiles.length === 0) {
                 console.error(`❌ No markdown files found in ${sanitizeLog(inputPath)}`);
             } else {

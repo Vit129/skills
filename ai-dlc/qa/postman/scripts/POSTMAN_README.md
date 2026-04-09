@@ -2,8 +2,8 @@
 
 > **Description:** A guide for maintaining and utilizing scripts for automated Postman-to-Playwright migration.
 > **Target Audience:** AI Agents & Developers
-> **🔄 Last Update:** 2026-04-08 (v6.2)
-> **Philosophy:** "Zero Data Loss & Path Consistency" — Ensuring every bit of logic is preserved and correctly structured.
+> **🔄 Last Update:** 2026-04-09 (v7.3)
+> **Philosophy:** "Markdown as IR (Intermediate Representation)" — Collection→MD→Playwright, summary for audit.
 
 ---
 
@@ -11,38 +11,118 @@
 
 This folder contains the core scripts for **AI-Enhanced Postman Migration**:
 
-1. `readPostmanCollection.ts`: Reads Collections → Arrow key folder selection → Generates Markdown + Playwright snippets + Nested describe tree.
-2. `readPostmanEnv.ts`: Reads Environments → Arrow key collection folder selection → Generates Markdown analysis + `.env` snippets.
-3. `postmanMdToPlaywright.ts`: Reads Markdown output from steps 1+2 → Generates `.spec.ts` + `Helper.ts` + `Service.ts` + `Schema.ts` + `Data.ts`. Reads folder structure from `workflow.md` automatically.
-4. `postmanToPlaywrightRunAndHeal.ts`: Runs generated Playwright tests + auto-heal fix loop (max 3–5 attempts) + writes Reflexion Log to `audit.md`.
+1. `readPostmanCollection.ts`: Reads Collection JSON → generates analysis Markdown (`.md`). **`--output` is optional** — auto-detects `tests-api/<collection-name>/`.
+2. `readPostmanEnv.ts`: Reads Environment JSON → generates Markdown analysis + `.env` snippets. **`--output` is optional** — interactive select from `tests-api/` folders.
+3. `postmanMdToPlaywright.ts`: **Main code generator** — reads Markdown → generates `.spec.ts` + `Helper.ts` + `Service.ts` + `Schema.ts` + `Data.ts`. **`--input` is optional** — auto-detects from `tests-api/`.
+4. `postmanToPlaywrightRunAndHeal.ts`: Runs generated Playwright tests + auto-heal fix loop + writes Reflexion Log.
+
+### Architecture (v7.3)
+
+```text
+Collection.json ──→ readPostmanCollection.ts ──→ tests-api/<name>/collection.md
+                                                       │
+Environment.json ─→ readPostmanEnv.ts ─────────→ tests-api/<name>/env.md
+                                                       │
+                                                       ▼
+                                            postmanMdToPlaywright.ts --skeleton
+                                                       │
+                                         (auto-split per ## 📁 Folder header)
+                                                       │
+                                    ┌──────────────────┼──────────────────┐
+                                    ▼                  ▼                  ▼
+                              folder1/             folder2/           folder3/
+                              ├── .spec.ts         ├── .spec.ts       ├── .spec.ts
+                              ├── Helper.ts        ├── Helper.ts      ├── Helper.ts
+                              ├── *Service.ts      ├── *Service.ts    ├── *Service.ts
+                              ├── Schema.ts        ├── Schema.ts      ├── Schema.ts
+                              └── Data.ts          └── Data.ts        └── Data.ts
+```
 
 ---
 
-## 🏗️ Core Features (v6.0)
+## 🚀 Usage
 
-- **Arrow Key Selection:** Interactive folder/environment selection using `@inquirer/prompts` (↑↓ arrow keys).
-- **PASS 1 — Execution Graph:** `buildExecutionGraph()` analyzes `setNextRequest` flow across the entire collection before generating snippets.
-- **PASS 1 — State Dependency Analysis:** `analyzeStateDependencies()` detects race condition risks in parallel execution and maps affected vars to `stateStore`.
-- **PASS 1 — Auth Inheritance:** `resolveAuth()` walks up the folder chain to inherit auth from parent folders or collection level.
-- **PASS 2 — VarRegistry:** Normalizes variable names and detects collisions (e.g. `my-var` and `my.var` both → `my_var`).
-- **PASS 3 — CPS → Async/Await:** `transformSendRequest()` converts `pm.sendRequest(config, callback)` to `await request.fetch()`.
-- **PASS 4 — Response Type Detection:** `detectResponseType()` avoids hardcoding `.json()` — detects JSON/text/none/unknown per request.
-- **Collection Variables Section:** Lists all collection variables with type classification and extracts function vars to `CollectionHelpers` blueprint.
-- **Env Variables Section:** Lists all required env vars with `.env` snippet + `process.env` declarations + machine-readable `used-vars` block.
-- **Nested Describe Tree:** Generates a full `describe()` tree mirroring the Postman folder structure at the end of the MD file.
-- **9-Type Env Detection:** `readPostmanEnv` detects URL / TOKEN / OBJECT / ARRAY / NUMBER / BOOLEAN / DYNAMIC / EMPTY / TEXT.
-- **`--used-vars` Filter:** Pass vars from collection's machine-readable block to filter only relevant env vars.
-- **Safe urlencoded parse:** `transformSendRequest()` uses `JSON.parse()` (not `eval()`) to parse urlencoded arrays from Postman scripts.
-- **Correct btoa/atob:** `btoa(x)` → `Buffer.from(x).toString('base64')`, `atob(x)` → `Buffer.from(x, 'base64').toString()`.
-- **Env error guidance:** `readPostmanEnv` shows expected path + usage hint when `tests-api/` folder is missing.
+### Step 1: Analyze Collection → Markdown
 
----
+```bash
+npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
+  ~/.claude/skills/ai-dlc/qa/postman/scripts/readPostmanCollection.ts \
+  "<collection.json>"
+# --output is optional: auto-detects tests-api/<collection-kebab-name>/
+```
 
-## 🔄 Script 4: postmanToPlaywrightRunAndHeal.ts — Run + Auto-Heal Fix Loop
+### Step 2: Analyze Environment (optional)
 
-Runs Playwright tests and automatically attempts to fix code failures in a loop (max 3–5 attempts). Appends a Reflexion Log to `audit.md` after each run.
+```bash
+npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
+  ~/.claude/skills/ai-dlc/qa/postman/scripts/readPostmanEnv.ts \
+  "<environment.json>"
+# --output is optional: interactive select from tests-api/ folders
+```
 
-### Usage
+### Step 3: Generate Playwright from Markdown
+
+```bash
+npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
+  ~/.claude/skills/ai-dlc/qa/postman/scripts/postmanMdToPlaywright.ts \
+  [--input "<collection.md or directory>"] \
+  [--env-input "<env.md>"] \
+  [--output-dir "<project-root>"] \
+  [--skeleton] \
+  [--no-split]
+```
+
+**Parameters:**
+
+| Flag            | Required | Default      | Description                                        |
+| --------------- | -------- | ------------ | -------------------------------------------------- |
+| `--input`       | ❌       | auto-detect  | Collection markdown file or directory              |
+| `--env-input`   | ❌       | —            | Environment markdown from readPostmanEnv           |
+| `--output-dir`  | ❌       | `cwd`        | Project root for output                            |
+| `--skeleton`    | ❌       | off          | Generate compile-safe skeletons (TODO assertions)  |
+| `--no-split`    | ❌       | off          | Disable auto-split (legacy single-file mode)       |
+| `--spec-dir`    | ❌       | `tests-api`  | Spec output directory name                         |
+| `--helper-dir`  | ❌       | `helpers`    | Helper output directory name                       |
+| `--schema-dir`  | ❌       | `schemas`    | Schema output directory name                       |
+| `--fixture-dir` | ❌       | `fixtures`   | Fixture output directory name                      |
+
+**Example (minimal — all auto-detect):**
+
+```bash
+# Run from project root (e.g. tests/api-testing/)
+
+# Step 1
+npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
+  ~/.claude/skills/ai-dlc/qa/postman/scripts/readPostmanCollection.ts \
+  "postman/collections/MyCollection.postman_collection.json"
+
+# Step 2
+npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
+  ~/.claude/skills/ai-dlc/qa/postman/scripts/readPostmanEnv.ts \
+  "postman/environments/MyEnv.postman_environment.json"
+
+# Step 3 — skeleton mode, auto-detect input
+npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
+  ~/.claude/skills/ai-dlc/qa/postman/scripts/postmanMdToPlaywright.ts \
+  --skeleton
+```
+
+**Output (auto-split per top-level folder):**
+
+```
+tests-api/<collection-name>/<folder-kebab>/
+  ├── <folderCamel>.spec.ts
+helpers/<collection-name>/<folder-kebab>/
+  ├── <folderCamel>Helper.ts
+  └── <subFolder>Service.ts   (1 per sub-folder)
+fixtures/<collection-name>/<folder-kebab>/
+  └── <folderCamel>Data.ts
+schemas/<collection-name>/<folder-kebab>/
+  └── <folderCamel>Schema.ts
+helpers/core/CollectionHelpers.ts  (shared, written once)
+```
+
+### Step 4: Run + Auto-Heal
 
 ```bash
 npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
@@ -50,198 +130,72 @@ npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
   --spec "<path/to/spec.ts or tests-api/folder>" \
   [--config "<playwright.config.ts>"] \
   [--max-attempts 3] \
-  [--audit "<path/to/audit.md>"] \
-  [--reporter line|json|dot]
+  [--audit "<audit.md>"]
 ```
 
-### Parameters
+---
 
-| Flag | Required | Default | Description |
-|------|----------|---------|-------------|
-| `--spec` | ✅ | — | Path to spec file or folder |
-| `--config` | ❌ | auto-detect | Playwright config file |
-| `--max-attempts` | ❌ | `3` | Max heal attempts (capped at 5) |
-| `--audit` | ❌ | `<spec-dir>/audit.md` | Reflexion Log output path |
-| `--reporter` | ❌ | `line` | Console reporter style |
+## 🏗️ Core Features (v7.3)
 
-### Auto-Heal Patterns
+- **Markdown IR Pipeline:** Collection JSON → Markdown analysis → Playwright code (2-step, auditable).
+- **Auto-Split:** Detects `## 📁 Folder:` headers → generates 1 spec + services per top-level folder.
+- **Skeleton Mode (`--skeleton`):** Generates compile-safe output with TODO assertions — dev fills later.
+- **Auto-Detect Paths:** All 3 scripts detect `tests-api/` automatically — no path flags required.
+- **Multi-Service Architecture:** One `*Service.ts` per sub-folder label, `*Helper.ts` as entry point composer.
+- **CPS→Async/Await:** `pm.sendRequest(config, callback)` → `await request.fetch()` (brace-safe parser).
+- **Chai→Playwright:** 40+ assertion transforms (`pm.expect` → `expect`, `.to.be.eql` → `.toEqual`).
+- **Compile-Safe Output:** Per-service dedup counters, single-quote escape in test titles, auto-declare undeclared vars.
+- **Heal Loop (v2.2):** 2-pass run (line reporter for terminal + json reporter for parse) — fixes always-pass bug.
 
-| Fix Type | Trigger | Action |
-|----------|---------|--------|
-| `timeout_selector` | `Timeout waiting for` | Adds `test.setTimeout(60_000)` |
-| `null_response` | `Cannot read prop of undefined` | Wraps `response.json()` with null guard |
-| `http_error` | `status 4xx/5xx` | Adds hint comment to check env/mock |
-| `missing_import` | `Cannot find module` | Adds install hint comment at top |
-| `assertion_failed` | `Expected ... received` | Adds `await response.finished()` before assertion |
+### v7.x Fixes
 
-### Failure Classification
+- **[v7.1]** Service grouping: `subFolder.split(' > ')[0]` — first level only as service key.
+- **[v7.2]** Spec dedup: per-service `Map<servicePropName, Map<methodName, count>>` — matches service file exactly.
+- **[v7.2]** Quote safety: `.replace(/'/g, "\\'")` on all test titles before template literal.
+- **[v7.3]** `--input` optional: auto-detect from `tests-api/` (1 folder = auto, multiple = interactive select).
+- **[v7.3]** `--output` optional in `readPostmanCollection`: auto-derive from collection name.
+- **[v7.3]** No-nest fix: skip `collectionFolderName` subfolder if `baseDir` already ends with it.
+- **[v7.3]** Filter `env.md` directories from mdFiles scan.
+- **[heal-v2.2]** 2-pass run: line reporter (terminal) + json reporter (file) — fixes always-pass bug.
 
-- **ENV failures** (ECONNREFUSED, 502/503/504, VPN) → skipped, not retried
-- **CODE failures** → auto-fix attempted, re-run triggered
-- If >80% pass rate → extends to 5 attempts automatically
+---
 
-### Reflexion Log Format
+## 📊 Output Report
 
-Appended to `audit.md` after each run:
+After running, the console shows:
 
+```text
+🔀 AUTO-SPLIT: Detected 7 top-level folders
+   📁 AMFW01000: 85 requests, sub-folders: [SearchData, CreateData, ...]
+   ...
+=========================================
+✅ AUTO-SPLIT COMPLETE: iuser-convert
+=========================================
+   Total requests : 473
+   Folders split  : 7
+   Mode           : SKELETON
+=========================================
 ```
-## <timestamp> | Spec: <spec-name>
-### Attempt 1 — PARTIAL
-- 📊 Total: 5 | ✅ Passed: 4 | ❌ Failed: 1
-#### 🔧 CODE FIX: [TC-0001] Login API
-- ❌ Symptom: Timeout waiting for selector
-- 💊 Applied Fix: `timeout_selector`
-- 📊 Impact: Isolated
-```
+
+### Inline Warnings in Generated Files
+
+| Comment                 | Meaning                                   |
+| ----------------------- | ----------------------------------------- |
+| `// ⚡ [CPS→ASYNC]`    | `pm.sendRequest` auto-converted           |
+| `// ⚠️ [MANUAL]`       | Too complex for auto-conversion           |
+| `// ⚠️ [CONTROL_FLOW]` | `setNextRequest` detected                 |
+| `// ⚠️ PARALLEL RISK`  | Shared state — use `test.describe.serial` |
+| `// TODO:`              | Skeleton assertion — fill manually        |
 
 ---
 
 ## ⚙️ Prerequisites
 
-All scripts require the `--project` flag pointing to the `tsconfig.json` in this folder:
-
 ```bash
 # tsconfig.json location: ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json
 # Uses module: CommonJS so ts-node can run without the --esm flag
+# Run all commands from project root (e.g. tests/api-testing/)
 ```
-
-> ⚠️ Without `--project`, you will get: `ReferenceError: __dirname is not defined in ES module scope`
-
----
-
-## 🚀 Usage
-
-> All commands use `~/.claude/skills/ai-dlc/qa/postman/scripts/` as the script root.
-
-### 1. Migrating a Collection
-
-```bash
-npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
-  ~/.claude/skills/ai-dlc/qa/postman/scripts/readPostmanCollection.ts "<collection.json>" --output "<output-dir>"
-```
-
-- Arrow key prompt to select a folder (or convert all)
-- Optional: `--folder <folder_name>` to skip the prompt
-
-**Example:**
-
-```bash
-npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
-  ~/.claude/skills/ai-dlc/qa/postman/scripts/readPostmanCollection.ts \
-  "Automation/tests/api-testing/postman/collections/Credit Management TS.postman_collection.json" \
-  --output Automation/tests/api-testing/tests-api
-```
-
-*Output:* `<output-dir>/<collection-name-kebab>/<folder-name-camel>.md`
-
----
-
-### 2. Migrating an Environment
-
-```bash
-npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
-  ~/.claude/skills/ai-dlc/qa/postman/scripts/readPostmanEnv.ts "<environment.json>"
-```
-
-- Arrow key prompt to select which collection folder to place the env file in
-- Optional: `--output <dir>` to skip auto-detection
-- Optional: `--collection <folder-name>` to skip the folder prompt
-- Optional: `--used-vars <comma-separated>` to filter only vars used by the collection
-
-**Example:**
-
-```bash
-npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
-  ~/.claude/skills/ai-dlc/qa/postman/scripts/readPostmanEnv.ts \
-  "Automation/tests/api-testing/postman/environments/CMM_dev.postman_environment 5.json"
-```
-
-*Output:* `tests-api/<collection-folder>/<envName-camelCase>.md` + `.env.example`
-
----
-
-### 3. Generate Playwright Files
-
-```bash
-npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
-  ~/.claude/skills/ai-dlc/qa/postman/scripts/postmanMdToPlaywright.ts \
-  --input "<tests-api/collection-folder>" \
-  --env-input "<tests-api/collection-folder/env.md>" \
-  --output-dir "<project-root>"
-```
-
-- `--input`: path to collection `.md` file or folder containing it
-- `--env-input`: path to env `.md` from `readPostmanEnv` (optional but recommended)
-- `--output-dir`: project root where output folders will be written
-
-*Output:*
-
-- `tests-api/<folder>/<name>.spec.ts`
-- `helpers/<folder>/<name>Helper.ts`
-- `helpers/<folder>/<name>Service.ts` (1 per label group)
-- `schemas/<folder>/<name>Schema.ts` ← AJV skeleton
-- `fixtures/<folder>/<name>Data.ts`
-- `helpers/core/CollectionHelpers.ts` (if collection has function vars)
-
-> Folder names (`tests-api/`, `helpers/`, etc.) are auto-detected from `workflow.md` if available.
-
----
-
-## 🔗 Connecting Collection → Environment
-
-After running `readPostmanCollection.ts`, the output MD contains a machine-readable block:
-
-```
-## 🔗 Used Variables (Machine-Readable)
-\`\`\`used-vars
-cmm_domain,token,currentDate,...
-\`\`\`
-```
-
-Pass this to `readPostmanEnv.ts` to filter only relevant vars:
-
-```bash
-npx ts-node readPostmanEnv.ts "<env.json>" --used-vars "cmm_domain,token,currentDate"
-```
-
----
-
-## 📊 Output Report Glossary
-
-After `postmanMdToPlaywright.ts` runs, it prints a summary before generating files:
-
-```
-=========================================
-🤖 <systemName>
-=========================================
-   Test blocks   : 5
-   Data-driven   : 2
-   Serial        : 1
-   Iteration keys: userId, token
-```
-
-| Field | Description |
-|---|---|
-| **Test blocks** | Number of `test('...', async () => {...})` blocks parsed from the collection MD — each block maps to 1 Postman request |
-| **Data-driven** | Number of test blocks where `pm.iterationData.get()` or a `data.` pattern was detected — these are generated as `for...of` loops iterating over the `iterationData` array in the fixture |
-| **Serial** | Number of test blocks containing `stateStore` or `setNextRequest` — these are wrapped with `test.describe.serial` to enforce sequential execution instead of parallel |
-| **Iteration keys** | Key names extracted from `pm.iterationData.get('key')` — used to generate the `interface IterationRow` and the `iterationData` array in the fixture for you to fill in later |
-
-### Inline Warnings in Generated Files
-
-Beyond console output, the script embeds warning comments directly in the generated files for developers to review during code review:
-
-| Comment | Meaning |
-|---|---|
-| `// ⚡ [CPS→ASYNC] pm.sendRequest converted` | `pm.sendRequest` was automatically converted to `await request.fetch()` — verify the logic is complete |
-| `// ⚠️ [MANUAL] pm.sendRequest — complex pattern` | Pattern is too complex to auto-convert — requires manual migration |
-| `// ⚠️ [CONTROL_FLOW] setNextRequest(...)` | `setNextRequest` detected — verify the `test.step` order manually |
-| `// ⚠️ [DANGER] eval() detected` | `eval()` found in CollectionHelpers — must be refactored before use |
-| `// 🚨 ACTION REQUIRED: Logic refactor needed` | Contains loops/mutations the AI could not convert — requires manual fix |
-| `// 💡 [KB] Auth/File/Validation hint` | Knowledge Base recommends a helper to use instead |
-| `// ⚠️ MISSING: varName — run readPostmanEnv` | Collection uses this variable but no env declaration was found — run `readPostmanEnv` |
-| `// 📊 [DATA_DRIVEN] for...of loop` | This test iterates over the `iterationData` array in the fixture |
-| `// ⚠️ PARALLEL RISK: use stateStore` | Contains shared state — must not run in parallel, use `test.describe.serial` |
 
 ---
 
@@ -249,13 +203,12 @@ Beyond console output, the script embeds warning comments directly in the genera
 
 ✅ **Do's:**
 
-- Use `--folder <name>` to skip the arrow key prompt in CI/CD pipelines.
-- Review the **🚨 Validation Issues** section before writing test code.
-- Use the generated `CollectionHelpers` blueprint for `eval()` and inline function logic.
-- Use `stateStore` (not `process.env`) for vars flagged as **PARALLEL RISK**.
+- Run Step 1 first — it creates `tests-api/<folder>/` that Steps 2+3 auto-detect.
+- Use `--skeleton` for large collections — generates compile-safe output immediately.
+- Review generated code for `// ⚠️` and `// TODO:` markers — these need manual attention.
 
 ❌ **Don'ts:**
 
-- Do not provide a `.md` filename in `--output`; the script handles naming automatically.
+- Do not skip Step 1 — Steps 2+3 need the folder to exist for auto-detect.
 - Do not ignore `pm.sendRequest` warnings — these require manual refactoring.
-- Do not use `process.env` for runtime-set variables shared across requests.
+- Do not use `process.env` for runtime-set variables shared across requests — use `stateStore`.

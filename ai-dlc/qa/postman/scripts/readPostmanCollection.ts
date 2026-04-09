@@ -21,18 +21,55 @@ function toCamelCase(str: string): string {
 
 const args = process.argv.slice(2);
 if (args.length === 0) {
-  console.error('❌ Usage: npx ts-node readPostmanCollection.ts <collection.json> --output <out_dir> [--folder <name>]');
+  console.error('❌ Usage: npx ts-node readPostmanCollection.ts <collection.json> [--output <out_dir>] [--folder <name>]');
   process.exit(1);
 }
 const filePath = path.resolve(args[0]);
 const outputIndex = args.indexOf('--output');
-if (outputIndex === -1 || !args[outputIndex + 1]) {
-  console.error('❌ --output <path> is required');
-  process.exit(1);
-}
-const outputPath = path.resolve(args[outputIndex + 1]);
+const outputArgPath = outputIndex !== -1 && args[outputIndex + 1] ? path.resolve(args[outputIndex + 1]) : null;
 const folderIndex = args.indexOf('--folder');
 const targetFolder = folderIndex !== -1 && args[folderIndex + 1] ? args[folderIndex + 1] : null;
+
+function findProjectRoot(start: string): string | null {
+  let dir = start;
+  while (true) {
+    if (fs.existsSync(path.join(dir, 'package.json'))) return dir;
+    const parent = path.dirname(dir);
+    if (parent === dir) return null;
+    dir = parent;
+  }
+}
+
+async function resolveOutputPath(): Promise<string> {
+  if (outputArgPath) return outputArgPath;
+
+  const isTestProject = (r: string) =>
+    fs.existsSync(path.join(r, 'playwright.config.ts')) ||
+    fs.existsSync(path.join(r, 'playwright.config.js')) ||
+    fs.existsSync(path.join(r, 'tsconfig.json'));
+
+  const allRoots = [process.cwd(), path.dirname(filePath)]
+    .map(findProjectRoot)
+    .filter((r): r is string => r !== null);
+  const uniqueRoots = [...new Set(allRoots)].filter(isTestProject);
+
+  let root: string;
+  if (uniqueRoots.length > 1) {
+    root = await select({
+      message: '🔍 เลือก PROJECT_ROOT (Use Arrow Keys):',
+      pageSize: 10,
+      choices: uniqueRoots.map((r, i) => ({ name: `Option ${i + 1}: ${r}`, value: r }))
+    });
+  } else {
+    root = uniqueRoots[0] ?? process.cwd();
+  }
+
+  // Auto-derive output from collection name → tests-api/<kebab-name>/
+  const collectionName = toKebabCase(data?.info?.name || path.basename(filePath, '.json'));
+  const testsApiDir = path.join(root, 'tests-api');
+  console.log(`\n📂 Auto-detected output: ${path.join(testsApiDir, collectionName)}`);
+  return path.join(testsApiDir, collectionName);
+}
 
 let data: any;
 try { data = JSON.parse(fs.readFileSync(filePath, 'utf-8')); }
@@ -697,9 +734,14 @@ async function run() {
 
   const collectionFolderName = toKebabCase(data.info?.name || 'Collection');
   const fileName = toCamelCase(finalFolderName);
-  let baseDir = outputPath;
-  if (outputPath.toLowerCase().endsWith('.md')) baseDir = path.dirname(outputPath);
-  const finalOutputPath = path.join(baseDir, collectionFolderName, `${fileName}.md`);
+  const resolvedOutput = await resolveOutputPath();
+  let baseDir = resolvedOutput;
+  if (resolvedOutput.toLowerCase().endsWith('.md')) baseDir = path.dirname(resolvedOutput);
+  // [FIX] Don't nest if baseDir already ends with collectionFolderName
+  const baseDirLeaf = path.basename(baseDir).toLowerCase();
+  const finalOutputPath = baseDirLeaf === collectionFolderName.toLowerCase()
+    ? path.join(baseDir, `${fileName}.md`)
+    : path.join(baseDir, collectionFolderName, `${fileName}.md`);
 
   const endpointsContent = parseItems(rootItems, 2, [], []);
 
