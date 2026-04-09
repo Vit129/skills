@@ -191,6 +191,22 @@ Analyze failures and auto-fix code.
 | Cross-layer | Fix affects shared-fixtures or auth used by API+Web+Mobile | Warn user, get approval before fixing |
 
 **Visual-First Debugging (before changing code):**
+
+Use `playwright-cli` to inspect the live app before modifying any code:
+
+```bash
+# เปิด browser และ snapshot ดู elements จริง
+playwright-cli -s=debug open http://localhost:5173
+playwright-cli -s=debug snapshot
+
+# screenshot ดูหน้าตา
+playwright-cli -s=debug screenshot --filename=debug.png
+
+# ดู element เฉพาะจุด
+playwright-cli -s=debug screenshot e5
+```
+
+Checklist:
 - Screenshot: is the element actually visible?
 - Layout: is the page broken?
 - Text: does the text match exactly? (case-sensitivity, whitespace, Thai characters)

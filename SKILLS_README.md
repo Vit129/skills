@@ -5,6 +5,7 @@ Single source of truth for all AI-assisted development, QA, and Finance analysis
 ## 1. AI-DLC Category (`ai-dlc/`)
 
 ### Core (Governance, Design, Reasoning, Tooling) — `ai-dlc/core/`
+
 | Folder | Purpose |
 |--------|---------|
 | `aidlc/` | Full AI-DLC lifecycle: governance, phases, templates, guides, task design, **Investment Port Context** |
@@ -17,6 +18,7 @@ Single source of truth for all AI-assisted development, QA, and Finance analysis
 | `monitoring/` | Logging, error tracking, performance metrics, tracing, alerts |
 
 ### Dev (Implementation) — `ai-dlc/dev/`
+
 | Folder | Purpose |
 |--------|---------|
 | `frontend-dev/` | React, Flutter, Android Kotlin, iOS Swift, Tailwind, Vite implementation |
@@ -25,6 +27,7 @@ Single source of truth for all AI-assisted development, QA, and Finance analysis
 | `storage/` | Knowledge save, buffer update, **Data Backup & Integrity** standards |
 
 ### QA (Testing & Automation) — `ai-dlc/qa/`
+
 | Folder | Purpose |
 |--------|---------|
 | `playwright-rules/` | Playwright coding standards (API + Web UI) |
@@ -40,6 +43,7 @@ Single source of truth for all AI-assisted development, QA, and Finance analysis
 ## 2. Finance Category (`finance/`)
 
 ### Coding (Claude Code) — `finance/coding/`
+
 | Folder | Purpose |
 |--------|---------|
 | `investment-architecture/` | React + Tailwind architecture guide for My Investment Port |
@@ -56,6 +60,7 @@ Single source of truth for all AI-assisted development, QA, and Finance analysis
 | `backup/` | Portfolio data backup and integrity verification |
 
 ### Research (Claude Chat/Cowork) — `finance/research/`
+
 | Folder | Purpose |
 |--------|---------|
 | `stock-deep-analysis/` | Fundamental and deep-dive stock analysis |
@@ -64,11 +69,20 @@ Single source of truth for all AI-assisted development, QA, and Finance analysis
 | `news-search/` | Market news search and sentiment analysis |
 | `ai-recommend/` | AI-driven stock recommendations and insights |
 
-## 3. Internal (`_internal/`)
+## 3. Knowledge Management (`memory-palace/`)
+
+| Folder | Purpose |
+|--------|---------|
+| `memory-palace/` | High-recall long-term memory via Wings/Rooms/Closets/Drawers + AAAK compression |
+
+## 4. Internal (`_internal/`)
+
 Folders that store system data, logs, or backups to keep the root directory clean.
+
 - `backups/`, `cache/`, `debug/`, `downloads/`, `file-history/`
 
 ## Maintenance
+
 - Edit skills in their respective subdirectories — this is the single source of truth.
 - **Project-specific rules** for "My Investment Port" are now consolidated into `ai-dlc/` references.
 - Last updated: 2026-04-08 (postman skill: added runAndHeal, schema generation, workflow.md integration)

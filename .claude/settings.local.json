@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(npx ts-node:*)",
-      "Bash(/Users/supavit.cho/.nvm/versions/node/v22.14.0/bin/npx ts-node:*)"
+      "Bash(/Users/supavit.cho/.nvm/versions/node/v22.14.0/bin/npx ts-node:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m ':*)"
     ]
   }
 }

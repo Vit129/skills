@@ -277,7 +277,16 @@ User → SPA → Booking API → DB → RabbitMQ → Notification → Email
 3. **PLAN** → Create execution plan (`planning/plans/{NN}-{phase-name}.md`) based on resolved decisions
 4. **USER APPROVES** → User approves the plan
 5. **EXECUTE** → Implement the approved plan, write output to `outputs/inception/`
-6. **AUDIT** → Update `audit.md` at each phase completion
+6. **AUDIT** → Update `audit.md` at each phase completion using this format:
+
+```markdown
+| Phase | Status | Date | Skills Used | Notes |
+|---|---|---|---|---|
+| 1.2 - Requirements Gathering | ✅ | YYYY-MM-DD | analysis-skills (requirements.md) | Brief summary of output |
+```
+
+   - `Skills Used` — list every skill and reference file read during this phase
+   - `Notes` — one-line summary of what was produced
 7. **PROGRESS** → Update `.aidlc/[SYSTEM_KEBAB]/PROGRESS.md` with current counts
 8. **KNOWLEDGE** → Capture reusable patterns to `audit.md` Knowledge Buffer section (Read `references/knowledge-buffer.md`)
 
