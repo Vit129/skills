@@ -32,17 +32,22 @@ Memory Palace แก้ปัญหานี้โดยให้ AI **เขี
 ## โครงสร้าง Palace (ที่เก็บข้อมูลจริง)
 
 ```
-.claude/memory/
+{project}/.memory/
 ├── state.md              ← แผนที่ palace: มี wing อะไรบ้าง, session ล่าสุด, งานค้าง
 ├── tunnels.md            ← cross-reference ระหว่าง wing
-└── wings/
-    └── {ชื่อ project}/
-        ├── hall.md       ← index ของ wing นี้ (มี room อะไรบ้าง)
-        ├── rooms/
-        │   └── {topic}.md    ← รายละเอียดเต็มของแต่ละ topic
-        └── closets/
-            └── {summary}.md  ← สรุปแบบ AAAK (กระชับ) เมื่อ room ยาวเกิน 80 บรรทัด
+├── wings/
+│   └── {ชื่อ project}/
+│       ├── hall.md       ← index ของ wing นี้ (มี room อะไรบ้าง)
+│       ├── rooms/
+│       │   └── {topic}.md    ← รายละเอียดเต็มของแต่ละ topic
+│       └── closets/
+│           └── {summary}.md  ← สรุปแบบ AAAK (กระชับ) เมื่อ room ยาวเกิน 80 บรรทัด
+└── archive/
+    ├── index.md          ← searchable index ของงานเก่า
+    └── {topic}/{year}/   ← archived wings จัดตาม topic แล้วแยกปี
 ```
+
+> Global memory (optional): `~/.memory-palace/global/` สำหรับ cross-project context
 
 ---
 
@@ -102,9 +107,9 @@ Mode: auto-split by topFolder → separate spec/helper/service per folder
 
 ## การทำงานอัตโนมัติ
 
-**Hook `agentStop`** (`.claude/.kiro/hooks/memory-palace-save.kiro.hook`)  
+**Hook `agentStop`** (`.kiro/hooks/memory-palace-save.kiro.hook`)  
 ทุกครั้งที่ AI หยุดทำงาน hook จะ remind ให้ AI บันทึก memory ตาม 10 ขั้นตอน:
-- อ่าน state.md → สร้าง/อัพเดท wing → เขียน rooms → compress closets → อัพเดท state.md
+- อ่าน `.memory/state.md` → สร้าง/อัพเดท wing → เขียน rooms → compress closets → อัพเดท state.md
 
 ---
 
@@ -114,10 +119,45 @@ Mode: auto-split by topFolder → separate spec/helper/service per folder
 > "อ่าน memory palace แล้วทำต่อจากครั้งที่แล้ว"
 
 AI จะ:
-1. อ่าน `.claude/memory/state.md`
+1. อ่าน `{project}/.memory/state.md`
 2. เลือก wing ที่เกี่ยวข้อง
 3. อ่าน hall.md + rooms ที่จำเป็น
 4. สรุปให้ฟังว่าครั้งที่แล้วทำอะไรไปแล้ว
+
+---
+
+## 🗂️ Archive System
+
+เมื่อ wing ไม่ active แล้ว หรือ state.md เริ่มยาว → ย้ายไป archive
+
+### โครงสร้าง Archive
+```
+.claude/memory/archive/
+├── index.md                    ← AI อ่านก่อนเสมอเมื่อค้นหาของเก่า
+└── {topic}/                    ← จัดตาม project (เช่น postman-migration)
+    ├── summary.md              ← AAAK snapshot ของ wing ทั้งหมด (อ่านก่อน drill down)
+    └── {year}/                 ← แยกตามปี
+        ├── rooms/
+        ├── closets/
+        └── sessions.md         ← session rows ของปีนั้น
+```
+
+### เมื่อไหร่ควร Archive?
+- Wing ไม่มี activity > 2 sprint
+- Recent Sessions ใน state.md > 10 rows → ย้าย rows เก่าไป archive
+- User บอก "archive {wing-name}"
+
+### ค้นหาของเก่ายังไง?
+บอก AI ว่า:
+> "ค้นหา {keyword} ในงานเก่า"
+
+AI จะ:
+1. อ่าน `archive/index.md` → หา topic ที่ match
+2. อ่าน `archive/{topic}/summary.md` → ดู overview
+3. Drill down ไป `archive/{topic}/{year}/rooms/` ถ้าต้องการ detail
+
+### เอางานเก่ากลับมา
+Copy folder จาก `archive/{topic}/{year}/` กลับไป `wings/{topic}/` แล้วเพิ่มใน state.md
 
 ---
 

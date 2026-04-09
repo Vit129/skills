@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "Sync Steering on New Skill",
+  "description": "When a new SKILL.md is created under .claude/skills/ai-dlc/, auto-create matching Kiro steering file.",
+  "version": "1.0.0",
+  "when": {
+    "type": "fileCreated",
+    "patterns": [".claude/skills/ai-dlc/**/*.md"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A new file was created under .claude/skills/ai-dlc/. Check if it's a SKILL.md file.\n\nIf NOT a SKILL.md — skip silently.\n\nIf it IS a SKILL.md:\n1. Extract category from path: .claude/skills/ai-dlc/{category}/{skill-name}/SKILL.md\n2. Check if .kiro/steering/{category}/{skill-name}.md already exists — if YES, skip.\n3. If NO — create steering file:\n```\n---\ninclusion: manual\n---\n# {Skill Name}\n{description first sentence}\n#[[file:{path to SKILL.md}]]\n```\n4. Add row to .kiro/steering/STEERING_INDEX.md under ### {category}/ section.\n5. Inform user: 'Added steering file for {skill-name} at .kiro/steering/{category}/{skill-name}.md'"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "enabled": false,
+  "name": "Run Tests on Save",
+  "description": "Automatically run Playwright tests when a .spec.ts file is saved by the user. Enable when ready to use.",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": ["**/*.spec.ts"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A spec file was saved. Run the test using: npx playwright test --reporter=line {filePath}. If tests fail, analyze the error and suggest a fix. If locator not found, use visual-first debugging from playwright-testing skill."
+  }
+}
