@@ -1,0 +1,52 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f .memory/state.md ]; then echo '=== Memory Palace ===' && cat .memory/state.md; else mkdir -p .memory/wings .memory/archive && printf '# 🏛️ Memory Palace — State\\n\\n## Active Wings\\n_No wings yet._\\n\\n## Recent Sessions\\n| Date | Wing | Summary |\\n|------|------|---------|\\n| — | — | Palace initialized |\\n\\n## Open Threads\\n- [ ] First session pending\\n' > .memory/state.md && echo '# 🔗 Tunnels — Cross-Wing References' > .memory/tunnels.md && echo '# 🗂️ Archive Index' > .memory/archive/index.md && echo '✅ Memory Palace initialized at .memory/'; fi"
+          },
+          {
+            "type": "prompt",
+            "prompt": "Memory Palace context was just loaded (or initialized) above. If `.memory/state.md` exists and has content:\n1. Briefly summarize to the user: Active Wings, last 3 sessions, Open Threads\n2. If any open threads are relevant to the current task → mention them proactively\n\nIf it was just initialized (empty palace) → say: 'Memory Palace initialized for this project. I will save context automatically at the end of each session.'\n\nKeep summary to 3-5 lines max."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Check if the file just written ends with `.kiro.hook` and is inside `.kiro/hooks/` (not inside `.claude/skills/`). If YES:\n1. Copy the file content to `.claude/skills/ai-dlc/core/hook-creator/templates/kiro/{filename}`\n2. Check if hook name exists in Templates table in `.claude/skills/ai-dlc/core/hook-creator/SKILL.md` — if not, add a row.\n3. Respond with {\"ok\": true} after syncing.\nIf NO (not a .kiro.hook file or already in templates) — respond with {\"ok\": true} immediately."
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Check the file path being written. ONLY apply this check if the path contains '.aidlc/' OR 'tests/' OR 'mock-pages/'. If the path is in .kiro/, .claude/skills/, .memory/, or any other location — respond with {\"ok\": true}.\n\nIf the path IS in .aidlc/ or tests/ or mock-pages/:\n1. Check AIDLC phase prerequisites:\n   - tests/ or mock-pages/ → qa-architecture.md AND test-cases.md must exist in .aidlc outputs\n   - qa-architecture.md → test-cases.md must exist\n   - test-cases.md → logical-design.md must exist\n   - logical-design.md → domain-design.md must exist\n   - domain-design.md → domain-decomposition.md must exist\n   - domain-decomposition.md → user-stories.md must exist\n2. Check decision+plan files exist for the current phase (planning/decisions/)\n\nIf prerequisites missing → respond with {\"ok\": false, \"reason\": \"Missing prerequisite: [what is missing]\"}. Otherwise {\"ok\": true}."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Evaluate whether this session is worth saving to the Memory Palace.\n\nSKIP if session was ONLY: Q&A with no decisions, comparisons without conclusion, commit messages/git commands, repeating existing palace info.\n\nSAVE if session had ANY of: file writes/code changes, a decision made, new open threads, architecture/design choices.\n\nIf SAVE needed, respond with {\"ok\": false, \"reason\": \"Save to Memory Palace: read .memory/state.md, update wings/rooms/hall, update state.md with session row. Keep state.md under 100 lines. Use AAAK compression in closets.\"}.\n\nIf no save needed, respond with {\"ok\": true}."
+          }
+        ]
+      }
+    ]
+  }
+}

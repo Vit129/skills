@@ -118,6 +118,6 @@ Next: {next phase name}
 
 ## Lessons Learnt
 
-ALWAYS read `ai-agent/knowledge/lessons/` before starting tasks:
+ALWAYS read `{knowledge_root}/lessons/` before starting tasks:
 - Dev: check for implementation pitfalls, architecture patterns, past mistakes
 - QA: check for UI behaviors, flaky test patterns, locator issues

@@ -1,0 +1,64 @@
+{
+    "version": "5.0.0",
+    "lastUpdated": "2025-12-18",
+    "description": "Master Index for Automation Templates & Lessons",
+    "_summary": {
+        "totalTemplates": 21,
+        "totalLessons": 16,
+        "categories": {
+            "api": {
+                "path": "ai-agent/knowledge/automation/api/apiIndex.json",
+                "templateCount": 10,
+                "issueCount": 8,
+                "subCategories": [
+                    "auth",
+                    "file",
+                    "validation",
+                    "utils",
+                    "test"
+                ]
+            },
+            "webUi": {
+                "path": "ai-agent/knowledge/automation/webUi/webUiIndex.json",
+                "templateCount": 11,
+                "issueCount": 8,
+                "subCategories": [
+                    "auth",
+                    "table",
+                    "form",
+                    "file",
+                    "feedback",
+                    "navigation"
+                ]
+            },
+            "mobile": {
+                "path": "ai-agent/knowledge/automation/mobile/mobileIndex.json",
+                "templateCount": 7,
+                "issueCount": 0,
+                "subCategories": [
+                    "auth",
+                    "gestures",
+                    "permissions",
+                    "deepLinking",
+                    "hybrid",
+                    "appManagement"
+                ]
+            },
+            "common": {
+                "path": "ai-agent/knowledge/automation/common/commonIndex.json",
+                "templateCount": 1,
+                "issueCount": 0,
+                "subCategories": [
+                    "database",
+                    "sharedFixtures"
+                ]
+            }
+        }
+    },
+    "readingProtocol": {
+        "step1": "Read _summary first",
+        "step2": "Match keywords with subCategories",
+        "step3": "Read only the required category",
+        "example": "If mobile login is needed -> Read mobile/mobileAuth.template.robot"
+    }
+}

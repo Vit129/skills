@@ -1,0 +1,29 @@
+{
+  "category": "validation",
+  "workflow_type": "api_automation",
+  "last_updated": "2025-01-30T11:00:00Z",
+  "lessons": [
+    {
+      "id": "LESSON-API-EMR-001",
+      "title": "Database mocking for demo/POC environments",
+      "issue": "Tests failed with database connection timeout in demo environment without real database",
+      "solution": "Implemented mock database operations that return success values instead of executing real queries",
+      "reflexion_source": "Phase 4 - Test Validation",
+      "source_ID": "ID-002",
+      "created_at": "2025-01-30T11:00:00Z",
+      "severity": "Medium",
+      "impact": "Enables test code validation in demo/POC environments without infrastructure dependencies"
+    },
+    {
+      "id": "LESSON-API-EMR-002",
+      "title": "Environment vs code logic error distinction",
+      "issue": "All tests failed with 404 - API endpoints don't exist",
+      "solution": "Skip healing for environment issues (404, 500, connection errors). Only heal code logic errors (element not found, assertion failed)",
+      "reflexion_source": "Phase 4 - Healing Decision",
+      "source_ID": "ID-002",
+      "created_at": "2025-01-30T11:00:00Z",
+      "severity": "High",
+      "impact": "Prevents wasted healing attempts on infrastructure issues that code changes cannot fix"
+    }
+  ]
+}

@@ -4,17 +4,15 @@ Single source of truth for all AI-assisted development, QA, and Finance analysis
 
 ## 1. AI-DLC Category (`ai-dlc/`)
 
-### Core (Governance, Design, Reasoning, Tooling) — `ai-dlc/core/`
+### Core (Governance, Design, Reasoning) — `ai-dlc/core/`
 
 | Folder | Purpose |
 |--------|---------|
-| `aidlc/` | Full AI-DLC lifecycle: governance, phases, templates, guides, task design, **Investment Port Context** |
+| `aidlc/` | Full AI-DLC lifecycle: governance, phases, templates, guides, task design |
 | `architect/` | DDD Strategic & Tactical, Architecture Patterns, Logical Design, TDD |
-| `skill-creator/` | Create, improve, validate Claude Code skills |
 | `ai-techniques/` | CoT, LATS, Step-Back, AoT, Discovery reasoning patterns |
 | `analysis-skills/` | Context, Figma, Gap, Domain, Requirements, Reverse Eng, Scenario Reader |
 | `ui-designer/` | Design system + aesthetic direction, **Sovereign Design System** rules |
-| `hook-creator/` | Create Kiro agent hooks from templates, event-driven automation |
 | `monitoring/` | Logging, error tracking, performance metrics, tracing, alerts |
 
 ### Dev (Implementation) — `ai-dlc/dev/`
@@ -69,11 +67,15 @@ Single source of truth for all AI-assisted development, QA, and Finance analysis
 | `news-search/` | Market news search and sentiment analysis |
 | `ai-recommend/` | AI-driven stock recommendations and insights |
 
-## 3. Knowledge Management (`memory-palace/`)
+## 3. System Skills (`system/`)
+
+Cross-project tools that work with any domain — not tied to ai-dlc.
 
 | Folder | Purpose |
 |--------|---------|
 | `memory-palace/` | High-recall long-term memory via Wings/Rooms/Closets/Drawers + AAAK compression |
+| `hook-creator/` | Create Kiro + Claude Code hooks from templates, event-driven automation |
+| `skill-creator/` | Create, improve, validate Claude Code skills |
 
 ## 4. Internal (`_internal/`)
 
@@ -84,5 +86,4 @@ Folders that store system data, logs, or backups to keep the root directory clea
 ## Maintenance
 
 - Edit skills in their respective subdirectories — this is the single source of truth.
-- **Project-specific rules** for "My Investment Port" are now consolidated into `ai-dlc/` references.
-- Last updated: 2026-04-08 (postman skill: added runAndHeal, schema generation, workflow.md integration)
+- Last updated: 2026-04-10 (system/: memory-palace, hook-creator, skill-creator moved out of ai-dlc/core)

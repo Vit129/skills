@@ -1,0 +1,11 @@
+[
+    {
+        "id": "LESSON-LOC-001",
+        "category": "locator",
+        "error": "Multiple elements match",
+        "pattern": "strict mode violation|multiple elements",
+        "cause": "Locator is not specific enough",
+        "solution": "Use getByTestId or add filter",
+        "example": "await page.getByTestId('unique-id').click();"
+    }
+]

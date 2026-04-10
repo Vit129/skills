@@ -1,0 +1,11 @@
+[
+    {
+        "id": "LESSON-AUTH-001",
+        "category": "auth",
+        "error": "401 Unauthorized",
+        "pattern": "401|Unauthorized|Invalid token",
+        "cause": "Token expired or incorrect",
+        "solution": "Verify authToken or refresh token in beforeEach",
+        "example": "const authToken = await api.getAuthToken(username, password);"
+    }
+]

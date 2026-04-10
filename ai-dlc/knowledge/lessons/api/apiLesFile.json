@@ -1,0 +1,11 @@
+[
+    {
+        "id": "LESSON-FILE-001",
+        "category": "file",
+        "error": "Multipart Upload Error",
+        "pattern": "multipart|form-data|file upload",
+        "cause": "Incorrect MIME type or wrong file path",
+        "solution": "Check MIME type and file path",
+        "example": "const mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';"
+    }
+]

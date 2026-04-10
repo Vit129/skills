@@ -1,0 +1,28 @@
+{
+    "domain": "auth",
+    "type": "core",
+    "description": "Authentication & Authorization",
+    "team": "Security Team",
+    "owner": "security@company.com",
+    "lastUpdated": "2025-12-18",
+    "triggers": [
+        "[Login]",
+        "[SSO]",
+        "[Auth]"
+    ],
+    "keywords": [
+        "login",
+        "logout",
+        "sso",
+        "oauth",
+        "authentication",
+        "token",
+        "session",
+        "Login",
+        "Logout"
+    ],
+    "files": {
+        "rules": "businessAuthRules.json",
+        "config": "businessAuthConfig.json"
+    }
+}

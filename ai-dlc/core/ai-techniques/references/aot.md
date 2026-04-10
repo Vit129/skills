@@ -1,51 +1,51 @@
 # Algorithm of Thought (AoT)
 
-จำลองกระบวนการค้นหาคำตอบแบบ algorithmic — สำรวจหลายเส้นทาง, ย้อนกลับเมื่อตัน, เลือกเส้นทางที่ดีที่สุด
-คล้ายการทำ DFS/BFS บน tree of possible solutions แต่ทำในหัวแทนการรัน code จริง
+Simulate an algorithmic search process — explore multiple paths, backtrack when stuck, select the best route.
+Similar to DFS/BFS on a tree of possible solutions, but executed mentally rather than in code.
 
 ## When to use
-- ปัญหามีหลายทางเลือกที่แตกแขนงออกไป (branching decisions)
-- ต้องการสำรวจทั้ง happy path และ dead-end ก่อนตัดสินใจ
-- ปัญหาที่ greedy approach (เลือกทางแรกที่เจอ) มักให้คำตอบที่ไม่ดีพอ
-- ต้องการ reasoning ที่ traceable ว่าทำไมถึงเลือก/ไม่เลือกแต่ละทาง
+- Problem has multiple branching decision points
+- Need to explore both happy paths and dead-ends before deciding
+- Greedy approach (picking the first option found) tends to give suboptimal results
+- Need traceable reasoning showing why each path was chosen or rejected
 
 ## How it works
 
 ### Phase 1: Define the Search Space
-1. ระบุปัญหาและ goal ให้ชัด
-2. ระบุ decision points ทั้งหมด — แต่ละจุดมีกี่ทางเลือก
-3. กำหนด evaluation criteria สำหรับตัดสินว่าทางไหนดี/ไม่ดี
+1. Clearly state the problem and goal
+2. Identify all decision points — how many options at each
+3. Define evaluation criteria for judging good vs bad paths
 
 ### Phase 2: Explore (DFS-style)
-4. เลือกทางเลือกแรก → ขยายต่อให้ลึกที่สุด
-5. ที่แต่ละ node ประเมิน:
-   - ✅ Promising → ขยายต่อ
-   - ⚠️ Uncertain → จดไว้ แล้วขยายต่อแบบระวัง
-   - ❌ Dead-end → หยุด, บันทึกเหตุผล, **backtrack**
-6. เมื่อ backtrack → กลับไป decision point ล่าสุดที่ยังมีทางเลือกเหลือ → ลองทางถัดไป
+4. Choose the first option → expand as deep as possible
+5. At each node, evaluate:
+   - ✅ Promising → continue expanding
+   - ⚠️ Uncertain → note it, continue cautiously
+   - ❌ Dead-end → stop, record reason, **backtrack**
+6. When backtracking → return to the most recent decision point with remaining options → try the next one
 
 ### Phase 3: Evaluate & Select
-7. เปรียบเทียบทุกเส้นทางที่สำรวจแล้ว
-8. ให้คะแนนตาม criteria ที่กำหนดใน Phase 1
-9. เลือกเส้นทางที่ดีที่สุด — อธิบายเหตุผลว่าทำไมทางอื่นถูกตัด
+7. Compare all explored paths
+8. Score against criteria defined in Phase 1
+9. Select the best path — explain why others were eliminated
 
 ## Key Principles
-- **Backtracking is strength, not failure** — การย้อนกลับคือการเรียนรู้ว่าทางนั้นไม่ work
-- **Record dead-ends** — จดทุก dead-end พร้อมเหตุผล เพื่อไม่กลับไปทางเดิม
-- **Depth before breadth** — ลงลึกก่อน ถ้าตันค่อย backtrack ไม่ใช่สำรวจผิวเผินทุกทาง
-- **Prune early** — ถ้าเห็นชัดว่าทางนี้ไม่ work ตัดทิ้งเลย ไม่ต้องสำรวจต่อ
+- **Backtracking is strength, not failure** — backtracking means learning that path doesn't work
+- **Record dead-ends** — document every dead-end with reason to avoid revisiting
+- **Depth before breadth** — go deep first, backtrack if stuck, don't explore shallowly across all options
+- **Prune early** — if a path is clearly wrong, cut it immediately without exploring further
 
 ## Tips
-- ใช้ tree notation (indent) เพื่อแสดง depth ของการสำรวจ
-- ถ้า decision points เยอะมาก (>5 ทาง) ให้ prune ด้วย heuristic ก่อนลงลึก
-- รวมกับ CoT ได้ — ใช้ CoT ที่แต่ละ node เพื่อประเมินว่า promising หรือ dead-end
-- รวมกับ LATS ได้ — ใช้ AoT สำรวจก่อน แล้วเอา top candidates ไปเข้า LATS scoring
+- Use tree notation (indentation) to show exploration depth
+- If decision points are many (>5 options), prune with heuristics before going deep
+- Combine with CoT — use CoT at each node to evaluate promising vs dead-end
+- Combine with LATS — use AoT to explore first, then feed top candidates into LATS scoring
 
 ## Example
 ```
-Problem: เลือก database strategy สำหรับ multi-tenant booking system
+Problem: Choose database strategy for a multi-tenant booking system
 
-Goal: รองรับ 50+ tenants, data isolation, query performance
+Goal: Support 50+ tenants, data isolation, query performance
 
 Decision Points:
   D1: DB Architecture → [Shared DB, Schema-per-tenant, DB-per-tenant]
@@ -55,40 +55,40 @@ Decision Points:
 Exploration:
 
 [D1] Shared DB
-  ├─ ✅ ง่ายต่อ deployment, ต้นทุนต่ำ
+  ├─ ✅ Easy to deploy, low cost
   ├─ [D2] Redis cache
-  │   ├─ ✅ Query performance ดี
+  │   ├─ ✅ Good query performance
   │   ├─ [D3] Read/Write split
-  │   │   └─ ✅ รองรับ scale — VIABLE PATH (Score: 7/10)
+  │   │   └─ ✅ Scalable — VIABLE PATH (Score: 7/10)
   │   └─ [D3] No split
-  │       └─ ⚠️ อาจ bottleneck ที่ write — VIABLE BUT RISKY (Score: 5/10)
+  │       └─ ⚠️ Potential write bottleneck — VIABLE BUT RISKY (Score: 5/10)
   └─ [D2] No cache
-      └─ ❌ 50 tenants shared table = slow queries — DEAD END
+      └─ ❌ 50 tenants on shared table = slow queries — DEAD END
 
 [D1] Schema-per-tenant
-  ├─ ✅ Data isolation ดี
-  ├─ ⚠️ Migration ต้องรัน 50 schemas
+  ├─ ✅ Good data isolation
+  ├─ ⚠️ Migrations must run across 50 schemas
   ├─ [D2] Redis cache
   │   └─ [D3] Read/Write split
   │       └─ ✅ Isolation + Performance — VIABLE PATH (Score: 8/10)
   └─ [D2] No cache
-      └─ ⚠️ Acceptable ถ้า query ไม่ complex — VIABLE (Score: 6/10)
+      └─ ⚠️ Acceptable if queries are simple — VIABLE (Score: 6/10)
 
 [D1] DB-per-tenant
-  ├─ ✅ Isolation สูงสุด
-  ├─ ❌ 50 DB instances = operational nightmare, cost สูงมาก
-  └─ DEAD END (pruned — ไม่สำรวจ D2, D3 ต่อ)
+  ├─ ✅ Maximum isolation
+  ├─ ❌ 50 DB instances = operational nightmare, very high cost
+  └─ DEAD END (pruned — D2, D3 not explored)
 
 Selected: Schema-per-tenant + Redis + Read/Write split (8/10)
-Reason: Balance ระหว่าง isolation กับ operational cost
-         Dead-ends บอกว่า Shared DB ไม่ scale, DB-per-tenant แพงเกิน
+Reason: Balances isolation with operational cost
+         Dead-ends show Shared DB doesn't scale, DB-per-tenant is too expensive
 ```
 
 ## Comparison with Other Techniques
 
-| Technique | เหมาะกับ | ต่างจาก AoT อย่างไร |
-|---|---|---|
-| CoT | ปัญหาเชิงเส้น ทำทีละ step | AoT สำรวจหลายเส้นทาง + backtrack |
-| LATS | เปรียบเทียบ N ตัวเลือกแบบ flat | AoT สำรวจแบบ tree (ลึก + แตกแขนง) |
-| Step-Back | ถอยออกมาดูภาพใหญ่ | AoT ลงลึกในรายละเอียดแต่ละทาง |
-| AoT | ปัญหาที่มี branching decisions หลายชั้น | ใช้ backtracking เป็นหัวใจ |
+| Technique | Best for | Difference from AoT |
+|-----------|----------|---------------------|
+| CoT | Linear problems, step-by-step | AoT explores multiple paths + backtracks |
+| LATS | Comparing N options flat | AoT explores as a tree (deep + branching) |
+| Step-Back | Zooming out to see the big picture | AoT dives deep into each path's details |
+| AoT | Problems with multi-level branching decisions | Uses backtracking as its core mechanism |

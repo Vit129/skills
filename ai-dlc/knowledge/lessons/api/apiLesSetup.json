@@ -1,0 +1,11 @@
+[
+    {
+        "id": "LESSON-SETUP-001",
+        "category": "fixture",
+        "error": "Fixture { request } from beforeAll cannot be reused",
+        "pattern": "Fixture.*from beforeAll cannot be reused|cannot be reused in a test",
+        "cause": "Playwright does not allow using request fixture from beforeAll in the test body",
+        "solution": "Create APIRequestContext manually in beforeAll and dispose in afterAll",
+        "example": "const requestContext = await playwrightRequest.newContext();\nawait requestContext.dispose();"
+    }
+]

@@ -35,7 +35,7 @@ Can start this phase if:
 ## Process
 
 1. Read logical design, test scenarios, test scripts
-2. Read Lessons Learnt: Check `ai-agent/knowledge/lessons/` for technical patterns, past mistakes, and implementation pitfalls
+2. Read Lessons Learnt: Check `{knowledge_root}/lessons/` for technical patterns, past mistakes, and implementation pitfalls
 3. For each user story, decompose into categories below
 4. Sequence by dependency order
 5. Estimate complexity per task

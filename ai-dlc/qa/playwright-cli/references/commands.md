@@ -73,8 +73,8 @@ playwright-cli close-all
 ## Session Naming
 Use `-s=<pbi-number>` or `-s=<system-feature>`:
 ```bash
-playwright-cli -s=pbi-215314 open https://sit.example.com
-playwright-cli -s=login-axons-one open https://sit.example.com/login
+playwright-cli -s=pbi-12345 open https://sit.example.com
+playwright-cli -s=login-flow open https://sit.example.com/login
 ```
 
 ## Config

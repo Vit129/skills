@@ -1,0 +1,57 @@
+[
+    {
+        "id": "LESSON-NET-001",
+        "category": "server",
+        "error": "500 Internal Server Error",
+        "pattern": "500|Internal Server Error|Server error",
+        "cause": "System failure",
+        "solution": "Retry or Skip test, inform Dev",
+        "example": "test.skip('[TC001] test', async () => { /* Skip due to server error */ });"
+    },
+    {
+        "id": "LESSON-NET-002",
+        "category": "server",
+        "error": "Request Timeout",
+        "pattern": "timeout|ETIMEDOUT|ECONNREFUSED",
+        "cause": "API slow response or not responding",
+        "solution": "Progressive Debugging: (1st) Increase timeout temporarily (2nd+) Find root cause",
+        "steps": [
+            {
+                "round": 1,
+                "action": "Quick Fix - Increase timeout",
+                "example": "await page.waitForResponse(res => res.url().includes('/api/data'), { timeout: 60000 });"
+            },
+            {
+                "round": 2,
+                "action": "Root Cause Analysis - Verify actual cause",
+                "checklist": [
+                    "1. Check Network Log: Does request reach server?",
+                    "2. Check API Endpoint: Is URL correct?",
+                    "3. Check Server Status: Is API server running normally?",
+                    "4. Check Request Payload: Is sent data complete?",
+                    "5. Check Database: Is query slow or deadlocked?"
+                ]
+            },
+            {
+                "round": 3,
+                "action": "Permanent Solution - Fix at source",
+                "solutions": [
+                    "- If API slow: Optimize query, add index, cache",
+                    "- If Network slow: Check VPN, proxy, firewall",
+                    "- If Payload large: Reduce payload size or use pagination",
+                    "- If Server overload: Scale up resources or load balancing"
+                ]
+            }
+        ],
+        "example": "// Round 1: Quick fix\nawait page.waitForResponse(res => res.url().includes('/api/data'), { timeout: 60000 });"
+    },
+    {
+        "id": "LESSON-NET-003",
+        "category": "network",
+        "error": "CORS Error",
+        "pattern": "CORS|Cross-Origin|Access-Control-Allow-Origin",
+        "cause": "CORS policy disallowed",
+        "solution": "Use APIRequestContext instead of page.request",
+        "example": "const request = await playwright.request.newContext();"
+    }
+]

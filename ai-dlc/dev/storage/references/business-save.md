@@ -30,10 +30,10 @@ Every business rule MUST contain:
 5. **source:** file path and line number
 
 ## Files Generated
-- `ai-agent/knowledge/business/{domain}/business{Domain}Rules.json` — business rules
-- `ai-agent/knowledge/business/{domain}/uiActions.json` — UI actions
-- `ai-agent/knowledge/business/{domain}/config.json` — domain config
-- `ai-agent/knowledge/business/businessIndex.json` — master index
+- `{knowledge_root}/business/{domain}/business{Domain}Rules.json` — business rules
+- `{knowledge_root}/business/{domain}/uiActions.json` — UI actions
+- `{knowledge_root}/business/{domain}/config.json` — domain config
+- `{knowledge_root}/business/businessIndex.json` — master index
 
 ## Rules
 - AI-Direct Mode: write all JSON files directly

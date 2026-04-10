@@ -1,0 +1,23 @@
+{
+    "version": "5.0.0",
+    "lastUpdated": "2025-12-18",
+    "description": "Lessons Learned Index (Decentralized Structure)",
+    "_summary": {
+        "total": 8,
+        "source": "*.json",
+        "categories": {
+            "timing": "webUiLesTiming.json",
+            "visibility": "webUiLesVisibility.json",
+            "locator": "webUiLesLocator.json",
+            "file": "webUiLesFile.json"
+        },
+        "popular_patterns": [
+            "timeout",
+            "hidden",
+            "disabled",
+            "overlay",
+            "multiple elements"
+        ]
+    },
+    "lessons": []
+}

@@ -1,0 +1,16 @@
+{
+    "environment": {
+        "sit": {
+            "url": "https://sit-auth.example.com",
+            "db_connection": "postgres://user:pass@sit-db:5432/auth"
+        },
+        "uat": {
+            "url": "https://uat-auth.example.com",
+            "db_connection": "postgres://user:pass@uat-db:5432/auth"
+        }
+    },
+    "timeouts": {
+        "default": 30000,
+        "long": 60000
+    }
+}

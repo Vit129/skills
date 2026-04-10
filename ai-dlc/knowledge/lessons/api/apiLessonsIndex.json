@@ -1,0 +1,26 @@
+{
+  "version": "5.0.0",
+  "lastUpdated": "2025-12-18",
+  "description": "Lessons Learned Index (Decentralized Structure)",
+  "_summary": {
+    "total": 11,
+    "source": "*.json",
+    "categories": {
+      "auth": "api_les_auth.json",
+      "network": "api_les_network.json",
+      "data": "api_les_data.json",
+      "file": "api_les_file.json",
+      "setup": "api_les_setup.json"
+    },
+    "popular_patterns": [
+      "401",
+      "404",
+      "500",
+      "timeout",
+      "validation",
+      "fixture",
+      "duplicate"
+    ]
+  },
+  "lessons": []
+}

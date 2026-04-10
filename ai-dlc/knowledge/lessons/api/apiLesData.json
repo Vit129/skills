@@ -1,0 +1,47 @@
+[
+    {
+        "id": "LESSON-DATA-001",
+        "category": "not_found",
+        "error": "404 Not Found",
+        "pattern": "404|Not Found|Resource not found",
+        "cause": "Resource not found or incorrect endpoint",
+        "solution": "Check ID/Parameters or endpoint URL",
+        "example": "expect(response.status()).toBe(404); // Expected behavior"
+    },
+    {
+        "id": "LESSON-DATA-002",
+        "category": "validation",
+        "error": "400 Bad Request - Validation Error",
+        "pattern": "400|Bad Request|validation|invalid",
+        "cause": "Incorrect or incomplete data",
+        "solution": "Check required fields and format",
+        "example": "expect(response.status()).toBe(400); // Expected validation error"
+    },
+    {
+        "id": "LESSON-DATA-003",
+        "category": "parsing",
+        "error": "JSON Parse Error",
+        "pattern": "JSON.parse|Unexpected token|invalid json",
+        "cause": "Response is not JSON",
+        "solution": "Use response.text() instead of response.json()",
+        "example": "const text = await response.text(); console.log(text);"
+    },
+    {
+        "id": "LESSON-DATA-004",
+        "category": "test_data",
+        "error": "Duplicate data in system",
+        "pattern": "duplicate|already exists|Data already exists in system",
+        "cause": "Using static test data that already exists in the system",
+        "solution": "Create unique test data using DataGenerator + timestamp/random",
+        "example": "const uniqueCode = `TEST${DataGenerator.generate_number(1000, 9999)}`;"
+    },
+    {
+        "id": "LESSON-DATA-005",
+        "category": "response",
+        "error": "Cannot read properties - Response structure mismatch",
+        "pattern": "Cannot read properties|toHaveProperty.*payload",
+        "cause": "API response has wrapper structure {payload: {...}, status: \"OK\"}",
+        "solution": "Access data through body.payload instead of direct body",
+        "example": "const body = await response.json();\nconst data = body.payload.content; // Not body.content"
+    }
+]

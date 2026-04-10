@@ -1,0 +1,27 @@
+{
+    "domain": "document",
+    "type": "core",
+    "description": "File Upload & Download",
+    "team": "Shared",
+    "owner": "shared@company.com",
+    "lastUpdated": "2025-12-18",
+    "triggers": [
+        "[Upload]",
+        "[Download]",
+        "[Document]",
+        "[File]"
+    ],
+    "keywords": [
+        "upload",
+        "download",
+        "document",
+        "file",
+        "attachment",
+        "preview",
+        "version"
+    ],
+    "files": {
+        "rules": "businessDocRules.json",
+        "config": "businessDocConfig.json"
+    }
+}

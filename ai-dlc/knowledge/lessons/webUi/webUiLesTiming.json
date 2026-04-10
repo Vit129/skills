@@ -1,0 +1,38 @@
+[
+    {
+        "id": "LESSON-TIME-001",
+        "category": "timeout",
+        "error": "Timeout waiting for selector",
+        "pattern": "Timeout.*waiting for selector|locator.*timeout",
+        "cause": "Element not yet appeared or covered by overlay",
+        "solution": "Wait for loading to disappear or wait for API response",
+        "example": "await page.waitForSelector('.loading', { state: 'hidden' });"
+    },
+    {
+        "id": "LESSON-TIME-002",
+        "category": "overlay",
+        "error": "Element covered by loading overlay",
+        "pattern": "intercept.*pointer|covered by|overlay",
+        "cause": "Loading spinner or modal covering the element",
+        "solution": "Wait for loading to disappear",
+        "example": "await page.waitForSelector('.loading-spinner', { state: 'hidden' });"
+    },
+    {
+        "id": "LESSON-TIME-003",
+        "category": "overlay",
+        "error": "Data not loaded",
+        "pattern": "empty|no data|not found",
+        "cause": "API has not responded yet",
+        "solution": "Wait for API response",
+        "example": "await page.waitForResponse(res => res.url().includes('/api/data'));"
+    },
+    {
+        "id": "LESSON-TIME-004",
+        "category": "timeout",
+        "error": "Navigation timeout",
+        "pattern": "navigation.*timeout|page.*not loaded",
+        "cause": "Page loads slowly or wrong URL",
+        "solution": "Increase timeout or wait for networkidle",
+        "example": "await page.goto(url, { waitUntil: 'networkidle' });"
+    }
+]

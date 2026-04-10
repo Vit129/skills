@@ -302,8 +302,11 @@ Brownfield start from 1.1, Greenfield start from 1.2
   → Use `analysis-skills` skill (reverse-eng.md)
 - **1.2** Requirements Gathering → User stories with BDD acceptance criteria
   → Use `analysis-skills` skill (requirements.md)
-  → After user stories: run `analysis-skills` skill (domain.md) for cross-domain reuse analysis
-  → After domain analysis: run `analysis-skills` skill (gap.md) to identify missing logic
+  → **MANDATORY after user stories:** run `analysis-skills` skill (domain.md) for cross-domain reuse analysis
+    - If `{knowledge_root}/business/businessIndex.json` does not exist → skip Steps 1-2, run Step 3 (Impact Assessment) only — set Reusability Score = 0%
+    - Never skip domain.md entirely — Impact Assessment is always required
+  → **MANDATORY after domain analysis:** run `analysis-skills` skill (gap.md) to identify missing logic
+    - If domain analysis returned 0% → treat all required logic as "No Match" and proceed to prioritize gaps
 - **1.3** Domain Decomposition → DDD Strategic Design + Architecture Decision
   → Use `architect` skill (decomposition.md, architecture-patterns.md)
 - **1.4** Domain Design → DDD Tactical Patterns (pseudocode)

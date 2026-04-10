@@ -1,0 +1,37 @@
+{
+  "category": "mock_strategy",
+  "workflow_type": "api_automation",
+  "last_updated": "2025-07-14",
+  "lessons": [
+    {
+      "id": "LESSON-API-EMR-001",
+      "title": "APIRequestContext does not support route interception — use method override instead",
+      "issue": "Used page.route() to mock API, but page context is not request context, making it impossible to intercept",
+      "solution": "Override service method in Arrange step: apiClient.service.method = async () => mockResponse",
+      "reflexion_source": "Healing Attempt 1 — EMR ID-002",
+      "source_ID": "ID-002",
+      "created_at": "2025-07-14",
+      "severity": "High"
+    },
+    {
+      "id": "LESSON-API-EMR-002",
+      "title": "Module-level store in DatabaseHelper causes parallel tests to leak data",
+      "issue": "Using const store = {} at module level causes tests running in parallel to share state",
+      "solution": "Move store into class instance (private maps) so each test has isolated state",
+      "reflexion_source": "Code Review Phase 4 — EMR ID-002",
+      "source_ID": "ID-002",
+      "created_at": "2025-07-14",
+      "severity": "Medium"
+    },
+    {
+      "id": "LESSON-API-EMR-003",
+      "title": "Mock DB pattern (in-memory) can replace real DB when no actual backend is available",
+      "issue": "Need tests that work close to reality without installing PostgreSQL",
+      "solution": "Use in-memory Map in EMRDatabaseHelper — Seed/Verify/Cleanup works fully, testId pattern prevents data collision",
+      "reflexion_source": "Architecture Design Phase 2 — EMR ID-002",
+      "source_ID": "ID-002",
+      "created_at": "2025-07-14",
+      "severity": "Low"
+    }
+  ]
+}

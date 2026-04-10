@@ -1,0 +1,299 @@
+{
+    "rules": {
+        "business_logic": [
+            {
+                "id": "BL001",
+                "name": "Date Validation",
+                "tags": [
+                    "common",
+                    "validation",
+                    "date"
+                ],
+                "validations": [
+                    "date_format_valid",
+                    "date_not_in_past",
+                    "date_within_range"
+                ],
+                "related_test_data": []
+            },
+            {
+                "id": "BL002",
+                "name": "Required Field Validation",
+                "tags": [
+                    "common",
+                    "validation",
+                    "form"
+                ],
+                "validations": [
+                    "field_not_empty",
+                    "field_meets_format"
+                ],
+                "related_test_data": []
+            },
+            {
+                "id": "BL003",
+                "name": "Authentication",
+                "tags": [
+                    "common",
+                    "auth",
+                    "login"
+                ],
+                "validations": [
+                    "credentials_required",
+                    "session_valid",
+                    "token_not_expired"
+                ],
+                "related_test_data": []
+            },
+            {
+                "id": "BL004",
+                "name": "Language Switch",
+                "tags": [
+                    "common",
+                    "language",
+                    "i18n"
+                ],
+                "validations": [
+                    "language_supported",
+                    "content_translated"
+                ],
+                "related_test_data": []
+            },
+            {
+                "id": "BL005",
+                "name": "Error Handling",
+                "tags": [
+                    "common",
+                    "error",
+                    "validation"
+                ],
+                "validations": [
+                    "error_message_displayed",
+                    "http_status_correct"
+                ],
+                "related_test_data": []
+            },
+            {
+                "id": "BL006",
+                "name": "Session Management",
+                "tags": [
+                    "common",
+                    "session",
+                    "timeout"
+                ],
+                "validations": [
+                    "session_timeout_valid",
+                    "auto_logout_on_timeout"
+                ],
+                "related_test_data": []
+            }
+        ],
+        "webui_actions": [
+            {
+                "id": "UA001",
+                "name": "Search",
+                "tags": [
+                    "common",
+                    "search",
+                    "webui"
+                ],
+                "steps": [
+                    "Locate search input field",
+                    "Clear existing text if any",
+                    "Enter search term",
+                    "Trigger search (click button or press Enter)",
+                    "Wait for results",
+                    "Verify results or empty state"
+                ],
+                "related_test_data": []
+            },
+            {
+                "id": "UA002",
+                "name": "Filter",
+                "tags": [
+                    "common",
+                    "filter",
+                    "webui"
+                ],
+                "steps": [
+                    "Open filter panel/dropdown",
+                    "Select filter criteria",
+                    "Apply filter",
+                    "Wait for filtered results",
+                    "Verify filter applied correctly"
+                ],
+                "related_test_data": []
+            },
+            {
+                "id": "UA003",
+                "name": "Pagination",
+                "tags": [
+                    "common",
+                    "pagination",
+                    "webui"
+                ],
+                "steps": [
+                    "Verify pagination controls visible",
+                    "Click next/previous page",
+                    "Wait for page to load",
+                    "Verify page number updated"
+                ],
+                "related_test_data": []
+            },
+            {
+                "id": "UA004",
+                "name": "Toast/Alert",
+                "tags": [
+                    "common",
+                    "toast",
+                    "alert",
+                    "webui"
+                ],
+                "steps": [
+                    "Wait for toast/alert to appear",
+                    "Verify message content",
+                    "Verify toast type (success/error/warning)",
+                    "Wait for toast to disappear or close manually"
+                ],
+                "related_test_data": []
+            },
+            {
+                "id": "UA005",
+                "name": "Modal/Dialog",
+                "tags": [
+                    "common",
+                    "modal",
+                    "dialog",
+                    "webui"
+                ],
+                "steps": [
+                    "Wait for modal to appear",
+                    "Verify modal content",
+                    "Click action button (Confirm/Cancel/Close)",
+                    "Verify modal closed"
+                ],
+                "related_test_data": []
+            },
+            {
+                "id": "UA006",
+                "name": "Breadcrumb",
+                "tags": [
+                    "common",
+                    "breadcrumb",
+                    "navigation",
+                    "webui"
+                ],
+                "steps": [
+                    "Verify breadcrumb visible",
+                    "Verify navigation path correct",
+                    "Click breadcrumb item",
+                    "Verify navigated to correct page"
+                ],
+                "related_test_data": []
+            },
+            {
+                "id": "UA007",
+                "name": "Dropdown",
+                "tags": [
+                    "common",
+                    "dropdown",
+                    "select",
+                    "webui"
+                ],
+                "steps": [
+                    "Click dropdown to open",
+                    "Wait for options to load",
+                    "Select option(s)",
+                    "Verify selection applied"
+                ],
+                "related_test_data": []
+            },
+            {
+                "id": "UA008",
+                "name": "Table Actions",
+                "tags": [
+                    "common",
+                    "table",
+                    "sort",
+                    "webui"
+                ],
+                "steps": [
+                    "Verify table loaded",
+                    "Click column header to sort",
+                    "Select row(s)",
+                    "Verify selection state"
+                ],
+                "related_test_data": []
+            },
+            {
+                "id": "UA009",
+                "name": "Form Actions",
+                "tags": [
+                    "common",
+                    "form",
+                    "submit",
+                    "webui"
+                ],
+                "steps": [
+                    "Fill form fields",
+                    "Validate required fields",
+                    "Submit form",
+                    "Verify success or error message"
+                ],
+                "related_test_data": []
+            },
+            {
+                "id": "UA010",
+                "name": "Login",
+                "tags": [
+                    "common",
+                    "auth",
+                    "login",
+                    "webui"
+                ],
+                "steps": [
+                    "Navigate to login page",
+                    "Enter username",
+                    "Enter password",
+                    "Click login button",
+                    "Verify successful login"
+                ],
+                "related_test_data": []
+            },
+            {
+                "id": "UA011",
+                "name": "Logout",
+                "tags": [
+                    "common",
+                    "auth",
+                    "logout",
+                    "webui"
+                ],
+                "steps": [
+                    "Click user menu",
+                    "Click logout button",
+                    "Verify redirected to login page",
+                    "Verify session cleared"
+                ],
+                "related_test_data": []
+            },
+            {
+                "id": "UA012",
+                "name": "Change Language",
+                "tags": [
+                    "common",
+                    "language",
+                    "i18n",
+                    "webui"
+                ],
+                "steps": [
+                    "Click language selector",
+                    "Select language",
+                    "Verify page content translated",
+                    "Verify language preference saved"
+                ],
+                "related_test_data": []
+            }
+        ]
+    }
+}

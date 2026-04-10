@@ -1,0 +1,43 @@
+{
+    "id": "mobileLessons",
+    "version": "1.0.0",
+    "description": "Index for Mobile Automation Lessons Learned (Robot Framework + Appium)",
+    "_summary": {
+        "categories": {
+            "timing": "Handling UI slowness vs Fast code execution",
+            "locators": "Best practices for Android/iOS element selection",
+            "gestures": "Reliable scrolling and swiping patterns"
+        },
+        "popular_patterns": [
+            "Wait-Action-Verify",
+            "AccessibilityId-First",
+            "Hybrid-API-Setup"
+        ]
+    },
+    "lessons": [
+        {
+            "id": "L-MOB-001",
+            "category": "timing",
+            "title": "UI Synchronization (UI Slower than Code)",
+            "path": "timingLessons.md"
+        },
+        {
+            "id": "L-MOB-002",
+            "category": "locators",
+            "title": "Cross-Platform Locator Strategy",
+            "path": "locatorsLessons.md"
+        },
+        {
+            "id": "L-MOB-003",
+            "category": "gestures",
+            "title": "Reliable Mobile Gestures",
+            "path": "gesturesLessons.md"
+        },
+        {
+            "id": "L-MOB-004",
+            "category": "infrastructure",
+            "title": "Session Stability & Cleanup",
+            "path": "infrastructureLessons.md"
+        }
+    ]
+}

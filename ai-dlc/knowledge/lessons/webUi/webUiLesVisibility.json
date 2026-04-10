@@ -1,0 +1,20 @@
+[
+    {
+        "id": "LESSON-VIS-001",
+        "category": "visibility",
+        "error": "Element not visible",
+        "pattern": "not visible|hidden|display: none",
+        "cause": "Element hidden by CSS or not yet loaded",
+        "solution": "Wait for element to be visible or check CSS",
+        "example": "await expect(page.locator('#element')).toBeVisible();"
+    },
+    {
+        "id": "LESSON-VIS-002",
+        "category": "visibility",
+        "error": "Element is disabled",
+        "pattern": "disabled|not enabled",
+        "cause": "Element is disabled (incomplete data or validation failed)",
+        "solution": "Fill in all required fields before clicking",
+        "example": "await page.fill('#required-field', 'data');"
+    }
+]

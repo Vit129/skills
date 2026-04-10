@@ -52,7 +52,7 @@ Also read coding rules:
 ## Process
 
 1. Read test scenarios, QA architecture, and data storage strategy
-2. Read Lessons Learnt: Check `ai-agent/knowledge/lessons/` for technical patterns, past mistakes, and UI behaviors
+2. Read Lessons Learnt: Check `{knowledge_root}/lessons/` for technical patterns, past mistakes, and UI behaviors
 3. For each feature/test suite, decompose into categories below
 4. Sequence by dependency order
 5. Estimate complexity per task

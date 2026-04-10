@@ -1,0 +1,63 @@
+{
+  "version": "6.0.0",
+  "lastUpdated": "2025-07-15",
+  "description": "API Templates & Lessons Index",
+  "templates": {
+    "auth": [
+      {
+        "id": "apiauth",
+        "path": "apiAuth.template.ts",
+        "description": "OAuth 2.0 Login Helper with Azure AD support"
+      }
+    ],
+    "file": [
+      {
+        "id": "apifile",
+        "path": "apiFile.template.ts",
+        "description": "File Upload/Download Helper"
+      }
+    ],
+    "validation": [
+      {
+        "id": "apivalidation",
+        "path": "apiValidation.template.ts",
+        "description": "Email, Phone, Thai ID, Response validators"
+      }
+    ],
+    "utils": [
+      {
+        "id": "apiutils",
+        "path": "apiUtils.template.ts",
+        "description": "Data Generator, Date Helper, Pagination, Search"
+      }
+    ]
+  },
+  "shared_resources": {
+    "fixtures": {
+      "path": "tests/shared-fixtures/",
+      "description": "Single Source of Truth for cross-layer test data (API, Web, Mobile)"
+    }
+  },
+  "lessonsIndex": "ai-agent/knowledge/lessons/api/apiLessonsIndex.json",
+  "lessons_count": 5,
+  "recent_lessons": [
+    {
+      "id": "LESSON-API-EMR-001",
+      "file": "apiLesMockStrategy.json",
+      "ID": "ID-002",
+      "summary": "APIRequestContext does not support route interception — use method override instead"
+    },
+    {
+      "id": "LESSON-API-EMR-002",
+      "file": "apiLesMockStrategy.json",
+      "ID": "ID-002",
+      "summary": "Module-level store in DatabaseHelper causes parallel tests to leak data"
+    },
+    {
+      "id": "LESSON-API-EMR-003",
+      "file": "apiLesMockStrategy.json",
+      "ID": "ID-002",
+      "summary": "Mock DB pattern (in-memory) can replace real DB when no actual backend is available"
+    }
+  ]
+}

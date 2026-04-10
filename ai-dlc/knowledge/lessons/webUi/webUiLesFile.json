@@ -1,0 +1,11 @@
+[
+    {
+        "id": "LESSON-FILE-001",
+        "category": "file",
+        "error": "File upload failed",
+        "pattern": "file.*not found|invalid file",
+        "cause": "Incorrect file path or file does not exist",
+        "solution": "Check file path",
+        "example": "await page.setInputFiles('input[type=\"file\"]', '/absolute/path/to/file.pdf');"
+    }
+]
