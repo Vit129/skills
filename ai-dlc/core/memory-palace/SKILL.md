@@ -12,8 +12,7 @@ description: >
 Core concepts, AAAK compression, Temporal KG, Contradiction Detection, Archive System:
 → `~/.claude/skills/system/memory-palace/SKILL.md`
 
-Full version plan (ChromaDB + MCP):
-→ `~/.claude/skills/system/memory-palace/references/full-version-plan.md`
+Full version plan: ยกเลิกแล้ว — markdown-only เป็น final approach
 
 README (ภาษาไทย):
 → `~/.claude/skills/system/memory-palace/MEMORY_PALACE_README.md`

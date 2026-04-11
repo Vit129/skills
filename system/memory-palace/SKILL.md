@@ -56,12 +56,15 @@ Load the appropriate reference when needed:
 |------|------|
 | Session start/end, loading context, schemas, archive | `references/scaling-protocol.md` |
 | Deciding what to write, contradiction check | `references/admission-control.md` |
-| Before creating rooms, matching wings, gap analysis | `references/ai-techniques.md` |
-| Technical logic, AAAK examples, MCP tools | `references/mempalace-logic.md` |
-| ChromaDB, full version plan | `references/full-version-plan.md` |
+| Wing: discover, classify, create, archive | `references/wing-analysis.md` |
+| Room: discover, gap, create, compress to closet | `references/room-analysis.md` |
+| Hall: index, tunnels, state.md, palace health | `references/hall-analysis.md` |
+| Technical logic, AAAK examples | `references/mempalace-logic.md` |
+
+Underlying concepts (loaded by analysis files above):
+- Reasoning: `~/.claude/skills/system/ai-techniques/` (CoT, LATS, AoT)
+- Analysis: `~/.claude/skills/system/analysis-concept/` (context, discovery, gap, reverse-eng)
 
 ## 📦 Optional Features
 
-- **ChromaDB + Semantic Search** — see `references/full-version-plan.md`
-- **MCP Tools (19 tools)** — see `references/mempalace-logic.md`
 - **File Curator (v2)** — mine files directly into rooms (`curate @file → wing/room`)

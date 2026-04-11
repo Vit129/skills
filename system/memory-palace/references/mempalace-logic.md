@@ -14,12 +14,12 @@ Detailed logic and implementation details adapted from the `milla-jovovich/mempa
 ## 2. AAAK (AI Agent Knowledge) Dialect Examples
 
 **Inefficient (Standard English):**
-"The portfolio currently holds 100 shares of AAPL bought at an average price of $150. The current strategy is to buy more if the price drops below $145 according to the DCA rules we established last week."
+"The auth service currently uses JWT tokens with a 1-hour expiry. The current strategy is to refresh tokens silently if the user is active, based on the session rules defined last sprint."
 
 **Efficient (AAAK-style):**
-`@Portfolio:Retire | Room:Stocks | Closet:State`
-`$AAPL: { Q:100, Avg:150, Strat:[Buy@<145], Ref:DCAv2_Rule }`
-`Status: Active | Updated: 2026-04-09`
+`@Auth:Service | Room:TokenStrategy | Closet:State`
+`JWT: { Expiry:1h, Refresh:[SilentIfActive], Ref:SessionRulesV2 }`
+`Status: Active | Updated: 2026-04-11`
 
 ## 3. Temporal Relationship Logic
 
@@ -31,8 +31,8 @@ Every fact in the system should be stored as a triple with a temporal dimension.
 
 **Example Queries:**
 
-- "What was the active strategy for Crypto during the Dec 2025 market crash?"
-- "Show me all Drawers (transactions) added since the last Rebalancing event."
+- "What was the active auth strategy during the migration in Jan 2026?"
+- "Show me all Drawers (changes) added since the last deployment event."
 
 ## 4. Contradiction Detection
 

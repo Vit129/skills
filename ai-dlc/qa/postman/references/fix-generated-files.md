@@ -907,3 +907,85 @@ test('WebSocket — receive order status update', async () => {
   });
 });
 ```
+
+
+---
+
+## 31. Collection Variables with eval() 🧮
+
+Postman uses `eval(pm.collectionVariables.get('fnName'))` to load reusable functions stored as collection variables. Script 3 converts these to `CollectionHelpers` class methods.
+
+```typescript
+// ❌ Postman — eval pattern
+var verifyError = eval(pm.collectionVariables.get('verifyErrorMessage'));
+verifyError(jsonData, "ข้อมูลไม่ถูกต้อง", "Invalid data");
+
+// ✅ Playwright — CollectionHelpers class
+import { CollectionHelpers } from '../helpers/CollectionHelpers';
+
+// Call directly
+CollectionHelpers.verifyErrorMessage(responseJson, "ข้อมูลไม่ถูกต้อง", "Invalid data");
+```
+
+### Creating the CollectionHelpers class
+
+Script 3 generates `// 📌 CollectionHelpers.xxx()` comments. AI must create the actual class from the raw Postman logic in the collection `.md` file (Section `🧰 Function Variables → Playwright Helpers`).
+
+```typescript
+// helpers/<collection>/CollectionHelpers.ts
+import { expect } from '@playwright/test';
+
+export class CollectionHelpers {
+
+  static verifyErrorMessage(responseJson: any, expectedTH: string, expectedEN: string) {
+    expect(responseJson.success).toBe(false);
+    expect(responseJson.result).toBeNull();
+    const lang = process.env['lang'] || 'th-TH';
+    if (lang === 'th-TH') {
+      expect(responseJson.errorMessage).toEqual(expectedTH);
+    } else {
+      expect(responseJson.errorMessage).toEqual(expectedEN);
+    }
+    expect(responseJson.traceId).toBeDefined();
+  }
+
+  static verifySuccessMessage(responseJson: any) {
+    expect(responseJson.success).toBe(true);
+    expect(responseJson.errorMessage).toBeNull();
+  }
+
+  static verifyResultMessage(responseJson: any, expectedResult: any) {
+    expect(responseJson.success).toBe(true);
+    expect(responseJson.result).toEqual(expectedResult);
+  }
+
+  static verifyObjectFn(responseJson: any, expectedObj: Record<string, any>) {
+    for (const [key, value] of Object.entries(expectedObj)) {
+      expect(responseJson.result).toHaveProperty(key, value);
+    }
+  }
+
+  static async deleteUserFn(request: any, keyword: string) {
+    const url = `${process.env['user-service-url']}/AMFW01000/delete?keyword=${keyword}`;
+    const response = await request.delete(url, {
+      headers: {
+        'Authorization': `Bearer ${process.env['accessToken']}`,
+        'Accept-Language': process.env['lang'] || 'th-TH',
+      },
+    });
+    expect(response.status()).toBe(200);
+  }
+}
+```
+
+### Common eval patterns from iuser-convert collection
+
+| Postman eval variable | CollectionHelpers method | Purpose |
+|---|---|---|
+| `verifyErrorMessage` | `CollectionHelpers.verifyErrorMessage(json, thMsg, enMsg)` | Assert error response (success=false, errorMessage matches lang) |
+| `verifySuccessMessage` | `CollectionHelpers.verifySuccessMessage(json)` | Assert success=true, no error |
+| `verifyResultMessage` | `CollectionHelpers.verifyResultMessage(json, expected)` | Assert success + result matches |
+| `verifyObjectFn` | `CollectionHelpers.verifyObjectFn(json, expectedObj)` | Deep property check on result |
+| `deleteUserFn` | `CollectionHelpers.deleteUserFn(request, keyword)` | Cleanup — delete test user by keyword |
+
+> AI should read the `🧰 Function Variables` section in the collection `.md` to get the raw Postman logic, then convert each to a static method in `CollectionHelpers`.

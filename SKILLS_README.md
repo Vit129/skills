@@ -10,7 +10,7 @@ Single source of truth for all AI-assisted development, QA, and Finance analysis
 |--------|---------|
 | `aidlc/` | Full AI-DLC lifecycle: governance, phases, templates, guides, task design |
 | `architect/` | DDD Strategic & Tactical, Architecture Patterns, Logical Design, TDD |
-| `ai-techniques/` | CoT, LATS, Step-Back, AoT, Discovery reasoning patterns |
+| `ai-techniques/` | **MOVED to system/ai-techniques/** |
 | `analysis-skills/` | Context, Figma, Gap, Domain, Requirements, Reverse Eng, Scenario Reader |
 | `ui-designer/` | Design system + aesthetic direction, **Sovereign Design System** rules |
 | `monitoring/` | Logging, error tracking, performance metrics, tracing, alerts |
@@ -75,7 +75,9 @@ Cross-project tools that work with any domain — not tied to ai-dlc.
 |--------|---------|
 | `memory-palace/` | High-recall long-term memory via Wings/Rooms/Closets/Drawers + AAAK compression |
 | `hook-creator/` | Create Kiro + Claude Code hooks from templates, event-driven automation |
-| `skill-creator/` | Create, improve, validate Claude Code skills |
+| `ai-techniques/` | CoT, LATS, AoT — domain-agnostic reasoning techniques |
+| `analysis-concept/` | Reusable analysis concepts: context, discovery, gap, reverse-eng, requirements |
+| `skill-creator/` | Create, improve, validate Claude Code skills (meta skill — use when building new skills) |
 
 ## 4. Internal (`_internal/`)
 
@@ -86,4 +88,4 @@ Folders that store system data, logs, or backups to keep the root directory clea
 ## Maintenance
 
 - Edit skills in their respective subdirectories — this is the single source of truth.
-- Last updated: 2026-04-10 (system/: memory-palace, hook-creator, skill-creator moved out of ai-dlc/core)
+- Last updated: 2026-04-11 (system/: added analysis-concept; ai-techniques moved from ai-dlc/core)
