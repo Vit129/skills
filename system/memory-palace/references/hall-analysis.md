@@ -121,3 +121,21 @@ Tunnels: [N] valid, [N] broken (endpoint missing)
 Archive: [N] entries, [N] with summary.md
 Issues: [list of problems found]
 ```
+
+## 6. Common Pitfalls
+
+- ❌ hall.md >50 lines without splitting → Fix: split to hall-detail.md immediately
+- ❌ state.md >100 lines without archiving → Fix: archive old sessions first
+- ❌ Tunnel pointing to non-existent room → Fix: verify both endpoints before creating tunnel
+- ❌ Orphan wings (folder exists but not in state.md) → Fix: run Palace Reverse Engineering periodically
+- ❌ Open Threads growing indefinitely → Fix: mark [x] completed items, remove items >2 sprints old
+- ❌ Forgetting to archive sessions when >10 rows → Fix: check count after every save
+
+## 7. Self-Review (before committing hall/state changes)
+
+After updating hall.md, state.md, or tunnels.md:
+
+1. **Consistency check:** "Does state.md match the actual wings/ folder structure?"
+2. **Line count check:** "Is state.md ≤100 lines? Is hall.md ≤50 lines?"
+3. **Tunnel check:** "Do all tunnel endpoints still exist?"
+4. **Thread check:** "Are completed threads marked [x]? Are old [x] items cleaned up?"

@@ -89,3 +89,21 @@ Use LATS (from ai-techniques/lats.md) if unsure:
 - Sim 2: Keep active → easy access, costs tokens
 - Sim 3: Compress to closets only → middle ground
 - Hybrid: usually compress first, archive if still inactive after 1 more sprint
+
+## 5. Common Pitfalls
+
+- ❌ Creating new wing without checking state.md → Fix: always read state.md first, search existing wings
+- ❌ Naming wing too specific (e.g., "jwt-token-fix") → Fix: use broader domain name ("auth-decisions")
+- ❌ Naming wing too generic (e.g., "misc") → Fix: every wing needs a clear domain boundary
+- ❌ Forgetting to update state.md after creating wing → Fix: state.md update is mandatory
+- ❌ Not creating hall.md → Fix: hall.md is required for every wing
+- ❌ Archiving wing that has active open threads → Fix: check Open Threads before archiving
+
+## 6. Self-Review (before committing wing changes)
+
+After creating or modifying a wing, challenge yourself:
+
+1. **Pre-mortem:** "If this wing structure is wrong, what did I miss?"
+2. **Redundancy check:** "Is there another wing that covers the same abstract concept?"
+3. **Naming check:** "Would someone reading state.md understand what this wing is about?"
+4. **Scope check:** "Is this wing too broad (should split) or too narrow (should be a room instead)?"

@@ -61,10 +61,6 @@ Load the appropriate reference when needed:
 | Hall: index, tunnels, state.md, palace health | `references/hall-analysis.md` |
 | Technical logic, AAAK examples | `references/mempalace-logic.md` |
 
-Underlying concepts (loaded by analysis files above):
-- Reasoning: `~/.claude/skills/system/ai-techniques/` (CoT, LATS, AoT)
-- Analysis: `~/.claude/skills/system/analysis-concept/` (context, discovery, gap, reverse-eng)
-
 ## 📦 Optional Features
 
 - **File Curator (v2)** — mine files directly into rooms (`curate @file → wing/room`)

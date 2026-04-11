@@ -102,3 +102,21 @@ From discovery-domain-concept Phase 6:
 - 🟢 >80% — mostly covered by existing rooms
 - 🟡 60-80% — some new rooms needed
 - 🔴 <60% — significant new content needed, consider new wing
+
+## 7. Common Pitfalls
+
+- ❌ Creating new room without checking hall.md → Fix: always read hall.md first, search existing rooms
+- ❌ Writing to room without conflict check → Fix: search for existing facts on same subject before writing
+- ❌ Room growing past 80 lines without closet → Fix: create closet immediately when room >80 lines
+- ❌ Forgetting to update hall.md after creating room → Fix: hall.md update is mandatory
+- ❌ Missing Tags line → Fix: every room needs 3-7 tags
+- ❌ Duplicating content across rooms → Fix: use tunnels to link, don't copy
+
+## 8. Self-Review (before committing room changes)
+
+After creating or modifying a room, challenge yourself:
+
+1. **Pre-mortem:** "If I need this info next session, will I find it here?"
+2. **Redundancy check:** "Is this content already in another room (even in a different wing)?"
+3. **Completeness check:** "Did I capture the decision AND the reasoning, not just the outcome?"
+4. **Temporal check:** "Did I add temporal markers so future sessions know WHEN this was true?"
