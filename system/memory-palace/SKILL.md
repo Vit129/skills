@@ -55,6 +55,7 @@ Load the appropriate reference when needed:
 | When | Load |
 |------|------|
 | Session start/end, loading context, schemas, archive | `references/scaling-protocol.md` |
+| Auto-consolidation trigger, dedup, stale, dream | `references/scaling-protocol.md` §Auto-Consolidation |
 | Deciding what to write, contradiction check | `references/admission-control.md` |
 | Wing: discover, classify, create, archive | `references/wing-analysis.md` |
 | Room: discover, gap, create, compress to closet | `references/room-analysis.md` |

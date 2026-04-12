@@ -210,6 +210,111 @@ Every 5 sessions in the same wing:
 2. Move raw session details to `archive/{topic}/{year}/sessions.md`
 3. Keep only closet + last 2 sessions in active wing
 
+## 🤖 Auto-Consolidation
+
+Automatically consolidates the palace after N sessions — no manual trigger needed.
+Inspired by Anthropic Auto-Dream. Default: **auto**. Can be set to manual per project.
+
+### Consolidation Mode
+
+Set in `state.md` (optional — omit = auto):
+
+```markdown
+Consolidation_Mode: auto      ← default, runs automatically
+Consolidation_Mode: manual    ← user must say "consolidate" or "dream"
+```
+
+### Trigger Conditions (auto mode)
+
+Run consolidation when ANY of these are true after a session save:
+
+```
+sessions_since_consolidation >= 5    (default threshold)
+days_since_consolidation >= 7
+state.md approaching 90 lines        (pre-emptive cleanup)
+```
+
+Track in `state.md`:
+
+```markdown
+Consolidation_Stats:
+  last_consolidation: YYYY-MM-DD
+  sessions_since: N
+  mode: auto
+```
+
+### Consolidation Steps
+
+Run silently after session save. Show only final summary.
+
+**Step 1 — Deduplication**
+- Scan all rooms in active wings
+- Find entries with same subject/predicate (temporal triples)
+- Merge: keep highest-confidence version, sum counts
+- Soft-delete duplicates: mark `still_relevant: false`, keep for audit
+
+**Step 2 — Stale Detection**
+- Flag rooms not accessed in >30 days with no open threads
+- Flag raw files older than 90 days → suggest archiving
+- Do NOT auto-delete — flag only, human decides
+
+**Step 3 — Date Normalization**
+- Scan for relative dates ("last week", "recently", "yesterday")
+- Resolve to absolute dates using `created_at` or session date
+- Update in-place
+
+**Step 4 — Contradiction Check**
+- Find active triples with same subject/predicate but different object
+- Flag pairs: add `⚠️ CONFLICT with {other_id}` note
+- Do NOT auto-resolve — flag for human review
+
+**Step 5 — Closet Compression**
+- Any room >80 lines without a closet → create closet (AAAK)
+- Any closet >60 lines → re-compress
+
+**Step 6 — State Cleanup**
+- Remove [x] Open Threads older than 2 sprints
+- Archive Recent Sessions rows if >10
+- Update `Consolidation_Stats` in state.md
+
+**Step 7 — Summary to User**
+
+```
+🔄 Auto-Consolidation complete:
+  Duplicates merged: N
+  Stale items flagged: N (review needed)
+  Dates normalized: N
+  Conflicts flagged: N (⚠️ needs human review)
+  Closets compressed: N
+  State cleaned: N threads removed, N sessions archived
+```
+
+### Human Verify Step
+
+After auto-consolidation, user should:
+1. Check flagged conflicts (`⚠️ CONFLICT`) — resolve or dismiss
+2. Check stale flags — archive or keep
+3. Confirm consolidation looks correct
+
+User can say "looks good" to confirm, or "revert consolidation" to undo.
+
+### Manual Trigger
+
+User says any of:
+- "consolidate memory"
+- "dream" / "auto-dream"
+- "clean up palace"
+- "compress memory"
+
+→ Run all 7 steps immediately regardless of session count.
+
+### What Auto-Consolidation Does NOT Touch
+
+- ❌ Human-curated rooms with `auto_captured: false` — never auto-stale
+- ❌ Rooms with active open threads — never flag as stale
+- ❌ Raw files referenced in open threads — never suggest archiving
+- ❌ Contradictions — flag only, never auto-resolve
+
 ## 📦 Raw Verbatim Storage
 
 **Read order:** closet → room → raw (only when exact reasoning needed)
