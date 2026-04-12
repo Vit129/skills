@@ -46,12 +46,26 @@ Adapt to project type — use only categories that apply:
 
 | Category | Traditional (REST + SQL) | Serverless | Spreadsheet-backed | Frontend-only |
 |----------|------------------------|------------|-------------------|---------------|
-| Data Storage | DB schema migrations | NoSQL collections | Spreadsheet tab structure | LocalStorage schema |
-| Server Logic | DTOs, Repository, Service, Controller | Function triggers, handlers | GAS doGet/doPost | N/A (skip) |
+| Infrastructure | DB schema migrations, message broker config, outbox table | NoSQL collections, function config | Spreadsheet tab structure | LocalStorage schema |
+| Data Storage | DTOs, Repository | NoSQL collections | GAS doGet/doPost | N/A (skip) |
+| Server Logic | Service, Controller | Function triggers, handlers | GAS doGet/doPost | N/A (skip) |
 | Client Application | Components, Pages, State, API integration | Same | Same + LocalStorage sync | Components, Pages, State |
 | Integration | E2E wiring, run test scripts | Same | Same | Same |
 
-Sequence: Data Storage → Server Logic → Client Application → Integration
+Sequence: **Infrastructure → Data Storage → Server Logic → Client Application → Integration**
+
+### Infrastructure Tasks (MANDATORY — list before Data Storage)
+
+Infrastructure tasks ต้องมาก่อนเสมอ เพราะ Server Logic depend on it:
+
+```markdown
+## Infrastructure
+- [ ] DB schema migration — {table names}
+- [ ] Message broker config — {Kafka topic / RabbitMQ queue} (ถ้ามี async events)
+- [ ] Outbox table — {event types} (ถ้าใช้ Outbox Pattern)
+- [ ] Environment config (.env) — {new env vars}
+- [ ] External service credentials — {API keys, endpoints}
+```
 
 ## Rules
 
@@ -59,6 +73,26 @@ Sequence: Data Storage → Server Logic → Client Application → Integration
 - Every component from logical design MUST have a corresponding task
 - Include tasks to run test scripts after each component
 - Skip categories that don't apply (e.g., no Server Logic for frontend-only)
+
+## Task Rollback Protocol
+
+เมื่อ task ที่ทำเสร็จแล้วทำให้ test fail หรือ dependent tasks พัง:
+
+| สถานการณ์ | Action |
+|----------|--------|
+| Task fail (test ไม่ผ่าน) | Mark task ❌, note root cause, fix before proceeding |
+| Dependent task พัง (task B พังเพราะ task A) | Re-sequence: fix task A ก่อน, re-run task B |
+| Architecture assumption ผิด | Escalate to architect → re-design → re-plan affected tasks |
+| Multiple tasks พังพร้อมกัน | Stop, assess scope, create new decision file |
+
+**Rollback steps:**
+1. Mark failed task as ❌ ใน dev-task-progress.md
+2. Note root cause: `Root cause: [อธิบาย]`
+3. ถ้า fix ง่าย → fix in-place, re-run test, mark ✅
+4. ถ้า fix กระทบ tasks อื่น → list affected tasks, re-sequence
+5. ถ้า fix กระทบ architecture → escalate ก่อน fix
+
+> ⚠️ ห้าม mark task ✅ ถ้า test ยังไม่ผ่าน — completion = test GREEN
 
 ## Progress Checklist Template
 

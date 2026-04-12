@@ -942,6 +942,53 @@ await expect.poll(async () => {
 }).toBe('COMPLETED');
 ```
 
+#### Issue 3: Concurrent Request Testing (Race Conditions)
+
+**Problem:** ต้องการ test ว่าระบบจัดการ concurrent requests ได้ถูกต้อง เช่น 2 users จอง seat เดียวกันพร้อมกัน
+
+**✅ Solution: Promise.all() Pattern**
+
+```typescript
+test('[TC-007] Race condition — จองที่นั่งเดียวกัน 2 requests พร้อมกัน', async ({ request }) => {
+  // Arrange
+  await dbService.seed({ seatId: 'SEAT-001', status: 'Available' }, 'TC-007')
+
+  // Act — fire 2 requests simultaneously
+  const [res1, res2] = await Promise.all([
+    apiService.book(request, { seatId: 'SEAT-001' }),
+    apiService.book(request, { seatId: 'SEAT-001' }),
+  ])
+
+  // Assert — exactly 1 success, 1 conflict
+  const statuses = [res1.status(), res2.status()].sort()
+  expect(statuses).toEqual([200, 409])
+
+  // Cleanup
+  await dbService.cleanup('TC-007')
+})
+```
+
+**กฎ Concurrent Testing:**
+- ใช้ `Promise.all()` เสมอ — ไม่ใช่ sequential calls
+- Sort statuses ก่อน assert — เพราะไม่รู้ว่า request ไหนจะ win
+- ต้องมี DB isolation level ที่ถูกต้อง (SERIALIZABLE) ไม่งั้น test ผ่านแต่ production พัง
+- Seed data ใน beforeEach ไม่ใช่ beforeAll — เพื่อให้แต่ละ test เริ่มจาก clean state
+
+**N concurrent requests:**
+```typescript
+// Test N requests simultaneously
+const N = 5
+const requests = Array.from({ length: N }, () =>
+  apiService.deduct(request, { productId: 'P001', quantity: 1 })
+)
+const responses = await Promise.all(requests)
+const statuses = responses.map(r => r.status()).sort()
+
+// Only 1 should succeed (stock = 1)
+expect(statuses.filter(s => s === 200)).toHaveLength(1)
+expect(statuses.filter(s => s === 409)).toHaveLength(N - 1)
+```
+
 ---
 
 ## PART 6: Advanced Contract Testing (Gems)

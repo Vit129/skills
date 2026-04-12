@@ -62,9 +62,25 @@ Before writing fixture data, classify every data field:
 | Classification | Location | Examples |
 |---|---|---|
 | Sensitive → `.env` | `process.env.X` | credentials, tokens, passwords, login emails, API keys |
+| Encrypted → fixture (plain text) | hardcoded plain text | PDPA fields, health data, PII — DbService handles encrypt/decrypt |
 | Non-sensitive → fixture file | hardcoded in `.ts`/`.yaml` | companyCode, customerCode, productCode, invoiceNumber |
 
 Rule: `process.env.X` in fixture is allowed ONLY for sensitive fields. Business data MUST be hardcoded in fixture file.
+
+**Encrypted Fields Category:**
+
+Fields ที่ encrypt ใน DB (เช่น PDPA, health data) ต้องระบุแยกออกมา:
+
+| Field | DB Storage | Test Fixture | DB Service |
+|-------|-----------|-------------|-----------|
+| patient_name | encrypted (AES-256) | plain text | DbService encrypt ก่อน insert, decrypt หลัง verify |
+| health_passport | encrypted (FHIR R4) | plain text | DbService encrypt ก่อน insert, decrypt หลัง verify |
+| credit_card | encrypted (PCI-DSS) | masked (`****1234`) | ห้าม store plain text ใน fixture |
+
+**กฎ Encrypted Fields:**
+- Fixture เก็บ plain text — DbService รับผิดชอบ encrypt/decrypt
+- ห้าม hardcode encrypted value ใน fixture (อ่านไม่รู้เรื่อง, maintain ยาก)
+- ถ้า field เป็น PCI-DSS → ใช้ masked value เท่านั้น ห้าม plain text
 
 Output in task progress file:
 ```markdown
@@ -73,11 +89,47 @@ Output in task progress file:
 |-------|-------|----------|---------|
 | TEST_USER_EMAIL | process.env | .env | sensitive: login credential |
 | ACCESS_TOKEN | process.env | .env | sensitive: auth token |
+| patient_name | 'John Doe' | fixture.ts | encrypted field — DbService handles encryption |
 | companyCode | '1002' | fixture.ts | non-sensitive: business data |
 | customerCode | '000XXXX' | fixture.ts | non-sensitive: business data |
 ```
 
-4. For each feature/test suite, decompose into categories below
+4. **Define Mock Strategy** (before creating mock/interceptor tasks):
+
+### Mock Strategy (MANDATORY for external dependencies)
+
+ก่อนสร้าง mock/interceptor tasks ต้องระบุ behavior สำหรับแต่ละ dependency:
+
+| Dependency | Mock Type | Success Response | Edge Case Behavior |
+|-----------|----------|-----------------|-------------------|
+| External API | `page.route()` interceptor | return fixture JSON | slow (>5s) → return cached + warning |
+| Third-party service | mock service class | return stub data | unavailable → fallback to fixture |
+| DB (brownfield) | real DB + TEST_ prefix | real data | conflict → skip with warning |
+
+**Edge Case Mock Rules (MANDATORY):**
+
+ต้องระบุ mock behavior สำหรับ edge cases ก่อนเขียน test scripts:
+
+```markdown
+### Mock Strategy
+| Dependency | Edge Case | Mock Behavior | Expected Result |
+|-----------|----------|--------------|----------------|
+| Visa Check API | ตอบช้า >5s | return cached result | show warning banner |
+| Flight Search | leg 2 ไม่มีเที่ยวบิน | return empty array | show alternative ±3 วัน |
+| Payment Gateway | timeout | return 408 | show retry button |
+```
+
+**Security Mock Strategy:**
+
+เมื่อ feature มี security layer (encryption, auth):
+
+| Scenario | Mock Approach | เมื่อไหร่ใช้ |
+|---------|--------------|------------|
+| Encryption validation | ใช้ real encryption library ใน test env | เมื่อต้องการ validate ว่า encrypt/decrypt ถูกต้อง |
+| Encryption bypass | mock response เฉยๆ (ไม่ encrypt จริง) | เมื่อ test business logic ไม่ใช่ security layer |
+| Auth token | real token จาก login flow | เสมอ — ห้าม mock auth token |
+| API key | process.env | เสมอ — ห้าม hardcode |
+
 5. Sequence by dependency order
 6. Estimate complexity per task
 

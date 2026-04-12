@@ -39,3 +39,46 @@ Generate database config and service classes for Playwright test data management
 - ❌ Static import from `pg`
 - ❌ Missing `testId` parameter in write methods
 - ❌ Logging sensitive data
+
+## Brownfield DB Strategy
+
+เมื่อ project มี existing DB ที่มี production data อยู่แล้ว:
+
+### ปัญหา
+- seed data ใหม่อาจ conflict กับ existing records (duplicate key, FK violation)
+- cleanup ผิดพลาดอาจลบ production data
+
+### กฎ Brownfield
+
+1. **Prefix ทุก test record** — ใช้ `TEST_` หรือ `AUTO_` นำหน้า identifier
+   ```sql
+   INSERT INTO users (email) VALUES ('TEST_john@example.com')
+   ```
+
+2. **Cleanup by testId เท่านั้น** — ห้าม cleanup by feature name หรือ date
+   ```sql
+   DELETE FROM users WHERE test_id = $1  -- ✅
+   DELETE FROM users WHERE created_at > $1  -- ❌ อันตราย
+   ```
+
+3. **Check before insert** — ใช้ `WHERE NOT EXISTS` ป้องกัน duplicate
+   ```sql
+   INSERT INTO users (email, test_id)
+   SELECT $1, $2
+   WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = $1)
+   ```
+
+4. **Seed ใน transaction** — rollback ทั้งหมดถ้า seed ล้มเหลว
+   ```typescript
+   await db.transaction(async (trx) => {
+     await trx('users').insert({ email: 'TEST_user@test.com', test_id: testId })
+     await trx('profiles').insert({ user_id: userId, test_id: testId })
+   })
+   ```
+
+5. **Verify ก่อน cleanup** — ตรวจว่า record มี test_id ก่อนลบ
+   ```typescript
+   const record = await db('users').where({ id, test_id: testId }).first()
+   if (!record) throw new Error(`Record ${id} not owned by test ${testId}`)
+   await db('users').where({ id, test_id: testId }).delete()
+   ```

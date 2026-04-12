@@ -813,6 +813,68 @@ await page.getByTestId('flight-result-item-FL001')
 | XPath (`//div/span`) | `getByTestId`, `getByRole` |
 | `getByRole({ name: 'Thai text' })` on translatable elements | `getByTestId` |
 
+### WebSocket Testing Pattern
+
+**ห้ามใช้ `waitForTimeout()` สำหรับ WebSocket** — ใช้ event-based waiting แทน:
+
+```typescript
+// ❌ WRONG — waitForTimeout
+await page.goto('/triage/queue')
+await page.waitForTimeout(12000) // ห้ามใช้!
+
+// ✅ CORRECT — รอ N events ด้วย Promise
+test('[TC-005] WebSocket queue update ทุก 5 วินาที', async ({ page }) => {
+  // Arrange — collect WebSocket frames
+  const updates: any[] = []
+  const waitForNUpdates = (n: number) =>
+    new Promise<void>(resolve => {
+      page.on('websocket', ws => {
+        ws.on('framereceived', frame => {
+          updates.push(JSON.parse(frame.payload as string))
+          if (updates.length >= n) resolve()
+        })
+      })
+    })
+
+  // Act
+  await page.goto('/triage/queue')
+  await waitForNUpdates(2) // รอจนได้ 2 updates
+
+  // Assert
+  expect(updates.length).toBeGreaterThanOrEqual(2)
+  updates.forEach(u => expect(u.type).toBe('QUEUE_UPDATE'))
+})
+```
+
+**Pattern: รอ WebSocket event เดียว**
+```typescript
+// รอ WebSocket connection เปิด
+const wsPromise = page.waitForEvent('websocket')
+await page.goto('/realtime-page')
+const ws = await wsPromise
+
+// รอ frame แรก
+const framePromise = ws.waitForEvent('framereceived')
+const frame = await framePromise
+expect(JSON.parse(frame.payload as string)).toHaveProperty('type')
+```
+
+**Pattern: รอ WebSocket message ที่ match condition**
+```typescript
+// รอจนได้ message ที่ต้องการ
+const getNextMatchingFrame = (ws: WebSocket, predicate: (data: any) => boolean) =>
+  new Promise<any>(resolve => {
+    ws.on('framereceived', frame => {
+      const data = JSON.parse(frame.payload as string)
+      if (predicate(data)) resolve(data)
+    })
+  })
+
+const ws = await page.waitForEvent('websocket')
+const update = await getNextMatchingFrame(ws, d => d.type === 'QUEUE_UPDATE')
+expect(update.patients).toBeDefined()
+```
+
 ---
 
 ## PART 6: Interactions & Assertions

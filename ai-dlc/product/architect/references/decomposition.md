@@ -57,3 +57,52 @@ Relationships:
 - Business capabilities first, technology choices later
 - No tech details in this phase — no databases, no frameworks
 - Every user story must belong to exactly one context
+
+## Integration Pattern Decision (MANDATORY for Microservices)
+
+เมื่อ architecture = Microservices และมี service-to-service communication ต้องตัดสินใจก่อนออกแบบ:
+
+### Decision: Sync vs Async
+
+| Pattern | เมื่อไหร่ใช้ | ตัวอย่าง |
+|---------|------------|---------|
+| **Synchronous (REST/gRPC)** | ต้องการ response ทันที, user รอผล | GET user profile, validate payment |
+| **Asynchronous (Event Bus)** | fire-and-forget, eventual consistency OK | send notification, update audit log |
+| **Async + Outbox Pattern** | async แต่ต้องการ guaranteed delivery | FlightDelayedEvent → Insurance claim |
+
+### Failure Handling (ถ้าเลือก Async)
+
+ต้องระบุ failure strategy ด้วย:
+- **Outbox Pattern** — store event ใน DB ก่อน, retry ทีหลัง (guaranteed delivery)
+- **Dead Letter Queue** — event ที่ fail ซ้ำ → ส่งไป DLQ สำหรับ manual review
+- **Idempotency** — consumer ต้อง handle duplicate events ได้
+
+### Output เพิ่มเติม (Microservices)
+
+```text
+Integration Patterns:
+- Context A → Context B: [sync REST | async event]
+  Event: [EventName] | Failure: [outbox | DLQ | retry]
+- Context B → Context C: [sync REST | async event]
+  Event: [EventName] | Failure: [outbox | DLQ | retry]
+```
+
+## Design-Domain Alignment Check (MANDATORY เมื่อมี Phase 1.6)
+
+เมื่อ UX/UI design เสร็จแล้ว ก่อนไป Phase 1.4 Domain Design ต้องตรวจว่า screens map กับ bounded contexts ถูกต้อง:
+
+```text
+Design-Domain Alignment:
+| Screen (UX/UI) | Bounded Context | Status |
+|----------------|----------------|--------|
+| FlightSearchPage | Flight | ✅ aligned |
+| BookingConfirmPage | Flight + Payment | ✅ aligned |
+| HealthPassportPage | Identity | ✅ aligned |
+| [screen] | [context] | ⚠️ mismatch — [reason] |
+```
+
+**กฎ:**
+- ทุก screen ต้องมี bounded context รองรับ
+- ถ้า screen ข้าม 2+ contexts → ตรวจว่า context map ถูกต้อง
+- ถ้า context ไม่มี screen → อาจเป็น backend-only context (OK) หรือ missing screen (ถาม UX/UI)
+- Mismatch → resolve ก่อน proceed to Phase 1.4

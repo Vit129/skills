@@ -25,3 +25,17 @@ Build consistent, polished, and distinctive interfaces for any project.
 - Respect accessibility: contrast ratios, focus states, reduced motion
 
 Use this skill for design decisions. Use `frontend-dev` to implement in code.
+
+## Phase 0: Existing Design System Detection (MANDATORY)
+
+ก่อนเริ่มออกแบบ ต้องตรวจว่ามี design system อยู่แล้วหรือไม่:
+
+| สิ่งที่พบ | Action |
+|---------|--------|
+| Figma URL มีอยู่แล้ว | Analyze existing design system → extract tokens, components, patterns → extend ไม่ใช่สร้างใหม่ |
+| Design tokens file มีอยู่แล้ว (CSS vars, Tailwind config) | Import existing tokens → align ไม่ใช่ override |
+| Component library มีอยู่แล้ว (MUI, Ant Design, etc.) | Document existing components → extend ด้วย custom tokens |
+| ไม่มีอะไรเลย | สร้างใหม่ตาม design-system.md |
+
+**ถาม user ก่อนเสมอ:**
+> "มี design system หรือ Figma อยู่แล้วไหม? ถ้ามี ส่ง link หรือ file มาได้เลย"

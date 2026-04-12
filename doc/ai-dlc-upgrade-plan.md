@@ -1,10 +1,78 @@
 # AI-DLC Full Upgrade Plan
-# Knowledge Evolution Integration
+# Knowledge Evolution Integration + Claude Code Internals Insights
 
-วันที่: 2026-04-12 (revised)
+วันที่: 2026-04-12 (revised with leaked source insights)
 สถานะ: Ready to Execute — all tasks reset to TODO
 
-Reference: `system/knowledge-evolution/KNOWLEDGE_EVOLUTION_README.md`
+Reference:
+- `system/knowledge-evolution/KNOWLEDGE_EVOLUTION_README.md`
+- Claude Code leaked source (codeaashu/claude-code) — architecture, tool system, skill system, dream system
+- Claude Code best practices (shanraisshan/claude-code-best-practice) — tips, skill design, hook patterns
+
+---
+
+## Insights จาก Claude Code Source ที่นำมาใช้
+
+### จาก Leaked Source (Architecture + Internals)
+
+| Insight | มาจากไหน | นำมาใช้ยังไง |
+|---------|----------|-------------|
+| **Tool Definition Pattern** — ทุก tool มี inputSchema (Zod), checkPermissions, isConcurrencySafe, isReadOnly, prompt injection | `src/tools/<ToolName>/` | ปรับ SKILL.md ให้มี concurrency + isolation hints เพื่อบอก agent ว่า skill นี้ safe to run parallel หรือไม่ |
+| **Progressive Disclosure 3 ระดับ** — metadata (always) → SKILL.md body (on trigger) → references (on demand) | `src/skills/loadSkillsDir.ts` | ตรวจ SKILL.md ทุกตัวว่าทำ 3 ระดับถูกหรือยัง — ย้าย content หนักไป references/ |
+| **Dream System (Auto-Consolidation)** — Orient→Gather→Consolidate→Prune background loop | `src/services/autoDream/` | ใช้เป็น model สำหรับ memory-palace auto-consolidation hook (Phase D2) |
+| **Skill description = trigger condition** — Claude Code ใช้ description field ตัดสินว่าจะ fire skill หรือไม่ | `src/skills/` | ปรับ description ทุก SKILL.md ให้เป็น trigger-style |
+| **Context Fork** — skill รันใน isolated subagent, main context เห็นแค่ result | `src/skills/` | เพิ่ม `context: fork` hint ใน skills ที่ควร isolate |
+| **Parallel Prefetch** — fire side-effects ก่อน heavy module load | `src/main.tsx` startup | ปรับ session-start hook ให้ prefetch memory + knowledge index พร้อมกัน |
+| **Permission Wildcards** — `Bash(git *)`, `FileEdit(/src/*)` | `src/hooks/toolPermission/` | document ใน hook-creator skill เพื่อลด permission prompts |
+| **Bundled Skills** — simplify, verify, stuck, remember, skillify, debug, batch | `src/skills/bundled/` | document ใน SKILLS_README.md ว่ามี built-in skills อะไรบ้าง ไม่ต้องสร้างซ้ำ |
+
+### จาก Leaked Source — Deep Analysis (community breakdowns)
+
+Sources: [blakecrosley.com](https://blakecrosley.com/blog/claude-code-source-leak), [wiz.jock.pl](https://wiz.jock.pl/articles/claude-code-source-leak-what-to-learn-ai-agents-2026/), [skilldb.dev](https://skilldb.dev/blog/claude-code-leaked-what-500k-lines-teach-us-about-agent-skills), [wavespeed.ai](https://wavespeed.ai/blog/posts/claude-code-hidden-features-leaked-source-2026/), [digitalapplied.com](https://www.digitalapplied.com/blog/claude-code-leak-agentic-architecture-lessons-2026), [elliotarledge.com](https://elliotarledge.com/blog/claude-code-leak), [mindstudio.ai](https://www.mindstudio.ai/blog/claude-code-source-leak-three-layer-memory-architecture/)
+
+| Insight | นำมาใช้ยังไง | Phase |
+|---------|-------------|-------|
+| **3-Layer Memory: Permanent Index → Working Context → Skeptical Memory** — recalled facts เป็นแค่ hints ต้อง verify ก่อน act | ปรับ memory-palace session-start: load hall.md เป็น "hints" → verify กับ actual files ก่อนใช้ | 0.8 |
+| **autoDream trigger: 5+ sessions / 24h cooldown** — consolidation threshold จริงจาก source | ปรับ D2 hook: sessions_since ≥ 5 (ตรงกับ source) | D2 |
+| **Prompt Cache: 14 break vectors + sticky latches** — แก้ CLAUDE.md mid-session = cache หายตลอด session | เพิ่ม rule ใน CLAUDE.md: "ห้ามแก้ CLAUDE.md, rules, MCP config ระหว่าง session" | 0.9 |
+| **Autocompact Circuit Breaker (MAX=3)** — เคยเสีย 250K API calls/day | เพิ่ม Gotcha: ถ้า compaction failed ซ้ำ → switch model to 1M context แล้ว /compact | 0.2 |
+| **Coordinator Mode = prompts as architecture** — multi-agent ทำผ่าน system prompt ไม่ใช่ code | document ใน hook-creator: orchestration ทำผ่าน prompt instructions ได้ | 0.7 |
+| **Frustration Detection = regex, not LLM** — ถูกกว่า LLM inference มาก | ใช้ regex-based checks ใน runCommand hooks แทน askAgent เมื่อ logic ง่าย → ประหยัด tokens | 0.7 |
+| **Modular System Prompt: stable top, dynamic bottom** — cache-aware boundaries | ปรับ CLAUDE.md structure: standards/rules อยู่บน, test mapping อยู่ล่าง | 0.5 |
+| **KAIROS: 15-second blocking budget** — proactive actions ต้องไม่ block นาน | เพิ่มใน hook prompts: "respond within 15 seconds, skip if analysis takes longer" | 0.7 |
+| **KAIROS: append-only daily logs** — immutable audit trail | memory-palace raw/ folder ใช้ append-only pattern เหมือน KAIROS | 0.8 |
+| **Hook Fork Bomb Prevention** — SessionStart hook spawn process → exponential growth | เพิ่ม Gotcha ใน hook-creator: "hooks ที่ spawn processes ต้องมี guard variable" | 0.2 |
+| **Verification Agent (VERIFICATION_AGENT flag)** — independent adversarial verification | เพิ่ม hook template: verify-on-stop ที่ทำ adversarial review | 0.7 |
+| **TOKEN_BUDGET flag** — explicit token budget targeting ("+500k", "spend 2M tokens") | ใช้แนวคิดนี้กับ tier selection strategy ใน CLAUDE.md/KIRO.md | awareness |
+| **Anti-Distillation: fake tool injection** — ป้องกัน training data extraction | awareness only — รู้ไว้ว่า Claude Code มี defense layer นี้ | — |
+
+### จาก Leaked Source — Prompt & Context Patterns (shloked.com, interviewbrowser.com, sfeir.com)
+
+| Insight | นำมาใช้ยังไง | Phase |
+|---------|-------------|-------|
+| **System Prompt = Template Engine** — ไม่ใช่ static doc แต่เป็น compilation ของ sections ที่ conditionally included ตาม ~20 boolean switches | ปรับ CLAUDE.md/KIRO.md: แยกเป็น sections ที่ include/exclude ตาม context (เช่น Playwright section include เฉพาะเมื่อมี test files) | 0.5 |
+| **System Reminders (`<system-reminder>`)** — re-inject instructions ที่อยู่ไกลใน context กลับมาตรง tool results | ปรับ hook prompts: ใส่ key rules ซ้ำใน askAgent prompts เพื่อ reinforce instructions ที่อาจหายไปใน long context | 0.10 |
+| **Compression: preserve ALL user messages** — user messages = source of truth, ไม่เคยถูก summarize ออก | ปรับ memory-palace: เมื่อ compress room → closet, preserve user decisions/corrections verbatim | 0.8 |
+| **Analysis Scratchpad Pattern** — `<analysis>` → `<summary>` → strip analysis | ปรับ knowledge-evolution: เมื่อ auto-capture lesson จาก failure, ใช้ analysis→summary→strip pattern | B2 |
+| **Memory Staleness Annotation** — "this memory was written N days ago" | ปรับ memory-palace hall.md: เพิ่ม `@last_updated: YYYY-MM-DD` ต่อท้ายทุก entry, agent ใช้ตัดสินว่า stale หรือไม่ | 0.8 |
+| **Fork = context-aware delegation** — "fork yourself when intermediate output isn't worth keeping" | ปรับ skill isolation hints: skills ที่ produce heavy intermediate output ควร fork | 0.4 |
+| **Output Medium Awareness** — บอก model ว่า output ไปที่ไหน (terminal, IDE, PDF) | เพิ่มใน KIRO.md: "Output renders in Kiro IDE chat panel with markdown support" | 0.5 |
+| **7-Layer Context Defense** — Tool Result Budget → Snip → Microcompact → Collapse → Auto-Compact → Block → Reactive | awareness: เข้าใจว่า Claude Code จัดการ context overflow ยังไง — ไม่ต้องทำเอง แต่รู้ไว้เพื่อ debug | — |
+| **autoDream 4 phases: Orient→Gather→Consolidate→Prune** + MEMORY.md ≤200 lines + lock file ป้องกัน concurrent | ปรับ D2 hook: เพิ่ม lock check + 200-line limit สำหรับ state.md | D2 |
+| **autoDream: relative dates → absolute dates** — "yesterday" → "2026-03-24" | เพิ่มใน memory-palace consolidation: normalize relative dates เป็น absolute | 0.8 |
+
+### จาก Best Practice Guide (shanraisshan)
+
+| Insight | มาจากไหน | นำมาใช้ยังไง |
+|---------|----------|-------------|
+| **Gotchas section** — highest-signal content, บันทึก failure points | Tips: Skills §4 | เพิ่ม `## Gotchas` ใน SKILL.md ทุกตัวที่เคยมีปัญหา |
+| **CLAUDE.md < 200 บรรทัด** | Tips: CLAUDE.md §1 | split CLAUDE.md ออกเป็น `.claude/rules/` files |
+| **Description = trigger, not summary** | Tips: Skills §5 | rewrite descriptions ที่ยังเป็น summary |
+| **Don't railroad — goals + constraints, not step-by-step** | Tips: Skills §7 | review SKILL.md body ที่ prescriptive เกินไป |
+| **`!command` injection** — embed shell output ใน SKILL.md | Tips: Skills §9 | ใช้กับ finance skills (inject current date, portfolio path) |
+| **PostToolUse hook for auto-format** | Tips: Hooks §3 | เพิ่ม format hook template |
+| **Stop hook to verify work** | Tips: Hooks §5 | เพิ่ม verification hook template |
+| **Measure skill usage with PreToolUse hook** | Tips: Hooks §2 | เพิ่ม skill-usage-tracker hook template |
 
 ---
 
@@ -13,6 +81,240 @@ Reference: `system/knowledge-evolution/KNOWLEDGE_EVOLUTION_README.md`
 All index files are at original state — no utility/effectiveness fields exist yet.
 All workflow files are unmodified.
 memory-palace scaling-protocol now has Auto-Consolidation section ✅
+
+---
+
+## Phase 0 (NEW) — Skill Quality: ปรับ SKILL.md ตาม Claude Code Internals
+**Goal:** ปรับ skill files ให้ตรงกับวิธีที่ Claude Code จริงๆ ใช้ skills — trigger ดีขึ้น, โครงสร้างดีขึ้น
+**ไม่กระทบ Phase A-D เดิม ทำก่อนหรือคู่กันได้**
+
+### 0.1 Rewrite SKILL.md descriptions เป็น trigger-style ❌ TODO
+
+**ทำไม:** จาก source, Claude Code ใช้ `description` field ตัดสินว่าจะ fire skill หรือไม่
+จาก best practice: "description is a trigger, not a summary — write it for the model"
+
+**ปรับ SKILL.md เหล่านี้:**
+
+| Skill | ปัญหาปัจจุบัน | ปรับเป็น |
+|-------|-------------|---------|
+| `ai-dlc/SKILL.md` | description เป็น summary ("Root skill for...") | เพิ่ม trigger phrases: "when starting any AI-DLC task", "resolve skill paths", "which skill should I use" |
+| `system/memory-palace/SKILL.md` | description เป็น summary ("Organizes project knowledge...") | เพิ่ม: "save memory", "load context", "compress room", "archive wing", "session start", "session end" |
+| `system/analysis-concept/SKILL.md` | ดีอยู่แล้ว — มี trigger phrases | ✅ ไม่ต้องปรับ |
+| `system/ai-techniques/SKILL.md` | ดีอยู่แล้ว — มี trigger phrases | ✅ ไม่ต้องปรับ |
+| `system/skill-creator/SKILL.md` | ดีอยู่แล้ว | ✅ ไม่ต้องปรับ |
+| `system/hook-creator/SKILL.md` | ดีอยู่แล้ว — มี Thai + English triggers | ✅ ไม่ต้องปรับ |
+| `system/knowledge-evolution/SKILL.md` | ดีอยู่แล้ว — มี trigger phrases ครบ | ✅ ไม่ต้องปรับ |
+
+**วิธีเขียน description ที่ดี (จาก Claude Code source + best practice):**
+```yaml
+description: >
+  This skill should be used when the user asks to "phrase 1", "phrase 2",
+  "phrase 3", or needs [what it provides].
+```
+- ใช้ third-person: "This skill should be used when..."
+- ใส่ phrases ที่ user จะพิมพ์จริงๆ
+- lean slightly "pushy" — Claude tends to under-trigger
+
+### 0.2 เพิ่ม Gotchas section ใน SKILL.md สำคัญ ❌ TODO
+
+**ทำไม:** จาก best practice: "build a Gotchas section in every skill — highest-signal content, add Claude's failure points over time"
+
+**เพิ่มใน SKILL.md เหล่านี้ (เฉพาะตัวที่เคยมีปัญหาจริง):**
+
+```markdown
+## ⚠️ Gotchas
+
+- [failure point ที่เคยเจอ — เพิ่มทีละข้อจากประสบการณ์จริง]
+```
+
+Skills ที่ควรมี Gotchas:
+- `ai-dlc/qa/playwright-testing/SKILL.md` — เคยมีปัญหา waitForTimeout, selector ผิด
+- `ai-dlc/qa/playwright-rules/SKILL.md` — เคยมีปัญหา Gemini ไม่ follow rules
+- `ai-dlc/core/aidlc/SKILL.md` — เคยมีปัญหา phase skip
+- `system/memory-palace/SKILL.md` — เคยมีปัญหา room >80 lines ไม่ compress
+- `ai-dlc/dev/frontend-dev/SKILL.md` — เคยมีปัญหา Gemini introduce bugs
+
+**กฎ:** เริ่มจาก section ว่าง แล้วเพิ่มทีละข้อจากประสบการณ์จริง — ไม่ต้องเดา
+
+### 0.3 ตรวจ Progressive Disclosure — ย้าย content หนักไป references/ ❌ TODO
+
+**ทำไม:** จาก Claude Code source, skill system ทำ 3 ระดับ:
+1. **Metadata** (name + description) — always in context (~100 words)
+2. **SKILL.md body** — loaded when skill triggers (<500 lines ideal, <2000 words)
+3. **references/** — loaded on demand (unlimited)
+
+**ตรวจ SKILL.md ที่อาจยาวเกินไป:**
+- ถ้า SKILL.md body > 2,000 words → ย้าย detailed content ไป references/
+- ถ้า references/ file > 300 lines → เพิ่ม table of contents
+
+### 0.4 เพิ่ม concurrency + isolation hints ❌ TODO
+
+**ทำไม:** จาก Claude Code source, ทุก tool ประกาศ `isConcurrencySafe()` และ `isReadOnly()`
+Skills ก็ควรบอก agent ว่า safe to run parallel หรือไม่
+
+**เพิ่มใน SKILL.md frontmatter (optional field):**
+```yaml
+---
+name: skill-name
+description: >
+  ...trigger phrases...
+concurrency: safe          # safe | unsafe (default: unsafe)
+isolation: shared           # shared | fork (default: shared)
+---
+```
+
+Skills ที่ควรเป็น `concurrency: safe` (read-only, ไม่ write files):
+- `system/analysis-concept` — read + think only
+- `system/ai-techniques` — read + think only
+- `ai-dlc/core/analysis-skills` — read + analyze only
+
+Skills ที่ควรเป็น `isolation: fork` (heavy, ไม่ควรเห็น intermediate steps):
+- `ai-dlc/qa/playwright-testing` — รัน tests, output เยอะ
+- `ai-dlc/qa/robotframework-testing` — รัน tests, output เยอะ
+- `ai-dlc/qa/postman` — migration workflow ยาว
+
+### 0.5 Split CLAUDE.md ให้สั้นลง ❌ TODO
+
+**ทำไม:** จาก best practice: "CLAUDE.md should target under 200 lines per file"
+ปัจจุบัน CLAUDE.md ~250+ บรรทัด
+
+**แผน:**
+1. ย้าย "Test Coverage Rules" (§7) → `.claude/rules/test-coverage.md`
+2. ย้าย "Playwright Skills" (§6) → `.claude/rules/playwright-standards.md`
+3. ย้าย "Claude Code Optimization Tips" (§8) → `.claude/rules/optimization.md`
+4. เหลือ CLAUDE.md เฉพาะ: Agent Selection (§1-2), Workflow (§3), Token Control (§4), Engineering Standards (§5)
+
+### 0.6 Document Built-in Skills ใน SKILLS_README.md ❌ TODO
+
+**ทำไม:** จาก Claude Code source มี bundled skills 16 ตัว — หลายตัวทำสิ่งที่ไม่ต้องสร้าง custom skill
+
+**เพิ่ม section ใน SKILLS_README.md:**
+```markdown
+## 5. Built-in Skills (Claude Code)
+
+Skills ที่มาพร้อม Claude Code — ไม่ต้องสร้างเอง:
+
+| Skill | ใช้เมื่อ | เทียบกับ custom skill |
+|-------|---------|---------------------|
+| `/simplify` | refactor code ให้ clean | — |
+| `/verify` | ตรวจ correctness | เสริม qa-architect |
+| `/stuck` | ติดปัญหา ไม่รู้จะทำยังไง | — |
+| `/remember` | persist ข้อมูลลง memory | เสริม memory-palace |
+| `/skillify` | สร้าง skill ใหม่จาก workflow | เสริม skill-creator |
+| `/debug` | debugging workflow | — |
+| `/batch` | batch operations across files | — |
+```
+
+### 0.7 เพิ่ม Hook Templates ใหม่ (จาก best practice + deep analysis) ❌ TODO
+
+**ทำไม:** จาก best practice + leaked source มี hook patterns ที่ยังไม่มีใน templates/
+
+**เพิ่มใน `system/hook-creator/templates/kiro/`:**
+
+| Hook | File | Purpose | Source |
+|------|------|---------|--------|
+| auto-format after write | `auto-format-on-write.kiro.hook` | PostToolUse(write) → run formatter | best practice |
+| verify work on stop | `verify-on-stop.kiro.hook` | agentStop → adversarial review ก่อนจบ session | VERIFICATION_AGENT flag |
+| skill usage tracker | `skill-usage-tracker.kiro.hook` | PreToolUse → log which skills fire | best practice |
+
+**เพิ่ม Gotcha ใน hook-creator SKILL.md:**
+- "hooks ที่ spawn processes ต้องมี guard variable ป้องกัน fork bomb" (จาก community incident — SessionStart hook ที่ spawn 2 instances → exponential growth)
+
+### 0.8 ปรับ Memory Palace: Skeptical Memory + Append-Only Logs ❌ TODO
+
+**ทำไม:** จาก leaked source, Claude Code ใช้ "skeptical memory" — recalled facts เป็นแค่ hints ต้อง verify ก่อน act
+และ KAIROS ใช้ append-only daily logs เป็น immutable audit trail
+
+**ปรับใน `system/memory-palace/SKILL.md` หรือ `references/scaling-protocol.md`:**
+
+```markdown
+## Skeptical Memory (จาก Claude Code 3-Layer Memory)
+
+On session start when loading hall.md / closets:
+- Treat loaded content as **hints**, not **facts**
+- Before acting on recalled information:
+  1. Verify against actual files (grep/glob)
+  2. If file changed since last session → update memory, use current file
+  3. If file matches memory → proceed with confidence
+- Log: "🔍 Verified: {fact} — still accurate" or "⚠️ Stale: {fact} — updated from source"
+
+## Append-Only Raw Logs (จาก KAIROS daily logs)
+
+raw/ folder ใช้ append-only pattern:
+- ไม่แก้ไข raw files ที่สร้างแล้ว
+- เพิ่มได้อย่างเดียว (append new entries)
+- ใช้ format: YYYY-MM-DD-{desc}.md
+- Consolidation อ่านจาก raw → สรุปเข้า rooms → ไม่ลบ raw
+```
+
+### 0.9 เพิ่ม Prompt Cache Rules ใน CLAUDE.md ❌ TODO
+
+**ทำไม:** จาก leaked source, prompt cache มี 14 break vectors + sticky latches
+เปลี่ยน CLAUDE.md mid-session = cache หายตลอด session ไม่กลับมา
+
+**เพิ่มใน CLAUDE.md §4 (Token Cost Control):**
+
+```markdown
+### Prompt Cache Protection
+
+- ห้ามแก้ CLAUDE.md, .claude/rules/, MCP config ระหว่าง session
+- ตั้งค่าทุกอย่างก่อนเริ่ม session — แก้ระหว่างทาง = cache หายถาวร
+- ถ้าต้องแก้จริงๆ → /clear แล้วเริ่ม session ใหม่
+- CLAUDE.md structure: stable content (standards, rules) อยู่บน, dynamic content (test mapping) อยู่ล่าง
+```
+
+**ปรับ CLAUDE.md structure ตาม cache-aware boundaries:**
+- ส่วนบน (cached): Agent Selection, Engineering Standards, Token Control
+- ส่วนล่าง (dynamic): Test Mapping, Playwright Skills (เปลี่ยนบ่อยกว่า)
+
+### 0.10 เพิ่ม LLM-Friendly Comments Standard ใน Dev Skills ❌ TODO
+
+**ทำไม:** จาก leaked source, Anthropic เขียน code comments สำหรับ AI agents อ่าน ไม่ใช่แค่คน
+ผลลัพธ์: AI แก้โค้ดได้ถูกต้องกว่าเพราะเข้าใจ intent ของแต่ละ function
+
+**ปรับใน `ai-dlc/dev/frontend-dev/SKILL.md` และ `ai-dlc/dev/backend-dev/SKILL.md`:**
+
+```markdown
+## LLM-Friendly Code Comments (จาก Claude Code Internals)
+
+เขียน comments ที่ AI agents อ่านแล้วเข้าใจ intent — ไม่ใช่แค่คนอ่าน:
+
+❌ แบบเดิม (สำหรับคนอ่าน):
+// validate input
+
+✅ แบบใหม่ (สำหรับ AI + คน):
+// Validates user input against business rules before saving to DB.
+// If validation fails, returns structured error with field-level messages.
+// Called by: handleSubmit() in FormComponent.
+
+หลักการ:
+- บอก **what** + **why** + **who calls** — ไม่ใช่แค่ what
+- ใส่ context ที่ AI ต้องรู้เพื่อแก้โค้ดได้ถูก (dependencies, side effects, constraints)
+- Function signatures: เพิ่ม JSDoc/TSDoc ที่อธิบาย params + return + throws
+- Complex logic: เพิ่ม comment block ก่อน section อธิบาย business rule
+```
+
+**เพิ่มใน `ai-dlc/qa/playwright-rules/` ด้วย:**
+- Test files: comment อธิบาย test intent + preconditions ที่ AI ต้องรู้เพื่อ maintain tests
+
+### 0.11 ปรับ Hook Prompts: Time Budget + Regex-First ❌ TODO
+
+**ทำไม:** จาก leaked source:
+- KAIROS มี 15-second blocking budget — proactive actions ต้องไม่ block developer นาน
+- Frustration detection ใช้ regex ไม่ใช่ LLM — ถูกกว่ามาก
+
+**ปรับ hook prompts ที่ใช้ askAgent:**
+- เพิ่ม: "Complete analysis within 15 seconds. If analysis requires more time, skip and report 'skipped — too complex for inline check'"
+- Document ใน hook-creator: "ใช้ runCommand + regex สำหรับ checks ง่ายๆ (file exists, pattern match) แทน askAgent → ประหยัด tokens"
+
+**ตัวอย่าง: เปลี่ยน askAgent → runCommand เมื่อ logic ง่าย:**
+```json
+// ❌ แพง: askAgent ทุกครั้ง
+{ "type": "askAgent", "prompt": "Check if test file exists for this source file" }
+
+// ✅ ถูก: runCommand + regex
+{ "type": "runCommand", "command": "test -f tests/${FILE%.ts}.spec.ts && echo 'exists' || echo 'missing'" }
+```
 
 ---
 
@@ -263,6 +565,11 @@ File: `system/hook-creator/templates/kiro/knowledge-score-update.kiro.hook`
 ```
 
 ### D2. Hook: memory palace auto-consolidation ❌ TODO
+
+**Inspired by:** Claude Code Dream System (`src/services/autoDream/`)
+Dream System ทำ Orient→Gather→Consolidate→Prune เป็น background loop
+เราปรับเป็น agentStop hook ที่ทำ consolidation เมื่อถึง threshold
+
 File: `system/hook-creator/templates/kiro/memory-palace-auto-consolidation.kiro.hook`
 ```json
 {
@@ -282,6 +589,17 @@ File: `system/hook-creator/templates/kiro/memory-palace-auto-consolidation.kiro.
 
 | Phase | Task | Status |
 |-------|------|--------|
+| **0** | **0.1 Rewrite SKILL.md descriptions (trigger-style)** | **❌ TODO** |
+| **0** | **0.2 เพิ่ม Gotchas section ใน SKILL.md สำคัญ** | **❌ TODO** |
+| **0** | **0.3 ตรวจ Progressive Disclosure** | **❌ TODO** |
+| **0** | **0.4 เพิ่ม concurrency + isolation hints** | **❌ TODO** |
+| **0** | **0.5 Split CLAUDE.md ให้สั้นลง + cache-aware structure** | **❌ TODO** |
+| **0** | **0.6 Document Built-in Skills** | **❌ TODO** |
+| **0** | **0.7 เพิ่ม Hook Templates ใหม่ + fork bomb gotcha** | **❌ TODO** |
+| **0** | **0.8 Memory Palace: Skeptical Memory + Append-Only Logs** | **❌ TODO** |
+| **0** | **0.9 Prompt Cache Rules ใน CLAUDE.md** | **❌ TODO** |
+| **0** | **0.10 LLM-Friendly Comments Standard ใน Dev Skills** | **❌ TODO** |
+| **0** | **0.11 Hook Prompts: Time Budget + Regex-First** | **❌ TODO** |
 | A | apiIndex.json utility fields | ❌ TODO |
 | A | webUiIndex.json utility fields | ❌ TODO |
 | A | mobileIndex.json utility fields | ❌ TODO |
@@ -301,17 +619,69 @@ File: `system/hook-creator/templates/kiro/memory-palace-auto-consolidation.kiro.
 | D | knowledge-score-update hook | ❌ TODO |
 | D | memory-palace-auto-consolidation hook | ❌ TODO |
 
-**Done:** 1/18 tasks
-**Remaining:** 17/18 tasks
+**Done:** 1/29 tasks
+**Remaining:** 28/29 tasks
 
 ---
 
-## Recommended Order
+## Execution Order (แบ่งตามความเร่งด่วน)
 
-1. **Phase A** — all 7 tasks (safe, additive only, no behavior change)
-2. **Phase B** — all 6 tasks (activate scoring in real workflow)
-3. **Commit after Phase B** — has value, don't wait for C-D
-4. **Phase C-D** — next iteration
+### 🟢 Sprint 1 — ทำวันนี้ได้เลย (~1 ชั่วโมง)
+**ผลทันที ไม่เสี่ยง ไม่กระทบ behavior เดิม**
+
+| ลำดับ | Task | ใช้เวลา | ผลที่ได้ |
+|-------|------|---------|---------|
+| 1 | 0.1 Rewrite descriptions 2 ตัว (ai-dlc, memory-palace) | 15 นาที | Skills fire ถูกจังหวะ |
+| 2 | 0.9 Prompt Cache Rules ใน CLAUDE.md | 10 นาที | Session เร็วขึ้น ประหยัด tokens |
+| 3 | 0.5 Split CLAUDE.md + cache-aware structure | 30 นาที | CLAUDE.md สั้น <200 บรรทัด, cache-friendly |
+
+**Commit หลัง Sprint 1** — ใช้ได้ทันทีใน session ถัดไป
+
+### 🟡 Sprint 2 — สัปดาห์นี้ (Foundation)
+**เพิ่ม fields + โครงสร้าง ยังไม่เปลี่ยน behavior**
+
+| ลำดับ | Task | ผลที่ได้ |
+|-------|------|---------|
+| 4 | A1-A7 เพิ่ม score/effectiveness fields ใน index files ทั้งหมด (7 tasks) | Knowledge base พร้อมรับ scoring |
+| 5 | 0.2 เพิ่ม Gotchas section (เริ่มจาก section ว่าง 5 skills) | ที่เก็บ failure points พร้อม |
+| 6 | 0.8 Skeptical Memory + Append-Only Logs + staleness annotation | Memory ไม่ hallucinate จาก stale data |
+| 7 | 0.6 Document Built-in Skills ใน SKILLS_README.md | รู้ว่ามี built-in อะไร ไม่สร้างซ้ำ |
+
+**Commit หลัง Sprint 2** — Phase A เสร็จ, knowledge base มี score fields พร้อม
+
+### 🟠 Sprint 3 — สัปดาห์หน้า (Activate)
+**เปิดใช้ scoring ใน workflow จริง — ต้องการ Sprint 2 เสร็จก่อน**
+
+| ลำดับ | Task | ผลที่ได้ |
+|-------|------|---------|
+| 8 | B1-B6 Update workflow files ให้ score-aware (6 tasks) | Templates/lessons ถูก rank ตาม effectiveness |
+| 9 | 0.3 ตรวจ Progressive Disclosure | SKILL.md ไม่ยาวเกิน, content หนักอยู่ใน references/ |
+| 10 | 0.4 เพิ่ม concurrency + isolation hints | Agent รู้ว่า skill ไหน safe to parallel |
+| 11 | 0.10 LLM-Friendly Comments Standard | AI แก้โค้ดแม่นขึ้น |
+
+**Commit หลัง Sprint 3** — Phase B เสร็จ, knowledge base self-scoring แล้ว
+
+### 🔴 Sprint 4 — เมื่อพร้อม (Memory + Automate)
+**Cross-session tracking + hooks อัตโนมัติ — ต้องการ Sprint 3 เสร็จก่อน**
+
+| ลำดับ | Task | ผลที่ได้ |
+|-------|------|---------|
+| 12 | C1-C2 Create knowledge-evolution wing + update memory-palace SKILL.md | Cross-session score tracking |
+| 13 | D1-D2 Create hooks: score-update + auto-consolidation | ไม่ต้อง manual trigger อีก |
+| 14 | 0.7 เพิ่ม Hook Templates ใหม่ (format, verify, tracker) + fork bomb gotcha | Hook library ครบ |
+| 15 | 0.11 Hook Prompts: Time Budget + Regex-First | Hooks เร็วขึ้น ประหยัด tokens |
+
+**Commit หลัง Sprint 4** — ระบบ self-evolving ครบ loop
+
+---
+
+## Recommended Order (legacy — ดู Execution Order ข้างบนแทน)
+
+1. **Phase 0** — skill quality (ทำก่อนหรือคู่กับ Phase A ได้)
+2. **Phase A** — all 7 tasks (safe, additive only, no behavior change)
+3. **Phase B** — all 6 tasks (activate scoring in real workflow)
+4. **Commit after Phase B** — has value, don't wait for C-D
+5. **Phase C-D** — next iteration
 
 ---
 
@@ -325,3 +695,7 @@ File: `system/hook-creator/templates/kiro/memory-palace-auto-consolidation.kiro.
 | Auto-consolidation protocol | `system/knowledge-evolution/references/auto-consolidation.md` |
 | Full concept guide | `system/knowledge-evolution/KNOWLEDGE_EVOLUTION_README.md` |
 | Hook schema (Kiro) | `system/hook-creator/references/kiro-hook-schema.md` |
+| Skill writing guide | `system/skill-creator/references/skill-guide.md` |
+| Claude Code architecture (leaked) | `https://github.com/codeaashu/claude-code/blob/main/docs/architecture.md` |
+| Claude Code skill system (leaked) | `https://github.com/codeaashu/claude-code/blob/main/docs/subsystems.md` |
+| Claude Code best practices | `https://github.com/shanraisshan/claude-code-best-practice` |

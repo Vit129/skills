@@ -16,6 +16,27 @@ Schema references:
 
 ---
 
+## Standard Hook Set (ใช้ได้ทั้ง Kiro + Claude Code)
+
+Hook ทั้ง 6 ตัวนี้ควรมีในทุก project ที่ใช้ AI-DLC:
+
+| # | Hook | Kiro Event | Claude Code Event | Purpose |
+|---|------|-----------|------------------|---------|
+| 1 | memory-load | `agentStart` | `SessionStart` | โหลด context ตอนเริ่ม session |
+| 2 | aidlc-phase-guard | `preToolUse` (write) | `PreToolUse` (Write\|Edit) | check prerequisites ก่อน write output |
+| 3 | run-tests-after-write | `postToolUse` (write) | `PostToolUse` (Write\|Edit) | รัน test หลัง AI write (ถ้ามี test files อยู่แล้ว) |
+| 4 | sync-steering-on-skill-add | `fileCreated` | `FileChanged` | sync steering เมื่อเพิ่ม skill |
+| 5 | sync-hook-to-templates | `fileEdited` | `FileChanged` | sync hook ไป templates |
+| 6 | memory-save | `agentStop` | `Stop` | บันทึก memory ท้ายสุด (always last) |
+
+**กฎสำคัญ:**
+- Hook #3 (test) ยิงเฉพาะเมื่อมี test files อยู่แล้วใน project — ไม่ยิงตอน first-time setup
+- Hook #6 (memory) ยิงท้ายสุดเสมอ เพราะ `agentStop`/`Stop` เป็น event สุดท้าย
+- Hook #2 (phase-guard) skip `.kiro/`, `.claude/`, `.memory/` เพื่อป้องกัน circular
+- แก้ไข hook ใน `templates/kiro/` ก่อน แล้ว copy ไป `.kiro/hooks/` เพื่อป้องกัน circular
+
+---
+
 ## Process
 
 1. Ask: Kiro or Claude Code?
@@ -32,6 +53,7 @@ Schema references:
 
 | Use Case | Template |
 |----------|---------|
+| Memory load on start | `templates/kiro/memory-load.kiro.hook` |
 | Memory Palace auto-save | `templates/kiro/memory-palace-save.kiro.hook` |
 | AIDLC phase guard | `templates/kiro/aidlc-phase-guard.kiro.hook` |
 | Run tests after AI write | `templates/kiro/run-tests-after-write.kiro.hook` |
@@ -50,21 +72,20 @@ Schema references:
 
 **Location:** `{project}/.claude/settings.json` (project) หรือ `~/.claude/settings.json` (global)
 
-| Use Case | Event | Template |
-|----------|-------|---------|
-| Auto-load memory on start | `SessionStart` | `templates/claude-code/settings.json` |
-| Memory Palace auto-save | `Stop` | `templates/claude-code/settings.json` |
-| AIDLC phase guard | `PreToolUse` | `templates/claude-code/settings.json` |
+**Setup:** Copy `templates/claude-code/settings.json` → `{project}/.claude/settings.json`
+
+| Use Case | Event | Included in template |
+|----------|-------|---------------------|
+| Memory load on start | `SessionStart` | ✅ |
+| AIDLC phase guard | `PreToolUse` | ✅ |
+| Run tests after write | `PostToolUse` | ✅ |
+| Memory Palace auto-save | `Stop` | ✅ |
 | Re-inject context after compact | `SessionStart` (matcher: `compact`) | custom |
-| Auto-format after edit | `PostToolUse` (matcher: `Edit\|Write`) | custom |
 | Block protected files | `PreToolUse` | custom |
 | Desktop notification | `Notification` | custom |
-| Auto-approve permission | `PermissionRequest` | custom |
 
 **Hook types available:**
-- `command` — shell script (most common)
+- `command` — shell script (most common, exit 2 = block)
 - `prompt` — single LLM call → `{"ok": true/false}`
 - `agent` — subagent with tool access → `{"ok": true/false}`
 - `http` — POST to endpoint
-
-**Setup:** Copy `templates/claude-code/settings.json` → `{project}/.claude/settings.json`

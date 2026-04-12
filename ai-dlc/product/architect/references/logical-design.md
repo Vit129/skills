@@ -136,3 +136,70 @@ data-testid="booking-status"
 - Both server logic AND client application must be specified (skip server logic only if frontend-only project)
 - MVP scope must be explicit
 - Client application section MUST include data-testid map for all components
+
+## Test Environment Requirements (MANDATORY)
+
+ก่อนส่งต่อให้ QA ต้องระบุ test environment requirements ใน logical-design.md:
+
+```text
+## Test Environment Requirements
+
+### Required DB Seed Data
+- [table]: [description of seed data needed]
+- Example: flights: 10 records with various routes and prices
+
+### External Service Strategy
+- [service]: [mock | real | conditional]
+- Example: Visa Check API: mock (slow response simulation needed)
+- Example: Payment Gateway: mock (avoid real charges in test)
+
+### Test Account Roles Required
+- [role]: [permissions needed]
+- Example: admin: can approve/reject bookings
+- Example: customer: can search and book flights
+
+### Environment Variables Required
+- [VAR_NAME]: [purpose]
+- Example: HEALTH_PASSPORT_KEY: encryption key for FHIR R4
+- Example: VISA_CHECK_API_URL: external visa check endpoint
+```
+
+QA ใช้ section นี้เพื่อ:
+1. สร้าง `.env` ที่ถูกต้อง
+2. ออกแบบ mock strategy ก่อนเขียน test scripts
+3. ขอ test accounts จาก admin ก่อนเริ่ม QA phase
+
+## API Field Optionality (MANDATORY)
+
+ทุก field ใน API request/response ต้องระบุ optional/required **per context** ไม่ใช่แค่ชื่อ field:
+
+### Format
+
+```text
+POST /api/[resource]
+- Request:
+  { 
+    field1: string (required — all contexts),
+    field2: string (required if [condition], optional otherwise),
+    field3: number (optional — defaults to [value])
+  }
+```
+
+### ตัวอย่าง
+
+```text
+POST /api/v1/reservations
+- Request:
+  {
+    flightId: string (required),
+    seatIds: string[] (required),
+    userId: string (required),
+    allergyProfileId: string (required if booking type = restaurant, optional if flight)
+  }
+```
+
+### กฎ
+
+- ถ้า field optional → ระบุ default value หรือ behavior เมื่อไม่ส่ง
+- ถ้า field required เฉพาะบาง context → ระบุ condition ชัดเจน
+- QA ใช้ spec นี้ตัดสินว่า test case ที่ไม่ส่ง field นั้น expect 200 หรือ 400

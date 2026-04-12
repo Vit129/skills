@@ -1,14 +1,14 @@
 {
   "enabled": true,
   "name": "AIDLC Phase Guard",
-  "description": "Before writing files in .aidlc/ outputs or tests/, verify prerequisite phase outputs exist and decision+plan files are created.",
-  "version": "2",
+  "description": "Before writing AIDLC output files, verify prerequisite phase outputs exist. Supports microservices pattern (domain-design-*.md).",
+  "version": "3.0.0",
   "when": {
     "type": "preToolUse",
     "toolTypes": ["write"]
   },
   "then": {
     "type": "askAgent",
-    "prompt": "Check the file path being written. ONLY apply this check if the path contains '.aidlc/' OR 'tests/' OR 'mock-pages/'. If the path is in .kiro/, .claude/skills/, .memory/, or any other location — SKIP this hook silently and proceed.\n\nIf the path IS in .aidlc/ or tests/ or mock-pages/:\n\n1. Check AIDLC phase prerequisites:\n   - tests/ or mock-pages/ → qa-architecture.md AND test-cases.md must exist in .aidlc outputs\n   - qa-architecture.md → test-cases.md must exist\n   - test-cases.md → logical-design.md must exist\n   - logical-design.md → domain-design.md must exist\n   - domain-design.md → domain-decomposition.md must exist\n   - domain-decomposition.md → user-stories.md must exist\n\n2. Check decision+plan files exist for the current phase:\n   - Each phase output MUST have a corresponding decision file in planning/decisions/\n   - If decision file is missing → remind to create it first\n\nIf prerequisites missing → STOP and inform user. Otherwise proceed."
+    "prompt": "Check the file path about to be written.\n\nSKIP ENTIRELY (do nothing, proceed silently) if path contains ANY of:\n- .kiro/\n- .claude/skills/\n- .memory/\n- planning/decisions/\n- planning/plans/\n- audit.md\n- PROGRESS.md\n- qa-task-progress.md\n- dev-task-progress.md\n\nONLY check prerequisites if path contains outputs/ AND matches one of these output types:\n- user-stories.md → no prerequisite (first output)\n- domain-decomposition.md → requires: user-stories.md\n- domain-design*.md → requires: domain-decomposition.md\n- logical-design*.md → requires: domain-design*.md (any file matching pattern)\n- implementation-plan.md → requires: logical-design*.md\n- *.spec.ts or *.robot → requires: implementation-plan.md\n\nFor microservices: glob pattern — domain-design*.md matches domain-design-booking.md etc.\n\nIf prerequisite missing → STOP and tell user which file is needed first.\nIf prerequisite exists OR path not in outputs/ → proceed silently."
   }
 }

@@ -250,3 +250,41 @@ Every heal attempt (success or fail) MUST be logged to the implementation plan o
 **Location:** Append to `.aidlc/[system]/[feature]/audit.md` under `## Reflexion Log` section.
 
 **Purpose:** Prevent repeating the same failed fix. Successful heals become reusable patterns for future features.
+
+## Bug Report Template (เมื่อ QA ไม่สามารถ self-heal ได้)
+
+เมื่อ max attempts ถึงแล้วยังไม่ผ่าน หรือ bug เป็น logic issue ที่ต้องให้ Dev แก้:
+
+```markdown
+## 🐛 Bug Report — [TS-XXX] [Test Name]
+
+**Date:** YYYY-MM-DD
+**Reporter:** QA
+**Severity:** Critical | High | Medium | Low
+
+### Symptom
+[อธิบายสิ่งที่เห็น — error message, wrong behavior]
+
+### Steps to Reproduce
+1. [step 1]
+2. [step 2]
+3. [step 3]
+
+### Expected vs Actual
+- Expected: [สิ่งที่ควรเกิด]
+- Actual: [สิ่งที่เกิดจริง]
+
+### Environment
+- ENV: SIT | UAT
+- Test data: [testId หรือ seed data ที่ใช้]
+- Browser/Platform: [ถ้า relevant]
+
+### Reflexion Log Reference
+[Link หรือ paste entry จาก Reflexion Log]
+
+### Hypothesis
+[QA คิดว่า root cause น่าจะเป็นอะไร — optional แต่ช่วย Dev มาก]
+```
+
+**Location:** สร้างใน `.aidlc/[system]/[feature]/audit.md` ใต้ `## Bug Reports` section
+**Notify:** Dev ที่รับผิดชอบ feature นั้น

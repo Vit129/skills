@@ -1,0 +1,12 @@
+{
+  "name": "Memory Palace — Load on Session Start",
+  "version": "2.0.0",
+  "description": "Load Memory Palace context at session start so AI knows what was done before.",
+  "when": {
+    "type": "agentStart"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Session starting. Load Memory Palace context.\n\nIf .memory/state.md does NOT exist → create it with empty template and inform user.\n\nIf it exists → read .memory/state.md and briefly summarize (3-5 lines):\n- Active Wings\n- Last 3 sessions\n- Open Threads\n\nIf context is relevant to current task → proactively mention it. Keep summary brief."
+  }
+}
