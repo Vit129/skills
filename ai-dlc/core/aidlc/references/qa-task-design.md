@@ -53,9 +53,33 @@ Also read coding rules:
 
 1. Read test scenarios, QA architecture, and data storage strategy
 2. Read Lessons Learnt: Check `{knowledge_root}/lessons/` for technical patterns, past mistakes, and UI behaviors
-3. For each feature/test suite, decompose into categories below
-4. Sequence by dependency order
-5. Estimate complexity per task
+3. **Classify test data sensitivity** (before creating fixture tasks):
+
+### Sensitive Data Classification (MANDATORY)
+
+Before writing fixture data, classify every data field:
+
+| Classification | Location | Examples |
+|---|---|---|
+| Sensitive → `.env` | `process.env.X` | credentials, tokens, passwords, login emails, API keys |
+| Non-sensitive → fixture file | hardcoded in `.ts`/`.yaml` | companyCode, customerCode, productCode, invoiceNumber |
+
+Rule: `process.env.X` in fixture is allowed ONLY for sensitive fields. Business data MUST be hardcoded in fixture file.
+
+Output in task progress file:
+```markdown
+### 📂 Test Data Classification
+| Field | Value | Location | Reason |
+|-------|-------|----------|---------|
+| TEST_USER_EMAIL | process.env | .env | sensitive: login credential |
+| ACCESS_TOKEN | process.env | .env | sensitive: auth token |
+| companyCode | '1002' | fixture.ts | non-sensitive: business data |
+| customerCode | '000XXXX' | fixture.ts | non-sensitive: business data |
+```
+
+4. For each feature/test suite, decompose into categories below
+5. Sequence by dependency order
+6. Estimate complexity per task
 
 ## Task Categories
 

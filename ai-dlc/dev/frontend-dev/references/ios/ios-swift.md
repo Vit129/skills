@@ -36,6 +36,30 @@ App/
 - Use `@Published` properties in ViewModels
 - Preview with `#Preview` macro (Swift 5.9+)
 
+## Swift Observation (iOS 17+)
+```swift
+// New @Observable macro replaces ObservableObject
+@Observable
+class UserViewModel {
+    var name = ""
+    var isLoading = false
+
+    func loadUser() async {
+        isLoading = true
+        // fetch...
+        isLoading = false
+    }
+}
+
+// In View — no @ObservedObject needed
+struct UserView: View {
+    @State private var vm = UserViewModel()
+    var body: some View {
+        Text(vm.name)
+    }
+}
+```
+
 ## Networking
 - URLSession + async/await for simple cases
 - Alamofire for complex networking needs
@@ -61,14 +85,12 @@ App/
 
 ## Cross-Platform Standards
 
-These topics apply to all platforms — see dedicated files for full details:
-
-- **Testability (accessibilityIdentifier):** `testability-standards.md`
-- **UI States (Loading/Empty/Error):** `ui-states-standards.md`
-- **Error Handling:** `error-handling-standards.md`
-- **Environment Config:** `env-config-standards.md`
-- **Logging:** `logging-standards.md`
-- **Navigation & Deep Links:** `navigation-standards.md`
+- **Testability (accessibilityIdentifier):** `../shared/testability-standards.md`
+- **UI States (Loading/Empty/Error):** `../shared/ui-states-standards.md`
+- **Error Handling:** `../shared/error-handling-standards.md`
+- **Environment Config:** `../shared/env-config-standards.md`
+- **Logging:** `../shared/logging-standards.md`
+- **Navigation & Deep Links:** `../shared/navigation-standards.md`
 
 ## Tips
 - Swift first — no Objective-C for new code

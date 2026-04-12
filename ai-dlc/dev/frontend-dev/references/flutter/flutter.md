@@ -57,14 +57,12 @@ lib/
 
 ## Cross-Platform Standards
 
-These topics apply to all platforms — see dedicated files for full details:
-
-- **Testability (Semantics / Key):** `testability-standards.md`
-- **UI States (Loading/Empty/Error):** `ui-states-standards.md`
-- **Error Handling:** `error-handling-standards.md`
-- **Environment Config:** `env-config-standards.md`
-- **Logging:** `logging-standards.md`
-- **Navigation & Deep Links:** `navigation-standards.md`
+- **Testability (Semantics / Key):** `../shared/testability-standards.md`
+- **UI States (Loading/Empty/Error):** `../shared/ui-states-standards.md`
+- **Error Handling:** `../shared/error-handling-standards.md`
+- **Environment Config:** `../shared/env-config-standards.md`
+- **Logging:** `../shared/logging-standards.md`
+- **Navigation & Deep Links:** `../shared/navigation-standards.md`
 
 ## Tips
 - Follow effective Dart style guide

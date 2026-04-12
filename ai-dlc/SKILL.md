@@ -33,7 +33,8 @@ Update `{skills_root}` to point to that `skills/` folder.
 
 ## Sub-Skills
 
-- `core/` — AIDLC workflow, analysis, architect, AI techniques
-- `dev/` — frontend-dev, backend-dev, devops-pipeline, storage
-- `qa/` — playwright-rules, playwright-testing, qa-architect, test-scenario, robotframework
+- `core/` — AIDLC governance, analysis-skills (foundational), memory palace, monitoring, storage
+- `product/` — architect (technical design), ui-designer (UX/UI + Figma)
+- `dev/` — frontend-dev, backend-dev, devops-pipeline
+- `qa/` — playwright-rules, playwright-testing, qa-architect, test-scenario (+ scenario-reader), robotframework
 - `knowledge/` — business rules, automation templates, lessons learnt

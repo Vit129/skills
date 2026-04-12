@@ -3,7 +3,8 @@ name: backend-dev
 description: >
   This skill should be used when the user asks to "design an API", "set up authentication",
   "design the database schema", "build a backend service", "create a REST endpoint",
-  "dockerize the app", or needs guidance on Node.js, Python, Express, FastAPI, Django, or Docker.
+  "dockerize the app", "use Pydantic v2", "SQLAlchemy 2.0", "async SQLAlchemy",
+  or needs guidance on Node.js, Python, Express, FastAPI, Django, or Docker.
 ---
 
 # Backend Development
@@ -20,6 +21,7 @@ Build and maintain backend services and APIs.
 | "Node.js", "Express", "Fastify", "NestJS" | `references/nodejs.md` |
 | "Python", "FastAPI", "Django" | `references/python.md` |
 | "Docker", "Dockerfile", "docker-compose", "multi-stage build" | `references/docker.md` |
+| "code review", "review backend code", "check quality", "audit code" | `references/backend-code-review.md` |
 
 ## Core
 - **API Design** — REST/GraphQL/gRPC conventions, versioning, error handling. (Read `references/api-design.md`)
@@ -32,3 +34,6 @@ Build and maintain backend services and APIs.
 
 ## Infrastructure
 - **Docker** — Dockerfile, docker-compose, multi-stage builds. (Read `references/docker.md`)
+
+## Code Quality
+- **Backend Code Review** — Static audit checklist: architecture, validation, auth, DB, security, logging. (Read `references/backend-code-review.md`)

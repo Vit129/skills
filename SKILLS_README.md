@@ -4,16 +4,22 @@ Single source of truth for all AI-assisted development, QA, and Finance analysis
 
 ## 1. AI-DLC Category (`ai-dlc/`)
 
-### Core (Governance, Design, Reasoning) — `ai-dlc/core/`
+### Core (Governance) — `ai-dlc/core/`
 
 | Folder | Purpose |
 |--------|---------|
 | `aidlc/` | Full AI-DLC lifecycle: governance, phases, templates, guides, task design |
-| `architect/` | DDD Strategic & Tactical, Architecture Patterns, Logical Design, TDD |
-| `ai-techniques/` | **MOVED to system/ai-techniques/** |
-| `analysis-skills/` | Context, Figma, Gap, Domain, Requirements, Reverse Eng, Scenario Reader |
-| `ui-designer/` | Design system + aesthetic direction, **Sovereign Design System** rules |
+| `analysis-skills/` | Context, Gap, Requirements, Domain Discovery, Reverse Eng — used across all phases |
+| `memory-palace/` | Memory Palace workspace adapter |
 | `monitoring/` | Logging, error tracking, performance metrics, tracing, alerts |
+| `storage/` | Knowledge save, buffer update, Data Backup & Integrity standards |
+
+### Product (Design) — `ai-dlc/product/`
+
+| Folder | Purpose |
+|--------|---------|
+| `architect/` | DDD Strategic & Tactical, Architecture Patterns, Logical Design, TDD |
+| `ui-designer/` | Design system + aesthetic direction, Figma analysis, Sovereign Design System rules |
 
 ### Dev (Implementation) — `ai-dlc/dev/`
 
@@ -22,7 +28,6 @@ Single source of truth for all AI-assisted development, QA, and Finance analysis
 | `frontend-dev/` | React, Flutter, Android Kotlin, iOS Swift, Tailwind, Vite implementation |
 | `backend-dev/` | API design, DB, Auth, Node.js, Python, Docker |
 | `devops-pipeline/` | CI/CD pipeline, PRs (Azure DevOps, GitHub Actions, GitLab CI) |
-| `storage/` | Knowledge save, buffer update, **Data Backup & Integrity** standards |
 
 ### QA (Testing & Automation) — `ai-dlc/qa/`
 

@@ -80,8 +80,19 @@ When user says "ทำต่อ", "resume", or "continue":
 
 1. Read `.aidlc/[SYSTEM_KEBAB]/PROGRESS.md` — find the 🔄 In Progress feature
 2. Read that feature's progress file (dev or QA)
-3. Find the first `[ ]` task — that's where to resume
-4. Continue from there
+3. **Verify artifacts from completed phases still exist:**
+   - Check each path listed in the `## Artifacts` section
+   - If a required file is missing → warn user before resuming:
+     ```
+     ⚠️ ไฟล์จาก phase ก่อนหน้าหาย: {file path}
+     ต้องทำ {phase name} ใหม่ก่อนทำต่อ
+     ```
+   - If all present → confirm:
+     ```
+     ✅ ตรวจสอบไฟล์ครบ — ทำต่อจาก: {first [ ] task}
+     ```
+4. Find the first `[ ]` task — that's where to resume
+5. Continue from there
 
 ## Checklist Rules
 

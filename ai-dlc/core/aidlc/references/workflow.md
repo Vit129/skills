@@ -33,21 +33,21 @@ ALL work goes through AIDLC. AI determines the correct phase by checking what ex
 2. Find the first phase that has no output yet → start there
 3. If user specifies a phase (e.g., "start from logical design") → verify prerequisites exist first
 
-| .aidlc/ has | Missing | Go to |
-|---|---|---|
-| Nothing | Everything | Phase 0 (Project Detection) → Phase 1.1 or 1.2 |
-| reverse-engineering/ | requirements | Phase 1.2 Requirements |
-| user-stories.md | domain-decomposition | Phase 1.3 Domain Decomposition |
-| domain-decomposition.md | domain-design | Phase 1.4 Domain Design |
-| domain-design.md | logical-design | Phase 1.5 Logical Design |
-| logical-design.md | qa-task-design | Phase 2.1 QA Task Design |
-| qa-task-design | test-cases | Phase 2.2 Test Case Design |
-| test-cases | QA architecture | Phase 2.3 QA Architecture |
-| QA architecture | test-scripts | Phase 2.4 Test Script Design |
-| test-scripts | dev-task-design | Phase 2.5 Dev Task Design |
-| dev-task-design | implementation | Phase 3.1 Implementation |
-| implementation | test results | Phase 3.2 Automated Testing |
-| test results passed | PR | Phase 3.3 Create Pull Request |
+| .aidlc/ has | Missing | Go to | ✅ Done when |
+|---|---|---|---|
+| Nothing | Everything | Phase 0 (Project Detection) → Phase 1.1 or 1.2 | project context detected |
+| reverse-engineering/ | requirements | Phase 1.2 Requirements | `user-stories.md` exists |
+| user-stories.md | domain-decomposition | Phase 1.3 Domain Decomposition | `domain-decomposition.md` exists |
+| domain-decomposition.md | domain-design | Phase 1.4 Domain Design | `domain-design.md` exists |
+| domain-design.md | logical-design | Phase 1.5 Logical Design | `logical-design.md` exists |
+| logical-design.md | qa-task-design | Phase 2.1 QA Task Design | `qa-task-progress.md` exists with tasks listed |
+| qa-task-design | test-cases | Phase 2.2 Test Case Design | test scenario CSV/MD exists |
+| test-cases | QA architecture | Phase 2.3 QA Architecture | `implementation-plan.md` exists |
+| QA architecture | test-scripts | Phase 2.4 Test Script Design | spec files exist + at least 1 run attempted |
+| test-scripts | dev-task-design | Phase 2.5 Dev Task Design | `dev-task-progress.md` exists with tasks listed |
+| dev-task-design | implementation | Phase 3.1 Implementation | all `[ ]` in dev-task-progress.md → `[x]` |
+| implementation | test results | Phase 3.2 Automated Testing | all tests PASS (0 failures) |
+| test results passed | PR | Phase 3.3 Create Pull Request | PR created + work items linked |
 
 If user intent is ambiguous (dev vs QA) → ASK: "1. Dev (implement) 2. QA (test) 3. ทั้งสอง (AIDLC full)"
 
@@ -277,6 +277,12 @@ User → SPA → Booking API → DB → RabbitMQ → Notification → Email
 3. **PLAN** → Create execution plan (`planning/plans/{NN}-{phase-name}.md`) based on resolved decisions
 4. **USER APPROVES** → User approves the plan
 5. **EXECUTE** → Implement the approved plan, write output to `outputs/inception/`
+
+   ⚠️ **OUTPUT CHECKPOINT** — after writing any file, verify before moving on:
+   - Confirm the file exists at the expected path
+   - Confirm required sections are present (not empty/placeholder)
+   - If missing or incomplete → fix immediately, do not proceed to step 6
+   - This is a soft gate: fix-in-place, not a hard stop requiring user input
 6. **AUDIT** → Update `audit.md` at each phase completion using this format:
 
 ```markdown
@@ -314,7 +320,7 @@ Brownfield start from 1.1, Greenfield start from 1.2
 - **1.5** Logical Design → Technical specifications (Server Logic, Data Storage, Client Application)
   → Use `architect` skill (logical-design.md)
 - **1.6** UI/UX Design → Design system, Figma analysis, component specs
-  → Use `ui-designer` skill (design-system.md) + `analysis-skills` skill (figma.md)
+  → Use `ui-designer` skill (design-system.md) + `ui-designer` skill (figma.md)
 
 ### QA Focus
 

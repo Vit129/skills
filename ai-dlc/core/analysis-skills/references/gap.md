@@ -53,3 +53,21 @@ Low: [list]
 
 Total estimated effort: [N] hours
 ```
+
+## Blocking Gap Handling
+
+If Critical gaps are found that cannot be inferred (undefined business rules, missing AC):
+
+```
+⚠️ Blocking Gaps Found — ไม่สามารถดำเนินการต่อได้โดยไม่มีข้อมูลเพิ่มเติม:
+- [gap 1]: [why it's blocking]
+- [gap 2]: [why it's blocking]
+
+กรุณาเลือก:
+1. ให้ข้อมูลเพิ่มเติม แล้วพิมพ์ "ทำต่อ"
+2. ดำเนินการต่อโดยไม่มีข้อมูลส่วนนั้น (scenario อาจไม่ครบถ้วน)
+```
+
+🛑 WAIT for user response before proceeding.
+
+Non-blocking gaps (High/Medium/Low) → document and continue without waiting.

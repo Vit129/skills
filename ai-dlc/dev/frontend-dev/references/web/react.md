@@ -15,6 +15,26 @@ Guidelines for building React and Next.js applications.
 - Prefix with `use`: `usePortfolio`, not `getPortfolio`
 - Split hooks with independent dependencies — don't combine unrelated state
 
+## React 19 New Hooks
+- `useActionState` — replaces `useFormState`, handles form actions + state
+- `useOptimistic` — instant UI update before server confirms
+- `useFormStatus` — inside form child components to read pending state
+- `use(promise)` — read async resources in render (replaces some useEffect patterns)
+
+```tsx
+// useActionState
+const [state, formAction, isPending] = useActionState(serverAction, initialState)
+
+// useOptimistic
+const [optimisticList, addOptimistic] = useOptimistic(list, (state, newItem) => [...state, newItem])
+
+// useFormStatus (must be inside <form>)
+function SubmitButton() {
+  const { pending } = useFormStatus()
+  return <button disabled={pending}>{pending ? 'Saving...' : 'Save'}</button>
+}
+```
+
 ## State Management
 - Local state: `useState` for component-level
 - Shared state: Context API for small apps, Zustand/Jotai for medium, Redux for large
@@ -43,56 +63,39 @@ src/
 - Folders: kebab-case (`user-management/`)
 - Constants: SCREAMING_SNAKE_CASE (`MAX_RETRY`)
 
-## Performance (Vercel Best Practices)
+## Performance (React 19 + Compiler)
+
+### React Compiler (Experimental — Next.js 15.5+)
+- Automatically memoizes components — reduces need for manual `useMemo`/`useCallback`
+- Enable in `next.config.ts`: `experimental: { reactCompiler: true }`
+- Still use `useMemo` for expensive computations until compiler is stable
 
 ### Critical — Eliminating Waterfalls
 - Use `Promise.all()` for independent async operations
 - Start promises early, await late in API routes
 - Use Suspense to stream content
-- Move `await` into branches where actually used
 
-### Critical — Bundle Size
+### High — Bundle Size
 - Import directly, avoid barrel files: `import { Button } from './Button'` not `from './components'`
-- Use `next/dynamic` for heavy components
+- Use `React.lazy` + `Suspense` for heavy components
 - Load analytics/logging after hydration
-- Preload on hover/focus for perceived speed
-
-### High — Server-Side (Next.js)
-- Use `React.cache()` for per-request deduplication
-- Avoid module-level mutable state in RSC/SSR
-- Minimize data passed to client components
-- Parallelize fetches across components
 
 ### Medium — Re-render Optimization
 - `React.memo()` for expensive renders that receive same props
-- `useMemo` / `useCallback` only when there's a measured performance issue — don't premature optimize
-- Hoist default non-primitive props outside component
-- Use primitive dependencies in effects
+- `useMemo` / `useCallback` only when there's a measured performance issue
 - Use `startTransition` for non-urgent updates
 - Use `useDeferredValue` for expensive renders to keep input responsive
-
-### Medium — Rendering
-- Lazy load routes: `React.lazy()` + `Suspense`
-- Avoid inline object/array creation in JSX props
-- Use ternary, not `&&` for conditionals (avoids `0` render bug)
-- Extract static JSX outside components
-
-### Low-Medium — JavaScript
-- Build `Map` for repeated lookups instead of `Array.find` in loops
-- Use `Set`/`Map` for O(1) lookups
-- Return early from functions
-- Defer non-critical work: `requestIdleCallback`
 
 ## Cross-Platform Standards
 
 These topics apply to all platforms — see dedicated files for full details:
 
-- **Testability (data-testid):** `testability-standards.md`
-- **UI States (Loading/Empty/Error):** `ui-states-standards.md`
-- **Error Handling:** `error-handling-standards.md`
-- **Environment Config:** `env-config-standards.md`
-- **Logging:** `logging-standards.md`
-- **Navigation & Deep Links:** `navigation-standards.md`
+- **Testability (data-testid):** `../shared/testability-standards.md`
+- **UI States (Loading/Empty/Error):** `../shared/ui-states-standards.md`
+- **Error Handling:** `../shared/error-handling-standards.md`
+- **Environment Config:** `../shared/env-config-standards.md`
+- **Logging:** `../shared/logging-standards.md`
+- **Navigation & Deep Links:** `../shared/navigation-standards.md`
 
 ## Tips
 - Prefer composition over inheritance
