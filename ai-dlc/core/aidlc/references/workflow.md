@@ -39,13 +39,15 @@ ALL work goes through AIDLC. AI determines the correct phase by checking what ex
 | reverse-engineering/ | requirements | Phase 1.2 Requirements | `user-stories.md` exists |
 | user-stories.md | domain-decomposition | Phase 1.3 Domain Decomposition | `domain-decomposition.md` exists |
 | domain-decomposition.md | domain-design | Phase 1.4 Domain Design | `domain-design.md` exists |
-| domain-design.md | logical-design | Phase 1.5 Logical Design | `logical-design.md` exists |
-| logical-design.md | qa-task-design | Phase 2.1 QA Task Design | `qa-task-progress.md` exists with tasks listed |
+| domain-design.md | ui-ux-design | Phase 1.5 UI/UX Design | `ui-ux-design.md` exists (or skipped for API-only) |
+| ui-ux-design.md (or domain-design.md for API-only) | logical-design | Phase 1.6 Logical Design | `logical-design.md` exists |
+| logical-design.md | testid-map | Phase 1.7 TestId Map Sync | `testid-map.md` exists (or skipped for API-only) |
+| testid-map.md (or logical-design.md for API-only) | qa-task-design | Phase 2.1 QA Task Design | `qa-task-progress.md` exists with tasks listed |
 | qa-task-design | test-cases | Phase 2.2 Test Case Design | test scenario CSV/MD exists |
 | test-cases | QA architecture | Phase 2.3 QA Architecture | `implementation-plan.md` exists |
-| QA architecture | test-scripts | Phase 2.4 Test Script Design | spec files exist + at least 1 run attempted |
-| test-scripts | dev-task-design | Phase 2.5 Dev Task Design | `dev-task-progress.md` exists with tasks listed |
-| dev-task-design | implementation | Phase 3.1 Implementation | all `[ ]` in dev-task-progress.md → `[x]` |
+| QA architecture | test-scripts + dev-task-design | Phase 2.4 + 2.5 (Parallel) | both spec files exist AND `dev-task-progress.md` exists |
+| test-scripts + dev-task-design | sync-gate | Phase 2.6 Mid-Parallel Sync Gate | Dev acknowledges QA coverage, no unresolved gaps |
+| sync-gate | implementation | Phase 3.1 Implementation | all `[ ]` in dev-task-progress.md → `[x]` |
 | implementation | test results | Phase 3.2 Automated Testing | all tests PASS (0 failures) |
 | test results passed | PR | Phase 3.3 Create Pull Request | PR created + work items linked |
 
@@ -208,72 +210,7 @@ Measure by QA impact (not dev effort):
 NEVER skip phases regardless of complexity — always run full AIDLC. Only output depth changes.
 AI MUST ask user to confirm complexity level at Phase 1.2 (Requirements Gathering).
 
-### Complexity Examples — เปรียบเทียบความลึกของ output
-
-ตัวอย่างใช้ Domain Decomposition เป็นตัวเทียบ แต่หลักการเดียวกันใช้กับทุก phase
-
-**Lightweight** — สรุปสั้น อย่างละ 1-2 บรรทัด:
-
-```markdown
-## Bounded Contexts
-- **Booking** — ค้นหา, จอง, ชำระเงิน
-
-## Context Map
-Booking → External API (conformist)
-
-## Architecture
-Monolith — React + REST API
-```
-
-**Standard** — เพิ่ม Entities + กฎสำคัญ + ระบุ pattern ของความสัมพันธ์:
-
-```markdown
-## Bounded Contexts
-- **Booking** — ค้นหา, จอง, ชำระเงิน
-  - Entities: Flight, Reservation
-  - กฎสำคัญ: ล็อคที่นั่งหมดอายุ 15 นาที
-- **User** — ยืนยันตัวตน, โปรไฟล์
-  - Entities: User, Preference
-
-## Context Map
-- Booking → User (downstream, ACL)
-- Booking → External API (conformist)
-
-## Architecture
-Monolith — React + Express + PostgreSQL (แยก schema ต่อ context)
-```
-
-**Full** — ลงถึง Value Objects, Aggregates, Domain Events + Sequence Diagram + Regression Checklist:
-
-```markdown
-## Bounded Contexts
-- **Booking**
-  - Entities: Flight, Seat, Reservation, PaymentTransaction
-  - Value Objects: Money, SeatClass
-  - Aggregates: Reservation (root) → Seat + Payment
-  - Domain Events: ReservationCreated, PaymentCompleted
-  - กฎสำคัญ: ไป-กลับ 2 segments, ล็อค 15 นาที, ชำระซ้ำสูงสุด 3 ครั้ง
-- **User** — (รายละเอียดเท่า Booking)
-- **Notification** — (รายละเอียดเท่า Booking)
-
-## Context Map
-- Booking → User (ACL — UserProfileAdapter)
-- Booking → Notification (published language — ReservationEvent)
-
-## Sequence Diagram — Happy Path
-User → SPA → Booking API → DB → RabbitMQ → Notification → Email
-
-## Regression Checklist
-- [ ] จองยังทำงานได้หลังแก้ User schema
-- [ ] Notification รับ event ได้หลังเปลี่ยนชื่อ domain event
-```
-
-หลักง่ายๆ: Lightweight = what, Standard = what + why, Full = what + why + how + ผลกระทบ
-
-ตัวอย่างข้างบนใช้ระบบจองเที่ยวบิน แต่ใช้หลักเดียวกันกับทุกโดเมน เช่น:
-- E-commerce: Product → Order → Payment → Shipping
-- Hospital: Patient → Appointment → Treatment → Billing
-- HR: Employee → Leave → Payroll → Evaluation
+For output depth examples per level → Read `references/complexity-examples.md`
 
 ## Standard Process (Every Phase)
 
@@ -344,10 +281,15 @@ Brownfield start from 1.1, Greenfield start from 1.2
   → Use `architect` skill (decomposition.md, architecture-patterns.md)
 - **1.4** Domain Design → DDD Tactical Patterns (pseudocode)
   → Use `architect` skill (domain-design.md)
-- **1.5** Logical Design → Technical specifications (Server Logic, Data Storage, Client Application)
-  → Use `architect` skill (logical-design.md)
-- **1.6** UI/UX Design → Design system, Figma analysis, component specs
+- **1.5** UI/UX Design → Design system, Figma analysis, component specs, wireframes
   → Use `ui-designer` skill (design-system.md) + `ui-designer` skill (figma.md)
+  → Skip for API-only features (no UI)
+- **1.6** Logical Design → Technical specifications (Server Logic, Data Storage, Client Application)
+  → Use `architect` skill (logical-design.md)
+  → Frontend component tree + state design informed by Phase 1.5 wireframes
+- **1.7** TestId Map Sync → Agree testId naming between QA and Dev based on actual UI structure from Phase 1.5
+  → Output: `testid-map.md` — maps component/element → testId → owner (QA uses, Dev implements)
+  → Skip for API-only features (no UI)
 
 ### QA Focus
 
@@ -364,12 +306,23 @@ Brownfield start from 1.1, Greenfield start from 1.2
   - เหตุผล: catch misunderstanding ก่อน invest ใน automation — แก้ตอนนี้ถูกกว่าแก้หลัง test script เสร็จ
 - **2.3** QA Architecture → Test automation framework blueprints
   → Use `qa-architect` skill (api-arch.md, web-arch.md, mobile-arch.md, test-db-strategy.md)
-- **2.4** Test Script Design → Playwright/Robot Framework scripts (TDD: RED)
+- **2.4** Test Script Design → Playwright/Robot Framework scripts (TDD: RED) — runs **parallel with 2.5**
   → Use `playwright-testing` skill or `robotframework-testing` skill
   → Read rules from `playwright-rules` or `robotframework-rules` first
-- **2.5** Dev Task Design → Task breakdown for implementation
+  → Contract: Test Scenario (Phase 2.2) + TestId Map (Phase 1.7) — shared with Dev
+  → Complete test file skeleton first, then 2.5 can start — full script completion not required
+- **2.5** Dev Task Design → Task breakdown for implementation — runs **parallel with 2.4**
   → Use `aidlc` reference (dev-task-design.md)
-- **2.6** DevOps Sync → Create work items via MCP
+  → Contract: Test Scenario (Phase 2.2) + TestId Map (Phase 1.7) — shared with QA
+  → ⚠️ "Parallel" means non-blocking — 2.5 starts as soon as 2.4 has test file skeleton, NOT waiting for full script completion
+  → When Kiro executes both: run 2.4 until skeleton exists → immediately start 2.5 → both proceed independently
+- **2.6** Mid-Parallel Sync Gate → QA + Dev align before implementation starts
+  → QA presents: test file list + scenario count per file + any new edge cases found during scripting
+  → Dev confirms: task breakdown still covers all scenarios — add tasks if gaps found
+  → ✅ Gate passes when: Dev acknowledges coverage, no unresolved gaps
+  → ⚠️ If gaps found → update test scenarios (Minor: amend in-place / Major: re-plan)
+  → This is a conversation checkpoint, not a document — no file output required
+- **2.7** DevOps Sync → Create work items via MCP
   → Use `devops-pipeline` skill (azure-sync.md)
 
 ### Construction (Technical Focus)
@@ -408,11 +361,13 @@ For detailed patterns → Use `architect` skill (architecture-patterns.md)
 - `"start AI-DLC brownfield"` — Include reverse engineering
 - `"start AI-DLC from domain design"` — Begin from phase 1.4
 - `"start AI-DLC from logical design"` — Begin from phase 1.5
-- `"start AI-DLC from UI/UX design"` — Begin from phase 1.6
+- `"start AI-DLC from UI/UX design"` — Begin from phase 1.5
+- `"start AI-DLC from logical design"` — Begin from phase 1.6
+- `"start AI-DLC from testid map"` — Begin from phase 1.7
 - `"start AI-DLC from test case design"` — Begin from phase 2.1
 - `"start AI-DLC from QA architecture"` — Begin from phase 2.2
-- `"start AI-DLC from test script design"` — Begin from phase 2.3
-- `"start AI-DLC from dev task design"` — Begin from phase 2.4
+- `"start AI-DLC from test script design"` — Begin from phase 2.3 (parallel: also starts 2.5)
+- `"start AI-DLC from dev task design"` — Begin from phase 2.4 (parallel: also starts 2.3)
 - `"start AI-DLC from sync AD"` — Begin from phase 2.6
 - `"start AI-DLC from implementation"` — Begin from phase 3.1
 - `"start AI-DLC from automation testing"` — Begin from phase 3.2

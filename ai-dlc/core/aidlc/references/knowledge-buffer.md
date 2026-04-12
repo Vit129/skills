@@ -2,6 +2,37 @@
 
 Capture reusable patterns, business rules, and lessons learned across features for future reuse.
 
+## Storage Boundary Rules (MANDATORY)
+
+Prevents AI from confusing `.aidlc/` with `.memory/`:
+
+| Store in | Content | Examples |
+|----------|---------|---------|
+| **`.aidlc/[system]/[feature]/`** | Working directory — plans and technical evidence for that specific project | decisions, plans, outputs, audit.md, task progress |
+| **`.aidlc/[system]/PROGRESS.md`** | Task status for that system (short-term, project-scoped) | feature status, task counts |
+| **`.memory/wings/`** | Long-term context — patterns, lessons, decisions reusable across projects | architecture decisions, reusable patterns, session summaries |
+| **`.memory/state.md`** | Palace map — active wings, recent sessions, open threads (cross-project) | NOT project status |
+
+**Rules:**
+- `.aidlc/` = **temporary** — used during that project, can be archived after PR merge
+- `.memory/` = **permanent** — information worth remembering across projects and sessions
+- No duplication: if data is already in `.aidlc/`, do NOT copy it to `.memory/`
+- Move to `.memory/` only: patterns reusable in ≥2 projects, decisions affecting long-term architecture
+
+**Correct:**
+```
+.aidlc/japan-travel/flight-booking/audit.md  ← technical evidence (temporary)
+.memory/wings/ai-dlc-skills/rooms/japan-travel-patterns.md  ← reusable patterns (permanent)
+```
+
+**Wrong:**
+```
+❌ copying entire PROGRESS.md into .memory/state.md
+❌ storing the same architecture decision in both .aidlc/ and .memory/
+```
+
+---
+
 ## When to use
 - After completing any AIDLC phase — capture what was learned
 - Before starting a new feature — check what's reusable from past features
