@@ -1,14 +1,14 @@
 {
   "enabled": false,
   "name": "Run Tests After AI Write",
-  "description": "After AI writes or modifies a test file, automatically run the test to verify it passes. Enable when ready to use.",
-  "version": "1",
+  "description": "Auto-run tests after AI write. Token-efficient.",
+  "version": "2.0.0",
   "when": {
     "type": "postToolUse",
     "toolTypes": ["write"]
   },
   "then": {
     "type": "askAgent",
-    "prompt": "Check if the file just written is a test file (*.spec.ts or *.robot). If YES — run the test using npx playwright test --reporter=line (or robot command for .robot). If tests fail, analyze and fix using self-healing. Max 3 attempts. If NOT a test file — do nothing, skip this hook silently."
+    "prompt": "If written file is test (*.spec.ts/*.robot) → run test. PASS: report '✅ [file] passes'. FAIL: self-heal max 3 times. Else: SILENT."
   }
 }

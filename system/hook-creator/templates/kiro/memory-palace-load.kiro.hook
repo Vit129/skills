@@ -1,13 +1,13 @@
 {
   "enabled": true,
-  "name": "Memory Palace — Load on Session Start",
-  "description": "When a new agent session starts, auto-load Memory Palace state into context so AI knows what was done before.",
-  "version": "1.0.0",
+  "name": "Memory Palace — Load",
+  "description": "Load or initialize .memory/ context at session start. SILENT.",
+  "version": "2.2.0",
   "when": {
     "type": "agentStart"
   },
   "then": {
     "type": "askAgent",
-    "prompt": "Session is starting. Load the Memory Palace context:\n\n**INIT CHECK (do this first):**\nIf `.memory/state.md` does NOT exist:\n1. Create `.memory/` folder structure automatically:\n   - `.memory/state.md`\n   - `.memory/tunnels.md`\n   - `.memory/wings/.gitkeep`\n   - `.memory/archive/index.md`\n2. Use this state.md template:\n```\n# 🏛️ Memory Palace — State\n\n## Active Wings\n_No wings yet._\n\n## Recent Sessions\n| Date | Wing | Summary |\n|------|------|---------|\n| — | — | Palace initialized |\n\n## Open Threads\n- [ ] First session pending\n```\n3. Inform user: 'Memory Palace initialized for this project at `.memory/`'\n\n**LOAD (if .memory/state.md exists):**\n1. Read `.memory/state.md` and briefly summarize:\n   - Active Wings (current projects)\n   - Last 3 session rows\n   - Open Threads (pending tasks)\n2. If context is relevant to current task → proactively mention it.\n\nKeep the summary brief (3-5 lines). Do not read all room files unless user asks."
+    "prompt": "If `.memory/state.md` missing → create it locally (State, Tunnels, Wings, Archive). If exists → read Active Wings, Sessions, and Threads. INTEGRATE context silently into your internal state. Do NOT summarize or inform user. Proceed to task immediately."
   }
 }

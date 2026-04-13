@@ -1,54 +1,49 @@
 {
-  "_comment": "Claude Code hooks — copy relevant sections into .claude/settings.json",
+  "_comment": "Claude Code hooks — Silent on Q&A, Feedback on results (C1/C2/Threads/2-week-purge).",
   "hooks": {
-
     "SessionStart": [
       {
         "matcher": "",
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "Session starting. Load Memory Palace context.\n\nIf .memory/state.md does NOT exist → create it with empty template and inform user.\n\nIf it exists → read .memory/state.md and briefly summarize (3-5 lines):\n- Active Wings\n- Last 3 sessions\n- Open Threads\n\nIf context is relevant to current task → proactively mention it. Keep summary brief."
+            "prompt": "If `.memory/state.md` missing → create locally (State, Tunnels, Wings, Archive). If exists → read Active Wings, Sessions, and Threads silently. Do NOT summarize unless first-time init. Proceed silently."
           }
         ]
       }
     ],
-
     "PreToolUse": [
       {
         "matcher": "Write|Edit|MultiEdit",
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "Check the file path about to be written.\n\nSKIP ENTIRELY (return {\"ok\": true}) if path contains ANY of:\n- .kiro/\n- .claude/\n- .memory/\n- planning/decisions/\n- planning/plans/\n- audit.md\n- PROGRESS.md\n- qa-task-progress.md\n- dev-task-progress.md\n\nONLY check prerequisites if path contains outputs/ AND matches:\n- domain-decomposition.md → requires: user-stories.md\n- domain-design*.md → requires: domain-decomposition.md\n- logical-design*.md → requires: domain-design*.md\n- implementation-plan.md → requires: logical-design*.md\n- *.spec.ts or *.robot → requires: implementation-plan.md\n\nIf prerequisite missing → return {\"ok\": false, \"reason\": \"Need [file] first\"}\nIf OK → return {\"ok\": true}"
+            "prompt": "Skip prerequisite check if path contains: .kiro/, .claude/, .memory/, planning/, audit.md, or PROGRESS.md. Otherwise, enforce sequence: domain-decomposition → user-stories; design → decomposition; implementation → design; tests → implementation. Return {\"ok\": true} silently."
           }
         ]
       }
     ],
-
     "PostToolUse": [
       {
         "matcher": "Write|Edit|MultiEdit",
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "Check the file path just written.\n\nStep 1: Only proceed if path ends with .spec.ts or .robot. If NOT → return {\"ok\": true} silently.\n\nStep 2: Check if tests/ folder has other existing .spec.ts or .robot files. If NO → first-time setup, return {\"ok\": true} silently.\n\nStep 3: Run test:\n- .spec.ts → npx playwright test [file] --reporter=line\n- .robot → robot --outputdir results [file]\n\nStep 4:\n- PASS → report '✅ [filename] passes', return {\"ok\": true}\n- FAIL → analyze, attempt self-healing max 3 times\n- After 3 fails → return {\"ok\": false, \"reason\": \"[error summary]\"}"
+            "prompt": "If file written is test (*.spec.ts/*.robot) → run test. If PASS: report '✅ [file] passes' and trigger Memory Palace update later. If FAIL: attempt self-healing max 3 times. If NOT test: return {\"ok\": true} SILENTLY."
           }
         ]
       }
     ],
-
     "Stop": [
       {
         "matcher": "",
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "IMPORTANT: Answer any pending user request FIRST before evaluating this.\n\nEvaluate whether this session is worth saving to Memory Palace.\n\nSKIP if session was ONLY: Q&A, reading files, explaining concepts, git commands, repeating known info.\n\nSAVE if session had ANY: file writes, decisions made, new open threads, architecture choices, features created.\n\nIf SAVE:\n1. Read .memory/state.md\n2. Create/update wing under .memory/wings/{topic}/\n3. Write/update room files\n4. Update hall.md\n5. Update .memory/state.md — add session row + update threads\n6. Keep state.md ≤100 lines\n\nReturn {\"ok\": true} when done."
+            "prompt": "Evaluate .memory/ save. First, locate workspace root by finding the folder containing .claude/ or .kiro/. SKIP: Q&A, comparison, git, read. SAVE if ANY: C1=user made a choice/decision from options presented, C2=test passed or feature verified working, file written, gotcha found, or open thread identified. If SAVE: Update {root}/.memory/ (state.md, wings/, tunnels.md) per SKILL.md. For Open Threads: 1. Add @YYYY-MM-DD to newly finished [x] tasks. 2. Purge [x] tasks older than 14 days. After save: check if any wing has >10 rooms OR Recent Sessions >10 rows — if exceeded, remind user to archive that wing. Inform: '✓ Memory Palace updated'. Else SILENT."
           }
         ]
       }
     ]
-
   }
 }

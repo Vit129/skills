@@ -1,13 +1,13 @@
 {
   "enabled": true,
-  "name": "Memory Palace — Save on Session End",
-  "description": "When agent execution stops, remind AI to save session context to the Memory Palace (.memory/).",
-  "version": "2.0.0",
+  "name": "Memory Palace — Save",
+  "description": "Save to .memory/. 2-week grace period for [x] threads.",
+  "version": "3.5.0",
   "when": {
     "type": "agentStop"
   },
   "then": {
     "type": "askAgent",
-    "prompt": "Before ending, evaluate whether this session is worth saving to the Memory Palace.\n\n**SKIP (do nothing) if session was ONLY:**\n- Q&A or clarification questions with no decisions made\n- Comparisons or analysis without a conclusion or action taken\n- Commit messages / git commands / git add only\n- Repeating or summarizing information already in palace\n- Reading files without making changes\n- Explaining concepts or answering how-to questions\n- Asking for options without choosing one\n- Session had no file writes, no decisions, no new threads\n\n**SAVE if session had ANY of:**\n- File writes or code changes (even small ones)\n- A decision made and confirmed (even from a comparison)\n- New open threads or TODOs identified\n- Architecture or design choices finalized\n- A feature, hook, skill, or config created/updated\n- A migration or restructure completed\n\nWhen in doubt — if nothing changed and nothing was decided, SKIP.\n\nIf SAVE, follow these steps:\nCore concepts: ~/.claude/skills/system/memory-palace/SKILL.md\n\n1. Read `.memory/state.md` for current palace state.\n2. Determine what was accomplished this session.\n3. Create/update wing folder under `.memory/wings/{project-or-topic}/`.\n4. Write/update room files in `wings/{name}/rooms/` for each topic.\n5. Update `wings/{name}/hall.md` with category index.\n6. If room >80 lines, compress to AAAK-style closet in `wings/{name}/closets/`.\n7. For state changes, use temporal triples: (Subject, Predicate, Object) [valid_from - valid_to].\n8. Run contradiction detection before overwriting active facts.\n9. Update `.memory/state.md` with: Active Wings, Recent Sessions row, Open Threads.\n10. If cross-wing refs exist, update `.memory/tunnels.md`.\n\nKeep state.md under 100 lines. Use AAAK compression in closets.\n\n**ARCHIVE REMINDER (after saving):**\nAfter updating, check each wing:\n- If any wing has >10 room files OR hall.md >50 lines → remind user:\n  'Wing `{name}` is getting large ({n} rooms). Want to archive old rooms? Say \"archive {wing-name}\" to compress them into closets.'\n- If Recent Sessions table >10 rows → move oldest rows to .memory/archive/{topic}/{year}/sessions.md, keep only 10 latest\n- Do NOT auto-delete or auto-archive wings. User decides.\n- When archiving: update .memory/archive/index.md + create .memory/archive/{topic}/summary.md"
+    "prompt": "Evaluate .memory/ save. First, locate workspace root by finding the folder containing .kiro/hooks/. SKIP: Q&A, comparison, git, read. SAVE if ANY: C1=user made a choice/decision from options presented, C2=test passed or feature verified working, file written, gotcha found, or open thread identified. If SAVE: Update {root}/.memory/ (state.md, wings/, tunnels.md) per SKILL.md. For Open Threads: 1. Add @YYYY-MM-DD to newly finished [x] tasks. 2. Purge [x] tasks older than 14 days. After save: check if any wing has >10 rooms OR Recent Sessions >10 rows — if exceeded, remind user to archive that wing. Inform: '✓ Memory Palace updated'. Else SILENT."
   }
 }

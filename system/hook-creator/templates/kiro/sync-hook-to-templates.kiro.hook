@@ -1,14 +1,14 @@
 {
   "enabled": true,
   "name": "Sync Hook to Templates",
-  "description": "When a .kiro.hook file is created or edited in .kiro/hooks/, auto-copy it to hook-creator/templates/kiro/ as source of truth.",
-  "version": "1.0.0",
+  "description": "Sync edited .kiro.hook files back to the source skill templates.",
+  "version": "1.1.0",
   "when": {
     "type": "fileEdited",
     "patterns": [".kiro/hooks/*.kiro.hook"]
   },
   "then": {
     "type": "askAgent",
-    "prompt": "A .kiro.hook file was just saved. Sync it to the hook-creator templates.\n\n1. Get the filename from the changed file path (e.g., `my-hook.kiro.hook`)\n2. Skip if the file is inside `.claude/skills/` (already a template) — do nothing.\n3. Copy the file content to `.claude/skills/ai-dlc/core/hook-creator/templates/kiro/{filename}`\n4. Check if the hook name already exists in the Templates table in `.claude/skills/ai-dlc/core/hook-creator/SKILL.md`\n   - If YES — skip SKILL.md update\n   - If NO — add a new row to the Templates table:\n     | {hook purpose} | `templates/kiro/{filename}` | — |\n5. Inform user: 'Synced {filename} to hook-creator templates.'"
+    "prompt": "A hook was edited in .kiro/hooks/. Sync it back:\n1. Find the actual path of 'hook-creator' skill under .claude/skills/ (likely system/ or ai-dlc/core/).\n2. Copy the edited hook to `.../hook-creator/templates/kiro/{filename}`.\n3. Ensure it's listed in the Templates table in hook-creator's SKILL.md.\n4. Confirm: 'Synced {filename} to source templates'."
   }
 }
