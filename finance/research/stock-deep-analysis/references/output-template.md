@@ -189,6 +189,50 @@ Net Cash/Debt:        $[X]B
 
 ---
 
+## 13) Latest News & Market Impact
+
+### 📰 Top 5-7 Headlines (ล่าสุด 7 วัน)
+
+1. **[Headline]** — [Date]
+   - Summary: [2-3 ประโยค ผลกระทบต่อธุรกิจ]
+   - Sentiment: [บวก/ลบ/กลาง]
+   - 🔗 Source: [URL]
+
+2. [...]
+
+### 📊 Market Sentiment Summary
+[บวก / ลบ / กลาง] — [1 ประโยคสรุป sentiment overall]
+
+### 🎯 News Impact on Thesis
+- [ข่าว 1 กระทบ analysis ตรงไหน?]
+- [ข่าว 2 เปลี่ยนมุมมองไหม?]
+
+---
+
+## 14) Investment Signal & Recommendations
+
+### 📈 AI Recommendation
+**Buy / Hold / Sell / Avoid** — [เหตุผล 2-3 ประโยค]
+
+### 💡 Investment Thesis
+[สรุป "เหตุใจในการลงทุน" ในแบบ 2-3 ประโยค]
+
+### 🎯 Entry Strategy (ถ้า Buy)
+- Best entry: [Price range / conditions]
+- Position size: [แนะนำสัดส่วน]
+- Risk/reward: [1:X ratio]
+
+### ⏱️ Time Horizon
+Short-term (0-6 months) / Medium (6-18 months) / Long-term (2+ years)?
+
+### 📊 Portfolio Fit
+- Growth portfolio? [Yes/No + เหตุผล]
+- Value portfolio? [Yes/No + เหตุผล]
+- Dividend portfolio? [Yes/No + เหตุผล]
+- Risk tolerance needed: [Low/Medium/High]
+
+---
+
 ⚠️ Disclaimer: ข้อมูลนี้จัดทำขึ้นเพื่อการศึกษาเท่านั้น ไม่ใช่คำแนะนำทางการเงิน
 ผู้ลงทุนควรศึกษาข้อมูลเพิ่มเติมและปรึกษาผู้เชี่ยวชาญก่อนตัดสินใจลงทุนทุกครั้ง
 ════════════════════════════════════════════════════

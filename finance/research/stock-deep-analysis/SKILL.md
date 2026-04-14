@@ -29,20 +29,25 @@ description: >
 - ✅ Brief explanation of complex terms (in parentheses)
 - ❌ ไม่มี flowery/overly polite/marketing language
 
-## Analysis Process
+## Complete Workflow
 
 ### Step 1 — รับ Ticker
 ถ้าไม่ได้ระบุ → ถาม "ต้องการวิเคราะห์หุ้นตัวไหน?"
 
-### Step 2 — Gather Data (Web Search)
-1. Financial Reports (10-K, 10-Q ล่าสุด)
-2. Earnings presentations & calls
-3. Latest news (3-5 ข่าวสำคัญ)
-4. Analyst reports & recommendations
-5. Business data (customers, revenue breakdown, competition)
+### Step 2 — Gather All Data (Web Search)
+1. **Financial Reports:** 10-K, 10-Q ล่าสุด
+2. **Earnings Data:** Presentations & Calls
+3. **Latest News:** 5-7 ข่าวสำคัญ (recent + impact)
+4. **Analyst Reports:** Recommendations & price targets
+5. **Business Data:** Customers, revenue breakdown, competition, moats
+6. **Market Context:** Sector trends, macro outlook
 
-### Step 3 — Analyze 12 Dimensions
-ใช้ template ในส่วน "Output Template" → (Read `references/output-template.md`)
+### Step 3 — Generate Complete Report (14 Sections)
+**Section 1-12:** Deep fundamental analysis (12 sections)
+**Section 13:** Latest News & Market Impact
+**Section 14:** AI Recommendations & Investment Signal
+
+→ (Read `references/output-template.md`)
 
 ## Critical Rules
 
