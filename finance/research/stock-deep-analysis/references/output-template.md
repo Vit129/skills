@@ -1,178 +1,195 @@
-# Stock Deep Analysis Output Template
+# Stock Deep Analysis — 12-Section Output Template
 
-## Claude Desktop Mode
-
-**Ticker Input:** User provides ticker → Orchestrate other skills:
-1. Load portfolio context from `src/data/` (if ticker in holdings)
-2. Call `news-search` for latest news (web search)
-3. Call `ai-recommend` for sentiment/signals
-4. Web search for financial data (10-K, earnings, analyst reports)
-
-**Output:** Use template below for all deep dives
+**ห้ามเปลี่ยนโครงสร้าง — ใช้ template นี้ทุกครั้ง**
 
 ---
-
-ห้ามเปลี่ยนโครงสร้าง — ใช้ template นี้ทุกครั้ง
 
 ```
 ⚠️ Disclaimer: ข้อมูลนี้จัดทำขึ้นเพื่อการศึกษาเท่านั้น ไม่ใช่คำแนะนำทางการเงิน
 ผู้ลงทุนควรศึกษาข้อมูลเพิ่มเติมและปรึกษาผู้เชี่ยวชาญก่อนตัดสินใจลงทุนทุกครั้ง
 
-════════════════════════════════════
-📰 ข่าวล่าสุด — [TICKER] | [วันที่]
-════════════════════════════════════
-
-สรุปข่าวสำคัญ 3-5 ข่าวล่าสุดที่กระทบธุรกิจ:
-
-1. [หัวข้อข่าว] — [วันที่]
-   สรุป: [2-3 ประโยค ผลกระทบต่อธุรกิจ]
-   🔗 Source: [URL]
-
-2. [หัวข้อข่าว] — [วันที่]
-   สรุป: ...
-   🔗 Source: [URL]
-
-[ต่อไปเรื่อยๆ]
-
-📊 ภาพรวมข่าว: [บวก/ลบ/กลาง] — [สรุป sentiment 1 ประโยค]
-
 ════════════════════════════════════════════════════
-🔬 DEEP FUNDAMENTAL ANALYSIS — [ชื่อบริษัท] ([TICKER])
+🎯 STOCK DEEP ANALYSIS — [TICKER] | [Company Name]
 ════════════════════════════════════════════════════
 
 ## 1) Business Overview (บริษัทนี้ทำธุรกิจอะไร)
 
-[อธิบายแบบง่ายๆ ว่าบริษัทหาเงินจากอะไร core product/service คืออะไร
-Revenue breakdown แต่ละ segment ทำเงินเท่าไหร่ segment ไหนเป็น primary driver
-อธิบายให้ง่ายจนคนที่ไม่รู้เรื่องธุรกิจนี้เลยสามารถจินตนาการได้]
+[อธิบายแบบง่ายๆ ว่าบริษัทหาเงินจากอะไร]
+- Core product/service คืออะไร?
+- Revenue breakdown — แต่ละ segment ทำเงินเท่าไหร่?
+- Primary driver (segment ไหนที่ทำรายได้สำคัญสุด)?
+
+[ให้คำอธิบายจนคนที่ไม่รู้เรื่องธุรกิจนี้สามารถจินตนาการได้]
 
 ---
 
 ## 2) Customer Base (ลูกค้าของบริษัทคือใคร)
 
-[ลูกค้าหลักคือใคร — B2B, B2C, หรือ Government?
-มี customer concentration risk มั้ย?
-Switching costs สูงแค่ไหน?
-ทำไมลูกค้าถึงไม่เปลี่ยนไปใช้คู่แข่ง?]
+- ลูกค้าหลักคือใคร (B2B, B2C, Government)?
+- มี customer concentration risk มั้ย?
+- Switching costs สูงแค่ไหน?
+- ทำไมลูกค้าถึงไม่เปลี่ยนไปใช้คู่แข่ง?
 
 ---
 
 ## 3) Revenue Model & Quality (โมเดลรายได้และคุณภาพรายได้)
 
-[รายได้เป็น recurring หรือ one-off?
-สม่ำเสมอแค่ไหน? อะไรขับเคลื่อนการเติบโต — volume, price, subscription?
-คุณภาพรายได้อยู่ในระดับไหน?]
+- รายได้เป็น recurring หรือ one-off?
+- สม่ำเสมอแค่ไหน?
+- อะไรขับเคลื่อนการเติบโต (volume, price increase, subscription growth)?
+- คุณภาพรายได้ — predictable + sustainable หรือปั่นๆ?
 
 ---
 
 ## 4) Financial Overview (ภาพรวมงบการเงินล่าสุด)
 
-Revenue:        $[X]B | Growth: [X]% YoY
-Net Income:     $[X]B | Growth: [X]% YoY
-Gross Margin:   [X]%
-Operating Margin: [X]%
-FCF:            $[X]B | FCF Margin: [X]%
-Cash on hand:   $[X]B
-Total Debt:     $[X]B
-Net Cash/Debt:  $[X]B
+Revenue:              $[X]B  |  Growth: [X]% YoY
+Net Income:           $[X]B  |  Growth: [X]% YoY
+Gross Margin:         [X]%
+Operating Margin:     [X]%
+Free Cash Flow (FCF): $[X]B  |  FCF Margin: [X]%
+Cash on Hand:         $[X]B
+Total Debt:           $[X]B
+Net Cash/Debt:        $[X]B
 
-[วิเคราะห์ว่า balance sheet แข็งแกร่งหรือเปราะบาง]
 [Source: 10-K/10-Q ล่าสุด + วันที่]
+
+วิเคราะห์: Balance sheet แข็งแกร่งหรือเปราะบาง?
 
 ---
 
 ## 5) Basic Health Check (เช็คคุณภาพพื้นฐานแบบง่าย)
 
-✅/⚠️/❌ Real revenue growth?     — [เหตุผลสั้นๆ]
-✅/⚠️/❌ กำไรสอดคล้องกับรายได้?  — [เหตุผลสั้นๆ]
-✅/⚠️/❌ FCF สุขภาพดีมั้ย?        — [เหตุผลสั้นๆ]
-✅/⚠️/❌ หนี้น่ากังวลมั้ย?         — [เหตุผลสั้นๆ]
-✅/⚠️/❌ Margin trend?            — [เหตุผลสั้นๆ]
-✅/⚠️/❌ ROIC/ROE/ROA?           — [เหตุผลสั้นๆ]
-✅/⚠️/❌ ยังโตหรือชะลอแล้ว?       — [เหตุผลสั้นๆ]
+✅/⚠️/❌ Real revenue growth?              — [เหตุผลสั้นๆ]
+✅/⚠️/❌ กำไรสอดคล้องกับรายได้?         — [เหตุผลสั้นๆ]
+✅/⚠️/❌ FCF healthy?                    — [เหตุผลสั้นๆ]
+✅/⚠️/❌ Debt level concerning?          — [เหตุผลสั้นๆ]
+✅/⚠️/❌ Margin trend positive?          — [เหตุผลสั้นๆ]
+✅/⚠️/❌ ROIC/ROE/ROA acceptable?        — [เหตุผลสั้นๆ]
+✅/⚠️/❌ Still growing or stalling?      — [เหตุผลสั้นๆ]
 
-🏁 สรุปพื้นฐาน: [Strong / Good but need caution / Weak]
-เหตุผล: [2-3 ประโยค]
+**🏁 Fundamentals Assessment:**
+[Strong / Good but need caution / Weak]
+
+**Reason:** [2-3 ประโยค]
 
 ---
 
 ## 6) Competitive Advantage (จุดแข็งของธุรกิจ)
 
-Moat ที่มี: [Brand / Network Effect / Switching Cost / Scale / Tech / Data]
+**Moat Type:** Brand / Network Effect / Switching Cost / Scale / Tech / Data / Other
 
-[อธิบายว่า moat นี้จริงหรือแค่ story]
-[เปรียบเทียบกับคู่แข่งสำคัญ 2-3 ราย]
+[อธิบายว่า moat นี้จริงหรือแค่เล่าเรื่อง]
+
+**Competitive Position:**
+- Main competitors: [2-3 ชื่อ]
+- vs Competitor A: [ข้อแข็ง/ข้ออ่อน]
+- vs Competitor B: [ข้อแข็ง/ข้ออ่อน]
+
+**Conclusion:** Moat แข็งแรงหรือกำลังลดลง?
 
 ---
 
 ## 7) Optionality & Future Growth (โอกาสโตในอนาคต)
 
-Growth drivers:
-- [โอกาสที่ 1 — ระยะใกล้/ไกล]
+**Growth Drivers (potential):**
+- [โอกาสที่ 1 — ระยะใกล้/ไกล? เหตุผล?]
 - [โอกาสที่ 2]
 - [โอกาสที่ 3]
 
-Unpriced upside: [อะไรที่ตลาดยังไม่ได้ price in?]
-Reality check: [โอกาสเหล่านี้ใกล้แค่ไหน vs wishful thinking]
+**Unpriced Upsides:** [อะไรที่ตลาดยังไม่ได้ price in?]
+
+**Reality Check:** [โอกาสเหล่านี้ใกล้แค่ไหน vs wishful thinking?]
 
 ---
 
 ## 8) Key Risks (ความเสี่ยงที่ต้องรู้)
 
-- 🔴 [ความเสี่ยงหลัก — competition/regulation/macro]
-- 🟡 [ความเสี่ยงรอง — margin compression/valuation]
-- ⚠️ [ความเสี่ยงที่มือใหม่มักมองข้าม]
+🔴 **Major Risk:** [competition / regulation / macro / customer concentration]
+   └─ Impact: [ถ้าเกิดขึ้นจะกระทบยังไง?]
+
+🟡 **Secondary Risk:** [margin compression / valuation / tech disruption]
+   └─ Impact: [...]
+
+⚠️ **Beginner-Misses Risk:** [สิ่งที่มือใหม่มักมองข้าม]
+   └─ Impact: [...]
 
 ---
 
 ## 9) Management & Narrative (ผู้บริหารและการเล่าเรื่อง)
 
-CEO/ทีมผู้บริหาร: [ชื่อ + track record]
-จุดแข็งด้านการบริหาร: [...]
-สิ่งที่ Earnings Call พูด vs ตัวเลขจริง: [สอดคล้องมั้ย?]
-Capital allocation: [buyback / dividend / R&D / M&A]
+**Leadership:**
+- CEO/CFO: [ชื่อ + background]
+- Track record: [ประวัติความสำเร็จ?]
+
+**Management Quality:**
+- Strengths: [3-4 ข้อแข็ง]
+- Concerns: [ข้อกังวล ถ้ามี]
+
+**Narrative vs Reality:**
+- Earnings call themes: [พวก CEO พูดเรื่องอะไร?]
+- Does it match numbers? [ใช่ / ไม่ใช่ + เหตุผล]
+
+**Capital Allocation:**
+- Buyback / Dividend / R&D / M&A — ทำอะไรกันหลัก?
+- Smart or wasteful? [ประเมิน]
 
 ---
 
-## 10) Summary for Beginners (สรุปให้มือใหม่)
+## 10) Summary for Beginners (สรุปให้มือใหม่ตัดสินใจ)
 
-🎯 Elevator Pitch (1 ประโยค):
-[อธิบายธุรกิจในประโยคเดียว]
+### 🎯 Elevator Pitch (1 ประโยค)
+[อธิบายธุรกิจในประโยคเดียว ให้มือใหม่เข้าใจ]
 
-💪 Top 3 Strengths:
+### 💪 Top 3 Strengths
 1. [...]
 2. [...]
 3. [...]
 
-⚠️ Top 3 Risks:
+### ⚠️ Top 3 Risks
 1. [...]
 2. [...]
 3. [...]
 
-เหมาะกับนักลงทุนแบบไหน: [Growth / Value / Dividend / High-Risk]
-อ่านต่อที่ไหน: [10-K, Investor Day presentation, earnings call transcript]
+### 🎓 Investor Profile
+เหมาะกับนักลงทุนแบบไหน: Growth / Value / Dividend / High-Risk / Speculative?
+
+### 📚 What to Read Next
+- 10-K (full annual report)
+- Latest earnings call transcript
+- Investor day presentation
+- [Industry report / competitive analysis]
 
 ---
 
 ## 11) Simple Scoring (ให้คะแนนแบบง่าย 1-10)
 
-ความเข้าใจง่าย (Business simplicity):  [X]/10 — [เหตุผล]
-คุณภาพรายได้ (Revenue quality):        [X]/10 — [เหตุผล]
-ความแข็งแกร่ง Balance Sheet:           [X]/10 — [เหตุผล]
-ศักยภาพการเติบโต (Growth capability):  [X]/10 — [เหตุผล]
-ระดับความเสี่ยง (Risk level):           [X]/10 — [เหตุผล]
-ความน่าสนใจโดยรวม (Overall):           [X]/10 — [เหตุผล]
+**Ease of Understanding** (Business simplicity):    [X]/10 — [เหตุผล]
+**Revenue Quality**:                                 [X]/10 — [เหตุผล]
+**Balance Sheet Strength**:                          [X]/10 — [เหตุผล]
+**Growth Capability** (ศักยภาพการเติบโต):           [X]/10 — [เหตุผล]
+**Risk Level** (ระดับความเสี่ยง):                   [X]/10 — [เหตุผล]
+**Overall Attractiveness** (โดยรวม):                [X]/10 — [เหตุผล]
 
 ---
 
 ## 12) Final Verdict
 
-คุ้มค่าศึกษาต่อมั้ย?    [ใช่/ไม่ใช่ + เหตุผล 1-2 ประโยค]
-พื้นฐานแข็งจริงมั้ย?    [ใช่/บางส่วน/ไม่ใช่ + เหตุผล]
-มือใหม่ควรเช็คอะไรก่อนซื้อ? [3-4 bullet points]
+**Worth studying further?**
+[ใช่ / ไม่ใช่ + เหตุผล 1-2 ประโยค]
 
-════════════════════════════════════
+**Are fundamentals truly strong?**
+[ใช่ / บางส่วน / ไม่ใช่ + เหตุผล]
+
+**What should a beginner check before buying?**
+1. [Point 1]
+2. [Point 2]
+3. [Point 3]
+4. [Point 4 (optional)]
+
+---
+
 ⚠️ Disclaimer: ข้อมูลนี้จัดทำขึ้นเพื่อการศึกษาเท่านั้น ไม่ใช่คำแนะนำทางการเงิน
 ผู้ลงทุนควรศึกษาข้อมูลเพิ่มเติมและปรึกษาผู้เชี่ยวชาญก่อนตัดสินใจลงทุนทุกครั้ง
-════════════════════════════════════
+════════════════════════════════════════════════════
 ```
