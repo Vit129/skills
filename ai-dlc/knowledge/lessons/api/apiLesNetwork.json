@@ -1,57 +1,155 @@
-[
+{
+  "category": "network",
+  "workflow_type": "api_automation",
+  "last_updated": "2026-04-14",
+  "lessons": [
     {
-        "id": "LESSON-NET-001",
-        "category": "server",
+      "id": "LESSON-NET-001",
+      "category": "server",
+      "title": "500 Internal Server Error — System Failure",
+      "severity": "High",
+      "tags": [
+        "500",
+        "server-error",
+        "skip",
+        "infrastructure"
+      ],
+      "context": "A 500 error means the server crashed or encountered an unhandled exception. This is almost always a backend bug or infrastructure issue — not a test code problem. Attempting to heal test code in response to a 500 wastes time and obscures the real issue.",
+      "problem": {
         "error": "500 Internal Server Error",
         "pattern": "500|Internal Server Error|Server error",
-        "cause": "System failure",
-        "solution": "Retry or Skip test, inform Dev",
-        "example": "test.skip('[TC001] test', async () => { /* Skip due to server error */ });"
+        "cause": "Backend system failure — unhandled exception, database error, or infrastructure issue",
+        "antipattern": {
+          "description": "Trying to fix test code when the server returns 500",
+          "why_bad": "500 is a server-side problem — no amount of test code changes will fix it",
+          "code": [
+            "// BAD — retrying or modifying test code for 500",
+            "// This is an infrastructure issue, not a test code issue"
+          ]
+        }
+      },
+      "solution": {
+        "description": "Skip the test and report the 500 to the dev team. Do not attempt to heal test code for server errors.",
+        "code": [
+          "// GOOD — skip and report",
+          "test.skip('[TC001] create user', async () => {",
+          "  // Skipped: POST /users returns 500 — backend issue, reported to dev team",
+          "});"
+        ]
+      },
+      "ai_instruction": "When a test fails with 500, do NOT attempt to heal the test code. Mark the test as skipped with a comment explaining it is a server-side issue.",
+      "related_lessons": [
+        "LESSON-NET-002"
+      ]
     },
     {
-        "id": "LESSON-NET-002",
-        "category": "server",
-        "error": "Request Timeout",
-        "pattern": "timeout|ETIMEDOUT|ECONNREFUSED",
-        "cause": "API slow response or not responding",
-        "solution": "Progressive Debugging: (1st) Increase timeout temporarily (2nd+) Find root cause",
+      "id": "LESSON-NET-002",
+      "category": "timeout",
+      "title": "Request Timeout — Progressive Debugging Strategy",
+      "severity": "High",
+      "tags": [
+        "timeout",
+        "ETIMEDOUT",
+        "ECONNREFUSED",
+        "slow-api",
+        "progressive-debug"
+      ],
+      "context": "Timeouts can have many root causes: slow database queries, network issues, server overload, or a too-short timeout setting. Use a progressive approach to find and fix the root cause rather than permanently increasing the timeout.",
+      "problem": {
+        "error": "Request Timeout / ETIMEDOUT / ECONNREFUSED",
+        "pattern": "timeout|ETIMEDOUT|ECONNREFUSED|Request timed out",
+        "cause": "API slow response, server not responding, network issue, or timeout setting too low",
+        "antipattern": {
+          "description": "Permanently increasing timeout without investigating root cause",
+          "why_bad": "Masks slow queries or infrastructure problems — tests become slow and the real bug goes unfixed",
+          "code": [
+            "// BAD — permanent timeout increase without investigation",
+            "test.setTimeout(120000); // Just made it longer, didn't fix anything"
+          ]
+        }
+      },
+      "solution": {
+        "description": "Use progressive debugging: quick fix first to unblock, then investigate root cause, then fix permanently.",
         "steps": [
-            {
-                "round": 1,
-                "action": "Quick Fix - Increase timeout",
-                "example": "await page.waitForResponse(res => res.url().includes('/api/data'), { timeout: 60000 });"
-            },
-            {
-                "round": 2,
-                "action": "Root Cause Analysis - Verify actual cause",
-                "checklist": [
-                    "1. Check Network Log: Does request reach server?",
-                    "2. Check API Endpoint: Is URL correct?",
-                    "3. Check Server Status: Is API server running normally?",
-                    "4. Check Request Payload: Is sent data complete?",
-                    "5. Check Database: Is query slow or deadlocked?"
-                ]
-            },
-            {
-                "round": 3,
-                "action": "Permanent Solution - Fix at source",
-                "solutions": [
-                    "- If API slow: Optimize query, add index, cache",
-                    "- If Network slow: Check VPN, proxy, firewall",
-                    "- If Payload large: Reduce payload size or use pagination",
-                    "- If Server overload: Scale up resources or load balancing"
-                ]
-            }
-        ],
-        "example": "// Round 1: Quick fix\nawait page.waitForResponse(res => res.url().includes('/api/data'), { timeout: 60000 });"
+          {
+            "round": 1,
+            "name": "Quick Fix — Unblock",
+            "code": [
+              "await page.waitForResponse(",
+              "  res => res.url().includes('/api/data'),",
+              "  { timeout: 60000 } // Temporary increase"
+            ]
+          },
+          {
+            "round": 2,
+            "name": "Root Cause Analysis",
+            "checklist": [
+              "1. Check Network Log: Does request reach server?",
+              "2. Check API Endpoint: Is URL correct?",
+              "3. Check Server Status: Is API server running normally?",
+              "4. Check Request Payload: Is sent data complete?",
+              "5. Check Database: Is query slow or deadlocked?"
+            ]
+          },
+          {
+            "round": 3,
+            "name": "Permanent Fix",
+            "solutions": [
+              "API slow → Optimize query, add index, or cache",
+              "Network slow → Check VPN, proxy, firewall",
+              "Payload large → Reduce size or use pagination",
+              "Server overload → Scale resources or load balance"
+            ]
+          }
+        ]
+      },
+      "ai_instruction": "When a test fails with timeout, apply Round 1 to unblock, then add a TODO comment to investigate root cause. Never permanently increase timeout without documenting why.",
+      "related_lessons": [
+        "LESSON-NET-001"
+      ]
     },
     {
-        "id": "LESSON-NET-003",
-        "category": "network",
-        "error": "CORS Error",
-        "pattern": "CORS|Cross-Origin|Access-Control-Allow-Origin",
-        "cause": "CORS policy disallowed",
-        "solution": "Use APIRequestContext instead of page.request",
-        "example": "const request = await playwright.request.newContext();"
+      "id": "LESSON-NET-003",
+      "category": "network",
+      "title": "CORS Error — Use APIRequestContext Instead of page.request",
+      "severity": "Medium",
+      "tags": [
+        "cors",
+        "cross-origin",
+        "APIRequestContext",
+        "browser-context"
+      ],
+      "context": "CORS is enforced by browsers, not servers. When tests run API calls through a browser page context, the browser enforces CORS and blocks cross-origin requests. APIRequestContext bypasses the browser entirely and is not subject to CORS restrictions.",
+      "problem": {
+        "error": "CORS Error / Access-Control-Allow-Origin missing",
+        "pattern": "CORS|Cross-Origin|Access-Control-Allow-Origin|blocked by CORS",
+        "cause": "API call made through browser page context — browser enforces CORS policy",
+        "antipattern": {
+          "description": "Using page.request for API calls that cross origins",
+          "why_bad": "Browser enforces CORS — cross-origin requests are blocked even if the server would allow them via direct HTTP",
+          "code": [
+            "// BAD — uses browser context, subject to CORS",
+            "const response = await page.request.get('https://api.other-domain.com/data');"
+          ]
+        }
+      },
+      "solution": {
+        "description": "Use playwright.request.newContext() which makes direct HTTP calls without browser CORS enforcement.",
+        "code": [
+          "// GOOD — direct HTTP, no CORS",
+          "import { request } from '@playwright/test';",
+          "",
+          "const apiContext = await request.newContext({",
+          "  baseURL: 'https://api.other-domain.com'",
+          "});",
+          "const response = await apiContext.get('/data');",
+          "expect(response.status()).toBe(200);"
+        ]
+      },
+      "ai_instruction": "For API tests, always use playwright.request.newContext() instead of page.request. This avoids CORS issues and is the correct approach for API-layer testing.",
+      "related_lessons": [
+        "LESSON-SETUP-001"
+      ]
     }
-]
+  ]
+}

@@ -4,18 +4,18 @@ description: >
   Workspace adapter for Memory Palace. Trigger when: starting a new chat,
   finishing a task, user says "remember this", "สรุป session", "save memory",
   "load context", "อ่าน memory", "what did we do last time".
-  Core concepts live at ~/.claude/skills/system/memory-palace/SKILL.md
+  Core concepts live at {skills_root}/system/memory-palace/SKILL.md
 ---
 
 # Memory Palace — Workspace Adapter
 
 Core concepts, AAAK compression, Temporal KG, Contradiction Detection, Archive System:
-→ `~/.claude/skills/system/memory-palace/SKILL.md`
+→ `{skills_root}/system/memory-palace/SKILL.md`
 
 Full version plan: ยกเลิกแล้ว — markdown-only เป็น final approach
 
 README (ภาษาไทย):
-→ `~/.claude/skills/system/memory-palace/MEMORY_PALACE_README.md`
+→ `{skills_root}/system/memory-palace/MEMORY_PALACE_README.md`
 
 ## Workspace Storage (Hybrid)
 
@@ -45,5 +45,5 @@ README (ภาษาไทย):
 3. Brief user on last session context
 
 ## Session End (agentStop hook)
-→ Follow save process in `~/.claude/skills/system/memory-palace/SKILL.md`
+→ Follow save process in `{skills_root}/system/memory-palace/SKILL.md`
 → Hook: `{project}/.kiro/hooks/memory-palace-save.kiro.hook`

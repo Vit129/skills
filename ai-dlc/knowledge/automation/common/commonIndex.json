@@ -7,9 +7,14 @@
       {
         "id": "database-helper",
         "path": "database.template.ts",
-        "description": "PostgreSQL Database Helper with query builder"
+        "description": "PostgreSQL Database Helper with query builder",
+        "utility_score": 5.0,
+        "usage_count": 0,
+        "last_used": null,
+        "last_failure": null,
+        "auto_captured": false
       }
     ]
   },
-  "lessonsIndex": "ai-agent/knowledge/lessons/common/"
+  "lessonsIndex": "knowledge/lessons/common/"
 }

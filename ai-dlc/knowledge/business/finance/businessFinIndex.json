@@ -21,5 +21,9 @@
     "files": {
         "rules": "businessFinRules.json",
         "config": "businessFinConfig.json"
+    },
+    "usage": {
+        "usage_count": 0,
+        "last_used": null
     }
 }

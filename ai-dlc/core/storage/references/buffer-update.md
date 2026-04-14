@@ -27,3 +27,15 @@ Aggregate findings and update the Knowledge Buffer section in the Implementation
 - Never overwrite valid existing data — append only
 - Replace "(Pending ...)" placeholders with aggregated info
 - If file not found → skip with warning
+
+## Score Sync (final step)
+
+After updating the Knowledge Buffer, sync scores back to index files:
+
+1. Check if `.memory/wings/knowledge-evolution/` exists
+2. If exists → read `template-health.md` and `lesson-effectiveness.md`
+3. Apply any pending score changes to index files:
+   - `{knowledge_root}/automation/{platform}/{platform}Index.json`
+   - `{knowledge_root}/lessons/{platform}/{platform}LessonsIndex.json`
+4. Log: "✅ Score sync complete — {n} index files updated"
+5. If wing does not exist → skip sync, scores already updated inline

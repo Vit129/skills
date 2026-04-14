@@ -7,47 +7,50 @@
         "totalLessons": 16,
         "categories": {
             "api": {
-                "path": "ai-agent/knowledge/automation/api/apiIndex.json",
-                "templateCount": 10,
-                "issueCount": 8,
+                "path": "knowledge/automation/api/apiIndex.json",
+                "templateCount": 4,
+                "lessonsCount": 16,
                 "subCategories": [
                     "auth",
                     "file",
                     "validation",
-                    "utils",
-                    "test"
+                    "utils"
                 ]
             },
             "webUi": {
-                "path": "ai-agent/knowledge/automation/webUi/webUiIndex.json",
-                "templateCount": 11,
-                "issueCount": 8,
+                "path": "knowledge/automation/webUi/webUiIndex.json",
+                "templateCount": 9,
+                "lessonsCount": 11,
                 "subCategories": [
                     "auth",
                     "table",
                     "form",
                     "file",
-                    "feedback",
-                    "navigation"
+                    "dialog",
+                    "navigation",
+                    "card",
+                    "drawer",
+                    "appLauncher"
                 ]
             },
             "mobile": {
-                "path": "ai-agent/knowledge/automation/mobile/mobileIndex.json",
+                "path": "knowledge/automation/mobile/mobileIndex.json",
                 "templateCount": 7,
-                "issueCount": 0,
+                "lessonsCount": 4,
                 "subCategories": [
                     "auth",
                     "gestures",
                     "permissions",
                     "deepLinking",
                     "hybrid",
-                    "appManagement"
+                    "appManagement",
+                    "expert"
                 ]
             },
             "common": {
-                "path": "ai-agent/knowledge/automation/common/commonIndex.json",
+                "path": "knowledge/automation/common/commonIndex.json",
                 "templateCount": 1,
-                "issueCount": 0,
+                "lessonsCount": 0,
                 "subCategories": [
                     "database",
                     "sharedFixtures"

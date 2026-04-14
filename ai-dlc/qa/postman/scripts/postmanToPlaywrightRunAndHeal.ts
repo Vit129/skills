@@ -3,8 +3,8 @@
  * @version 2.0 — Playwright Test Runner + Auto-Heal Fix Loop
  *
  * Usage:
- *   npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
- *     ~/.claude/skills/ai-dlc/qa/postman/scripts/postmanToPlaywrightRunAndHeal.ts \
+ *   npx ts-node --project {skills_root}/ai-dlc/qa/postman/scripts/tsconfig.json \
+ *     {skills_root}/ai-dlc/qa/postman/scripts/postmanToPlaywrightRunAndHeal.ts \
  *     --spec <path/to/spec.ts or tests-api/folder> \
  *     [--config <playwright.config.ts>] \
  *     [--max-attempts <3>] \

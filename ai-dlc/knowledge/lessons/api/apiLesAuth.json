@@ -1,11 +1,53 @@
-[
+{
+  "category": "auth",
+  "workflow_type": "api_automation",
+  "last_updated": "2026-04-14",
+  "lessons": [
     {
-        "id": "LESSON-AUTH-001",
-        "category": "auth",
+      "id": "LESSON-AUTH-001",
+      "category": "auth",
+      "title": "401 Unauthorized — Token Expired or Incorrect",
+      "severity": "High",
+      "tags": [
+        "auth",
+        "401",
+        "token",
+        "bearer",
+        "beforeEach"
+      ],
+      "context": "API tests that require authentication must obtain a valid token before each request. Tokens expire and cannot be reused across test sessions. Hardcoding tokens or reusing them from a previous run causes 401 failures that are hard to distinguish from real auth bugs.",
+      "problem": {
         "error": "401 Unauthorized",
         "pattern": "401|Unauthorized|Invalid token",
-        "cause": "Token expired or incorrect",
-        "solution": "Verify authToken or refresh token in beforeEach",
-        "example": "const authToken = await api.getAuthToken(username, password);"
+        "cause": "Token expired, incorrect credentials, or token not refreshed before test",
+        "antipattern": {
+          "description": "Hardcoding or reusing token across tests",
+          "why_bad": "Tokens expire — hardcoded tokens fail silently after expiry, making tests non-deterministic",
+          "code": [
+            "// BAD — hardcoded token",
+            "const headers = { Authorization: 'Bearer eyJhbGc...' };"
+          ]
+        }
+      },
+      "solution": {
+        "description": "Always obtain a fresh token in beforeEach or beforeAll using a dedicated auth helper.",
+        "code": [
+          "// GOOD — fresh token per test suite",
+          "let authToken: string;",
+          "beforeAll(async () => {",
+          "  authToken = await api.getAuthToken(username, password);",
+          "});",
+          "",
+          "test('GET /users', async () => {",
+          "  const response = await request.get('/users', {",
+          "    headers: { Authorization: `Bearer ${authToken}` }",
+          "  });",
+          "  expect(response.status()).toBe(200);",
+          "});"
+        ]
+      },
+      "ai_instruction": "Always generate a beforeAll/beforeEach block that calls getAuthToken() and stores the result. Never hardcode tokens in test files.",
+      "related_lessons": []
     }
-]
+  ]
+}

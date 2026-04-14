@@ -269,3 +269,24 @@ When using templates or existing code:
 - If >60% can be reused, the feature is cheaper than it looks
 - If <30% can be reused, consider whether the existing architecture fits at all
 - This takes 30 seconds of thinking but saves hours of rework
+
+## Phase 4.0 (NEW): Extract Intent
+
+Before keyword matching, extract the abstract intent of the feature:
+"What is the Input → Process → Output of this feature?"
+
+Example: "User submits login form → system validates credentials → session created"
+
+## Phase 4.1 (NEW): Intent Match
+
+Compare extracted intent against `intent_patterns` in `businessIndex.json`:
+- Match = pattern overlap ≥ 2 steps → load domain, proceed to Phase 5
+- If no match → continue to Phase 4.2 (keyword matching, original behavior)
+
+## Phase 5 (updated): Utility-Weighted Template Selection
+
+When multiple templates match in Phase 5:
+1. Sort by `utility_score DESC`
+2. Select top match
+3. If top score < 3.0 → warn: "⚠️ Template มีปัญหาบ่อย — review ก่อนใช้"
+4. If `auto_captured = true` AND `confidence < 0.8` → note: "📝 Auto-captured — ยังไม่ verified"

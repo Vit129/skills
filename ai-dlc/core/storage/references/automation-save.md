@@ -50,3 +50,24 @@ Save technical automation knowledge (components, test data, lessons) for API/Web
 - Deduplicate by id when merging with existing files
 - Update implementation plan save status after successful save
 - Verify at least one file was written before returning success
+
+## Score Update (after saving lesson)
+
+After saving a lesson to a lesson file, update the score in the corresponding index file:
+
+- Test PASS → `effectiveness.applied_count += 1`, `last_used = today`
+- Test FAIL (lesson prevented it) → `effectiveness.prevented_failures += 1`
+- New auto-captured lesson → `effectiveness.confidence = 0.75`, `auto_captured = true`
+
+Conflict check before save:
+1. Load existing index
+2. Same id + same content → skip (increment `applied_count` only)
+3. Same id + different content → create new entry with `-v2` suffix
+4. Contradicting existing lesson → flag for human review, do NOT save
+5. Log: "✅ Knowledge updated: {id} effectiveness {before}→{after}"
+
+Index files to update:
+- API lessons → `{knowledge_root}/lessons/api/apiLessonsIndex.json`
+- Web UI lessons → `{knowledge_root}/lessons/webUi/webUiLessonsIndex.json`
+- Mobile lessons → `{knowledge_root}/lessons/mobile/mobileLessonsIndex.json`
+- Template used → `{knowledge_root}/automation/{platform}/{platform}Index.json` → `utility_score += 0.5`, `usage_count += 1`

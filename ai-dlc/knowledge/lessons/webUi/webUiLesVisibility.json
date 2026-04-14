@@ -1,20 +1,93 @@
-[
+{
+  "category": "visibility",
+  "workflow_type": "webui_automation",
+  "last_updated": "2026-04-14",
+  "lessons": [
     {
-        "id": "LESSON-VIS-001",
-        "category": "visibility",
-        "error": "Element not visible",
-        "pattern": "not visible|hidden|display: none",
-        "cause": "Element hidden by CSS or not yet loaded",
-        "solution": "Wait for element to be visible or check CSS",
-        "example": "await expect(page.locator('#element')).toBeVisible();"
+      "id": "LESSON-VIS-001",
+      "category": "visibility",
+      "title": "Element Not Visible — Hidden by CSS or Not Yet Loaded",
+      "severity": "Medium",
+      "tags": [
+        "visibility",
+        "hidden",
+        "css",
+        "display-none",
+        "toBeVisible"
+      ],
+      "context": "Elements can be hidden in multiple ways: display:none, visibility:hidden, opacity:0, or not yet added to the DOM. The fix depends on the cause — CSS-hidden elements need a trigger action, while not-yet-loaded elements need a wait.",
+      "problem": {
+        "error": "Element not visible / hidden / display: none",
+        "pattern": "not visible|hidden|display: none|visibility.*hidden",
+        "cause": "Element hidden by CSS (conditional rendering) or not yet added to DOM (async load)",
+        "antipattern": {
+          "description": "Asserting visibility without taking the action that triggers the element to appear",
+          "why_bad": "Element is hidden because a prerequisite action wasn't taken — waiting alone won't make it appear",
+          "code": [
+            "// BAD — element is hidden because form wasn't submitted",
+            "await expect(page.locator('#success-message')).toBeVisible(); // Hidden until form submitted"
+          ]
+        }
+      },
+      "solution": {
+        "description": "Identify why the element is hidden and take the appropriate action before asserting visibility.",
+        "code": [
+          "// GOOD — trigger the action that makes element visible",
+          "await page.getByRole('button', { name: 'Submit' }).click();",
+          "await expect(page.getByText('Success! Your order has been placed.')).toBeVisible();",
+          "",
+          "// GOOD — wait for async element to appear",
+          "await expect(page.locator('[data-testid=\"result-panel\"]')).toBeVisible({ timeout: 10000 });"
+        ]
+      },
+      "ai_instruction": "When asserting element visibility, first identify what triggers the element to appear (button click, API response, tab switch). Generate the trigger action before the visibility assertion.",
+      "related_lessons": [
+        "LESSON-VIS-002",
+        "LESSON-TIME-002"
+      ]
     },
     {
-        "id": "LESSON-VIS-002",
-        "category": "visibility",
-        "error": "Element is disabled",
-        "pattern": "disabled|not enabled",
-        "cause": "Element is disabled (incomplete data or validation failed)",
-        "solution": "Fill in all required fields before clicking",
-        "example": "await page.fill('#required-field', 'data');"
+      "id": "LESSON-VIS-002",
+      "category": "visibility",
+      "title": "Element Is Disabled — Fill Required Fields Before Clicking",
+      "severity": "Medium",
+      "tags": [
+        "disabled",
+        "enabled",
+        "required-fields",
+        "form-validation",
+        "toBeEnabled"
+      ],
+      "context": "Submit buttons are often disabled until all required form fields are filled. Clicking a disabled button has no effect in Playwright — it doesn't throw an error, it just does nothing. This causes tests to silently fail at the next assertion.",
+      "problem": {
+        "error": "Element is disabled / button click has no effect",
+        "pattern": "disabled|not enabled|button.*no effect",
+        "cause": "Button is disabled because required form fields are empty or validation has not passed",
+        "antipattern": {
+          "description": "Clicking a button without filling required fields first",
+          "why_bad": "Clicking a disabled button silently does nothing — the next assertion fails with a confusing error",
+          "code": [
+            "// BAD — button is disabled, click has no effect",
+            "await page.getByRole('button', { name: 'Submit Order' }).click();",
+            "// Nothing happened — next assertion fails"
+          ]
+        }
+      },
+      "solution": {
+        "description": "Fill all required fields and verify the button is enabled before clicking.",
+        "code": [
+          "// GOOD — fill required fields, verify enabled, then click",
+          "await page.getByLabel('Full Name').fill('John Doe');",
+          "await page.getByLabel('Email').fill('john@example.com');",
+          "",
+          "await expect(page.getByRole('button', { name: 'Submit Order' })).toBeEnabled();",
+          "await page.getByRole('button', { name: 'Submit Order' }).click();"
+        ]
+      },
+      "ai_instruction": "Before generating a button click step, check if the button has enable conditions (required fields, checkboxes). Generate all prerequisite fill steps first, then add toBeEnabled() assertion before the click.",
+      "related_lessons": [
+        "LESSON-VIS-001"
+      ]
     }
-]
+  ]
+}

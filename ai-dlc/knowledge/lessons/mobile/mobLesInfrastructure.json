@@ -1,0 +1,98 @@
+{
+  "id": "L-MOB-004",
+  "category": "infrastructure",
+  "title": "Mobile Infrastructure & Session Stability",
+  "priority": "HIGH",
+  "severity": "High",
+  "workflow_type": "mobile_automation",
+  "last_updated": "2026-04-14",
+  "tags": [
+    "infrastructure",
+    "appium",
+    "session",
+    "teardown",
+    "keyboard",
+    "reset",
+    "ci"
+  ],
+  "context": "Appium manages a persistent session between the test runner and the device. Without proper lifecycle management, sessions leak between tests, the app state bleeds across test cases, and UI elements get obscured by the soft keyboard — all causing hard-to-diagnose failures.",
+  "problem": {
+    "description": "Poor Appium session and app lifecycle management causes slow, unstable test suites with hard-to-reproduce failures.",
+    "symptoms": [
+      "'Session Not Created' error when a previous session was not properly closed",
+      "Test suite takes 10x longer due to full app reinstall on every test",
+      "Button click fails because soft keyboard is covering it"
+    ],
+    "antipatterns": [
+      {
+        "name": "Session Overlap",
+        "why_bad": "Starting a new Appium session while the previous one is still active causes 'Session Not Created Exception'",
+        "code": [
+          "# BAD — no teardown, session leaks to next test",
+          "*** Test Cases ***",
+          "My Test",
+          "    Open Application    ...",
+          "    # test steps — no Close Application"
+        ]
+      },
+      {
+        "name": "Heavy Reset on Every Test",
+        "why_bad": "fullReset reinstalls the app, which takes 30-60 seconds per test. A 50-test suite becomes 30-50 minutes.",
+        "code": [
+          "# BAD — fullReset on every test",
+          "Open Application    ...    fullReset=true"
+        ]
+      }
+    ]
+  },
+  "solution": {
+    "pattern": "Hybrid-API-Setup",
+    "description": "Use smart reset strategy, explicit teardown, and keyboard management to keep sessions clean and fast.",
+    "steps": [
+      {
+        "name": "Smart Reset Strategy",
+        "description": "Use noReset=true for most tests to preserve login state and app data. Reserve fullReset=true only for the first test in a suite or explicit 'Clean Install' scenarios.",
+        "code": [
+          "# Suite Setup — full reset only once",
+          "Open Application    ${APP_URL}    fullReset=true",
+          "",
+          "# Individual tests — keep existing state",
+          "Open Application    ${APP_URL}    noReset=true"
+        ]
+      },
+      {
+        "name": "Explicit Teardown",
+        "description": "Every test case must close the application in its Teardown to free the Appium node for the next test.",
+        "code": [
+          "*** Test Cases ***",
+          "Login Test",
+          "    [Teardown]    Close Application",
+          "    Open Application    ${APP_URL}    noReset=true",
+          "    # test steps..."
+        ]
+      },
+      {
+        "name": "Hide Keyboard Pattern",
+        "description": "Always hide the soft keyboard immediately after an Input Text step if the next action is a button click or navigation. The keyboard covers the bottom 40% of the screen on most devices.",
+        "code": [
+          "# GOOD — hide keyboard before clicking button below input",
+          "Input Text       ${USERNAME_FIELD}    john@example.com",
+          "Hide Keyboard",
+          "Click Element    ${LOGIN_BTN}"
+        ]
+      },
+      {
+        "name": "Appium Health Check (CI)",
+        "description": "On CI environments, verify the Appium server is responsive before starting the suite to avoid cryptic connection errors.",
+        "code": [
+          "# Run before suite on CI",
+          "Wait Until Keyword Succeeds    3x    5s    Get Appium Session Id"
+        ]
+      }
+    ]
+  },
+  "ai_instruction": "Ensure every generated test suite has a [Teardown] that calls Close Application. When generating Input Text steps, proactively add Hide Keyboard immediately after if the next step is a Click Element or navigation action.",
+  "related_lessons": [
+    "L-MOB-001"
+  ]
+}

@@ -417,7 +417,7 @@ test.describe('[ID-1234][ID-1235] User Registration Flow', () => {
 
 #### Login System (Per-Feature)
 >
-> **📦 Source:** `ai-agent/knowledge/automation/webUi/webUiAuth.template.ts`
+> **📦 Source:** `{knowledge_root}/automation/webUi/webUiAuth.template.ts`
 > **📌 Location:** `pages/common/loginPage.ts` (if shared) or `pages/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/login/[SYSTEM_FEATURE_CAMEL]LoginPage.ts` (if specific).
 > **⭐️ Flexibility:** Create per-feature to support unique URLs and logic.
 > **⚠️ Note:** DO NOT create ID sub-folders inside the Login module.
@@ -552,7 +552,7 @@ test.describe('[ID-1234] Document Management System', () => {
 
 **🎯 Principle:** Utilize Templates from `@automation/webUi/` instead of writing custom helpers.
 
-**📦 Source:** `ai-agent/knowledge/automation/webUi/`
+**📦 Source:** `{knowledge_root}/automation/webUi/`
 
 #### Available Templates
 
@@ -567,7 +567,7 @@ test.describe('[ID-1234] Document Management System', () => {
 
 **⚠️ Notes:**
 
-- Templates are located in `ai-agent/knowledge/automation/webUi/`.
+- Templates are located in `{knowledge_root}/automation/webUi/`.
 - Copy to `helpers/shared/` in the project.
 - See examples in Section 3 (Full Example).
 
@@ -600,7 +600,7 @@ pages/userManagement/
 
 ### 6. Additional UI Patterns
 
-**📦 Source:** `ai-agent/knowledge/automation/webUi/`
+**📦 Source:** `{knowledge_root}/automation/webUi/`
 
 | Template | Class | Use Case |
 | :--- | :--- | :--- |

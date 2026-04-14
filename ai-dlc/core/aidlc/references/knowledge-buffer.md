@@ -100,3 +100,24 @@ At Phase 1.2 of a new feature, AI SHOULD:
 - Common logic only if reusable across 2+ features
 - Lessons must have: what happened, why, and how to prevent/reuse
 - AI reads Knowledge Buffer automatically at Phase 1.2 — no user action needed
+
+## Post-Execution Reflect (Phase 3.2)
+
+After test execution completes, update knowledge scores:
+
+1. PASS → `utility_score += 0.5`, `usage_count += 1`, `last_used = today` for templates used
+2. FAIL → `utility_score -= 1.0`, `last_failure = today` for templates that caused failure
+3. Extract failure pattern → check for duplicate in lessons index
+4. New pattern → auto-capture lesson (`confidence: 0.75`, `auto_captured: true`)
+5. Log: "✅ Knowledge Buffer updated"
+
+## Reuse Check (Phase 1.2 — score-aware)
+
+When scanning lessons before task creation:
+
+1. Load `{knowledge_root}/lessons/{platform}/` index
+2. Filter: `still_relevant = true` only
+3. Sort: `effectiveness.prevented_failures DESC`, then `applied_count DESC`
+4. Surface top 3 most effective lessons first
+5. Report: "📚 Top lessons: {lesson_id} (prevented {n}x failures)"
+6. Note: if `auto_captured = true` AND `confidence < 0.8` → flag as "📝 Auto-captured — verify before applying"

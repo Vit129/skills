@@ -45,8 +45,8 @@ Environment.json ─→ readPostmanEnv.ts ─────────→ tests-a
 ### Step 1: Analyze Collection → Markdown
 
 ```bash
-npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
-  ~/.claude/skills/ai-dlc/qa/postman/scripts/readPostmanCollection.ts \
+npx ts-node --project {skills_root}/ai-dlc/qa/postman/scripts/tsconfig.json \
+  {skills_root}/ai-dlc/qa/postman/scripts/readPostmanCollection.ts \
   "<collection.json>"
 # --output is optional: auto-detects tests-api/<collection-kebab-name>/
 ```
@@ -54,8 +54,8 @@ npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
 ### Step 2: Analyze Environment (optional)
 
 ```bash
-npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
-  ~/.claude/skills/ai-dlc/qa/postman/scripts/readPostmanEnv.ts \
+npx ts-node --project {skills_root}/ai-dlc/qa/postman/scripts/tsconfig.json \
+  {skills_root}/ai-dlc/qa/postman/scripts/readPostmanEnv.ts \
   "<environment.json>"
 # --output is optional: interactive select from tests-api/ folders
 ```
@@ -63,8 +63,8 @@ npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
 ### Step 3: Generate Playwright from Markdown
 
 ```bash
-npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
-  ~/.claude/skills/ai-dlc/qa/postman/scripts/postmanMdToPlaywright.ts \
+npx ts-node --project {skills_root}/ai-dlc/qa/postman/scripts/tsconfig.json \
+  {skills_root}/ai-dlc/qa/postman/scripts/postmanMdToPlaywright.ts \
   [--input "<collection.md or directory>"] \
   [--env-input "<env.md>"] \
   [--output-dir "<project-root>"] \
@@ -92,18 +92,18 @@ npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
 # Run from project root (e.g. tests/api-testing/)
 
 # Step 1
-npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
-  ~/.claude/skills/ai-dlc/qa/postman/scripts/readPostmanCollection.ts \
+npx ts-node --project {skills_root}/ai-dlc/qa/postman/scripts/tsconfig.json \
+  {skills_root}/ai-dlc/qa/postman/scripts/readPostmanCollection.ts \
   "postman/collections/MyCollection.postman_collection.json"
 
 # Step 2
-npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
-  ~/.claude/skills/ai-dlc/qa/postman/scripts/readPostmanEnv.ts \
+npx ts-node --project {skills_root}/ai-dlc/qa/postman/scripts/tsconfig.json \
+  {skills_root}/ai-dlc/qa/postman/scripts/readPostmanEnv.ts \
   "postman/environments/MyEnv.postman_environment.json"
 
 # Step 3 — skeleton mode, auto-detect input
-npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
-  ~/.claude/skills/ai-dlc/qa/postman/scripts/postmanMdToPlaywright.ts \
+npx ts-node --project {skills_root}/ai-dlc/qa/postman/scripts/tsconfig.json \
+  {skills_root}/ai-dlc/qa/postman/scripts/postmanMdToPlaywright.ts \
   --skeleton
 ```
 
@@ -125,8 +125,8 @@ helpers/core/CollectionHelpers.ts  (shared, written once)
 ### Step 4: Run + Auto-Heal
 
 ```bash
-npx ts-node --project ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json \
-  ~/.claude/skills/ai-dlc/qa/postman/scripts/postmanToPlaywrightRunAndHeal.ts \
+npx ts-node --project {skills_root}/ai-dlc/qa/postman/scripts/tsconfig.json \
+  {skills_root}/ai-dlc/qa/postman/scripts/postmanToPlaywrightRunAndHeal.ts \
   --spec "<path/to/spec.ts or tests-api/folder>" \
   [--config "<playwright.config.ts>"] \
   [--max-attempts 3] \
@@ -192,7 +192,7 @@ After running, the console shows:
 ## ⚙️ Prerequisites
 
 ```bash
-# tsconfig.json location: ~/.claude/skills/ai-dlc/qa/postman/scripts/tsconfig.json
+# tsconfig.json location: {skills_root}/ai-dlc/qa/postman/scripts/tsconfig.json
 # Uses module: CommonJS so ts-node can run without the --esm flag
 # Run all commands from project root (e.g. tests/api-testing/)
 ```

@@ -153,6 +153,31 @@ function findProjectRootMd(start: string): string | null {
     }
 }
 
+// ───────────────────────────────────────────────
+// KNOWLEDGE ROOT RESOLVER
+// Supports any prefix: ~/.claude/skills/knowledge, ~/ai-agent/skills/knowledge, etc.
+// Pattern: {anything}/skills/knowledge/
+// ───────────────────────────────────────────────
+function findKnowledgeRoot(start: string): string {
+    // 1. Walk up from cwd looking for skills/knowledge/
+    let dir = start;
+    while (true) {
+        const candidate = path.join(dir, 'skills', 'knowledge');
+        if (fs.existsSync(candidate)) return candidate;
+        const parent = path.dirname(dir);
+        if (parent === dir) break;
+        dir = parent;
+    }
+    // 2. Fallback: ~/.claude/skills/ai-dlc/knowledge
+    const homeDefault = path.join(process.env.HOME ?? '~', '.claude', 'skills', 'ai-dlc', 'knowledge');
+    if (fs.existsSync(homeDefault)) return homeDefault;
+    // 3. Last resort: relative to script location
+    return path.join(__dirname, '..', '..', '..', 'knowledge');
+}
+
+const KNOWLEDGE_ROOT = findKnowledgeRoot(process.cwd());
+const KNOWLEDGE_API_INDEX = path.join(KNOWLEDGE_ROOT, 'automation', 'api', 'apiIndex.json');
+
 async function resolveInputPath(): Promise<string> {
     if (inputArgPath) return inputArgPath;
 
@@ -226,7 +251,7 @@ function toPascalCase(str: string): string {
 // ───────────────────────────────────────────────
 // KNOWLEDGE BASE INTEGRATION
 // ───────────────────────────────────────────────
-const KNOWLEDGE_PATH = path.join(process.cwd(), 'ai-agent/knowledge/automation/api/apiIndex.json');
+const KNOWLEDGE_PATH = KNOWLEDGE_API_INDEX;
 let knowledgeBase: any = null;
 try {
     if (fs.existsSync(KNOWLEDGE_PATH)) {

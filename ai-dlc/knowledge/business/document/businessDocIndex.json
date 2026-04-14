@@ -23,5 +23,9 @@
     "files": {
         "rules": "businessDocRules.json",
         "config": "businessDocConfig.json"
+    },
+    "usage": {
+        "usage_count": 0,
+        "last_used": null
     }
 }

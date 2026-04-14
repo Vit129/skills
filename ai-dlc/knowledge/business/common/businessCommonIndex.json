@@ -27,5 +27,9 @@
     ],
     "files": {
         "rules": "businessCommonRules.json"
+    },
+    "usage": {
+        "usage_count": 0,
+        "last_used": null
     }
 }

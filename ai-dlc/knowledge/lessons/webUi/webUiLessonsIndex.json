@@ -1,23 +1,110 @@
 {
-    "version": "5.0.0",
-    "lastUpdated": "2025-12-18",
-    "description": "Lessons Learned Index (Decentralized Structure)",
-    "_summary": {
-        "total": 8,
-        "source": "*.json",
-        "categories": {
-            "timing": "webUiLesTiming.json",
-            "visibility": "webUiLesVisibility.json",
-            "locator": "webUiLesLocator.json",
-            "file": "webUiLesFile.json"
-        },
-        "popular_patterns": [
-            "timeout",
-            "hidden",
-            "disabled",
-            "overlay",
-            "multiple elements"
-        ]
+  "version": "6.0.0",
+  "lastUpdated": "2026-04-14",
+  "description": "Lessons Learned Index (Decentralized Structure)",
+  "_summary": {
+    "total": 11,
+    "source": "*.json",
+    "categories": {
+      "timing": "webUiLesTiming.json",
+      "visibility": "webUiLesVisibility.json",
+      "locator": "webUiLesLocator.json",
+      "locators": "webUiLesLocators.json",
+      "file": "webUiLesFile.json"
     },
-    "lessons": []
+    "popular_patterns": [
+      "timeout", "hidden", "disabled", "overlay",
+      "multiple elements", "filter-hasText", "getByRole"
+    ]
+  },
+  "lessons": [
+    {
+      "id": "LESSON-FILE-001",
+      "category": "file",
+      "title": "File Upload Failed — Incorrect File Path",
+      "path": "webUiLesFile.json",
+      "effectiveness": { "applied_count": 0, "prevented_failures": 0, "still_relevant": true, "confidence": 1.0 },
+      "auto_captured": false
+    },
+    {
+      "id": "LESSON-LOC-001",
+      "category": "locator",
+      "title": "Multiple Elements Match — Locator Not Specific Enough",
+      "path": "webUiLesLocator.json",
+      "effectiveness": { "applied_count": 0, "prevented_failures": 0, "still_relevant": true, "confidence": 1.0 },
+      "auto_captured": false
+    },
+    {
+      "id": "LESSON-UI-001",
+      "category": "locators",
+      "title": "Replace CSS ID Selectors with getByRole for Button Locators",
+      "path": "webUiLesLocators.json",
+      "effectiveness": { "applied_count": 0, "prevented_failures": 0, "still_relevant": true, "confidence": 1.0 },
+      "auto_captured": false
+    },
+    {
+      "id": "LESSON-UI-002",
+      "category": "locators",
+      "title": "Use filter({ hasText }) Instead of nth()/first() for List Item Selection",
+      "path": "webUiLesLocators.json",
+      "effectiveness": { "applied_count": 0, "prevented_failures": 0, "still_relevant": true, "confidence": 1.0 },
+      "auto_captured": false
+    },
+    {
+      "id": "LESSON-UI-003",
+      "category": "locators",
+      "title": "Inline HTML Mock via page.setContent() Enables Fast Isolated UI Tests",
+      "path": "webUiLesLocators.json",
+      "effectiveness": { "applied_count": 0, "prevented_failures": 0, "still_relevant": true, "confidence": 1.0 },
+      "auto_captured": false
+    },
+    {
+      "id": "LESSON-TIME-001",
+      "category": "timing",
+      "title": "Timeout Waiting for Selector — Element Not Yet Appeared or Covered",
+      "path": "webUiLesTiming.json",
+      "effectiveness": { "applied_count": 0, "prevented_failures": 0, "still_relevant": true, "confidence": 1.0 },
+      "auto_captured": false
+    },
+    {
+      "id": "LESSON-TIME-002",
+      "category": "timing",
+      "title": "Element Covered by Loading Overlay — Wait for Spinner to Disappear",
+      "path": "webUiLesTiming.json",
+      "effectiveness": { "applied_count": 0, "prevented_failures": 0, "still_relevant": true, "confidence": 1.0 },
+      "auto_captured": false
+    },
+    {
+      "id": "LESSON-TIME-003",
+      "category": "timing",
+      "title": "Data Not Loaded — Wait for API Response Before Asserting",
+      "path": "webUiLesTiming.json",
+      "effectiveness": { "applied_count": 0, "prevented_failures": 0, "still_relevant": true, "confidence": 1.0 },
+      "auto_captured": false
+    },
+    {
+      "id": "LESSON-TIME-004",
+      "category": "timing",
+      "title": "Navigation Timeout — Page Loads Slowly or Wrong URL",
+      "path": "webUiLesTiming.json",
+      "effectiveness": { "applied_count": 0, "prevented_failures": 0, "still_relevant": true, "confidence": 1.0 },
+      "auto_captured": false
+    },
+    {
+      "id": "LESSON-VIS-001",
+      "category": "visibility",
+      "title": "Element Not Visible — Hidden by CSS or Not Yet Loaded",
+      "path": "webUiLesVisibility.json",
+      "effectiveness": { "applied_count": 0, "prevented_failures": 0, "still_relevant": true, "confidence": 1.0 },
+      "auto_captured": false
+    },
+    {
+      "id": "LESSON-VIS-002",
+      "category": "visibility",
+      "title": "Element Is Disabled — Fill Required Fields Before Clicking",
+      "path": "webUiLesVisibility.json",
+      "effectiveness": { "applied_count": 0, "prevented_failures": 0, "still_relevant": true, "confidence": 1.0 },
+      "auto_captured": false
+    }
+  ]
 }

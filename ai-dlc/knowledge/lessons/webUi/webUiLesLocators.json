@@ -1,34 +1,141 @@
 {
   "category": "locators",
   "workflow_type": "webui_automation",
-  "last_updated": "2025-07-14",
+  "last_updated": "2026-04-14",
   "lessons": [
     {
       "id": "LESSON-UI-001",
-      "type": "improvement",
-      "summary": "Replace CSS id selectors with getByRole for button locators",
-      "detail": "CSS id selectors like #btn-search and #btn-confirm are fragile. Use page.getByRole('button', { name: 'Search Flights' }) for stability and accessibility compliance.",
-      "impact": "Improves locator stability and follows webUi.md PART 5 priority order",
-      "source": "PBI-001 flightBookingVisaAdvice — Adversarial Review Step 1",
-      "created_at": "2025-07-14"
+      "category": "locator",
+      "title": "Replace CSS ID Selectors with getByRole for Button Locators",
+      "severity": "Medium",
+      "tags": [
+        "locator",
+        "getByRole",
+        "css-selector",
+        "accessibility",
+        "stability"
+      ],
+      "context": "CSS id selectors like #btn-search are fragile — they break when developers rename IDs during refactoring. getByRole() locators are tied to the element's semantic role and accessible name, which are far more stable and also validate accessibility compliance.",
+      "problem": {
+        "error": "Locator breaks after UI refactoring",
+        "pattern": "id.*changed|selector.*not found|#btn-.*not found",
+        "cause": "CSS id selectors are implementation details that change frequently during development",
+        "antipattern": {
+          "description": "Using CSS id selectors for button locators",
+          "why_bad": "IDs are implementation details — renamed during refactoring, causing test failures unrelated to functionality",
+          "code": [
+            "// BAD — fragile CSS id selector",
+            "await page.locator('#btn-search').click();",
+            "await page.locator('#btn-confirm').click();"
+          ]
+        }
+      },
+      "solution": {
+        "description": "Use getByRole() with the button's accessible name. Stable across refactoring and validates accessibility.",
+        "code": [
+          "// GOOD — semantic role locator",
+          "await page.getByRole('button', { name: 'Search Flights' }).click();",
+          "await page.getByRole('button', { name: 'Confirm Booking' }).click();"
+        ]
+      },
+      "ai_instruction": "When generating button locators, always prefer getByRole('button', { name: '...' }) over CSS id selectors. Only use getByTestId() when the button has no meaningful accessible name.",
+      "related_lessons": [
+        "LESSON-UI-002",
+        "LESSON-LOC-001"
+      ]
     },
     {
       "id": "LESSON-UI-002",
-      "type": "discovery",
-      "summary": "Use filter({ hasText }) instead of nth()/first() for flight item selection",
-      "detail": "When selecting a specific flight from a list, use locator.filter({ hasText: flightCode }) to target by content rather than index. This is more resilient to list order changes.",
-      "impact": "Prevents brittle index-based locators, follows webUi.md PART 5 anti-patterns",
-      "source": "PBI-001 flightBookingVisaAdvice — flightBookingPage.ts selectFlight()",
-      "created_at": "2025-07-14"
+      "category": "locator",
+      "title": "Use filter({ hasText }) Instead of nth()/first() for List Item Selection",
+      "severity": "Medium",
+      "tags": [
+        "locator",
+        "filter",
+        "hasText",
+        "list",
+        "nth",
+        "index-based"
+      ],
+      "context": "Selecting list items by index (nth(0), first()) is brittle — the order of items can change due to sorting, filtering, or new data. Selecting by content with filter({ hasText }) targets the specific item regardless of its position.",
+      "problem": {
+        "error": "Test selects wrong item after list order changes",
+        "pattern": "nth\\(|first\\(|wrong.*item.*selected",
+        "cause": "Index-based selection breaks when list order changes",
+        "antipattern": {
+          "description": "Using nth() or first() to select a specific item from a list",
+          "why_bad": "List order is not guaranteed — nth(0) today may be a different item tomorrow",
+          "code": [
+            "// BAD — index-based, breaks when order changes",
+            "await page.getByRole('listitem').first().click();"
+          ]
+        }
+      },
+      "solution": {
+        "description": "Use filter({ hasText }) to select by content, making the locator resilient to order changes.",
+        "code": [
+          "// GOOD — content-based, resilient to order changes",
+          "await page.getByRole('listitem')",
+          "  .filter({ hasText: 'TG-001 Bangkok → Tokyo' })",
+          "  .getByRole('button', { name: 'Select' })",
+          "  .click();"
+        ]
+      },
+      "ai_instruction": "When selecting a specific item from a list or table, always use .filter({ hasText: '...' }) to target by content. Never use .nth() or .first() unless position is semantically meaningful.",
+      "related_lessons": [
+        "LESSON-UI-001",
+        "LESSON-LOC-001"
+      ]
     },
     {
       "id": "LESSON-UI-003",
-      "type": "discovery",
-      "summary": "Inline HTML mock via page.setContent() enables fast isolated UI tests without a server",
-      "detail": "For systems using inline HTML mock, centralizing the HTML in the Page Object (setupMockPage()) keeps spec files clean and makes the mock reusable across all test cases.",
-      "impact": "Reduces spec file complexity, improves test isolation and reusability",
-      "source": "PBI-001 flightBookingVisaAdvice — flightBookingPage.ts setupMockPage()",
-      "created_at": "2025-07-14"
+      "category": "architecture",
+      "title": "Inline HTML Mock via page.setContent() Enables Fast Isolated UI Tests",
+      "severity": "Low",
+      "tags": [
+        "mock",
+        "setContent",
+        "page-object",
+        "isolation",
+        "html-mock"
+      ],
+      "context": "For systems where a real backend is not available, page.setContent() can inject inline HTML directly into the browser. Centralizing the HTML mock in the Page Object's setupMockPage() method keeps spec files clean and makes the mock reusable across all test cases.",
+      "problem": {
+        "error": "Tests require a running backend server",
+        "pattern": "server.*not available|backend.*required",
+        "cause": "Tests navigate to real URLs that require a running backend",
+        "antipattern": {
+          "description": "Duplicating inline HTML mock in every test case",
+          "why_bad": "HTML mock duplicated across tests is hard to maintain — one change requires updating every test",
+          "code": [
+            "// BAD — HTML mock duplicated in every test",
+            "test('test 1', async ({ page }) => {",
+            "  await page.setContent('<html>...(100 lines)...</html>');",
+            "});",
+            "test('test 2', async ({ page }) => {",
+            "  await page.setContent('<html>...(same 100 lines)...</html>'); // Duplicated!",
+            "});"
+          ]
+        }
+      },
+      "solution": {
+        "description": "Centralize the HTML mock in the Page Object's setupMockPage() method.",
+        "code": [
+          "// GOOD — centralized in Page Object",
+          "export class FlightBookingPage {",
+          "  async setupMockPage(): Promise<void> {",
+          "    await this.page.setContent(`<html><body><!-- mock --></body></html>`);",
+          "  }",
+          "}",
+          "",
+          "test('test 1', async ({ page }) => {",
+          "  const flightPage = new FlightBookingPage(page);",
+          "  await flightPage.setupMockPage(); // Reusable",
+          "});"
+        ]
+      },
+      "ai_instruction": "When generating tests that use inline HTML mocks, always centralize the HTML in a setupMockPage() method in the Page Object. Never duplicate HTML mock content across test cases.",
+      "related_lessons": []
     }
   ]
 }

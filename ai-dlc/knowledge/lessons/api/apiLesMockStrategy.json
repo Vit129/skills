@@ -1,37 +1,163 @@
 {
   "category": "mock_strategy",
   "workflow_type": "api_automation",
-  "last_updated": "2025-07-14",
+  "last_updated": "2026-04-14",
   "lessons": [
     {
-      "id": "LESSON-API-EMR-001",
-      "title": "APIRequestContext does not support route interception — use method override instead",
-      "issue": "Used page.route() to mock API, but page context is not request context, making it impossible to intercept",
-      "solution": "Override service method in Arrange step: apiClient.service.method = async () => mockResponse",
-      "reflexion_source": "Healing Attempt 1 — EMR ID-002",
-      "source_ID": "ID-002",
-      "created_at": "2025-07-14",
-      "severity": "High"
+      "id": "LESSON-MOCK-001",
+      "category": "mock_strategy",
+      "title": "APIRequestContext Does Not Support route() Interception — Use Method Override Instead",
+      "severity": "High",
+      "tags": [
+        "mock",
+        "route",
+        "interception",
+        "APIRequestContext",
+        "method-override"
+      ],
+      "context": "Playwright's page.route() intercepts network requests made by the browser page context. APIRequestContext makes direct HTTP calls that bypass the browser entirely — so page.route() has no effect on them.",
+      "problem": {
+        "error": "page.route() mock has no effect on APIRequestContext calls",
+        "pattern": "route.*not intercepted|mock.*not working|APIRequestContext.*route",
+        "cause": "page.route() only intercepts browser-initiated requests — APIRequestContext bypasses the browser network stack",
+        "antipattern": {
+          "description": "Using page.route() to mock responses for APIRequestContext",
+          "why_bad": "APIRequestContext makes direct HTTP calls — page.route() never fires, mock is silently ignored",
+          "code": [
+            "// BAD — route() has no effect on APIRequestContext",
+            "await page.route('**/api/users', route => {",
+            "  route.fulfill({ json: { users: [] } });",
+            "});",
+            "// This mock is never triggered when using apiContext.get('/api/users')"
+          ]
+        }
+      },
+      "solution": {
+        "description": "Override the service method directly in the Arrange step to inject mock behavior.",
+        "code": [
+          "// GOOD — override service method in Arrange step",
+          "const mockResponse = { users: [{ id: 1, name: 'Mock User' }] };",
+          "apiClient.userService.getUsers = async () => mockResponse;",
+          "",
+          "const result = await apiClient.userService.getUsers();",
+          "expect(result.users).toHaveLength(1);"
+        ]
+      },
+      "ai_instruction": "When mocking API responses in API-layer tests using APIRequestContext, use method override in the Arrange step instead of page.route(). Never use page.route() for APIRequestContext mocking.",
+      "related_lessons": [
+        "LESSON-MOCK-002",
+        "LESSON-MOCK-003"
+      ]
     },
     {
-      "id": "LESSON-API-EMR-002",
-      "title": "Module-level store in DatabaseHelper causes parallel tests to leak data",
-      "issue": "Using const store = {} at module level causes tests running in parallel to share state",
-      "solution": "Move store into class instance (private maps) so each test has isolated state",
-      "reflexion_source": "Code Review Phase 4 — EMR ID-002",
-      "source_ID": "ID-002",
-      "created_at": "2025-07-14",
-      "severity": "Medium"
+      "id": "LESSON-MOCK-002",
+      "category": "mock_strategy",
+      "title": "Module-Level Store in DatabaseHelper Causes Parallel Test Data Leakage",
+      "severity": "Medium",
+      "tags": [
+        "parallel",
+        "isolation",
+        "state",
+        "module-level",
+        "DatabaseHelper",
+        "leak"
+      ],
+      "context": "When tests run in parallel, shared module-level state causes data from one test to bleed into another. A module-level const store = {} is initialized once per module load and shared across all parallel test workers.",
+      "problem": {
+        "error": "Tests interfere with each other when running in parallel",
+        "pattern": "parallel.*leak|shared state|module.*store|data.*bleed",
+        "cause": "Module-level store is shared across all parallel test workers",
+        "antipattern": {
+          "description": "Using module-level variables to store test state",
+          "why_bad": "Module-level state is shared across parallel workers — test A's data appears in test B's assertions",
+          "code": [
+            "// BAD — module-level store shared across parallel tests",
+            "const store: Record<string, User> = {}; // Shared by all workers!",
+            "export class DatabaseHelper {",
+            "  async seedUser(data: UserData) { store[data.id] = data; }",
+            "}"
+          ]
+        }
+      },
+      "solution": {
+        "description": "Move store into class instance (private maps) so each test instantiation has isolated state.",
+        "code": [
+          "// GOOD — instance-level store, isolated per test",
+          "export class DatabaseHelper {",
+          "  private userStore = new Map<string, User>();",
+          "",
+          "  async seedUser(data: UserData): Promise<string> {",
+          "    const id = `user-${Date.now()}`;",
+          "    this.userStore.set(id, { ...data, id });",
+          "    return id;",
+          "  }",
+          "",
+          "  async cleanup(id: string): Promise<void> {",
+          "    this.userStore.delete(id);",
+          "  }",
+          "}"
+        ]
+      },
+      "ai_instruction": "When generating DatabaseHelper classes, always use private instance Maps instead of module-level variables. This ensures parallel test isolation.",
+      "related_lessons": [
+        "LESSON-MOCK-001",
+        "LESSON-MOCK-003"
+      ]
     },
     {
-      "id": "LESSON-API-EMR-003",
-      "title": "Mock DB pattern (in-memory) can replace real DB when no actual backend is available",
-      "issue": "Need tests that work close to reality without installing PostgreSQL",
-      "solution": "Use in-memory Map in EMRDatabaseHelper — Seed/Verify/Cleanup works fully, testId pattern prevents data collision",
-      "reflexion_source": "Architecture Design Phase 2 — EMR ID-002",
-      "source_ID": "ID-002",
-      "created_at": "2025-07-14",
-      "severity": "Low"
+      "id": "LESSON-MOCK-003",
+      "category": "mock_strategy",
+      "title": "In-Memory Mock DB Pattern for Tests Without Real Database",
+      "severity": "Low",
+      "tags": [
+        "mock-db",
+        "in-memory",
+        "Map",
+        "seed",
+        "cleanup",
+        "testId",
+        "isolation"
+      ],
+      "context": "When no real database is available (demo, CI without DB, POC), an in-memory Map-based DatabaseHelper can fully replace real DB operations. The key is using a testId prefix on all seeded data to prevent collision between parallel tests.",
+      "problem": {
+        "error": "Tests cannot run without a real database connection",
+        "pattern": "database.*required|no.*database|connection.*refused",
+        "cause": "Test infrastructure requires real database that isn't available in all environments",
+        "antipattern": {
+          "description": "Hard dependency on real database for all environments",
+          "why_bad": "Blocks testing in demo, CI-lite, or POC environments",
+          "code": [
+            "// BAD — hard dependency on real database",
+            "const db = new PostgresClient(process.env.DATABASE_URL);"
+          ]
+        }
+      },
+      "solution": {
+        "description": "Use in-memory Map as a drop-in replacement. Use testId prefix to prevent data collision between parallel tests.",
+        "code": [
+          "// GOOD — in-memory mock DB",
+          "export class EMRDatabaseHelper {",
+          "  private patients = new Map<string, Patient>();",
+          "",
+          "  async seedPatient(testId: string, data: PatientData): Promise<string> {",
+          "    const id = `${testId}-patient-${Date.now()}`;",
+          "    this.patients.set(id, { ...data, id });",
+          "    return id;",
+          "  }",
+          "",
+          "  async cleanup(testId: string): Promise<void> {",
+          "    for (const [key] of this.patients) {",
+          "      if (key.startsWith(testId)) this.patients.delete(key);",
+          "    }",
+          "  }",
+          "}"
+        ]
+      },
+      "ai_instruction": "When generating DatabaseHelper for environments without real DB, use in-memory Map with testId-prefixed keys. Always implement seed(), get(), and cleanup(testId) methods.",
+      "related_lessons": [
+        "LESSON-MOCK-001",
+        "LESSON-MOCK-002"
+      ]
     }
   ]
 }

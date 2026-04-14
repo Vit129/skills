@@ -1,11 +1,47 @@
-[
+{
+  "category": "file",
+  "workflow_type": "webui_automation",
+  "last_updated": "2026-04-14",
+  "lessons": [
     {
-        "id": "LESSON-FILE-001",
-        "category": "file",
-        "error": "File upload failed",
-        "pattern": "file.*not found|invalid file",
-        "cause": "Incorrect file path or file does not exist",
-        "solution": "Check file path",
-        "example": "await page.setInputFiles('input[type=\"file\"]', '/absolute/path/to/file.pdf');"
+      "id": "LESSON-FILE-001",
+      "category": "file",
+      "title": "File Upload Failed — Incorrect File Path",
+      "severity": "Medium",
+      "tags": [
+        "file",
+        "upload",
+        "path",
+        "setInputFiles",
+        "absolute-path"
+      ],
+      "context": "Playwright's setInputFiles() requires a valid file path. Relative paths work only when the test runner's CWD matches the expected base directory, which varies between local runs and CI. Using absolute paths via path.resolve() eliminates this ambiguity.",
+      "problem": {
+        "error": "File upload failed / file not found",
+        "pattern": "file.*not found|invalid file|ENOENT|no such file",
+        "cause": "Relative path resolves differently depending on where the test runner is invoked",
+        "antipattern": {
+          "description": "Using relative file path in setInputFiles()",
+          "why_bad": "Relative paths depend on CWD — works locally but breaks in CI where CWD is different",
+          "code": [
+            "// BAD — relative path, breaks in CI",
+            "await page.setInputFiles('input[type=\"file\"]', './fixtures/document.pdf');"
+          ]
+        }
+      },
+      "solution": {
+        "description": "Always use path.resolve(__dirname, ...) to construct absolute paths for file uploads.",
+        "code": [
+          "// GOOD — absolute path, works everywhere",
+          "import path from 'path';",
+          "",
+          "const filePath = path.resolve(__dirname, 'fixtures/document.pdf');",
+          "await page.setInputFiles('input[type=\"file\"]', filePath);",
+          "await expect(page.getByText('document.pdf')).toBeVisible();"
+        ]
+      },
+      "ai_instruction": "When generating file upload steps, always use path.resolve(__dirname, 'fixtures/filename') for file paths. Never use relative paths.",
+      "related_lessons": []
     }
-]
+  ]
+}

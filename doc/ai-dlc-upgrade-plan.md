@@ -76,11 +76,28 @@ Sources: [blakecrosley.com](https://blakecrosley.com/blog/claude-code-source-lea
 
 ---
 
-## Current State (verified 2026-04-12)
+## Current State (verified 2026-04-14)
 
-All index files are at original state — no utility/effectiveness fields exist yet.
+Phase A complete ✅ — all index files have utility/effectiveness fields, businessIndex has intent_patterns.
+Mobile lessons converted from .md → .json with enriched schema (context, tags, code arrays, why_bad, related_lessons) ✅
 All workflow files are unmodified.
 memory-palace scaling-protocol now has Auto-Consolidation section ✅
+
+### Additional work done beyond Phase A plan:
+
+**Lesson schema enrichment (all platforms):**
+- All lesson files (api, webUi, mobile) upgraded to enriched schema: `context`, `tags`, `code` arrays, `antipattern.why_bad`, `ai_instruction`, `related_lessons`
+- `effectiveness` + `auto_captured` removed from lesson files → now lives in index files only (single source of truth)
+
+**Index files:**
+- `apiLessonsIndex.json` — populated `lessons` array with all 16 lessons + path + effectiveness
+- `webUiLessonsIndex.json` — populated `lessons` array with all 11 lessons + path + effectiveness
+- `mobileLessonsIndex.json` — already had lessons array, confirmed complete
+- `automationIndex.json` — fixed stale paths (`ai-agent/knowledge/...` → `knowledge/...`), updated counts
+- `apiIndex.json` — fixed stale lessonsIndex path, updated lessons_count to 16
+
+**Business domain index files:**
+- All 4 domain indexes (auth, common, document, finance) — added `usage: { usage_count: 0, last_used: null }`
 
 ---
 
@@ -321,7 +338,7 @@ raw/ folder ใช้ append-only pattern:
 ## Phase A — Foundation: Add Quality Signals
 **Goal:** Add fields only. No behavior change. Safe to do immediately.
 
-### A1. automation/api/apiIndex.json ❌ TODO
+### A1. automation/api/apiIndex.json ✅ DONE
 Add to each template entry:
 ```json
 "utility_score": 5.0,
@@ -332,77 +349,31 @@ Add to each template entry:
 ```
 Templates: apiauth, apifile, apivalidation, apiutils
 
-### A2. automation/webUi/webUiIndex.json ❌ TODO
+### A2. automation/webUi/webUiIndex.json ✅ DONE
 Same fields as A1.
 Templates: webUiAuth, webUiDialog, webUiFile, webUiForm, webUiNavigation, webUiTable, webUiCard, webUiDrawer, webUiAppLauncher
 
-### A3. automation/mobile/mobileIndex.json ❌ TODO
+### A3. automation/mobile/mobileIndex.json ✅ DONE
 Same fields as A1.
 Templates: mobileAppLaunch, mobileAuth, mobileGestures, mobilePermissions, mobileDeepLink, mobileApiSetup, mobileBiometrics
 
-### A4. lessons/api/* — all lesson json files ❌ TODO
-Add to each lesson entry:
-```json
-"effectiveness": {
-  "applied_count": 0,
-  "prevented_failures": 0,
-  "still_relevant": true,
-  "confidence": 1.0
-},
-"auto_captured": false
-```
+### A4. lessons/api/* — all lesson json files ✅ DONE
+Enriched all lesson files with full schema: `context`, `tags`, `severity`, `code` arrays, `antipattern.why_bad`, `ai_instruction`, `related_lessons`.
+`effectiveness` + `auto_captured` live in index files only (single source of truth — not in lesson files).
 Files: apiLesAuth, apiLesData, apiLesFile, apiLesMockStrategy, apiLesNetwork, apiLesSetup, apiLesValidation
 
-### A5. lessons/webUi/* — all lesson json files ❌ TODO
-Same fields as A4.
+### A5. lessons/webUi/* — all lesson json files ✅ DONE
+Same enriched schema as A4.
 Files: webUiLesFile, webUiLesLocator, webUiLesLocators, webUiLesTiming, webUiLesVisibility
 
-### A6. lessons/mobile/mobileLessonsIndex.json ❌ TODO
-Add to each lesson entry in `lessons` array:
-```json
-"effectiveness": {
-  "applied_count": 0,
-  "prevented_failures": 0,
-  "still_relevant": true,
-  "confidence": 1.0
-},
-"auto_captured": false
-```
+### A6. lessons/mobile/mobileLessonsIndex.json ✅ DONE
+Mobile lessons converted from .md → .json with enriched schema.
+Index populated with lessons array + path + effectiveness fields.
 Entries: L-MOB-001, L-MOB-002, L-MOB-003, L-MOB-004
 
-### A7. business/businessIndex.json ❌ TODO
-Add `intent_patterns` alongside existing `keywords` per domain:
-```json
-"auth": {
-  "keywords": [...existing...],
-  "intent_patterns": [
-    "verify identity → grant access",
-    "input credentials → validate → create session",
-    "revoke access → destroy session"
-  ]
-},
-"common": {
-  "keywords": [...existing...],
-  "intent_patterns": [
-    "input query → filter results → display list",
-    "select item → validate → confirm action"
-  ]
-},
-"document": {
-  "keywords": [...existing...],
-  "intent_patterns": [
-    "select file → validate format → upload → confirm",
-    "request document → fetch → render → download"
-  ]
-},
-"finance": {
-  "keywords": [...existing...],
-  "intent_patterns": [
-    "calculate amount → validate → process transaction",
-    "generate document → apply rules → produce output"
-  ]
-}
-```
+### A7. business/businessIndex.json ✅ DONE
+Added `intent_patterns` alongside existing `keywords` per domain.
+Added `usage: { usage_count, last_used }` to all 4 domain index files (auth, common, document, finance).
 
 ---
 
@@ -587,101 +558,52 @@ File: `system/hook-creator/templates/kiro/memory-palace-auto-consolidation.kiro.
 
 ## Status Summary
 
-| Phase | Task | Status |
-|-------|------|--------|
-| **0** | **0.1 Rewrite SKILL.md descriptions (trigger-style)** | **❌ TODO** |
-| **0** | **0.2 เพิ่ม Gotchas section ใน SKILL.md สำคัญ** | **❌ TODO** |
-| **0** | **0.3 ตรวจ Progressive Disclosure** | **❌ TODO** |
-| **0** | **0.4 เพิ่ม concurrency + isolation hints** | **❌ TODO** |
-| **0** | **0.5 Split CLAUDE.md ให้สั้นลง + cache-aware structure** | **❌ TODO** |
-| **0** | **0.6 Document Built-in Skills** | **❌ TODO** |
-| **0** | **0.7 เพิ่ม Hook Templates ใหม่ + fork bomb gotcha** | **❌ TODO** |
-| **0** | **0.8 Memory Palace: Skeptical Memory + Append-Only Logs** | **❌ TODO** |
-| **0** | **0.9 Prompt Cache Rules ใน CLAUDE.md** | **❌ TODO** |
-| **0** | **0.10 LLM-Friendly Comments Standard ใน Dev Skills** | **❌ TODO** |
-| **0** | **0.11 Hook Prompts: Time Budget + Regex-First** | **❌ TODO** |
-| A | apiIndex.json utility fields | ❌ TODO |
-| A | webUiIndex.json utility fields | ❌ TODO |
-| A | mobileIndex.json utility fields | ❌ TODO |
-| A | api lesson files effectiveness fields | ❌ TODO |
-| A | webUi lesson files effectiveness fields | ❌ TODO |
-| A | mobileLessonsIndex.json effectiveness fields | ❌ TODO |
-| A | businessIndex.json intent_patterns | ❌ TODO |
-| B | automation-save.md score update | ❌ TODO |
-| B | knowledge-buffer.md reflect protocol | ❌ TODO |
-| B | qa-task-design.md lesson sorting | ❌ TODO |
-| B | dev-task-design.md lesson sorting | ❌ TODO |
-| B | discovery-domain.md intent + utility routing | ❌ TODO |
-| B | buffer-update.md score sync | ❌ TODO |
-| C | knowledge-evolution wing template | ❌ TODO |
-| C | core/memory-palace/SKILL.md | ❌ TODO |
-| C | scaling-protocol.md auto-consolidation | ✅ DONE |
-| D | knowledge-score-update hook | ❌ TODO |
-| D | memory-palace-auto-consolidation hook | ❌ TODO |
+<!-- Priority order (revised 2026-04-13): A → B → C → D → Phase 0 -->
 
-**Done:** 1/29 tasks
-**Remaining:** 28/29 tasks
+| Priority | Phase | Task | Status |
+|----------|-------|------|--------|
+| 🔴 NOW | A | apiIndex.json utility fields | ✅ DONE |
+| 🔴 NOW | A | webUiIndex.json utility fields | ✅ DONE |
+| 🔴 NOW | A | mobileIndex.json utility fields | ✅ DONE |
+| 🔴 NOW | A | api lesson files effectiveness fields | ✅ DONE |
+| 🔴 NOW | A | webUi lesson files effectiveness fields | ✅ DONE |
+| 🔴 NOW | A | mobileLessonsIndex.json effectiveness fields | ✅ DONE |
+| 🔴 NOW | A | businessIndex.json intent_patterns | ✅ DONE |
+| 🟠 NEXT | B | automation-save.md score update | ✅ DONE |
+| 🟠 NEXT | B | knowledge-buffer.md reflect protocol | ✅ DONE |
+| 🟠 NEXT | B | qa-task-design.md lesson sorting | ✅ DONE |
+| 🟠 NEXT | B | dev-task-design.md lesson sorting | ✅ DONE |
+| 🟠 NEXT | B | discovery-domain.md intent + utility routing | ✅ DONE |
+| 🟠 NEXT | B | buffer-update.md score sync | ✅ DONE |
+| 🟡 THEN | C | knowledge-evolution wing template | ❌ TODO |
+| 🟡 THEN | C | core/memory-palace/SKILL.md | ❌ TODO |
+| 🟡 THEN | C | scaling-protocol.md auto-consolidation | ✅ DONE |
+| 🟡 THEN | D | knowledge-score-update hook | ❌ TODO |
+| 🟡 THEN | D | memory-palace-auto-consolidation hook | ❌ TODO |
+| 🟢 AFTER | 0 | 0.1 Rewrite SKILL.md descriptions (trigger-style) | ❌ TODO |
+| 🟢 AFTER | 0 | 0.2 เพิ่ม Gotchas section ใน SKILL.md สำคัญ | ❌ TODO |
+| 🟢 AFTER | 0 | 0.3 ตรวจ Progressive Disclosure | ❌ TODO |
+| 🟢 AFTER | 0 | 0.4 เพิ่ม concurrency + isolation hints | ❌ TODO |
+| 🟢 AFTER | 0 | 0.5 Split CLAUDE.md ให้สั้นลง + cache-aware structure | ❌ TODO |
+| 🟢 AFTER | 0 | 0.6 Document Built-in Skills | ❌ TODO |
+| 🟢 AFTER | 0 | 0.7 เพิ่ม Hook Templates ใหม่ + fork bomb gotcha | ❌ TODO |
+| 🟢 AFTER | 0 | 0.8 Memory Palace: Skeptical Memory + Append-Only Logs | ❌ TODO |
+| 🟢 AFTER | 0 | 0.9 Prompt Cache Rules ใน CLAUDE.md | ❌ TODO |
+| 🟢 AFTER | 0 | 0.10 LLM-Friendly Comments Standard ใน Dev Skills | ❌ TODO |
+| 🟢 AFTER | 0 | 0.11 Hook Prompts: Time Budget + Regex-First | ❌ TODO |
+| 🟢 AFTER | 0 | 0.12 Edit Path | ✅ DONE |
+
+**Done:** 15/30 tasks
+**Remaining:** 15/30 tasks
 
 ---
 
 ## Execution Order (แบ่งตามความเร่งด่วน)
-
-### 🟢 Sprint 1 — ทำวันนี้ได้เลย (~1 ชั่วโมง)
-**ผลทันที ไม่เสี่ยง ไม่กระทบ behavior เดิม**
-
-| ลำดับ | Task | ใช้เวลา | ผลที่ได้ |
-|-------|------|---------|---------|
-| 1 | 0.1 Rewrite descriptions 2 ตัว (ai-dlc, memory-palace) | 15 นาที | Skills fire ถูกจังหวะ |
-| 2 | 0.9 Prompt Cache Rules ใน CLAUDE.md | 10 นาที | Session เร็วขึ้น ประหยัด tokens |
-| 3 | 0.5 Split CLAUDE.md + cache-aware structure | 30 นาที | CLAUDE.md สั้น <200 บรรทัด, cache-friendly |
-
-**Commit หลัง Sprint 1** — ใช้ได้ทันทีใน session ถัดไป
-
-### 🟡 Sprint 2 — สัปดาห์นี้ (Foundation)
-**เพิ่ม fields + โครงสร้าง ยังไม่เปลี่ยน behavior**
-
-| ลำดับ | Task | ผลที่ได้ |
-|-------|------|---------|
-| 4 | A1-A7 เพิ่ม score/effectiveness fields ใน index files ทั้งหมด (7 tasks) | Knowledge base พร้อมรับ scoring |
-| 5 | 0.2 เพิ่ม Gotchas section (เริ่มจาก section ว่าง 5 skills) | ที่เก็บ failure points พร้อม |
-| 6 | 0.8 Skeptical Memory + Append-Only Logs + staleness annotation | Memory ไม่ hallucinate จาก stale data |
-| 7 | 0.6 Document Built-in Skills ใน SKILLS_README.md | รู้ว่ามี built-in อะไร ไม่สร้างซ้ำ |
-
-**Commit หลัง Sprint 2** — Phase A เสร็จ, knowledge base มี score fields พร้อม
-
-### 🟠 Sprint 3 — สัปดาห์หน้า (Activate)
-**เปิดใช้ scoring ใน workflow จริง — ต้องการ Sprint 2 เสร็จก่อน**
-
-| ลำดับ | Task | ผลที่ได้ |
-|-------|------|---------|
-| 8 | B1-B6 Update workflow files ให้ score-aware (6 tasks) | Templates/lessons ถูก rank ตาม effectiveness |
-| 9 | 0.3 ตรวจ Progressive Disclosure | SKILL.md ไม่ยาวเกิน, content หนักอยู่ใน references/ |
-| 10 | 0.4 เพิ่ม concurrency + isolation hints | Agent รู้ว่า skill ไหน safe to parallel |
-| 11 | 0.10 LLM-Friendly Comments Standard | AI แก้โค้ดแม่นขึ้น |
-
-**Commit หลัง Sprint 3** — Phase B เสร็จ, knowledge base self-scoring แล้ว
-
-### 🔴 Sprint 4 — เมื่อพร้อม (Memory + Automate)
-**Cross-session tracking + hooks อัตโนมัติ — ต้องการ Sprint 3 เสร็จก่อน**
-
-| ลำดับ | Task | ผลที่ได้ |
-|-------|------|---------|
-| 12 | C1-C2 Create knowledge-evolution wing + update memory-palace SKILL.md | Cross-session score tracking |
-| 13 | D1-D2 Create hooks: score-update + auto-consolidation | ไม่ต้อง manual trigger อีก |
-| 14 | 0.7 เพิ่ม Hook Templates ใหม่ (format, verify, tracker) + fork bomb gotcha | Hook library ครบ |
-| 15 | 0.11 Hook Prompts: Time Budget + Regex-First | Hooks เร็วขึ้น ประหยัด tokens |
-
-**Commit หลัง Sprint 4** — ระบบ self-evolving ครบ loop
-
----
-
-## Recommended Order (legacy — ดู Execution Order ข้างบนแทน)
-
-1. **Phase 0** — skill quality (ทำก่อนหรือคู่กับ Phase A ได้)
-2. **Phase A** — all 7 tasks (safe, additive only, no behavior change)
-3. **Phase B** — all 6 tasks (activate scoring in real workflow)
-4. **Commit after Phase B** — has value, don't wait for C-D
-5. **Phase C-D** — next iteration
+Sprint 1 🔴 — Phase A (7 tasks, add fields)
+Sprint 2 🟠 — Phase B (6 tasks, activate scoring)  
+Sprint 3 🟡 — Phase C-D (4 tasks, memory + hooks)
+Sprint 4 🟢 — Phase 0 (11 tasks, skill quality)
+Sprint 5 🟢 - Edit path ai-agent/knowledge to {project_root}/skills/knowledge
 
 ---
 

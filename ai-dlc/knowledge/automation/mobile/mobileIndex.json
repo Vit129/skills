@@ -1,63 +1,98 @@
 {
-    "version": "1.0.0",
-    "lastUpdated": "2026-03-16",
-    "description": "Mobile Automation Templates & Lessons Index (Robot Framework + Appium)",
-    "page_objects": [],
-    "templates": {
-        "appManagement": [
-            {
-                "id": "mobileAppLaunch",
-                "path": "mobileAppManagement.template.robot",
-                "description": "Standardised App Launch, Install, and Reset patterns"
-            }
-        ],
-        "auth": [
-            {
-                "id": "mobileAuth",
-                "path": "mobileAuth.template.robot",
-                "description": "Cross-platform Mobile Login (Android/iOS) with session handling"
-            }
-        ],
-        "gestures": [
-            {
-                "id": "mobileGestures",
-                "path": "mobileGestures.template.robot",
-                "description": "Standard Scroll, Swipe, Pinch, and Drag actions"
-            }
-        ],
-        "permissions": [
-            {
-                "id": "mobilePermissions",
-                "path": "mobilePermissions.template.robot",
-                "description": "Handling System Alerts and OS Permissions (Camera, Location)"
-            }
-        ],
-        "deepLinking": [
-            {
-                "id": "mobileDeepLink",
-                "path": "mobileDeepLink.template.robot",
-                "description": "Direct navigation to app screens via URLs"
-            }
-        ],
-        "hybrid": [
-            {
-                "id": "mobileApiSetup",
-                "path": "mobileApiSetup.template.robot",
-                "description": "Integration with Python Helpers for API data seeding"
-            }
-        ],
-        "expert": [
-            {
-                "id": "mobileBiometrics",
-                "path": "mobileBiometrics.template.robot",
-                "description": "Handling FaceID and Fingerprint simulations"
-            }
-        ]
-    },
-    "shared_resources": {
-        "fixtures": {
-            "path": "tests/shared-fixtures/",
-            "description": "Single Source of Truth for cross-layer test data (API, Web, Mobile)"
-        }
+  "version": "1.0.0",
+  "lastUpdated": "2026-03-16",
+  "description": "Mobile Automation Templates & Lessons Index (Robot Framework + Appium)",
+  "page_objects": [],
+  "templates": {
+    "appManagement": [
+      {
+        "id": "mobileAppLaunch",
+        "path": "mobileAppManagement.template.robot",
+        "description": "Standardised App Launch, Install, and Reset patterns",
+        "utility_score": 5.0,
+        "usage_count": 0,
+        "last_used": null,
+        "last_failure": null,
+        "auto_captured": false
+      }
+    ],
+    "auth": [
+      {
+        "id": "mobileAuth",
+        "path": "mobileAuth.template.robot",
+        "description": "Cross-platform Mobile Login (Android/iOS) with session handling",
+        "utility_score": 5.0,
+        "usage_count": 0,
+        "last_used": null,
+        "last_failure": null,
+        "auto_captured": false
+      }
+    ],
+    "gestures": [
+      {
+        "id": "mobileGestures",
+        "path": "mobileGestures.template.robot",
+        "description": "Standard Scroll, Swipe, Pinch, and Drag actions",
+        "utility_score": 5.0,
+        "usage_count": 0,
+        "last_used": null,
+        "last_failure": null,
+        "auto_captured": false
+      }
+    ],
+    "permissions": [
+      {
+        "id": "mobilePermissions",
+        "path": "mobilePermissions.template.robot",
+        "description": "Handling System Alerts and OS Permissions (Camera, Location)",
+        "utility_score": 5.0,
+        "usage_count": 0,
+        "last_used": null,
+        "last_failure": null,
+        "auto_captured": false
+      }
+    ],
+    "deepLinking": [
+      {
+        "id": "mobileDeepLink",
+        "path": "mobileDeepLink.template.robot",
+        "description": "Direct navigation to app screens via URLs",
+        "utility_score": 5.0,
+        "usage_count": 0,
+        "last_used": null,
+        "last_failure": null,
+        "auto_captured": false
+      }
+    ],
+    "hybrid": [
+      {
+        "id": "mobileApiSetup",
+        "path": "mobileApiSetup.template.robot",
+        "description": "Integration with Python Helpers for API data seeding",
+        "utility_score": 5.0,
+        "usage_count": 0,
+        "last_used": null,
+        "last_failure": null,
+        "auto_captured": false
+      }
+    ],
+    "expert": [
+      {
+        "id": "mobileBiometrics",
+        "path": "mobileBiometrics.template.robot",
+        "description": "Handling FaceID and Fingerprint simulations",
+        "utility_score": 5.0,
+        "usage_count": 0,
+        "last_used": null,
+        "last_failure": null,
+        "auto_captured": false
+      }
+    ]
+  },
+  "shared_resources": {
+    "fixtures": {
+      "path": "tests/shared-fixtures/",
+      "description": "Single Source of Truth for cross-layer test data (API, Web, Mobile)"
     }
+  }
 }

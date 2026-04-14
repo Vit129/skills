@@ -162,3 +162,15 @@ Before proceeding to next phase, validate:
 When all tasks complete:
 - If DevOps Sync is next → go to `references/phases/inception/azure-devops-sync.md`
 - If Construction is next → go to `references/phases/construction/implementation.md`
+
+## Score-Aware Lesson Reading (Step 2 — updated)
+
+When reading Lessons Learnt before task creation:
+
+1. Load `{knowledge_root}/lessons/{platform}/` index
+2. Filter: `still_relevant = true` only
+3. Sort: `effectiveness.prevented_failures DESC`, then `applied_count DESC`
+4. Surface top 3 most effective lessons first
+5. Note `confidence` for `auto_captured` lessons — treat with lower trust if `confidence < 0.8`
+6. Skip lessons where `still_relevant = false`
+7. Report: "📚 Applying lesson: {id} — prevented {n}x failures"
