@@ -47,3 +47,17 @@ README (ภาษาไทย):
 ## Session End (agentStop hook)
 → Follow save process in `{skills_root}/system/memory-palace/SKILL.md`
 → Hook: `{project}/.kiro/hooks/memory-palace-save.kiro.hook`
+
+## Knowledge Tracking
+
+On session start (if knowledge-evolution wing exists):
+- Load `~/.claude/.memory/wings/knowledge-evolution/hall.md`
+- Brief: top template score, top lesson effectiveness, flags, gaps
+- Example: "📚 Knowledge state: apiAuth score=8.5, LESSON-NET-002 prevented=3x. ⚠️ Flagged: none."
+
+On session end (if knowledge was used this session):
+- Update `rooms/template-health.md` with score changes
+- Update `rooms/lesson-effectiveness.md` with lessons applied
+- Append to `rooms/routing-log.md`: `{date}: Used {template_id}, Applied {lesson_id}`
+- Sync back to index files: `{knowledge_root}/automation/*/Index.json` and `{knowledge_root}/lessons/*/Index.json`
+- Tunnel: knowledge-evolution ↔ active project wing

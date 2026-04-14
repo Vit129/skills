@@ -1,0 +1,13 @@
+{
+  "name": "Knowledge Score Update",
+  "version": "1.0.0",
+  "description": "After shell commands that run tests, update utility scores in knowledge index files based on test results.",
+  "when": {
+    "type": "postToolUse",
+    "toolTypes": ["shell"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Check if the last shell command ran tests (look for 'playwright test', 'robot', 'npm test', 'npx playwright' in the command).\n\nIf NOT a test command → stay silent, do nothing.\n\nIf it WAS a test command:\n1. Determine which platform was tested (playwright → webUi/api, robot → mobile)\n2. Check test result (PASS/FAIL)\n3. Update the relevant knowledge index file at {knowledge_root}/automation/{platform}/{platform}Index.json:\n   - PASS → utility_score += 0.5, usage_count += 1, last_used = today (YYYY-MM-DD)\n   - FAIL (template caused it) → utility_score -= 1.0, last_failure = today\n4. If new failure pattern found → check {knowledge_root}/lessons/{platform}/ for duplicates\n   - Not found → create new lesson entry with confidence: 0.75, auto_captured: true\n5. Log: '✅ Knowledge scores updated' or stay silent if no tests ran.\n\nUse {knowledge_root} = find 'skills/knowledge/' walking up from project root."
+  }
+}

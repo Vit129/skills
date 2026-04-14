@@ -1,14 +1,22 @@
 ---
 name: us-stock
 description: >
-  วิเคราะห์สถานะพอร์ตหุ้น US ที่มีใน My Investment Port, P&L, FX impact และน้ำหนักแต่ละ sector.
-  Trigger เมื่อผู้ใช้ต้องการดู "ภาพรวมพอร์ตหุ้น US" เช่น "ดูพอร์ต US",
-  "สรุปพอร์ตหุ้นอเมริกา", "กำไรขาดทุนหุ้น US ตอนนี้เป็นยังไง".
-  ใช้ skill นี้สำหรับภาพรวม ไม่ใช่การวิเคราะห์หุ้นรายตัวเชิงลึก.
+  วิเคราะห์สถานะพอร์ตหุ้น US: P&L, FX impact, sector allocation.
+  ✅ Claude Desktop compatible — load data directly from src/data/
+  Trigger: "ดูพอร์ต US", "สรุปหุ้นอเมริกา", "กำไรขาดทุน US", "allocation US"
+  ใช้สำหรับภาพรวม ไม่ใช่การวิเคราะห์หุ้นรายตัวเชิงลึก.
 ---
 
-# US Stock Analysis Skill
+# US Stock Analysis Skill (Standalone)
 
-วิเคราะห์ US stock positions ใน My Investment Port
+วิเคราะห์ US stock portfolio โดยอ่านข้อมูลจาก `src/data/` โดยตรง
 
-Source files, sectors, วิธีวิเคราะห์, output format → (Read `references/analysis-guide.md`)
+## 2 Modes
+
+### Mode 1: Claude Desktop (Recommended)
+ใช้เมื่อ Claude Desktop เท่านั้น — read `src/data/raw/webull_holdings.js` โดยตรง
+
+### Mode 2: User Input
+ถ้าผู้ใช้ให้ข้อมูลมาตรง ให้ใช้ค่านั้นแทน
+
+Data structure, loading code, analysis method → (Read `references/analysis-guide.md`)

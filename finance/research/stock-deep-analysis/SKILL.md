@@ -1,16 +1,14 @@
 ---
 name: stock-deep-analysis
 description: >
-  วิเคราะห์หุ้นรายตัวเชิงลึก (Deep Dive) โดยรวบรวมข้อมูลครบทุกมิติ.
-  **ใช้เป็น Skill หลักเมื่อผู้ใช้ต้องการ 'วิเคราะห์หุ้น'**.
-  Trigger เมื่อผู้ใช้พูดว่า "วิเคราะห์หุ้น [TICKER]", "deep dive [TICKER]",
-  "ขอข้อมูลหุ้น [TICKER]", "พื้นฐาน [TICKER] เป็นยังไง".
-  Skill นี้จะเรียกใช้ skill อื่นเพื่อรวบรวมข้อมูลโดยอัตโนมัติ.
+  Deep dive หุ้นรายตัว (US/TH) โดยรวบรวมข้อมูล: ประวัติ, sector context, ข่าว, signal.
+  ✅ Claude Desktop compatible — orchestrate other skills + web research
+  Trigger: "วิเคราะห์หุ้น [TICKER]", "deep dive", "ข้อมูลหุ้น", "พื้นฐานหุ้น"
 ---
 
-# Stock Deep Analysis (Orchestrator)
+# Stock Deep Analysis — Orchestrator (Standalone)
 
-วิเคราะห์หุ้นรายตัวเชิงลึกในฐานะ Investment Specialist โดยเรียกใช้ Skill อื่นๆ
+วิเคราะห์หุ้นรายตัวเชิงลึก โดยเรียก skills และ web research โดยอัตโนมัติ
 
 ## Persona
 

@@ -575,11 +575,11 @@ File: `system/hook-creator/templates/kiro/memory-palace-auto-consolidation.kiro.
 | 🟠 NEXT | B | dev-task-design.md lesson sorting | ✅ DONE |
 | 🟠 NEXT | B | discovery-domain.md intent + utility routing | ✅ DONE |
 | 🟠 NEXT | B | buffer-update.md score sync | ✅ DONE |
-| 🟡 THEN | C | knowledge-evolution wing template | ❌ TODO |
-| 🟡 THEN | C | core/memory-palace/SKILL.md | ❌ TODO |
+| 🟡 THEN | C | knowledge-evolution wing template | ✅ DONE |
+| 🟡 THEN | C | core/memory-palace/SKILL.md | ✅ DONE |
 | 🟡 THEN | C | scaling-protocol.md auto-consolidation | ✅ DONE |
-| 🟡 THEN | D | knowledge-score-update hook | ❌ TODO |
-| 🟡 THEN | D | memory-palace-auto-consolidation hook | ❌ TODO |
+| 🟡 THEN | D | knowledge-score-update hook | ✅ DONE |
+| 🟡 THEN | D | memory-palace-auto-consolidation hook | ✅ DONE |
 | 🟢 AFTER | 0 | 0.1 Rewrite SKILL.md descriptions (trigger-style) | ❌ TODO |
 | 🟢 AFTER | 0 | 0.2 เพิ่ม Gotchas section ใน SKILL.md สำคัญ | ❌ TODO |
 | 🟢 AFTER | 0 | 0.3 ตรวจ Progressive Disclosure | ❌ TODO |
@@ -593,8 +593,8 @@ File: `system/hook-creator/templates/kiro/memory-palace-auto-consolidation.kiro.
 | 🟢 AFTER | 0 | 0.11 Hook Prompts: Time Budget + Regex-First | ❌ TODO |
 | 🟢 AFTER | 0 | 0.12 Edit Path | ✅ DONE |
 
-**Done:** 15/30 tasks
-**Remaining:** 15/30 tasks
+**Done:** 19/30 tasks
+**Remaining:** 11/30 tasks
 
 ---
 

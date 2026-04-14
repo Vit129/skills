@@ -1,5 +1,17 @@
 # Stock Deep Analysis Output Template
 
+## Claude Desktop Mode
+
+**Ticker Input:** User provides ticker → Orchestrate other skills:
+1. Load portfolio context from `src/data/` (if ticker in holdings)
+2. Call `news-search` for latest news (web search)
+3. Call `ai-recommend` for sentiment/signals
+4. Web search for financial data (10-K, earnings, analyst reports)
+
+**Output:** Use template below for all deep dives
+
+---
+
 ห้ามเปลี่ยนโครงสร้าง — ใช้ template นี้ทุกครั้ง
 
 ```

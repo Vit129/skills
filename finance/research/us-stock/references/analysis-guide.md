@@ -1,11 +1,39 @@
-# US Stock Analysis Guide
+# US Stock Analysis Guide (Standalone)
 
-## Source Files
+## Data Loading (Claude Desktop)
 
-- **Data:** `src/data/raw/webull_holdings.js`, `dime_holdings.js`
-- **FX Rate:** USD/THB จาก Yahoo Finance (auto-sync ใน `src/data/services/yahoo.js`)
-- **Feature files:** `src/features/holdings/`, `src/features/overview/`
-- **Portfolio engine:** `src/features/holdings/usePortfolioEngine.js`
+**Base path:** `/Users/supavit.cho/Git/My Investment Port/`
+
+### Step 1: Load Holdings Data
+
+File: `src/data/raw/webull_holdings.js`
+```javascript
+// Read the file, parse holdings array
+// Expected structure:
+[
+  {
+    ticker: "AAPL",
+    shares: 100,
+    costBasis: 150.25,
+    currentPrice: 180.50,
+    sector: "Technology",
+    holdingValue: 18050.00
+  },
+  ...
+]
+```
+
+### Step 2: Get FX Rate
+
+File: `src/data/services/yahoo.js` or latest from `src/data/config/fxRate.json`
+- Look for current USD/THB rate
+- Default fallback: 33.50 THB/USD
+
+### Step 3: Calculate Portfolio Stats
+
+- **Total Value:** Sum of all `holdingValue`
+- **Total Value THB:** totalValueUSD × FX rate
+- **Sector Allocation:** Group by sector, calc % of total
 
 ## Sectors ที่ track
 

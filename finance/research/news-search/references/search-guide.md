@@ -1,14 +1,13 @@
-# News Search Guide
+# News Search Guide (Standalone)
 
-## ขั้นตอน
+## ขั้นตอน (Claude Desktop)
 
-### 1. เช็คพอร์ตปัจจุบัน
-อ่าน `src/data/raw/webull_holdings.js` และ `dime_holdings.js` เพื่อรู้ว่ามี ticker อะไรบ้าง
+### Step 1: ได้รับ Input จากผู้ใช้
+- ถ้าระบุมา: ใช้ ticker/sector ที่ระบุ
+- ถ้าไม่ระบุ: ถาม "ต้องการข่าวเกี่ยวกับหุ้นตัวไหน หรือข่าว macro?"
+- Optional: โหลดพอร์ตจาก `src/data/raw/webull_holdings.js` เพื่ออ้างอิง
 
-### 2. ถามผู้ใช้ (ถ้าไม่ได้ระบุมา)
-"ต้องการข่าวเกี่ยวกับหุ้นตัวไหน? หรือต้องการข่าวทั้งพอร์ต?"
-
-### 3. ค้นหาด้วย WebSearch
+### Step 2: ค้นหาด้วย WebSearch API
 
 **หุ้นเฉพาะตัว:**
 - `"[TICKER] news today"`

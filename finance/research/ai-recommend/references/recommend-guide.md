@@ -1,10 +1,27 @@
 # AI Recommend Guide
 
-## ขั้นตอนการทำงาน
+## ขั้นตอนการทำงาน (Claude Desktop)
 
-### 1. วิเคราะห์พอร์ตปัจจุบัน
-- อ่านข้อมูลจาก `src/data/raw/webull_holdings.js` และ `dime_holdings.js`
-- สรุป: sectors ที่มี, % concentration ของแต่ละ sector, มูลค่ารวม
+### 1. Load Current Portfolio (from src/data/)
+
+**Base path:** `/Users/supavit.cho/Git/My Investment Port/`
+
+Files:
+- `src/data/raw/webull_holdings.js` — US stock holdings
+- `src/data/raw/thaiFunds.js` — Thai fund holdings (if applicable)
+
+```javascript
+// Parse holdings from files
+// Calculate by sector:
+const sectorAllocation = {
+  "Technology": 35.2,      // % of portfolio
+  "Healthcare": 15.1,
+  "Finance": 12.3,
+  ...
+};
+```
+
+Output: Total portfolio value + sector summary
 
 ### 2. หา gaps ในพอร์ต
 - Sector ไหน underweight หรือยังไม่มีเลย

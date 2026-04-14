@@ -1,0 +1,12 @@
+{
+  "name": "Memory Palace Auto-Consolidation",
+  "version": "1.0.0",
+  "description": "After agent stops, check if Memory Palace consolidation threshold is reached and run auto-consolidation if needed. Inspired by Claude Code Dream System (Orient→Gather→Consolidate→Prune).",
+  "when": {
+    "type": "agentStop"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Check if Memory Palace consolidation is needed.\n\n1. Look for state.md in these locations (in order):\n   - {project}/.memory/state.md\n   - ~/.claude/.memory/state.md\n\n2. If state.md not found → skip silently.\n\n3. Read Consolidation_Stats from state.md:\n   - If mode = 'manual' → skip silently.\n   - If mode = 'auto' (default) AND (sessions_since >= 5 OR days_since >= 7):\n     → Run Auto-Consolidation from memory-palace/references/scaling-protocol.md §Auto-Consolidation\n     → Update Consolidation_Stats.sessions_since = 0, last_consolidation = today\n     → Show brief summary to user for verification\n\n4. If Consolidation_Stats section missing → add it with defaults:\n   mode: auto, sessions_since: 1, last_consolidation: today\n\nComplete within 15 seconds. If analysis takes longer → skip and report 'skipped — consolidation check timed out'."
+  }
+}

@@ -4,7 +4,10 @@
       "Bash(npx ts-node:*)",
       "Bash(/Users/supavit.cho/.nvm/versions/node/v22.14.0/bin/npx ts-node:*)",
       "Bash(git add:*)",
-      "Bash(git commit -m ':*)"
+      "Bash(git commit -m ':*)",
+      "Bash(git rm:*)",
+      "Bash(git commit -m 'rename: SKILLS_README.md → SKILL.md for consistent naming convention:*)",
+      "Bash(git commit -m 'refactor: update all 5 finance/research skills for Claude Desktop standalone mode:*)"
     ]
   }
 }

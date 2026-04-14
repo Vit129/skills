@@ -42,6 +42,15 @@ Single source of truth for all AI-assisted development, QA, and Finance analysis
 | `test-scenario/` | Scenario design, data gen, reuse, quick-scenario |
 | `test-scenario-rules/` | Test scenario design guidelines + CSV export |
 | `postman/` | Postman → Playwright migration: collection/env analysis, code generation (spec+helper+service+schema), run + auto-heal fix loop |
+| `performance-testing/` | Performance test strategy, scripts, and analysis |
+
+### Knowledge (Domain Data) — `ai-dlc/knowledge/`
+
+| Folder | Purpose |
+|--------|---------|
+| `automation/` | Automation knowledge base: API, Web UI, Mobile — indexed via automationIndex.json |
+| `business/` | Business domain knowledge: auth, common, document, finance — indexed via businessIndex.json |
+| `lessons/` | Lessons learned from past projects: API, Mobile, Web UI |
 
 ## 2. Finance Category (`finance/`)
 
@@ -83,6 +92,7 @@ Cross-project tools that work with any domain — not tied to ai-dlc.
 | `ai-techniques/` | CoT, LATS, AoT — domain-agnostic reasoning techniques |
 | `analysis-concept/` | Reusable analysis concepts: context, discovery, gap, reverse-eng, requirements |
 | `skill-creator/` | Create, improve, validate Claude Code skills (meta skill — use when building new skills) |
+| `knowledge-evolution/` | Auto-consolidation, semantic routing, utility scoring — knowledge lifecycle management |
 
 ## 4. Internal (`_internal/`)
 
@@ -93,4 +103,4 @@ Folders that store system data, logs, or backups to keep the root directory clea
 ## Maintenance
 
 - Edit skills in their respective subdirectories — this is the single source of truth.
-- Last updated: 2026-04-11 (system/: added analysis-concept; ai-techniques moved from ai-dlc/core)
+- Last updated: 2026-04-14 (added: ai-dlc/knowledge/, ai-dlc/qa/performance-testing/, ai-dlc/product/analysis-skills/, system/knowledge-evolution/)
