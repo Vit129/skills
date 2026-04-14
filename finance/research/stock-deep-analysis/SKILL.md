@@ -35,17 +35,40 @@ description: >
 ถ้าไม่ได้ระบุ → ถาม "ต้องการวิเคราะห์หุ้นตัวไหน?"
 
 ### Step 2 — Gather All Data (Web Search)
-1. **Financial Reports:** 10-K, 10-Q ล่าสุด
-2. **Earnings Data:** Presentations & Calls
-3. **Latest News:** 5-7 ข่าวสำคัญ (recent + impact)
-4. **Analyst Reports:** Recommendations & price targets
-5. **Business Data:** Customers, revenue breakdown, competition, moats
-6. **Market Context:** Sector trends, macro outlook
 
-### Step 3 — Generate Complete Report (14 Sections)
-**Section 1-12:** Deep fundamental analysis (12 sections)
+**Financial & Valuation:**
+1. Financial Reports (10-K, 10-Q ล่าสุด)
+2. Earnings presentations & calls (3-5 recent quarters)
+3. Analyst reports, price targets, ratings
+4. Valuation metrics (P/E, PEG, Price-to-Sales, EV/EBITDA)
+5. DCF analysis / Fair value estimates
+
+**Business & Competition:**
+6. Business data (customers, revenue breakdown, moats, competitive position)
+7. Comparable companies metrics & analysis
+8. Industry trends & macro outlook
+
+**Performance & Sentiment:**
+9. Historical performance (1Y, 3Y, 5Y returns vs S&P 500)
+10. Stock price chart & volatility data
+11. Latest news (5-7 headlines) + sentiment analysis
+12. Insider trading activity (buying/selling signals)
+
+**Earnings Quality:**
+13. Earnings surprise history (last 8 quarters)
+14. Revenue surprises & guidance accuracy
+15. Dividend history (if applicable) & payout sustainability
+
+### Step 3 — Generate Complete Report (20 Sections)
+**Section 1-12:** Deep fundamental analysis
 **Section 13:** Latest News & Market Impact
-**Section 14:** AI Recommendations & Investment Signal
+**Section 14:** Investment Signal & Recommendations
+**Section 15:** Valuation Analysis (P/E, PEG, DCF, Fair Value)
+**Section 16:** Historical Performance vs Market
+**Section 17:** Insider Trading Activity & Signals
+**Section 18:** Comparable Companies Analysis
+**Section 19:** Earnings Surprise History & Pattern
+**Section 20:** Final Investment Checklist & Action Plan
 
 → (Read `references/output-template.md`)
 

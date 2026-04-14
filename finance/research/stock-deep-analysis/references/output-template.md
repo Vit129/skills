@@ -233,6 +233,197 @@ Short-term (0-6 months) / Medium (6-18 months) / Long-term (2+ years)?
 
 ---
 
+## 15) Valuation Analysis
+
+### P/E Ratio & Earnings Valuation
+- Current P/E: [X]
+- Industry average P/E: [X]
+- Valuation: [Undervalued / Fair / Overvalued]
+
+### PEG Ratio (Price/Earnings to Growth)
+- PEG: [X]
+- Interpretation: [ถูกสุด / ปกติ / แพง]
+
+### Dividend Metrics (if applicable)
+- Dividend yield: [X]%
+- Dividend growth rate: [X]% YoY
+- Payout ratio: [X]%
+- Safety: [Safe / Watch / Risky]
+
+### Valuation Metrics Summary
+- Price-to-Sales: [X]
+- Price-to-Book: [X]
+- EV/EBITDA: [X]
+- vs Peers: [ถูกกว่า / แพงกว่า]
+
+### DCF (Intrinsic Value) Analysis
+- Fair value estimate: $[X] (based on DCF model)
+- vs Current price: [+X% upside / -X% downside]
+- Confidence level: [Low/Medium/High]
+
+---
+
+## 16) Historical Performance vs Market
+
+### 1-Year Performance
+- Stock return: [+X]%
+- S&P 500 return: [+X]%
+- Outperformance: [+X% / -X%]
+
+### 3-Year Performance
+- Stock CAGR: [X]%
+- S&P 500 CAGR: [X]%
+- Vs peers: [Top 10% / Mid 50% / Bottom 10%]
+
+### 5-Year Performance
+- Stock CAGR: [X]%
+- Max Drawdown: [-X]%
+- Recovery time from drawdown: [X months]
+
+### Volatility Analysis
+- Beta: [X] (vs market)
+- Volatility (Std Dev): [X]%
+- Risk-adjusted returns (Sharpe Ratio): [X]
+
+---
+
+## 17) Insider Trading Activity & Signals
+
+### Recent Insider Transactions (3-6 months)
+**Management Buying Signals:**
+- [Executive name]: Bought [X] shares @ $[Y] (date)
+- [Executive name]: Bought [X] shares @ $[Y] (date)
+
+**Management Selling Signals:**
+- [Executive name]: Sold [X] shares @ $[Y] (date)
+- [Executive name]: Sold [X] shares @ $[Y] (date)
+
+### Insider Sentiment Analysis
+- Buying > Selling? [Yes/No]
+- Pattern: [All insiders buying = bullish / Mixed = neutral / All selling = bearish]
+- Interpretation: [บ่งชี้อะไร?]
+
+### Aggregate Insider Ownership
+- % of company owned by insiders: [X]%
+- Trend: [Increasing / Stable / Decreasing]
+
+---
+
+## 18) Comparable Companies Analysis
+
+### Main Competitors
+1. **[Competitor A]**
+   - Market Cap: $[X]B
+   - P/E: [X] vs stock P/E [Y]
+   - Growth: [X]% vs stock [Y]%
+   - Assessment: [More expensive / Similar / Cheaper]
+
+2. **[Competitor B]**
+   - Market Cap: $[X]B
+   - P/E: [X]
+   - Growth: [X]%
+   - Assessment: [...]
+
+### Valuation vs Peers
+- Our stock valuation rank: [1st (cheapest) / Middle / Last (most expensive)]
+- Is premium/discount justified? [Yes + เหตุผล / No + เหตุผล]
+
+### Business Quality vs Peers
+- Margin quality: [Best / Middle / Worst]
+- Revenue growth: [Best / Middle / Worst]
+- FCF generation: [Best / Middle / Worst]
+- Overall: [Leading / Competitive / Lagging]
+
+---
+
+## 19) Earnings Surprise History & Pattern
+
+### Last 8 Quarters Earnings Results
+| Quarter | EPS Estimate | EPS Actual | Beat/Miss | % Surprise |
+|---------|-------------|-----------|-----------|-----------|
+| Q[X] | $[X] | $[X] | Beat/Miss | +X% / -X% |
+| [...]  |   |   |   |   |
+
+### Pattern Analysis
+- % of quarters beat: [X]%
+- Average surprise magnitude: [+X]% / [-X]%
+- Trend: [Beating more recently / Consistent / Missing more]
+
+### Revenue Surprise Pattern
+| Quarter | Revenue Est | Revenue Act | Beat/Miss | % Surprise |
+|---------|------------|-----------|-----------|-----------|
+| Q[X] | $[X]B | $[X]B | Beat/Miss | +X% / -X% |
+
+### Guidance Accuracy
+- Does management underpromise/overdeliver? [Yes / No / Mixed]
+- Guidance credibility: [High / Medium / Low]
+
+---
+
+## 20) Final Investment Checklist & Action Plan
+
+### ✅ Investment Decision Checklist
+
+**Business Quality:**
+- ✅/⚠️/❌ Business model is durable & defensible
+- ✅/⚠️/❌ Competitive advantages (moat) are real
+- ✅/⚠️/❌ Revenue quality is strong & recurring
+- ✅/⚠️/❌ Profitability & cash flow are healthy
+
+**Valuation:**
+- ✅/⚠️/❌ Stock is reasonably valued (P/E, DCF, etc.)
+- ✅/⚠️/❌ Upside/downside risk is attractive (3:1 or better)
+- ✅/⚠️/❌ Fair value provides margin of safety
+
+**Growth:**
+- ✅/⚠️/❌ Growth drivers are sustainable & real
+- ✅/⚠️/❌ Management execution track record is strong
+- ✅/⚠️/❌ Earnings surprises show competence
+
+**Risk:**
+- ✅/⚠️/❌ Key risks are manageable & understood
+- ✅/⚠️/❌ Insider buying shows confidence (if available)
+- ✅/⚠️/❌ Valuation vs peers justifies any premium
+
+**Portfolio Fit:**
+- ✅/⚠️/❌ Aligns with my investment strategy
+- ✅/⚠️/❌ Position size appropriate for risk tolerance
+- ✅/⚠️/❌ Not correlated with existing holdings
+
+### 🎯 Action Plan
+
+**If BUY Decision:**
+1. Entry price target: $[X] - $[Y]
+2. Initial position size: [X]% of portfolio
+3. Set stop loss: $[X] (-X% from entry)
+4. First profit target: $[X] (+X% from entry)
+5. Watch triggers:
+   - [Monitor metric 1]
+   - [Monitor metric 2]
+   - [Monitor metric 3]
+
+**If HOLD Decision:**
+1. Monitoring schedule: [Weekly / Monthly]
+2. Key data points to track:
+   - Earnings surprises
+   - Insider activity
+   - Valuation changes
+3. Catalyst to watch for: [X months]
+4. Re-evaluation date: [X date]
+
+**If AVOID Decision:**
+1. Reason: [Primary concern]
+2. Conditions to revisit: [If valuation falls to X / If X improves]
+3. Re-check date: [X date]
+
+### 📚 Next Steps
+1. Read: [10-K / earnings call transcript / investor presentation]
+2. Watch: [Earnings date / Conference / Key event]
+3. Compare: [vs [Competitor A] / vs [Index]]
+4. Consult: [Financial advisor / Tax professional]
+
+---
+
 ⚠️ Disclaimer: ข้อมูลนี้จัดทำขึ้นเพื่อการศึกษาเท่านั้น ไม่ใช่คำแนะนำทางการเงิน
 ผู้ลงทุนควรศึกษาข้อมูลเพิ่มเติมและปรึกษาผู้เชี่ยวชาญก่อนตัดสินใจลงทุนทุกครั้ง
 ════════════════════════════════════════════════════
