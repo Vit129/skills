@@ -37,3 +37,31 @@ Build and maintain backend services and APIs.
 
 ## Code Quality
 - **Backend Code Review** — Static audit checklist: architecture, validation, auth, DB, security, logging. (Read `references/backend-code-review.md`)
+
+## ⚠️ Gotchas
+
+- **Missing input validation on new endpoints** — agent adds endpoint without validation layer. Fix: every endpoint must validate input with Zod/Pydantic before processing.
+- **Auth middleware skipped on new routes** — new routes added without attaching auth middleware. Fix: always check auth middleware is applied when adding any protected route.
+- **N+1 query in loops** — agent writes DB queries inside loops instead of batch queries. Fix: always use `WHERE id IN (...)` or JOIN instead of per-item queries.
+- **Secrets hardcoded in code** — agent puts API keys or passwords directly in source. Fix: always use environment variables; never commit secrets.
+- **Migration not created for schema change** — agent edits model without creating a migration file. Fix: every schema change requires a corresponding migration.
+
+## LLM-Friendly Code Comments
+
+Write comments that AI agents can understand — not just humans:
+
+```python
+# ❌ Old style:
+# validate input
+
+# ✅ New style:
+# Validates user input against business rules before saving to DB.
+# Returns structured error dict with field-level messages on failure.
+# Called by: POST /api/users endpoint handler.
+```
+
+**Principles:**
+- State **what** + **why** + **who calls** — not just what
+- Include context AI needs to edit correctly (dependencies, side effects, constraints)
+- Add docstrings/JSDoc with params + return + raises/throws
+- Complex business logic: add comment block explaining the rule before the code

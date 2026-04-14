@@ -1,9 +1,14 @@
 ---
 name: memory-palace
 description: >
-  Organizes project knowledge into a hierarchical structure (Wings, Rooms, Closets, Drawers)
-  using AAAK compression for high-density state management. Scales from small projects to
-  large multi-wing palaces without any new dependencies — pure markdown files.
+  This skill should be used when the user asks to "save memory", "load context",
+  "compress room", "archive wing", "session start", "session end",
+  "remember this for next session", "what did we do last time",
+  "store this in memory", "update the palace", "create a wing",
+  "check memory", "recall context", "palace health", "consolidate memory",
+  or needs cross-session knowledge persistence for any project.
+concurrency: unsafe
+isolation: shared
 ---
 
 # Memory Palace
@@ -61,6 +66,15 @@ Load the appropriate reference when needed:
 | Room: discover, gap, create, compress to closet | `references/room-analysis.md` |
 | Hall: index, tunnels, state.md, palace health | `references/hall-analysis.md` |
 | Technical logic, AAAK examples | `references/mempalace-logic.md` |
+
+## ⚠️ Gotchas
+
+- **Room >80 lines not compressed** — agent skips compression when room grows gradually. Fix: check room line count explicitly before session end, not just after writes.
+- **hall.md drift** — hall.md becomes stale when rooms are added/renamed without updating the index. Fix: always update hall.md when creating or archiving a room.
+- **Stale closet after room edit** — editing a room without regenerating its closet leaves the closet out of sync. Fix: after any room edit >10 lines, regenerate the closet.
+- **state.md overflow** — state.md can exceed 100 lines if wings accumulate without archiving. Fix: archive wings that haven't been touched in 30+ days.
+- **Tunnel references break on archive** — tunnels.md still points to archived rooms. Fix: update tunnels.md when archiving any wing.
+- **Recalled facts treated as truth** — loaded hall.md/closets are hints only, not verified facts. Always grep/glob to verify before acting on recalled information.
 
 ## 📦 Optional Features
 

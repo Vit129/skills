@@ -1,0 +1,12 @@
+{
+  "name": "Auto-Captured Lesson Review",
+  "version": "1.0.0",
+  "description": "At session end, checks for auto-captured lessons with confidence < 0.8 that haven't been reviewed yet. Prompts user to verify or dismiss them before they influence future routing decisions.",
+  "when": {
+    "type": "agentStop"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Complete within 15 seconds. If analysis takes longer, skip silently.\n\nCheck for unreviewed auto-captured lessons:\n1. Search lesson index files for entries where BOTH conditions are true:\n   - auto_captured: true\n   - confidence < 0.8\n   - (optional) reviewed: false or field missing\n\nIndex files to check:\n- ~/.claude/skills/ai-dlc/knowledge/lessons/api/apiLessonsIndex.json\n- ~/.claude/skills/ai-dlc/knowledge/lessons/webUi/webUiLessonsIndex.json\n- ~/.claude/skills/ai-dlc/knowledge/lessons/mobile/mobileLessonsIndex.json\n\n2. If NONE found → stay silent.\n3. If found → show compact list:\n   '📝 Auto-captured lessons need review ({n} items):\n   - {id}: {summary} (confidence: {x})\n   ...\n   Review now? (yes/later)'\n\n4. If user says yes → for each lesson:\n   - Show summary + detail\n   - Ask: [K]eep as verified / [E]dit / [D]elete\n   - K → set confidence: 1.0, auto_captured: false in lesson file + index\n   - E → open lesson file for editing\n   - D → set still_relevant: false in index\n\n5. If user says later → skip, will appear again next session end."
+  }
+}

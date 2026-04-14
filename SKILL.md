@@ -100,6 +100,22 @@ Folders that store system data, logs, or backups to keep the root directory clea
 
 - `backups/`, `cache/`, `debug/`, `downloads/`, `file-history/`
 
+## 5. Built-in Skills (Claude Code)
+
+Skills ที่มาพร้อม Claude Code — ไม่ต้องสร้างเอง:
+
+| Skill | ใช้เมื่อ | เทียบกับ custom skill |
+|-------|---------|---------------------|
+| `/simplify` | refactor code ให้ clean | — |
+| `/verify` | ตรวจ correctness | เสริม qa-architect |
+| `/stuck` | ติดปัญหา ไม่รู้จะทำยังไง | — |
+| `/remember` | persist ข้อมูลลง memory | เสริม memory-palace |
+| `/skillify` | สร้าง skill ใหม่จาก workflow | เสริม skill-creator |
+| `/debug` | debugging workflow | — |
+| `/batch` | batch operations across files | — |
+
+---
+
 ## Maintenance
 
 - Edit skills in their respective subdirectories — this is the single source of truth.

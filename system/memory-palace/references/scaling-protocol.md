@@ -315,6 +315,17 @@ User says any of:
 - ❌ Raw files referenced in open threads — never suggest archiving
 - ❌ Contradictions — flag only, never auto-resolve
 
+## 🧠 Skeptical Memory (จาก Claude Code 3-Layer Memory)
+
+On session start when loading hall.md / closets:
+- Treat loaded content as **hints**, not **facts**
+- Before acting on recalled information:
+  1. Verify against actual files (grep/glob)
+  2. If file changed since last session → update memory, use current file
+  3. If file matches memory → proceed with confidence
+- Log: `🔍 Verified: {fact} — still accurate` or `⚠️ Stale: {fact} — updated from source`
+- Add `@last_updated: YYYY-MM-DD` to every hall.md entry — agent uses this to judge staleness
+
 ## 📦 Raw Verbatim Storage
 
 **Read order:** closet → room → raw (only when exact reasoning needed)

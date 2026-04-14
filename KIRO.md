@@ -112,6 +112,8 @@ A task is **NOT done** until:
 
 ## 4. Engineering Standards
 
+> **Output Medium:** Kiro IDE chat panel — markdown renders fully. Use headers, tables, code blocks freely. Avoid ANSI escape codes.
+
 Regardless of tier, **always follow**:
 
 1. **Explain Before Acting** — briefly state intent before invoking any tool
@@ -125,45 +127,24 @@ Regardless of tier, **always follow**:
 
 ## 5. Playwright Skills (Mandatory for All Test Work)
 
-When writing, reviewing, fixing, or running Playwright tests:
+→ Full rules: `system/hook-creator/templates/kiro/steering/` or load `#playwright-rules` in chat
 
-| Skill | When to Use |
-|-------|-------------|
-| **`playwright-rules`** | Always — before writing or reviewing any `.spec.ts` or page object |
-| **`playwright-cli`** | When running browser automation via terminal |
+When writing, reviewing, fixing, or running Playwright tests, activate both `playwright-rules` and `playwright-cli` skills. Key mandates: no `waitForTimeout()`, `getByTestId` selector priority, AAA pattern, Page Object Model.
 
-**Key rules (always enforce):**
-- No `waitForTimeout()` — use smart waits
-- Selector priority: `getByTestId` > `getByRole` > `getByLabel`
-- AAA Pattern: Arrange-Act-Assert in every test
-- No inline logic: all interactions through Page Objects or Helpers
-
-Skill files:
-- `~/.claude/skills/ai-dlc/qa/playwright-rules/references/coding-standards.md`
-- `~/.claude/skills/ai-dlc/qa/playwright-rules/references/web-ui.md`
+Skill paths (relative to SKILLS_ROOT):
+- Standards: `ai-dlc/qa/playwright-rules/SKILL.md`
+- Testing workflow: `ai-dlc/qa/playwright-testing/SKILL.md`
+- CLI: `ai-dlc/qa/playwright-cli/SKILL.md`
 
 ---
 
 ## 6. Test Coverage Rules (Mandatory)
 
-After **every file write or edit**, run the corresponding test(s):
+→ Load `#qa-architect` in chat for full test mapping
 
-- **Single file changed** → run the test that covers that file
-- **Multiple files changed** → run ALL matching tests for every affected module
-- **Cross-cutting changes** (shared utils, hooks, services) → run full regression suite
+After every file write or edit, run the corresponding test(s). Never mark a task done until all relevant tests pass.
 
-> ⚠️ **Rule:** Never mark a task done until all relevant tests pass. Fix root cause — do NOT modify test expectations to force a pass.
-
-### Test Mapping (My Investment Port)
-
-| File Pattern | Test Command |
-|---|---|
-| `src/features/holdings/**` | `cd tests/web-testing && npx cross-env LANG=th ENV=sit npx playwright test tests-web/port/holdings/holdings.spec.ts --reporter=line` |
-| `src/features/tax/**` | `cd tests/web-testing && npx cross-env LANG=th ENV=sit npx playwright test tests-web/port/tax/tax.spec.ts --reporter=line` |
-| `src/features/passiveIncome/**` | `cd tests/web-testing && npx cross-env LANG=th ENV=sit npx playwright test tests-web/port/passive/passive.spec.ts tests-web/port/passive/archive.spec.ts --reporter=line` |
-| `src/features/rmf/**` | `cd tests/web-testing && npx cross-env LANG=th ENV=sit npx playwright test tests-web/port/rmf/rmf.spec.ts --reporter=line` |
-| `src/App.jsx` or `src/components/**` | `cd tests/web-testing && npx cross-env LANG=th ENV=sit npx playwright test tests-web/port/main-menu/mainMenu.spec.ts tests-web/port/regression/regression.spec.ts --reporter=line` |
-| `src/data/services/**` | `cd tests/api-testing && npx cross-env LANG=th ENV=sit npx playwright test --reporter=line` |
+Skill path: `ai-dlc/qa/qa-architect/SKILL.md`
 
 ---
 
@@ -175,15 +156,39 @@ After **every file write or edit**, run the corresponding test(s):
 | Keep prompts focused | Reduces input tokens |
 | Read only necessary files | Reduces context scan |
 | Escalate to Opus only when needed | Avoids unnecessary cost |
+| Do NOT edit KIRO.md/rules mid-session | Breaks prompt cache permanently |
+
+### Prompt Cache Protection
+
+- ห้ามแก้ KIRO.md, `.kiro/steering/`, MCP config ระหว่าง session — cache หายถาวร
+- ตั้งค่าทุกอย่างก่อนเริ่ม session — แก้ระหว่างทาง = cache lost, ไม่กลับมา
+- ถ้าต้องแก้จริงๆ → เริ่ม session ใหม่
+- KIRO.md structure: stable content (standards, rules) อยู่บน, dynamic content อยู่ล่าง → cache-aware boundaries
+
+### Token Budget Targeting
+
+สำหรับ task ใหญ่ที่ cost สำคัญ ระบุ budget ชัดเจนใน prompt:
+- `"ใช้ไม่เกิน 50K tokens"` → agent scope งานให้พอดี ไม่ over-engineer
+- `"spend up to 200K — ทำให้ละเอียด"` → agent deep dive ได้เต็มที่
+- ไม่ระบุ = agent ตัดสินใจเอง (อาจ over หรือ under spend)
 
 ---
 
 ## How to Load This File
 
 Tell Kiro in chat:
-> "Read `~/.claude/skills/KIRO.md` and follow those instructions for this session."
+> "Read `AGENT.md` in the skills folder and follow those instructions for this session."
 
-Or reference it in a spec/steering file:
+Or reference directly:
+
 ```
-#[[file:~/.claude/skills/KIRO.md]]
+#[[file:~/.claude/skills/AGENT.md]]
 ```
+
+Or if skills folder has moved:
+
+```
+#[[file:{skills_root}/AGENT.md]]
+```
+
+AGENT.md will point Kiro to this file and all available skills automatically.

@@ -1,0 +1,13 @@
+{
+  "name": "Gotcha Capture",
+  "version": "1.0.0",
+  "description": "After a shell command fails, checks if the failure matches a known pattern and suggests adding a Gotcha to the relevant skill. Helps build the Gotchas sections from real experience automatically.",
+  "when": {
+    "type": "postToolUse",
+    "toolTypes": ["shell"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Complete within 15 seconds. If analysis takes longer, skip silently.\n\nCheck the last shell command result:\n1. If exit code = 0 (success) → do nothing, stay silent.\n2. If exit code != 0 (failure):\n   a. Identify the failure pattern (e.g., waitForTimeout, selector not found, missing migration, auth middleware skipped, etc.)\n   b. Check if this pattern already exists in the relevant skill's ## ⚠️ Gotchas section\n   c. If NOT already documented → suggest: '💡 New Gotcha candidate: [skill] — [one-line description of failure + fix]. Add it? (yes/skip)'\n   d. If user says yes → append to the skill's Gotchas section\n   e. If already documented → stay silent\n\nSkip silently if: the failure is a simple typo, missing file, or network error unrelated to agent behavior."
+  }
+}

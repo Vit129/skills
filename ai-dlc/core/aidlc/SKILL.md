@@ -46,6 +46,14 @@ For full phase list, routing table, and anti-shortcut rules → (Read `reference
 
 For skill routing guide → (Read `references/related-skills.md`)
 
+## ⚠️ Gotchas
+
+- **Phase skip** — agent jumps from Domain Design directly to implementation without Logical Design. Fix: enforce phase gate — check that the previous phase output file exists before proceeding.
+- **Decision file not created** — agent starts planning without creating a DECISIONS file first. Fix: DECISIONS file is mandatory before any PLAN or EXECUTE step.
+- **Resume without reading context** — on resume, agent starts from scratch instead of reading the existing decision/plan files. Fix: always read `planning/decisions/` and `planning/plans/` before any action on resume.
+- **Multiple agents on same task** — two agents (e.g., Gemini + Claude) edit the same file simultaneously, causing conflicts. Fix: one agent owns one task start-to-finish.
+- **Task marked done without commit** — agent reports completion but hasn't committed. Fix: commit hash is the only proof of completion — no hash = not done.
+
 ## Project Specifics
 
 - **My Investment Port** — (Read `references/investment-port.md`)

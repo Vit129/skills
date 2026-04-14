@@ -35,3 +35,12 @@ Always read the `playwright-rules` skill before writing or reviewing any Playwri
 - **Visual Regression** — Screenshot comparison, baseline management, multi-viewport testing. (Read `references/visual-regression.md`)
 - **Accessibility** — axe-core integration, WCAG scanning, keyboard navigation testing. (Read `references/accessibility.md`)
 - **Component Testing** — Test React/Vue/Svelte components in isolation in a real browser. (Read `references/component-testing.md`)
+
+## ⚠️ Gotchas
+
+- **`waitForTimeout()` creep** — easy to add as a quick fix for flaky tests. Always replace with `waitForSelector`, `waitForResponse`, or `expect(locator).toBeVisible()` with a timeout option.
+- **Selector breaks after UI refactor** — hardcoded CSS selectors or text-based selectors break silently. Fix: use `getByTestId` as primary, add `data-testid` to components during dev.
+- **Healing loop overwrites correct assertions** — auto-heal can change `toEqual` to `toContain` to make tests pass without fixing the real bug. Always review healed assertions before committing.
+- **Page Object state leak between tests** — shared PO instances carry state across tests. Fix: instantiate fresh PO in each test's Arrange block.
+- **Screenshot baseline mismatch on CI** — screenshots taken on macOS differ from Linux CI (font rendering, pixel density). Fix: always generate baselines on CI, not locally.
+- **DB seed not cleaned up** — test data written via db-writer persists and pollutes subsequent tests. Fix: always run teardown in `afterEach` or use transaction rollback.

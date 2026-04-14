@@ -54,3 +54,30 @@ Use `ui-designer` first if design tokens, visual language, or component specs ha
 - **Navigation** — Route naming, deep links, navigation patterns. (Read `references/shared/navigation-standards.md`)
 - **Testability** — data-testid, accessibilityIdentifier, testTag naming conventions. (Read `references/shared/testability-standards.md`)
 - **UI States** — Loading, Success, Empty, Error state patterns. (Read `references/shared/ui-states-standards.md`)
+
+## ⚠️ Gotchas
+
+- **Gemini introduces bugs on logic-heavy edits** — Gemini tends to fix one bug and introduce another (e.g., `null` vs `[]` conditional logic). Fix: use Claude Sonnet for any task graded 🟡 Medium or above. Never hand off Gemini output to Claude without flagging the cost.
+- **Component missing `data-testid`** — new components built without testability attributes break Playwright tests silently. Fix: always add `data-testid` during component creation, not as an afterthought.
+- **State not reset between renders** — shared state (context, store) leaks between component renders in tests. Fix: wrap each test in a fresh provider/store instance.
+- **LLM-Friendly comments omitted** — agent writes code without intent comments, making future AI edits error-prone. Fix: every non-trivial function needs a comment block with what + why + who calls it.
+
+## LLM-Friendly Code Comments
+
+Write comments that AI agents can understand — not just humans:
+
+```ts
+// ❌ Old style (for humans only):
+// validate input
+
+// ✅ New style (for AI + humans):
+// Validates user input against business rules before saving to DB.
+// If validation fails, returns structured error with field-level messages.
+// Called by: handleSubmit() in FormComponent.
+```
+
+**Principles:**
+- State **what** + **why** + **who calls** — not just what
+- Include context AI needs to edit correctly (dependencies, side effects, constraints)
+- Function signatures: add JSDoc/TSDoc with params + return + throws
+- Complex logic: add comment block before section explaining the business rule
