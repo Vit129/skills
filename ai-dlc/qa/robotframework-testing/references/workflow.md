@@ -92,6 +92,42 @@ Run tests and capture results.
 - Ensure Identical Naming preserved after fix
 - Log every fix attempt to Reflexion Log
 
+## Reflexion Log — Write to Audit Trail (MANDATORY)
+
+Every heal attempt (success or fail) MUST be logged.
+
+**Location:** `.aidlc/[system]/[feature]/audit.md` under `## Reflexion Log` section.
+
+**Format:**
+```
+## [Timestamp] | Type: [ErrorCategory]
+- ❌ Symptom: [brief error description]
+- 🔍 Root Cause: [root cause]
+- 💊 Applied Fix: [keyword/locator change summary]
+- 🏁 Outcome: HEALED / FAILED
+- 📊 Impact: Isolated / Shared / Cross-platform
+```
+
+## Test Results — Write to Audit Trail (MANDATORY)
+
+After test execution, append results to audit trail.
+
+**Location:** `.aidlc/[system]/[feature]/audit.md` under `### Test Results` section.
+
+**Format:**
+```
+### Test Results — [Timestamp]
+- Total: [N] | Passed: [N] | Failed: [N]
+- Platform: [Android/iOS] | ENV: [SIT/UAT]
+- Failed tests: [list or "none"]
+```
+
+**OUTPUT TO USER (chat summary only):**
+```
+✅ Tests recorded to audit.md
+Passed: [N]/[N] | Failed: [N]
+```
+
 ## 5. Python Database Writer
 
 Generate Python DB config and service for mobile tests.

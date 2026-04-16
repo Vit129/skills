@@ -48,9 +48,7 @@
         ]
       },
       "ai_instruction": "When a locator might match multiple elements, use getByTestId() for unique elements, or chain .filter({ hasText }) or parent context locators to narrow the match to exactly one element.",
-      "related_lessons": [
-        "LESSON-UI-001"
-      ]
+      "related_lessons": []
     }
   ]
 }

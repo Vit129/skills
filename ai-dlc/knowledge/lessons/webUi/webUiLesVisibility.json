@@ -41,10 +41,7 @@
         ]
       },
       "ai_instruction": "When asserting element visibility, first identify what triggers the element to appear (button click, API response, tab switch). Generate the trigger action before the visibility assertion.",
-      "related_lessons": [
-        "LESSON-VIS-002",
-        "LESSON-TIME-002"
-      ]
+      "related_lessons": []
     },
     {
       "id": "LESSON-VIS-002",
@@ -85,9 +82,7 @@
         ]
       },
       "ai_instruction": "Before generating a button click step, check if the button has enable conditions (required fields, checkboxes). Generate all prerequisite fill steps first, then add toBeEnabled() assertion before the click.",
-      "related_lessons": [
-        "LESSON-VIS-001"
-      ]
+      "related_lessons": []
     }
   ]
 }

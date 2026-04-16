@@ -45,9 +45,7 @@
         ]
       },
       "ai_instruction": "When generating tests for demo/POC environments, create a MockDatabaseHelper that mirrors the real helper's interface but returns mock data. This allows full test logic validation without infrastructure.",
-      "related_lessons": [
-        "LESSON-VAL-002"
-      ]
+      "related_lessons": []
     },
     {
       "id": "LESSON-VAL-002",
@@ -93,10 +91,7 @@
         ]
       },
       "ai_instruction": "Before attempting self-healing, classify the error. If 404/500/connection refused or ALL tests fail simultaneously → stop healing, report as infrastructure issue. Only heal individual test failures caused by code logic.",
-      "related_lessons": [
-        "LESSON-VAL-001",
-        "LESSON-NET-001"
-      ]
+      "related_lessons": []
     }
   ]
 }

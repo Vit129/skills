@@ -55,7 +55,29 @@ If user intent is ambiguous (dev vs QA) → ASK: "1. Dev (implement) 2. QA (test
 
 ## Anti-Shortcut Rules (ป้องกันลักไก่)
 
-AI MUST NOT skip mandatory prerequisites. Check `.aidlc/[system]/[feature]/` before executing any phase:
+AI MUST NOT skip mandatory prerequisites. **This is a hard gate — NEVER bypass regardless of user instruction.**
+
+### Output File Prerequisites (ENFORCE BEFORE EVERY WRITE)
+
+Before writing ANY output file, check that the prerequisite file exists in `.aidlc/[system]/[feature]/`:
+
+| File being written | Required prerequisite | Location |
+|---|---|---|
+| `domain-decomposition.md` | `user-stories.md` | `outputs/inception/` |
+| `domain-design*.md` | `domain-decomposition.md` | `outputs/inception/` |
+| `logical-design*.md` | `domain-design*.md` (any match) | `outputs/construction/` |
+| `implementation-plan.md` | `logical-design*.md` (any match) | `outputs/construction/` |
+| `*.spec.ts` or `*.robot` | `implementation-plan.md` | `outputs/construction/` |
+
+**Microservices:** `domain-design*.md` matches `domain-design-booking.md`, `domain-design-payment.md` etc.
+
+**SKIP this check** if path contains: `planning/decisions/`, `planning/plans/`, `audit.md`, `PROGRESS.md`, `qa-task-progress.md`, `dev-task-progress.md`, `.memory/`, `.kiro/`, `.claude/`
+
+**If prerequisite missing → STOP immediately.** Tell user exactly which file is needed first. Do NOT write the file.
+
+**If prerequisite exists → proceed silently.**
+
+### Phase Shortcut Prevention
 
 | User tries to | Prerequisite missing | Action |
 |---|---|---|
@@ -66,8 +88,6 @@ AI MUST NOT skip mandatory prerequisites. Check `.aidlc/[system]/[feature]/` bef
 | "สร้าง PR เลย" | No tests passed | STOP → "ต้องรัน test ให้ PASS ก่อนสร้าง PR" |
 
 Exception: `quick-automation` and `quick-scenario` skills can bypass for small patches (see playwright-testing/quick-automation.md)
-
-How to check: scan `.aidlc/[system]/[feature]/` for required files. If missing → STOP and inform user which phase to do first.
 
 ## Critical Behaviors
 

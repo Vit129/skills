@@ -19,6 +19,7 @@
     "step2": "Match keywords ในหน้านี้กับ Domains ด้านล่างเพื่อหาไฟล์ที่ถูกต้อง",
     "step3": "อ่านเฉพาะ domain/index.json หรือ rules ที่เกี่ยวข้องกับงาน"
   },
+  "edges": [],
   "domains": {
     "auth": {
       "type": "core",

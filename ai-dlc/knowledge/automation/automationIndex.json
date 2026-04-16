@@ -63,5 +63,6 @@
         "step2": "Match keywords with subCategories",
         "step3": "Read only the required category",
         "example": "If mobile login is needed -> Read mobile/mobileAuth.template.robot"
-    }
+    },
+    "edges": []
 }

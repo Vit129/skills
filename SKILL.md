@@ -52,7 +52,46 @@ Single source of truth for all AI-assisted development, QA, and Finance analysis
 | `business/` | Business domain knowledge: auth, common, document, finance — indexed via businessIndex.json |
 | `lessons/` | Lessons learned from past projects: API, Mobile, Web UI |
 
-## 2. Finance Category (`finance/`)
+## 2. System Skills (`system/`)
+
+Cross-project tools that work with any domain — not tied to ai-dlc.
+
+| Folder | Purpose | Trigger phrases |
+|--------|---------|----------------|
+| `memory-palace/` | High-recall long-term memory via Wings/Rooms/Closets/Drawers + AAAK compression | "save memory", "load context", "session start/end", "compress room" |
+| `hook-creator/` | Create Kiro + Claude Code hooks from templates, event-driven automation | "create hook", "automate on save", "สร้าง hook" |
+| `ai-techniques/` | CoT, LATS, AoT — domain-agnostic reasoning techniques | "use CoT", "step-back", "LATS", "reasoning technique" |
+| `analysis-concept/` | Reusable analysis concepts: context, discovery, gap, reverse-eng, requirements | "analyze context", "gap analysis", "domain discovery" |
+| `skill-creator/` | Create, improve, validate Claude Code skills (meta skill — use when building new skills) | "create skill", "improve skill", "skillify" |
+| `knowledge-evolution/` | Auto-consolidation, semantic routing, utility scoring — knowledge lifecycle management | "track which templates work", "score lessons", "auto-capture failures", "feedback loop" |
+
+### knowledge-evolution — Special Note
+
+Meta-skill ที่ improve skills อื่นๆ ตลอดเวลา — always activate เมื่อทำงานกับ `ai-dlc/knowledge/` หรือหลัง test execution
+
+References: `system/knowledge-evolution/references/` (utility-scoring, smart-routing, auto-consolidation, memory-integration)
+
+## 3. Built-in Skills (Claude Code)
+
+Skills ที่มาพร้อม Claude Code — ไม่ต้องสร้างเอง:
+
+| Skill | ใช้เมื่อ | เทียบกับ custom skill |
+|-------|---------|---------------------|
+| `/simplify` | refactor code ให้ clean | — |
+| `/verify` | ตรวจ correctness | เสริม qa-architect |
+| `/stuck` | ติดปัญหา ไม่รู้จะทำยังไง | — |
+| `/remember` | persist ข้อมูลลง memory | เสริม memory-palace |
+| `/skillify` | สร้าง skill ใหม่จาก workflow | เสริม skill-creator |
+| `/debug` | debugging workflow | — |
+| `/batch` | batch operations across files | — |
+
+## 4. Internal (`_internal/`)
+
+Folders that store system data, logs, or backups to keep the root directory clean.
+
+- `backups/`, `cache/`, `debug/`, `downloads/`, `file-history/`
+
+## 5. Finance Category (`finance/`)
 
 ### Coding (Claude Code) — `finance/coding/`
 
@@ -81,42 +120,8 @@ Single source of truth for all AI-assisted development, QA, and Finance analysis
 | `news-search/` | Market news search and sentiment analysis |
 | `ai-recommend/` | AI-driven stock recommendations and insights |
 
-## 3. System Skills (`system/`)
-
-Cross-project tools that work with any domain — not tied to ai-dlc.
-
-| Folder | Purpose |
-|--------|---------|
-| `memory-palace/` | High-recall long-term memory via Wings/Rooms/Closets/Drawers + AAAK compression |
-| `hook-creator/` | Create Kiro + Claude Code hooks from templates, event-driven automation |
-| `ai-techniques/` | CoT, LATS, AoT — domain-agnostic reasoning techniques |
-| `analysis-concept/` | Reusable analysis concepts: context, discovery, gap, reverse-eng, requirements |
-| `skill-creator/` | Create, improve, validate Claude Code skills (meta skill — use when building new skills) |
-| `knowledge-evolution/` | Auto-consolidation, semantic routing, utility scoring — knowledge lifecycle management |
-
-## 4. Internal (`_internal/`)
-
-Folders that store system data, logs, or backups to keep the root directory clean.
-
-- `backups/`, `cache/`, `debug/`, `downloads/`, `file-history/`
-
-## 5. Built-in Skills (Claude Code)
-
-Skills ที่มาพร้อม Claude Code — ไม่ต้องสร้างเอง:
-
-| Skill | ใช้เมื่อ | เทียบกับ custom skill |
-|-------|---------|---------------------|
-| `/simplify` | refactor code ให้ clean | — |
-| `/verify` | ตรวจ correctness | เสริม qa-architect |
-| `/stuck` | ติดปัญหา ไม่รู้จะทำยังไง | — |
-| `/remember` | persist ข้อมูลลง memory | เสริม memory-palace |
-| `/skillify` | สร้าง skill ใหม่จาก workflow | เสริม skill-creator |
-| `/debug` | debugging workflow | — |
-| `/batch` | batch operations across files | — |
-
 ---
 
 ## Maintenance
 
 - Edit skills in their respective subdirectories — this is the single source of truth.
-- Last updated: 2026-04-14 (added: ai-dlc/knowledge/, ai-dlc/qa/performance-testing/, ai-dlc/product/analysis-skills/, system/knowledge-evolution/)

@@ -192,3 +192,18 @@ Or if skills folder has moved:
 ```
 
 AGENT.md will point Kiro to this file and all available skills automatically.
+
+---
+
+## Knowledge Ingest & Citation
+
+→ See `AGENT.md` §Knowledge Ingest Workflow and §Citation Convention
+
+**Ingest trigger phrases:** "ingest this", "add to knowledge", "learn from this", "dump to raw"
+
+**Citation format when answering from knowledge base:**
+```
+[from: LESSON-AUTH-001]        ← lesson
+[from: skill:playwright-rules] ← skill
+[from: memory:{wing}/{room}]   ← memory palace
+```

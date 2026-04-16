@@ -39,10 +39,7 @@
         ]
       },
       "ai_instruction": "Never use waitForTimeout() in generated tests. Always wait for a specific condition: element state change, loading indicator hidden, or API response received.",
-      "related_lessons": [
-        "LESSON-TIME-002",
-        "LESSON-TIME-003"
-      ]
+      "related_lessons": []
     },
     {
       "id": "LESSON-TIME-002",
@@ -79,10 +76,7 @@
         ]
       },
       "ai_instruction": "Before clicking any element that appears after a loading state, always add waitForSelector('.loading-spinner', { state: 'hidden' }) first.",
-      "related_lessons": [
-        "LESSON-TIME-001",
-        "LESSON-TIME-003"
-      ]
+      "related_lessons": []
     },
     {
       "id": "LESSON-TIME-003",
@@ -123,10 +117,7 @@
         ]
       },
       "ai_instruction": "After navigating to a page that loads data from an API, always add waitForResponse() for the relevant endpoint before asserting on the data.",
-      "related_lessons": [
-        "LESSON-TIME-001",
-        "LESSON-TIME-004"
-      ]
+      "related_lessons": []
     },
     {
       "id": "LESSON-TIME-004",
@@ -168,9 +159,7 @@
         ]
       },
       "ai_instruction": "For pages that load many async resources, use goto() with waitUntil: 'networkidle'. For known slow pages, also increase the timeout and add a comment explaining why.",
-      "related_lessons": [
-        "LESSON-TIME-001"
-      ]
+      "related_lessons": []
     }
   ]
 }

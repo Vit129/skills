@@ -17,6 +17,19 @@
       "multiple elements", "filter-hasText", "getByRole"
     ]
   },
+  "edges": [
+    { "from": "LESSON-FILE-001", "to": ["LESSON-LOC-001"] },
+    { "from": "LESSON-LOC-001", "to": ["LESSON-UI-001"] },
+    { "from": "LESSON-UI-001", "to": ["LESSON-UI-002", "LESSON-LOC-001"] },
+    { "from": "LESSON-UI-002", "to": ["LESSON-UI-001", "LESSON-LOC-001"] },
+    { "from": "LESSON-UI-003", "to": ["LESSON-UI-001", "LESSON-UI-002"] },
+    { "from": "LESSON-TIME-001", "to": ["LESSON-TIME-002", "LESSON-TIME-003"] },
+    { "from": "LESSON-TIME-002", "to": ["LESSON-TIME-001", "LESSON-TIME-003"] },
+    { "from": "LESSON-TIME-003", "to": ["LESSON-TIME-001", "LESSON-TIME-004"] },
+    { "from": "LESSON-TIME-004", "to": ["LESSON-TIME-001"] },
+    { "from": "LESSON-VIS-001", "to": ["LESSON-VIS-002", "LESSON-TIME-002"] },
+    { "from": "LESSON-VIS-002", "to": ["LESSON-VIS-001"] }
+  ],
   "lessons": [
     {
       "id": "LESSON-FILE-001",

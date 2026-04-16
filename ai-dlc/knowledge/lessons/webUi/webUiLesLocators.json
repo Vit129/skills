@@ -39,10 +39,7 @@
         ]
       },
       "ai_instruction": "When generating button locators, always prefer getByRole('button', { name: '...' }) over CSS id selectors. Only use getByTestId() when the button has no meaningful accessible name.",
-      "related_lessons": [
-        "LESSON-UI-002",
-        "LESSON-LOC-001"
-      ]
+      "related_lessons": []
     },
     {
       "id": "LESSON-UI-002",
@@ -82,10 +79,7 @@
         ]
       },
       "ai_instruction": "When selecting a specific item from a list or table, always use .filter({ hasText: '...' }) to target by content. Never use .nth() or .first() unless position is semantically meaningful.",
-      "related_lessons": [
-        "LESSON-UI-001",
-        "LESSON-LOC-001"
-      ]
+      "related_lessons": []
     },
     {
       "id": "LESSON-UI-003",

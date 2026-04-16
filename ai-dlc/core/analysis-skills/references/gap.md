@@ -54,6 +54,21 @@ Low: [list]
 Total estimated effort: [N] hours
 ```
 
+## Step 6: Write to File (MANDATORY — DO NOT SKIP)
+
+Write the full gap analysis output to the appropriate file:
+- If inside AIDLC workflow → write to audit trail: `### Gap Analysis` section in `audit.md`
+- If implementation plan exists → append to `implementationPlan[FEATURE].md` Appendix
+- If neither exists → write to `.aidlc/[system]/[feature]/outputs/inception/gap-analysis.md`
+
+**OUTPUT TO USER (chat summary only):**
+```
+✅ Gap Analysis recorded to [file]
+Required: [N] items | Reusable: [N] ([XX]%) | Missing: [N] ([XX]%)
+Critical gaps: [N] | Estimated effort: [N] hours
+```
+Full details in file — do NOT dump full analysis in chat.
+
 ## Blocking Gap Handling
 
 If Critical gaps are found that cannot be inferred (undefined business rules, missing AC):

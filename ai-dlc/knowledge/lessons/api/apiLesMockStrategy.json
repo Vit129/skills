@@ -44,10 +44,7 @@
         ]
       },
       "ai_instruction": "When mocking API responses in API-layer tests using APIRequestContext, use method override in the Arrange step instead of page.route(). Never use page.route() for APIRequestContext mocking.",
-      "related_lessons": [
-        "LESSON-MOCK-002",
-        "LESSON-MOCK-003"
-      ]
+      "related_lessons": []
     },
     {
       "id": "LESSON-MOCK-002",
@@ -99,10 +96,7 @@
         ]
       },
       "ai_instruction": "When generating DatabaseHelper classes, always use private instance Maps instead of module-level variables. This ensures parallel test isolation.",
-      "related_lessons": [
-        "LESSON-MOCK-001",
-        "LESSON-MOCK-003"
-      ]
+      "related_lessons": []
     },
     {
       "id": "LESSON-MOCK-003",
@@ -154,10 +148,7 @@
         ]
       },
       "ai_instruction": "When generating DatabaseHelper for environments without real DB, use in-memory Map with testId-prefixed keys. Always implement seed(), get(), and cleanup(testId) methods.",
-      "related_lessons": [
-        "LESSON-MOCK-001",
-        "LESSON-MOCK-002"
-      ]
+      "related_lessons": []
     }
   ]
 }

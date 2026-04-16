@@ -19,6 +19,24 @@
       "fixture", "duplicate", "mock", "parallel-leak"
     ]
   },
+  "edges": [
+    { "from": "LESSON-AUTH-001", "to": ["LESSON-SETUP-001", "LESSON-VAL-002"] },
+    { "from": "LESSON-DATA-001", "to": ["LESSON-DATA-002", "LESSON-VAL-002"] },
+    { "from": "LESSON-DATA-002", "to": ["LESSON-DATA-001", "LESSON-VAL-002"] },
+    { "from": "LESSON-DATA-003", "to": ["LESSON-DATA-005", "LESSON-NET-001"] },
+    { "from": "LESSON-DATA-004", "to": ["LESSON-MOCK-003", "LESSON-VAL-001"] },
+    { "from": "LESSON-DATA-005", "to": ["LESSON-DATA-003", "LESSON-DATA-001"] },
+    { "from": "LESSON-FILE-001", "to": ["LESSON-DATA-004"] },
+    { "from": "LESSON-MOCK-001", "to": ["LESSON-MOCK-002", "LESSON-MOCK-003"] },
+    { "from": "LESSON-MOCK-002", "to": ["LESSON-MOCK-001", "LESSON-MOCK-003"] },
+    { "from": "LESSON-MOCK-003", "to": ["LESSON-MOCK-001", "LESSON-MOCK-002"] },
+    { "from": "LESSON-NET-001", "to": ["LESSON-NET-002"] },
+    { "from": "LESSON-NET-002", "to": ["LESSON-NET-001"] },
+    { "from": "LESSON-NET-003", "to": ["LESSON-SETUP-001"] },
+    { "from": "LESSON-SETUP-001", "to": ["LESSON-AUTH-001"] },
+    { "from": "LESSON-VAL-001", "to": ["LESSON-VAL-002"] },
+    { "from": "LESSON-VAL-002", "to": ["LESSON-VAL-001", "LESSON-NET-001"] }
+  ],
   "lessons": [
     {
       "id": "LESSON-AUTH-001",

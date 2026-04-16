@@ -57,9 +57,7 @@
         ]
       },
       "ai_instruction": "When generating API test suites that need a shared request context, always use playwrightRequest.newContext() in beforeAll with a matching dispose() in afterAll. Never capture the built-in request fixture in beforeAll.",
-      "related_lessons": [
-        "LESSON-AUTH-001"
-      ]
+      "related_lessons": []
     }
   ]
 }

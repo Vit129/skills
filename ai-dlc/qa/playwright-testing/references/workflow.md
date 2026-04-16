@@ -233,6 +233,26 @@ Checklist:
 - MUST run impact analysis before fixing shared code
 - Log every fix attempt (healed or failed) to Reflexion Log
 
+## Test Results — Write to Audit Trail (MANDATORY)
+
+After test execution, append results to audit trail:
+
+**Location:** `.aidlc/[system]/[feature]/audit.md` under `### Test Results` section.
+
+**Format:**
+```
+### Test Results — [Timestamp]
+- Total: [N] | Passed: [N] | Failed: [N]
+- ENV: [SIT/UAT] | Mode: [CLI/GUI]
+- Failed tests: [list or "none"]
+```
+
+**OUTPUT TO USER (chat summary only):**
+```
+✅ Tests recorded to audit.md
+Passed: [N]/[N] | Failed: [N]
+```
+
 ## Reflexion Log
 
 Every heal attempt (success or fail) MUST be logged to the implementation plan or audit file.

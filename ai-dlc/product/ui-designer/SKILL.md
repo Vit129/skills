@@ -1,63 +1,80 @@
 ---
 name: ui-designer
 description: >
-  This skill should be used when the user asks to "design the UI", "create a design system",
-  "pick colors and typography", "set up spacing and layout", "add animations", "define design tokens",
-  "make it look distinctive", "avoid generic design", "pick an aesthetic direction",
+  Use this skill when the user asks to "design the UI", "create a design system",
+  "generate design rules for my product", "pick colors and typography", "set up spacing and layout",
+  "add animations", "define design tokens", "make it look distinctive", "avoid generic design",
+  "pick an aesthetic direction", "recommend colors for my industry", "validate design against best practices",
   or needs UX/UI design guidance for building consistent, scalable, visually memorable interfaces.
   Use this for DESIGN DECISIONS (what to build), not implementation (how to code it).
+  Covers both aesthetic direction and industry-validated patterns across 8 sectors.
 ---
 
 # UI Designer
 
-Build consistent, polished, and distinctive interfaces for any project.
+Build consistent, polished, and distinctive interfaces for any project — from aesthetic direction to industry-validated design systems.
 
-- **Design System** — Aesthetic direction, industry rules, colors, typography, spacing, layout, animation, accessibility, pre-delivery checklist. (Read `references/design-system.md`)
-- **Sovereign DS** — Project-specific rules for My Investment Port. (Read `references/sovereign-ds.md`)
+## Core Capabilities
+
+| Capability | Count | Use Case |
+|-----------|-------|----------|
+| **Industry Rules** | 161 | Domain-specific patterns (finance ≠ e-commerce) |
+| **UI Styles** | 67 | Visual approaches (minimalism, brutalism, glassmorphism, etc.) |
+| **Color Palettes** | 161 | Psychology-backed, industry-aligned colors |
+| **Font Pairings** | 57 | Google Fonts, accessibility-tested combinations |
+| **Chart Types** | 25 | Data visualization for dashboards & analytics |
+| **UX Guidelines** | 99 | Detailed interactive patterns |
+| **Tech Stacks** | 15 | Web, mobile, native platform guidance |
 
 ## Workflow (Always in This Order)
 
 1. **Phase 0** — Detect existing design system (see below)
-2. **Aesthetic Direction** — Commit to tone, differentiation, font + color direction
-3. **Industry Rules** — Match product type → style → color mood → anti-patterns
-4. **Tokens** — Define colors, spacing, typography as CSS variables
-5. **Components** — Build from primitives up
+2. **Identify Industry** — SaaS, Finance, Healthcare, E-commerce, Services, Creative, Lifestyle, Emerging Tech
+3. **Run Reasoning Engine** — 4-stage analysis (search → match → generate → validate)
+4. **Aesthetic Direction** — Commit to tone, differentiation, font + color direction
+5. **Apply Industry Rules** — Match product type → style → color mood → anti-patterns
+6. **Tokens** — Define colors, spacing, typography as CSS variables
+7. **Components** — Build from primitives up
+8. **Validate** — WCAG AA accessibility, responsive breakpoints, dark mode
 
 Use this skill for design decisions. Use `frontend-dev` to implement in code.
 
 ## Phase 0: Existing Design System Detection (MANDATORY)
 
-ก่อนเริ่มออกแบบ ต้องตรวจว่ามี design system อยู่แล้วหรือไม่:
+Before designing, check if a design system already exists:
 
-| สิ่งที่พบ | Action |
-|---------|--------|
-| Figma URL มีอยู่แล้ว | Analyze existing design system → extract tokens, components, patterns → extend ไม่ใช่สร้างใหม่ |
-| Design tokens file มีอยู่แล้ว (CSS vars, Tailwind config) | Import existing tokens → align ไม่ใช่ override |
-| Component library มีอยู่แล้ว (MUI, Ant Design, shadcn/ui, etc.) | Document existing components → extend ด้วย custom tokens |
-| ไม่มีอะไรเลย | สร้างใหม่ตาม design-system.md |
+| Found | Action |
+|-------|--------|
+| Figma URL exists | Analyze existing design system → extract tokens, components, patterns → extend, don't rebuild |
+| Design tokens file exists (CSS vars, Tailwind config) | Import existing tokens → align, don't override |
+| Component library exists (MUI, Ant Design, shadcn/ui, etc.) | Document existing components → extend with custom tokens |
+| Nothing exists | Build new following industry rules + reasoning engine |
 
-**ถาม user ก่อนเสมอ:**
-> "มี design system หรือ Figma อยู่แล้วไหม? ถ้ามี ส่ง link หรือ file มาได้เลย"
+**Always ask the user first:**
+> "Do you have an existing design system or Figma file? If so, share the link or file."
 
 ## Stack Detection
 
-ระบุ stack ก่อน generate code หรือ spec:
+Identify stack before generating code or spec:
 
 | Stack | Notes |
-|---|---|
+|-------|-------|
 | React / Next.js | Use Tailwind + CSS vars; shadcn/ui if applicable |
 | Vue / Nuxt | Same token approach, adapt class syntax |
 | Flutter | Use ThemeData tokens, Material 3 |
 | SwiftUI | Use Color assets + ViewModifier |
 | HTML + Tailwind | Default if unspecified |
 
-## Design System Generator Output Format
+Full stack guidance → `references/tech-stacks.md`
 
-เมื่อ generate design system ให้ output ในรูปแบบนี้:
+## Output Format
+
+When generating a design system, output in this format:
 
 ```
 TARGET: [Project Name] — RECOMMENDED DESIGN SYSTEM
 ─────────────────────────────────────────────────
+INDUSTRY:  [Sector]
 PATTERN:   [Landing page / app structure]
 STYLE:     [UI style name + keywords]
 COLORS:    Primary / Secondary / CTA / Background / Text
@@ -65,7 +82,12 @@ TYPOGRAPHY: [Display font] / [Body font]
 KEY EFFECTS: [Animations, interactions]
 AVOID:     [Anti-patterns for this industry]
 ─────────────────────────────────────────────────
-PRE-DELIVERY CHECKLIST: (from design-system.md)
+PRE-DELIVERY CHECKLIST:
+□ WCAG AA contrast ratios
+□ Responsive breakpoints (320 / 768 / 1024px)
+□ Touch targets 44px+
+□ Dark mode tokens
+□ Focus states & keyboard navigation
 ```
 
 ## Conventions
@@ -75,3 +97,18 @@ PRE-DELIVERY CHECKLIST: (from design-system.md)
 - Mobile-first responsive design
 - Respect accessibility: contrast ratios, focus states, reduced motion
 - No emojis as icons — use SVG (Heroicons, Lucide)
+
+## References
+
+| Task | Read |
+|------|------|
+| Building a design system from scratch | `references/reasoning-engine/four-stage-process.md` |
+| Finance, banking, investment products | `references/industry-rules/finance.md` |
+| Healthcare, medical, telemedicine | `references/industry-rules/healthcare.md` |
+| SaaS, dashboards, analytics | `references/industry-rules/tech-saas.md` |
+| E-commerce, retail, marketplaces | `references/industry-rules/ecommerce.md` |
+| Color palette options | `references/design-patterns/colors-index.md` |
+| Full design patterns library | `references/design-patterns/overview.md` |
+| Tech stack guidance | `references/tech-stacks.md` |
+| Figma integration | `references/figma.md` |
+

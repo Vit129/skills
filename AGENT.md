@@ -36,49 +36,54 @@ MEMORY_PROJECT = {project}/.memory/           ← per-project memory
 
 ---
 
-## Core Skills (always available)
+## Skills
 
-### System Skills — `system/`
-
-| Skill | Trigger phrases | Load |
-|-------|----------------|------|
-| `memory-palace` | "save memory", "load context", "session start/end", "compress room" | `system/memory-palace/SKILL.md` |
-| `knowledge-evolution` | "track which templates work", "score lessons", "auto-capture failures", "feedback loop", "knowledge keeps getting better" | `system/knowledge-evolution/SKILL.md` |
-| `hook-creator` | "create hook", "automate on save", "สร้าง hook" | `system/hook-creator/SKILL.md` |
-| `ai-techniques` | "use CoT", "step-back", "LATS", "reasoning technique" | `system/ai-techniques/SKILL.md` |
-| `analysis-concept` | "analyze context", "gap analysis", "domain discovery" | `system/analysis-concept/SKILL.md` |
-| `skill-creator` | "create skill", "improve skill", "skillify" | `system/skill-creator/SKILL.md` |
-
-### Knowledge Evolution — Special Note
-
-`knowledge-evolution` is a **meta-skill** that improves all other knowledge over time.
-
-Without it, the agent will:
-- Not update utility scores after test runs
-- Not auto-capture lessons from failures
-- Not route to the best-performing templates
-
-Always activate when working with `ai-dlc/knowledge/` or after test execution.
-
-References:
-- Scoring protocol: `system/knowledge-evolution/references/utility-scoring.md`
-- Smart routing: `system/knowledge-evolution/references/smart-routing.md`
-- Auto-consolidation: `system/knowledge-evolution/references/auto-consolidation.md`
-- Memory integration: `system/knowledge-evolution/references/memory-integration.md`
+→ Full index with trigger phrases: `SKILL.md`
 
 ---
 
-## AI-DLC Skills — `ai-dlc/`
+## Knowledge Ingest Workflow (Wiki-Graph Pattern)
 
-Full index: `SKILL.md`
+เมื่อต้องการเพิ่มความรู้ใหม่เข้าระบบ:
 
-| Category | Skills |
-|----------|--------|
-| Core | `aidlc`, `analysis-skills`, `memory-palace`, `monitoring`, `storage` |
-| Product | `architect`, `ui-designer` |
-| Dev | `frontend-dev`, `backend-dev`, `devops-pipeline` |
-| QA | `playwright-rules`, `playwright-testing`, `playwright-cli`, `robotframework-rules`, `robotframework-testing`, `qa-architect`, `test-scenario`, `postman`, `performance-testing` |
-| Knowledge | `automation/`, `business/`, `lessons/` |
+```
+1. dump raw content → {project}/.memory/wings/{topic}/raw/YYYY-MM-DD-{desc}.md
+2. AI reads raw file → extracts key concepts
+3. AI checks admission-control score (≥ 0.6 → proceed)
+4. AI writes to room + updates hall.md + updates lessons index
+5. Update lessonGraph.json if new lesson connections found
+```
+
+**Trigger phrases:** "ingest this", "add to knowledge", "learn from this", "dump to raw"
+
+---
+
+## Lesson Backlinks (Embedded in Index)
+
+Lesson relationships (edges) are embedded in each platform's index file:
+
+```
+ai-dlc/knowledge/lessons/api/apiLessonsIndex.json      → "edges": [...]
+ai-dlc/knowledge/lessons/webUi/webUiLessonsIndex.json   → "edges": [...]
+ai-dlc/knowledge/lessons/mobile/mobileLessonsIndex.json  → "edges": [...]
+```
+
+Do NOT edit `related_lessons` in individual lesson files — use `edges` in the index only.
+
+---
+
+## Citation Convention
+
+เมื่อ AI ตอบโดยอ้างอิงจาก knowledge base ให้ระบุ source เสมอ:
+
+```
+[from: LESSON-AUTH-001]       ← lesson reference
+[from: skill:playwright-rules] ← skill reference  
+[from: memory:{wing}/{room}]   ← memory palace reference
+```
+
+ถ้าตอบจากหลาย source: `[from: LESSON-AUTH-001, skill:playwright-rules]`
+ถ้าตอบจาก general knowledge (ไม่มี source): ไม่ต้องใส่ tag
 
 ---
 

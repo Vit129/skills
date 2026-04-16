@@ -799,10 +799,109 @@ async function run() {
     if (!validationIssues.includes(msg)) validationIssues.push(msg);
   });
 
+  // ── STRUCTURE SUMMARY (for AI to read without loading full MD) ──────────────
+  function buildStructureSummary(): string {
+    // Auth strategy
+    const authTypes = new Set<string>();
+    const collectAuth = (items: any[]) => {
+      items.forEach((item: any) => {
+        if (item.item) { collectAuth(item.item); return; }
+        const auth = resolveAuth(item, []);
+        if (auth?.type) authTypes.add(auth.type);
+      });
+    };
+    collectAuth(data.item || []);
+    const authStr = authTypes.size === 0 ? 'none' : [...authTypes].join(', ');
+    const authStrategy = authTypes.has('basic')
+      ? 'Basic Auth (hardcoded) — ใส่ใน fixture ครั้งเดียว ไม่ต้อง login'
+      : authTypes.has('bearer')
+        ? 'Bearer Token — login ครั้งเดียวใน globalSetup หรือ beforeAll แล้ว share token'
+        : authTypes.has('oauth2')
+          ? 'OAuth2 — fetch token ใน beforeAll แล้ว share ผ่าน stateStore'
+          : `${authStr} — ตรวจสอบ auth strategy ด้วยมือ`;
+
+    // Top-level folders
+    let topFolderList = data.item || [];
+    while (topFolderList.length === 1 && topFolderList[0].item) topFolderList = topFolderList[0].item;
+    const topFolders = topFolderList.filter((i: any) => i.item).map((i: any) => i.name);
+
+    // Shared patterns — find request names that appear in 2+ folders
+    const requestNamesByFolder = new Map<string, Set<string>>();
+    const collectRequestNames = (items: any[], folderName: string) => {
+      items.forEach((item: any) => {
+        if (item.item) { collectRequestNames(item.item, folderName); return; }
+        if (!item.request) return;
+        if (!requestNamesByFolder.has(folderName)) requestNamesByFolder.set(folderName, new Set());
+        requestNamesByFolder.get(folderName)!.add(item.name);
+      });
+    };
+    topFolderList.forEach((f: any) => { if (f.item) collectRequestNames(f.item, f.name); });
+
+    const allRequestNames = new Map<string, string[]>();
+    requestNamesByFolder.forEach((names, folder) => {
+      names.forEach(name => {
+        if (!allRequestNames.has(name)) allRequestNames.set(name, []);
+        allRequestNames.get(name)!.push(folder);
+      });
+    });
+    const sharedPatterns = [...allRequestNames.entries()]
+      .filter(([, folders]) => folders.length >= 2)
+      .map(([name, folders]) => `\`${name}\` (${folders.length} folders)`);
+
+    // Cross-folder stateStore vars
+    const crossFolderVars = stateDeps
+      .filter(d => d.isParallelRisk)
+      .map(d => `\`${d.variable}\` (set: ${d.setBy.slice(0, 2).join(', ')}${d.setBy.length > 2 ? '...' : ''} → used: ${d.usedBy.slice(0, 2).join(', ')}${d.usedBy.length > 2 ? '...' : ''})`);
+
+    // Runtime-set vars (set by pm.environment.set)
+    const runtimeSetVars = stateDeps.filter(d => d.setBy.length > 0).map(d => d.variable);
+
+    let s = `## 🏗️ Structure Summary (AI reads this — not the full MD)\n\n`;
+    s += `> **Purpose:** AI uses this section to design test structure before generating code.\n\n`;
+    s += `### Auth Strategy\n`;
+    s += `- **Type:** ${authStr}\n`;
+    s += `- **Recommendation:** ${authStrategy}\n\n`;
+    s += `### Top-Level Folders (${topFolders.length})\n`;
+    topFolders.forEach((f: string) => { s += `- \`${f}\`\n`; });
+    s += `\n`;
+    if (sharedPatterns.length > 0) {
+      s += `### Shared Patterns (reuse across folders)\n`;
+      s += `> These request names appear in multiple folders — consider shared Service classes.\n\n`;
+      sharedPatterns.slice(0, 10).forEach(p => { s += `- ${p}\n`; });
+      if (sharedPatterns.length > 10) s += `- ... and ${sharedPatterns.length - 10} more\n`;
+      s += `\n`;
+    }
+    if (crossFolderVars.length > 0) {
+      s += `### Cross-Folder State Dependencies\n`;
+      s += `> These vars are set in one folder and used in another — use global \`stateStore\`.\n\n`;
+      crossFolderVars.forEach(v => { s += `- ${v}\n`; });
+      s += `\n`;
+    }
+    if (runtimeSetVars.length > 0) {
+      s += `### Runtime-Set Variables (use stateStore, NOT process.env)\n`;
+      s += `\`\`\`\n${runtimeSetVars.join(', ')}\n\`\`\`\n\n`;
+    }
+    s += `### Recommended File Structure\n`;
+    s += `\`\`\`\n`;
+    s += `tests-api/${toKebabCase(data.info?.name || 'collection')}/\n`;
+    topFolders.forEach((f: string) => { s += `├── ${toKebabCase(f)}/\n`; });
+    s += `helpers/${toKebabCase(data.info?.name || 'collection')}/\n`;
+    if (sharedPatterns.length > 0) s += `├── shared/          ← shared services (reused across folders)\n`;
+    topFolders.forEach((f: string) => { s += `├── ${toKebabCase(f)}/\n`; });
+    s += `fixtures/${toKebabCase(data.info?.name || 'collection')}/\n`;
+    topFolders.forEach((f: string) => { s += `├── ${toKebabCase(f)}/\n`; });
+    s += `\`\`\`\n\n`;
+    s += `---\n\n`;
+    return s;
+  }
+
+  const structureSummary = buildStructureSummary();
+
   let md = `# 📖 ${data.info?.name || 'Postman Collection'} — Migration Report (v6.0)\n\n`;
   md += `**Source:** \`${path.basename(filePath)}\`\n`;
   md += `**Total Requests:** ${totalRequests}\n`;
   md += `**Generated:** ${new Date().toISOString().split('T')[0]}\n\n---\n\n`;
+  md += structureSummary;
   md += importsSection;
   if (validationIssues.length > 0) md += `## 🚨 Validation Issues (${validationIssues.length})\n\n${validationIssues.join('\n\n')}\n\n---\n\n`;
   md += collectionVarSection + `---\n\n`;

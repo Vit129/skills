@@ -92,7 +92,5 @@
     ]
   },
   "ai_instruction": "Ensure every generated test suite has a [Teardown] that calls Close Application. When generating Input Text steps, proactively add Hide Keyboard immediately after if the next step is a Click Element or navigation action.",
-  "related_lessons": [
-    "L-MOB-001"
-  ]
+  "related_lessons": []
 }

@@ -38,9 +38,7 @@
         ]
       },
       "ai_instruction": "When a test fails with 500, do NOT attempt to heal the test code. Mark the test as skipped with a comment explaining it is a server-side issue.",
-      "related_lessons": [
-        "LESSON-NET-002"
-      ]
+      "related_lessons": []
     },
     {
       "id": "LESSON-NET-002",
@@ -104,9 +102,7 @@
         ]
       },
       "ai_instruction": "When a test fails with timeout, apply Round 1 to unblock, then add a TODO comment to investigate root cause. Never permanently increase timeout without documenting why.",
-      "related_lessons": [
-        "LESSON-NET-001"
-      ]
+      "related_lessons": []
     },
     {
       "id": "LESSON-NET-003",
@@ -147,9 +143,7 @@
         ]
       },
       "ai_instruction": "For API tests, always use playwright.request.newContext() instead of page.request. This avoids CORS issues and is the correct approach for API-layer testing.",
-      "related_lessons": [
-        "LESSON-SETUP-001"
-      ]
+      "related_lessons": []
     }
   ]
 }

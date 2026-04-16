@@ -224,10 +224,29 @@ async function run() {
       return declLine ? `${key}:::${declLine.trim()}` : null;
     }).filter(Boolean).join('\n');
 
+  // Env Summary (for AI to read without loading full MD)
+  const urlVars    = filteredVars.filter(p => p.enabled && p.analysis.type === 'URL').map(p => p.key);
+  const secretVars = filteredVars.filter(p => p.enabled && (p.analysis.sensitive || p.analysis.type === 'TOKEN')).map(p => p.key);
+  const emptyVars  = filteredVars.filter(p => p.enabled && p.analysis.type === 'EMPTY').map(p => p.key);
+  const runtimeVars = filteredVars.filter(p => p.enabled && p.analysis.dynamic).map(p => p.key);
+
+  let envSummary = `## 🏗️ Env Summary (AI reads this — not the full MD)\n\n`;
+  envSummary += `> **Purpose:** AI uses this to understand env vars before generating code.\n\n`;
+  envSummary += `| Category | Count | Keys |\n|----------|-------|------|\n`;
+  envSummary += `| 🌐 Base URLs | ${urlVars.length} | ${urlVars.join(', ') || '—'} |\n`;
+  envSummary += `| 🔐 Secrets (fill manually) | ${secretVars.length} | ${secretVars.join(', ') || '—'} |\n`;
+  envSummary += `| ⚡ Runtime-set (stateStore) | ${runtimeVars.length} | ${runtimeVars.slice(0, 8).join(', ')}${runtimeVars.length > 8 ? '...' : ''} |\n`;
+  envSummary += `| 📭 Empty (set at runtime) | ${emptyVars.length} | ${emptyVars.slice(0, 8).join(', ')}${emptyVars.length > 8 ? '...' : ''} |\n\n`;
+  if (secretVars.length > 0) {
+    envSummary += `> ⚠️ **Secrets not exported by Postman:** ${secretVars.join(', ')} — must be filled manually in \`.env\`\n\n`;
+  }
+  envSummary += `---\n\n`;
+
   // Assemble MD (dev.md format)
   let md = `# 🌍 Environment Analysis: ${envName} (v6.0)\n\n`;
   md += `**Source:** \`${path.basename(filePath)}\`\n\n`;
   if (unusedVars.length > 0) md += `> **Filtered:** ${filteredVars.length} used, ${unusedVars.length} unused\n\n`;
+  md += envSummary;
   md += `## 📝 .env Snippet\n\`\`\`properties\n${dotenvSnippet}\`\`\`\n\n---\n\n`;
   md += `## 🎭 Playwright Declarations\n\`\`\`typescript\n${playwrightSnippet}\`\`\`\n`;
   if (machineReadable) {

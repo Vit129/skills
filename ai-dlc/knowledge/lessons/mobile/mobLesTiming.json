@@ -65,7 +65,5 @@
     ]
   },
   "ai_instruction": "When generating Robot scripts, NEVER use Sleep. Always generate a Wait Until... keyword before any interaction (Click, Input, Swipe). If a transaction is expected to be slow (e.g., network call, file upload), explicitly set a longer timeout argument (e.g., timeout=30s).",
-  "related_lessons": [
-    "L-MOB-004"
-  ]
+  "related_lessons": []
 }

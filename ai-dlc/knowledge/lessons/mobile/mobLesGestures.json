@@ -84,7 +84,5 @@
     ]
   },
   "ai_instruction": "When generating gesture code, always prefer percentage-based methods. If the requirement is 'scroll until found', always wrap the logic in a FOR loop with a maximum of 5-10 retries and add a final assertion after the loop to fail clearly if the element was never found.",
-  "related_lessons": [
-    "L-MOB-001"
-  ]
+  "related_lessons": []
 }

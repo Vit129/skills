@@ -77,6 +77,22 @@ Dependencies: [APIs, DB, external]
 Conflicts: [none / list with resolution]
 ```
 
+## Phase 4: Write to File (MANDATORY — DO NOT SKIP)
+
+Write the full analysis output to the appropriate file:
+- If inside AIDLC workflow → write to audit trail: `### Step-Back Analysis` and `### Context Analysis` sections in `audit.md`
+- If implementation plan exists → append to `implementationPlan[FEATURE].md` Appendix
+- If neither exists → write to `.aidlc/[system]/[feature]/outputs/inception/context-analysis.md`
+
+**OUTPUT TO USER (chat summary only):**
+```
+✅ Context Analysis recorded to [file]
+Goal: [one line]
+Scope: In [N items] / Out [N items]
+Conflicts: [none / N found]
+```
+Full details in file — do NOT dump full analysis in chat.
+
 ## Tips
 
 - This takes 30 seconds of thinking but saves hours of rework

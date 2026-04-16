@@ -15,6 +15,12 @@
       "Hybrid-API-Setup"
     ]
   },
+  "edges": [
+    { "from": "L-MOB-001", "to": ["L-MOB-004"] },
+    { "from": "L-MOB-002", "to": ["L-MOB-003"] },
+    { "from": "L-MOB-003", "to": ["L-MOB-001"] },
+    { "from": "L-MOB-004", "to": ["L-MOB-001"] }
+  ],
   "lessons": [
     {
       "id": "L-MOB-001",

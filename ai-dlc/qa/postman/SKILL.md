@@ -1,15 +1,14 @@
 ---
 name: postman
 description: >
-  This skill should be used when the user asks to "convert Postman to Playwright",
-  "migrate Postman collection", "analyze Postman environment", "generate Playwright from Postman",
-  "fix generated files", "add mock env", "fix URL placeholders", "add auth header",
-  or needs to transform existing Postman test suites into Playwright API automation.
+  Activate when user says "convert Postman to Playwright", "migrate Postman",
+  "analyze Postman collection/environment", "generate Playwright from Postman",
+  "fix URL placeholders", "add auth header", "postmanMigrate", or "run all steps".
 ---
 
 # Postman → Playwright Migration
 
-Full migration pipeline: analyze → generate → fix → run.
+Pipeline: scripts analyze JSON → Markdown IR, then AI generates Playwright code per folder.
 
 Always read the `playwright-rules` skill before writing or reviewing any generated Playwright code.
 
@@ -17,49 +16,78 @@ Always read the `playwright-rules` skill before writing or reviewing any generat
 
 | User says | Load |
 |-----------|------|
-| "how to migrate", "how to start", "full migration steps", "missing data from export", "step 3.1", "step 3.2" | `references/migration-steps.md` |
-| "what scripts to run", "run script 1", "run script 2", "analyze collection", "script commands" | `scripts/POSTMAN_README.md` |
-| "fix generated files", "URL placeholder", "add auth", "fix {{var}}", "stateStore", "assertions", "polling" | `references/fix-generated-files.md` |
-| "generate playwright", "run script 3", "postmanMdToPlaywright" | `scripts/POSTMAN_README.md` + `references/fix-generated-files.md` |
-| "run and heal", "run tests", "fix test errors", "auto-heal", "code review", "step 3.3", "reflexion log" | `references/run-and-heal.md` |
-
-- **Migration Steps** — How to start, missing data checklist, Step 3.1 data check, Step 3.2 standard fixes. (Read `references/migration-steps.md`)
-- **Fix Generated Files** — URL vars, auth header, stateStore, assertion gems, polling, schema. (Read `references/fix-generated-files.md`)
-- **Run & Heal** — Code review (Step 3.3), execution, impact analysis, error triage, reflexion log. (Read `references/run-and-heal.md`)
-- **Scripts Guide** — CLI commands for all 4 scripts, flags, auto-detect behavior, output structure. (Read `scripts/POSTMAN_README.md`)
+| "migrate Postman", "run scripts", "analyze collection", "postmanMigrate" | `scripts/POSTMAN_README.md` |
+| "generate Playwright", "convert folder", "write tests from collection.md" | `references/fix-generated-files.md` + `playwright-rules/references/api.md` + `playwright-testing/references/workflow.md` |
+| "missing data", "data check", "what's missing from export" | `references/migration-steps.md` |
+| "fix URL", "add auth", "stateStore", "polling", "pm.sendRequest" | `references/fix-generated-files.md` |
+| "review code", "run tests", "fix failures" | `playwright-testing/references/playwright-code-review.md` + `playwright-testing/references/workflow.md` |
 
 ## Migration Flow
 
-```
-collection.json + environment.json
-        ↓
-  Script 1: readPostmanCollection.ts  →  collection.md
-  Script 2: readPostmanEnv.ts         →  environment.md + .env snippet
-  Script 3: postmanMdToPlaywright.ts --skeleton  →  spec + helper + service + schema + fixture
-        ↓
-  Step 3.1: Data Completeness Check — list missing data, ASK USER
-        ↓
-  Step 3.2: Standard Fixes — URL vars, auth header, stateStore
-        ↓
-  Step 3.3: Code Review (static) — APPROVED or NEEDS_FIX
-        ↓
-  Fill // TODO: assertions per spec (folder by folder) - Ref: playwright-rules
-        ↓
-  Run tests → Impact Analysis → Error Triage → Heal (max 3 attempts)
-        ↓
-  Reflexion Log → audit.md
+```text
+Step 1+2:   Script → collection.md + env.md     (Read scripts/POSTMAN_README.md)
+Step 2.5:   AI → ออกแบบ structure + ถาม user     (Auth, shared services, stateStore, file tree)
+Step 3:     AI → Playwright files per folder     (Read references below)
+Step 4:     AI → Run tests + fix failures        (Read playwright-testing)
 ```
 
-## Decision Rules
+## Step 2.5: AI ออกแบบ Structure (ก่อน generate)
 
-**Use scripts (not AI) for generation when:**
-- Collection has > 50 requests
-- Multiple folders with cross-folder state dependencies
-- Need consistent, repeatable output
+หลังได้ `.md` แล้ว AI อ่านแค่ 2 summary sections — ไม่ต้องอ่าน MD ทั้งหมด:
 
-**Use AI directly when:**
-- Collection has ≤ 50 requests
-- Single folder, no cross-folder state
-- Quick one-off migration
+**จาก `collection.md`** → `## 🏗️ Structure Summary`
+- Auth Strategy — type + recommendation (Basic/Bearer/OAuth2)
+- Top-Level Folders — list ทุก folder
+- Shared Patterns — request names ที่ซ้ำกันข้าม folders → ควรเป็น shared Service
+- Cross-Folder State — vars ที่ set ใน folder หนึ่ง ใช้ใน folder อื่น → global stateStore
+- Runtime-Set Variables — vars ทั้งหมดที่ต้องใช้ stateStore (ไม่ใช่ process.env)
+- Recommended File Structure — tree overview
 
-**For very large collections (> 300 requests):** migrate one top-level folder at a time, run heal loop per folder — never attempt full-collection migration in a single session.
+**จาก `env.md`** → `## 🏗️ Env Summary`
+- Base URLs — domain vars ที่ใช้ใน requests
+- Secrets — vars ที่ต้อง fill manually (token, secretKey, accessToken)
+- Runtime-set vars — vars ที่ set ตอน runtime (ใช้ stateStore)
+- Empty vars — vars ที่ยังไม่มีค่า (ต้องถาม user)
+
+AI เสนอ structure ให้ user approve ก่อน generate code ทีละ folder
+
+## Step 3: AI Generation Rules
+
+Before writing any Playwright code, AI must read:
+
+1. `playwright-rules` → `references/api.md` (structure, AAA, assertions)
+2. `playwright-testing` → `references/workflow.md` (folder structure, write→run cycle)
+3. This skill → `references/fix-generated-files.md` (Postman→Playwright patterns)
+4. This skill → `references/migration-steps.md` (data completeness check)
+
+### Process
+
+- Read one `## 📁 Folder:` section at a time from collection.md
+- Read env.md for variable declarations
+- Generate: `.spec.ts` + `Helper.ts` + `*Service.ts` + `Schema.ts` + `Data.ts`
+- If missing data detected → ask user before generating
+
+### Key Postman→Playwright Patterns
+
+| Postman | Playwright |
+|---------|------------|
+| `{{var}}` | `` `${process.env['VAR_NAME']}` `` |
+| `pm.expect()` | `expect()` (30+ mappings in fix-generated-files.md) |
+| `pm.sendRequest` CPS | `await request.fetch()` async |
+| `pm.environment.set()` | `stateStore['key']` (not `process.env`) |
+| Auth inheritance | `beforeAll` + shared headers |
+| `setNextRequest` | `test.describe.serial` + `test.skip` |
+
+## Collection Size Rules
+
+| Size | Strategy |
+|------|----------|
+| ≤ 300 requests | AI generates all folders in sequence |
+| > 300 requests | AI generates one top-level folder at a time |
+
+## ⚠️ Gotchas
+
+- **Postman exports lack Current Values** — only "Initial Values" are exported. Secrets and runtime-set values will be empty. Always check with user.
+- **`pm.environment.set()` chains** — requests that set variables used by later requests need `stateStore` + `test.describe.serial`, not `process.env`.
+- **Auth inheritance missed** — Postman folder-level auth is invisible in request JSON. AI must check `resolveAuth` chain in collection.md.
+- **`pm.sendRequest` in pre-request** — CPS callback pattern must be converted to async/await. Complex patterns need manual review.

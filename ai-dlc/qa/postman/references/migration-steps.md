@@ -14,7 +14,7 @@ Provide the following to the AI:
 **Example:**
 > "Migrate Postman from `/path/to/collection.json` and `/path/to/env.json` to Playwright in `./tests/api-testing`"
 
-The AI will determine whether to use scripts (large collections) or direct generation (small collections) based on Decision Rules in `SKILL.md`.
+The AI will run scripts for analysis (Step 1+2) and then generate Playwright code directly from the produced `.md` files (Step 3).
 
 ---
 
@@ -35,7 +35,7 @@ AI and Users must be aware that Postman JSON exports often lack critical data:
 
 ## Step 3.1: Data Completeness Check (MANDATORY)
 
-Before fixing anything, AI must analyze the generated skeleton and identify values that couldn't be exported from Postman.
+Before fixing anything, AI must analyze the collection.md and env.md and identify values that couldn't be exported from Postman.
 
 **Look for:**
 - Empty or placeholder auth tokens
@@ -50,7 +50,7 @@ Before fixing anything, AI must analyze the generated skeleton and identify valu
 
 ## Step 3.2: Standard Fixes
 
-After user has confirmed missing data, apply fixes to all generated `*Service.ts` files.
+After user has confirmed missing data, AI applies these patterns when generating Playwright code from collection.md.
 
 > For exact patterns and code examples, read `references/fix-generated-files.md`.
 
@@ -106,11 +106,10 @@ const id = stateStore['orderId']
 
 ---
 
-## Script 3 Guard
+## Verify Analysis Complete
 
-Script 3 (`postmanMdToPlaywright.ts`) requires `tests-api/<name>/collection.md` to exist.
+AI generation (Step 3) requires `tests-api/<name>/collection.md` to exist.
 
-**Always verify Script 1 has completed and the folder exists before invoking Script 3.**
-If the folder is missing, Script 3 will fail silently with wrong auto-detect paths.
+**Always verify Script 1+2 have completed and the `.md` files exist before generating Playwright code.**
 
-For very large collections (> 300 requests): migrate one top-level folder at a time and run the heal loop per folder — do not attempt full-collection migration in a single session.
+For very large collections (> 300 requests): migrate one top-level folder at a time — do not attempt full-collection migration in a single session.
