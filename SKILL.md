@@ -14,11 +14,16 @@ Single source of truth for all AI-assisted development, QA, and Finance analysis
 | `monitoring/` | Logging, error tracking, performance metrics, tracing, alerts |
 | `storage/` | Knowledge save, buffer update, Data Backup & Integrity standards |
 
-### Product (Design) — `ai-dlc/product/`
+### PO (Product Owner) — `ai-dlc/po/`
 
 | Folder | Purpose |
 |--------|---------|
 | `architect/` | DDD Strategic & Tactical, Architecture Patterns, Logical Design, TDD |
+
+### UX-UI (Design) — `ai-dlc/ux-ui/`
+
+| Folder | Purpose |
+|--------|---------|
 | `ui-designer/` | Design system + aesthetic direction, Figma analysis, Sovereign Design System rules |
 
 ### Dev (Implementation) — `ai-dlc/dev/`

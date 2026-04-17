@@ -12,6 +12,8 @@
 
 ## One-Shot (recommended)
 
+> ⚠️ **USER runs this in terminal** — AI prepares the exact command with correct paths, then USER copies and runs it.
+
 ```bash
 npx ts-node --project {skills_root}/ai-dlc/qa/postman/scripts/tsconfig.json \
   {skills_root}/ai-dlc/qa/postman/scripts/postmanMigrate.ts \
@@ -27,6 +29,8 @@ npx ts-node --project {skills_root}/ai-dlc/qa/postman/scripts/tsconfig.json \
 | `--output-dir` | ❌ | Override project root (default: cwd) |
 
 ## Run Separately
+
+> ⚠️ **USER runs these in terminal** — AI prepares commands with correct paths.
 
 ```bash
 # Step 1: Analyze Collection

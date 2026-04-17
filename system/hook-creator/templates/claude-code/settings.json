@@ -1,5 +1,4 @@
 {
-  "_comment": "Claude Code hooks — Silent on Q&A, Feedback on results (C1/C2/Threads/2-week-purge).",
   "hooks": {
     "SessionStart": [
       {
@@ -7,29 +6,7 @@
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "If `.memory/state.md` missing → create locally (State, Tunnels, Wings, Archive). If exists → read Active Wings, Sessions, and Threads silently. Do NOT summarize unless first-time init. Proceed silently."
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "Write|Edit|MultiEdit",
-        "hooks": [
-          {
-            "type": "prompt",
-            "prompt": "Skip prerequisite check if path contains: .kiro/, .claude/, .memory/, planning/, audit.md, or PROGRESS.md. Otherwise, enforce sequence: domain-decomposition → user-stories; design → decomposition; implementation → design; tests → implementation. Return {\"ok\": true} silently."
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit|MultiEdit",
-        "hooks": [
-          {
-            "type": "prompt",
-            "prompt": "If file written is test (*.spec.ts/*.robot) → run test. If PASS: report '✅ [file] passes' and trigger Memory Palace update later. If FAIL: attempt self-healing max 3 times. If NOT test: return {\"ok\": true} SILENTLY."
+            "prompt": "Load ~/.claude/.memory/state.md silently. Skim ~/.claude/skills/SKILL.md. Inform '🏛️ Memory loaded'."
           }
         ]
       }
@@ -40,10 +17,34 @@
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "Evaluate .memory/ save. First, locate workspace root by finding the folder containing .claude/ or .kiro/. SKIP: Q&A, comparison, git, read. SAVE if ANY: C1=user made a choice/decision from options presented, C2=test passed or feature verified working, file written, gotcha found, or open thread identified. If SAVE: Update {root}/.memory/ (state.md, wings/, tunnels.md) per SKILL.md. For Open Threads: 1. Add @YYYY-MM-DD to newly finished [x] tasks. 2. Purge [x] tasks older than 14 days. After save: check if any wing has >10 rooms OR Recent Sessions >10 rows — if exceeded, remind user to archive that wing. Inform: '✓ Memory Palace updated'. Else SILENT."
+            "prompt": "SAVE if: file written, decision made, test passed, or open thread identified. SKIP if: Q&A only, git, read-only. If SAVE: update ~/.claude/.memory/state.md (append session, update threads, purge [x] >14 days). Check Consolidation_Stats: if sessions_since>=5 OR days_since>=7 → consolidate. Inform '✓ Session saved'. Else silent."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "prompt",
+            "async": true,
+            "prompt": "If command contains 'playwright test'/'robot'/'npm test': check PASS/FAIL. PASS → score+0.5 in knowledge index. FAIL → score-1.0, auto-capture lesson if new pattern. If exit!=0 AND not test: check skill's Gotchas section, append if new pattern. Silent always."
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "prompt",
+            "async": true,
+            "prompt": "If file ends with .spec.ts/.robot AND tests/ has existing files → run test. PASS → silent. FAIL → report error. Otherwise silent."
           }
         ]
       }
     ]
-  }
+  },
+  "_comment": "Auto: knowledge scores on test, memory save on stop. No interrupts.",
+  "model": "haiku"
 }

@@ -1,13 +1,13 @@
 {
   "name": "Knowledge Score Update",
-  "version": "1.0.0",
-  "description": "After shell commands that run tests, update utility scores in knowledge index files based on test results.",
+  "version": "3.1.0",
+  "description": "After any tool use: update .knowledge/ scores and capture new patterns. Works for all roles and all knowledge domains.",
   "when": {
     "type": "postToolUse",
-    "toolTypes": ["shell"]
+    "toolTypes": ["*"]
   },
   "then": {
     "type": "askAgent",
-    "prompt": "Check if the last shell command ran tests (look for 'playwright test', 'robot', 'npm test', 'npx playwright' in the command).\n\nIf NOT a test command → stay silent, do nothing.\n\nIf it WAS a test command:\n1. Determine which platform was tested (playwright → webUi/api, robot → mobile)\n2. Check test result (PASS/FAIL)\n3. Update the relevant knowledge index file at {knowledge_root}/automation/{platform}/{platform}Index.json:\n   - PASS → utility_score += 0.5, usage_count += 1, last_used = today (YYYY-MM-DD)\n   - FAIL (template caused it) → utility_score -= 1.0, last_failure = today\n4. If new failure pattern found → check {knowledge_root}/lessons/{platform}/ for duplicates\n   - Not found → create new lesson entry with confidence: 0.75, auto_captured: true\n5. Log: '✅ Knowledge scores updated' or stay silent if no tests ran.\n\nUse {knowledge_root} = find 'skills/knowledge/' walking up from project root."
+    "prompt": "Find workspace root by locating the folder that contains .kiro/hooks/ directory. Check if this tool execution produced a scoreable outcome:\n\nSCORE UP (+0.5): tool succeeded AND result was used (file written, decision made, output accepted)\nSCORE DOWN (-1.0): tool failed AND failure was caused by a known knowledge item (template, lesson, rule)\nCAPTURE: if tool result revealed a new pattern, insight, rule, or knowledge not yet in .knowledge/ → auto-capture\n\nDomain mapping (match by topic, create new domain if none fit):\n- coding/implementation → ui, sync, web\n- testing/qa → web\n- design/ux → ui\n- hooks/agent/memory/tooling → tooling\n- law/legal/compliance → legal\n- accounting/finance/tax/investment → finance\n- computer science/algorithms/data structures → cs\n- AI/ML/LLM concepts → ai\n- anything else → use topic name as domain id (e.g. 'biology', 'marketing')\n\nIf score change: update utility_score in {root}/.knowledge/index.json for matching domain.\nIf new domain needed: add it to {root}/.knowledge/index.json domains array first.\nIf new pattern/insight: append to matching *LessonsIndex.json (create file+index if domain is new) with fields: id, type, summary, detail, source, timestamp, effectiveness:{applied_count:0,prevented_failures:0,still_relevant:true,confidence:0.75}, auto_captured:true. Skip if duplicate.\nSilent always."
   }
 }

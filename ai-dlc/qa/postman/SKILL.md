@@ -25,10 +25,14 @@ Always read the `playwright-rules` skill before writing or reviewing any generat
 ## Migration Flow
 
 ```text
-Step 1+2:   Script → collection.md + env.md     (Read scripts/POSTMAN_README.md)
-Step 2.5:   AI → ออกแบบ structure + ถาม user     (Auth, shared services, stateStore, file tree)
-Step 3:     AI → Playwright files per folder     (Read references below)
-Step 4:     AI → Run tests + fix failures        (Read playwright-testing)
+Step 1+2:   USER runs script in terminal → produces collection.md + env.md
+            AI prepares the exact command with correct paths — USER copies and runs it
+            (Read scripts/POSTMAN_README.md for command format)
+Step 2.5:   AI reads summary sections → ออกแบบ structure → ถาม user approve
+            (Auth, shared services, stateStore, file tree)
+Step 3:     AI generates Playwright files per folder
+            (Read references below)
+Step 4:     USER runs tests in terminal → AI fixes failures
 ```
 
 ## Step 2.5: AI ออกแบบ Structure (ก่อน generate)

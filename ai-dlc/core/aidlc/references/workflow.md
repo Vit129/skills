@@ -258,7 +258,7 @@ For output depth examples per level → Read `references/complexity-examples.md`
 ```markdown
 | Phase | Status | Date | Skills Used | Notes |
 |---|---|---|---|---|
-| 1.2 - Requirements Gathering | ✅ | YYYY-MM-DD | analysis-skills (requirements.md) | Brief summary of output |
+| 1.2 - Requirements Gathering | ✅ | YYYY-MM-DD | core/analysis-skills (requirements.md) | Brief summary of output |
 ```
 
    - `Skills Used` — list every skill and reference file read during this phase
@@ -289,23 +289,23 @@ MANDATORY: Steps 1-8 apply to EVERY phase. Do NOT skip decision/plan files even 
 Brownfield start from 1.1, Greenfield start from 1.2
 
 - **1.1** Reverse Engineering → Analyze existing codebase (brownfield only)
-  → Use `analysis-skills` skill (reverse-eng.md)
+  → Use `core/analysis-skills` skill (reverse-eng.md)
 - **1.2** Requirements Gathering → User stories with BDD acceptance criteria
-  → Use `analysis-skills` skill (requirements.md)
-  → **MANDATORY after user stories:** run `analysis-skills` skill (domain.md) for cross-domain reuse analysis
+  → Use `core/analysis-skills` skill (requirements.md)
+  → **MANDATORY after user stories:** run `core/analysis-skills` skill (domain.md) for cross-domain reuse analysis
     - If `{knowledge_root}/business/businessIndex.json` does not exist → skip Steps 1-2, run Step 3 (Impact Assessment) only — set Reusability Score = 0%
     - Never skip domain.md entirely — Impact Assessment is always required
-  → **MANDATORY after domain analysis:** run `analysis-skills` skill (gap.md) to identify missing logic
+  → **MANDATORY after domain analysis:** run `core/analysis-skills` skill (gap.md) to identify missing logic
     - If domain analysis returned 0% → treat all required logic as "No Match" and proceed to prioritize gaps
 - **1.3** Domain Decomposition → DDD Strategic Design + Architecture Decision
-  → Use `architect` skill (decomposition.md, architecture-patterns.md)
+  → Use `po/architect` skill (decomposition.md, architecture-patterns.md)
 - **1.4** Domain Design → DDD Tactical Patterns (pseudocode)
-  → Use `architect` skill (domain-design.md)
+  → Use `po/architect` skill (domain-design.md)
 - **1.5** UI/UX Design → Design system, Figma analysis, component specs, wireframes
-  → Use `ui-designer` skill (design-system.md) + `ui-designer` skill (figma.md)
+  → Use `ux-ui/ui-designer` skill (design-system.md) + `ux-ui/ui-designer` skill (figma.md)
   → Skip for API-only features (no UI)
 - **1.6** Logical Design → Technical specifications (Server Logic, Data Storage, Client Application)
-  → Use `architect` skill (logical-design.md)
+  → Use `po/architect` skill (logical-design.md)
   → Frontend component tree + state design informed by Phase 1.5 wireframes
 - **1.7** TestId Map Sync → Agree testId naming between QA and Dev based on actual UI structure from Phase 1.5
   → Output: `testid-map.md` — maps component/element → testId → owner (QA uses, Dev implements)
@@ -372,7 +372,7 @@ Brownfield start from 1.1, Greenfield start from 1.2
 - Single files with context sections (`domain-design.md`)
 - Single `outputs/construction/` folder
 
-For detailed patterns → Use `architect` skill (architecture-patterns.md)
+For detailed patterns → Use `po/architect` skill (architecture-patterns.md)
 
 ## Quick Commands
 

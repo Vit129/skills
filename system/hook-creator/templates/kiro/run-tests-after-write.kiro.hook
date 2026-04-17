@@ -1,14 +1,14 @@
 {
   "enabled": true,
   "name": "Run Tests After AI Write",
-  "description": "After AI writes a test file, run it — but ONLY if test files already exist in the project (not first-time setup).",
-  "version": "2.1.0",
+  "description": "After AI writes a test file, run it automatically.",
+  "version": "2.3.0",
   "when": {
-    "type": "postToolUse",
-    "toolTypes": ["write"]
+    "type": "fileEdited",
+    "patterns": ["**/*.spec.ts", "**/*.robot"]
   },
   "then": {
     "type": "askAgent",
-    "prompt": "Check the file path just written.\n\n**Step 1: Is it a test file?**\nOnly proceed if path ends with .spec.ts or .robot.\nIf NOT → stay silent, do nothing.\n\n**Step 2: Do test files already exist in this project?**\nCheck if tests/ folder has any existing .spec.ts or .robot files (other than the one just written).\nIf NO existing test files → this is first-time setup, skip silently.\nIf YES → proceed to Step 3.\n\n**Step 3: Run the test**\n- .spec.ts → npx playwright test [file] --reporter=line\n- .robot → robot --outputdir results [file]\n\n**Step 4: Handle result**\n- PASS → report '✅ [filename] passes'\n- FAIL → analyze error, attempt self-healing (max 3 attempts)\n- After 3 failed attempts → report failure with error summary, stop"
+    "prompt": "Run the file just saved. .spec.ts: npx playwright test [file] --reporter=line | .robot: robot --outputdir results [file]. PASS → '✅ [file] passes'. FAIL → self-heal max 3 attempts, then report."
   }
 }

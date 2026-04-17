@@ -1,13 +1,13 @@
 {
   "enabled": true,
   "name": "Memory Palace — Save",
-  "description": "Save to .memory/. 2-week grace period for [x] threads.",
-  "version": "3.5.0",
+  "description": "Save only when user+AI agreed on something or work was done. Silent on Q&A/exploration.",
+  "version": "3.8.0",
   "when": {
     "type": "agentStop"
   },
   "then": {
     "type": "askAgent",
-    "prompt": "Evaluate .memory/ save. First, locate workspace root by finding the folder containing .kiro/hooks/. SKIP: Q&A, comparison, git, read. SAVE if ANY: C1=user made a choice/decision from options presented, C2=test passed or feature verified working, file written, gotcha found, or open thread identified. If SAVE: Update {root}/.memory/ (state.md, wings/, tunnels.md) per SKILL.md. For Open Threads: 1. Add @YYYY-MM-DD to newly finished [x] tasks. 2. Purge [x] tasks older than 14 days. After save: check if any wing has >10 rooms OR Recent Sessions >10 rows — if exceeded, remind user to archive that wing. Inform: '✓ Memory Palace updated'. Else SILENT."
+    "prompt": "Find workspace root by locating the folder that contains .kiro/hooks/ directory.\n\nDECIDE: SAVE or SKIP?\nSAVE if ANY of: file written, user accepted a proposal/option, decision finalized, test passed, gotcha found, implementation completed.\nSKIP if ALL of: pure Q&A, exploration/comparison only (user still deciding), read-only, git operations, no outcome yet.\n\nExamples:\n- AI proposes A/B/C → user asks differences → SKIP\n- AI proposes A/B/C → user picks one → SAVE\n- Just asking questions → SKIP\n- File written or test passed → SAVE\n- Implementation finished → SAVE\n\nIf SAVE: update {root}/.memory/ (state.md, wings/, tunnels.md). Threads: add @YYYY-MM-DD to finished [x], purge [x] >14 days. Warn if wing >10 rooms or sessions >10 rows. Then show:\n'✓ Memory Palace updated'\n  → session: [1-line summary of what was done]\n  → lessons: [lesson id captured, or 'none']\nIf SKIP: silent.\n\nThen check consolidation: read Consolidation_Stats from {root}/.memory/state.md. If mode=auto AND (sessions_since>=5 OR days_since>=7) → run auto-consolidation (archive old sessions, keep last 5), reset sessions_since=0, last_consolidation=today, show summary. If section missing → add defaults (mode:auto, sessions_since:1, last_consolidation:today). Timeout 15s → skip.\n\nThen capture lessons (only if SAVE): if session had new decisions, gotchas, or patterns → check {root}/.knowledge/index.json (create if missing). For each new pattern: find matching domain, append to *LessonsIndex.json with fields: id, type, summary, detail, source, timestamp, effectiveness:{applied_count:0,prevented_failures:0,still_relevant:true,confidence:0.75}, auto_captured:true. Skip duplicates. Silent always."
   }
 }

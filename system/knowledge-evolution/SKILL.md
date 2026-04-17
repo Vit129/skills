@@ -16,6 +16,43 @@ description: >
 A pattern for making any knowledge base self-improving through a closed feedback loop.
 Adapt the concepts here to your system's storage format, naming conventions, and workflow.
 
+## Knowledge Structure (Two Layers)
+
+```
+KNOWLEDGE_GLOBAL  = ~/.claude/skills/ai-dlc/knowledge/   ← cross-project templates + lessons
+KNOWLEDGE_PROJECT = {project}/.knowledge/                 ← per-project overrides
+```
+
+Resolution order: `{project}/.knowledge/` first → fallback to `KNOWLEDGE_GLOBAL`
+
+### Global (`ai-dlc/knowledge/`)
+```
+ai-dlc/knowledge/
+├── index.json              ← master catalog, utility_score per domain
+├── automation/
+│   ├── api/                apiIndex.json + templates
+│   ├── webUi/              webUiIndex.json + templates
+│   ├── mobile/             mobileIndex.json + templates
+│   └── common/             commonIndex.json + templates
+├── business/
+│   ├── auth/               businessAuthIndex.json + rules
+│   ├── finance/            businessFinIndex.json + rules
+│   └── document/           businessDocIndex.json + rules
+└── lessons/
+    ├── api/                apiLessonsIndex.json + lesson files
+    ├── webUi/              webUiLessonsIndex.json + lesson files
+    └── mobile/             mobileLessonsIndex.json + lesson files
+```
+
+### Per-Project (`{project}/.knowledge/`)
+```
+{project}/.knowledge/
+├── index.json              ← project domain catalog, utility_score per domain
+├── README.md               ← usage guide
+└── lessons/
+    └── {domain}/           *LessonsIndex.json + lesson files
+```
+
 ## Core Concept
 
 ```
@@ -31,30 +68,21 @@ The system learns which knowledge is reliable without human intervention.
 
 | Need | Load |
 |------|------|
-| "score templates/lessons", "track usage", "flag bad templates", "auto-capture from failures" | `references/utility-scoring.md` |
-| "improve routing", "intent matching", "find best match", "sort by effectiveness" | `references/smart-routing.md` |
-| "semantic search", "BM25", "embedding-based routing", "knowledge base too large for patterns" | `references/semantic-routing.md` |
-| "cross-session tracking", "memory palace integration", "sync scores back to source" | `references/memory-integration.md` |
-| "consolidate knowledge", "deduplicate lessons", "prune stale", "auto-dream", "clean up knowledge" | `references/auto-consolidation.md` |
-| "analyze multiple failures", "batch lesson capture", "parallel trace analysis", "conflict-free lessons" | `references/parallel-analysis.md` |
-| "implement all of this", "phase-by-phase plan", "what files to change" | `references/implementation-guide.md` |
+| เพิ่ม `utility_score` ให้ templates, `effectiveness` ให้ lessons, auto-capture หลัง test fail/pass, conflict detection | `references/utility-scoring.md` |
+| เพิ่ม `intent_patterns`, routing sort by score, lesson sort by prevented_failures | `references/smart-routing.md` |
+| Knowledge base > 50 templates / > 100 lessons → BM25 หรือ vector embeddings | `references/semantic-routing.md` |
+| สร้าง knowledge-evolution wing, session start/end protocol, write-back sync to index files | `references/memory-integration.md` |
+| Deduplicate, stale detection, date normalization, conflict resolution, score normalization | `references/auto-consolidation.md` |
+| วิเคราะห์ failure > 5 อันพร้อมกัน, batch lesson capture, conflict-free consolidation | `references/parallel-analysis.md` |
+| Phase A→D roadmap, folder structure สองชั้น, setup `.knowledge/`, placeholder mapping | `references/implementation-guide.md` |
 
 ## How to Adapt
-
-This skill describes **concepts**, not implementations. Each system will differ:
 
 - **Storage format** — json index files, markdown, database, vector store — adapt the schema
 - **Trigger points** — after test run, after save, on session end — adapt to your workflow hooks
 - **Score fields** — `utility_score` is a suggestion; rename to fit your domain
-- **Routing logic** — intent patterns work for keyword-based systems; swap for semantic search if available
+- **Routing logic** — check `.knowledge/` first → fallback to global
 - **Memory layer** — Memory Palace is the reference implementation; any persistent store works
-
-## Adaptation Steps
-
-1. Read the concept reference that matches your need
-2. Identify your system's equivalent of: knowledge store, execution trigger, score field, routing logic
-3. Map the concept's `{placeholders}` to your system's actual paths and field names
-4. Implement the minimal version first — scoring alone adds value without routing or memory
 
 ## Design Principles
 

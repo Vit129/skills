@@ -84,21 +84,6 @@ Proceeding with Sonnet.
 git checkout -b feat/description-of-work
 ```
 
-Benefits:
-- Easy rollback if something breaks
-- Clear git history (each PR = one logical change)
-- Safe to experiment without affecting main
-
-### Workflow
-
-```
-1. Assess complexity → recommend tier
-2. User confirms or overrides
-3. Execute task
-4. Run relevant tests
-5. Commit with descriptive message
-```
-
 ### Completion Criteria
 
 A task is **NOT done** until:
@@ -108,24 +93,11 @@ A task is **NOT done** until:
 
 > ⚠️ **Rule:** A task without a commit hash is NOT done. Code that isn't committed can be lost.
 
----
-
-## 4. Engineering Standards
-
-> **Output Medium:** Kiro IDE chat panel — markdown renders fully. Use headers, tables, code blocks freely. Avoid ANSI escape codes.
-
-Regardless of tier, **always follow**:
-
-1. **Explain Before Acting** — briefly state intent before invoking any tool
-2. **Evidence-First** — never guess — search for evidence first
-3. **Validation is Finality** — work is complete only when tests confirm correctness
-4. **Context Efficiency** — read only necessary files, batch operations
-5. **Commit Early & Often** — after each logical step, not just at the end
-6. **Commit After Final Review** — stage all changes and commit with descriptive message
+> **Engineering Standards & Karpathy Principles** → See `AGENT.md`
 
 ---
 
-## 5. Playwright Skills (Mandatory for All Test Work)
+## 4. Playwright Skills (Mandatory for All Test Work)
 
 → Full rules: `system/hook-creator/templates/kiro/steering/` or load `#playwright-rules` in chat
 
@@ -138,7 +110,7 @@ Skill paths (relative to SKILLS_ROOT):
 
 ---
 
-## 6. Test Coverage Rules (Mandatory)
+## 5. Test Coverage Rules (Mandatory)
 
 → Load `#qa-architect` in chat for full test mapping
 
@@ -148,7 +120,7 @@ Skill path: `ai-dlc/qa/qa-architect/SKILL.md`
 
 ---
 
-## 7. Token / Cost Control
+## 6. Token / Cost Control
 
 | Action | Effect |
 |--------|--------|
@@ -160,17 +132,17 @@ Skill path: `ai-dlc/qa/qa-architect/SKILL.md`
 
 ### Prompt Cache Protection
 
-- ห้ามแก้ KIRO.md, `.kiro/steering/`, MCP config ระหว่าง session — cache หายถาวร
-- ตั้งค่าทุกอย่างก่อนเริ่ม session — แก้ระหว่างทาง = cache lost, ไม่กลับมา
-- ถ้าต้องแก้จริงๆ → เริ่ม session ใหม่
-- KIRO.md structure: stable content (standards, rules) อยู่บน, dynamic content อยู่ล่าง → cache-aware boundaries
+- **Do NOT edit** KIRO.md, `.kiro/steering/`, MCP config mid-session — cache is permanently lost
+- Configure everything before starting a session — editing mid-session = cache lost, never recovers
+- If you must edit → start a new session
+- KIRO.md structure: stable content (standards, rules) on top, dynamic content at bottom → cache-aware boundaries
 
 ### Token Budget Targeting
 
-สำหรับ task ใหญ่ที่ cost สำคัญ ระบุ budget ชัดเจนใน prompt:
-- `"ใช้ไม่เกิน 50K tokens"` → agent scope งานให้พอดี ไม่ over-engineer
-- `"spend up to 200K — ทำให้ละเอียด"` → agent deep dive ได้เต็มที่
-- ไม่ระบุ = agent ตัดสินใจเอง (อาจ over หรือ under spend)
+For large tasks where cost matters, specify budget explicitly in the prompt:
+- `"Use no more than 50K tokens"` → agent scopes work to fit, avoids over-engineering
+- `"Spend up to 200K — go deep"` → agent deep dives fully
+- Not specified = agent decides on its own (may over or under spend)
 
 ---
 

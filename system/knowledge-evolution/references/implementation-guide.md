@@ -7,19 +7,64 @@ Adapted from: `system/knowledge-evolution` integration plan (Memento-Skills conc
 
 ---
 
+## Knowledge Structure (Two Layers)
+
+```
+KNOWLEDGE_GLOBAL = ~/.claude/skills/ai-dlc/knowledge/   ← cross-project (templates, lessons)
+KNOWLEDGE_PROJECT = {project}/.knowledge/                ← per-project (overrides global)
+```
+
+**Resolution order:** `{project}/.knowledge/` first → fallback to `KNOWLEDGE_GLOBAL`
+
+### Global Knowledge (`ai-dlc/knowledge/`)
+```
+ai-dlc/knowledge/
+├── index.json                    ← master catalog with utility_score per domain
+├── automation/
+│   ├── automationIndex.json
+│   ├── api/        apiIndex.json + templates
+│   ├── webUi/      webUiIndex.json + templates
+│   ├── mobile/     mobileIndex.json + templates
+│   └── common/     commonIndex.json + templates
+├── business/
+│   ├── businessIndex.json
+│   ├── auth/       businessAuthIndex.json + rules
+│   ├── finance/    businessFinIndex.json + rules
+│   └── document/   businessDocIndex.json + rules
+└── lessons/
+    ├── api/        apiLessonsIndex.json + lesson files
+    ├── webUi/      webUiLessonsIndex.json + lesson files
+    └── mobile/     mobileLessonsIndex.json + lesson files
+```
+
+### Per-Project Knowledge (`{project}/.knowledge/`)
+```
+{project}/.knowledge/
+├── index.json                    ← project domain catalog with utility_score
+├── README.md                     ← usage guide + resolution order note
+└── lessons/
+    ├── web/        webLessonsIndex.json + lesson files   (project-specific E2E)
+    ├── ui/         uiLessonsIndex.json + lesson files    (project-specific UI)
+    └── sync/       syncLessonsIndex.json + lesson files  (project-specific sync)
+```
+
+Project knowledge **overrides** global for the same domain. If a domain only exists globally, fallback applies automatically.
+
+---
+
 ## Before Starting
 
 Identify your system's equivalents for these concepts:
 
 | Concept | Your System's Equivalent |
 |---------|--------------------------|
-| `{knowledge_store}` | Where templates/lessons/rules live (json, markdown, db, etc.) |
-| `{index_file}` | The catalog/index that lists available knowledge items |
+| `{knowledge_store}` | `ai-dlc/knowledge/` (global) or `{project}/.knowledge/` (per-project) |
+| `{index_file}` | `index.json` at each level + domain-specific `*Index.json` files |
 | `{execution_trigger}` | When execution happens (test run, build, deploy, save) |
-| `{score_field}` | What you'll call the quality signal (utility_score, rank, weight) |
-| `{lesson_store}` | Where lessons learned are kept |
-| `{routing_logic}` | How the system currently finds the right knowledge item |
-| `{memory_layer}` | Where cross-session state is tracked (Memory Palace, db, file) |
+| `{score_field}` | `utility_score` (0–10 scale) in index files |
+| `{lesson_store}` | `lessons/` under global or per-project knowledge |
+| `{routing_logic}` | Check `.knowledge/` first → fallback to `ai-dlc/knowledge/` |
+| `{memory_layer}` | `{project}/.memory/` (per-project) or `~/.memory/global/` (cross-project) |
 
 ---
 
@@ -234,6 +279,46 @@ Default scale: 0–10. Adjust thresholds to match your domain's signal density.
 - ❌ No changes to existing knowledge item format (fields are additive)
 - ❌ No specific programming language or framework
 - ❌ No Memento-Skills code — concepts only
+
+---
+
+## Quick Setup: New Project `.knowledge/`
+
+When starting a new project, run Phase A for the per-project layer:
+
+```
+1. Create {project}/.knowledge/index.json
+   → Add domains relevant to this project
+   → Set utility_score: 5.0 (neutral default) for all
+
+2. Create {project}/.knowledge/lessons/{domain}/
+   → Add *LessonsIndex.json with effectiveness fields
+   → Add lesson files as patterns are discovered
+
+3. Resolution order is automatic:
+   → Agent reads {project}/.knowledge/index.json first
+   → Falls back to ai-dlc/knowledge/index.json for missing domains
+```
+
+Minimal `index.json` for a new project:
+```json
+{
+  "project": "{project-name}",
+  "updated": "{date}",
+  "resolution_order": "{project}/.knowledge/ first → fallback to KNOWLEDGE_GLOBAL",
+  "domains": [
+    {
+      "id": "{domain}",
+      "description": "{what this domain covers}",
+      "lesson_file": "lessons/{domain}/{domain}LessonsIndex.json",
+      "utility_score": 5.0,
+      "usage_count": 0,
+      "last_used": null,
+      "last_failure": null
+    }
+  ]
+}
+```
 
 ---
 

@@ -9,7 +9,9 @@ description: >
   "test scenario", "test case", "สร้าง test", "เขียน test",
   "automate", "automation", "QA", "testing",
   or needs governance for the AI Development Lifecycle.
-  ALL development and QA work MUST go through this skill first.
+  ALL coding, development, and QA work MUST go through this skill first.
+  Non-coding tasks (research, analysis, finance, presentation, knowledge management)
+  can go directly to the relevant skill or knowledge without AIDLC governance.
 ---
 
 # AIDLC (AI Development Lifecycle)

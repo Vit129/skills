@@ -22,7 +22,7 @@ Foundational analysis tools used across all AIDLC phases.
 | "gather requirements", "write user stories", "BDD scenarios" | `references/requirements.md` |
 | "reverse engineer", "scan codebase", "understand architecture" | `references/reverse-eng.md` |
 
-**Note:** For Figma analysis → use `product/ui-designer` skill. For test scenario reading → use `qa/test-scenario` skill.
+**Note:** For Figma analysis → use `ux-ui/ui-designer` skill. For test scenario reading → use `qa/test-scenario` skill.
 
 **Hard rules:**
 - Load ONE reference file — never load multiple in the same turn unless explicitly asked

@@ -1,13 +1,13 @@
 {
   "enabled": true,
   "name": "Memory Palace — Load",
-  "description": "Load or initialize .memory/ context at session start. SILENT.",
-  "version": "2.2.0",
+  "description": "Load or initialize .memory/ context at session start.",
+  "version": "2.3.0",
   "when": {
     "type": "agentStart"
   },
   "then": {
     "type": "askAgent",
-    "prompt": "If `.memory/state.md` missing → create it locally (State, Tunnels, Wings, Archive). If exists → read Active Wings, Sessions, and Threads. INTEGRATE context silently into your internal state. Do NOT summarize or inform user. Proceed to task immediately."
+    "prompt": "Read .memory/state.md (create if missing with State/Tunnels/Wings/Archive sections). Load Active Wings, Sessions, Threads silently. Inform user: '🏛️ Memory Palace loaded' (or '🏛️ Memory Palace initialized' if newly created). Do NOT show details."
   }
 }
