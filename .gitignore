@@ -32,11 +32,13 @@ plugins/
 rules/
 scripts/
 session-env/
+shell-snapshots/
 statsig/
 tasks/
 telemetry/
 todos/
 .setup-checklist
+.claude/
 history.jsonl
 settings.json
 stats-cache.json
