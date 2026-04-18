@@ -5,7 +5,7 @@ Personal knowledge base and skill library for AI-assisted development — works 
 ## What's inside
 
 ```
-skills/
+{project-root}/
 ├── skills/
 │   ├── ai-dlc/          ← Dev lifecycle: analysis, design, frontend, backend, QA, testing
 │   ├── system/          ← Meta-skills: unified-memory, skill-creator, hook-creator, ai-techniques
