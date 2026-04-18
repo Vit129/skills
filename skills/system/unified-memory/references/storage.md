@@ -20,13 +20,11 @@ L4: Hall    — index of rooms within a wing (≤50 lines)
 ├── palace/
 │   ├── state.md                      ← palace map (≤100 lines)
 │   ├── tunnels.md                    ← cross-wing links
-│   ├── graph.json                    ← [Obsidian] machine-readable graph (auto-generated)
-│   ├── graph.md                      ← [Obsidian] Mermaid visual graph (auto-generated)
 │   ├── wings/
 │   │   └── {topic}/
 │   │       ├── hall.md               ← wing index (≤50 lines)
 │   │       ├── hall-detail.md        ← overflow from hall (optional)
-│   │       ├── rooms/{room}.md       ← full detail (with frontmatter + wikilinks)
+│   │       ├── rooms/{room}.md       ← full detail
 │   │       ├── closets/{room}.md     ← AAAK compressed (when room >80 lines)
 │   │       └── raw/YYYY-MM-DD-*.md   ← verbatim records
 │   └── archive/
@@ -44,6 +42,7 @@ L4: Hall    — index of rooms within a wing (≤50 lines)
 
 **Rules:**
 - Top-level .unified-memory/palace/ contains ONLY: state.md, tunnels.md, wings/, archive/
+
 - Max folder depth = 4 levels
 - hall.md ≤ 50 lines. Overflow → hall-detail.md
 
@@ -132,15 +131,6 @@ Hot | Warm | Cold | Pending Archive
 
 ### Room Schema
 ```markdown
----
-wing: {wing-name}
-status: hot | warm | cold
-tags: [{tag1}, {tag2}, {tag3}]
-created: YYYY-MM-DD
-updated: YYYY-MM-DD
-links: ["[[{wing}/{room}]]"]
----
-
 # {Room Name}
 
 ## Current State
@@ -154,16 +144,12 @@ links: ["[[{wing}/{room}]]"]
 
 ## Implementation Details
 {Key facts, paths, configs — grep-verified}
-Cross-ref: [[{wing}/{related-room}]]
 
 ## Rejected Approaches
 - {approach}: rejected because {reason}
 
 ## Open Questions
 - {question}
-
-## Backlinks
-- [[{wing}/{room}]] — {why it links here}
 ```
 
 ### Contradiction Check (Before Overwriting)
@@ -192,9 +178,7 @@ Principles:
   Context Pinning   — always include "Current Truth" pointer
   Relational Links  — use ->, => and temporal markers (@YYYY-MM-DD)
 
-Pro tip: Wrap AAAK content in an Obsidian Callout for better UI visibility:
-  > [!ABSTRACT] AAAK Closet
-  > @auth-service | v: OAuth2 @2026-03-15
+
 ```
 
 ### Closet Schema
@@ -227,7 +211,7 @@ Create when:
   - Knowledge-evolution score impacts project wing
   - Bug in domain A explains behavior in domain B
 
-Pro tip: Use wikilinks [[wing/room]] inside tunnel purpose descriptions.
+
 ```
 
 ### tunnels.md Schema
@@ -402,7 +386,7 @@ Formula: (reuse + extend items) / total required × 100
 ❌ Writing without conflict check → Fix: search existing facts before writing
 ❌ Room >80 lines without closet → Fix: create closet immediately
 ❌ Forgetting to update hall.md → Fix: hall.md update is mandatory
-❌ Missing Tags line → Fix: every room needs 3–7 tags
+
 ❌ Duplicating content across rooms → Fix: use tunnels to link, don't copy
 ```
 
@@ -516,10 +500,6 @@ AAAK (25 tokens):
 }
 ```
 
-Pro tip: For human readability in Obsidian, wrap triple lists in:
-  > [!INFO] Temporal Triples (History)
-  > - (Subject, Predicate, Value) [date—date]
-
 Historical record (previous value):
 ```json
 {
@@ -545,185 +525,3 @@ Query capability: "What was auth-service architecture during Jan 2026?" → mono
    - Same meaning → skip (no-op, avoid duplication)
 ```
 
----
-
-## Obsidian Integration (Additive Layer)
-
-Original Wings/Rooms/Closets/Halls/Tunnels stay unchanged.
-These conventions layer on top — enabling Obsidian graph view + Mermaid + JSON.
-
----
-
-### Frontmatter (Room Metadata)
-
-Every room must have YAML frontmatter at the top:
-
-```yaml
----
-wing: {wing-name}
-status: hot | warm | cold
-tags: [tag1, tag2, tag3]
-created: YYYY-MM-DD
-updated: YYYY-MM-DD
-links: ["[[{wing}/{room}]]", "[[{wing2}/{room2}]]"]
----
-```
-
-**Tag conventions:**
-- Use domain terms: `auth`, `api`, `error`, `performance`, `security`
-- Use lifecycle terms: `decision`, `open`, `resolved`, `deprecated`
-- Max 5 tags per room — prefer fewer, more specific
-- Tags are cross-wing: same tag on rooms in different wings = semantic cluster
-
----
-
-### Wikilinks (Cross-References)
-
-Format: `[[{wing-name}/{room-name}]]`
-
-```markdown
-See [[auth-decisions/token-strategy]] for how this was decided.
-Affected by [[api-integration/error-handling]].
-```
-
-**Rules:**
-- Use wikilinks whenever referencing another room — never bare file paths
-- Obsidian auto-builds graph from wikilinks — no manual maintenance
-- Add to `links:` frontmatter AND inline in content where relevant
-- When creating a wikilink to room B from room A → add A to B's Backlinks section
-
----
-
-### Backlinks (Bidirectional)
-
-Each room tracks what links TO it:
-
-```markdown
-## Backlinks
-- [[payment-api/auth-flow]] — depends on token strategy here
-- [[api-integration/session-mgmt]] — references expiry decision
-```
-
-**Rules:**
-- Update target room's Backlinks when you add a wikilink to it
-- Remove from Backlinks when the source room is archived
-- Backlinks are informational — never block room writing if missing
-
----
-
-### graph.json Schema
-
-Auto-generated at session end from state.md + tunnels.md + frontmatter links.
-
-```json
-{
-  "generated": "YYYY-MM-DD",
-  "nodes": [
-    {
-      "id": "{wing-name}",
-      "type": "wing",
-      "status": "hot | warm | cold",
-      "rooms": 3,
-      "tags": ["auth", "security"],
-      "last_updated": "YYYY-MM-DD"
-    },
-    {
-      "id": "{wing-name}/{room-name}",
-      "type": "room",
-      "wing": "{wing-name}",
-      "tags": ["auth", "jwt"],
-      "status": "hot",
-      "last_updated": "YYYY-MM-DD"
-    }
-  ],
-  "edges": [
-    {
-      "from": "{wing-name}",
-      "to": "{wing2-name}",
-      "type": "tunnel",
-      "purpose": "auth approach drives API choices",
-      "sync": "session-end"
-    },
-    {
-      "from": "{wing-name}/{room-name}",
-      "to": "{wing2-name}/{room2-name}",
-      "type": "wikilink",
-      "inline": true
-    }
-  ]
-}
-```
-
-**Node types:** `wing`, `room`
-**Edge types:** `tunnel` (from tunnels.md), `wikilink` (from frontmatter + inline links)
-
----
-
-### graph.md Schema (Mermaid)
-
-Auto-generated at session end. Shows wings as clusters, rooms as nodes, edges as links.
-
-````markdown
-# Palace Graph — {project}
-Generated: YYYY-MM-DD
-
-```mermaid
-graph LR
-  subgraph auth-decisions
-    auth-decisions/token-strategy
-    auth-decisions/oauth-flow
-  end
-
-  subgraph api-integration
-    api-integration/error-handling
-    api-integration/session-mgmt
-  end
-
-  auth-decisions -->|tunnel: auth drives API| api-integration
-  auth-decisions/token-strategy -->|wikilink| api-integration/session-mgmt
-```
-````
-
-**Rendering:** Opens in Obsidian, GitHub, VS Code (Markdown Preview Enhanced), any Mermaid renderer.
-
----
-
-### Generation Rules (Session End)
-
-Run after Step 2f (tunnels.md updated):
-
-```
-2g. Generate graph files:
-
-  graph.json:
-    1. Read state.md → all active wings → nodes (type: wing)
-    2. Read each wing's hall.md → rooms → nodes (type: room)
-    3. Read each room's frontmatter → tags, links → edges (type: wikilink)
-    4. Read tunnels.md → active tunnels → edges (type: tunnel)
-    5. Write palace/graph.json
-
-  graph.md:
-    1. From graph.json nodes → build subgraph per wing
-    2. From graph.json edges → build arrows with labels
-    3. Write palace/graph.md
-
-  Skip generation if:
-    - No rooms changed this session (graph unchanged)
-    - User explicitly skipped ("skip graph")
-```
-
----
-
-### Opening in Obsidian
-
-To use Obsidian as a visual interface:
-
-```
-1. Open Obsidian → "Open folder as vault"
-2. Select: {project_root}/.unified-memory/palace/
-3. Graph View → shows wings, rooms, wikilink connections
-4. Click any node → opens the room file
-5. Tags panel → filter rooms by tag across wings
-```
-
-Obsidian graph is built live from wikilinks — graph.json/graph.md are for non-Obsidian use.

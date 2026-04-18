@@ -1,7 +1,3 @@
----
-Tags: #memory-palace #skill #aaak #reference-files #hierarchy
----
-
 # Room: Memory Palace Skill Structure
 
 ## Hierarchy

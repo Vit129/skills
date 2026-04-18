@@ -92,10 +92,7 @@ During work:
   - Note reasoning in-session (written to rooms at session end)
   - Flag gaps: "no template for {domain}" → add to gap-tracker
 
-  [Obsidian] Cross-references during work:
-  - When referencing another room → note as [[wing/room]] (not file path)
-  - When tagging a decision → note tags for frontmatter (e.g. #auth #decision)
-  - Collect wikilinks + tags in-session → write to frontmatter at session end
+
 ```
 
 ---
@@ -157,18 +154,6 @@ For each topic worked on:
 
   2f. Update tunnels.md:
       Add cross-wing references created this session
-
-  2g. [Obsidian] Write frontmatter + backlinks for each room touched:
-      - frontmatter: wing, status, tags, created, updated, links
-      - inline wikilinks in Implementation Details / Decisions Log
-      - update Backlinks section in every room that was linked TO
-
-  2h. [Obsidian] Auto-generate graph files:
-      graph.json → nodes (wings + rooms) + edges (tunnels + wikilinks)
-      graph.md   → Mermaid diagram from graph.json
-      Skip if: no rooms changed this session
-
-  Pro tip: Re-generating graph files (2h) is mandatory if any [[wikilinks]] were added or rooms renamed.
 ```
 
 ### Step 3: Update Learning State
@@ -216,7 +201,6 @@ Global knowledge ({project_root}/skills/knowledge/):
  - Templates: {id} {before}→{after} (×N sessions)
  - Lessons: {N} applied, {M} auto-captured
  - Synced: .unified-memory/knowledge/index.json ✓
- - Graph: {N} nodes, {M} edges → graph.json + graph.md updated
  Next: {next_session_intent}"
 ```
 

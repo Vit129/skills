@@ -77,8 +77,6 @@ Together = Compound Growth:
 │   │   │       ├── hall.md
 │   │   │       ├── rooms/
 │   │   │       └── closets/
-│   │   ├── graph.json                   (machine-readable Obsidian graph)
-│   │   └── graph.md                     (Mermaid diagram)
 │   │
 │   └── knowledge/                       ← Knowledge Evolution
 │       ├── index.json                   (source of truth: scores)
@@ -88,36 +86,6 @@ Together = Compound Growth:
 │
 └── {project_root}/skills/knowledge/   ← Global fallback knowledge
 ```
-
----
-
-## Obsidian Integration (新)
-
-All Memory Palace rooms are Obsidian-compatible:
-
-**Frontmatter (YAML):**
-```yaml
----
-wing: code
-status: active
-tags: [patterns, components]
-created: 2026-04-18
-updated: 2026-04-18
-links: [[code/architecture], [code/testing]]
----
-```
-
-**Cross-References:**
-- Wikilinks: `[[wing/room]]` for navigation
-- Backlinks: Auto-built by Obsidian from wikilinks
-- Graph layers:
-  1. **Obsidian graph** — interactive visual (wikilinks)
-  2. **Mermaid diagram** — static, shareable (graph.md)
-  3. **JSON metadata** — machine-readable (graph.json)
-
-Session end auto-generates:
-- `.unified-memory/palace/graph.json` — node/edge schema
-- `.unified-memory/palace/graph.md` — Mermaid visualization
 
 ---
 
@@ -146,9 +114,7 @@ Session end auto-generates:
 │  3. Update knowledge-evolution wing        │
 │  4. Sync to knowledge/index.json           │
 │  5. Update state.md + tunnels.md           │
-│  2g. Write frontmatter + backlinks to rooms│
-│  2h. Auto-generate graph.json + graph.md   │
-│  6. Confirm: "✅ X rooms, Y scores, graph" │
+│  6. Confirm: "✅ X rooms, Y scores synced" │
 └────────────────────────────────────────────┘
 ```
 
@@ -161,7 +127,6 @@ No dependencies   = markdown + JSON only, no database
 Manual triggers   = "save session + learn" (no hooks = no token waste)
 Source of truth   = knowledge/index.json (memory = session buffer only)
 Admission control = score ≥0.6 gates writes (prevents noise)
-Obsidian native   = frontmatter + wikilinks + graph layers
 Compound growth   = each session makes templates + lessons more reliable
 ```
 
@@ -173,7 +138,7 @@ Compound growth   = each session makes templates + lessons more reliable
 ~/.claude/skills/system/unified-memory/
 ├── SKILL.md                     ← Entry point (triggers + commands)
 ├── SYSTEM_README.md             ← Architecture (you are here)
-├── GOTCHAS.md                   ← 18 edge cases + Obsidian fixes
+├── GOTCHAS.md                   ← 15 edge cases + fixes
 └── references/
     ├── session.md               ← Session start/end, admission
     ├── storage.md               ← Wings, rooms, closets, archive
@@ -181,27 +146,6 @@ Compound growth   = each session makes templates + lessons more reliable
     ├── maintenance.md           ← Write-back, sync, conflict handling
     └── adaptation.md            ← Domain examples + custom routing
 ```
-
----
-
-## 🎨 Obsidian Conventions (Writing Guide)
-
-ใช้แนวคิดของ Obsidian เพื่อช่วยให้ "สมองของ AI" อ่านง่ายขึ้นสำหรับมนุษย์ โดยไม่กระทบโครงสร้างหลัก:
-
-### 1. Properties UI (YAML Frontmatter)
-ในทุก Room ให้รักษาส่วน YAML ไว้ด้านบนสุด เพื่อให้ Obsidian แสดงผลเป็น **Properties UI** ช่วยให้คุณ Filter ตาม `tags`, `status` หรือ `wing` ได้ทันทีจากแถบเครื่องมือ
-
-### 2. Visual Blocks (Obsidian Callouts)
-ใช้ Callouts เพื่อ "หุ้ม" ข้อมูลที่เป็น Shorthand หรือ AI-only logic เพื่อให้พับเก็บได้ (Foldable) และแยกสีให้ชัดเจน:
-- `> [!ABSTRACT] AAAK Closet` — สำหรับสรุปที่บีบอัดแล้ว
-- `> [!INFO] Temporal Triples` — สำหรับประวัติการเปลี่ยนแปลงข้อมูล
-- `> [!QUOTE] Raw Reference` — สำหรับข้อความ verbatim จากแหล่งอ้างอิง
-
-### 3. Bidirectional Links (Wikilinks)
-ใช้ `[[wing/room]]` แทนการเขียน File Path ปกติ เพื่อให้ Obsidian สร้าง **Live Graph** เชื่อมโยงความสัมพันธ์ของความจำให้คุณเห็นเป็นเส้นใยแมงมุม
-
-### 4. Semantic Tagging
-ใช้ Tags (สูงสุด 5 อัน) เพื่อเชื่อมโยง Room ที่อยู่คนละ Wing เข้าด้วยกัน เช่น `#security` หรือ `#performance` เพื่อให้เห็นภาพรวมของหัวข้อนั้นๆ ทั้งโปรเจกต์
 
 ---
 
@@ -214,4 +158,4 @@ Compound growth   = each session makes templates + lessons more reliable
 | ดู scores, routing, consolidation | `references/intelligence.md` |
 | Sync ระหว่าง memory ↔ knowledge | `references/maintenance.md` |
 | ตัวอย่างสำหรับ domain คุณ | `references/adaptation.md` |
-| Edge case / Obsidian gotcha | `GOTCHAS.md` |
+| Edge cases | `GOTCHAS.md` |
