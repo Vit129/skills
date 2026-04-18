@@ -91,25 +91,6 @@ All known failure modes with root causes and solutions.
 
 ---
 
-## Obsidian Integration Gotchas
-
-### 16. Wikilink target doesn't exist yet
-**Symptom:** `[[auth-decisions/token-strategy]]` written but room not created yet → broken link in Obsidian  
-**Root cause:** Room referenced before it's written  
-**Fix:** Only write wikilinks to rooms that exist. If room is planned but not yet written → use plain text: "see auth-decisions (token-strategy, planned)". Add wikilink after room is created.
-
-### 17. graph.json out of sync with actual rooms
-**Symptom:** graph.json shows nodes/edges for archived or renamed rooms  
-**Root cause:** Graph generated once, rooms changed later without re-generating  
-**Fix:** Always re-generate graph.json + graph.md at session end (step 2h). Never hand-edit graph files — they are always derived from state.md + tunnels.md + frontmatter.
-
-### 18. Tag explosion (too many tags, no meaning)
-**Symptom:** 10+ tags per room, tags like `misc`, `todo`, `thing` — routing noise  
-**Root cause:** Tags added without discipline  
-**Fix:** Max 5 tags per room. Reject generic tags. Tags must be domain terms or lifecycle terms. Quarterly: audit tag list in graph.json, merge similar tags, remove singles used only once.
-
----
-
 ## Quick Reference: Fix Matrix
 
 | Gotcha | When | Fix |
@@ -126,6 +107,3 @@ All known failure modes with root causes and solutions.
 | KE wing missing (#13) | First session | Auto-create empty template |
 | Sync fails (#14) | Session end | Compare + re-sync + log |
 | Admission too strict (#15) | Score <0.6 | Explain + let user override |
-| Broken wikilink (#16) | Room not yet created | Use plain text until room exists |
-| graph.json stale (#17) | After room changes | Re-generate at every session end |
-| Tag explosion (#18) | Quarterly | Audit tags, max 5, domain terms only |

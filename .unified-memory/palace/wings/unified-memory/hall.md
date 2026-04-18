@@ -11,16 +11,15 @@
 
 ## Decisions
 - [2026-04-18] Audited and consolidated `memory-palace` and `knowledge-evolution` wings into a single `unified-memory` wing to align with `AGENT.md`.
-- [2026-04-18] Deployed Obsidian-compatible frontmatter and graph generation.
 
 ## Rooms Index
 
-| Room | Description | Tags |
-|------|-------------|------|
-| `skill-structure` | Standard SKILL.md structure and hierarchy | #standards #core |
-| `template-health` | Track utility scores and usage for global templates | #intelligence #learning |
-| `lesson-effectiveness` | Monitor applied lessons and failure prevention count | #intelligence #learning |
-| `knowledge-state` | (AAAK) Compressed summary of current global knowledge health | #aaak #summary |
+| Room | Description |
+|------|-------------|
+| `skill-structure` | Standard SKILL.md structure and hierarchy |
+| `template-health` | Track utility scores and usage for global templates |
+| `lesson-effectiveness` | Monitor applied lessons and failure prevention count |
+| `knowledge-state` | (AAAK) Compressed summary of current global knowledge health |
 
 ## Connections (Tunnels)
 - → ai-dlc-skills/hall.md: Shared engineering standards and workflow rules
