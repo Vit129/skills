@@ -173,6 +173,9 @@ AGENT.md will point Kiro to this file and all available skills automatically.
 
 **Ingest trigger phrases:** "ingest this", "add to knowledge", "learn from this", "dump to raw"
 
+**Memory + Knowledge trigger phrases:** "save memory", "load context", "session start/end", "remember this", "track which templates work", "score lessons"
+→ Unified Memory skill: `system/unified-memory/SKILL.md`
+
 **Citation format when answering from knowledge base:**
 ```
 [from: LESSON-AUTH-001]        ← lesson

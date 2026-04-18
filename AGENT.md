@@ -18,15 +18,15 @@
 ## Paths (relative to this file)
 
 ```
-SKILLS_ROOT  = {folder containing this file}
-CLAUDE_RULES = {SKILLS_ROOT}/../rules/        ← Claude Code rules
-MEMORY_GLOBAL = ~/.memory/global/             ← cross-project memory
-MEMORY_PROJECT = {project}/.memory/           ← per-project memory
-KNOWLEDGE_GLOBAL = {SKILLS_ROOT}/ai-dlc/knowledge/  ← global templates + lessons
-KNOWLEDGE_PROJECT = {project}/.knowledge/     ← per-project knowledge (overrides global)
+SKILLS_ROOT       = {folder containing this file}
+CLAUDE_RULES      = {SKILLS_ROOT}/../rules/                       ← Claude Code rules
+MEMORY_GLOBAL     = ~/.memory/global/                             ← cross-project memory
+MEMORY_PROJECT    = {project}/.unified-memory/palace/             ← per-project palace
+KNOWLEDGE_GLOBAL  = {SKILLS_ROOT}/ai-dlc/knowledge/               ← global templates + lessons
+KNOWLEDGE_PROJECT = {project}/.unified-memory/knowledge/          ← per-project knowledge (overrides global)
 ```
 
-> Resolution order: `{project}/.knowledge/` first → fallback to `KNOWLEDGE_GLOBAL`
+> Resolution order: `{project}/.unified-memory/knowledge/` first → fallback to `KNOWLEDGE_GLOBAL`
 
 ---
 
@@ -121,17 +121,19 @@ For multi-step tasks, state a brief plan:
 ## Knowledge
 
 ```
-KNOWLEDGE_GLOBAL  = {SKILLS_ROOT}/ai-dlc/knowledge/   ← cross-project templates + lessons
-KNOWLEDGE_PROJECT = {project}/.knowledge/              ← per-project overrides
+KNOWLEDGE_GLOBAL  = {SKILLS_ROOT}/ai-dlc/knowledge/              ← cross-project templates + lessons
+KNOWLEDGE_PROJECT = {project}/.unified-memory/knowledge/          ← per-project overrides
 ```
 
-Resolution order: `{project}/.knowledge/` first → fallback to `KNOWLEDGE_GLOBAL`
+Resolution order: `{project}/.unified-memory/knowledge/` first → fallback to `KNOWLEDGE_GLOBAL`
 
-- Structure, setup, and Phase A→D implementation: `system/knowledge-evolution/references/implementation-guide.md`
-- Skill index and routing: `system/knowledge-evolution/SKILL.md`
+- Structure, setup, and Phase A→D implementation: `system/unified-memory/references/adaptation.md`
+- Skill index and routing: `system/unified-memory/SKILL.md`
 
-**Ingest trigger phrases:** "ingest this", "add to knowledge", "learn from this", "dump to raw"
-→ Dump raw → `{project}/.memory/wings/{topic}/raw/YYYY-MM-DD-{desc}.md` → extract → write to `.knowledge/`
+**Ingest trigger phrases:** "ingest this", "add to knowledge", "learn from this", "dump to raw", "save memory", "load context"
+→ Dump raw → `{project}/.unified-memory/palace/wings/{topic}/raw/YYYY-MM-DD-{desc}.md` → extract → write to `.unified-memory/knowledge/`
+
+**Unified Memory skill:** `system/unified-memory/SKILL.md` — Memory Palace + Knowledge Evolution merged into one entry point.
 
 **Citation convention:**
 ```
@@ -146,7 +148,8 @@ Resolution order: `{project}/.knowledge/` first → fallback to `KNOWLEDGE_GLOBA
 
 ```
 Global (cross-project):  ~/.memory/global/
-Per-project:             {project}/.memory/
+Per-project palace:      {project}/.unified-memory/palace/
+Per-project knowledge:   {project}/.unified-memory/knowledge/
 ```
 
 ### Global Memory Structure
@@ -170,11 +173,11 @@ Per-project:             {project}/.memory/
 
 On session start:
 1. Load `~/.memory/global/state.md` if exists → cross-project context
-2. Load project `.memory/state.md` → project-specific context
+2. Load project `.unified-memory/palace/state.md` → project-specific context
 3. Treat both as **hints** (skeptical memory) — verify against actual files before acting
 
 On session end (if decisions were made):
-1. Save to project `.memory/` first
+1. Save to project `.unified-memory/palace/` first
 2. Sync knowledge-evolution scores to `~/.memory/global/wings/knowledge-evolution/`
 3. Update `~/.memory/global/state.md` if cross-project state changed
 

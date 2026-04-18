@@ -10,7 +10,7 @@ Single source of truth for all AI-assisted development, QA, and Finance analysis
 |--------|---------|
 | `aidlc/` | Full AI-DLC lifecycle: governance, phases, templates, guides, task design |
 | `analysis-skills/` | Context, Gap, Requirements, Domain Discovery, Reverse Eng — used across all phases |
-| `memory-palace/` | Memory Palace workspace adapter |
+| `unified-memory/` | Unified Memory workspace adapter (Memory Palace + Knowledge Evolution) |
 | `monitoring/` | Logging, error tracking, performance metrics, tracing, alerts |
 | `storage/` | Knowledge save, buffer update, Data Backup & Integrity standards |
 
@@ -63,18 +63,17 @@ Cross-project tools that work with any domain — not tied to ai-dlc.
 
 | Folder | Purpose | Trigger phrases |
 |--------|---------|----------------|
-| `memory-palace/` | High-recall long-term memory via Wings/Rooms/Closets/Drawers + AAAK compression | "save memory", "load context", "session start/end", "compress room" |
+| `unified-memory/` | Persistent memory + self-learning knowledge for any domain (Memory Palace + Knowledge Evolution) | "save memory", "load context", "session start/end", "remember this", "track which templates work", "score lessons", "auto-capture failures", "feedback loop" |
 | `hook-creator/` | Create Kiro + Claude Code hooks from templates, event-driven automation | "create hook", "automate on save", "สร้าง hook" |
 | `ai-techniques/` | CoT, LATS, AoT — domain-agnostic reasoning techniques | "use CoT", "step-back", "LATS", "reasoning technique" |
 | `analysis-concept/` | Reusable analysis concepts: context, discovery, gap, reverse-eng, requirements | "analyze context", "gap analysis", "domain discovery" |
 | `skill-creator/` | Create, improve, validate Claude Code skills (meta skill — use when building new skills) | "create skill", "improve skill", "skillify" |
-| `knowledge-evolution/` | Auto-consolidation, semantic routing, utility scoring — knowledge lifecycle management | "track which templates work", "score lessons", "auto-capture failures", "feedback loop" |
 
-### knowledge-evolution — Special Note
+### unified-memory — Special Note
 
-Meta-skill ที่ improve skills อื่นๆ ตลอดเวลา — always activate เมื่อทำงานกับ `ai-dlc/knowledge/` หรือหลัง test execution
+Meta-skill ที่รวม Memory Palace + Knowledge Evolution — always activate เมื่อต้องการ session memory หรือ knowledge tracking ในทุก domain
 
-References: `system/knowledge-evolution/references/` (utility-scoring, smart-routing, auto-consolidation, memory-integration)
+References: `system/unified-memory/references/` (session, storage, intelligence, maintenance, adaptation)
 
 ## 3. Built-in Skills (Claude Code)
 

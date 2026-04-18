@@ -1,12 +1,12 @@
-# Utility Scoring Protocol
+# Utility Scoring Protocol — Any Domain
 
-Adds measurable quality signals to templates and lessons so the system knows what works.
+Adds measurable quality signals to templates and lessons. Works for any domain: code, design, writing, decision-making, learning, etc.
 
 ---
 
-## 1. Template Index Schema
+## 1. Template Index Schema (Universal)
 
-Add these fields to every `automation/*/Index.json`:
+Add these fields to `{project}/.knowledge/` or `~/.claude/skills/ai-dlc/knowledge/`:
 
 ```json
 {
@@ -17,19 +17,23 @@ Add these fields to every `automation/*/Index.json`:
       "utility_score": 5.0,
       "usage_count": 0,
       "last_used": null,
-      "last_failure": null,
+      "outcome_success_count": 0,
+      "outcome_failure_count": 0,
+      "last_outcome": null,
       "auto_captured": false
     }]
   }
 }
 ```
 
-**Field rules:**
-- `utility_score` — float 0–10, default 5.0 for existing templates
-- `usage_count` — increment on every successful use
+**Field rules (domain-independent):**
+- `utility_score` — float 0–10, default 5.0 for new templates
+- `usage_count` — increment on every use (success or failure)
 - `last_used` — ISO date string, update on every use
-- `last_failure` — ISO date string or null, set when template causes test failure
-- `auto_captured` — true if AI created this template (needs human review)
+- `outcome_success_count` — increment on SUCCESS outcome
+- `outcome_failure_count` — increment on FAILURE outcome
+- `last_outcome` — "success" | "failure" | null
+- `auto_captured` — true if AI created (needs human review)
 
 ---
 
@@ -61,42 +65,67 @@ Add these fields to every `lessons/*/Index.json`:
 
 ---
 
-## 3. Score Update Protocol
+## 3. Score Update Protocol (Domain-Agnostic)
 
-### After test PASS (Phase 3.2 success)
+### After SUCCESS outcome
 ```
-template.utility_score += 0.5   (max 10.0)
+template.utility_score += 0.5     (max 10.0)
 template.usage_count += 1
 template.last_used = today
+template.last_outcome = "success"
+template.outcome_success_count += 1
 ```
 
-### After test FAIL caused by template
+Examples: test passes, design approved, draft accepted, decision succeeds, learning validated
+
+### After FAILURE outcome
 ```
-template.utility_score -= 1.0   (min 0.0)
-template.last_failure = today
+template.utility_score -= 1.0     (min 0.0)
+template.usage_count += 1
+template.last_used = today
+template.last_outcome = "failure"
+template.outcome_failure_count += 1
 ```
 
-### After lesson applied and failure prevented
+Examples: test fails, design rejected, draft needs revision, decision backfires, misconception found
+
+### After lesson applied and prevented failure
 ```
 lesson.effectiveness.applied_count += 1
 lesson.effectiveness.prevented_failures += 1
 ```
 
-### After lesson applied (no failure to prevent)
+### After lesson applied (no prevention)
 ```
 lesson.effectiveness.applied_count += 1
 ```
 
 ---
 
-## 4. Score Thresholds
+## 4. Score Thresholds (Universal)
 
 | Score | Status | Action |
 |-------|--------|--------|
-| ≥ 7.0 | Proven | Prefer first in routing |
-| 3.0–6.9 | Active | Normal use |
-| < 3.0 | Flagged | Warn user: "template มีปัญหาบ่อย — review ก่อนใช้" |
+| ≥ 7.0 | Proven | Prefer first in routing, reliable |
+| 3.0–6.9 | Active | Normal use, balanced |
+| < 3.0 | Flagged | ⚠️ Warn user before use, needs review |
 | 0.0 | Deprecated | Skip unless explicitly requested |
+
+### Threshold Customization (Optional)
+
+Adjust per domain in `{project}/.knowledge/index.json`:
+
+```json
+{
+  "scoring": {
+    "threshold_proven": 7.0,
+    "threshold_flagged": 3.0,
+    "threshold_deprecated": 0.0,
+    "success_boost": 0.5,
+    "failure_penalty": 1.0
+  }
+}
+```
 
 ---
 
