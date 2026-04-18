@@ -19,3 +19,24 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+
+# Application data and workspace configuration
+backups/
+cache/
+chrome/
+downloads/
+file-history/
+paste-cache/
+plans/
+plugins/
+rules/
+scripts/
+session-env/
+statsig/
+tasks/
+telemetry/
+todos/
+.setup-checklist
+history.jsonl
+settings.json
+stats-cache.json
