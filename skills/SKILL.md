@@ -119,10 +119,6 @@ Folders that store system data, logs, or backups to keep the root directory clea
 | Folder | Purpose |
 |--------|---------|
 | `stock-deep-analysis/` | Fundamental and deep-dive stock analysis |
-| `thai-stock/` | Thai market specific analysis (RMF/SSF/ThaiESG) |
-| `us-stock/` | US holdings and market analysis |
-| `news-search/` | Market news search and sentiment analysis |
-| `ai-recommend/` | AI-driven stock recommendations and insights |
 
 ---
 

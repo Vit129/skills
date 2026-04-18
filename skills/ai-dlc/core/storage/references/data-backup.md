@@ -12,8 +12,3 @@ Standards for ensuring data safety, persistence, and verification.
 - **Acknowledge:** Confirm target folder creation
 - **Audit:** Check existence of all required files
 - **Analyze:** Verify record counts and file sizes (not empty)
-
-## Project Specific: My Investment Port
-- **Files:** `holdings.json`, `dividends.json`, `sectors.json`, `tax_inputs.json`, `rmf_funds.json`
-- **Source:** Sync from Google Sheets tabs via GAS
-- **Warning:** Alert if files are missing or contain 0 records

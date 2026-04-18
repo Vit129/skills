@@ -66,7 +66,3 @@ For skill routing guide → (Read `references/related-skills.md`)
 | 2. Global fallback | `{project_root}/skills/knowledge/` | No per-project knowledge found — cross-project shared patterns |
 
 **Rule:** Always check per-project first. Fall back to global only if `.unified-memory/knowledge/` does not exist in the project tree.
-
-## Project Specifics
-
-- **My Investment Port** — (Read `references/investment-port.md`)
