@@ -1,255 +1,93 @@
-# Global Agent Instructions — Right-Tool Engineering
+# Workspace Configuration — Skills + Rules + Infrastructure
 
-> **Compatible with:** Claude Code · Gemini CLI · Cursor · Codex
+**Purpose:** Central registry for workspace integration. Maps skills → hooks → automation.
 
----
-
-## 1. Agent Selection Decision Matrix
-
-**Before starting any task**, evaluate the correct tier — always start from the cheapest tier that can do the job:
-
-### Tier 1 — ♊ Gemini Flash (Free / Cheapest)
-> Use when: wide reading, no logic required, low risk of breaking things
-
-| Task Type | Reasoning |
-|-----------|-----------|
-| **Codebase Mapping & Research** | 1M context — reads 50+ files at once |
-| **Generating boilerplate / scaffold** | Low risk, easy to verify |
-| **Summarizing / documenting** | No code logic involved |
-
-### Tier 2 — ❄️ Claude Haiku (Cheap)
-> Use when: small edits, simple fixes, clear spec — Tab off Extended Thinking
-
-| Task Type | Reasoning |
-|-----------|-----------|
-| **Simple one-file edits** | Known fix, low ambiguity |
-| **Writing test data / fixtures** | Mechanical, easy to verify |
-| **Renaming / restructuring** | Low logic complexity |
-
-### Tier 3 — ❄️ Claude Sonnet (Expensive — use sparingly)
-> Use when: logic is complex, mistakes are costly, precision matters
-
-| Task Type | Reasoning |
-|-----------|-----------|
-| **Bug fixing with logic tracing** | Gemini tends to introduce new bugs |
-| **Architecture decisions** | Requires deep reasoning |
-| **Debugging state/async/race conditions** | Needs precision thinking |
-| **Final review & QA** | Catches subtle UX and logic issues |
-
-> ⚠️ **Escalation Rule:** If Tier 1 or 2 produces incorrect output → escalate to next tier. Do NOT let Gemini's output get handed to Claude to clean up without flagging the cost to the user.
-
-> ⚠️ **Lesson Learned (2026-04-05):** Gemini fixed a test bug but introduced a new one (`null` vs `[]` logic). Claude had to re-trace the entire flow to find it, then needed Kiro to verify the fix. This wasted 2 days and multiple sessions.
->
-> **Root cause:** Handing off buggy code between agents (Gemini → Claude → Kiro) multiplies the cost.
->
-> **Prevention:**
-> 1. **Gemini must test locally** before handing to Claude (run: `npm run build && npm test`)
-> 2. **Single-test smoke test** immediately (`playwright test 1 spec only`) to catch regressions fast
-> 3. **NO hand-offs** — one agent owns the fix start-to-finish + commit
+> **Related:** See `skills/CLAUDE.md` for **agent selection strategy** (Gemini vs Claude tier decisions). This file covers **workspace infrastructure** (what's activated, hooks, setup).
 
 ---
 
-## 2. Tier Selection Strategy (Risk-Based, Pay-Per-Use)
-
-> **Philosophy:** Default assume all tasks are risky. User controls which tier to use on a per-task basis—no fixed subscription required.
-
-### Workflow: Assess → Recommend → User Chooses
+## 1. Directory Structure (What's Activated)
 
 ```
-1. Gemini: Read task + summarize findings
-                    ↓
-2. Claude: Assess complexity → recommend tier
-                    ↓
-3. User: Choose [Haiku (risky)] [Sonnet (safe)] [Skip]
-                    ↓
-4. Execute + commit
+.claude/
+├── CLAUDE.md                    ← You are here
+├── settings.json                ← Hooks registry
+├── rules/                       ← Coding standards (test-coverage, optimization, playwright-standards)
+├── skills/                      ← Feature skills (ai-dlc, finance, system)
+│   ├── CLAUDE.md               ← Agent tier selection strategy
+│   ├── ai-dlc/                 ← Dev lifecycle: core, dev, product, qa
+│   ├── finance/                ← Investment portfolio skills
+│   ├── system/                 ← Meta-skills: unified-memory, skill-creator
+│   └── ...
+├── .unified-memory/             ← Active memory: palace/ (Wings, Archive) + knowledge/
+└── projects/                    ← Session projects
 ```
-
-### Tier Recommendation Matrix
-
-| Complexity | Risk Level | Recommend | Haiku Risk | Cost |
-|-----------|-----------|-----------|-----------|------|
-| 🟢 **Easy** (boilerplate, simple fix, clear spec) | Low | **Haiku** | Safe | $0.01 |
-| 🟡 **Medium** (bug with logic, state change, test coverage exists) | Medium-High | **Sonnet** | 10-15% miss subtle bugs | $0.10 |
-| 🔴 **Hard** (state mutation, async/race conditions, critical path, no tests) | Critical | **Sonnet** (required) | Not recommended | $0.15 |
-
-### Assessment Checklist (Claude Uses)
-
-When recommending tier, Claude checks:
-
-- **Logic complexity**: State mutations? Async? Race conditions?
-- **Test coverage**: Exists? Will catch regressions?
-- **Risk of bug**: If wrong, how bad? (UI broken = low risk; data loss = critical)
-- **Subtlety**: Edge cases? Timing issues? (Haiku misses these)
-
-### Example: Claude Assessment Output
-
-```
-## Task Assessment
-Title: Fix calendar input validation
-Complexity: 🟡 Medium
-
-Analysis:
-  ✓ Tests exist (holdings.spec.ts)
-  ✓ Logic is clear (input min-date validation)
-  ⚠️ Involves state update (calendar selection)
-  ⚠️ Date comparison (off-by-one risk)
-
-Haiku risk:
-  • 10% chance miss off-by-one edge case
-  • 5% chance wrong date comparison
-
-Recommendation:
-  → Sonnet (safer for this)
-  → Or Haiku if you accept 10-15% risk
-
-Your choice:
-  [A] Sonnet ($0.10 — safe)
-  [B] Haiku ($0.01 — risky)
-  [C] Skip for now
-```
-
-### Cost Model (Pay-Per-Use)
-
-No fixed subscription. Sample month:
-
-```
-Task 1 (Easy fix):    Haiku    → $0.01
-Task 2 (Medium bug):  Sonnet   → $0.10
-Task 3 (API work):    Sonnet   → $0.15
-Task 4 (Scaffold):    Haiku    → $0.01
-─────────────────────────────────────
-Monthly total:                    ~$5-15
-
-vs Claude Max ($100/month) = 6-20x cheaper
-vs Claude Pro ($20/month) = Similar cost with more control
-```
-
-### Gemini's Role in This Strategy
-
-✅ **Gemini ONLY for:**
-- Reading code / documentation
-- Summarizing task requirements
-- Listing files / context mapping
-- Finding relevant code sections
-
-❌ **Never Gemini for:**
-- Fixing logic bugs
-- State management changes
-- Async/timing fixes
-- Any task graded 🟡 or 🔴
-
-**Why:** Gemini bug cascade wastes more tokens than just using Sonnet upfront.
 
 ---
 
-## 3. Right-Tool Engineering Workflow (Primary)
+## 2. Active Integrations
 
-### Pre-Flight — Create Feature Branch (Always)
-**Always**, even working solo — protects against mistakes and gives easy rollback:
+### Rules (Always Active)
+- `rules/test-coverage.md` — Test commands per file
+- `rules/optimization.md` — Token management, cache protection
+- `rules/playwright-standards.md` — Test coding standards
 
-```bash
-git checkout -b feat/description-of-work
-```
+### Skills (Conditional Activation)
 
-Benefits:
-- 🔄 Easy rollback if something breaks (`git reset --hard`)
-- 📋 Clear git history (each PR = one logical change)
-- 🧪 Safe to experiment without affecting main
-- 🛑 Catch mistakes before merging (self-review)
-- ⚡ **Critical when using multiple AI agents** — if Gemini introduces bugs, Claude can revert and retry without polluting main
+| Category | Activated By | Usage |
+|----------|--------------|-------|
+| **ai-dlc** | Hooks (PostToolUse) | Auto-run tests after Write/Edit |
+| **finance** | Manual skill invoke | `/finance-*` or Kiro |
+| **system** | SessionStart hook | unified-memory, skill-creator |
 
-> 💡 **Note:** Even solo work benefits from branches. Especially with AI assistance where mistakes can be subtle (e.g., Gemini's `h || []` bug was hidden in conditional logic).
+### Hooks (Configured in settings.json)
 
-### Step 1 — Suggest the Agent
-Notify the user immediately if the task should go through Gemini CLI:
-> "♊ This task is recommended for **Gemini CLI** (model: `gemini-3-flash-preview`) for maximum efficiency and context savings — would you like me to generate the ready-to-run command?"
-
-### Step 2 — Handover
-Generate a ready-to-run command:
-```bash
-gemini --model gemini-3-flash-preview -p "[Prompt with detailed task context and goals]"
-```
-
-### Step 3 — Gemini Self-Review + Commit (Mandatory — No Exceptions)
-
-After Gemini completes the task, it MUST do **all 3** before the task is considered done:
-
-**3a. Build Verification**
-```bash
-npm run build   # Must pass with zero errors
-```
-
-**3b. Commit ALL changes** (no uncommitted work allowed)
-```bash
-git add <all changed files>
-git commit -m "feat/fix: [description]
-
-Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
-```
-
-**3c. Report commit hash**
-> "✅ Done — committed as `abc1234`"
-
-> ⚠️ **Rule:** A task without a commit hash is NOT done — no matter how good the screenshot looks. Code in a worktree that isn't committed will be lost when the worktree is deleted.
-
-> ⚠️ **Rule:** Gemini must self-review AND fix all issues before the result is considered done. Do NOT hand off unreviewed output to Claude/Kiro. This prevents overloading Claude/Kiro with avoidable corrections.
-
-### Lesson Learned (2026-04-03)
-Gemini implemented Sandbox Mode successfully (screenshot showed orange banner ✅, build passed ✅) but **never committed**. When the worktree was deleted, all code was lost. The fix: commit hash is the only proof of completion.
+| Hook | Matcher | Action |
+|------|---------|--------|
+| **SessionStart** | Always | Load `.unified-memory/palace/state.md` (Memory Palace) |
+| **PreToolUse** | Write/Edit/MultiEdit | Check design → decomposition → implementation sequence |
+| **PostToolUse** | Write/Edit (test files) | Run test, auto-heal if fails, trigger Memory Palace |
 
 ---
 
-## 4. Token Cost Control
+## 3. New Workspace Setup Checklist
 
-| Action | Saves |
-|--------|-------|
-| Press `Tab` to toggle off Extended Thinking for simple tasks | Massively reduces output tokens |
-| Use **Haiku** model for Tier 2 tasks (`/model claude-haiku-4-5`) | ~20x cheaper than Sonnet |
-| Use Gemini for research before asking Claude to implement | Claude doesn't need to read files itself |
-| Keep prompts focused — don't dump whole codebase | Reduces input tokens |
-| `.claudeignore` excludes build/test artifacts | Reduces context scan |
+→ See `.setup-checklist` for step-by-step migration
 
-### Prompt Cache Protection
-
-- **Do NOT edit** CLAUDE.md, `.claude/rules/`, MCP config mid-session — cache is permanently lost for the entire session
-- Configure everything before starting a session — editing mid-session = cache lost, never recovers
-- If you must edit → `/clear` and start a new session
-- CLAUDE.md structure: stable content (standards, rules) on top, dynamic content (test mapping) at bottom → cache-aware boundaries
-
-### Token Budget Targeting
-
-For large tasks where cost matters, specify budget explicitly in the prompt:
-- `"Use no more than 50K tokens"` → agent scopes work to fit, avoids over-engineering
-- `"Spend up to 200K — go deep"` → agent deep dives fully
-- Not specified = agent decides on its own (may over or under spend)
+**Quick summary:**
+1. Copy `~/.claude/` to new workspace
+2. Verify `settings.json` hooks are loaded
+3. Initialize `.memory/state.md` (first SessionStart does this)
+4. Confirm test commands match new project structure
+5. Done — skills auto-activate
 
 ---
 
-## 5. Engineering Standards & Karpathy Principles
+## 4. Workspace Portability Notes
 
-→ See `AGENT.md` — Engineering Standards + Karpathy Coding Principles apply to all agents.
+### What's Portable ✅
+- `rules/` — universal standards
+- `skills/system/` — core meta-skills (unified-memory, skill-creator)
+- `skills/ai-dlc/` — dev lifecycle
+- `settings.json` hooks schema
+
+### What Needs Adjustment ⚠️
+- `rules/test-coverage.md` → Test mapping depends on project structure
+- `skills/finance/` → Investment portfolio paths (project-specific)
+- `.unified-memory/` → Session-specific state (auto-recreated per workspace)
+
+### Migration Path
+1. Copy everything except `.unified-memory/`
+2. Update `rules/test-coverage.md` test commands for new project
+3. First SessionStart auto-initializes `.unified-memory/palace/state.md`
+4. Done
 
 ---
 
-## 6. Playwright Skills (Mandatory for All Test Work)
+## 5. References
 
-→ Full rules: `.claude/rules/playwright-standards.md`
-
-When writing, reviewing, fixing, or running Playwright tests, activate both `playwright-rules` and `playwright-cli` skills. Key mandates: no `waitForTimeout()`, `getByTestId` selector priority, AAA pattern, Page Object Model.
-
----
-
-## 7. Test Coverage Rules (Mandatory)
-
-→ Full rules + test mapping: `.claude/rules/test-coverage.md`
-
-After every file write or edit, run the corresponding test(s). Never mark a task done until all relevant tests pass.
-
----
-
-## 8. Optimization Tips
-
-→ Full guide: `.claude/rules/optimization.md`
-
-Key rules: toggle Extended Thinking off for simple tasks, do NOT edit CLAUDE.md/rules/MCP config mid-session (breaks prompt cache), use `.claudeignore` to reduce context scan.
+- **Agent Strategy:** `skills/CLAUDE.md` (tier selection, Gemini vs Claude)
+- **Karpathy Principles:** `skills/CLAUDE.md` §5 (Think Before Coding, Simplicity First, Surgical Changes, Goal-Driven Execution)
+- **Test Standards:** `rules/test-coverage.md` + `rules/playwright-standards.md`
+- **Token Management:** `rules/optimization.md`
+- **Unified Memory:** `skills/system/unified-memory/` (Memory Palace + Knowledge Evolution — auto-activated SessionStart)

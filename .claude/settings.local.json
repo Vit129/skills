@@ -1,17 +1,25 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx ts-node:*)",
-      "Bash(/Users/supavit.cho/.nvm/versions/node/v22.14.0/bin/npx ts-node:*)",
-      "Bash(git add:*)",
-      "Bash(git commit -m ':*)",
-      "Bash(git rm:*)",
-      "Bash(git commit -m 'rename: SKILLS_README.md → SKILL.md for consistent naming convention:*)",
-      "Bash(git commit -m 'refactor: update all 5 finance/research skills for Claude Desktop standalone mode:*)",
-      "Bash(git commit -m 'refactor: consolidate to stock-deep-analysis + remove thai-stock:*)",
-      "Bash(git show:*)",
-      "Read(//tmp/**)",
-      "Bash(git commit:*)"
+      "Bash(chmod +x ~/.claude/scripts/*.sh)",
+      "Bash(~/.claude/scripts/update-memory.sh SESSION_START)",
+      "Bash(~/.claude/scripts/update-knowledge.sh \"src/test.ts\" \"PASS\")",
+      "Bash(~/.claude/scripts/update-knowledge.sh \"src/utils.ts\" \"FAIL\")",
+      "Bash(~/.claude/scripts/consolidate-knowledge.sh)",
+      "Bash(~/.claude/scripts/update-memory.sh SESSION_END)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(mv ~/.claude/skills/@design-system/reasoning-engine ~/.claude/skills/@design-system/references/)",
+      "Bash(mv ~/.claude/skills/@design-system/industry-rules ~/.claude/skills/@design-system/references/)",
+      "Bash(mv ~/.claude/skills/@design-system/design-patterns ~/.claude/skills/@design-system/references/)",
+      "Bash(mv ~/.claude/skills/@design-system/tech-stacks.md ~/.claude/skills/@design-system/references/)",
+      "Bash(mv ~/.claude/skills/@design-system ~/.claude/skills/design-system)",
+      "Bash(rm ~/.claude/skills/ai-dlc/product/ui-designer/references/design-system.md)",
+      "Bash(xargs sed *)",
+      "Bash(grep -v \".ts$\")",
+      "Bash(git *)",
+      "Bash(mv /Users/supavit.cho/.claude/skills/.git /Users/supavit.cho/.claude/.git)",
+      "Bash(mv /Users/supavit.cho/.claude/skills/.gitignore /Users/supavit.cho/.claude/.gitignore)"
     ]
   }
 }
