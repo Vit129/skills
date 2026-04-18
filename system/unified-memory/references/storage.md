@@ -720,7 +720,7 @@ To use Obsidian as a visual interface:
 
 ```
 1. Open Obsidian → "Open folder as vault"
-2. Select: {project}/.unified-memory/palace/
+2. Select: {project_root}/.unified-memory/palace/
 3. Graph View → shows wings, rooms, wikilink connections
 4. Click any node → opens the room file
 5. Tags panel → filter rooms by tag across wings

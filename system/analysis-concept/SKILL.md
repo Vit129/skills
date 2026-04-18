@@ -28,3 +28,14 @@ Reusable thinking patterns for analysis. Each concept describes HOW to think, no
 | "gather requirements", "write user stories", "acceptance criteria" | `references/requirements-concept.md` |
 
 Each concept is self-contained. Load ONE at a time.
+
+## Knowledge Root Convention
+
+`{knowledge_root}` resolves in this order:
+
+| Priority | Path | When to use |
+|----------|------|-------------|
+| 1. Per-project | `{cwd}/.unified-memory/knowledge/` | Working within a specific project workspace — walk up from cwd until found |
+| 2. Global fallback | `{project_root}/skills/knowledge/` | No per-project knowledge found — cross-project shared patterns |
+
+**Rule:** Always check per-project first. Fall back to global only if `.unified-memory/knowledge/` does not exist in the project tree.

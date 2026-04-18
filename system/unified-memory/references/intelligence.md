@@ -35,11 +35,11 @@ Each domain has its own natural signal vocabulary — do NOT replace with generi
 ## 2. Knowledge Structure (Two Layers)
 
 ```
-KNOWLEDGE_GLOBAL  = ~/.claude/skills/ai-dlc/knowledge/              ← cross-project templates + lessons
-KNOWLEDGE_PROJECT = {project}/.unified-memory/knowledge/             ← per-project overrides
+KNOWLEDGE_GLOBAL  = {project_root}/skills/knowledge/              ← cross-project templates + lessons
+KNOWLEDGE_PROJECT = {project_root}/.unified-memory/knowledge/             ← per-project overrides
 
 Resolution order:
-  1. Check {project}/.unified-memory/knowledge/ first
+  1. Check {project_root}/.unified-memory/knowledge/ first
   2. Fallback to KNOWLEDGE_GLOBAL if domain not found
 ```
 

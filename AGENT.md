@@ -21,17 +21,18 @@
 SKILLS_ROOT       = {folder containing this file}
 CLAUDE_RULES      = {SKILLS_ROOT}/../rules/                       ← Claude Code rules
 MEMORY_GLOBAL     = ~/.memory/global/                             ← cross-project memory
-MEMORY_PROJECT    = {project}/.unified-memory/palace/             ← per-project palace
+MEMORY_PROJECT    = {project_root}/.unified-memory/palace/             ← per-project palace
 KNOWLEDGE_GLOBAL  = {SKILLS_ROOT}/ai-dlc/knowledge/               ← global templates + lessons
-KNOWLEDGE_PROJECT = {project}/.unified-memory/knowledge/          ← per-project knowledge (overrides global)
+KNOWLEDGE_PROJECT = {project_root}/.unified-memory/knowledge/          ← per-project knowledge (overrides global)
 ```
 
-> Resolution order: `{project}/.unified-memory/knowledge/` first → fallback to `KNOWLEDGE_GLOBAL`
+> Resolution order: `{project_root}/.unified-memory/knowledge/` first → fallback to `KNOWLEDGE_GLOBAL`
 
 ---
 
 ## Agent-Specific Instructions
 
+- **Gemini CLI:** `GEMINI.md` — Tier 1 explorer/scaffold architect, context efficiency, mandatory commit loop
 - **Kiro:** `KIRO.md` — tier selection (Sonnet/Opus), token control, Playwright/test refs
 - **Claude Code:** `CLAUDE.md` — tier selection (Gemini/Haiku/Sonnet), workflow, token control
 - **Skill index:** `SKILL.md` — full map of all available skills
@@ -122,16 +123,16 @@ For multi-step tasks, state a brief plan:
 
 ```
 KNOWLEDGE_GLOBAL  = {SKILLS_ROOT}/ai-dlc/knowledge/              ← cross-project templates + lessons
-KNOWLEDGE_PROJECT = {project}/.unified-memory/knowledge/          ← per-project overrides
+KNOWLEDGE_PROJECT = {project_root}/.unified-memory/knowledge/          ← per-project overrides
 ```
 
-Resolution order: `{project}/.unified-memory/knowledge/` first → fallback to `KNOWLEDGE_GLOBAL`
+Resolution order: `{project_root}/.unified-memory/knowledge/` first → fallback to `KNOWLEDGE_GLOBAL`
 
 - Structure, setup, and Phase A→D implementation: `system/unified-memory/references/adaptation.md`
 - Skill index and routing: `system/unified-memory/SKILL.md`
 
 **Ingest trigger phrases:** "ingest this", "add to knowledge", "learn from this", "dump to raw", "save memory", "load context"
-→ Dump raw → `{project}/.unified-memory/palace/wings/{topic}/raw/YYYY-MM-DD-{desc}.md` → extract → write to `.unified-memory/knowledge/`
+→ Dump raw → `{project_root}/.unified-memory/palace/wings/{topic}/raw/YYYY-MM-DD-{desc}.md` → extract → write to `.unified-memory/knowledge/`
 
 **Unified Memory skill:** `system/unified-memory/SKILL.md` — Memory Palace + Knowledge Evolution merged into one entry point.
 
@@ -148,8 +149,8 @@ Resolution order: `{project}/.unified-memory/knowledge/` first → fallback to `
 
 ```
 Global (cross-project):  ~/.memory/global/
-Per-project palace:      {project}/.unified-memory/palace/
-Per-project knowledge:   {project}/.unified-memory/knowledge/
+Per-project palace:      {project_root}/.unified-memory/palace/
+Per-project knowledge:   {project_root}/.unified-memory/knowledge/
 ```
 
 ### Global Memory Structure
@@ -159,13 +160,9 @@ Per-project knowledge:   {project}/.unified-memory/knowledge/
 ├── state.md                    ← global palace map (active wings across all projects)
 ├── tunnels.md                  ← cross-project links
 └── wings/
-    ├── knowledge-evolution/    ← template scores + lesson effectiveness (cross-project)
-    │   ├── hall.md
-    │   ├── rooms/
-    │   │   ├── template-health.md
-    │   │   ├── lesson-effectiveness.md
-    │   │   └── gap-tracker.md
-    │   └── closets/
+    ├── unified-memory/         ← template scores + lesson effectiveness (cross-project)
+    │   ├── palace/             ← global palace map
+    │   └── knowledge/          ← global templates + lessons
     └── {other-global-wings}/
 ```
 
@@ -178,7 +175,7 @@ On session start:
 
 On session end (if decisions were made):
 1. Save to project `.unified-memory/palace/` first
-2. Sync knowledge-evolution scores to `~/.memory/global/wings/knowledge-evolution/`
+2. Sync knowledge scores to `~/.memory/global/unified-memory/knowledge/`
 3. Update `~/.memory/global/state.md` if cross-project state changed
 
 ### Relocation

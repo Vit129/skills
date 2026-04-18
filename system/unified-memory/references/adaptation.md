@@ -171,7 +171,7 @@ Describes abstract flow, NOT implementation details.
 ## Global Knowledge Structure (Cross-Project)
 
 ```
-~/.claude/skills/ai-dlc/knowledge/      ← KNOWLEDGE_GLOBAL
+{project_root}/skills/knowledge/      ← KNOWLEDGE_GLOBAL
 ├── index.json                          ← master catalog, utility_score per domain
 ├── automation/
 │   ├── automationIndex.json
@@ -192,7 +192,7 @@ Describes abstract flow, NOT implementation details.
 
 Per-Project Knowledge (overrides global for same domain):
 ```
-{project}/.unified-memory/knowledge/
+{project_root}/.unified-memory/knowledge/
 ├── index.json                          ← project catalog + utility_score
 ├── README.md                           ← usage + resolution order note
 └── lessons/
@@ -201,7 +201,7 @@ Per-Project Knowledge (overrides global for same domain):
         └── *.md
 ```
 
-**Resolution order:** `{project}/.unified-memory/knowledge/` first → fallback `KNOWLEDGE_GLOBAL`
+**Resolution order:** `{project_root}/.unified-memory/knowledge/` first → fallback `KNOWLEDGE_GLOBAL`
 Domain only in global → fallback applies automatically.
 Domain in both → project version wins.
 
@@ -211,13 +211,13 @@ Domain in both → project version wins.
 
 | Concept | Default Value | Your System's Equivalent |
 |---------|--------------|--------------------------|
-| `{knowledge_store}` | `ai-dlc/knowledge/` or `{project}/.unified-memory/knowledge/` | |
+| `{knowledge_store}` | `ai-dlc/knowledge/` or `{project_root}/.unified-memory/knowledge/` | |
 | `{index_file}` | `index.json` + domain `*Index.json` | |
 | `{execution_trigger}` | test run, review, publish, decision | |
 | `{score_field}` | `utility_score` (0–10 scale) | |
 | `{lesson_store}` | `lessons/` under knowledge | |
 | `{routing_logic}` | project first → global fallback | |
-| `{memory_layer}` | `{project}/.unified-memory/palace/` | |
+| `{memory_layer}` | `{project_root}/.unified-memory/palace/` | |
 | `{positive_signal}` | PASS / APPROVE / ACCEPT / POSITIVE | |
 | `{negative_signal}` | FAIL / REJECT / REVISE / NEGATIVE | |
 

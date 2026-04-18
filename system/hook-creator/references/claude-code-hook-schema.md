@@ -1,6 +1,6 @@
 # Claude Code Hook Schema
 
-ไฟล์: `{project}/.claude/settings.json` (project) หรือ `~/.claude/settings.json` (global)
+ไฟล์: `{project_root}/.claude/settings.json` (project) หรือ `~/.claude/settings.json` (global)
 
 ## Event Types
 

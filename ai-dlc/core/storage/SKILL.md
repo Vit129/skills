@@ -25,3 +25,14 @@ Knowledge persistence, data indexing, and backup management.
 - **Scenario Save** — Save test scenario PBIs to index and extract test data. (Read `references/scenario-save.md`)
 - **Buffer Update** — Aggregate findings and update Knowledge Buffer in implementation plan. (Read `references/buffer-update.md`)
 - **Data Backup** — Standards for data safety and integrity. (Read `references/data-backup.md`)
+
+## Knowledge Root Convention
+
+`{knowledge_root}` resolves in this order:
+
+| Priority | Path | When to use |
+|----------|------|-------------|
+| 1. Per-project | `{cwd}/.unified-memory/knowledge/` | Working within a specific project workspace — walk up from cwd until found |
+| 2. Global fallback | `{project_root}/skills/knowledge/` | No per-project knowledge found — cross-project shared patterns |
+
+**Rule:** Always write to per-project first. Sync to global only when patterns have cross-project value.

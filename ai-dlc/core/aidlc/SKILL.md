@@ -56,6 +56,17 @@ For skill routing guide → (Read `references/related-skills.md`)
 - **Multiple agents on same task** — two agents (e.g., Gemini + Claude) edit the same file simultaneously, causing conflicts. Fix: one agent owns one task start-to-finish.
 - **Task marked done without commit** — agent reports completion but hasn't committed. Fix: commit hash is the only proof of completion — no hash = not done.
 
+## Knowledge Root Convention
+
+`{knowledge_root}` resolves in this order:
+
+| Priority | Path | When to use |
+|----------|------|-------------|
+| 1. Per-project | `{cwd}/.unified-memory/knowledge/` | Working within a specific project workspace — walk up from cwd until found |
+| 2. Global fallback | `{project_root}/skills/knowledge/` | No per-project knowledge found — cross-project shared patterns |
+
+**Rule:** Always check per-project first. Fall back to global only if `.unified-memory/knowledge/` does not exist in the project tree.
+
 ## Project Specifics
 
 - **My Investment Port** — (Read `references/investment-port.md`)

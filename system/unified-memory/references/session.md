@@ -191,7 +191,7 @@ Memory Palace = session buffer
 .unified-memory/knowledge/index.json = source of truth (survives sessions)
 
 For each score change in template-health.md:
-  1. Read {project}/.unified-memory/knowledge/index.json
+  1. Read {project_root}/.unified-memory/knowledge/index.json
   2. Find template by ID
   3. Update: utility_score, usage_count, outcome counts, last_used, last_outcome
   4. Write back
@@ -204,7 +204,7 @@ For each lesson change in lesson-effectiveness.md:
   2. Update: applied_count, prevented_failures
   3. Write back + verify
 
-Global knowledge (~/.claude/skills/ai-dlc/knowledge/):
+Global knowledge ({project_root}/skills/knowledge/):
   Sync only when template is cross-project (auto_captured = false, used ≥3 projects)
   Otherwise per-project .knowledge/ is enough
 ```

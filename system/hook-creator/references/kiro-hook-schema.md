@@ -1,6 +1,6 @@
 # Kiro Hook Schema
 
-ไฟล์: `{project}/.kiro/hooks/[name].kiro.hook`
+ไฟล์: `{project_root}/.kiro/hooks/[name].kiro.hook`
 
 ## Event Types
 

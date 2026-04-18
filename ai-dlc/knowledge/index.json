@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "updated": "2026-04-17",
   "description": "Global Knowledge Base — Master Index",
-  "resolution_order": "{project}/.knowledge/ first → fallback here",
+  "resolution_order": "{project_root}/.knowledge/ first → fallback here",
   "score_thresholds": {
     "proven": 7.0,
     "active": 3.0,

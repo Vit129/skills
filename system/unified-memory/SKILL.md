@@ -26,7 +26,7 @@ Together       = compound growth: remembers past + gets smarter each session
 ## 🏛️ Storage Architecture
 
 ```
-{project}/
+{project_root}/
 └── .unified-memory/
     ├── palace/                           ← Memory Palace (narrative + decisions)
     │   ├── state.md                      ← palace map (≤100 lines)
@@ -55,10 +55,10 @@ Together       = compound growth: remembers past + gets smarter each session
             ├── *LessonsIndex.json
             └── *.md
 
-Global Knowledge: ~/.claude/skills/ai-dlc/knowledge/ ← cross-project fallback
+Global Knowledge: {project_root}/skills/knowledge/ ← cross-project fallback
 ```
 
-**Resolution order:** `{project}/.unified-memory/knowledge/` → fallback → `~/.claude/skills/ai-dlc/knowledge/`
+**Resolution order:** `{project_root}/.unified-memory/knowledge/` → fallback → `{project_root}/skills/knowledge/`
 
 ---
 

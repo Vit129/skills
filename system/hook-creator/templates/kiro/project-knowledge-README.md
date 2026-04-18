@@ -5,7 +5,7 @@ Per-project knowledge that overrides global templates.
 ## Structure
 
 ```
-{project}/.knowledge/
+{project_root}/.knowledge/
 ├── README.md                    ← this file
 ├── automation/
 │   ├── api/apiIndex.json        ← project-specific API templates + scores
@@ -22,8 +22,8 @@ Per-project knowledge that overrides global templates.
 ## Resolution Order
 
 ```
-1. {project}/.knowledge/   ← project-specific (checked first)
-2. ~/.claude/skills/ai-dlc/knowledge/  ← global fallback
+1. {project_root}/.knowledge/   ← project-specific (checked first)
+2. {project_root}/skills/knowledge/  ← global fallback
 ```
 
 ## When to Use

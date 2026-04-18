@@ -62,7 +62,7 @@ Together = Compound Growth:
 ## On-Disk Layout (Project)
 
 ```
-{project}/
+{project_root}/
 ├── .unified-memory/                     ← New root
 │   ├── palace/                          ← Memory Palace
 │   │   ├── state.md                     (palace map ≤100 lines)
@@ -86,7 +86,7 @@ Together = Compound Growth:
 │           ├── *LessonsIndex.json
 │           └── *.md
 │
-└── ~/.claude/skills/ai-dlc/knowledge/   ← Global fallback knowledge
+└── {project_root}/skills/knowledge/   ← Global fallback knowledge
 ```
 
 ---
