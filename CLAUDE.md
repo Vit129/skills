@@ -1,4 +1,4 @@
-# Gemini Workspace
+# Claude Code Workspace
 
 ## Agent Tier (pick before every task)
 
