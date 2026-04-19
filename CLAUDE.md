@@ -1,93 +1,107 @@
-# Workspace Configuration — Skills + Rules + Infrastructure
+# Claude Code Workspace
 
-**Purpose:** Central registry for workspace integration. Maps skills → hooks → automation.
+## Agent Tier (pick before every task)
 
-> **Related:** See `skills/CLAUDE.md` for **agent selection strategy** (Gemini vs Claude tier decisions). This file covers **workspace infrastructure** (what's activated, hooks, setup).
+| Task | Agent |
+|------|-------|
+| Read code / research / scaffold | Gemini Flash (free) |
+| Single-file fix, clear spec | Haiku |
+| Logic bug / arch / async / critical | Sonnet |
 
----
+> One agent owns a task end-to-end — no mid-task handoffs (Gemini bug cascade cost 2 days).
+> Gemini must pass build + commit before the task is considered done.
 
-## 1. Directory Structure (What's Activated)
+## Skill Map (keyword → path)
 
+| Keyword / Task | Skill |
+|----------------|-------|
+| playwright test, spec, automation | `ai-dlc/qa/playwright-rules/` + `playwright-testing/` |
+| browser CLI, navigate, click | `ai-dlc/qa/playwright-cli/` |
+| QA architecture, test strategy | `ai-dlc/qa/qa-architect/` |
+| test scenario, test case design | `ai-dlc/qa/test-scenario/` |
+| robot framework, mobile test | `ai-dlc/qa/robotframework-rules/` + `robotframework-testing/` |
+| postman migration | `ai-dlc/qa/postman/` |
+| performance test, k6 | `ai-dlc/qa/performance-testing/` |
+| backend API, node, python, docker | `ai-dlc/dev/backend-dev/` |
+| frontend React, Flutter, Swift | `ai-dlc/dev/frontend-dev/` |
+| CI/CD, github actions, PR | `ai-dlc/dev/devops-pipeline/` |
+| domain design, DDD, architect | `ai-dlc/po/architect/` |
+| UI design, figma, design system | `ai-dlc/ux-ui/ui-designer/` |
+| task design, phase, aidlc | `ai-dlc/core/aidlc/` |
+| gap analysis, context, reverse-eng | `ai-dlc/core/analysis-skills/` |
+| save memory, load context, session | `system/unified-memory/` |
+| CoT, LATS, AoT, reasoning | `system/ai-techniques/` |
+| create new skill | `system/skill-creator/` |
+| create hook | `system/hook-creator/` |
+| investment port, tax, dividend | `finance/coding/` |
+| stock analysis, fundamental | `finance/research/stock-deep-analysis/` |
+
+All skill paths relative to `~/.claude/skills/`
+
+## Karpathy Principles (always active)
+
+### 1. Think Before Coding
+**Don't assume. Don't hide confusion. Surface tradeoffs.**
+
+- State assumptions explicitly. If uncertain, ask.
+- If multiple interpretations exist, present them — don't pick silently.
+- If a simpler approach exists, say so. Push back when warranted.
+- If something is unclear, stop. Name what's confusing. Ask.
+
+### 2. Simplicity First
+**Minimum code that solves the problem. Nothing speculative.**
+
+- No features beyond what was asked.
+- No abstractions for single-use code.
+- No "flexibility" or "configurability" that wasn't requested.
+- No error handling for impossible scenarios.
+- If you write 200 lines and it could be 50, rewrite it.
+
+Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
+
+### 3. Surgical Changes
+**Touch only what you must. Clean up only your own mess.**
+
+When editing existing code:
+- Don't "improve" adjacent code, comments, or formatting.
+- Don't refactor things that aren't broken.
+- Match existing style, even if you'd do it differently.
+- If you notice unrelated dead code, mention it — don't delete it.
+
+When your changes create orphans:
+- Remove imports/variables/functions that YOUR changes made unused.
+- Don't remove pre-existing dead code unless asked.
+
+The test: Every changed line should trace directly to the user's request.
+
+### 4. Goal-Driven Execution
+**Define success criteria. Loop until verified.**
+
+Transform tasks into verifiable goals:
+- "Add validation" → "Write tests for invalid inputs, then make them pass"
+- "Fix the bug" → "Write a test that reproduces it, then make it pass"
+- "Refactor X" → "Ensure tests pass before and after"
+
+For multi-step tasks, state a brief plan:
 ```
-.claude/
-├── CLAUDE.md                    ← You are here
-├── settings.json                ← Hooks registry
-├── rules/                       ← Coding standards (test-coverage, optimization, playwright-standards)
-├── skills/                      ← Feature skills (ai-dlc, finance, system)
-│   ├── CLAUDE.md               ← Agent tier selection strategy
-│   ├── ai-dlc/                 ← Dev lifecycle: core, dev, product, qa
-│   ├── finance/                ← Investment portfolio skills
-│   ├── system/                 ← Meta-skills: unified-memory, skill-creator
-│   └── ...
-├── .unified-memory/             ← Active memory: palace/ (Wings, Archive) + knowledge/
-└── projects/                    ← Session projects
+1. [Step] → verify: [check]
+2. [Step] → verify: [check]
+3. [Step] → verify: [check]
 ```
 
----
+Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
 
-## 2. Active Integrations
+## Rules (always active)
 
-### Rules (Always Active)
-- `rules/test-coverage.md` — Test commands per file
-- `rules/optimization.md` — Token management, cache protection
-- `rules/playwright-standards.md` — Test coding standards
+- **Test:** After every edit → run matching test (mapping: `rules/test-coverage.md`)
+- **Playwright:** no `waitForTimeout()` · selector priority: `getByTestId` > `getByRole` · AAA pattern
+- **Cache:** Do NOT edit CLAUDE.md / rules / MCP config mid-session (breaks prompt cache)
+- **Token:** Toggle Extended Thinking off (Tab) for simple tasks
 
-### Skills (Conditional Activation)
+## Hooks (auto-active via settings.json)
 
-| Category | Activated By | Usage |
-|----------|--------------|-------|
-| **ai-dlc** | Hooks (PostToolUse) | Auto-run tests after Write/Edit |
-| **finance** | Manual skill invoke | `/finance-*` or Kiro |
-| **system** | SessionStart hook | unified-memory, skill-creator |
-
-### Hooks (Configured in settings.json)
-
-| Hook | Matcher | Action |
+| Hook | Trigger | Action |
 |------|---------|--------|
-| **SessionStart** | Always | Load `.unified-memory/palace/state.md` (Memory Palace) |
-| **PreToolUse** | Write/Edit/MultiEdit | Check design → decomposition → implementation sequence |
-| **PostToolUse** | Write/Edit (test files) | Run test, auto-heal if fails, trigger Memory Palace |
-
----
-
-## 3. New Workspace Setup Checklist
-
-→ See `.setup-checklist` for step-by-step migration
-
-**Quick summary:**
-1. Copy `~/.claude/` to new workspace
-2. Verify `settings.json` hooks are loaded
-3. Initialize `.memory/state.md` (first SessionStart does this)
-4. Confirm test commands match new project structure
-5. Done — skills auto-activate
-
----
-
-## 4. Workspace Portability Notes
-
-### What's Portable ✅
-- `rules/` — universal standards
-- `skills/system/` — core meta-skills (unified-memory, skill-creator)
-- `skills/ai-dlc/` — dev lifecycle
-- `settings.json` hooks schema
-
-### What Needs Adjustment ⚠️
-- `rules/test-coverage.md` → Test mapping depends on project structure
-- `skills/finance/` → Investment portfolio paths (project-specific)
-- `.unified-memory/` → Session-specific state (auto-recreated per workspace)
-
-### Migration Path
-1. Copy everything except `.unified-memory/`
-2. Update `rules/test-coverage.md` test commands for new project
-3. First SessionStart auto-initializes `.unified-memory/palace/state.md`
-4. Done
-
----
-
-## 5. References
-
-- **Agent Strategy:** `skills/CLAUDE.md` (tier selection, Gemini vs Claude)
-- **Karpathy Principles:** `skills/CLAUDE.md` §5 (Think Before Coding, Simplicity First, Surgical Changes, Goal-Driven Execution)
-- **Test Standards:** `rules/test-coverage.md` + `rules/playwright-standards.md`
-- **Token Management:** `rules/optimization.md`
-- **Unified Memory:** `skills/system/unified-memory/` (Memory Palace + Knowledge Evolution — auto-activated SessionStart)
+| SessionStart | Session open | Load `.unified-memory/palace/state.md` |
+| PreToolUse | Write/Edit | Check design → decompose → implement |
+| PostToolUse | Edit test file | Run test, auto-heal on fail |

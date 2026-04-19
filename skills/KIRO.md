@@ -1,182 +1,102 @@
-# Global Agent Instructions — Right-Tool Engineering (Kiro Edition)
+# Kiro Workspace
 
-> **For:** Kiro AI IDE
-> **Companion file:** `CLAUDE.md` (same folder — Claude Code version with Gemini tier)
+## Agent Tier (pick before every task)
 
----
+| Task | Agent |
+|------|-------|
+| Most tasks — logic, impl, bug fix, tests | Sonnet (default) |
+| Complex multi-file / async / critical path | Opus (escalate only) |
 
-## 1. Agent Selection Decision Matrix
+> Escalation rule: if Sonnet fails twice on the same problem → escalate to Opus, don't retry.
+> Task is NOT done without: code written + tests pass + commit hash.
 
-**Before starting any task**, evaluate the correct tier:
+## Skill Map (keyword → path)
 
-### Tier 1 — ❄️ Claude Sonnet 4.6 (Default)
-> Use when: most tasks — logic, implementation, bug fixing, architecture
+| Keyword / Task | Skill |
+|----------------|-------|
+| playwright test, spec, automation | `ai-dlc/qa/playwright-rules/` + `playwright-testing/` |
+| browser CLI, navigate, click | `ai-dlc/qa/playwright-cli/` |
+| QA architecture, test strategy | `ai-dlc/qa/qa-architect/` |
+| test scenario, test case design | `ai-dlc/qa/test-scenario/` |
+| robot framework, mobile test | `ai-dlc/qa/robotframework-rules/` + `robotframework-testing/` |
+| postman migration | `ai-dlc/qa/postman/` |
+| performance test, k6 | `ai-dlc/qa/performance-testing/` |
+| backend API, node, python, docker | `ai-dlc/dev/backend-dev/` |
+| frontend React, Flutter, Swift | `ai-dlc/dev/frontend-dev/` |
+| CI/CD, github actions, PR | `ai-dlc/dev/devops-pipeline/` |
+| domain design, DDD, architect | `ai-dlc/po/architect/` |
+| UI design, figma, design system | `ai-dlc/ux-ui/ui-designer/` |
+| task design, phase, aidlc | `ai-dlc/core/aidlc/` |
+| gap analysis, context, reverse-eng | `ai-dlc/core/analysis-skills/` |
+| save memory, load context, session | `system/unified-memory/` |
+| CoT, LATS, AoT, reasoning | `system/ai-techniques/` |
+| investment port, tax, dividend | `finance/coding/` |
+| stock analysis, fundamental | `finance/research/stock-deep-analysis/` |
 
-| Task Type | Reasoning |
-|-----------|-----------|
-| **Bug fixing with logic tracing** | Precision thinking, avoids subtle regressions |
-| **Implementation (features, components)** | Reliable output, good context retention |
-| **Architecture decisions** | Deep reasoning, considers tradeoffs |
-| **Test writing and review** | Understands AAA pattern, Page Object Model |
-| **Code review and QA** | Catches subtle UX and logic issues |
-| **Refactoring** | Understands intent, not just syntax |
+All skill paths relative to `~/.claude/skills/`
 
-### Tier 2 — ❄️ Claude Opus 4.6 (Expensive — use sparingly)
-> Use when: the problem is genuinely hard and Sonnet has already failed or is likely to fail
+## Rules (always active)
 
-| Task Type | Reasoning |
-|-----------|-----------|
-| **Complex multi-file debugging** | State/async/race conditions across many files |
-| **Critical architecture with high stakes** | Wrong decision = weeks of rework |
-| **Ambiguous requirements needing deep reasoning** | Needs to infer intent from incomplete specs |
-| **Sonnet produced incorrect output twice** | Escalate rather than retry indefinitely |
+- **Test:** After every edit → run matching test
+- **Playwright:** no `waitForTimeout()` · `getByTestId` > `getByRole` · AAA pattern
+- **Cache:** Do NOT edit KIRO.md / steering mid-session (breaks prompt cache)
+- **Branch:** Always `git checkout -b feat/...` before starting work
 
-> ⚠️ **Escalation Rule:** If Sonnet produces incorrect output → try once more with better context → if still wrong, escalate to Opus. Do NOT retry Sonnet 3+ times on the same problem.
+## Karpathy Principles (always active)
 
----
+### 1. Think Before Coding
+**Don't assume. Don't hide confusion. Surface tradeoffs.**
 
-## 2. Tier Selection Strategy (Risk-Based)
+- State assumptions explicitly. If uncertain, ask.
+- If multiple interpretations exist, present them — don't pick silently.
+- If a simpler approach exists, say so. Push back when warranted.
+- If something is unclear, stop. Name what's confusing. Ask.
 
-### Assessment Checklist
+### 2. Simplicity First
+**Minimum code that solves the problem. Nothing speculative.**
 
-Before starting, evaluate:
+- No features beyond what was asked.
+- No abstractions for single-use code.
+- No "flexibility" or "configurability" that wasn't requested.
+- No error handling for impossible scenarios.
+- If you write 200 lines and it could be 50, rewrite it.
 
-- **Logic complexity**: State mutations? Async? Race conditions?
-- **Test coverage**: Exists? Will catch regressions?
-- **Risk of bug**: If wrong, how bad? (UI cosmetic = low; data loss = critical)
-- **Subtlety**: Edge cases? Timing issues? Off-by-one?
+Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
 
-### Tier Recommendation Matrix
+### 3. Surgical Changes
+**Touch only what you must. Clean up only your own mess.**
 
-| Complexity | Risk Level | Recommend | Cost |
-|-----------|-----------|-----------|------|
-| 🟢 **Easy** (boilerplate, simple fix, clear spec) | Low | **Sonnet** | Low |
-| 🟡 **Medium** (bug with logic, state change, test coverage exists) | Medium | **Sonnet** | Medium |
-| 🔴 **Hard** (state mutation, async/race, critical path, no tests) | Critical | **Opus** | High |
+When editing existing code:
+- Don't "improve" adjacent code, comments, or formatting.
+- Don't refactor things that aren't broken.
+- Match existing style, even if you'd do it differently.
+- If you notice unrelated dead code, mention it — don't delete it.
 
-### Example Assessment Output
+When your changes create orphans:
+- Remove imports/variables/functions that YOUR changes made unused.
+- Don't remove pre-existing dead code unless asked.
 
+The test: Every changed line should trace directly to the user's request.
+
+### 4. Goal-Driven Execution
+**Define success criteria. Loop until verified.**
+
+Transform tasks into verifiable goals:
+- "Add validation" → "Write tests for invalid inputs, then make them pass"
+- "Fix the bug" → "Write a test that reproduces it, then make it pass"
+- "Refactor X" → "Ensure tests pass before and after"
+
+For multi-step tasks, state a brief plan:
 ```
-## Task Assessment
-Title: Fix calendar input validation
-Complexity: 🟡 Medium
-
-Analysis:
-  ✓ Tests exist (holdings.spec.ts)
-  ✓ Logic is clear (input min-date validation)
-  ⚠️ Involves state update (calendar selection)
-  ⚠️ Date comparison (off-by-one risk)
-
-Recommendation:
-  → Sonnet (sufficient for this)
-  → Escalate to Opus only if Sonnet misses edge case after 2 attempts
-
-Proceeding with Sonnet.
-```
-
----
-
-## 3. Engineering Workflow
-
-### Pre-Flight — Create Feature Branch (Always)
-
-```bash
-git checkout -b feat/description-of-work
-```
-
-### Completion Criteria
-
-A task is **NOT done** until:
-1. ✅ Code written
-2. ✅ Relevant tests pass
-3. ✅ Changes committed with hash
-
-> ⚠️ **Rule:** A task without a commit hash is NOT done. Code that isn't committed can be lost.
-
-> **Engineering Standards & Karpathy Principles** → See `AGENT.md`
-
----
-
-## 4. Playwright Skills (Mandatory for All Test Work)
-
-→ Full rules: `system/hook-creator/templates/kiro/steering/` or load `#playwright-rules` in chat
-
-When writing, reviewing, fixing, or running Playwright tests, activate both `playwright-rules` and `playwright-cli` skills. Key mandates: no `waitForTimeout()`, `getByTestId` selector priority, AAA pattern, Page Object Model.
-
-Skill paths (relative to SKILLS_ROOT):
-- Standards: `ai-dlc/qa/playwright-rules/SKILL.md`
-- Testing workflow: `ai-dlc/qa/playwright-testing/SKILL.md`
-- CLI: `ai-dlc/qa/playwright-cli/SKILL.md`
-
----
-
-## 5. Test Coverage Rules (Mandatory)
-
-→ Load `#qa-architect` in chat for full test mapping
-
-After every file write or edit, run the corresponding test(s). Never mark a task done until all relevant tests pass.
-
-Skill path: `ai-dlc/qa/qa-architect/SKILL.md`
-
----
-
-## 6. Token / Cost Control
-
-| Action | Effect |
-|--------|--------|
-| Use Sonnet for most tasks | Cheaper than Opus, sufficient for 80%+ of tasks |
-| Keep prompts focused | Reduces input tokens |
-| Read only necessary files | Reduces context scan |
-| Escalate to Opus only when needed | Avoids unnecessary cost |
-| Do NOT edit KIRO.md/rules mid-session | Breaks prompt cache permanently |
-
-### Prompt Cache Protection
-
-- **Do NOT edit** KIRO.md, `.kiro/steering/`, MCP config mid-session — cache is permanently lost
-- Configure everything before starting a session — editing mid-session = cache lost, never recovers
-- If you must edit → start a new session
-- KIRO.md structure: stable content (standards, rules) on top, dynamic content at bottom → cache-aware boundaries
-
-### Token Budget Targeting
-
-For large tasks where cost matters, specify budget explicitly in the prompt:
-- `"Use no more than 50K tokens"` → agent scopes work to fit, avoids over-engineering
-- `"Spend up to 200K — go deep"` → agent deep dives fully
-- Not specified = agent decides on its own (may over or under spend)
-
----
-
-## How to Load This File
-
-Tell Kiro in chat:
-> "Read `AGENT.md` in the skills folder and follow those instructions for this session."
-
-Or reference directly:
-
-```
-#[[file:~/.claude/skills/AGENT.md]]
+1. [Step] → verify: [check]
+2. [Step] → verify: [check]
+3. [Step] → verify: [check]
 ```
 
-Or if skills folder has moved:
+Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
 
-```
-#[[file:{skills_root}/AGENT.md]]
-```
+## Citation format (when answering from knowledge base)
 
-AGENT.md will point Kiro to this file and all available skills automatically.
-
----
-
-## Knowledge Ingest & Citation
-
-→ See `AGENT.md` §Knowledge Ingest Workflow and §Citation Convention
-
-**Ingest trigger phrases:** "ingest this", "add to knowledge", "learn from this", "dump to raw"
-
-**Memory + Knowledge trigger phrases:** "save memory", "load context", "session start/end", "remember this", "track which templates work", "score lessons"
-→ Unified Memory skill: `system/unified-memory/SKILL.md`
-
-**Citation format when answering from knowledge base:**
 ```
 [from: LESSON-AUTH-001]        ← lesson
 [from: skill:playwright-rules] ← skill
