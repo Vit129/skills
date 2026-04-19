@@ -11,32 +11,63 @@
 > One agent owns a task end-to-end — no mid-task handoffs (Gemini bug cascade cost 2 days).
 > Gemini must pass build + commit before the task is considered done.
 
-## Skill Map (keyword → path)
+## Skill Map
 
-| Keyword / Task | Skill |
-|----------------|-------|
-| playwright test, spec, automation | `ai-dlc/qa/playwright-rules/` + `playwright-testing/` |
-| browser CLI, navigate, click | `ai-dlc/qa/playwright-cli/` |
-| QA architecture, test strategy | `ai-dlc/qa/qa-architect/` |
-| test scenario, test case design | `ai-dlc/qa/test-scenario/` |
-| robot framework, mobile test | `ai-dlc/qa/robotframework-rules/` + `robotframework-testing/` |
-| postman migration | `ai-dlc/qa/postman/` |
-| performance test, k6 | `ai-dlc/qa/performance-testing/` |
-| backend API, node, python, docker | `ai-dlc/dev/backend-dev/` |
-| frontend React, Flutter, Swift | `ai-dlc/dev/frontend-dev/` |
-| CI/CD, github actions, PR | `ai-dlc/dev/devops-pipeline/` |
-| domain design, DDD, architect | `ai-dlc/po/architect/` |
-| UI design, figma, design system | `ai-dlc/ux-ui/ui-designer/` |
-| task design, phase, aidlc | `ai-dlc/core/aidlc/` |
-| gap analysis, context, reverse-eng | `ai-dlc/core/analysis-skills/` |
-| save memory, load context, session | `system/unified-memory/` |
-| CoT, LATS, AoT, reasoning | `system/ai-techniques/` |
+> All paths relative to `~/.claude/skills/`
+> For any dev/QA coding task → start with `ai-dlc/core/aidlc/` first (governance + phase routing)
+
+### ai-dlc/core/ — Governance & Foundation
+| Keyword | Skill |
+|---------|-------|
+| any dev/QA task, start AIDLC, plan, build, phases | `core/aidlc/` |
+| analyze, gap analysis, requirements, reverse-eng | `core/analysis-skills/` |
+| logging, monitoring, observability, alerts | `core/monitoring/` |
+| save knowledge, backup, knowledge buffer | `core/storage/` |
+
+### ai-dlc/qa/ — Quality & Testing
+| Keyword | Skill |
+|---------|-------|
+| playwright standards, coding rules | `qa/playwright-rules/` ← load first |
+| write/run/fix playwright tests | `qa/playwright-testing/` |
+| browser CLI, navigate, screenshot | `qa/playwright-cli/` |
+| QA architecture, test framework design | `qa/qa-architect/` |
+| test scenario, test case design | `qa/test-scenario/` |
+| test scenario rules, CSV format | `qa/test-scenario-rules/` ← load first |
+| robot framework standards, RF rules | `qa/robotframework-rules/` ← load first |
+| write/run/fix RF mobile tests | `qa/robotframework-testing/` |
+| postman migration to playwright | `qa/postman/` |
+| load test, k6, performance | `qa/performance-testing/` |
+
+### ai-dlc/dev/ — Implementation
+| Keyword | Skill |
+|---------|-------|
+| backend API, node, python, docker | `dev/backend-dev/` |
+| frontend React, Next.js, Flutter, Swift | `dev/frontend-dev/` |
+| CI/CD, github actions, PR, pipeline | `dev/devops-pipeline/` |
+
+### ai-dlc/po/ — Product & Architecture
+| Keyword | Skill |
+|---------|-------|
+| domain design, DDD, bounded contexts, logical design | `po/architect/` |
+
+### ai-dlc/ux-ui/ — Design
+| Keyword | Skill |
+|---------|-------|
+| UI design, figma, design system, tokens | `ux-ui/ui-designer/` ← use before frontend-dev |
+
+### system/ — Meta Skills
+| Keyword | Skill |
+|---------|-------|
+| save memory, load context, session start/end | `system/unified-memory/` |
+| CoT, LATS, AoT, reasoning technique | `system/ai-techniques/` |
 | create new skill | `system/skill-creator/` |
 | create hook | `system/hook-creator/` |
-| investment port, tax, dividend | `finance/coding/` |
-| stock analysis, fundamental | `finance/research/stock-deep-analysis/` |
 
-All skill paths relative to `~/.claude/skills/`
+### finance/ — Investment Portfolio
+| Keyword | Skill |
+|---------|-------|
+| investment port, tax, dividend, rebalance | `finance/coding/` |
+| stock analysis, fundamental research | `finance/research/stock-deep-analysis/` |
 
 ## Karpathy Principles (always active)
 

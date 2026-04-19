@@ -19,7 +19,10 @@
       "Bash(grep -v \".ts$\")",
       "Bash(git *)",
       "Bash(mv /Users/supavit.cho/.claude/skills/.git /Users/supavit.cho/.claude/.git)",
-      "Bash(mv /Users/supavit.cho/.claude/skills/.gitignore /Users/supavit.cho/.claude/.gitignore)"
+      "Bash(mv /Users/supavit.cho/.claude/skills/.gitignore /Users/supavit.cho/.claude/.gitignore)",
+      "Bash(gh run *)",
+      "Bash(gh api *)",
+      "Bash(xargs -I{} sh -c 'echo \"=== {} ===\" && head -5 {}')"
     ]
   }
 }
