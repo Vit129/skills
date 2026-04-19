@@ -13,6 +13,7 @@
 
 | Date | Wing | Summary |
 |------|------|---------|
+| 2026-04-19 | ai-dlc-skills | Rewrote CLAUDE.md skill map to mirror ai-dlc/ category structure ✅ |
 | 2026-04-18 | ai-dlc-skills | Standardized all path placeholders → `{project_root}` across 15+ skill files ✅ |
 | 2026-04-18 | ai-dlc-skills | `{knowledge_root}` convention added to all 5 core SKILL.md files ✅ |
 | 2026-04-18 | unified-memory | Unified Memory system audit → structure & patterns aligned with system skill ✅ |

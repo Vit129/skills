@@ -1,15 +1,17 @@
-# Claude Code Workspace
+# Gemini Workspace
 
 ## Agent Tier (pick before every task)
 
 | Task | Agent |
 |------|-------|
-| Read code / research / scaffold | Gemini Flash (free) |
-| Single-file fix, clear spec | Haiku |
-| Logic bug / arch / async / critical | Sonnet |
+| Read code / research / scaffold | Gemini 3 Flash |
+| Single-file fix, clear spec | Gemini 2.5 Pro |
+| Logic bug / arch / async / critical | Gemini 3 Pro |
 
 > One agent owns a task end-to-end — no mid-task handoffs (Gemini bug cascade cost 2 days).
 > Gemini must pass build + commit before the task is considered done.
+
+> **Search / root cause / research rule:** If searching the project, finding root cause of a bug, or doing research — always call **Gemini CLI Flash 3** first.
 
 ## Skill Map
 

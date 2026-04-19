@@ -22,7 +22,25 @@
       "Bash(mv /Users/supavit.cho/.claude/skills/.gitignore /Users/supavit.cho/.claude/.gitignore)",
       "Bash(gh run *)",
       "Bash(gh api *)",
-      "Bash(xargs -I{} sh -c 'echo \"=== {} ===\" && head -5 {}')"
+      "Bash(xargs -I{} sh -c 'echo \"=== {} ===\" && head -5 {}')",
+      "Bash(mkdir -p /Users/supavit.cho/.claude/skills/finance/coding/portfolio-holdings/references)",
+      "Bash(mkdir -p /Users/supavit.cho/.claude/skills/finance/coding/passive-income/references)",
+      "Bash(mkdir -p /Users/supavit.cho/.claude/skills/finance/coding/tax-management/references)",
+      "Bash(mkdir -p /Users/supavit.cho/.claude/skills/finance/coding/investment-coding/references)",
+      "Bash(mkdir -p /Users/supavit.cho/.claude/skills/finance/coding/data-pipeline/references)",
+      "Bash(cp /Users/supavit.cho/.claude/skills/finance/coding/add-stock/references/add-stock-guide.md /Users/supavit.cho/.claude/skills/finance/coding/portfolio-holdings/references/)",
+      "Bash(cp /Users/supavit.cho/.claude/skills/finance/coding/rebalance-check/references/rebalance-guide.md /Users/supavit.cho/.claude/skills/finance/coding/portfolio-holdings/references/)",
+      "Bash(cp /Users/supavit.cho/.claude/skills/finance/coding/fx-alert/references/fx-guide.md /Users/supavit.cho/.claude/skills/finance/coding/portfolio-holdings/references/)",
+      "Bash(cp /Users/supavit.cho/.claude/skills/finance/coding/passive/references/analysis-guide.md /Users/supavit.cho/.claude/skills/finance/coding/passive-income/references/)",
+      "Bash(cp /Users/supavit.cho/.claude/skills/finance/coding/dividend-tracker/references/tracker-guide.md /Users/supavit.cho/.claude/skills/finance/coding/passive-income/references/)",
+      "Bash(cp /Users/supavit.cho/.claude/skills/finance/coding/investment-architecture/SKILL.md /Users/supavit.cho/.claude/skills/finance/coding/investment-coding/)",
+      "Bash(cp /Users/supavit.cho/.claude/skills/finance/coding/investment-architecture/investment-port.md /Users/supavit.cho/.claude/skills/finance/coding/investment-coding/)",
+      "Bash(cp /Users/supavit.cho/.claude/skills/finance/coding/investment-architecture/sovereign-ds.md /Users/supavit.cho/.claude/skills/finance/coding/investment-coding/)",
+      "Bash(cp /Users/supavit.cho/.claude/skills/finance/coding/investment-architecture/references/architecture.md /Users/supavit.cho/.claude/skills/finance/coding/investment-coding/references/)",
+      "Bash(cp /Users/supavit.cho/.claude/skills/finance/coding/portfolio-report/SKILL.md /Users/supavit.cho/.claude/skills/finance/coding/portfolio-reporting/)",
+      "Bash(python3 *)",
+      "Bash(rm -rf /Users/supavit.cho/.claude/skills/finance/coding)",
+      "Bash(rm -rf /Users/supavit.cho/.gemini/skills/finance/coding)"
     ]
   }
 }
