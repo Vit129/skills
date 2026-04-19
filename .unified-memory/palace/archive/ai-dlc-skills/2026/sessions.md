@@ -11,3 +11,10 @@
 | 2026-04-11 | ai-dlc-skills | Deleted old ai-dlc/core/ai-techniques/ (SKILL.md + 3 refs) — cleanup complete, system/ is sole source ✅ |
 | 2026-04-11 | memory-palace | Decision: ChromaDB/MCP/semantic search ยกเลิก — markdown-only เป็น final approach ✅ |
 | 2026-04-11 | ai-dlc-skills | Closed 3 threads: merge-B ✅, centralize-hooks ✅, ChromaDB cancelled |
+| 2026-04-19 | ai-dlc-skills | Fixed obsidian branch merge conflicts (graph.md deleted, skill-structure.md frontmatter kept) ✅ |
+| 2026-04-19 | ai-dlc-skills | Consolidated agent entry points: CLAUDE.md 474→54 lines, removed SKILL.md + AGENT.md + skills/CLAUDE.md ✅ |
+| 2026-04-19 | ai-dlc-skills | Added full Karpathy principles to CLAUDE.md, KIRO.md, GEMINI.md ✅ |
+| 2026-04-19 | ai-dlc-skills | Rewrote CLAUDE.md skill map to mirror ai-dlc/ category structure ✅ |
+| 2026-04-19 | ai-dlc-skills | Added mandatory pairing to test-scenario/SKILL.md (load test-scenario-rules first) ✅ |
+| 2026-04-19 | ai-dlc-skills | Fixed related-skills.md: replaced knowledge-evolution + memory-palace → unified-memory ✅ |
+| 2026-04-19 | ai-dlc-skills | Deleted obsidian branches (local + remote) — only main remains ✅ |
