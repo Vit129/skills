@@ -18,9 +18,6 @@
 - [2026-04-12] Demo simulation complete: 4 systems, 10 feedback items → all fixed in 8 skill files ✅
 - [2026-04-12] Claude Code leak analysis: 32 insights → 29 upgrade tasks (Phase 0-D)
 - [2026-04-12] Sprint plan: 4 sprints — Sprint 1 (today), Sprint 2 (this week), Sprint 3-4 (later)
-- [2026-04-12] Demo simulation complete: 4 systems, 10 feedback items → all fixed in 8 skill files ✅
-- [2026-04-12] Claude Code leak analysis: 32 insights → 29 upgrade tasks (Phase 0-D)
-- [2026-04-12] Sprint plan: 4 sprints — Sprint 1 (today), Sprint 2 (this week), Sprint 3-4 (later)
 
 
 ## Patterns
@@ -35,7 +32,3 @@
 - `knowledge-evolution-skill.md` — knowledge-evolution system skill (3-layer design, Phase A-D roadmap)
 - `skill-structure-upgrade-2026-04-12.md` — Sub-folder restructure + new references + v1 checkpoint borrow
 - `v1-v2-full-comparison.md` — Complete v1 (_backup) vs v2 (ai-dlc) system comparison: 30/30 covered + 15 v2-only
-- `demo-simulation-2026-04-12.md` — 4 system demos (Japan/HR/Ecom/Hospital) + 10 feedback items → all fixed ✅ (source: VitProjects/ai-dlc-demo.md)
-- `upgrade-plan-2026-04-12.md` — Claude Code leak → 29 upgrade tasks (Phase 0-D) + Sprint plan (source: .claude/skills/doc/ai-dlc-upgrade-plan.md)
-- `demo-simulation-2026-04-12.md` — 4 system demos (Japan/HR/Ecom/Hospital) + 10 feedback items → all fixed ✅ (see VitProjects/ai-dlc-demo.md)
-- `upgrade-plan-2026-04-12.md` — Claude Code leak insights → 29 upgrade tasks (Phase 0-D) + Sprint plan (see .claude/skills/doc/ai-dlc-upgrade-plan.md)

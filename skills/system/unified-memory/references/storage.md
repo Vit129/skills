@@ -41,10 +41,83 @@ L4: Hall    — index of rooms within a wing (≤50 lines)
 ```
 
 **Rules:**
-- Top-level .unified-memory/palace/ contains ONLY: state.md, tunnels.md, wings/, archive/
+- Top-level .unified-memory/palace/ contains ONLY: state.md, tunnels.md, user-profile.md, search-index.md, wings/, archive/
 
 - Max folder depth = 4 levels
 - hall.md ≤ 50 lines. Overflow → hall-detail.md
+
+---
+
+## User Profile (Cross-Session Identity)
+
+### Concept
+Persistent user model that captures preferences, work patterns, and communication style across sessions. Enables AI to adapt tone, format, and suggestions to the user.
+
+### Storage
+```
+.unified-memory/palace/user-profile.md   ← single file, ≤80 lines
+```
+
+### Schema
+```markdown
+# User Profile
+
+Updated: YYYY-MM-DD
+
+## Preferences
+- Language: {e.g. Thai + English mixed}
+- Response style: {e.g. direct, minimal, tables preferred}
+- Preferred tools: {e.g. Claude Code, Kiro}
+- Work patterns: {e.g. iterates fast, compares before deciding}
+
+## Observed Patterns (auto-captured)
+- Decision style: {e.g. data-driven, compare options first}
+- Common domains: {e.g. AI skills, QA automation, system design}
+- Typical session length: {e.g. medium, focused bursts}
+- Feedback style: {e.g. brief approval, detailed when disagreeing}
+
+## Communication
+- Likes: {e.g. tables, comparisons, bullet points, Thai mixed}
+- Dislikes: {e.g. verbose summaries, unnecessary explanations}
+- Tone: {e.g. casual-professional, direct}
+
+## Domain Expertise
+- Strong: {domains user demonstrates expertise in}
+- Learning: {domains user is actively exploring}
+- Delegated: {domains user prefers AI to handle fully}
+```
+
+### Update Rules
+```
+At session end (after Step 2, before Step 3):
+  1. Observe: did user show new preferences or patterns this session?
+  2. If new observation:
+     a. Check existing profile for contradiction
+     b. Same → skip
+     c. New → append to appropriate section
+     d. Contradicts → overwrite with temporal note: "(was: X, changed: YYYY-MM-DD)"
+  3. Update "Updated:" date
+  4. Keep ≤80 lines — if exceeding, compress older observations
+
+Auto-capture signals:
+  - User corrects AI format → update Communication.Likes/Dislikes
+  - User consistently uses certain language → update Preferences.Language
+  - User skips certain suggestions repeatedly → update Preferences
+  - User shows expertise in domain → update Domain Expertise.Strong
+  - User asks basic questions in domain → update Domain Expertise.Learning
+```
+
+### Load Rules (Session Start)
+```
+At session start (Step 1, alongside state.md):
+  1. Read user-profile.md if exists
+  2. Apply preferences to session behavior:
+     - Adjust response language/tone
+     - Prefer user's liked formats (tables, bullets, etc.)
+     - Avoid user's disliked patterns
+     - Route suggestions through domain expertise level
+  3. If user-profile.md doesn't exist → create empty template on first session end
+```
 
 ---
 
@@ -61,6 +134,27 @@ Discovery check:
 Naming: kebab-case, lowercase, domain-specific
   Good: "payment-api", "form-redesign", "auth-decisions"
   Bad:  "api" (too broad), "work" (too vague)
+```
+
+### Wing Split Rule (Overflow Prevention)
+```
+Trigger: wing has >15 rooms
+
+Action:
+  1. Identify sub-clusters (group rooms by semantic similarity)
+  2. Create child wings: {parent}-{subtopic}/
+  3. Move rooms to child wings
+  4. Parent wing becomes "umbrella" — hall.md links to child wings only
+  5. Update state.md: replace parent with child wings
+  6. Update tunnels.md: remap references to new child wing paths
+
+Example:
+  api-integration/ (18 rooms)
+    → api-integration-auth/ (5 rooms)
+    → api-integration-payment/ (7 rooms)
+    → api-integration-notification/ (6 rooms)
+
+Rule: child wing inherits parent's Hot/Warm/Cold status initially.
 ```
 
 ### Wing Classification (Hot / Cold / Warm)
@@ -181,7 +275,25 @@ Principles:
 
 ```
 
-### Closet Schema
+### AAAK Priority Order (What to Keep vs Drop)
+```
+KEEP (never cut):
+  1. Decision + Reason     ← why this choice was made
+  2. Core Business Logic   ← domain rules that don't change
+  3. Current State         ← verified facts only (not assumptions)
+  4. Open Questions        ← unresolved decisions
+
+COMPRESS (shorten):
+  5. Technical Decisions   ← keep conclusion + reason, drop explanation
+  6. Implementation paths  ← compress to pattern name + path
+  7. Context/background    ← drop if obvious from room name
+
+DROP (remove):
+  - Filler text ("we decided to...", "it was agreed that...")
+  - Repeated context (use tunnel instead)
+  - Speculative content ("might", "could", "maybe")
+  - Process steps with no decision (e.g. "ran npm install")
+```
 ```markdown
 # {Room Name} — Closet [AAAK]
 
@@ -388,6 +500,188 @@ Formula: (reuse + extend items) / total required × 100
 ❌ Forgetting to update hall.md → Fix: hall.md update is mandatory
 
 ❌ Duplicating content across rooms → Fix: use tunnels to link, don't copy
+```
+
+---
+
+## Skills (Crystallized Execution Paths)
+
+### Concept
+When a task is solved successfully and the same pattern appears ≥2 times, crystallize the execution path into a reusable skill file. Skills live inside wings alongside rooms.
+
+### Storage
+```
+wings/{topic}/skills/{skill-name}.md   ← crystallized skill
+```
+
+### Skill File Schema
+```markdown
+# Skill: {skill-name}
+
+Created: YYYY-MM-DD
+Version: 1
+Status: DRAFT | ACTIVE | STALE
+Uses: 0
+Positive_Uses: 0
+Negative_Uses: 0
+Last_Used: null
+Last_Execution_Steps: null
+Source_Rooms: [room-a, room-b]
+
+## When to Use
+{One-line trigger condition — when should this skill be invoked?}
+
+## Steps
+1. {Step 1}
+2. {Step 2}
+3. ...
+
+## Previous Steps (rollback safety)
+{Empty until first self-improvement. Stores v(n-1) Steps for regression rollback.}
+
+## Improvement Log
+| Date | Version | Change | Outcome | Auto? |
+|------|---------|--------|---------|-------|
+```
+
+### Crystallization Rules (Auto-write Draft)
+```
+Trigger: same pattern solved ≥2 times (check routing-log.md for repeats)
+
+Auto-crystallize flow (no user confirmation needed):
+  1. Detect repeat: same domain + similar intent in routing-log ≥2 entries
+  2. Verify intent match: both source sessions must have same Input→Process→Output pattern
+     (if intent differs → skip, don't crystallize — Gotcha #23)
+  3. Auto-write skill file with Status: DRAFT
+  4. Update hall.md: add skill to index with "(draft)" marker
+  5. Notify: "🔮 Auto-crystallized: {name} (draft) — will activate after first successful use"
+  6. Log: "🔮 Skill crystallized (draft): {name} from rooms: {list}"
+
+Lifecycle:
+  DRAFT → used successfully 1x → promote to ACTIVE
+  DRAFT → unused 30 days → auto-remove + notify: "🗑️ Draft skill '{name}' removed (unused 30d)"
+  ACTIVE → unused 60 days → demote to STALE
+  STALE → used successfully → promote back to ACTIVE
+  STALE → unused 30 more days (90 total) → archive
+
+Status rules for session start:
+  ACTIVE → suggest to user when task matches
+  DRAFT  → do NOT suggest (invisible until proven)
+  STALE  → suggest with warning: "⚠️ Stale skill — last used {n} days ago"
+
+Manual: user says "crystallize skill from {room}" → write as ACTIVE directly (human-curated)
+```
+
+### Self-Improvement (Auto-refine on Positive Outcome)
+```
+When skill is used:
+  1. Increment Uses count
+  2. Record Last_Execution_Steps (actual steps taken this time)
+  3. Track outcome (POSITIVE/NEGATIVE)
+
+After POSITIVE outcome:
+  a. Compare Last_Execution_Steps vs current Steps
+  b. If execution DEVIATED from Steps AND outcome is positive:
+     → Copy current Steps to "Previous Steps" (rollback safety)
+     → Auto-update Steps to match actual execution
+     → Bump Version
+     → Append to Improvement Log: {date, version, "auto-refined: {diff summary}", outcome, Auto: yes}
+     → Log: "🔮 Self-improved: {name} v{n-1}→v{n} (better outcome with deviation)"
+  c. If execution FOLLOWED Steps exactly:
+     → No change to Steps
+     → Increment Positive_Uses
+     → If DRAFT + first positive → promote to ACTIVE
+
+After NEGATIVE outcome:
+  a. DO NOT auto-update Steps (Gotcha #27)
+  b. Increment Negative_Uses
+  c. Append to Improvement Log: {date, version, "negative outcome: {reason}", outcome, Auto: no}
+  d. If 2 consecutive negatives:
+     → Flag: "⚠️ Skill '{name}' degrading — 2 consecutive failures"
+     → If Previous Steps exists → suggest rollback: "Rollback to v{n-1}? [y/n]"
+
+Deviation detection:
+  Simple: compare step count + key action verbs
+  Match = same count + same verbs in same order
+  Deviation = different count OR different verbs OR different order
+```
+
+### Skill in Hall.md
+```
+Add to hall.md Rooms Index table:
+
+| Room/Skill | Description | Type | Last Updated |
+|------------|-------------|------|--------------|
+| `skills/deploy-flow` | CI/CD deployment steps | skill | 2026-04-20 |
+```
+
+### Skill Reuse (Session Start)
+```
+When loading Hot wing:
+  1. Load hall.md (includes skill index)
+  2. Filter skills by status:
+     ACTIVE → eligible for suggestion
+     DRAFT  → skip (invisible until proven)
+     STALE  → eligible with warning
+  3. If task matches skill's "When to Use":
+     ACTIVE: "🔮 Skill available: {name} (v{n}, {uses}x used)"
+     STALE:  "🔮 Stale skill: {name} — last used {n} days ago. Use? [y/n]"
+  4. User confirms → execute skill steps
+  5. Record Last_Execution_Steps (actual steps taken)
+  6. Track outcome → feed back into self-improvement
+```
+
+---
+
+## Session Search Index
+
+### Concept
+Flat-file search index enabling grep-based lookup across all sessions. No SQLite, no dependencies.
+
+### Storage
+```
+.unified-memory/palace/search-index.md
+```
+
+### Schema
+```markdown
+# Session Search Index
+
+| Date | Wing | Keywords | Room Path | Summary |
+|------|------|----------|-----------|---------|
+| 2026-04-20 | unified-memory | competitive,hermes,evolver,roadmap | wings/unified-memory/rooms/competitive-analysis-roadmap.md | Compared 4 GitHub agents, P1/P2 roadmap |
+| 2026-04-18 | ai-dlc-skills | placeholder,path,convention | wings/ai-dlc-skills/rooms/standards-update.md | Standardized {project_root} across skills |
+```
+
+### Write Rules
+```
+At session end (Step 2f, after updating state.md):
+  For each room written/updated this session:
+    1. Extract 3-5 keywords from room content (nouns + decisions)
+    2. Append row to search-index.md
+    3. Dedup: if same room_path already has entry for same date → overwrite row
+
+Max rows: 500 (oldest rows archived to search-index-archive.md when exceeded)
+```
+
+### Search Usage
+```
+User: "search memory for {query}"
+
+1. grep search-index.md for query terms (case-insensitive)
+2. Return matching rows sorted by date DESC
+3. For each match: show Date, Wing, Summary
+4. User picks → load the Room Path for full detail
+
+Fuzzy: if exact match fails → split query into words, match any word
+```
+
+### Maintenance
+```
+During consolidation:
+  - Remove rows pointing to archived rooms
+  - Remove rows older than 180 days (they're in archive anyway)
+  - Rebuild index if room paths changed (wing split, rename)
 ```
 
 ---

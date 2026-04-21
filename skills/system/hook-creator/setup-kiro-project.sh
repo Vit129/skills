@@ -23,7 +23,13 @@ mkdir -p "$HOOKS_DST"
 hook_count=0
 for hook in "$HOOKS_SRC"/*.kiro.hook; do
   [ -f "$hook" ] || continue
-  cp "$hook" "$HOOKS_DST/"
+  filename="$(basename "$hook")"
+  if [ -f "$HOOKS_DST/$filename" ]; then
+    echo "   ⏭️  Hook exists, skipping: $filename"
+  else
+    cp "$hook" "$HOOKS_DST/"
+    echo "   ✅ Copied hook: $filename"
+  fi
   hook_count=$((hook_count + 1))
 done
 
@@ -35,54 +41,36 @@ mkdir -p "$STEERING_DST"
 steering_count=0
 for steering in "$STEERING_SRC"/*.md; do
   [ -f "$steering" ] || continue
-  cp "$steering" "$STEERING_DST/"
+  filename="$(basename "$steering")"
+  # Replace __SKILLS_ROOT__ placeholder with actual path
+  sed "s|__SKILLS_ROOT__|$SKILLS_ROOT|g" "$steering" > "$STEERING_DST/$filename"
   steering_count=$((steering_count + 1))
+  echo "   ✅ Steering: $filename (SKILLS_ROOT=$SKILLS_ROOT)"
 done
 
-# --- STEERING_INDEX.md ---
-# Create/update STEERING_INDEX.md with correct SKILLS_ROOT
-INDEX_DST="$PROJECT/.kiro/steering/STEERING_INDEX.md"
-if [ ! -f "$INDEX_DST" ]; then
-  cat > "$INDEX_DST" << EOF
----
-inclusion: auto
----
-
-# Kiro Steering — Skills Index
-
-<!-- SKILLS_ROOT: $SKILLS_ROOT -->
-<!-- เปลี่ยนบรรทัดบนนี้บรรทัดเดียวเมื่อย้าย skills folder -->
-<!-- Entry point: $SKILLS_ROOT/AGENT.md -->
-
-All steering files reference \`{SKILLS_ROOT}\` as the single source of truth.
-
-## Skills Discovery
-
-Read \`$SKILLS_ROOT/AGENT.md\` for full skill index and instructions.
-
-## Auto-loaded
-
-| File | Purpose |
-|------|---------|
-| \`ai-dlc-standards.md\` | AI-DLC engineering standards every session |
-
-## Manual (load via # in chat)
-
-See \`$SKILLS_ROOT/AGENT.md\` for full list of available skills and their trigger phrases.
-EOF
-  echo "   Created: STEERING_INDEX.md (with SKILLS_ROOT=$SKILLS_ROOT)"
-else
-  # Update SKILLS_ROOT in existing index
-  sed -i.bak "s|<!-- SKILLS_ROOT:.*-->|<!-- SKILLS_ROOT: $SKILLS_ROOT -->|" "$INDEX_DST"
-  rm -f "$INDEX_DST.bak"
-  echo "   Updated: STEERING_INDEX.md (SKILLS_ROOT=$SKILLS_ROOT)"
+# --- MCP config ---
+MCP_DST="$PROJECT/.kiro/settings"
+mkdir -p "$MCP_DST"
+if [ ! -f "$MCP_DST/mcp.json" ]; then
+  # Check common locations for MCP config template
+  MCP_SOURCES=(
+    "$PROJECT/ai-agent/docs/KIRO_MCP.json"
+    "$SKILLS_ROOT/../docs/KIRO_MCP.json"
+  )
+  for mcp_src in "${MCP_SOURCES[@]}"; do
+    if [ -f "$mcp_src" ]; then
+      cp "$mcp_src" "$MCP_DST/mcp.json"
+      echo "   ✅ MCP config copied from: $mcp_src"
+      break
+    fi
+  done
 fi
 
 echo ""
 echo "✅ Kiro project setup complete: $PROJECT"
-echo "   Hooks:    $hook_count files → $HOOKS_DST"
+echo "   Hooks:    $hook_count templates → $HOOKS_DST"
 echo "   Steering: $steering_count files → $STEERING_DST"
 echo ""
 echo "Next steps:"
 echo "  1. Review hooks in $HOOKS_DST — disable any you don't need"
-echo "  2. Tell Kiro: 'Read $SKILLS_ROOT/AGENT.md and follow those instructions'"
+echo "  2. Tell Kiro: 'Read $SKILLS_ROOT/KIRO.md and follow those instructions'"

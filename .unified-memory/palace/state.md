@@ -5,42 +5,47 @@
 
 ## Active Wings
 
-- **unified-memory** — Global memory & intelligence management (consolidated 2026-04-18)
-- **ai-dlc-skills** — AI-DLC skill ecosystem (last updated: 2026-04-18)
-- **knowledge-ingest** — Wiki-Graph ingest infrastructure + rooms (last updated: 2026-04-16)
+- **unified-memory** — Global memory & intelligence management (last updated: 2026-04-20)
+- **ai-dlc-skills** — AI-DLC skill ecosystem (last updated: 2026-04-20)
 
 ## Recent Sessions
 
 | Date | Wing | Summary |
 |------|------|---------|
-| 2026-04-19 | ai-dlc-skills | Rewrote CLAUDE.md skill map to mirror ai-dlc/ category structure ✅ |
-| 2026-04-18 | ai-dlc-skills | Standardized all path placeholders → `{project_root}` across 15+ skill files ✅ |
-| 2026-04-18 | ai-dlc-skills | `{knowledge_root}` convention added to all 5 core SKILL.md files ✅ |
-| 2026-04-18 | unified-memory | Unified Memory system audit → structure & patterns aligned with system skill ✅ |
-| 2026-04-16 | knowledge-ingest | Wiki-Graph pattern ingested → room created, backlinks added, KIRO.md updated ✅ |
-| 2026-04-16 | ai-dlc-skills | Backlinks added to all lesson files, Citation + Ingest workflow added to AGENT.md ✅ |
-| 2026-04-14 | ai-dlc-skills | Phase A complete: enriched lesson schema, effectiveness→index only, business usage tracking ✅ |
-| 2026-04-14 | ai-dlc-skills | Phase B complete: 6 workflow files updated (score-aware, intent matching, lesson sorting) ✅ |
+| 2026-04-21 | unified-memory | Architecture decision: Hybrid Inverted Index + Sorted Date Array (no SQLite) → keyword-index.json + date-index.json, search-scaling-research.md updated ✅ |
+| 2026-04-21 | unified-memory | AGENTS.md: merged 5 AIDLC rules from KIRO_STEERING.md (AIDLC first, phase gates, no shortcuts, knowledge check, language) — KIRO_STEERING.md now redundant ✅ |
+| 2026-04-20 | unified-memory | GOTCHAS #29-30 added: AAAK over-compression + dirty missed in long sessions, count→30 ✅ |
+| 2026-04-20 | unified-memory | AAAK taxonomy added: Keep/Compress/Drop priority order for compression decisions ✅ |
+| 2026-04-20 | unified-memory | Search scaling research: DS&A analysis, inverted index JSON design, tiered strategy confirmed, Big O compared ✅ |
+| 2026-04-20 | ai-dlc-skills | Updated CLAUDE.md, KIRO.md, GEMINI.md, README.md: added analysis-concept skill, user-profile keywords, hooks, unified-memory features ✅ |
+| 2026-04-20 | ai-dlc-skills | Updated doc/aidlc flowchart + swimlane: memory-palace→unified-memory, added bootstrap/nudges/skills/search/evolution_log ✅ |
+| 2026-04-20 | unified-memory | Merged knowledge-ingest wing → unified-memory (wiki-graph-pattern room), deleted wing, 2 wings remaining ✅ |
+| 2026-04-20 | unified-memory | Bootstrap flow added (Step 0 init), GOTCHA #28, gap audit complete → spec-data 100% aligned ✅ |
+| 2026-04-20 | unified-memory | Gap audit: deduped ai-dlc-skills hall.md, created skills/ folders, raw/ folder, archive/index.md → data 100% aligned with spec ✅ |
+| 2026-04-20 | unified-memory | Phase 2 implemented: user modeling, auto-crystallize (DRAFT/ACTIVE/STALE), skill self-improve (auto-refine + rollback) + naming decision ✅ |
+| 2026-04-20 | unified-memory | P1+P2 implemented: skill crystallization, search index, nudges, audit trail → 7 skill files + GOTCHAS #23-27 ✅ |
+
+_Older sessions archived_
+
+## Current Focus
+
+- focus: ""
+- blockers: ""
+- next_action: ""
 
 ## Open Threads
 
-- [x] memory-palace: update SKILL.md to load both project + user level (Unified Memory System)
-- [x] unified-memory: Audit system structure vs system skill (completed 2026-04-18)
-- [x] ai-dlc/core/aidlc: add {knowledge_root} convention to core/aidlc/SKILL.md (Global & Per-Project support)
-- [x] ai-dlc/core/analysis-skills: add {knowledge_root} convention (Global & Per-Project support)
-- [x] ai-dlc/core/storage: add {knowledge_root} convention (Global & Per-Project support)
-- [x] ai-dlc/core/memory-palace (unified-memory): add {knowledge_root} convention (Global & Per-Project support)
-- [x] system/analysis-concept: add {knowledge_root} convention (Global & Per-Project support)
-- [x] skills-wide: standardize all path placeholders to `{project_root}` — replaced {project}/, {PROJECT_ROOT}, ~/.claude/skills/ai-dlc/knowledge/ across 15+ files
-- [ ] ai-dlc-skills: verify {knowledge_root} resolves correctly at runtime
+- [ ] Search scaling implementation: Hybrid Inverted Index + Sorted Date Array decided → implement keyword-index.json + date-index.json (see wings/unified-memory/rooms/search-scaling-research.md)
+- [x] AGENTS.md: adopted Trust Priority, Do-not-store, Minimum Update Contract from agent-context-kit @2026-04-21
 
 ## Placeholder Convention
 
 ```
 {project_root}   = root directory of the active project (walk up from cwd)
 {knowledge_root} resolves in order:
-  1. {project_root}/.unified-memory/knowledge/   ← per-project (checked first)
-  2. {project_root}/skills/knowledge/            ← global fallback (cross-project)
+  1. {project_root}/.unified-memory/knowledge/          ← per-project (checked first)
+  2. {project_root}/ai-agent/skills/ai-dlc/knowledge/   ← skills in project repo (use in company)
+  3. ~/.claude/skills/ai-dlc/knowledge/                  ← user-level global fallback
 
 {skills_root}    = {project_root}/skills/
 {cwd}            = current working directory

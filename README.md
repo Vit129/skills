@@ -14,7 +14,7 @@ Personal knowledge base and skill library for AI-assisted development — works 
 │   │   ├── dev/         ← backend, frontend, devops-pipeline
 │   │   ├── po/          ← architect (DDD, logical design)
 │   │   └── ux-ui/       ← ui-designer
-│   ├── system/          ← unified-memory, ai-techniques, skill-creator, hook-creator
+│   ├── system/          ← unified-memory, ai-techniques, analysis-concept, skill-creator, hook-creator
 │   └── finance/         ← Investment portfolio: tax, dividend, rebalance, stock analysis
 │
 └── .unified-memory/     ← Session memory (auto-managed)
@@ -36,7 +36,7 @@ Personal knowledge base and skill library for AI-assisted development — works 
 
 **CLAUDE.md** is the single entry point — agents read this once and know exactly which skill to load, no extra hops needed.
 
-**Unified Memory** persists context and learning across sessions without a database — plain markdown + JSON.
+**Unified Memory** persists context and learning across sessions without a database — plain markdown + JSON. Includes user modeling, skill crystallization, periodic nudges, evolution audit trail, and session search.
 
 ## Quick start
 

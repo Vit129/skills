@@ -32,7 +32,8 @@ Knowledge persistence, data indexing, and backup management.
 
 | Priority | Path | When to use |
 |----------|------|-------------|
-| 1. Per-project | `{cwd}/.unified-memory/knowledge/` | Working within a specific project workspace — walk up from cwd until found |
-| 2. Global fallback | `{project_root}/skills/knowledge/` | No per-project knowledge found — cross-project shared patterns |
+| 1. Per-project | `{project_root}/.unified-memory/knowledge/` | Working within a specific project workspace — walk up from cwd until found |
+| 2. Project skills | `{project_root}/ai-agent/skills/ai-dlc/knowledge/` | Skills copied into project repo |
+| 3. User-level | `~/.claude/skills/ai-dlc/knowledge/` | Global fallback — shared across all projects |
 
-**Rule:** Always write to per-project first. Sync to global only when patterns have cross-project value.
+**Rule:** Always write to per-project first. Sync to global only when patterns have cross-project value (see `projects_used_in[]` in unified-memory).

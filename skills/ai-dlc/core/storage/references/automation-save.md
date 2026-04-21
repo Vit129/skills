@@ -34,15 +34,23 @@ Save technical automation knowledge (components, test data, lessons) for API/Web
 ## Lesson Schema
 ```json
 {
-  "id": "LESSON-[TYPE]-001",
-  "type": "improvement | mistake | discovery",
-  "summary": "One-line description (max 100 chars)",
-  "detail": "Full explanation with context",
-  "impact": "How this affects future development",
+  "id": "LESSON-{DOMAIN}-{TYPE}-{N}",
+  "title": "One-line description (max 100 chars)",
+  "description": "Full explanation with context",
+  "effectiveness": {
+    "applied_count": 0,
+    "prevented_failures": 0,
+    "still_relevant": true,
+    "confidence": 1.0
+  },
+  "auto_captured": false,
   "source": "Reference to Reflexion Log or code location",
-  "created_at": "YYYY-MM-DD"
+  "created": "YYYY-MM-DD",
+  "last_applied": null
 }
 ```
+
+> Schema aligned with `system/unified-memory/references/intelligence.md` Lesson Index Schema.
 
 ## Rules
 - AI-Direct Mode: write all JSON/TS files directly, no shell scripts
@@ -52,6 +60,8 @@ Save technical automation knowledge (components, test data, lessons) for API/Web
 - Verify at least one file was written before returning success
 
 ## Score Update (after saving lesson)
+
+> **Owner:** This is the authoritative score writer for per-save updates. The Stop hook (via `references/session.md` Step 4) handles per-session sync. `buffer-update.md` is READ-ONLY — it propagates scores but never originates them.
 
 After saving a lesson to a lesson file, update the score in the corresponding index file:
 

@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "Load ~/.claude/.memory/state.md silently. Skim ~/.claude/skills/SKILL.md. Inform '🏛️ Memory loaded'."
+            "prompt": "Load ~/.claude/.unified-memory/palace/state.md silently. Classify wings Hot/Warm/Cold for today's task. Load Hot wing hall.md + closets. Skim ~/.claude/skills/system/unified-memory/SKILL.md for session workflow. Inform '🏛️ Memory loaded — {N} hot wings'."
           }
         ]
       }
@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "SAVE if: file written, decision made, test passed, or open thread identified. SKIP if: Q&A only, git, read-only. If SAVE: update ~/.claude/.memory/state.md (append session, update threads, purge [x] >14 days). Check Consolidation_Stats: if sessions_since>=5 OR days_since>=7 → consolidate. Inform '✓ Session saved'. Else silent."
+            "prompt": "SAVE if: file written, decision made, test passed, open thread, or lesson learned. SKIP if: Q&A only, git, read-only. If SAVE, follow ~/.claude/skills/system/unified-memory/references/session.md Session End steps: 1) Admission control (score ≥0.6 or ask override). 2) Write wings: update/create rooms, compress >80 lines to closets, update hall.md per wing, update state.md + tunnels.md. 3) Update knowledge-evolution rooms (template-health, lesson-effectiveness, gap-tracker). 4) Sync scores to ~/.claude/.unified-memory/knowledge/index.json. 5) VERIFY before confirming: for each wing touched check hall.md updated + rooms written + closets current + state.md reflects session. If all pass → '✅ Session saved: {N} rooms, {M} wings'. If any fail → '⚠️ Incomplete save: {list missing steps}' and fix before confirming."
           }
         ]
       }

@@ -22,6 +22,7 @@
 
 | Hook | Trigger | Action |
 |------|---------|--------|
-| SessionStart | Session open | Load `.unified-memory/palace/state.md` |
-| PreToolUse | Write/Edit | Check design → decompose → implement |
-| PostToolUse | Edit test file | Run test, auto-heal on fail |
+| SessionStart | Session open | Load `.unified-memory/palace/state.md`, user-profile.md, classify wings, nudge check, skill suggestions |
+| Stop | Session end | Full save: admission → write wings/rooms → search-index → skill crystallize → user-profile → sync knowledge → verify |
+| PostToolUse | Bash test cmd | Score ±0.5/1.0 in knowledge index |
+| PostToolUse | Write/Edit file | Track dirty flag for session save reminder |

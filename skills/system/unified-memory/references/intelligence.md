@@ -255,7 +255,131 @@ NEGATIVE outcome detected
 
 ---
 
-## 7. Semantic Routing Upgrade (Optional — Scale Later)
+## 9. Periodic Nudges (Self-Improvement Reminders)
+
+Proactive reminders at session start to review skills, lessons, and knowledge health.
+
+### Nudge Rules (Checked at Session Start, After Step 5 Brief)
+```
+Check each rule. If triggered → append nudge to brief output.
+Max nudges per session: 3 (prioritize by severity).
+
+Rule 1 — Skill Review Due
+  Condition: skill.Uses ≥ 5 AND no Improvement Log entry in last 30 days
+  Nudge: "🔮 Skill '{name}' used {n}x — review for improvements?"
+  Priority: Medium
+
+Rule 2 — Low Confidence Lesson Aging
+  Condition: lesson.confidence < 0.8 AND lesson.applied_count ≥ 3 AND created > 14 days
+  Nudge: "📝 Lesson '{id}' applied {n}x but still unreviewed — verify or promote?"
+  Priority: High
+
+Rule 3 — Gap Stagnation
+  Condition: gap in gap-tracker.md open > 14 days with no template created
+  Nudge: "🔴 Gap '{domain}' open {n} days — create template or dismiss?"
+  Priority: Medium
+
+Rule 4 — Score Plateau
+  Condition: template.utility_score unchanged for 10+ sessions AND usage_count > 5
+  Nudge: "📊 Template '{id}' score stuck at {score} for {n} sessions — still accurate?"
+  Priority: Low
+
+Rule 5 — Stale Wing
+  Condition: wing.last_updated > 21 days AND wing in Active_Wings
+  Nudge: "🏛️ Wing '{name}' untouched for {n} days — archive or keep?"
+  Priority: Low
+
+Rule 6 — Consolidation Due
+  Condition: sessions_since_consolidation ≥ 5 OR days_since_consolidation ≥ 7
+  Nudge: "🧹 Consolidation due ({n} sessions since last) — run 'consolidate knowledge'?"
+  Priority: High
+```
+
+### Nudge Display Format
+```
+After standard session brief, if nudges triggered:
+
+  "💡 Nudges:
+   1. {nudge text}
+   2. {nudge text}
+   3. {nudge text}
+   
+   Act on any? [1/2/3/skip]"
+```
+
+### Nudge Fatigue Prevention
+```
+- Max 3 nudges per session (highest priority first)
+- Same nudge not repeated within 3 sessions (track in routing-log.md)
+- If user skips same nudge 3x → suppress for 30 days
+- Track: nudge_suppressions[] in knowledge-evolution/hall.md
+```
+
+---
+
+## 10. Evolution Audit Trail
+
+Track every score change with full context for debugging and accountability.
+
+### Schema (Added to Template Index in index.json)
+```json
+{
+  "templates": {
+    "{category}": [{
+      "id": "template-id",
+      "utility_score": 5.0,
+      "usage_count": 0,
+      "evolution_log": [
+        {
+          "date": "2026-04-20",
+          "action": "score_change",
+          "before": 5.0,
+          "after": 5.5,
+          "reason": "PASS: auth test suite",
+          "session": "competitive-analysis-roadmap"
+        }
+      ]
+    }]
+  }
+}
+```
+
+### Log Rules
+```
+Every score change MUST append to evolution_log[]:
+  - date: YYYY-MM-DD
+  - action: "score_change" | "recalibration" | "burst_dampen" | "manual_override" | "promote_global"
+  - before: previous score
+  - after: new score
+  - reason: one-line context (outcome signal + what was tested/used)
+  - session: room or session identifier
+
+Every lesson change MUST append:
+  - action: "applied" | "prevented_failure" | "staled" | "merged" | "confidence_change"
+  - before/after: relevant field values
+  - reason: context
+```
+
+### Audit Trail Queries
+```
+User: "why did template X score change?"
+  → Read evolution_log[] for template X
+  → Show chronological history
+
+User: "show score history for {domain}"
+  → Read all templates in domain
+  → Aggregate evolution_log entries by date
+  → Show trend: "auth domain: 5.0 → 6.5 → 7.0 over 3 sessions"
+```
+
+### Maintenance
+```
+evolution_log[] max entries: 50 per template
+When exceeded:
+  1. Archive oldest 25 entries to rooms/template-health.md (append summary)
+  2. Keep newest 25 in index.json
+  3. Log: "📜 Archived {n} evolution entries for {template_id}"
+```
 
 Current routing (Level 0) uses manual intent_patterns. Upgrade when knowledge base grows.
 

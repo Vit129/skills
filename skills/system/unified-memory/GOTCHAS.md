@@ -89,6 +89,89 @@ All known failure modes with root causes and solutions.
 **Root cause:** Threshold too high, or content type prior penalizes valid content  
 **Fix:** If score fails, explain why: "Score: 0.45 (low future utility: this was Q&A only). Save anyway? [y/n]". Let user override.
 
+### 16. Dirty flag not triggered (session content lost silently)
+**Symptom:** Session had decisions/code changes but no save reminder appeared  
+**Root cause:** Dirty flag conditions too narrow, or trivial-looking work had hidden value  
+**Fix:** Err on the side of marking dirty. If in doubt → dirty = true. Better to remind unnecessarily than lose data. Review dirty conditions quarterly.
+
+### 17. Reminder fatigue (user ignores all reminders)
+**Symptom:** User always says "skip save" → system stops being useful  
+**Root cause:** Too many false-positive reminders, or user doesn't see value  
+**Fix:** Max 2 reminders per session. If user skips 3 sessions in a row → reduce sensitivity (only remind for decisions + architecture, not code changes). Track skip_count in session metadata.
+
+---
+
+### 18. Wing Split creates orphan tunnels
+**Symptom:** After splitting wing, tunnels.md still points to old parent wing rooms  
+**Root cause:** Split moves rooms to child wings but tunnels not remapped  
+**Fix:** During split, remap ALL tunnel references from `{parent}/rooms/{room}` → `{child}/rooms/{room}`. Verify tunnels.md has zero references to parent rooms after split.
+
+### 19. Burst Mode not deactivated after sprint ends
+**Symptom:** Scores still dampened (factor 0.90) weeks after sprint ended  
+**Root cause:** Rolling 7-day count dropped but sprint mode flag not cleared  
+**Fix:** Check rolling count at EVERY session start. If ≤10 → deactivate immediately. Log: "⚡ Sprint mode OFF: {domain}". Never persist sprint mode across sessions without re-checking.
+
+### 20. Cross-project promote duplicates in global
+**Symptom:** Same template/lesson appears multiple times in global knowledge  
+**Root cause:** Promoted from different projects without dedup check  
+**Fix:** Before promoting, search global by `id` AND semantic similarity. If match exists → merge `projects_used_in[]` into existing entry, don't create new. Log: "🌐 Merged into existing: {id}".
+
+### 21. Domain-aware settling misclassifies wing domain
+**Symptom:** Architecture wing uses ui threshold (2 sessions) → distilled too early  
+**Root cause:** Wing domain not explicitly tagged, auto-detection guessed wrong  
+**Fix:** Add `domain_type: arch|api|ui|default` field to hall.md metadata. If missing → use `default` (3). Never auto-assign `ui` or `arch` without explicit tag.
+
+### 22. Hook prompt drift from skill spec (partial save)
+**Symptom:** state.md updated at session end but wings/rooms/halls/closets/knowledge all stale — data drift accumulates across sessions  
+**Root cause:** Hook prompt (settings.json) references old paths (`.memory/`) or partial workflow (only state.md) after a restructure — doesn't match SKILL.md architecture or session.md save workflow  
+**Fix:** After ANY restructure that changes paths or workflow: 1) Cross-check settings.json hook prompts against SKILL.md Storage Architecture paths. 2) Verify Stop hook covers ALL session.md Session End steps (not just state.md). 3) Verify SessionStart hook loads from correct path. Checklist: `grep -n '.memory/' settings.json` should return 0 hits after migration to `.unified-memory/`.
+
+---
+
+### 23. Skill crystallization from false pattern (noise skill)
+**Symptom:** Skill created from 2 similar-looking tasks that were actually different contexts  
+**Root cause:** Pattern matching in routing-log too loose — matched on domain + keywords without checking actual intent  
+**Fix:** Before crystallizing: verify both source sessions had same intent (Input → Process → Output pattern match). If intent differs → don't crystallize. Always ask user confirmation before writing skill file.
+
+### 24. Search index grows unbounded
+**Symptom:** search-index.md exceeds 500 rows, grep becomes slow  
+**Root cause:** No archival triggered, or consolidation skipped  
+**Fix:** At consolidation: archive rows >180 days old to search-index-archive.md. Remove rows pointing to archived rooms. Hard cap: 500 rows in active index.
+
+### 25. Nudge fatigue — user ignores all nudges
+**Symptom:** User always says "skip" → nudges become noise  
+**Root cause:** Too many low-priority nudges, or nudges not actionable  
+**Fix:** Track skip count per nudge type. If same nudge skipped 3x → suppress for 30 days. Reduce to max 2 nudges if user skip rate >80%. Only show High priority after 3 consecutive skips.
+
+### 26. Evolution audit trail bloats index.json
+**Symptom:** index.json grows large, slow to parse  
+**Root cause:** evolution_log[] never archived  
+**Fix:** Cap at 50 entries per template. When exceeded: archive oldest 25 to template-health.md room, keep newest 25 in index.json. Run check during consolidation.
+
+### 27. Skill version regression not caught
+**Symptom:** Skill updated to v3 but v3 performs worse than v2, no rollback  
+**Root cause:** Self-improvement overwrites Steps without preserving previous version  
+**Fix:** On regression (outcome worse than previous version): keep previous Steps, log regression in Improvement Log, flag "⚠️ Regression in v{n}". Never auto-overwrite Steps on negative outcome.
+
+### 28. First session crashes — no .unified-memory/ exists
+**Symptom:** Session start fails reading state.md or hall.md — files don't exist  
+**Root cause:** No bootstrap/init flow, system assumes data already exists  
+**Fix:** Step 0 Bootstrap in session.md: check if `.unified-memory/` exists. If not → auto-create full directory tree with empty templates. Log "🏛️ Memory Palace initialized". Skip to Execute.
+
+### 29. AAAK closet loses critical information (over-compression)
+**Symptom:** Closet exists but next session can't reconstruct decisions from it — key reasoning missing  
+**Root cause:** Compressed too aggressively, dropped Decision+Reason or Core Business Logic  
+**Fix:** Follow AAAK Priority Order (in storage.md): NEVER drop Decision+Reason, Core Business Logic, Current State, Open Questions. When in doubt → keep it. A slightly verbose closet beats a lossy one. If closet feels wrong → user says "recompress {room}" to redo.
+
+### 30. Dirty flag missed in long sessions
+**Symptom:** Session had meaningful work but save reminder never triggered — data lost  
+**Root cause:** Session >50 messages → early dirty items fall out of active context window  
+**Fix:** 
+- PostToolUse write hook catches most cases automatically
+- For long sessions: save incrementally ("save session + learn" mid-session), don't wait for end
+- Rule: if session >50 messages → treat as dirty=true regardless of content
+- Max 2 save reminders per session to avoid fatigue (Gotcha #17)
+
 ---
 
 ## Quick Reference: Fix Matrix
@@ -107,3 +190,18 @@ All known failure modes with root causes and solutions.
 | KE wing missing (#13) | First session | Auto-create empty template |
 | Sync fails (#14) | Session end | Compare + re-sync + log |
 | Admission too strict (#15) | Score <0.6 | Explain + let user override |
+| Dirty flag missed (#16) | Session with hidden value | Err on side of dirty=true |
+| Reminder fatigue (#17) | User skips 3x in a row | Reduce sensitivity, max 2/session |
+| Wing split orphan tunnels (#18) | After wing split | Remap all tunnel refs to child wings |
+| Burst mode stuck (#19) | Session start | Re-check 7-day count, deactivate if ≤10 |
+| Cross-project dupe (#20) | Before promote | Search global by id + semantic before writing |
+| Domain settling misclass (#21) | Auto-dream | Require explicit domain_type in hall.md |
+| Hook prompt drift (#22) | After restructure | Cross-check settings.json paths + workflow against SKILL.md |
+| Noise skill (#23) | Before crystallizing | Verify intent match, always ask user confirmation |
+| Search index unbounded (#24) | Consolidation | Archive >180 days, remove archived room refs, cap 500 |
+| Nudge fatigue (#25) | Session start | Track skips, suppress after 3x, reduce to High-only |
+| Audit trail bloat (#26) | Consolidation | Cap 50/template, archive oldest 25 to template-health.md |
+| Skill regression (#27) | After skill use | Keep prev Steps on negative outcome, flag regression |
+| Bootstrap missing (#28) | First session | Auto-create full tree with empty templates |
+| AAAK over-compression (#29) | Creating closet | Never drop Decision+Reason/Core Logic; when in doubt keep it |
+| Dirty missed in long session (#30) | Session >50 msgs | Save incrementally; treat >50 msgs as dirty=true |

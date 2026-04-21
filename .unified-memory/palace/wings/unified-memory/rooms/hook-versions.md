@@ -1,20 +1,27 @@
-# Hook Versions — memory-palace-save
+# Hook Versions — unified-memory-save
 
-Tags: #hook #memory-palace #versioning
-Last_Updated: 2026-04-13
+Tags: #hook #unified-memory #versioning
+Last_Updated: 2026-04-20
 
 ## Decision
-Updated `memory-palace-save.kiro.hook` from v2 → v3.5 (from template).
+Rewrote all hooks in `settings.json` to align with unified-memory spec after restructure.
 
 ## Version Comparison
-| Version | Path | SKIP logic | Thread cleanup | Prompt size |
-|---------|------|-----------|----------------|-------------|
-| v1 | .claude/memory/ | ❌ | ❌ | verbose ~10 lines |
-| v2 | .memory/ | ✅ | mark [x] + purge >2 sprints | verbose ~15 lines |
-| v3.5 | .memory/ | ✅ | 14-day grace period | compressed 3 lines |
+| Version | Path | Save scope | Verification | Prompt size |
+|---------|------|-----------|--------------|-------------|
+| v1 | .claude/memory/ | state.md only | ❌ | verbose ~10 lines |
+| v2 | .memory/ | state.md only | ❌ | verbose ~15 lines |
+| v3.5 | .memory/ | state.md only | ❌ | compressed 3 lines |
+| v4.0 | .unified-memory/palace/ | full 5-step workflow | ✅ verify before confirm | references session.md |
 
-## Why v3.5
-- Shorter prompt = less token per session
-- 14-day grace period clearer than "2 sprints"
-- `✓ Memory Palace updated` feedback to user
-- C1/C2 labels help AI decide SKIP/SAVE faster
+## Why v4.0
+- v3.5 root cause of data drift: only updated state.md, wings/rooms/knowledge never touched
+- v4.0 references session.md for full workflow (admission → wings → learning → sync → verify)
+- Verification step: checks all touched wings updated before confirming ✅
+- If verify fails → ⚠️ Incomplete instead of false ✅
+- SessionStart also fixed: loads from correct `.unified-memory/palace/` path
+
+## Gap Found (2026-04-20)
+- state.md was updated Apr 20 but all wings stuck at Apr 19
+- Root cause: Stop hook only wrote state.md with old `.memory/` path
+- Fix: GOTCHA #22 added, hooks rewritten to v4.0

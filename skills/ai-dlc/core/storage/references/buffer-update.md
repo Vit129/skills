@@ -32,10 +32,12 @@ Aggregate findings and update the Knowledge Buffer section in the Implementation
 
 After updating the Knowledge Buffer, sync scores back to index files:
 
-1. Check if `.memory/wings/knowledge-evolution/` exists
+1. Check if `.unified-memory/palace/wings/unified-memory/rooms/template-health.md` exists
 2. If exists → read `template-health.md` and `lesson-effectiveness.md`
 3. Apply any pending score changes to index files:
    - `{knowledge_root}/automation/{platform}/{platform}Index.json`
    - `{knowledge_root}/lessons/{platform}/{platform}LessonsIndex.json`
 4. Log: "✅ Score sync complete — {n} index files updated"
-5. If wing does not exist → skip sync, scores already updated inline
+5. If rooms do not exist → skip sync, scores already updated inline
+
+> **Owner:** This is a READ-ONLY consumer of scores. The authoritative score writer is `automation-save.md` (per-save) and the Stop hook (per-session via `references/session.md`). Buffer-update only reads scores to propagate to index files.

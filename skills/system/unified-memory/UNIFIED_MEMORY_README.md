@@ -1,5 +1,7 @@
 # Unified Memory System — System Architecture
 
+> **Quick alias:** Wing = domain folder | Hall = index | Room = detail | Closet = summary | Tunnel = cross-link
+
 ระบบความจำ + การเรียนรู้ สำหรับ AI ใน Session ข้ามกัน  
 Memory (จำ) + Knowledge (เรียนรู้) = ทำงานเป็น "สมอง" เดียวกัน
 
@@ -67,11 +69,14 @@ Together = Compound Growth:
 │   ├── palace/                          ← Memory Palace
 │   │   ├── state.md                     (palace map ≤100 lines)
 │   │   ├── tunnels.md                   (cross-wing links)
+│   │   ├── search-index.md              (grep-searchable session index)
+│   │   ├── user-profile.md              (persistent user model ≤80 lines)
 │   │   ├── wings/
 │   │   │   ├── {topic}/
 │   │   │   │   ├── hall.md
 │   │   │   │   ├── rooms/{room}.md
 │   │   │   │   ├── closets/{room}.md
+│   │   │   │   ├── skills/{name}.md     (crystallized execution paths)
 │   │   │   │   └── raw/YYYY-MM-DD-*.md
 │   │   │   └── knowledge-evolution/
 │   │   │       ├── hall.md
@@ -79,7 +84,7 @@ Together = Compound Growth:
 │   │   │       └── closets/
 │   │
 │   └── knowledge/                       ← Knowledge Evolution
-│       ├── index.json                   (source of truth: scores)
+│       ├── index.json                   (source of truth: scores + evolution_log[])
 │       └── lessons/{domain}/
 │           ├── *LessonsIndex.json
 │           └── *.md
@@ -94,16 +99,21 @@ Together = Compound Growth:
 ```
 ┌─── START ──────────────────────────────────┐
 │  1. Read palace/state.md                   │
-│  2. Read knowledge-evolution/hall.md        │
-│  3. Classify wings Hot/Cold                │
-│  4. Load Hot wings + top lessons           │
-│  5. Brief: context + learning state        │
+│  2. Read palace/user-profile.md            │
+│  3. Read knowledge-evolution/hall.md        │
+│  4. Classify wings Hot/Cold                │
+│  5. Load Hot wings + top lessons           │
+│  6. Brief: context + learning state        │
+│  7. Nudge check: 6 rules, max 3 shown     │
+│  8. Skill suggestions: ACTIVE skills only  │
 └────────────────────────────────────────────┘
            │
            ▼
 ┌─── EXECUTE ────────────────────────────────┐
 │  - Use templates from knowledge/index.json │
+│  - Use skills from wings/{topic}/skills/   │
 │  - Track outcome: SUCCESS or FAILURE       │
+│  - Record actual execution steps per skill │
 │  - Note reasoning in-session               │
 └────────────────────────────────────────────┘
            │
@@ -111,10 +121,14 @@ Together = Compound Growth:
 ┌─── END ────────────────────────────────────┐
 │  1. Admission Control (score ≥0.6?)        │
 │  2. Write to palace/wings/{topic}/         │
-│  3. Update knowledge-evolution wing        │
-│  4. Sync to knowledge/index.json           │
-│  5. Update state.md + tunnels.md           │
-│  6. Confirm: "✅ X rooms, Y scores synced" │
+│  3. Update search-index.md (keywords)      │
+│  4. Skill auto-crystallize (≥2x → DRAFT)  │
+│  5. Skill self-improve (refine on +outcome)│
+│  6. Update user-profile.md                 │
+│  7. Update knowledge-evolution wing        │
+│  8. Sync to knowledge/index.json + evo_log │
+│  9. Update state.md + tunnels.md           │
+│ 10. Confirm: "✅ X rooms, Y scores synced" │
 └────────────────────────────────────────────┘
 ```
 
@@ -138,11 +152,11 @@ Compound growth   = each session makes templates + lessons more reliable
 ~/.claude/skills/system/unified-memory/
 ├── SKILL.md                     ← Entry point (triggers + commands)
 ├── SYSTEM_README.md             ← Architecture (you are here)
-├── GOTCHAS.md                   ← 15 edge cases + fixes
+├── GOTCHAS.md                   ← 30 edge cases + fixes
 └── references/
-    ├── session.md               ← Session start/end, admission
-    ├── storage.md               ← Wings, rooms, closets, archive
-    ├── intelligence.md          ← Scoring, routing, consolidation
+    ├── session.md               ← Session start/end, admission, nudges, skill suggestions
+    ├── storage.md               ← Wings, rooms, closets, archive, skills, search index
+    ├── intelligence.md          ← Scoring, routing, nudge rules, audit trail, consolidation
     ├── maintenance.md           ← Write-back, sync, conflict handling
     └── adaptation.md            ← Domain examples + custom routing
 ```
@@ -153,9 +167,9 @@ Compound growth   = each session makes templates + lessons more reliable
 
 | เมื่อต้องการ | Load |
 |-----------|------|
-| เริ่ม session หรือ จบ session | `references/session.md` |
-| สร้าง wing, room, closet, archive | `references/storage.md` |
-| ดู scores, routing, consolidation | `references/intelligence.md` |
+| เริ่ม session, จบ session, nudges, skill suggestions | `references/session.md` |
+| สร้าง wing, room, closet, archive, skill, search index | `references/storage.md` |
+| ดู scores, routing, nudge rules, audit trail | `references/intelligence.md` |
 | Sync ระหว่าง memory ↔ knowledge | `references/maintenance.md` |
 | ตัวอย่างสำหรับ domain คุณ | `references/adaptation.md` |
-| Edge cases | `GOTCHAS.md` |
+| Edge cases (28 items) | `GOTCHAS.md` |

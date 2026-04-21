@@ -1,0 +1,13 @@
+{
+  "name": "Unified Memory — Dirty Flag",
+  "version": "1.0.0",
+  "description": "After write operations, track that session has saveable content. Lightweight — just notes the dirty state internally.",
+  "when": {
+    "type": "postToolUse",
+    "toolTypes": ["write"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A write operation just completed. Note internally that this session has unsaved content (dirty=true). Do NOT write any files or produce any output. Silent always. Complete within 5 seconds."
+  }
+}

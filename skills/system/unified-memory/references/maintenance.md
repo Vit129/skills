@@ -152,6 +152,28 @@ Recalibration formula:
 
 Rule: Run recalibration max once per quarter
 Log: "Recalibrated {N} templates on {date}. Factor: 0.85"
+
+### Burst Activity Recalibration (Sprint Mode)
+```
+Trigger: >10 score changes within 7 days for same domain
+
+Problem: Rapid iteration inflates scores faster than normal cadence
+         → templates reach "Proven" before truly validated
+
+Sprint mode factor: 0.90
+  Apply to ALL score changes in that domain during burst window:
+    effective_boost = 0.5 × 0.90 = 0.45 (instead of 0.5)
+    effective_penalty = 1.0 × 0.90 = 0.90 (instead of 1.0)
+
+Detection:
+  Count score_changes in last 7 days per domain (from routing-log.md)
+  If count > 10 → activate sprint mode for that domain
+
+Deactivation:
+  When 7-day rolling count drops to ≤10 → resume normal scoring
+
+Log: "⚡ Sprint mode: {domain} ({n} changes/7d) — factor 0.90 applied"
+```
 ```
 
 ---
@@ -165,7 +187,12 @@ When to run: After consolidation steps 1–5
 What it does:
   For each wing in .unified-memory/palace/wings/:
     1. Read all closets for this wing
-    2. Identify: what information has "settled" (unchanged for 3+ sessions)
+    2. Identify: what information has "settled" (unchanged for N sessions, domain-aware)
+    3. Domain-aware settling threshold:
+         arch (architecture/decisions): 5 sessions unchanged → settled
+         api (API patterns/endpoints):  4 sessions unchanged → settled
+         ui (UI components/locators):   2 sessions unchanged → settled
+         default:                       3 sessions unchanged → settled
     3. Distill settled facts → single compact statement per topic
     4. Archive the source rooms that fed into distilled statements
     5. Keep distilled version as new "ground truth" closet
