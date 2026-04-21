@@ -292,7 +292,7 @@ flowchart TD
     ScoreDown --> Heal[Self-Healing] --> Phase32
 
     SessionEnd([Session End]) --> MemSave[Save to palace]
-    MemSave --> SearchIdx[Update search-index.md]
+    MemSave --> SearchIdx[Update search indexes: keyword-index + date-index + search-index.md]
     SearchIdx --> SkillCrystal{Pattern repeated?}
     SkillCrystal -->|Yes| AutoDraft[Auto-crystallize DRAFT]
     SkillCrystal -->|No| ProfileUpdate[Update user-profile.md]

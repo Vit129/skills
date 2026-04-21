@@ -1,0 +1,11 @@
+{
+  "_meta": {
+    "version": "2.0",
+    "description": "Sorted date array for date-range queries. Entries sorted DESC by date.",
+    "total_docs": 0,
+    "last_updated": null,
+    "oldest_entry": null,
+    "newest_entry": null
+  },
+  "by_date": []
+}

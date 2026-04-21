@@ -33,7 +33,9 @@ Together       = compound growth: remembers past + gets smarter each session
     ├── palace/                           ← Memory Palace (narrative + decisions)
     │   ├── state.md                      ← palace map (≤100 lines)
     │   ├── tunnels.md                    ← cross-wing links
-    │   ├── search-index.md              ← grep-searchable session index
+    │   ├── search-index.md              ← grep-searchable session index (legacy fallback)
+    │   ├── keyword-index.json           ← inverted index: keyword→postings O(1) search
+    │   ├── date-index.json              ← sorted date array: O(log n) date-range search
     │   ├── user-profile.md              ← persistent user model (≤80 lines)
     │   ├── wings/
     │   │   ├── {topic}/
@@ -100,7 +102,7 @@ User: "save session + learn"
 
 1. Admission Control: score ≥0.6? → proceed | skip
 2. Write to .memory/wings/{topic}/ (rooms, closets, hall)
-3. Update search-index.md (keywords + room paths for this session)
+3. Update search indexes: keyword-index.json (inverted index) + date-index.json (sorted array) + search-index.md (legacy fallback)
 4. Skill auto-crystallize: pattern ≥2x in routing-log → auto-write DRAFT
 5. Skill self-improve: if skill used → compare execution vs Steps → auto-refine on positive
 6. Update user-profile.md (new preferences/patterns observed)
@@ -150,7 +152,7 @@ See `GOTCHAS.md` for full list (30 items). Top 7:
 - **Skill Crystallization** — repeated patterns (≥2x) → auto-write as DRAFT, promote to ACTIVE after 1 success (see `references/storage.md`)
 - **Skill Self-improvement** — auto-refine Steps on positive outcome with deviation, rollback on regression (see `references/storage.md`)
 - **User Modeling** — persistent user-profile.md captures preferences, patterns, expertise across sessions (see `references/storage.md`)
-- **Session Search** — grep-based flat-file index for cross-session lookup (see `references/storage.md`)
+- **Session Search** — Hybrid Inverted Index (keyword-index.json) + Sorted Date Array (date-index.json): O(1) keyword, O(log n) date range, scales to 10K+ sessions (see `references/storage.md`)
 - **Periodic Nudges** — 6 rules checked at session start, max 3 shown, fatigue-protected (see `references/intelligence.md`)
 - **Evolution Audit Trail** — every score change logged with before/after/reason in index.json (see `references/intelligence.md`)
 - **Wing Split** — >15 rooms → auto-split to child wings (see `references/storage.md`)

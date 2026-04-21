@@ -123,7 +123,7 @@ sequenceDiagram
 
     rect rgb(21, 128, 61)
     Note over User,ADO: SESSION END
-    AI->>Mem: Save state (.unified-memory/palace/ — wings, rooms, search-index, user-profile)
+    AI->>Mem: Save state (.unified-memory/palace/ — wings, rooms, keyword-index, date-index, search-index, user-profile)
     AI->>AI: Skill crystallization check (pattern ≥2x → auto-write DRAFT)
     AI->>Know: Sync scores + evolution_log[] to index.json
     end

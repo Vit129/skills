@@ -289,11 +289,27 @@ For each topic worked on:
   2f. Update tunnels.md:
       Add cross-wing references created this session
 
-  2g. Update search-index.md:
+  2g. Update search indexes (3 files):
       For each room written/updated this session:
-        Extract 3-5 keywords (nouns + decisions)
-        Append row: date | wing | keywords | room_path | summary
-        Dedup: same room_path + same date → overwrite
+
+      A. keyword-index.json (Inverted Index):
+        1. Extract keywords: tokenize → lowercase → remove stopwords → remove <3 chars → top 10 by tf
+        2. For each keyword:
+           - If term missing → create {"df": 0, "postings": []}
+           - Check duplicate (same path + date) → skip if exists
+           - Append posting: {path, date, wing, tf, summary}
+           - Sort postings DESC by date, increment df
+        3. Update _meta: total_docs++, total_terms, last_updated
+
+      B. date-index.json (Sorted Date Array):
+        1. Build entry: {date, wing, path, keywords: top-5, summary}
+        2. Check duplicate (same path + date) → overwrite if exists
+        3. Prepend entry (newest first), update _meta
+
+      C. search-index.md (Legacy flat-file — keep for human readability):
+        Extract 3-5 keywords, append row: date | wing | keywords | room_path | summary
+        Dedup: same room_path + same date → overwrite row
+        Max rows: 500 → archive older to search-index-archive.md
 
   2h. Skill crystallization check:
       Check routing-log.md for repeated patterns (same domain + similar intent ≥2x)

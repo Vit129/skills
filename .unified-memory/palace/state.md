@@ -12,8 +12,10 @@
 
 | Date | Wing | Summary |
 |------|------|---------|
+| 2026-04-21 | unified-memory, ai-dlc-skills | Synced search index refs across all skills: UNIFIED_MEMORY_README.md, aidlc-flowchart.md, aidlc-swimlane.md updated to hybrid search ✅ |
+| 2026-04-21 | unified-memory | Implemented Hybrid Search: keyword-index.json + date-index.json created; storage.md, session.md, SKILL.md updated with full algorithm ✅ |
 | 2026-04-21 | unified-memory | Architecture decision: Hybrid Inverted Index + Sorted Date Array (no SQLite) → keyword-index.json + date-index.json, search-scaling-research.md updated ✅ |
-| 2026-04-21 | unified-memory | AGENTS.md: merged 5 AIDLC rules from KIRO_STEERING.md (AIDLC first, phase gates, no shortcuts, knowledge check, language) — KIRO_STEERING.md now redundant ✅ |
+| 2026-04-21 | unified-memory | README.md: replaced ~/.claude/ with {skills_root}/ placeholder, added scripts/setup/ and doc/ to structure ✅ |
 | 2026-04-20 | unified-memory | GOTCHAS #29-30 added: AAAK over-compression + dirty missed in long sessions, count→30 ✅ |
 | 2026-04-20 | unified-memory | AAAK taxonomy added: Keep/Compress/Drop priority order for compression decisions ✅ |
 | 2026-04-20 | unified-memory | Search scaling research: DS&A analysis, inverted index JSON design, tiered strategy confirmed, Big O compared ✅ |
@@ -35,7 +37,7 @@ _Older sessions archived_
 
 ## Open Threads
 
-- [ ] Search scaling implementation: Hybrid Inverted Index + Sorted Date Array decided → implement keyword-index.json + date-index.json (see wings/unified-memory/rooms/search-scaling-research.md)
+- [x] Search scaling implementation: Hybrid Inverted Index + Sorted Date Array implemented → keyword-index.json + date-index.json created, storage.md + session.md + SKILL.md updated @2026-04-21
 - [x] AGENTS.md: adopted Trust Priority, Do-not-store, Minimum Update Contract from agent-context-kit @2026-04-21
 
 ## Placeholder Convention

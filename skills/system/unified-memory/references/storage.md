@@ -41,7 +41,7 @@ L4: Hall    — index of rooms within a wing (≤50 lines)
 ```
 
 **Rules:**
-- Top-level .unified-memory/palace/ contains ONLY: state.md, tunnels.md, user-profile.md, search-index.md, wings/, archive/
+- Top-level .unified-memory/palace/ contains ONLY: state.md, tunnels.md, user-profile.md, search-index.md, keyword-index.json, date-index.json, wings/, archive/
 
 - Max folder depth = 4 levels
 - hall.md ≤ 50 lines. Overflow → hall-detail.md
@@ -633,55 +633,225 @@ When loading Hot wing:
 
 ---
 
-## Session Search Index
+## Session Search Index (Hybrid: Inverted Index + Sorted Date Array)
 
 ### Concept
-Flat-file search index enabling grep-based lookup across all sessions. No SQLite, no dependencies.
+Production-ready search using two complementary data structures. No SQLite, no dependencies.
+Decision: 2026-04-21 — skip tiered approach, build full hybrid from day 1.
 
 ### Storage
 ```
-.unified-memory/palace/search-index.md
+.unified-memory/palace/
+├── keyword-index.json   ← Inverted Index: keyword → postings list  (O(1) keyword search)
+├── date-index.json      ← Sorted Date Array: date DESC             (O(log n) date range)
+└── search-index.md      ← Legacy flat-file (keep for human readability + grep fallback)
 ```
 
-### Schema
-```markdown
-# Session Search Index
+---
 
-| Date | Wing | Keywords | Room Path | Summary |
-|------|------|----------|-----------|---------|
-| 2026-04-20 | unified-memory | competitive,hermes,evolver,roadmap | wings/unified-memory/rooms/competitive-analysis-roadmap.md | Compared 4 GitHub agents, P1/P2 roadmap |
-| 2026-04-18 | ai-dlc-skills | placeholder,path,convention | wings/ai-dlc-skills/rooms/standards-update.md | Standardized {project_root} across skills |
+### Structure 1: Inverted Index (`keyword-index.json`)
+
+#### Schema
+```json
+{
+  "_meta": {
+    "version": "2.0",
+    "total_docs": 0,
+    "total_terms": 0,
+    "last_rebuilt": "YYYY-MM-DD",
+    "last_updated": "YYYY-MM-DD",
+    "stopwords": ["the","a","an","is","was","and","or","but","in","on","at","to","of","ที่","ของ","และ","หรือ","แต่","ใน","บน","ที่","จาก"]
+  },
+  "terms": {
+    "{keyword}": {
+      "df": 3,
+      "postings": [
+        {
+          "path": "wings/unified-memory/rooms/auth.md",
+          "date": "2026-04-20",
+          "wing": "unified-memory",
+          "tf": 5,
+          "summary": "JWT auth decisions"
+        }
+      ]
+    }
+  }
+}
 ```
 
-### Write Rules
-```
-At session end (Step 2f, after updating state.md):
-  For each room written/updated this session:
-    1. Extract 3-5 keywords from room content (nouns + decisions)
-    2. Append row to search-index.md
-    3. Dedup: if same room_path already has entry for same date → overwrite row
+Fields:
+- `df` = document frequency (how many docs contain this term)
+- `tf` = term frequency (how many times term appears in this doc)
+- `postings` = sorted DESC by date
 
-Max rows: 500 (oldest rows archived to search-index-archive.md when exceeded)
+#### Insert Algorithm (Session End)
+```
+For each room written/updated this session:
+  1. Extract keywords from room content:
+     a. Tokenize: split on spaces, punctuation, newlines
+     b. Lowercase all tokens
+     c. Remove stopwords (check _meta.stopwords)
+     d. Remove tokens < 3 chars
+     e. Keep top 10 by frequency (tf)
+  2. For each keyword:
+     a. If term not in index → create: {"df": 0, "postings": []}
+     b. Check postings for duplicate (same path + same date) → skip if exists
+     c. Append posting: {path, date, wing, tf, summary}
+     d. Sort postings DESC by date
+     e. Increment df
+  3. Update _meta: total_docs++, total_terms (count unique keys), last_updated
 ```
 
-### Search Usage
+#### Search Algorithm
+```
+Single keyword search:
+  1. Lookup terms[keyword] → O(1)
+  2. Return postings sorted by date DESC
+  3. Display: date | wing | summary | path
+
+AND query ("auth jwt"):
+  1. Lookup terms["auth"] → list_A
+  2. Lookup terms["jwt"]  → list_B
+  3. Intersect by path: result = paths in BOTH lists → O(min(|A|, |B|))
+  4. Sort result by date DESC
+
+OR query ("auth OR api"):
+  1. Lookup terms["auth"] → list_A
+  2. Lookup terms["api"]  → list_B
+  3. Union by path: result = paths in EITHER list → O(|A| + |B|)
+  4. Dedup by path, sort by date DESC
+
+Wing filter ("auth in unified-memory"):
+  1. Lookup terms["auth"] → postings
+  2. Filter: posting.wing == "unified-memory"
+  3. Return filtered list
+```
+
+#### Maintenance
+```
+During consolidation:
+  1. Remove postings where path points to archived/deleted room
+  2. Cap: if total_terms > 5000 → remove terms where df=1 AND oldest posting > 90 days
+  3. Full rebuild (if index corrupted):
+     - Scan all rooms/ in all wings
+     - Re-extract keywords for each room
+     - Write fresh keyword-index.json
+  4. Update _meta.last_rebuilt
+```
+
+---
+
+### Structure 2: Sorted Date Array (`date-index.json`)
+
+#### Schema
+```json
+{
+  "_meta": {
+    "version": "2.0",
+    "total_docs": 0,
+    "last_updated": "YYYY-MM-DD",
+    "oldest_entry": "YYYY-MM-DD",
+    "newest_entry": "YYYY-MM-DD"
+  },
+  "by_date": [
+    {
+      "date": "2026-04-21",
+      "wing": "unified-memory",
+      "path": "wings/unified-memory/rooms/search-scaling-research.md",
+      "keywords": ["search","inverted","index","hybrid","json"],
+      "summary": "Architecture decision: Hybrid Inverted Index + Sorted Date Array"
+    }
+  ]
+}
+```
+
+Array is always sorted DESC by date (newest first).
+
+#### Insert Algorithm (Session End)
+```
+For each room written/updated this session:
+  1. Build entry: {date: today, wing, path, keywords: top-5, summary: one-line}
+  2. Check duplicate: same path + same date → overwrite existing entry
+  3. Prepend to by_date[] (newest first = prepend is O(1) conceptually)
+     In practice: append then sort, or insert at correct position
+  4. Update _meta: total_docs++, newest_entry, oldest_entry, last_updated
+```
+
+#### Search Algorithm (Date Range)
+```
+"Last 7 days" query:
+  1. cutoff = today - 7 days
+  2. Binary search by_date[] for cutoff position → O(log n)
+     (array sorted DESC → search from start until date < cutoff)
+  3. Return entries from index 0 to cutoff position → O(log n + k)
+
+"Between date A and date B":
+  1. Binary search for position of date B (start) → O(log n)
+  2. Binary search for position of date A (end) → O(log n)
+  3. Return slice between positions → O(log n + k)
+
+"Wing filter + date range":
+  1. Get date range slice (above)
+  2. Filter by wing field → O(k)
+```
+
+#### Maintenance
+```
+During consolidation:
+  1. Remove entries where path points to archived/deleted room
+  2. Verify sort order (should always be DESC) — resort if corrupted
+  3. Update _meta.oldest_entry and newest_entry
+  4. Cap: entries older than 365 days → move to date-index-archive.json
+```
+
+---
+
+### Legacy: search-index.md (Keep as Fallback)
+```
+Keep search-index.md for:
+  - Human readability (can open in editor)
+  - grep fallback if JSON index corrupted
+  - Audit trail
+
+Write Rules (unchanged):
+  At session end: append row per room updated
+  Format: | Date | Wing | Keywords | Room Path | Summary |
+  Max rows: 500 → archive older to search-index-archive.md
+```
+
+---
+
+### Complexity Summary
+
+| Operation | Data Structure | Complexity |
+|-----------|---------------|-----------|
+| Single keyword search | Inverted Index | O(1) |
+| AND multi-keyword | Inverted Index | O(min posting lists) |
+| OR multi-keyword | Inverted Index | O(sum posting lists) |
+| Wing filter | Inverted Index | O(k results) |
+| Date range query | Sorted Array + Binary Search | O(log n + k) |
+| Recent N sessions | Sorted Array | O(N) |
+| Insert (session end) | Both | O(k keywords) |
+| Full rebuild | Inverted Index | O(n × avg_keywords) |
+| Scales to | Both | 10,000+ sessions |
+
+---
+
+### Search Usage (User-Facing)
+
 ```
 User: "search memory for {query}"
 
-1. grep search-index.md for query terms (case-insensitive)
-2. Return matching rows sorted by date DESC
-3. For each match: show Date, Wing, Summary
-4. User picks → load the Room Path for full detail
+Router:
+  Has date qualifier ("last week", "in April") → use date-index.json
+  Has keyword only → use keyword-index.json
+  Has both → keyword-index first, then filter by date
 
-Fuzzy: if exact match fails → split query into words, match any word
-```
+Display format:
+  [{date}] {wing} — {summary}
+  Path: {path}
 
-### Maintenance
-```
-During consolidation:
-  - Remove rows pointing to archived rooms
-  - Remove rows older than 180 days (they're in archive anyway)
-  - Rebuild index if room paths changed (wing split, rename)
+User picks → load Room Path for full detail
 ```
 
 ---

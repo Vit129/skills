@@ -1,0 +1,12 @@
+{
+  "_meta": {
+    "version": "2.0",
+    "description": "Inverted index for keyword search. keyword → postings list.",
+    "total_docs": 0,
+    "total_terms": 0,
+    "last_rebuilt": null,
+    "last_updated": null,
+    "stopwords": ["the","a","an","is","was","are","were","be","been","being","have","has","had","do","does","did","will","would","could","should","may","might","shall","can","need","dare","ought","used","to","of","in","on","at","by","for","with","about","against","between","into","through","during","before","after","above","below","from","up","down","out","off","over","under","again","further","then","once","and","but","or","nor","so","yet","both","either","neither","not","only","own","same","than","too","very","just","because","as","until","while","although","if","unless","since","though","ที่","ของ","และ","หรือ","แต่","ใน","บน","ที่","จาก","ไป","มา","ได้","เป็น","มี","ไม่","ก็","จะ","ให้","กับ","นี้","นั้น","ว่า","แล้ว","ด้วย","โดย","เพื่อ","เมื่อ","ถ้า","แม้","เพราะ","เนื่องจาก"]
+  },
+  "terms": {}
+}

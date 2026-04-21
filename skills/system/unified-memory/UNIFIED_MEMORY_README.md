@@ -69,7 +69,9 @@ Together = Compound Growth:
 │   ├── palace/                          ← Memory Palace
 │   │   ├── state.md                     (palace map ≤100 lines)
 │   │   ├── tunnels.md                   (cross-wing links)
-│   │   ├── search-index.md              (grep-searchable session index)
+│   │   ├── search-index.md              (grep-searchable session index — legacy fallback)
+│   │   ├── keyword-index.json          (inverted index: keyword→postings O(1) search)
+│   │   ├── date-index.json             (sorted date array: O(log n) date-range search)
 │   │   ├── user-profile.md              (persistent user model ≤80 lines)
 │   │   ├── wings/
 │   │   │   ├── {topic}/
@@ -121,7 +123,7 @@ Together = Compound Growth:
 ┌─── END ────────────────────────────────────┐
 │  1. Admission Control (score ≥0.6?)        │
 │  2. Write to palace/wings/{topic}/         │
-│  3. Update search-index.md (keywords)      │
+│  3. Update search indexes (keyword-index + date-index + search-index.md) │
 │  4. Skill auto-crystallize (≥2x → DRAFT)  │
 │  5. Skill self-improve (refine on +outcome)│
 │  6. Update user-profile.md                 │
