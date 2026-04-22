@@ -32,3 +32,5 @@
 - `knowledge-evolution-skill.md` — knowledge-evolution system skill (3-layer design, Phase A-D roadmap)
 - `skill-structure-upgrade-2026-04-12.md` — Sub-folder restructure + new references + v1 checkpoint borrow
 - `v1-v2-full-comparison.md` — Complete v1 (_backup) vs v2 (ai-dlc) system comparison: 30/30 covered + 15 v2-only
+- `setup-script-root-support.md` — setupAgentSkills.sh: added "." and "--self" support for workspace root install
+- `impeccable-design-skill.md` — Added impeccable-design skill to dev/ from pbakaus/impeccable repo

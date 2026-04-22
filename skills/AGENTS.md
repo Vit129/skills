@@ -49,6 +49,7 @@ If notes conflict with the codebase, trust the codebase.
 | backend API, node, python, docker | `dev/backend-dev/` |
 | frontend React, Next.js, Flutter, Swift | `dev/frontend-dev/` |
 | CI/CD, github actions, PR, pipeline | `dev/devops-pipeline/` |
+| design quality, anti-AI-slop, typography, OKLCH, craft UI, polish UI, impeccable | `dev/impeccable-design/` ← use after ui-designer |
 
 ### ai-dlc/po/ — Product & Architecture
 | Keyword | Skill |

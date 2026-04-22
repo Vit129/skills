@@ -1,6 +1,6 @@
 # Claude Code Workspace
 
-> See [`.agents/AGENTS.md`](.agents/AGENTS.md) for shared Skill Map and Karpathy Principles.
+> See `AGENTS.md` in the same skills root folder as this file for shared Skill Map and Karpathy Principles.
 
 ## Agent Tier (pick before every task)
 

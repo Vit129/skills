@@ -10,7 +10,7 @@
 > Escalation rule: if Sonnet fails twice on the same problem → escalate to Opus, don't retry.
 > Task is NOT done without: code written + tests pass + commit hash.
 
-> See [`.agents/AGENTS.md`](../.agents/AGENTS.md) for shared Skill Map and Karpathy Principles.
+> See `AGENTS.md` in the same skills root folder as this file for shared Skill Map and Karpathy Principles.
 
 ## Rules (KIRO-specific)
 

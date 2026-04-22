@@ -1,19 +1,32 @@
 #!/bin/bash
 # setupAgentSkills.sh — Setup AI agent context layer for any project
 # Handles: .agents/ scaffold + Kiro IDE (.kiro/) + unified-memory bootstrap
-# Usage: bash setupAgentSkills.sh [PROJECT_NAME_OR_PATH] [--force]
+# Usage: bash setupAgentSkills.sh [PROJECT_NAME_OR_PATH|.|--self] [--force]
 # Portable: works with ~/.claude/skills, ~/ai-agent/skills, or project-local skills
 
 set -euo pipefail
 
 if [ -z "${1:-}" ]; then
-    echo "❌ กรุณาระบุ folder (เช่น MyProject, AAA/MyProject)"
-    echo "Usage: $0 [PROJECT_NAME_OR_PATH] [--force]"
+    echo "❌ กรุณาระบุ folder (เช่น MyProject, AAA/MyProject, . สำหรับ root)"
+    echo "Usage: $0 [PROJECT_NAME_OR_PATH|.|--self] [--force]"
     exit 1
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BASE_DIR="$(cd "$SCRIPT_DIR/../../.." && pwd)"   # walk up to workspace root
+
+# Walk up from Current Working Directory (pwd) to find project root
+_dir="$(pwd)"
+while [ "$_dir" != "/" ]; do
+  if [ -d "$_dir/.git" ]; then
+    BASE_DIR="$_dir"
+    break
+  fi
+  _dir="$(dirname "$_dir")"
+done
+if [ -z "${BASE_DIR:-}" ]; then
+  echo "⚠️  .git/ not found — falling back to cwd"
+  BASE_DIR="$(pwd)"
+fi
 
 FORCE=0
 TARGET_DIR=""
@@ -22,8 +35,9 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --force) FORCE=1; shift ;;
     -h|--help)
-      echo "Usage: bash setupAgentSkills.sh [PROJECT_NAME_OR_PATH] [--force]"
+      echo "Usage: bash setupAgentSkills.sh [PROJECT_NAME_OR_PATH|.|--self] [--force]"
       echo "  PROJECT_NAME_OR_PATH  folder name or path to project root"
+      echo "  .  or  --self         install at workspace root (BASE_DIR)"
       echo "  --force               overwrite existing files"
       exit 0 ;;
     *) TARGET_DIR="$1"; shift ;;
@@ -33,20 +47,37 @@ done
 # ── Folder detection (same pattern as setupTests.sh) ────────
 cd "$BASE_DIR" || exit 1
 
-if [[ "$TARGET_DIR" == *"/"* ]] || [ -d "$TARGET_DIR" ]; then
+# Support "." or "--self" to install at BASE_DIR (workspace root) itself
+if [[ "$TARGET_DIR" == "." ]] || [[ "$TARGET_DIR" == "--self" ]]; then
+    TARGET_DIR="."
+    echo "📁 Using workspace root: $BASE_DIR"
+# Support absolute paths (e.g. /Users/xxx/MyProject)
+elif [[ "$TARGET_DIR" == /* ]]; then
+    if [ ! -d "$TARGET_DIR" ]; then
+        echo "❌ Folder $TARGET_DIR ไม่พบ"
+        exit 1
+    fi
+    echo "📁 Using absolute path: $TARGET_DIR"
+elif [[ "$TARGET_DIR" == *"/"* ]] || [ -d "$TARGET_DIR" ]; then
     if [ ! -d "$TARGET_DIR" ]; then
         echo "❌ Folder $TARGET_DIR ไม่พบ"
         exit 1
     fi
     echo "📁 Using: $TARGET_DIR"
 else
+    # Search by name — level-by-level (shallowest first = root priority)
     echo "🔍 Searching for folder: $TARGET_DIR"
-    FOUND_PATHS=($(find . -maxdepth 4 -type d -name "$TARGET_DIR" \
-        -not -path "*/node_modules/*" \
-        -not -path "*/.git/*" \
-        -not -path "*/tests/*" \
-        -not -path "*/.unified-memory/*" \
-        2>/dev/null))
+    FOUND_PATHS=()
+    for depth in 1 2 3 4; do
+        while IFS= read -r -d '' p; do
+            FOUND_PATHS+=("$p")
+        done < <(find . -mindepth "$depth" -maxdepth "$depth" -type d -name "$TARGET_DIR" \
+            -not -path "*/node_modules/*" \
+            -not -path "*/.git/*" \
+            -not -path "*/tests/*" \
+            -not -path "*/.unified-memory/*" \
+            -print0 2>/dev/null)
+    done
 
     if [ ${#FOUND_PATHS[@]} -eq 0 ]; then
         echo "❌ Folder $TARGET_DIR ไม่พบ"
@@ -55,7 +86,7 @@ else
         TARGET_DIR="${FOUND_PATHS[0]#./}"
         echo "✅ Found: $TARGET_DIR"
     else
-        echo "⚠️  พบหลายตำแหน่ง:"
+        echo "⚠️  พบหลายตำแหน่ง (เรียงจาก root → ลึก):"
         for i in "${!FOUND_PATHS[@]}"; do
             echo "  [$((i+1))] ${FOUND_PATHS[$i]#./}"
         done
@@ -131,19 +162,7 @@ else
   echo "  link  .agents/AGENTS.md → $AGENTS_SOURCE"
 fi
 
-# .gitignore entry for .unified-memory
-GITIGNORE="$ROOT_DIR/.gitignore"
-if [ -f "$GITIGNORE" ]; then
-  if ! grep -Fq ".unified-memory/" "$GITIGNORE"; then
-    echo ".unified-memory/" >> "$GITIGNORE"
-    echo "  append .gitignore → .unified-memory/"
-  else
-    echo "  skip  .gitignore (already has .unified-memory/)"
-  fi
-else
-  echo ".unified-memory/" > "$GITIGNORE"
-  echo "  write .gitignore"
-fi
+# Note: .unified-memory/ is NOT gitignored — it's part of the project context
 
 # unified-memory bootstrap
 UNIFIED_MEM="$ROOT_DIR/.unified-memory"

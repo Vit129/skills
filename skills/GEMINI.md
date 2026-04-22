@@ -13,7 +13,7 @@ Gemini is the research and scaffold agent. Leverage the 1M context window for wi
 
 > If a logic bug persists after 2 attempts → hand off to Claude Sonnet explicitly.
 
-> See [`.agents/AGENTS.md`](../.agents/AGENTS.md) for shared Skill Map and Karpathy Principles.
+> See `AGENTS.md` in the same skills root folder as this file for shared Skill Map and Karpathy Principles.
 
 ## Rules (Gemini-specific)
 

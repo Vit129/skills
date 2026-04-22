@@ -12,6 +12,10 @@
 
 | Date | Wing | Summary |
 |------|------|---------|
+| 2026-04-22 | ai-dlc-skills | Registered impeccable-design in AGENTS.md Skill Map (both .claude/skills/ and .claude/.agents/) — keywords: design quality, anti-AI-slop, typography, OKLCH, craft UI, polish UI ✅ |
+| 2026-04-22 | ai-dlc-skills | Discovered impeccable-design not registered in AGENTS.md Skill Map — needs entry under ai-dlc/dev/ section |
+| 2026-04-22 | ai-dlc-skills | Added impeccable-design skill to dev/ from pbakaus/impeccable — SKILL.md + 9 references (typography, color, spatial, motion, interaction, responsive, ux-writing, craft, extract) ✅ |
+| 2026-04-21 | ai-dlc-skills | setupAgentSkills.sh: root/absolute path support + level-by-level search (shallowest first) + removed gitignore — all 3 copies synced ✅ |
 | 2026-04-21 | unified-memory, ai-dlc-skills | Synced search index refs across all skills: UNIFIED_MEMORY_README.md, aidlc-flowchart.md, aidlc-swimlane.md updated to hybrid search ✅ |
 | 2026-04-21 | unified-memory | Implemented Hybrid Search: keyword-index.json + date-index.json created; storage.md, session.md, SKILL.md updated with full algorithm ✅ |
 | 2026-04-21 | unified-memory | Architecture decision: Hybrid Inverted Index + Sorted Date Array (no SQLite) → keyword-index.json + date-index.json, search-scaling-research.md updated ✅ |
@@ -39,6 +43,9 @@ _Older sessions archived_
 
 - [x] Search scaling implementation: Hybrid Inverted Index + Sorted Date Array implemented → keyword-index.json + date-index.json created, storage.md + session.md + SKILL.md updated @2026-04-21
 - [x] AGENTS.md: adopted Trust Priority, Do-not-store, Minimum Update Contract from agent-context-kit @2026-04-21
+- [x] Fix BASE_DIR walk-up level in setupAgentSkills.sh — replaced hardcoded `../../..` with `.git/` detection loop, all 3 copies synced @2026-04-21
+- [ ] Add to setupAgentSkills.sh: resolve {project_root} placeholder in GEMINI.md/KIRO.md to correct relative path based on install depth
+- [x] Add impeccable-design to AGENTS.md Skill Map under ai-dlc/dev/ section @2026-04-22
 
 ## Placeholder Convention
 
