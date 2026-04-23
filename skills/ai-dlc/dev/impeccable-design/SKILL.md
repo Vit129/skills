@@ -3,9 +3,11 @@ name: impeccable-design
 description: >
   Create distinctive, production-grade frontend interfaces with high design quality.
   Generates creative, polished code that avoids generic AI aesthetics ("AI slop").
-  Use when the user asks to "design a UI", "make it look better", "improve the design",
-  "build a landing page", "create a component with good UX", "audit the design",
-  "polish the UI", "fix the typography", "improve colors", "add animations",
+  Use when the user asks to "design a UI", "ออกแบบ UI", "make it look better", "ทำให้สวยขึ้น",
+  "improve the design", "ปรับปรุง design", "build a landing page", "สร้าง landing page",
+  "create a component with good UX", "สร้าง component ที่ดี", "audit the design", "ตรวจสอบ design",
+  "polish the UI", "polish UI", "fix the typography", "แก้ typography",
+  "improve colors", "ปรับสี", "add animations", "เพิ่ม animation",
   or needs frontend design guidance that goes beyond basic implementation.
   Use this for DESIGN QUALITY (how it looks/feels), not just implementation (how to code it).
   Based on pbakaus/impeccable (Apache 2.0). See https://github.com/pbakaus/impeccable

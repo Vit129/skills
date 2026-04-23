@@ -1,8 +1,9 @@
 ---
 name: playwright-cli
 description: >
-  This skill should be used when the user asks to "open a URL", "take a screenshot",
-  "test the login flow", "scrape this page", "interact with a web element",
+  This skill should be used when the user asks to "open a URL", "เปิด URL",
+  "take a screenshot", "ถ่าย screenshot", "test the login flow", "ทดสอบ login flow",
+  "scrape this page", "scrape หน้านี้", "interact with a web element", "กดปุ่มบนเว็บ",
   or needs browser automation via Playwright CLI terminal commands.
 ---
 

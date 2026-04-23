@@ -1,11 +1,12 @@
 ---
 name: playwright-testing
 description: >
-  This skill should be used when the user asks to "write Playwright tests", "review test code",
-  "run the tests", "fix failing tests", "heal test failures", "visual regression test",
-  "screenshot comparison", "accessibility test", "axe-core", "WCAG", "component test",
-  "test React component in browser", or needs the full Playwright
-  automation cycle: write code, review quality, execute tests, and auto-heal failures.
+  This skill should be used when the user asks to "write Playwright tests", "เขียน Playwright tests",
+  "review test code", "review test", "run the tests", "รัน tests", "fix failing tests", "แก้ test ที่ fail",
+  "heal test failures", "heal failures", "visual regression test", "screenshot comparison",
+  "accessibility test", "axe-core", "WCAG", "component test",
+  "test React component in browser", "ทดสอบ React component",
+  or needs the full Playwright automation cycle: write code, review quality, execute tests, and auto-heal failures.
 ---
 
 # Playwright Testing

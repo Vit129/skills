@@ -2,9 +2,10 @@
 name: robotframework-rules
 description: >
   This skill should be used when the user asks to "check Robot Framework standards",
-  "review RF code", "what are the RF rules", or needs the authoritative coding standards
-  for Robot Framework + Appium mobile automation. Always activate when writing or reviewing
-  Robot Framework code.
+  "เช็ค Robot Framework standards", "review RF code", "review RF",
+  "what are the RF rules", "RF rules คืออะไร",
+  or needs the authoritative coding standards for Robot Framework + Appium mobile automation.
+  Always activate when writing or reviewing Robot Framework code.
 ---
 
 # Robot Framework Rules

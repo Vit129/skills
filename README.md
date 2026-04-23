@@ -7,8 +7,6 @@ Personal knowledge base and skill library for AI-assisted development — works 
 ```
 {skills_root}/           ← e.g. ~/.claude/ or ~/ai-agent/
 ├── CLAUDE.md            ← Claude Code entry point: skill map, agent tier, Karpathy principles
-├── .agents/
-│   └── AGENTS.md        ← symlink → skills/AGENTS.md (shared rules for all agents)
 ├── skills/
 │   ├── AGENTS.md        ← Shared agent rules: Trust Priority, AIDLC rules, Karpathy, Do Not Store
 │   ├── KIRO.md          ← Kiro entry point: tier selection + skill map
@@ -21,13 +19,18 @@ Personal knowledge base and skill library for AI-assisted development — works 
 │   │   ├── dev/         ← backend, frontend, devops-pipeline
 │   │   ├── po/          ← architect (DDD, logical design)
 │   │   └── ux-ui/       ← ui-designer
-│   ├── system/          ← unified-memory, ai-techniques, analysis-concept, skill-creator, hook-creator
-│   ├── finance/         ← Investment research
+│   ├── system/          ← unified-memory, ai-techniques, skill-creator, hook-creator
+│   ├── finance/         ← Investment research (local only)
 │   ├── doc/             ← Documentation: aidlc flowchart, swimlane
 │   └── scripts/
-│       └── setup/
-│           ├── setupAgentSkills.sh  ← Bootstrap .agents/ + .kiro/ + .unified-memory/ for any project
-│           └── setupTests.sh        ← Bootstrap COE QA test structure (API/Web/Mobile)
+│       ├── setup/
+│       │   ├── setupAgentSkills.sh     ← Bootstrap .kiro/ + .unified-memory/ for any project
+│       │   ├── setupKiro.sh            ← Setup Kiro IDE config (steering, hooks)
+│       │   ├── setupMemory.sh          ← Init .unified-memory/ (Memory Palace)
+│       │   ├── setupTests.sh           ← Bootstrap COE QA test structure (API/Web/Mobile)
+│       │   └── postmanToPlaywright.sh  ← Copy postman migration skill to project
+│       └── copyToWork/
+│           └── copySkills.sh           ← Copy shared skills to project (excludes personal)
 │
 └── .unified-memory/     ← Session memory (auto-managed)
     ├── palace/          ← Memory Palace: wings, rooms, closets, archive
@@ -41,17 +44,17 @@ Personal knowledge base and skill library for AI-assisted development — works 
 | **Claude Code** | `CLAUDE.md` auto-loaded — skill map + routing built in |
 | **Kiro** | `skills/KIRO.md` — tier selection + skill map |
 | **Gemini CLI** | `skills/GEMINI.md` — research + scaffold tasks |
-| **Any agent** | `.agents/AGENTS.md` — shared rules, Trust Priority, AIDLC rules |
+| **Any agent** | `skills/AGENTS.md` — shared rules, Trust Priority, AIDLC rules |
 
 ## Key concepts
 
 **Skills** are markdown instruction files that agents load on demand. Each skill has a `SKILL.md` with triggers, routing table, and references.
 
-**AGENTS.md** is the shared entry point for all agents — Trust Priority, AIDLC rules, Karpathy Principles, Do Not Store, Minimum Update Contract. Symlinked into `.agents/AGENTS.md` so any project can reference it.
+**AGENTS.md** is the shared entry point for all agents — Trust Priority, AIDLC rules, Karpathy Principles, Do Not Store, Minimum Update Contract.
 
 **Unified Memory** persists context and learning across sessions without a database — plain markdown + JSON. Includes user modeling, skill crystallization, periodic nudges, evolution audit trail, and session search.
 
-**Setup scripts** bootstrap new projects with agent context layer (`.agents/`, `.kiro/`, `.unified-memory/`) and COE QA test structure — portable, not tied to any specific agent or path.
+**Setup scripts** bootstrap new projects with agent context layer (`.kiro/`, `.unified-memory/`) and COE QA test structure — portable, not tied to any specific agent or path.
 
 ## Quick start
 
@@ -61,6 +64,9 @@ bash ~/.claude/skills/scripts/setup/setupAgentSkills.sh MyProject
 
 # Bootstrap QA test structure (prompted automatically after agent setup):
 bash ~/.claude/skills/scripts/setup/setupTests.sh MyProject
+
+# Copy postman migration skill to project (optional):
+bash ~/.claude/skills/scripts/setup/postmanToPlaywright.sh MyProject
 
 # Load memory at session start:
 "load context for [project]"

@@ -1,9 +1,11 @@
 ---
 name: robotframework-testing
 description: >
-  This skill should be used when the user asks to "write Robot Framework tests", "review mobile test code",
-  "run mobile tests", "fix failing mobile tests", "heal mobile test failures", "use Browser Library",
-  "use Playwright with Robot Framework", "RF 7 features", "secret variables", "typed keywords",
+  This skill should be used when the user asks to "write Robot Framework tests", "เขียน Robot Framework tests",
+  "review mobile test code", "review mobile test", "run mobile tests", "รัน mobile tests",
+  "fix failing mobile tests", "แก้ mobile test ที่ fail", "heal mobile test failures",
+  "use Browser Library", "use Playwright with Robot Framework", "RF 7 features",
+  "secret variables", "typed keywords",
   or needs the full Robot Framework + Appium automation cycle: write code, review quality, execute tests, and auto-heal failures.
 ---
 

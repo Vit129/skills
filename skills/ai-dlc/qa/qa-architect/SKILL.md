@@ -2,7 +2,9 @@
 name: qa-architect
 description: >
   This skill should be used when the user asks to "design test automation architecture",
-  "create API test framework", "design page object structure", "plan test DB strategy",
+  "ออกแบบ test automation architecture", "create API test framework", "สร้าง API test framework",
+  "design page object structure", "ออกแบบ page object structure",
+  "plan test DB strategy", "วางแผน test DB strategy",
   or needs platform-specific blueprints for API, Web UI, or Mobile test automation
   and database seed/verify/cleanup strategy.
 ---

@@ -2,9 +2,10 @@
 name: playwright-rules
 description: >
   This skill should be used when the user asks to "check Playwright coding standards",
-  "review Playwright code", "what are the Playwright rules", or needs the authoritative
-  coding standards for API and Web UI Playwright automation. Always activate when writing
-  or reviewing Playwright code.
+  "เช็ค Playwright standards", "review Playwright code", "review Playwright",
+  "what are the Playwright rules", "Playwright rules คืออะไร",
+  or needs the authoritative coding standards for API and Web UI Playwright automation.
+  Always activate when writing or reviewing Playwright code.
 ---
 
 # Playwright Standards

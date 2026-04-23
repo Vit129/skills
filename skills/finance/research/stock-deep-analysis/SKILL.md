@@ -3,7 +3,9 @@ name: stock-deep-analysis
 description: >
   Deep dive หุ้น US เชิงลึก 20 มิติ: Business, Financials, Competitive Advantage, Risks, Management, Valuation, Performance, Insider Trading, Comparable Companies, Earnings, Action Plan.
   ✅ Claude Desktop only — Investment Specialist analysis, data-driven, 20-section output
-  Trigger: "วิเคราะห์หุ้น [TICKER]", "deep dive [TICKER]", "ข้อมูลหุ้น", "พื้นฐาน"
+  Trigger: "วิเคราะห์หุ้น [TICKER]", "deep dive [TICKER]", "ข้อมูลหุ้น", "พื้นฐาน",
+  "analyze stock [TICKER]", "stock analysis", "fundamental analysis", "deep dive stock",
+  "investment analysis", "stock deep dive", "research stock"
 ---
 
 # Stock Deep Analysis — Investment Specialist (20 Sections)

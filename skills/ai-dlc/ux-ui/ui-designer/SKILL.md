@@ -1,10 +1,16 @@
 ---
 name: ui-designer
 description: >
-  Use this skill when the user asks to "design the UI", "create a design system",
-  "generate design rules for my product", "pick colors and typography", "set up spacing and layout",
-  "add animations", "define design tokens", "make it look distinctive", "avoid generic design",
-  "pick an aesthetic direction", "recommend colors for my industry", "validate design against best practices",
+  Use this skill when the user asks to "design the UI", "ออกแบบ UI",
+  "create a design system", "สร้าง design system",
+  "generate design rules for my product", "สร้าง design rules สำหรับ product",
+  "pick colors and typography", "เลือกสีและ typography",
+  "set up spacing and layout", "ตั้งค่า spacing และ layout",
+  "add animations", "เพิ่ม animation", "define design tokens", "กำหนด design tokens",
+  "make it look distinctive", "ทำให้ดูโดดเด่น", "avoid generic design", "หลีกเลี่ยง generic design",
+  "pick an aesthetic direction", "เลือก aesthetic direction",
+  "recommend colors for my industry", "แนะนำสีสำหรับ industry ของฉัน",
+  "validate design against best practices", "ตรวจสอบ design",
   or needs UX/UI design guidance for building consistent, scalable, visually memorable interfaces.
   Use this for DESIGN DECISIONS (what to build), not implementation (how to code it).
   Covers both aesthetic direction and industry-validated patterns across 8 sectors.

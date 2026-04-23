@@ -1,14 +1,17 @@
 ---
 name: devops-pipeline
 description: >
-  This skill should be used when the user asks to "create a pipeline", "set up CI/CD",
-  "create a pull request", "link work items", "sync to DevOps", "set up GitHub Actions",
-  "set up GitLab CI", "add workflow YAML", "OIDC authentication", "keyless deployment",
-  "reusable workflows", "concurrency control", or needs pipeline YAML generation, cron scheduling,
-  test command selection, or PR creation with work item linking.
+  This skill should be used when the user asks to "create a pipeline", "สร้าง pipeline",
+  "set up CI/CD", "ตั้งค่า CI/CD", "create a pull request", "สร้าง pull request",
+  "link work items", "link work item", "sync to DevOps", "sync DevOps",
+  "set up GitHub Actions", "ตั้งค่า GitHub Actions", "set up GitLab CI", "add workflow YAML",
+  "OIDC authentication", "keyless deployment", "reusable workflows",
+  "concurrency control", "คอมมิต", "พุช", "commit", "push",
+  or needs pipeline YAML generation, cron scheduling, test command selection, or PR creation with work item linking.
   Supports Azure DevOps, GitHub Actions, and GitLab CI.
   Also covers DevSecOps: "scan Docker image", "Trivy", "CodeQL", "secret detection",
-  "Gitleaks", "SAST", "SCA", "security gate in pipeline", "shift-left security".
+  "Gitleaks", "SAST", "SCA", "security gate in pipeline", "shift-left security",
+  "สแกน Docker image", "ตรวจสอบ security".
 ---
 
 # DevOps Pipeline

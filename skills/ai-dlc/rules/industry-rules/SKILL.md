@@ -2,10 +2,11 @@
 name: industry-rules
 description: >
   This skill should be used when the user asks to "check industry design rules",
-  "what are the design rules for finance/healthcare/ecommerce/tech",
-  "recommend design patterns for my industry", or needs the authoritative
-  industry-specific UX/UI design rules. Always activate when designing
-  interfaces for a specific industry sector.
+  "เช็ค industry design rules", "what are the design rules for finance/healthcare/ecommerce/tech",
+  "design rules สำหรับ finance/healthcare/ecommerce/tech คืออะไร",
+  "recommend design patterns for my industry", "แนะนำ design patterns สำหรับ industry ของฉัน",
+  or needs the authoritative industry-specific UX/UI design rules.
+  Always activate when designing interfaces for a specific industry sector.
 ---
 
 # Industry Rules (161 Total)

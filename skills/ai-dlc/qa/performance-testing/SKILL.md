@@ -1,10 +1,12 @@
 ---
 name: performance-testing
 description: >
-  This skill should be used when the user asks to "load test", "stress test", "performance test",
-  "k6", "write k6 script", "test API under load", "check response time", "find bottleneck",
-  "simulate concurrent users", "spike test", "soak test", or needs to validate
-  system performance before release.
+  This skill should be used when the user asks to "load test", "ทำ load test",
+  "stress test", "ทำ stress test", "performance test", "ทดสอบ performance",
+  "k6", "write k6 script", "เขียน k6 script", "test API under load", "ทดสอบ API ภายใต้ load",
+  "check response time", "เช็ค response time", "find bottleneck", "หา bottleneck",
+  "simulate concurrent users", "จำลอง concurrent users",
+  "spike test", "soak test", or needs to validate system performance before release.
 ---
 
 # Performance Testing

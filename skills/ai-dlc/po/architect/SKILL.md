@@ -1,9 +1,11 @@
 ---
 name: architect
 description: >
-  This skill should be used when the user asks to "design the architecture", "define bounded contexts",
-  "model the domain", "create API contracts", "do logical design", "use TDD", or needs DDD Strategic
-  & Tactical Design, Logical Design, or Test-Driven Development guidance.
+  This skill should be used when the user asks to "design the architecture", "ออกแบบ architecture",
+  "define bounded contexts", "กำหนด bounded contexts", "model the domain", "model domain",
+  "create API contracts", "สร้าง API contracts", "do logical design", "ทำ logical design",
+  "use TDD", "ทำ TDD", or needs DDD Strategic & Tactical Design, Logical Design,
+  or Test-Driven Development guidance.
 ---
 
 # Architect

@@ -1,9 +1,11 @@
 ---
 name: monitoring
 description: >
-  This skill should be used when the user asks to "add logging", "set up monitoring",
-  "debug production issues", "track errors", "add observability", "set up alerts",
-  "check why this is slow", "trace a request", or needs runtime visibility into
+  This skill should be used when the user asks to "add logging", "เพิ่ม logging",
+  "set up monitoring", "ตั้งค่า monitoring", "debug production issues", "debug ปัญหา production",
+  "track errors", "ติดตาม error", "add observability", "เพิ่ม observability",
+  "set up alerts", "ตั้งค่า alert", "check why this is slow", "เช็คว่าทำไมช้า",
+  "trace a request", "trace request", or needs runtime visibility into
   application health, performance, or errors in production or staging.
 ---
 

@@ -1,8 +1,10 @@
 ---
 name: test-scenario
 description: >
-  This skill should be used when the user asks to "design test scenarios", "create test cases",
-  "generate test data", "export to CSV", "add test scenario", "quick scenario",
+  This skill should be used when the user asks to "design test scenarios", "ออกแบบ test scenarios",
+  "create test cases", "สร้าง test cases", "generate test data", "สร้าง test data",
+  "export to CSV", "export CSV", "add test scenario", "เพิ่ม test scenario",
+  "quick scenario", "สร้าง scenario เร็วๆ",
   or needs the full test scenario design cycle: analyze → design → data → validate → export.
 ---
 

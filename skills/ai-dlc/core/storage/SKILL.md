@@ -1,8 +1,9 @@
 ---
 name: storage
 description: >
-  This skill should be used when the user asks to "save knowledge", "update knowledge base",
-  "index automation patterns", "save business rules", "update knowledge buffer",
+  This skill should be used when the user asks to "save knowledge", "บันทึก knowledge",
+  "update knowledge base", "อัปเดต knowledge base", "index automation patterns", "index pattern",
+  "save business rules", "บันทึก business rules", "update knowledge buffer", "อัปเดต knowledge buffer",
   or needs to persist automation patterns, business logic, lessons learned, or test data to the knowledge base.
 ---
 

@@ -1,9 +1,11 @@
 ---
 name: analysis-skills
 description: >
-  This skill should be used when the user asks to "analyze the codebase", "extract requirements",
-  "do gap analysis", "map business domains", "find existing assets", "discover before building",
-  "zoom out", "big picture first", "reverse engineer this system",
+  This skill should be used when the user asks to "analyze the codebase", "วิเคราะห์ codebase",
+  "extract requirements", "ดึง requirements", "do gap analysis", "ทำ gap analysis",
+  "map business domains", "map domain", "find existing assets", "หา asset ที่มีอยู่",
+  "discover before building", "ค้นหาก่อนสร้าง", "zoom out", "มองภาพรวม", "big picture first",
+  "reverse engineer this system", "reverse engineer ระบบนี้",
   or needs to understand what exists, what's needed, and what's missing before implementation.
   Used by PO, Dev, and QA roles across all phases.
 ---
