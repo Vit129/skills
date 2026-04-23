@@ -5,7 +5,7 @@
  *              After this, AI generates Playwright code from the produced .md files.
  *
  * Usage:
- *   npx ts-node --project <skills>/tsconfig.json <skills>/postmanMigrate.ts \
+ *   npx tsx <skills>/postmanMigrate.ts \
  *     --collection "<collection.json>" \
  *     [--env "<environment.json>"] \
  *     [--folder "<folder-name>"] \
@@ -43,7 +43,6 @@ if (!collectionArg) {
 
 // ── RESOLVE PATHS ────────────────────────────────────────────────────────────
 const scriptsDir     = __dirname;
-const tsconfig       = path.join(scriptsDir, 'tsconfig.json');
 const script1        = path.join(scriptsDir, 'readPostmanCollection.ts');
 const script2        = path.join(scriptsDir, 'readPostmanEnv.ts');
 const cwd            = outputDirArg ? path.resolve(outputDirArg) : process.cwd();
@@ -76,17 +75,18 @@ function run(label: string, cmd: string) {
   }
 }
 
-const tsNode = `npx ts-node --project "${tsconfig}"`;
+const tsx = `npx tsx`;
 
 // ── STEP 1: readPostmanCollection ────────────────────────────────────────────
-let step1Cmd = `${tsNode} "${script1}" "${collectionPath}"`;
+let step1Cmd = `${tsx} "${script1}" "${collectionPath}"`;
 if (folderArg) step1Cmd += ` --folder "${folderArg}"`;
+if (outputDirArg) step1Cmd += ` --output-dir "${cwd}"`;
 run('Step 1 — Analyze Collection → Markdown', step1Cmd);
 
 // ── STEP 2: readPostmanEnv (optional) ────────────────────────────────────────
 if (envArg) {
   const envPath = path.resolve(cwd, envArg);
-  const step2Cmd = `${tsNode} "${script2}" "${envPath}"`;
+  const step2Cmd = `${tsx} "${script2}" "${envPath}"`;
   run('Step 2 — Analyze Environment → Markdown', step2Cmd);
 } else {
   console.log('\n⏭️  Step 2 skipped (no --env provided)');

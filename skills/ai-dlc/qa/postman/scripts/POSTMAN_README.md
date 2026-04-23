@@ -15,8 +15,7 @@
 > ⚠️ **USER runs this in terminal** — AI prepares the exact command with correct paths, then USER copies and runs it.
 
 ```bash
-npx ts-node --project {skills_root}/ai-dlc/qa/postman/scripts/tsconfig.json \
-  {skills_root}/ai-dlc/qa/postman/scripts/postmanMigrate.ts \
+npx tsx {skills_root}/ai-dlc/qa/postman/scripts/postmanMigrate.ts \
   --collection "postman/collections/xxx.postman_collection.json" \
   --env "postman/environments/yyy.postman_environment.json"
 ```
@@ -34,13 +33,11 @@ npx ts-node --project {skills_root}/ai-dlc/qa/postman/scripts/tsconfig.json \
 
 ```bash
 # Step 1: Analyze Collection
-npx ts-node --project {skills_root}/ai-dlc/qa/postman/scripts/tsconfig.json \
-  {skills_root}/ai-dlc/qa/postman/scripts/readPostmanCollection.ts \
+npx tsx {skills_root}/ai-dlc/qa/postman/scripts/readPostmanCollection.ts \
   "postman/collections/xxx.postman_collection.json"
 
 # Step 2: Analyze Environment
-npx ts-node --project {skills_root}/ai-dlc/qa/postman/scripts/tsconfig.json \
-  {skills_root}/ai-dlc/qa/postman/scripts/readPostmanEnv.ts \
+npx tsx {skills_root}/ai-dlc/qa/postman/scripts/readPostmanEnv.ts \
   "postman/environments/yyy.postman_environment.json"
 ```
 
@@ -57,7 +54,7 @@ Full instructions → read `SKILL.md` in this skill's root folder.
 ## Prerequisites
 
 - Run from project root (e.g. `tests/api-testing/`)
-- `tsconfig.json` uses CommonJS — no `--esm` flag needed
+- Uses `tsx` (auto-installed via `npx tsx`) — no tsconfig needed
 - Scripts auto-detect `tests-api/` folder for output
 - Step 1 must run before Step 2 (creates the folder Step 2 auto-detects)
 

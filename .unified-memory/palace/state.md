@@ -12,6 +12,7 @@
 
 | Date | Wing | Summary |
 |------|------|---------|
+| 2026-04-23 | ai-dlc-skills | setupKiro.sh: removed interactive copy/reference prompt, default to #[[file:]] reference only ✅ |
 | 2026-04-22 | ai-dlc-skills | Registered impeccable-design in AGENTS.md Skill Map (both .claude/skills/ and .claude/.agents/) — keywords: design quality, anti-AI-slop, typography, OKLCH, craft UI, polish UI ✅ |
 | 2026-04-22 | ai-dlc-skills | Discovered impeccable-design not registered in AGENTS.md Skill Map — needs entry under ai-dlc/dev/ section |
 | 2026-04-22 | ai-dlc-skills | Added impeccable-design skill to dev/ from pbakaus/impeccable — SKILL.md + 9 references (typography, color, spatial, motion, interaction, responsive, ux-writing, craft, extract) ✅ |
