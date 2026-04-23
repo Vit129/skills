@@ -1,6 +1,6 @@
 #!/bin/bash
 # copySkills.sh — Copy shared skills to project's ai-agent/skills/
-# Copies: ai-dlc/, doc/, system/, KIRO.md, scripts/setup/*
+# Copies: ai-dlc/, doc/, system/, postman-to-playwright/, KIRO.md, scripts/setup/*
 # Excludes: finance/, GEMINI.md (personal)
 #
 # Usage: bash copySkills.sh <PROJECT_ROOT> [--force]
@@ -62,7 +62,7 @@ echo "   to:   $DEST"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
 # ── Folders to copy ──
-FOLDERS=("ai-dlc" "doc" "system")
+FOLDERS=("ai-dlc" "doc" "system" "postman-to-playwright")
 
 for folder in "${FOLDERS[@]}"; do
   if [ ! -d "$SRC/$folder" ]; then
@@ -89,8 +89,14 @@ for file in "${FILES[@]}"; do
   if [ -f "$DEST/$file" ] && [ "$FORCE" -ne 1 ]; then
     echo "  ⏭️  skip  $file (exists, use --force to overwrite)"
   else
-    cp "$SRC/$file" "$DEST/$file"
-    echo "  ✅ $file"
+    if [ "$file" = "KIRO.md" ]; then
+      # Strip personal finance/ section (marked with <!-- PERSONAL: strip ... -->)
+      sed '/^### finance\/ — Investment Portfolio/,/^## /{ /^## /!d; }' "$SRC/$file" > "$DEST/$file"
+      echo "  ✅ $file (finance/ section stripped)"
+    else
+      cp "$SRC/$file" "$DEST/$file"
+      echo "  ✅ $file"
+    fi
   fi
 done
 

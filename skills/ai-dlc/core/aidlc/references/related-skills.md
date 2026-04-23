@@ -1,7 +1,7 @@
 # Related Skills Routing
 
 ## Standalone Tools (ไม่เข้า AIDLC loop)
-- Postman migration → `qa/postman` (Postman collection → Playwright tests, trigger ตรงจาก SKILL.md)
+- Postman migration → `postman-to-playwright/postman` (Postman collection → Playwright tests, trigger ตรงจาก SKILL.md)
 
 ## Phase 1-4 (Recurring Loop)
 - Analysis → `core/analysis-skills`

@@ -989,3 +989,32 @@ export class CollectionHelpers {
 | `deleteUserFn` | `CollectionHelpers.deleteUserFn(request, keyword)` | Cleanup — delete test user by keyword |
 
 > AI should read the `🧰 Function Variables` section in the collection `.md` to get the raw Postman logic, then convert each to a static method in `CollectionHelpers`.
+
+---
+
+## 32. Knowledge Check (Before Generating) 🧠
+
+Before generating code for each folder, check `.unified-memory/knowledge/lessons/` for postman-related lessons learned from previous migrations. Apply known fixes proactively instead of waiting for failures.
+
+### What to check
+
+- `.unified-memory/knowledge/lessons/` — scan for lessons with keywords: postman, playwright, migration, stateStore, auth, collection
+- `.unified-memory/palace/state.md` — check Open Threads for in-progress migration context
+
+### Known lessons to apply (examples)
+
+| Lesson | Pattern | Fix |
+|--------|---------|-----|
+| Filename collision | `toCamelCase` strips numbers → duplicate filenames | Use `toKebabCase` for unique filenames |
+| stateStore vs process.env | `pm.environment.set()` at runtime | Always use `stateStore`, never `process.env` for runtime values |
+| Auth inheritance | Folder-level auth invisible in request JSON | Check `resolveAuth` chain in collection.md |
+| pm.sendRequest CPS | Callback pattern in pre-request scripts | Convert to `await request.fetch()` async |
+| Interactive prompt hang | Multiple folders in `tests-api/` | Use `--folder` or `--output` flag to skip prompt |
+
+### When to check
+
+- Once at migration start (Step 2.5 — before designing structure)
+- Once per folder (Step 3 — before generating code)
+- After test failures (Step 4 — check if lesson already exists before debugging)
+
+> 💡 If a new pattern/fix is discovered during migration, capture it as a lesson in `.unified-memory/knowledge/lessons/` for future migrations.

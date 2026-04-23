@@ -3,7 +3,8 @@ name: postman
 description: >
   Activate when user says "convert Postman to Playwright", "migrate Postman",
   "analyze Postman collection/environment", "generate Playwright from Postman",
-  "fix URL placeholders", "add auth header", "postmanMigrate", or "run all steps".
+  "fix URL placeholders", "add auth header", "postmanMigrate", or "run all steps",
+  "แปลง Postman เป็น Playwright".
 ---
 
 # Postman → Playwright Migration
@@ -43,43 +44,38 @@ Step 4:     USER runs tests in terminal → AI fixes failures
 
 | # | Script | Input | Output |
 |---|--------|-------|--------|
-| 0 | `postmanMigrate.ts` | collection.json + env.json | Runs 1+2 in sequence |
 | 1 | `readPostmanCollection.ts` | collection.json | `tests-api/<name>/collection.md` |
 | 2 | `readPostmanEnv.ts` | environment.json | `tests-api/<name>/env.md` |
 
-### One-Shot (recommended)
+### Commands
 
 ```bash
-npx tsx {skills_root}/ai-dlc/qa/postman/scripts/postmanMigrate.ts \
-  --collection "postman/collections/xxx.postman_collection.json" \
-  --env "postman/environments/yyy.postman_environment.json"
-```
-
-| Flag | Required | Description |
-|------|----------|-------------|
-| `--collection` | ✅ | Path to `.postman_collection.json` |
-| `--env` | ❌ | Path to `.postman_environment.json` |
-| `--folder` | ❌ | Migrate one top-level folder only |
-| `--output-dir` | ❌ | Override project root (default: cwd) |
-
-### Run Separately
-
-```bash
-# Step 1: Analyze Collection
-npx tsx {skills_root}/ai-dlc/qa/postman/scripts/readPostmanCollection.ts \
+# Step 1: Analyze Collection → Markdown
+npx tsx {skills_root}/postman-to-playwright/postman/scripts/readPostmanCollection.ts \
   "postman/collections/xxx.postman_collection.json"
 
-# Step 2: Analyze Environment
-npx tsx {skills_root}/ai-dlc/qa/postman/scripts/readPostmanEnv.ts \
+# Step 2: Analyze Environment → Markdown (optional, run after Step 1)
+npx tsx {skills_root}/postman-to-playwright/postman/scripts/readPostmanEnv.ts \
   "postman/environments/yyy.postman_environment.json"
 ```
+
+| Flag (Step 1) | Required | Description |
+|------|----------|-------------|
+| `<collection.json>` | ✅ | Path to `.postman_collection.json` |
+| `--folder` | ❌ | Migrate one top-level folder only |
+| `--output` | ❌ | Override output directory |
+
+| Flag (Step 2) | Required | Description |
+|------|----------|-------------|
+| `<environment.json>` | ✅ | Path to `.postman_environment.json` |
+| `--output` | ❌ | Override output directory |
+| `--used-vars` | ❌ | Comma-separated list of vars to filter |
 
 ### Prerequisites
 
 - Run from project root (e.g. `tests/api-testing/`)
 - Scripts auto-detect `tests-api/` folder for output
 - Step 1 must run before Step 2 (creates the folder Step 2 auto-detects)
-- `@inquirer/prompts` must be installed (`npm install @inquirer/prompts`)
 
 
 ---
@@ -224,6 +220,52 @@ stateStore['orderId'] = responseJson.id
 ---
 
 ## ⚠️ Gotchas
+
+- **Progress tracking:** At migration start, AI creates `progress.md` from `references/progress-template.md` in the target project's `tests-api/<collection>/` folder. Update status (⬜→✅/❌) after each step completes. Link to `.unified-memory/palace/state.md` Open Threads for cross-session continuity.
+
+---
+
+## Step 4: Run Tests → Fix Failures
+
+> ⚠️ **USER runs tests in terminal** — AI reads output and fixes failures.
+
+### Run Command
+
+```bash
+# Run all tests for a folder
+npx cross-env ENV=sit npx playwright test --config=playwright.config.ts tests-api/<folder>/
+
+# Run a specific spec file
+npx cross-env ENV=sit npx playwright test --config=playwright.config.ts tests-api/<folder>/<name>.spec.ts
+```
+
+### AI Fix Workflow
+
+1. User pastes test output (or AI reads from terminal)
+2. AI reads the error message + stack trace
+3. AI checks `references/fix-generated-files.md` for matching pattern
+4. AI checks `.unified-memory/knowledge/lessons/` for known fix
+5. AI applies fix → user re-runs → repeat until pass
+
+### Common Failure Patterns
+
+| Error | Likely Cause | Fix |
+|-------|-------------|-----|
+| 401 Unauthorized | Missing/wrong auth header | Add `Authorization` header (Section 2 in fix-generated-files.md) |
+| `{{variable}}` in URL | Unresolved Postman variable | Replace with `process.env['VAR']` template literal |
+| `stateStore is not defined` | Missing stateStore declaration | Add `const stateStore = (global as any).__stateStore ??= {};` |
+| `Cannot read property of undefined` | Response not parsed | Add response type check (Section 3) |
+| `expect(...).toHaveStatus is not a function` | Wrong assertion API | Use `expect(response.status()).toBe(200)` |
+| Timeout | Slow API or polling needed | Add `timeout` option or use `expect.poll` (Section 5) |
+
+### After All Tests Pass
+
+- Update `progress.md` → Step 4 status ✅
+- Capture any new patterns as lessons in `.unified-memory/knowledge/lessons/`
+
+---
+
+## ⚠️ More Gotchas
 
 - **Postman exports lack Current Values** — only "Initial Values" are exported. Secrets and runtime-set values will be empty. Always check with user.
 - **`pm.environment.set()` chains** — requests that set variables used by later requests need `stateStore` + `test.describe.serial`, not `process.env`.

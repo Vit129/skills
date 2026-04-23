@@ -71,7 +71,7 @@ If notes conflict with the codebase, trust the codebase.
 | QA architecture, test framework design | `qa/qa-architect/` |
 | test scenario, test case design | `qa/test-scenario/` |
 | write/run/fix RF mobile tests | `qa/robotframework-testing/` |
-| postman migration to playwright | `qa/postman/` |
+| postman migration to playwright | `postman-to-playwright/postman/` |
 | load test, k6, performance | `qa/performance-testing/` |
 
 ### ai-dlc/dev/ — Implementation
@@ -103,6 +103,14 @@ If notes conflict with the codebase, trust the codebase.
 | CoT, LATS, AoT, reasoning technique | `system/ai-techniques/` |
 | create new skill | `system/skill-creator/` |
 | create hook | `system/hook-creator/` |
+
+### finance/ — Investment Portfolio
+
+<!-- PERSONAL: strip this section when copying to project (copySkills.sh) -->
+
+| Keyword | Skill |
+|---------|-------|
+| stock analysis, fundamental research | `finance/research/stock-deep-analysis/` |
 
 ## Karpathy Principles (always active)
 
@@ -168,7 +176,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 ## Rules (always active)
 
 - **AIDLC first:** All dev/QA work goes through `ai-dlc/core/aidlc/` — never call qa/dev skills directly unless AIDLC routes there
-- **AIDLC exception — Postman migration:** `qa/postman/` skill bypasses AIDLC entirely — source of truth is the Postman collection, not requirements. Use migration flow in `qa/postman/SKILL.md` directly (Step 1→2→2.5→3→4). No `.aidlc/` folder needed.
+- **AIDLC exception — Postman migration:** `postman-to-playwright/postman/` skill bypasses AIDLC entirely — source of truth is the Postman collection, not requirements. Use migration flow in `postman-to-playwright/postman/SKILL.md` directly (Step 1→2→2.5→3→4). No `.aidlc/` folder needed.
 - **Phase gates:** If prerequisites missing → STOP, tell user what's needed first
 - **Phase gate check (MANDATORY):** Before ANY dev/QA work → scan `.aidlc/[system]/[feature]/` for existing outputs → find first missing phase → start THERE, not at the user's requested phase. If no `.aidlc/` folder exists for the feature → start from Phase 0/1.2. NEVER skip to a later phase. This check MUST happen BEFORE reading spec docs or generating any output.
 - **No shortcuts:** "เขียน code เลย" without prerequisites = STOP, not proceed

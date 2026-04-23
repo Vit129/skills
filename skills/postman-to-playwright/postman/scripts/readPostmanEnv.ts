@@ -250,7 +250,7 @@ async function run() {
   md += `## 📝 .env Snippet\n\`\`\`properties\n${dotenvSnippet}\`\`\`\n\n---\n\n`;
   md += `## 🎭 Playwright Declarations\n\`\`\`typescript\n${playwrightSnippet}\`\`\`\n`;
   if (machineReadable) {
-    md += `\n## 🔌 Machine-Readable Declarations\n\n<!-- AUTO-GENERATED: used by postmanMdToPlaywright -->\n\`\`\`env-declarations\n${machineReadable}\n\`\`\`\n`;
+    md += `\n## 🔌 Machine-Readable Declarations\n\n<!-- AUTO-GENERATED: used by AI during Step 3 generation -->\n\`\`\`env-declarations\n${machineReadable}\n\`\`\`\n`;
   }
 
   fs.writeFileSync(path.join(finalDir, fileName), md, 'utf-8');

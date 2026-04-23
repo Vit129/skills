@@ -13,15 +13,16 @@ Personal knowledge base and skill library for AI-assisted development — works 
 │   ├── AGENTS.md        ← Shared agent rules: Trust Priority, AIDLC rules, Karpathy, Do Not Store
 │   ├── KIRO.md          ← Kiro entry point: tier selection + skill map
 │   ├── GEMINI.md        ← Gemini CLI entry point: research + scaffold tasks
+│   ├── postman-to-playwright/ ← Postman→Playwright migration (standalone, not AI-DLC)
 │   ├── ai-dlc/          ← Dev lifecycle: analysis, design, frontend, backend, QA, testing
 │   │   ├── core/        ← aidlc governance, analysis, monitoring, storage
 │   │   ├── rules/       ← coding standards: playwright, robotframework, test-scenario, industry
-│   │   ├── qa/          ← playwright-testing, robotframework-testing, postman, performance
+│   │   ├── qa/          ← playwright-testing, robotframework-testing, performance
 │   │   ├── dev/         ← backend, frontend, devops-pipeline
 │   │   ├── po/          ← architect (DDD, logical design)
 │   │   └── ux-ui/       ← ui-designer
 │   ├── system/          ← unified-memory, ai-techniques, analysis-concept, skill-creator, hook-creator
-│   ├── finance/         ← Investment portfolio: tax, dividend, rebalance, stock analysis
+│   ├── finance/         ← Investment research
 │   ├── doc/             ← Documentation: aidlc flowchart, swimlane
 │   └── scripts/
 │       └── setup/

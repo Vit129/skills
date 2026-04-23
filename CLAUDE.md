@@ -1,4 +1,4 @@
-# Claude Code Workspace
+# Gemini Code Workspace
 
 ## Agent Tier (pick before every task)
 
@@ -11,9 +11,9 @@
 > One agent owns a task end-to-end — no mid-task handoffs (Gemini bug cascade cost 2 days).
 > **Search / root cause / research rule:** Always call **Gemini CLI Flash 3** first.
 
-## Rules (Claude-specific)
+## Rules (Gemini-specific)
 
-- **Cache:** Do NOT edit CLAUDE.md / rules / MCP config mid-session (breaks prompt cache)
+- **Cache:** Do NOT edit GEMINI.md / rules / MCP config mid-session (breaks prompt cache)
 - **Token:** Toggle Extended Thinking off (Tab) for simple tasks
 
 ## Hooks (auto-active via settings.json)
@@ -36,14 +36,14 @@ When information conflicts, higher items win:
 3. `AGENTS.md` — shared rules & skill map (inlined in each agent's config file)
 4. Agent-specific file — tier routing, escalation, cache rules
 5. `.unified-memory/palace/state.md` — active session state
-6. Skill files at `{skills_root}/` (e.g. `~/.claude/skills/`, `~/ai-agent/skills/`, or project `ai-agent/skills/`)
+6. Skill files at `{skills_root}/` (e.g. `~/.gemini/skills/`, `~/ai-agent/skills/`, or project `ai-agent/skills/`)
 7. After any file write or decision → note internally that session has unsaved work (dirty); before ending session, follow the save workflow in `system/unified-memory/` skill
 
 If notes conflict with the codebase, trust the codebase.
 
 ## Skill Map
 
-> All paths relative to `{skills_root}/` (e.g. `~/.claude/skills/` or `ai-agent/skills/`)
+> All paths relative to `{skills_root}/` (e.g. `~/.gemini/skills/` or `ai-agent/skills/`)
 > For any dev/QA coding task → start with `ai-dlc/core/aidlc/` first (governance + phase routing)
 
 ### ai-dlc/core/ — Governance & Foundation
@@ -70,7 +70,7 @@ If notes conflict with the codebase, trust the codebase.
 | QA architecture, test framework design | `qa/qa-architect/` |
 | test scenario, test case design | `qa/test-scenario/` |
 | write/run/fix RF mobile tests | `qa/robotframework-testing/` |
-| postman migration to playwright | `qa/postman/` |
+| postman migration to playwright | `postman-to-playwright/postman/` |
 | load test, k6, performance | `qa/performance-testing/` |
 
 ### ai-dlc/dev/ — Implementation
@@ -102,7 +102,6 @@ If notes conflict with the codebase, trust the codebase.
 ### finance/ — Investment Portfolio
 | Keyword | Skill |
 |---------|-------|
-| investment port, tax, dividend, rebalance | `finance/coding/` |
 | stock analysis, fundamental research | `finance/research/stock-deep-analysis/` |
 
 ## Karpathy Principles (always active)
@@ -162,6 +161,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 ## Rules (always active)
 
 - **AIDLC first:** All dev/QA work goes through `ai-dlc/core/aidlc/` — never call qa/dev skills directly unless AIDLC routes there
+- **AIDLC exception — Postman migration:** `postman-to-playwright/postman/` skill bypasses AIDLC entirely — source of truth is the Postman collection, not requirements. Use migration flow in `postman-to-playwright/postman/SKILL.md` directly (Step 1→2→2.5→3→4). No `.aidlc/` folder needed.
 - **Phase gates:** If prerequisites missing → STOP, tell user what's needed first
 - **Phase gate check (MANDATORY):** Before ANY dev/QA work → scan `.aidlc/[system]/[feature]/` for existing outputs → find first missing phase → start THERE, not at the user's requested phase. If no `.aidlc/` folder exists for the feature → start from Phase 0/1.2. NEVER skip to a later phase. This check MUST happen BEFORE reading spec docs or generating any output.
 - **No shortcuts:** "เขียน code เลย" without prerequisites = STOP, not proceed
