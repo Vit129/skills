@@ -1,7 +1,7 @@
 # Robot Framework Code Review
 
 Static code audit checklist — run BEFORE executing mobile tests.
-MUST read `robotframework-rules` skill first to know the full standards.
+MUST read `ai-dlc/rules/robotframework-rules/` skill first to know the full standards.
 
 ## When to Use
 
@@ -11,7 +11,7 @@ MUST read `robotframework-rules` skill first to know the full standards.
 
 ## Review Process
 
-1. Load standards: `robotframework-rules/standards.md` + `android.md` or `ios.md`
+1. Load standards: `ai-dlc/rules/robotframework-rules/references/standards.md` + `android.md` or `ios.md`
 2. Check every file against checklist below
 3. Output review report
 4. If NEEDS_FIX + autoFixable → fix immediately, re-review

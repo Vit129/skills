@@ -316,7 +316,7 @@ Brownfield start from 1.1, Greenfield start from 1.2
 - **2.1** QA Task Design → Task breakdown for QA automation
   → Use `aidlc` reference (qa-task-design.md)
 - **2.2** Test Case Design → BDD test scenarios
-  → Use `test-scenario` skill + `test-scenario-rules` skill
+  → Use `ai-dlc/qa/test-scenario/` skill + `ai-dlc/rules/test-scenario-rules/` skill
 
   ✅ **PO Sign-off Gate** (MANDATORY before Phase 2.3):
   - Present test scenario titles + batch summary to PO
@@ -328,7 +328,7 @@ Brownfield start from 1.1, Greenfield start from 1.2
   → Use `qa-architect` skill (api-arch.md, web-arch.md, mobile-arch.md, test-db-strategy.md)
 - **2.4** Test Script Design → Playwright/Robot Framework scripts (TDD: RED) — runs **parallel with 2.5**
   → Use `playwright-testing` skill or `robotframework-testing` skill
-  → Read rules from `playwright-rules` or `robotframework-rules` first
+  → Read rules from `ai-dlc/rules/playwright-rules/` or `ai-dlc/rules/robotframework-rules/` first
   → Contract: Test Scenario (Phase 2.2) + TestId Map (Phase 1.7) — shared with Dev
   → Complete test file skeleton first, then 2.5 can start — full script completion not required
 - **2.5** Dev Task Design → Task breakdown for implementation — runs **parallel with 2.4**

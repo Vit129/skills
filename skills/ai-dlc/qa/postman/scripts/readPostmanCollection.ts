@@ -4,7 +4,6 @@
  */
 import * as fs from 'fs';
 import * as path from 'path';
-import { select, Separator } from '@inquirer/prompts';
 
 function toKebabCase(str: string): string {
   return str.toLowerCase().trim()
@@ -55,11 +54,9 @@ async function resolveOutputPath(): Promise<string> {
 
   let root: string;
   if (uniqueRoots.length > 1) {
-    root = await select({
-      message: '🔍 เลือก PROJECT_ROOT (Use Arrow Keys):',
-      pageSize: 10,
-      choices: uniqueRoots.map((r, i) => ({ name: `Option ${i + 1}: ${r}`, value: r }))
-    });
+    // Use first test project root found (no interactive prompt)
+    root = uniqueRoots[0];
+    console.log(`📂 Multiple project roots found, using: ${root}`);
   } else {
     root = uniqueRoots[0] ?? process.cwd();
   }
@@ -706,44 +703,62 @@ async function run() {
     rootItems = [filtered];
     finalFolderName = targetFolder;
   } else {
-    const folderChoices = targetFolderList.filter((i: any) => i.item).map((i: any, index: number) => ({ name: `Option ${index + 1}: ${i.name}`, value: i.name }));
-    if (folderChoices.length > 0) {
-      const targetName = await select({
-        message: '📂 Select a folder to migrate (Use Arrow Keys):',
-        pageSize: 15,
-        choices: [
-          { name: `Option 0: [ Convert All Folders ]`, value: 'ALL_FOLDERS' },
-          new Separator(),
-          ...folderChoices
-        ]
-      });
-      if (targetName !== 'ALL_FOLDERS') {
-        const filteredFolder = targetFolderList.find((f: any) => f.name === targetName);
-        if (!filteredFolder) { console.error(`❌ Folder not found: ${targetName}`); process.exit(1); }
-        finalFolderName = targetName;
-        console.log(`\n✅ Selected: ${targetName}`);
-        rootItems = [filteredFolder];
-      } else {
-        rootItems = targetFolderList;
-        console.log(`\n✅ Processing ALL folders`);
+    // Always process ALL folders → separate .md files per folder
+    const resolvedOutput = await resolveOutputPath();
+    let baseDir = resolvedOutput;
+    if (resolvedOutput.toLowerCase().endsWith('.md')) baseDir = path.dirname(resolvedOutput);
+    const collectionFolderName = toKebabCase(data.info?.name || 'Collection');
+    const baseDirLeaf = path.basename(baseDir).toLowerCase();
+    const outputDir = baseDirLeaf === collectionFolderName.toLowerCase()
+      ? baseDir
+      : path.join(baseDir, collectionFolderName);
+
+    const foldersToProcess = targetFolderList.filter((i: any) => i.item);
+    if (foldersToProcess.length > 0) {
+      console.log(`\n✅ Processing ALL ${foldersToProcess.length} folders → separate .md files`);
+      for (const folder of foldersToProcess) {
+        await generateForFolder([folder], folder.name, outputDir);
       }
-    } else {
-      rootItems = targetFolderList;
+      console.log(`\n📊 ALL_FOLDERS Summary: ${foldersToProcess.length} folders processed`);
+      return;
     }
+    // No sub-folders — treat entire collection as single file
+    rootItems = targetFolderList;
   }
 
+  // Single folder mode
   const collectionFolderName = toKebabCase(data.info?.name || 'Collection');
-  const fileName = toCamelCase(finalFolderName);
   const resolvedOutput = await resolveOutputPath();
   let baseDir = resolvedOutput;
   if (resolvedOutput.toLowerCase().endsWith('.md')) baseDir = path.dirname(resolvedOutput);
-  // [FIX] Don't nest if baseDir already ends with collectionFolderName
   const baseDirLeaf = path.basename(baseDir).toLowerCase();
-  const finalOutputPath = baseDirLeaf === collectionFolderName.toLowerCase()
-    ? path.join(baseDir, `${fileName}.md`)
-    : path.join(baseDir, collectionFolderName, `${fileName}.md`);
+  const outputDir = baseDirLeaf === collectionFolderName.toLowerCase()
+    ? baseDir
+    : path.join(baseDir, collectionFolderName);
 
-  const endpointsContent = parseItems(rootItems, 2, [], []);
+  await generateForFolder(rootItems, finalFolderName, outputDir);
+}
+
+/** Reset mutable global state before processing a new folder */
+function resetGlobalState() {
+  totalRequests = 0;
+  validationIssues.length = 0;
+  testGroups.clear();
+  globalEnvVarsUsed.clear();
+  importsNeeded.clear();
+  importsNeeded.add('{ test, expect } from "@playwright/test"');
+  describeTree.tests.length = 0;
+  describeTree.children.clear();
+}
+
+/** Generate a single .md file for the given items (one folder) */
+async function generateForFolder(items: any[], folderName: string, outputDir: string) {
+  resetGlobalState();
+
+  const fileName = toKebabCase(folderName);
+  const finalOutputPath = path.join(outputDir, `${fileName}.md`);
+
+  const endpointsContent = parseItems(items, 2, [], []);
 
   // Collection Variables section
   let collectionVarSection = `## 📦 Collection Variables\n\n`;
@@ -909,18 +924,18 @@ async function run() {
   md += `## 📋 API Endpoints\n\n` + endpointsContent;
   md += groupedSection;
 
-  function smartWrite(targetPath: string) {
+  function smartWrite(targetPath: string, mdContent: string) {
     const dir = path.dirname(targetPath);
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    if (!fs.existsSync(targetPath)) { fs.writeFileSync(targetPath, md, 'utf-8'); console.log(`✅ Created: ${targetPath}`); return; }
+    if (!fs.existsSync(targetPath)) { fs.writeFileSync(targetPath, mdContent, 'utf-8'); console.log(`✅ Created: ${targetPath}`); return; }
     const existing = fs.readFileSync(targetPath, 'utf-8');
     const placeholder = '(Pending postmanSpecialist.md)';
-    if (existing.includes(placeholder)) { fs.writeFileSync(targetPath, existing.replace(placeholder, md), 'utf-8'); console.log(`✅ Replaced placeholder: ${targetPath}`); }
-    else { fs.writeFileSync(targetPath, md, 'utf-8'); console.log(`✅ Overwritten: ${targetPath}`); }
+    if (existing.includes(placeholder)) { fs.writeFileSync(targetPath, existing.replace(placeholder, mdContent), 'utf-8'); console.log(`✅ Replaced placeholder: ${targetPath}`); }
+    else { fs.writeFileSync(targetPath, mdContent, 'utf-8'); console.log(`✅ Overwritten: ${targetPath}`); }
   }
 
-  smartWrite(finalOutputPath);
-  console.log(`\n📊 Summary:`);
+  smartWrite(finalOutputPath, md);
+  console.log(`\n📊 Summary [${folderName}]:`);
   console.log(`   Total Requests    : ${totalRequests}`);
   console.log(`   Collection Vars   : ${collectionVars.length} (${functionVars.length} functions)`);
   console.log(`   Env Vars Required : ${globalEnvVarsUsed.size}`);

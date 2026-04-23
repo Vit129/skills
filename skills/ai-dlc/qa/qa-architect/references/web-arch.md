@@ -9,7 +9,7 @@ Design the page object structure and helper layer for Web UI test automation usi
 ## Process
 1. Read implementation plan — extract test cases, DB strategy, existing assets, templates found
 2. Read Lessons Learnt: check `{knowledge_root}/lessons/webUi/` for UI behaviors (casing, modals, pagination)
-3. Read coding rules from `playwright-rules` skill (webUi.md + coding-standards.md) — ALL parts
+3. Read coding rules from `ai-dlc/rules/playwright-rules/` skill (webUi.md + coding-standards.md) — ALL parts
 4. Analyze requirements (CoT) — count screens/components, identify UI sections
 5. Generate patterns (LATS) — simulate 3-4 architectures, score, select hybrid
 6. Validate design — check against all coding standards + business edge cases

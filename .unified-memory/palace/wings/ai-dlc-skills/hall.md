@@ -34,3 +34,4 @@
 - `v1-v2-full-comparison.md` — Complete v1 (_backup) vs v2 (ai-dlc) system comparison: 30/30 covered + 15 v2-only
 - `setup-script-root-support.md` — setupAgentSkills.sh: added "." and "--self" support for workspace root install
 - `impeccable-design-skill.md` — Added impeccable-design skill to dev/ from pbakaus/impeccable repo
+- `rules-folder-restructure.md` — Centralized 4 -rules skills into ai-dlc/rules/ folder

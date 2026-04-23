@@ -9,7 +9,7 @@ Generate Robot Framework + Appium test files from architecture design.
 **Input:** Architecture Design + Test Structure Blueprint from implementation plan.
 
 **Steps:**
-1. Read coding rules from `robotframework-rules` skill (standards.md + android.md or ios.md) — ALL parts
+1. Read coding rules from `ai-dlc/rules/robotframework-rules/` skill (standards.md + android.md or ios.md) — ALL parts
 2. Read architecture and test structure blueprint
 3. Create directory structure (mkdir -p) — folders kebab-case
 4. Generate YAML fixtures — `[feature]Data.yaml` with environment-specific data and `[feature]Labels.yaml` with TH/EN UI labels

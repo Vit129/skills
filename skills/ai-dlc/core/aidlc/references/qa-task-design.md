@@ -10,7 +10,7 @@ Can start this phase if:
 - [ ] Test case design is complete (test scenarios exist)
 - [ ] QA architecture is complete (implementation plan exists)
 - [ ] Data storage strategy is defined
-- [ ] Coding rules reviewed (playwright-rules or robotframework-rules)
+- [ ] Coding rules reviewed (ai-dlc/rules/playwright-rules or ai-dlc/rules/robotframework-rules)
 
 ## Required Context from Previous Phases
 
@@ -40,8 +40,8 @@ Based on the test platform, MUST read the corresponding skill first:
 | iOS | `robotframework-testing` | workflow.md, python-db.md |
 
 Also read coding rules:
-- Web/API → `playwright-rules` (coding-standards.md + web-ui.md or api.md)
-- Mobile → `robotframework-rules` (standards.md + android.md or ios.md)
+- Web/API → `ai-dlc/rules/playwright-rules/` (coding-standards.md + web-ui.md or api.md)
+- Mobile → `ai-dlc/rules/robotframework-rules/` (standards.md + android.md or ios.md)
 
 ## When to use
 
@@ -175,7 +175,7 @@ Status: In Progress | Completed
 - Test Scenarios: {path}
 - Architecture: {path}
 - Data Storage Strategy: {path}
-- Coding Rules: {playwright-rules or robotframework-rules}
+- Coding Rules: {ai-dlc/rules/playwright-rules or ai-dlc/rules/robotframework-rules}
 
 ## Summary
 - Total tasks: {N}

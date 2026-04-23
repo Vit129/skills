@@ -12,7 +12,7 @@ description: >
 
 Full automation cycle for Playwright: write → review → run → heal.
 
-Always read the `playwright-rules` skill before writing or reviewing any Playwright code.
+Always read the `ai-dlc/rules/playwright-rules/` skill before writing or reviewing any Playwright code.
 
 ## When to Load Each Reference
 

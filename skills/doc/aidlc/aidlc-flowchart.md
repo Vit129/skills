@@ -245,7 +245,7 @@ flowchart TD
 flowchart TD
     PM([Postman Collection]) --> PMSkill[postman skill<br/>Parse collection + environment]
     PMSkill --> PMArch[2.2 QA Architecture<br/>qa-architect skill]
-    PMArch --> PMScript[2.3 Test Script Design<br/>playwright-testing + playwright-rules]
+    PMArch --> PMScript[2.3 Test Script Design<br/>playwright-testing + ai-dlc/rules/playwright-rules]
     PMScript --> PMTask[2.4 QA Task Design]
     PMTask --> PMRun[3.2 Automated Testing]
     PMRun --> PMPR[3.3 Pull Request]

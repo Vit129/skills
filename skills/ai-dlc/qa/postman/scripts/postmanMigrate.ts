@@ -1,6 +1,6 @@
 /**
  * @file postmanMigrate.ts
- * @version 2.0 — One-Shot Orchestrator (Step 1 + 2)
+ * @version 3.0 — One-Shot Orchestrator (Step 1 + 2) — uses tsx
  * @description Runs readPostmanCollection → readPostmanEnv in sequence.
  *              After this, AI generates Playwright code from the produced .md files.
  *

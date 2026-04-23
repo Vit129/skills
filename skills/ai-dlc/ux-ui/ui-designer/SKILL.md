@@ -103,10 +103,10 @@ PRE-DELIVERY CHECKLIST:
 | Task | Read |
 |------|------|
 | Building a design system from scratch | `references/reasoning-engine/four-stage-process.md` |
-| Finance, banking, investment products | `references/industry-rules/finance.md` |
-| Healthcare, medical, telemedicine | `references/industry-rules/healthcare.md` |
-| SaaS, dashboards, analytics | `references/industry-rules/tech-saas.md` |
-| E-commerce, retail, marketplaces | `references/industry-rules/ecommerce.md` |
+| Finance, banking, investment products | `ai-dlc/rules/industry-rules/references/finance.md` |
+| Healthcare, medical, telemedicine | `ai-dlc/rules/industry-rules/references/healthcare.md` |
+| SaaS, dashboards, analytics | `ai-dlc/rules/industry-rules/references/tech-saas.md` |
+| E-commerce, retail, marketplaces | `ai-dlc/rules/industry-rules/references/ecommerce.md` |
 | Color palette options | `references/design-patterns/colors-index.md` |
 | Full design patterns library | `references/design-patterns/overview.md` |
 | Tech stack guidance | `references/tech-stacks.md` |

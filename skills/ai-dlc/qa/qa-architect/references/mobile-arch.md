@@ -8,7 +8,7 @@ Design the page object structure for Android/iOS test automation using Robot Fra
 
 ## Process
 1. Read implementation plan — extract test cases, platform (Android/iOS), DB strategy, templates found
-2. Read coding rules from `robotframework-rules` skill (standards.md + android.md or ios.md)
+2. Read coding rules from `ai-dlc/rules/robotframework-rules/` skill (standards.md + android.md or ios.md)
 3. Parse XML source (if available) — extract accessibility_id, resource-id, content-desc, text
 4. Analyze requirements (CoT) — count screens, identify shared vs feature keywords
 5. Generate patterns (LATS) — simulate 3 patterns (Simple vs Hybrid vs Expert), select hybrid

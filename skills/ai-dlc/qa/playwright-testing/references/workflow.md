@@ -9,7 +9,7 @@ Generate Playwright test files from architecture design.
 **Input:** Architecture Design + Test Structure Blueprint from implementation plan.
 
 **Steps:**
-1. Read coding rules from `playwright-rules` skill (api.md or webUi.md + coding-standards.md) — ALL parts
+1. Read coding rules from `ai-dlc/rules/playwright-rules/` skill (api.md or webUi.md + coding-standards.md) — ALL parts
 2. Read architecture and test structure blueprint from implementation plan
 3. Check discovery results — if Resources Discovery found reusable templates, import them instead of creating from scratch
 4. Create directory structure (mkdir -p) — folders kebab-case
@@ -146,7 +146,7 @@ await page.getByTestId('flight-result-item-FL001')
 Static quality audit before execution — no running tests.
 
 **Check against:**
-- `playwright-rules` skill compliance (all parts)
+- `ai-dlc/rules/playwright-rules/` skill compliance (all parts)
 - Architecture matches blueprint
 - DB methods follow strategy (seed/verify/cleanup)
 - No forbidden patterns

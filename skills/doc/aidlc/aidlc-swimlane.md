@@ -214,12 +214,12 @@ sequenceDiagram
 
     AIDLC->>Know: 2.x — check templates + lessons before writing
     AIDLC->>TestScen: 2.1 Test Case Design
-    Note over TestScen: uses test-scenario-rules skill internally
+    Note over TestScen: uses ai-dlc/rules/test-scenario-rules skill internally
     AIDLC->>QAArch: 2.2 QA Architecture
     AIDLC->>PW: 2.3 Test Script Design (API/Web)
-    Note over PW: loads playwright-rules before writing
+    Note over PW: loads ai-dlc/rules/playwright-rules before writing
     AIDLC->>RF: 2.3 Test Script Design (Mobile)
-    Note over RF: loads robotframework-rules before writing
+    Note over RF: loads ai-dlc/rules/robotframework-rules before writing
     AIDLC->>AIDLC: 2.4 QA Task Design
     AIDLC->>DevOps: 2.5 DevOps Sync
 

@@ -39,7 +39,7 @@ Add or modify test scripts without running the full QA workflow.
 
 ## Process (Quick Mode)
 1. Read existing spec file and understand current structure
-2. Read coding rules (`playwright-rules` or `robotframework-rules`)
+2. Read coding rules (`ai-dlc/rules/playwright-rules/` or `ai-dlc/rules/robotframework-rules/`)
 3. Adversarial review before proposing changes:
    - Does the change break existing tests?
    - Does it follow naming conventions?

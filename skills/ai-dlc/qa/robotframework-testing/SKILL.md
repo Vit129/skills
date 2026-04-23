@@ -11,7 +11,7 @@ description: >
 
 Full automation cycle for Robot Framework + Appium: write → review → run → heal.
 
-Always read the `robotframework-rules` skill before writing or reviewing any Robot Framework code.
+Always read the `ai-dlc/rules/robotframework-rules/` skill before writing or reviewing any Robot Framework code.
 
 ## When to Load Each Reference
 

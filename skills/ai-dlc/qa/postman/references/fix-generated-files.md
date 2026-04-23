@@ -14,7 +14,7 @@ Postman uses `{{variable}}` syntax, which must be converted to Template Literals
 | **Query Param** | `?id={{userId}}` | `` `?id=${process.env['USER_ID']}` `` |
 | **Path Param** | `/users/{{id}}` | `` `/users/${process.env['ID']}` `` |
 
-**⚠️ AI Mandate:** Always check if the variable name in `process.env` should be `SCREAMING_SNAKE_CASE` per `playwright-rules`.
+**⚠️ AI Mandate:** Always check if the variable name in `process.env` should be `SCREAMING_SNAKE_CASE` per `ai-dlc/rules/playwright-rules/`.
 
 ---
 

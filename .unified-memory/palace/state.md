@@ -12,6 +12,18 @@
 
 | Date | Wing | Summary |
 |------|------|---------|
+| 2026-04-23 | ai-dlc-skills | Fixed last 2 citation refs in KIRO.md/CLAUDE.md: skill:playwright-rules → skill:ai-dlc/rules/playwright-rules — grep now clean ✅ |
+| 2026-04-23 | ai-dlc-skills | Final: all Skill Map paths + doc diagrams now use ai-dlc/rules/ full prefix consistently ✅ |
+| 2026-04-23 | ai-dlc-skills | Final sweep: updated ALL bare skill name references across 15 files (rules/, core/, qa/, doc/) to use full ai-dlc/rules/ paths ✅ |
+| 2026-04-23 | ai-dlc-skills | Updated all qa/ SKILL.md files (playwright-testing, robotframework-testing, test-scenario, postman) to use full ai-dlc/rules/ paths instead of bare skill names ✅ |
+| 2026-04-23 | ai-dlc-skills | Switched all cross-skill references from relative paths (../../) to {skills_root} paths (ai-dlc/rules/...) for portability ✅ |
+| 2026-04-23 | ai-dlc-skills | Updated README.md structure tree: added rules/ folder between core/ and qa/ ✅ |
+| 2026-04-23 | ai-dlc-skills | Completed all rules/ path updates: README.md, postman/SKILL.md, ui-designer/SKILL.md, Skill Maps (3 agents); old qa/*-rules/ folders pending user rm ✅ |
+| 2026-04-23 | ai-dlc-skills | Fixed postman/SKILL.md: relative paths updated to ../../rules/playwright-rules/ and ../playwright-testing/ ✅ |
+| 2026-04-23 | ai-dlc-skills | Added ai-dlc/rules/ section to Skill Map in GEMINI.md/KIRO.md/CLAUDE.md — rules/ now separate section from qa/ ✅ |
+| 2026-04-23 | ai-dlc-skills | Updated Skill Map in GEMINI.md/KIRO.md/CLAUDE.md: qa/playwright-rules→rules/, qa/robotframework-rules→rules/, qa/test-scenario-rules→rules/ ✅ |
+| 2026-04-23 | ai-dlc-skills | Completed rules/ restructure: ui-designer/SKILL.md updated with new industry-rules paths; all 4 rules skills in ai-dlc/rules/ ✅ |
+| 2026-04-23 | ai-dlc-skills | Restructured ai-dlc/rules/: created rules/ folder, moved playwright-rules/robotframework-rules/test-scenario-rules/industry-rules from qa/ and ux-ui/ ✅ |
 | 2026-04-23 | ai-dlc-skills | setupKiro.sh: removed interactive copy/reference prompt, default to #[[file:]] reference only ✅ |
 | 2026-04-22 | ai-dlc-skills | Registered impeccable-design in AGENTS.md Skill Map (both .claude/skills/ and .claude/.agents/) — keywords: design quality, anti-AI-slop, typography, OKLCH, craft UI, polish UI ✅ |
 | 2026-04-22 | ai-dlc-skills | Discovered impeccable-design not registered in AGENTS.md Skill Map — needs entry under ai-dlc/dev/ section |

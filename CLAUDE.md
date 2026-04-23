@@ -54,16 +54,21 @@ If notes conflict with the codebase, trust the codebase.
 | logging, monitoring, observability, alerts | `core/monitoring/` |
 | save knowledge, backup, knowledge buffer | `core/storage/` |
 
+### ai-dlc/rules/ — Coding Standards & Rules
+| Keyword | Skill |
+|---------|-------|
+| playwright standards, coding rules | `ai-dlc/rules/playwright-rules/` ← load first |
+| test scenario rules, CSV format | `ai-dlc/rules/test-scenario-rules/` ← load first |
+| robot framework standards, RF rules | `ai-dlc/rules/robotframework-rules/` ← load first |
+| industry design rules, finance/healthcare/ecommerce/saas design | `ai-dlc/rules/industry-rules/` ← load first |
+
 ### ai-dlc/qa/ — Quality & Testing
 | Keyword | Skill |
 |---------|-------|
-| playwright standards, coding rules | `qa/playwright-rules/` ← load first |
 | write/run/fix playwright tests | `qa/playwright-testing/` |
 | browser CLI, navigate, screenshot | `qa/playwright-cli/` |
 | QA architecture, test framework design | `qa/qa-architect/` |
 | test scenario, test case design | `qa/test-scenario/` |
-| test scenario rules, CSV format | `qa/test-scenario-rules/` ← load first |
-| robot framework standards, RF rules | `qa/robotframework-rules/` ← load first |
 | write/run/fix RF mobile tests | `qa/robotframework-testing/` |
 | postman migration to playwright | `qa/postman/` |
 | load test, k6, performance | `qa/performance-testing/` |
@@ -171,7 +176,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 ```
 [from: LESSON-AUTH-001]        ← lesson
-[from: skill:playwright-rules] ← skill
+[from: skill:ai-dlc/rules/playwright-rules] ← skill
 [from: memory:{wing}/{room}]   ← memory palace
 ```
 

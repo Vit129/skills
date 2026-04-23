@@ -15,7 +15,8 @@ Personal knowledge base and skill library for AI-assisted development — works 
 │   ├── GEMINI.md        ← Gemini CLI entry point: research + scaffold tasks
 │   ├── ai-dlc/          ← Dev lifecycle: analysis, design, frontend, backend, QA, testing
 │   │   ├── core/        ← aidlc governance, analysis, monitoring, storage
-│   │   ├── qa/          ← playwright, robotframework, test-scenario, postman, performance
+│   │   ├── rules/       ← coding standards: playwright, robotframework, test-scenario, industry
+│   │   ├── qa/          ← playwright-testing, robotframework-testing, postman, performance
 │   │   ├── dev/         ← backend, frontend, devops-pipeline
 │   │   ├── po/          ← architect (DDD, logical design)
 │   │   └── ux-ui/       ← ui-designer

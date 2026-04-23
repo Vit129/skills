@@ -10,7 +10,7 @@ description: >
 
 Design, generate, and export test scenarios for Azure DevOps.
 
-Always read the `test-scenario-rules` skill before designing or exporting any test scenarios.
+Always read the `ai-dlc/rules/test-scenario-rules/` skill before designing or exporting any test scenarios.
 
 ## When to Load Each Reference
 
