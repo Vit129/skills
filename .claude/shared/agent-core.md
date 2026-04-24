@@ -15,6 +15,80 @@ When information conflicts, higher items win:
 
 If notes conflict with the codebase, trust the codebase.
 
+## Plan Mode (Mandatory Rule)
+
+**Before any non-trivial implementation, enter plan mode.**
+
+Use `EnterPlanMode` when:
+- New feature implementation (multiple files, unclear scope)
+- Multiple valid approaches exist (need to choose one)
+- Code modifications affecting behavior or structure
+- Architectural decisions required
+- Multi-file changes likely
+- Requirements unclear (explore first)
+- User preferences matter (present options)
+
+Do NOT use plan mode for:
+- Single-line or few-line fixes
+- Simple one-function additions with clear requirements
+- Research/exploration tasks (use Agent tool instead)
+- Tasks with explicit detailed instructions
+
+Plan output:
+1. Explore codebase (Glob, Grep, Read)
+2. Understand existing patterns
+3. Design implementation approach
+4. Present plan to user for approval via `ExitPlanMode`
+5. Use `AskUserQuestion` if approach unclear
+
+---
+
+## Design & Craftsmanship Rules (Premium Standards)
+
+**Craft UI/code like a senior engineer ships to production.**
+
+### Foundational Tokens (Centralized)
+- **Color:** Use design tokens from `.claude/shared/` or design system (not hardcoded hex)
+- **Typography:** Consistent font families, sizes, weights, line heights
+- **Spacing:** Modular scale (8px, 12px, 16px, 24px, 32px base units)
+- **Shadows:** Depth hierarchy (shadow-sm, shadow-md, shadow-lg)
+- **Borders:** Consistent radius (0px, 4px, 8px, 12px)
+- **Duration:** Consistent animation timing (150ms, 250ms, 350ms)
+
+### Reusable Components
+- Extract repeated patterns → shared components
+- Props-based customization (not copy-paste variants)
+- Accessible by default (ARIA labels, semantic HTML, keyboard nav)
+- Dark mode support built-in (not an afterthought)
+
+### Typography Hierarchy
+- **Display:** Large, bold, headlines (32px+)
+- **Heading:** Section titles (24px)
+- **Subheading:** Subsection titles (18px)
+- **Body:** Content (16px)
+- **Label:** Form labels, captions (14px)
+- **Caption:** Metadata, hints (12px)
+
+### Anti-AI-Slop (Checklist)
+- [ ] No generic placeholder text ("Click here", "Submit")
+- [ ] No orphaned UI elements (every control has clear purpose)
+- [ ] No inconsistent spacing or alignment (use grid/flex)
+- [ ] No forgotten states (hover, focus, active, disabled)
+- [ ] No color contrast fails (WCAG AA minimum)
+- [ ] No tiny unreadable text (14px minimum for body)
+- [ ] No cluttered layouts (whitespace is content)
+- [ ] No missing feedback (loading states, error messages, success confirmations)
+
+### Code Craftsmanship
+- **Naming:** Clear, pronounceable, intent-revealing (not `temp`, `data`, `thing`)
+- **Functions:** Single responsibility, <20 lines when possible
+- **Comments:** Why, not what (code shows what, comments explain why)
+- **DRY:** Extract common patterns → utilities/helpers
+- **Testability:** Arrange-Act-Assert pattern, one concept per test
+- **Performance:** Profile before optimizing, measure after changes
+
+---
+
 ## Karpathy Principles (always active)
 
 ### 1. Think Before Coding
