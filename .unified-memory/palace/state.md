@@ -52,16 +52,18 @@ _Older sessions archived_
 
 ## Current Focus
 
-- focus: ""
+- focus: "SSOT architecture for Claude/Gemini/Codex configs — complete ✅"
 - blockers: ""
-- next_action: ""
+- next_action: "Push to GitHub when ready"
 
 ## Open Threads
 
+- [x] SSOT architecture for Claude/Gemini/Codex: created .claude/shared/agent-core.md + sync script, thin adapters for CODEX.md/GEMINI.md @2026-04-24
+- [x] Removed hooks from settings.json → state.md as manual instruction (turn start/end checklist) @2026-04-24
+- [ ] Push to GitHub when user ready
 - [x] Search scaling implementation: Hybrid Inverted Index + Sorted Date Array implemented → keyword-index.json + date-index.json created, storage.md + session.md + SKILL.md updated @2026-04-21
 - [x] AGENTS.md: adopted Trust Priority, Do-not-store, Minimum Update Contract from agent-context-kit @2026-04-21
 - [x] Fix BASE_DIR walk-up level in setupAgentSkills.sh — replaced hardcoded `../../..` with `.git/` detection loop, all 3 copies synced @2026-04-21
-- [ ] Add to setupAgentSkills.sh: resolve {project_root} placeholder in GEMINI.md/KIRO.md to correct relative path based on install depth
 - [x] Add impeccable-design to AGENTS.md Skill Map under ai-dlc/dev/ section @2026-04-22
 
 ## Placeholder Convention

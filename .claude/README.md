@@ -71,8 +71,29 @@ If an agent needs extra rules (e.g., "never use gcloud") that others don't:
 | `~/.codex/CODEX.md` | Generated (user-local) | ❌ No |
 | `~/.gemini/GEMINI.md` | Generated (user-local) | ❌ No |
 
-## Next Steps
+## Implementation Status
+
+✅ **Completed (2026-04-24):**
+- Created `.claude/shared/agent-core.md` with universal rules
+- Implemented `sync-agent-instructions.sh` script
+- Generated `~/.codex/CODEX.md` and `~/.gemini/GEMINI.md`
+- Made project `CLAUDE.md` a thin adapter (project-specific only)
+- Documented architecture in this README
+- Committed to GitHub (commit hash: b3885e2)
+
+## Usage Quick Start
+
+```bash
+# After editing .claude/shared/agent-core.md
+./.claude/scripts/sync-agent-instructions.sh
+
+# Verify generated files
+cat ~/.codex/CODEX.md
+cat ~/.gemini/GEMINI.md
+```
+
+## Future Enhancements
 
 - [ ] Add `agent-skills.md` (shared skill map reference)
 - [ ] Add agent-specific overrides if needed (e.g., `.claude/shared/codex-overrides.md`)
-- [ ] Document how to manage breaking changes across agents
+- [ ] Automate sync on `.claude/shared/` changes (git hook)
