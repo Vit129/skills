@@ -1,45 +1,19 @@
-# Gemini Code Workspace
+# Claude Code Workspace (Project Root)
 
-## Agent Tier (pick before every task)
+> 🔗 **SSOT Architecture:** Shared rules live in `.claude/shared/agent-core.md`
+> - `~/.codex/CODEX.md` (user-level) — generated from shared + Codex-specific
+> - `~/.gemini/GEMINI.md` (user-level) — generated from shared + Gemini-specific  
+> - `.claude/shared/` — committed to GitHub
+>
+> **Sync:** Run `./.claude/scripts/sync-agent-instructions.sh` when shared rules change.
 
-| Task | Agent |
-|------|-------|
-| Read code / research / scaffold | Gemini 3 Flash |
-| Single-file fix, clear spec | Gemini 2.5 Pro |
-| Logic bug / arch / async / critical | Gemini 3 Pro |
+## Project-Level Context
 
-> One agent owns a task end-to-end — no mid-task handoffs (Gemini bug cascade cost 2 days).
-> **Search / root cause / research rule:** Always call **Gemini CLI Flash 3** first.
+This file documents shared skill map, architecture decisions, and knowledge specific to this project.
 
-## Rules (Gemini-specific)
+For universal rules (state management, Karpathy principles, reading order), see `.claude/shared/agent-core.md`.
 
-- **Cache:** Do NOT edit GEMINI.md / rules / MCP config mid-session (breaks prompt cache)
-- **Token:** Toggle Extended Thinking off (Tab) for simple tasks
-
-## Hooks (auto-active via settings.json)
-
-| Hook | Trigger | Action |
-|------|---------|--------|
-| SessionStart | Session open | Load `.unified-memory/palace/state.md`, user-profile.md, classify wings, nudge check, skill suggestions |
-| Stop | Session end | Full save: admission → write wings/rooms → search-index → skill crystallize → user-profile → sync knowledge → verify |
-| PostToolUse | Bash test cmd | Score ±0.5/1.0 in knowledge index |
-| PostToolUse | Write/Edit file | Track dirty flag for session save reminder |
-
-<!-- ═══ AGENTS.md — Shared Agent Rules (inlined) ═══ -->
-
-## Reading Order & Trust Priority
-
-When information conflicts, higher items win:
-
-1. Latest explicit user instruction
-2. Verified codebase state (grep/read before acting)
-3. `AGENTS.md` — shared rules & skill map (inlined in each agent's config file)
-4. Agent-specific file — tier routing, escalation, cache rules
-5. `.unified-memory/palace/state.md` — active session state
-6. Skill files at `{skills_root}/` (e.g. `~/.gemini/skills/`, `~/ai-agent/skills/`, or project `ai-agent/skills/`)
-7. After any file write or decision → note internally that session has unsaved work (dirty); before ending session, follow the save workflow in `system/unified-memory/` skill
-
-If notes conflict with the codebase, trust the codebase.
+---
 
 ## Skill Map
 
@@ -104,61 +78,7 @@ If notes conflict with the codebase, trust the codebase.
 |---------|-------|
 | stock analysis, fundamental research | `finance/research/stock-deep-analysis/` |
 
-## Karpathy Principles (always active)
-
-### 1. Think Before Coding
-**Don't assume. Don't hide confusion. Surface tradeoffs.**
-
-- State assumptions explicitly. If uncertain, ask.
-- If multiple interpretations exist, present them — don't pick silently.
-- If a simpler approach exists, say so. Push back when warranted.
-- If something is unclear, stop. Name what's confusing. Ask.
-
-### 2. Simplicity First
-**Minimum code that solves the problem. Nothing speculative.**
-
-- No features beyond what was asked.
-- No abstractions for single-use code.
-- No "flexibility" or "configurability" that wasn't requested.
-- No error handling for impossible scenarios.
-- If you write 200 lines and it could be 50, rewrite it.
-
-Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
-
-### 3. Surgical Changes
-**Touch only what you must. Clean up only your own mess.**
-
-When editing existing code:
-- Don't "improve" adjacent code, comments, or formatting.
-- Don't refactor things that aren't broken.
-- Match existing style, even if you'd do it differently.
-- If you notice unrelated dead code, mention it — don't delete it.
-
-When your changes create orphans:
-- Remove imports/variables/functions that YOUR changes made unused.
-- Don't remove pre-existing dead code unless asked.
-
-The test: Every changed line should trace directly to the user's request.
-
-### 4. Goal-Driven Execution
-**Define success criteria. Loop until verified.**
-
-Transform tasks into verifiable goals:
-- "Add validation" → "Write tests for invalid inputs, then make them pass"
-- "Fix the bug" → "Write a test that reproduces it, then make it pass"
-- "Refactor X" → "Ensure tests pass before and after"
-
-For multi-step tasks, state a brief plan:
-
-```
-1. [Step] → verify: [check]
-2. [Step] → verify: [check]
-3. [Step] → verify: [check]
-```
-
-Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
-
-## Rules (always active)
+## Project Rules (overrides/extends shared)
 
 - **AIDLC first:** All dev/QA work goes through `ai-dlc/core/aidlc/` — never call qa/dev skills directly unless AIDLC routes there
 - **AIDLC exception — Postman migration:** `postman-to-playwright/postman/` skill bypasses AIDLC entirely — source of truth is the Postman collection, not requirements. Use migration flow in `postman-to-playwright/postman/SKILL.md` directly (Step 1→2→2.5→3→4). No `.aidlc/` folder needed.
@@ -179,14 +99,3 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 [from: skill:ai-dlc/rules/playwright-rules] ← skill
 [from: memory:{wing}/{room}]   ← memory palace
 ```
-
-## Do Not Store
-
-Never record: secrets/credentials, raw chat transcripts, chain-of-thought reasoning, speculative notes without evidence, duplicate summaries already in `.unified-memory/`.
-
-## Minimum Update Contract
-
-After meaningful work, update:
-- `.unified-memory/palace/state.md` → Current Focus + Open Threads when focus/blockers/next steps change
-- `.unified-memory/` rooms → when decisions, architecture choices, or lessons are made
-- Trigger "save session + learn" at session end if dirty=true

@@ -12,6 +12,8 @@
 
 | Date | Wing | Summary |
 |------|------|---------|
+| 2026-04-24 | unified-memory | Implemented SSOT architecture: `.claude/shared/agent-core.md` + sync script → generated ~/.codex/CODEX.md, ~/.gemini/GEMINI.md; project CLAUDE.md now thin adapter ✅ |
+| 2026-04-24 | unified-memory | Removed all hooks from settings.json → state.md as CLAUDE.md instruction (turn start: read, turn end: update) ✅ |
 | 2026-04-23 | ai-dlc-skills | Added EN triggers to stock-deep-analysis/SKILL.md (was TH-only); all 21 SKILL.md files now bilingual EN+TH ✅ |
 | 2026-04-23 | ai-dlc-skills | Added TH translations to description field of all 19 SKILL.md files (EN-only → bilingual EN+TH fuzzy triggers) ✅ |
 | 2026-04-23 | ai-dlc-skills | Fixed last 2 citation refs in KIRO.md/CLAUDE.md: skill:playwright-rules → skill:ai-dlc/rules/playwright-rules — grep now clean ✅ |
