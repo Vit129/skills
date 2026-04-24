@@ -219,6 +219,26 @@ If any check fails, task is not done. Fix it or escalate.
 
 > Summary rule: action verbs only (Added, Fixed, Updated, Completed, Migrated). Exclude: discussions, no-decision turns, compare-only turns, and general learnings.
 
+## .unified-memory/ Usage Guide
+
+**state.md** (Turn tracking)
+- UPDATE if: decision made, direction committed, blocker identified, next steps clearer, implementation/testing progress
+- SKIP if: pure Q&A, no-decision turns, compare-only discussion, brainstorming without commitment, general conversation
+- Scope: This session's working context + progress
+- Format: Action verbs only (Added, Fixed, Updated, Completed, Migrated)
+
+**knowledge/** (Lessons & patterns)
+- CREATE if: discovered a reusable pattern, found a best practice worth repeating, captured a gotcha/lesson learned
+- Examples: design-tokens.md, error-recovery-strategy.md, testing-best-practices.md
+- Scope: Cross-project patterns (useful in future sessions)
+- Format: Lesson frontmatter + examples + decision rationale
+
+**palace/wings/** (Persistent evolution tracking)
+- CREATE if: major capability added, architecture decision made, significant learning accumulated
+- Examples: agent-rules-evolution.md (tracks rule versions), wings architecture changes
+- Scope: Project evolution & growth over time (visible to future team members)
+- Format: Timestamped rooms with metadata
+
 ## Do Not Store
 
 Never record: secrets/credentials, raw chat transcripts, chain-of-thought reasoning, speculative notes without evidence, duplicate summaries already in `.unified-memory/`.
