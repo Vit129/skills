@@ -1,20 +1,16 @@
 # Claude Code Workspace (Project Root)
 
-> 🔗 **SSOT Architecture:** Shared rules live in `.claude/shared/agent-core.md`
-> - `~/.codex/CODEX.md` (user-level) — generated from shared + Codex-specific
-> - `~/.gemini/GEMINI.md` (user-level) — generated from shared + Gemini-specific  
-> - `.claude/shared/` — committed to GitHub
+> 🔗 **Full SSOT Architecture:** 
+> - Source of truth: `CLAUDE.md` (this file)
+> - `.claude/shared/agent-core.md` — Universal rules (reading order, state, principles)
+> - **Synced sections** (marked below) → auto-generated to `~/.codex/CODEX.md` and `~/.gemini/GEMINI.md`
+> - `.claude/scripts/sync-agent-instructions.sh` — Extract marked sections + generate agents
 >
-> **Sync:** Run `./.claude/scripts/sync-agent-instructions.sh` when shared rules change.
-
-## Project-Level Context
-
-This file documents shared skill map, architecture decisions, and knowledge specific to this project.
-
-For universal rules (state management, Karpathy principles, reading order), see `.claude/shared/agent-core.md`.
+> **Workflow:** Edit CLAUDE.md, run sync script, all agents updated ✅
 
 ---
 
+<!-- SYNC:START skill-map -->
 ## Skill Map
 
 > All paths relative to `{skills_root}/` (e.g. `~/.gemini/skills/` or `ai-agent/skills/`)
@@ -77,7 +73,9 @@ For universal rules (state management, Karpathy principles, reading order), see 
 | Keyword | Skill |
 |---------|-------|
 | stock analysis, fundamental research | `finance/research/stock-deep-analysis/` |
+<!-- SYNC:END skill-map -->
 
+<!-- SYNC:START project-rules -->
 ## Project Rules (overrides/extends shared)
 
 - **AIDLC first:** All dev/QA work goes through `ai-dlc/core/aidlc/` — never call qa/dev skills directly unless AIDLC routes there
@@ -91,7 +89,9 @@ For universal rules (state management, Karpathy principles, reading order), see 
 - **Build:** Build must pass + commit hash required before task is done
 - **Playwright:** no `waitForTimeout()` · `getByTestId` > `getByRole` · AAA pattern
 - **Escalate:** Don't retry the same failing approach 3+ times — hand off or ask
+<!-- SYNC:END project-rules -->
 
+<!-- SYNC:START citation-format -->
 ## Citation Format
 
 ```
@@ -99,3 +99,4 @@ For universal rules (state management, Karpathy principles, reading order), see 
 [from: skill:ai-dlc/rules/playwright-rules] ← skill
 [from: memory:{wing}/{room}]   ← memory palace
 ```
+<!-- SYNC:END citation-format -->

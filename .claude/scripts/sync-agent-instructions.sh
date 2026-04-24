@@ -1,33 +1,62 @@
 #!/bin/bash
-# Sync agent-core.md → ~/.codex/CODEX.md and ~/.gemini/GEMINI.md
+# Sync Full SSOT: extract marked sections from CLAUDE.md → generate agent configs
 # Usage: ./.claude/scripts/sync-agent-instructions.sh
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-SHARED_FILE="$PROJECT_ROOT/.claude/shared/agent-core.md"
+SHARED_CORE="$PROJECT_ROOT/.claude/shared/agent-core.md"
+CLAUDE_MD="$PROJECT_ROOT/CLAUDE.md"
 
-if [[ ! -f "$SHARED_FILE" ]]; then
-  echo "❌ Error: $SHARED_FILE not found"
+if [[ ! -f "$SHARED_CORE" ]]; then
+  echo "❌ Error: $SHARED_CORE not found"
   exit 1
 fi
+
+if [[ ! -f "$CLAUDE_MD" ]]; then
+  echo "❌ Error: $CLAUDE_MD not found"
+  exit 1
+fi
+
+# Function to extract marked section from file
+extract_section() {
+  local file=$1
+  local marker=$2
+  local start_line=$(grep -n "<!-- SYNC:START $marker -->" "$file" | cut -d: -f1)
+  local end_line=$(grep -n "<!-- SYNC:END $marker -->" "$file" | cut -d: -f1)
+
+  if [[ -z "$start_line" ]] || [[ -z "$end_line" ]]; then
+    echo "⚠️  Warning: section '$marker' not found in $file" >&2
+    return
+  fi
+
+  # Extract lines between markers, exclude the marker lines themselves
+  sed -n "$((start_line + 1)),$((end_line - 1))p" "$file"
+}
 
 # Function to generate agent config
 generate_agent_config() {
   local agent_name=$1
   local agent_uppercase=$2
   local output_file=$3
-  local agent_dir=$4
 
   echo "📝 Generating $agent_name config..."
 
   mkdir -p "$(dirname "$output_file")"
 
-  cat > "$output_file" << 'HEADER'
+  # Extract all synced sections
+  local skill_map=$(extract_section "$CLAUDE_MD" "skill-map")
+  local project_rules=$(extract_section "$CLAUDE_MD" "project-rules")
+  local citation_format=$(extract_section "$CLAUDE_MD" "citation-format")
+
+  # Generate file with all content
+  {
+    cat << 'HEADER'
 # {{AGENT_NAME}} Agent Configuration
 
-> Extends `.claude/shared/agent-core.md` (SSOT). Agent-specific overrides below.
+> Full SSOT: extends `.claude/shared/agent-core.md` + synced sections from `CLAUDE.md`.
+> **Sync:** Run `./.claude/scripts/sync-agent-instructions.sh` to regenerate.
 
 ## {{AGENT_UPPERCASE}} Agent Tier (pick before every task)
 
@@ -46,36 +75,62 @@ generate_agent_config() {
 
 ---
 
-## Shared Rules (from `.claude/shared/agent-core.md`)
+## Shared Core Rules (from `.claude/shared/agent-core.md`)
 
 HEADER
 
-  # Append shared content
-  cat "$SHARED_FILE" >> "$output_file"
+    cat "$SHARED_CORE"
 
-  # Replace placeholders (handle symlinks by removing and recreating)
-  if [[ -L "$output_file" ]]; then
-    local target=$(readlink "$output_file")
-    rm "$output_file"
-    output_file="$target"
-  fi
+    cat << 'SECTIONS'
 
-  sed -i.bak "s/{{AGENT_NAME}}/$agent_name/g" "$output_file"
-  sed -i.bak "s/{{AGENT_UPPERCASE}}/$agent_uppercase/g" "$output_file"
-  rm -f "$output_file.bak"
+---
+
+## Project Rules (synced from CLAUDE.md)
+
+SECTIONS
+
+    echo "$project_rules"
+
+    cat << 'SKILLS'
+
+---
+
+## Skill Map (synced from CLAUDE.md)
+
+SKILLS
+
+    echo "$skill_map"
+
+    cat << 'CITATIONS'
+
+---
+
+## Citation Format (synced from CLAUDE.md)
+
+CITATIONS
+
+    echo "$citation_format"
+
+  } > "$output_file.tmp"
+
+  # Replace placeholders (macOS compatible)
+  sed -i '' "s/{{AGENT_NAME}}/$agent_name/g" "$output_file.tmp"
+  sed -i '' "s/{{AGENT_UPPERCASE}}/$agent_uppercase/g" "$output_file.tmp"
+
+  mv "$output_file.tmp" "$output_file"
 
   echo "✅ Generated: $output_file"
 }
 
 # Generate for Codex
-generate_agent_config "Codex" "CODEX" ~/.codex/CODEX.md "codex"
+generate_agent_config "Codex" "CODEX" ~/.codex/CODEX.md
 
 # Generate for Gemini
-generate_agent_config "Gemini" "GEMINI" ~/.gemini/GEMINI.md "gemini"
+generate_agent_config "Gemini" "GEMINI" ~/.gemini/GEMINI.md
 
 echo ""
-echo "🎯 Sync complete!"
-echo "   ~/.codex/CODEX.md"
-echo "   ~/.gemini/GEMINI.md"
+echo "🎯 Sync complete! Full SSOT implemented."
+echo "   ~/.codex/CODEX.md (Codex + all synced content)"
+echo "   ~/.gemini/GEMINI.md (Gemini + all synced content)"
 echo ""
-echo "📌 Reminder: Commit .claude/shared/ to GitHub, user-level files are local-only."
+echo "📌 Edit CLAUDE.md → run this script → agents automatically synced"
