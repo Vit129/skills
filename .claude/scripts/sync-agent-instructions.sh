@@ -7,33 +7,30 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 SHARED_CORE="$PROJECT_ROOT/.claude/shared/agent-core.md"
-CLAUDE_MD="$PROJECT_ROOT/CLAUDE.md"
+SHARED_DIR="$PROJECT_ROOT/.claude/shared"
+SKILL_MAP="$SHARED_DIR/skill-map.md"
+PROJECT_RULES="$SHARED_DIR/project-rules.md"
+CITATION_FORMAT="$SHARED_DIR/citation-format.md"
 
 if [[ ! -f "$SHARED_CORE" ]]; then
   echo "❌ Error: $SHARED_CORE not found"
   exit 1
 fi
 
-if [[ ! -f "$CLAUDE_MD" ]]; then
-  echo "❌ Error: $CLAUDE_MD not found"
+if [[ ! -f "$SKILL_MAP" ]]; then
+  echo "❌ Error: $SKILL_MAP not found"
   exit 1
 fi
 
-# Function to extract marked section from file
-extract_section() {
-  local file=$1
-  local marker=$2
-  local start_line=$(grep -n "<!-- SYNC:START $marker -->" "$file" | cut -d: -f1)
-  local end_line=$(grep -n "<!-- SYNC:END $marker -->" "$file" | cut -d: -f1)
+if [[ ! -f "$PROJECT_RULES" ]]; then
+  echo "❌ Error: $PROJECT_RULES not found"
+  exit 1
+fi
 
-  if [[ -z "$start_line" ]] || [[ -z "$end_line" ]]; then
-    echo "⚠️  Warning: section '$marker' not found in $file" >&2
-    return
-  fi
-
-  # Extract lines between markers, exclude the marker lines themselves
-  sed -n "$((start_line + 1)),$((end_line - 1))p" "$file"
-}
+if [[ ! -f "$CITATION_FORMAT" ]]; then
+  echo "❌ Error: $CITATION_FORMAT not found"
+  exit 1
+fi
 
 # Function to generate agent config
 generate_agent_config() {
@@ -45,10 +42,10 @@ generate_agent_config() {
 
   mkdir -p "$(dirname "$output_file")"
 
-  # Extract all synced sections
-  local skill_map=$(extract_section "$CLAUDE_MD" "skill-map")
-  local project_rules=$(extract_section "$CLAUDE_MD" "project-rules")
-  local citation_format=$(extract_section "$CLAUDE_MD" "citation-format")
+  # Read synced sections from shared files
+  local skill_map=$(cat "$SKILL_MAP")
+  local project_rules=$(cat "$PROJECT_RULES")
+  local citation_format=$(cat "$CITATION_FORMAT")
 
   # Generate file with all content
   {
