@@ -72,16 +72,19 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 ## State Management (Manual)
 
 ### Mandatory Checklist — Turn Start
-- [ ] **Read** `.unified-memory/palace/state.md` → check Active Focus, Open Threads, blockers
-- [ ] **Route** by focus: continuation? new task? blocked?
-- [ ] **Scan** recent sessions table for context clues
+- [ ] **Check** whether `.unified-memory/palace/state.md` exists
+- [ ] **Read** it before substantial reasoning or tool use when it exists
+- [ ] **Use** Current Focus, Open Threads, blockers, and next steps as working context
+- [ ] **Continue** normally without blocking the turn if the file is missing or stale
 
 ### Mandatory Checklist — Turn End
-- [ ] **Update** state.md: Current Focus (what was done), Open Threads (resolved ✅ or pending ⏳)
-- [ ] **Log** session row: date, wing, 1-line summary (actions only, no Q&A/comparisons)
-- [ ] **Commit** if files changed (git log required for task done)
+- [ ] **Decide** whether the turn produced meaningful working context
+- [ ] **Update** `state.md` only if at least one is true: a decision was made, a direction was committed, a blocker was identified, next steps became clearer, or concrete implementation/testing progress happened
+- [ ] **Write** only a concise summary that helps the next turn continue work
+- [ ] **Skip** `state.md` updates for pure Q&A, no-decision turns, compare-only discussion, brainstorming without commitment, or general conversation
+- [ ] **Commit** if files changed and the task requires completion proof
 
-> Summary rule: action verbs only (Added, Fixed, Updated, Completed, Migrated). Exclude: discussions, decisions not implemented, general learnings.
+> Summary rule: action verbs only (Added, Fixed, Updated, Completed, Migrated). Exclude: discussions, no-decision turns, compare-only turns, and general learnings.
 
 ## Do Not Store
 

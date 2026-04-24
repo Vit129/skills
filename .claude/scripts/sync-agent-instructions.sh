@@ -1,59 +1,75 @@
 #!/bin/bash
-# Sync Full SSOT: extract marked sections from CLAUDE.md → generate agent configs
+# Sync shared SSOT files → ~/.codex/CODEX.md and ~/.gemini/GEMINI.md
 # Usage: ./.claude/scripts/sync-agent-instructions.sh
 
-set -e
+set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-SHARED_CORE="$PROJECT_ROOT/.claude/shared/agent-core.md"
 SHARED_DIR="$PROJECT_ROOT/.claude/shared"
-SKILL_MAP="$SHARED_DIR/skill-map.md"
-PROJECT_RULES="$SHARED_DIR/project-rules.md"
-CITATION_FORMAT="$SHARED_DIR/citation-format.md"
 
-if [[ ! -f "$SHARED_CORE" ]]; then
-  echo "❌ Error: $SHARED_CORE not found"
-  exit 1
-fi
+CORE_FILE="$SHARED_DIR/agent-core.md"
+SKILL_MAP_FILE="$SHARED_DIR/skill-map.md"
+PROJECT_RULES_FILE="$SHARED_DIR/project-rules.md"
+CITATION_FILE="$SHARED_DIR/citation-format.md"
 
-if [[ ! -f "$SKILL_MAP" ]]; then
-  echo "❌ Error: $SKILL_MAP not found"
-  exit 1
-fi
+require_file() {
+  local path=$1
+  if [[ ! -f "$path" ]]; then
+    echo "Error: required file not found: $path" >&2
+    exit 1
+  fi
+}
 
-if [[ ! -f "$PROJECT_RULES" ]]; then
-  echo "❌ Error: $PROJECT_RULES not found"
-  exit 1
-fi
+require_file "$CORE_FILE"
+require_file "$SKILL_MAP_FILE"
+require_file "$PROJECT_RULES_FILE"
+require_file "$CITATION_FILE"
 
-if [[ ! -f "$CITATION_FORMAT" ]]; then
-  echo "❌ Error: $CITATION_FORMAT not found"
-  exit 1
-fi
+resolve_output_path() {
+  local output_file=$1
+  if [[ -L "$output_file" ]]; then
+    readlink "$output_file"
+  else
+    echo "$output_file"
+  fi
+}
 
-# Function to generate agent config
+append_if_exists() {
+  local file_path=$1
+  local temp_file=$2
+  if [[ -f "$file_path" ]]; then
+    printf '\n' >> "$temp_file"
+    cat "$file_path" >> "$temp_file"
+  fi
+}
+
 generate_agent_config() {
   local agent_name=$1
   local agent_uppercase=$2
   local output_file=$3
+  local target_file
+  local temp_file
+  local target_dir
+  local agent_lowercase
+  local agent_override_file
 
-  echo "📝 Generating $agent_name config..."
+  agent_lowercase="$(printf '%s' "$agent_uppercase" | tr '[:upper:]' '[:lower:]')"
+  agent_override_file="$SHARED_DIR/${agent_lowercase}-overrides.md"
+
+  echo "Generating $agent_name config..."
 
   mkdir -p "$(dirname "$output_file")"
+  target_file="$(resolve_output_path "$output_file")"
+  target_dir="$(dirname "$target_file")"
+  mkdir -p "$target_dir"
 
-  # Read synced sections from shared files
-  local skill_map=$(cat "$SKILL_MAP")
-  local project_rules=$(cat "$PROJECT_RULES")
-  local citation_format=$(cat "$CITATION_FORMAT")
+  temp_file="$(mktemp "$target_dir/.tmp.${agent_lowercase}.XXXXXX")"
 
-  # Generate file with all content
-  {
-    cat << 'HEADER'
+  cat > "$temp_file" <<'HEADER'
 # {{AGENT_NAME}} Agent Configuration
 
-> Full SSOT: extends `.claude/shared/agent-core.md` + synced sections from `CLAUDE.md`.
-> **Sync:** Run `./.claude/scripts/sync-agent-instructions.sh` to regenerate.
+> Generated from `.claude/shared/` (SSOT). Edit shared files or agent-specific overrides, not this file directly.
 
 ## {{AGENT_UPPERCASE}} Agent Tier (pick before every task)
 
@@ -67,67 +83,43 @@ generate_agent_config() {
 
 ## Rules ({{AGENT_UPPERCASE}}-specific)
 
-- **Cache:** Do NOT edit {{AGENT_UPPERCASE}}.md / rules / MCP config mid-session (breaks prompt cache)
+- **Cache:** Do NOT edit generated {{AGENT_UPPERCASE}}.md directly during normal use; update `.claude/shared/` or `{{AGENT_UPPERCASE}}` overrides and resync instead
 - **Token:** Toggle Extended Thinking off (Tab) for simple tasks
 
 ---
 
-## Shared Core Rules (from `.claude/shared/agent-core.md`)
+## Shared Core (from `.claude/shared/agent-core.md`)
 
 HEADER
 
-    cat "$SHARED_CORE"
+  cat "$CORE_FILE" >> "$temp_file"
 
-    cat << 'SECTIONS'
+  printf '\n\n## Shared Skill Map (from `.claude/shared/skill-map.md`)\n\n' >> "$temp_file"
+  cat "$SKILL_MAP_FILE" >> "$temp_file"
 
----
+  printf '\n\n## Shared Project Rules (from `.claude/shared/project-rules.md`)\n\n' >> "$temp_file"
+  cat "$PROJECT_RULES_FILE" >> "$temp_file"
 
-## Project Rules (synced from CLAUDE.md)
+  printf '\n\n## Shared Citation Format (from `.claude/shared/citation-format.md`)\n\n' >> "$temp_file"
+  cat "$CITATION_FILE" >> "$temp_file"
 
-SECTIONS
+  append_if_exists "$agent_override_file" "$temp_file"
 
-    echo "$project_rules"
+  sed -i.bak "s/{{AGENT_NAME}}/$agent_name/g" "$temp_file"
+  sed -i.bak "s/{{AGENT_UPPERCASE}}/$agent_uppercase/g" "$temp_file"
+  rm -f "$temp_file.bak"
 
-    cat << 'SKILLS'
+  mv "$temp_file" "$target_file"
 
----
-
-## Skill Map (synced from CLAUDE.md)
-
-SKILLS
-
-    echo "$skill_map"
-
-    cat << 'CITATIONS'
-
----
-
-## Citation Format (synced from CLAUDE.md)
-
-CITATIONS
-
-    echo "$citation_format"
-
-  } > "$output_file.tmp"
-
-  # Replace placeholders (macOS compatible)
-  sed -i '' "s/{{AGENT_NAME}}/$agent_name/g" "$output_file.tmp"
-  sed -i '' "s/{{AGENT_UPPERCASE}}/$agent_uppercase/g" "$output_file.tmp"
-
-  mv "$output_file.tmp" "$output_file"
-
-  echo "✅ Generated: $output_file"
+  echo "Generated: $target_file"
 }
 
-# Generate for Codex
-generate_agent_config "Codex" "CODEX" ~/.codex/CODEX.md
-
-# Generate for Gemini
-generate_agent_config "Gemini" "GEMINI" ~/.gemini/GEMINI.md
+generate_agent_config "Codex" "CODEX" "$HOME/.codex/CODEX.md"
+generate_agent_config "Gemini" "GEMINI" "$HOME/.gemini/GEMINI.md"
 
 echo ""
-echo "🎯 Sync complete! Full SSOT implemented."
-echo "   ~/.codex/CODEX.md (Codex + all synced content)"
-echo "   ~/.gemini/GEMINI.md (Gemini + all synced content)"
+echo "Sync complete:"
+echo "  $HOME/.codex/CODEX.md"
+echo "  $HOME/.gemini/GEMINI.md"
 echo ""
-echo "📌 Edit CLAUDE.md → run this script → agents automatically synced"
+echo "Reminder: commit .claude/shared/ and .claude/scripts/ to GitHub; generated user-level files remain local."
