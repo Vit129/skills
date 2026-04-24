@@ -8,7 +8,7 @@ When information conflicts, higher items win:
 
 1. Latest explicit user instruction
 2. Verified codebase state (grep/read before acting)
-3. `AGENTS.md` — shared rules & skill map (inlined in each agent's config file)
+3. `.claude/shared/` files (skill-map, project-rules, citation-format — inlined in each agent's config)
 4. Agent-specific file — tier routing, escalation, cache rules
 5. `.unified-memory/palace/state.md` — active session state
 6. Skill files at `{skills_root}/` (e.g. `~/.gemini/skills/`, `~/ai-agent/skills/`, or project `ai-agent/skills/`)
