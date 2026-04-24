@@ -89,6 +89,258 @@ Plan output:
 
 ---
 
+## Performance Awareness Rule
+
+**Optimize mindfully. Measure, don't guess.**
+
+### Token Budgeting
+- Track context usage: system prompt, conversation history, output tokens
+- Avoid wasteful patterns:
+  - ❌ Outputting entire files when summary suffices
+  - ❌ Long narration (use terse summaries)
+  - ❌ Verbose explanations without asking
+  - ❌ Re-reading same file multiple times
+- Compress aggressively when approaching limit (use `/compact` command)
+- Use extended thinking only for complex problems (toggle with `/fast` for simple tasks)
+
+### Batch Operations
+- Group independent operations: read 5 files in parallel (not sequential)
+- Chain dependent operations: build after changes complete
+- Defer expensive operations: run tests/build at end, not mid-session
+
+### Response Efficiency
+- Lead with summary, details after (user decides depth)
+- Use tables for comparisons (visual parsing is faster)
+- Cite line numbers/paths (saves user search time)
+- No unnecessary context: skip explanations user already knows
+
+### When to Optimize
+- ✅ Token approaching 70% → compress or `/compact`
+- ✅ Same query run 2x → cache/reuse result
+- ✅ Multiple file changes → batch into one commit
+- ❌ Don't premature optimize: readable code > unreadable optimization
+
+---
+
+## Security Checklist (Mandatory for Code/Config)
+
+**Never ship insecure code. Check before committing.**
+
+### Input Validation
+- [ ] User input sanitized (no injection: SQL, XSS, command)
+- [ ] File uploads validated (size, type, malware scan)
+- [ ] API requests validated (auth, rate limits, schema)
+- [ ] Environment variables checked (required ones present, no defaults for secrets)
+
+### Data Handling
+- [ ] PII encrypted in transit (HTTPS, TLS 1.2+)
+- [ ] PII encrypted at rest (if stored, use encryption key)
+- [ ] Credentials never in code (use .env, environment variables, vaults)
+- [ ] Logs don't leak secrets (filter auth tokens, passwords, API keys)
+- [ ] Error messages don't expose internals (database details, stack traces in production)
+
+### Access Control
+- [ ] Authentication required for protected endpoints (not optional)
+- [ ] Authorization checked (user can only access own data)
+- [ ] Role-based access enforced (admin != user)
+- [ ] Session tokens expire (logout clears token)
+
+### Dependencies
+- [ ] No known CVEs in dependencies (run `npm audit`, `pip audit`)
+- [ ] Dependencies pinned/locked (reproducible builds, no surprise updates)
+- [ ] Unused dependencies removed (smaller attack surface)
+
+### OWASP Top 10 Check
+- [ ] SQL Injection: parameterized queries, no string concatenation
+- [ ] Broken Authentication: strong passwords, no hardcoded creds
+- [ ] Sensitive Data Exposure: encryption in transit + at rest
+- [ ] XML External Entities: disable if parsing XML
+- [ ] Access Control: principle of least privilege
+- [ ] Security Misconfiguration: default creds removed, security headers set
+- [ ] XSS: input sanitized, output encoded
+- [ ] Insecure Deserialization: validate serialized data before deserialization
+- [ ] Using Components with Known Vulnerabilities: audit + update
+- [ ] Insufficient Logging & Monitoring: security events logged
+
+### Before Committing
+- [ ] No credentials in git history (check git log)
+- [ ] No .env files committed (in .gitignore)
+- [ ] Security-critical paths tested (auth, payment, data deletion)
+- [ ] Secret scanning passed (GitHub, GitLab, or local tool)
+
+---
+
+## Testing Strategy (Mandatory Coverage)
+
+**Write tests that matter. Don't test the framework.**
+
+### Unit Tests
+- Test business logic (calculations, validations, transformations)
+- Mock external dependencies (API calls, databases, file systems)
+- Pattern: Arrange → Act → Assert (AAA)
+- Coverage target: 80%+ for critical paths
+- Avoid: testing framework code (React.render, database connection)
+
+### Integration Tests
+- Test components working together (auth + API + database)
+- Use real or containerized dependencies (not mocks)
+- Test the actual contract (what user sees, not internals)
+- Example: "Login with valid credentials → redirects to dashboard"
+
+### End-to-End Tests
+- Test full user flow (signup → login → transaction → logout)
+- Run in production-like environment
+- Cover happy path + major failure modes
+- Tools: Playwright, Cypress, Selenium
+
+### Coverage Guidelines
+| Tier | Target | Focus |
+|------|--------|-------|
+| Unit | 80%+ | Business logic, calculations |
+| Integration | 60%+ | Component contracts |
+| E2E | Critical paths | User workflows |
+
+### Testing Checklist
+- [ ] Happy path tested (normal flow works)
+- [ ] Edge cases tested (empty, null, max, min values)
+- [ ] Failure modes tested (error handling, recovery)
+- [ ] Async tested (promises resolve, timeouts work)
+- [ ] No flaky tests (consistent results, no random failures)
+- [ ] Tests run in CI (commit blocks if tests fail)
+- [ ] New code has test coverage (not just existing code)
+
+### When NOT to Test
+- ❌ Framework code (React.render, library internals)
+- ❌ Configuration (no tests for .env parsing, unless custom)
+- ❌ Trivial getters/setters (property assignment doesn't need test)
+
+---
+
+## Backwards Compatibility Rule (Explicit)
+
+**Breaking changes are expensive. Avoid them.**
+
+### When Changes Are Breaking
+- Renamed public function / class / export
+- Changed function signature (parameters, return type)
+- Removed property / method / field
+- Changed data structure format (JSON, database schema)
+- Changed API response format or status codes
+- Changed behavior without warning
+
+### Before Making Breaking Changes
+- [ ] Is non-breaking alternative possible? (new function, new field, deprecation)
+- [ ] Have you documented deprecation path? (what users should migrate to)
+- [ ] Is migration guide provided? (step-by-step, code examples)
+- [ ] Did you bump major version? (Semantic Versioning: MAJOR.minor.patch)
+- [ ] Is changelog updated? (what changed, why, migration steps)
+
+### Handling Breaking Changes
+1. **Deprecate first** (1-2 releases):
+   - New API exists alongside old
+   - Old API logs warning: "X is deprecated, use Y instead"
+   - Deprecation period: at least one release cycle
+
+2. **Migrate together**:
+   - Provide codemods / migration scripts when possible
+   - Update all internal uses
+   - Update documentation + examples
+
+3. **Remove** (next major version):
+   - Old API removed entirely
+   - Clear changelog entry: "BREAKING: X removed (was deprecated in v1.5)"
+
+### Non-Breaking Alternatives
+- Add new parameter (keep old optional)
+- Add new method (keep old working)
+- Add new field (don't remove old ones)
+- Create new endpoint (keep old one)
+- Extend data structure (don't shrink it)
+
+---
+
+## Documentation Standard (Mandatory)
+
+**Document the Why, not the What. Code shows What.**
+
+### Code Comments
+**Good:** Explains decision, gotcha, constraint
+```javascript
+// Fetch twice: first call primes cache, second gets fresh data
+// (API doesn't support cache headers, so manual refresh needed)
+const data = await fetch('/api/data');
+const fresh = await fetch('/api/data');
+```
+
+**Bad:** Repeats code
+```javascript
+// Increment counter
+counter++;
+```
+
+**Rule:** Comments should answer "Why is this code here?" or "Why this approach?"
+
+### README.md (Project Level)
+- [ ] One-line description (what is this?)
+- [ ] Quick start (npm install, how to run)
+- [ ] Architecture overview (where are things?)
+- [ ] Development setup (clone, dependencies, environment)
+- [ ] How to test (unit, integration, e2e)
+- [ ] How to deploy (build, environment, servers)
+- [ ] Contributing guidelines (PR process, code style)
+- [ ] License
+
+### API Documentation
+- [ ] Endpoint list (GET /users, POST /users, etc.)
+- [ ] Request/response format (with examples)
+- [ ] Authentication method (Bearer token, API key, session)
+- [ ] Status codes (200 OK, 400 Bad Request, 500 Server Error)
+- [ ] Error responses (error message format, codes)
+- [ ] Rate limits (requests/minute, throttling)
+- [ ] Example: cURL, Python, JavaScript
+
+### Inline Documentation (Functions/Classes)
+```javascript
+/**
+ * Calculate compound interest.
+ * @param principal Starting amount (USD)
+ * @param rate Annual interest rate (decimal: 0.05 = 5%)
+ * @param years Investment period
+ * @returns Total amount after interest
+ * @throws RangeError if principal < 0 or rate > 1
+ */
+function calculateInterest(principal, rate, years) {
+  // ...
+}
+```
+
+**Format:** JSDoc, Docstrings, or equivalent for language
+
+### Changelog.md
+- [ ] Latest first (newest changes on top)
+- [ ] Date of release (YYYY-MM-DD)
+- [ ] Version number (Semantic Versioning)
+- [ ] Three sections: Added, Changed, Fixed, Removed, Deprecated
+- [ ] Breaking changes marked clearly (⚠️ BREAKING)
+- [ ] Migration guides for breaking changes
+
+### Type Definitions (TypeScript / Python)
+- [ ] Interfaces for data structures
+- [ ] Function signatures with types
+- [ ] Return types explicit (not `any`)
+- [ ] Generics for reusable structures
+- [ ] Comments for complex types
+
+### Decision Log (ADR - Architecture Decision Records)
+For significant decisions, document:
+- [ ] What was decided
+- [ ] Why (context, constraints, alternatives considered)
+- [ ] When (date)
+- [ ] Who decided (team members)
+- [ ] Trade-offs (what we gained vs. lost)
+
+---
+
 ## Karpathy Principles (always active)
 
 ### 1. Think Before Coding
