@@ -52,15 +52,15 @@ _Older sessions archived_
 
 ## Current Focus
 
-- focus: "SSOT architecture for Claude/Gemini/Codex configs — complete ✅"
+- focus: "SSOT architecture pushed ✅"
 - blockers: ""
-- next_action: "Push to GitHub when ready"
+- next_action: "Await user direction"
 
 ## Open Threads
 
 - [x] SSOT architecture for Claude/Gemini/Codex: created .claude/shared/agent-core.md + sync script, thin adapters for CODEX.md/GEMINI.md @2026-04-24
 - [x] Removed hooks from settings.json → state.md as manual instruction (turn start/end checklist) @2026-04-24
-- [ ] Push to GitHub when user ready
+- [x] Push to GitHub: branch `claude/wonderful-herschel-fb954a` pushed ✅ @2026-04-24
 - [x] Search scaling implementation: Hybrid Inverted Index + Sorted Date Array implemented → keyword-index.json + date-index.json created, storage.md + session.md + SKILL.md updated @2026-04-21
 - [x] AGENTS.md: adopted Trust Priority, Do-not-store, Minimum Update Contract from agent-context-kit @2026-04-21
 - [x] Fix BASE_DIR walk-up level in setupAgentSkills.sh — replaced hardcoded `../../..` with `.git/` detection loop, all 3 copies synced @2026-04-21
