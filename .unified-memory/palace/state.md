@@ -12,6 +12,8 @@
 
 | Date | Wing | Summary |
 |------|------|---------|
+| 2026-04-24 | unified-memory | Final SSOT polish: removed non-existent AGENTS.md from reading order in agent-core.md; trust priority now references .claude/shared/ files (skill-map, project-rules, citation-format) ✅ |
+| 2026-04-24 | unified-memory | Finalized SSOT: extracted skill-map.md, project-rules.md, citation-format.md → .claude/shared/; updated sync script to read from files (not markers); removed markers from project CLAUDE.md ✅ |
 | 2026-04-24 | unified-memory | Implemented SSOT architecture: `.claude/shared/agent-core.md` + sync script → generated ~/.codex/CODEX.md, ~/.gemini/GEMINI.md; project CLAUDE.md now thin adapter ✅ |
 | 2026-04-24 | unified-memory | Removed all hooks from settings.json → state.md as CLAUDE.md instruction (turn start: read, turn end: update) ✅ |
 | 2026-04-23 | ai-dlc-skills | Added EN triggers to stock-deep-analysis/SKILL.md (was TH-only); all 21 SKILL.md files now bilingual EN+TH ✅ |
@@ -52,12 +54,13 @@ _Older sessions archived_
 
 ## Current Focus
 
-- focus: "SSOT architecture pushed ✅"
+- focus: "SSOT finalized: separate shared files + cleaner sync script ✅"
 - blockers: ""
 - next_action: "Await user direction"
 
 ## Open Threads
 
+- [x] SSOT finalization: extracted skill-map.md, project-rules.md, citation-format.md → .claude/shared/ (separate files vs markers); updated sync script to read files; committed @2026-04-24
 - [x] SSOT architecture for Claude/Gemini/Codex: created .claude/shared/agent-core.md + sync script, thin adapters for CODEX.md/GEMINI.md @2026-04-24
 - [x] Removed hooks from settings.json → state.md as manual instruction (turn start/end checklist) @2026-04-24
 - [x] Push to GitHub: branch `claude/wonderful-herschel-fb954a` pushed ✅ @2026-04-24
