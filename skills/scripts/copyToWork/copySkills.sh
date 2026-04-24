@@ -1,7 +1,7 @@
 #!/bin/bash
 # copySkills.sh — Copy shared skills to project's ai-agent/skills/
-# Copies: ai-dlc/, doc/, system/, postman-to-playwright/, KIRO.md, scripts/setup/*
-# Excludes: finance/, GEMINI.md (personal)
+# Copies: ai-dlc/, doc/, system/, postman-to-playwright/, KIRO.md
+# Excludes: finance/, GEMINI.md, scripts/ (personal/local-only)
 #
 # Usage: bash copySkills.sh <PROJECT_ROOT> [--force]
 #   e.g. bash copySkills.sh /Users/supavit.cho/Git/VitProjects
@@ -100,30 +100,13 @@ for file in "${FILES[@]}"; do
   fi
 done
 
-# ── scripts/setup/ ──
-mkdir -p "$DEST/scripts/setup"
-setup_count=0
-skip_count=0
-for f in "$SRC/scripts/setup/"*; do
-  [ -f "$f" ] || continue
-  fname="$(basename "$f")"
-  [ "$fname" = ".DS_Store" ] && continue
-  if [ -f "$DEST/scripts/setup/$fname" ] && [ "$FORCE" -ne 1 ]; then
-    skip_count=$((skip_count + 1))
-  else
-    cp "$f" "$DEST/scripts/setup/$fname"
-    setup_count=$((setup_count + 1))
-  fi
-done
-echo "  ✅ scripts/setup/ ($setup_count copied, $skip_count skipped)"
-
 # ── Remove .DS_Store ──
 find "$DEST" -name ".DS_Store" -delete 2>/dev/null || true
 
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "✅ Done — shared skills copied to $DEST"
-echo "   Excluded: finance/, GEMINI.md (personal)"
+echo "   Excluded: finance/, GEMINI.md, scripts/ (personal)"
 echo ""
 echo "To overwrite: bash $(basename "$0") $TARGET --force"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

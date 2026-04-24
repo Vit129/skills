@@ -147,13 +147,36 @@ if [ ! -f "$ROOT_DIR/.kiro/steering/agent-skills.md" ] || [ "$FORCE" -eq 1 ]; th
 inclusion: always
 ---
 
+<!-- SKILLS_ROOT: $SKILLS_ROOT -->
+<!-- เปลี่ยน path ด้านล่างเมื่อย้าย skills folder -->
+
+# Agent Skills — Mandatory Routing
+
+## Step 0: Read KIRO.md FIRST (before any action)
+
+Read the file below. It contains the skill map, routing rules, and exceptions.
+Do NOT read any other file, write any file, or start any work until you have read this.
+
 #[[file:$KIRO_REF]]
 
-## AIDLC — Mandatory Entry Point
+## Step 1: Route using the Skill Map in KIRO.md
 
-ALL dev and QA work MUST start by reading \`ai-agent/skills/ai-dlc/core/aidlc/SKILL.md\` and following DECISIONS → PLAN → EXECUTE.
+After reading KIRO.md, match the user's request to the correct skill using the **Skill Map** table.
+Follow the routing rules in KIRO.md exactly — including any exception rules (e.g. Postman migration bypasses AIDLC).
 
-**Never produce output files (code, design, test scripts, specs) without a DECISIONS file and approved PLAN first.**
+## Step 2: AIDLC — Default Entry Point for Dev/QA
+
+Unless an exception rule applies (check KIRO.md Rules section), ALL dev and QA work MUST:
+
+1. Read \`ai-agent/skills/ai-dlc/core/aidlc/SKILL.md\`
+2. Follow DECISIONS → PLAN → EXECUTE
+3. Never produce output files (code, design, test scripts, specs) without a DECISIONS file and approved PLAN first
+
+## HARD STOP Rules
+
+- **Do NOT write any file** before completing Step 0 and Step 1
+- **Do NOT skip to implementation** even if the user says "เขียน code เลย" — route first
+- **Do NOT guess the skill** — match keywords from the Skill Map table
 STEERING_EOF
         steering_count=$((steering_count + 1))
         echo "  ✅ agent-skills.md (reference → $KIRO_REF)"
@@ -163,13 +186,30 @@ STEERING_EOF
 inclusion: always
 ---
 
-# Kiro Workspace
+# Agent Skills — Mandatory Routing
 
-## AIDLC — Mandatory Entry Point
+## Step 0: Read KIRO.md FIRST (before any action)
 
-ALL dev and QA work MUST start by reading the AIDLC skill and following DECISIONS → PLAN → EXECUTE.
+If a KIRO.md file exists in the project, read it first. It contains the skill map and routing rules.
+Do NOT read any other file, write any file, or start any work until you have read this.
 
-**Never produce output files (code, design, test scripts, specs) without a DECISIONS file and approved PLAN first.**
+## Step 1: Route using the Skill Map
+
+Match the user's request to the correct skill using the Skill Map table in KIRO.md.
+Follow the routing rules exactly — including any exception rules.
+
+## Step 2: AIDLC — Default Entry Point for Dev/QA
+
+Unless an exception rule applies, ALL dev and QA work MUST:
+
+1. Read the AIDLC skill and follow DECISIONS → PLAN → EXECUTE
+2. Never produce output files (code, design, test scripts, specs) without a DECISIONS file and approved PLAN first
+
+## HARD STOP Rules
+
+- **Do NOT write any file** before completing Step 0 and Step 1
+- **Do NOT skip to implementation** even if the user says "เขียน code เลย" — route first
+- **Do NOT guess the skill** — match keywords from the Skill Map table
 STEERING_EOF
         steering_count=$((steering_count + 1))
         echo "  ✅ agent-skills.md (minimal)"

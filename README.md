@@ -1,6 +1,7 @@
 # Skills
 
 Personal knowledge base and skill library for AI-assisted development — works with Claude Code, Kiro, and Gemini CLI.
+Can also be exposed to Codex while keeping `~/.claude/skills` as the single source of truth.
 
 ## What's inside
 
@@ -44,6 +45,7 @@ Personal knowledge base and skill library for AI-assisted development — works 
 | **Claude Code** | `CLAUDE.md` auto-loaded — skill map + routing built in |
 | **Kiro** | `skills/KIRO.md` — tier selection + skill map |
 | **Gemini CLI** | `skills/GEMINI.md` — research + scaffold tasks |
+| **Codex** | Symlink or copy `skills/` into `~/.codex/skills/claude-ssot` via `skills/scripts/setup/setupCodexSkills.sh` |
 | **Any agent** | `skills/AGENTS.md` — shared rules, Trust Priority, AIDLC rules |
 
 ## Key concepts
@@ -67,6 +69,9 @@ bash ~/.claude/skills/scripts/setup/setupTests.sh MyProject
 
 # Copy postman migration skill to project (optional):
 bash ~/.claude/skills/scripts/setup/postmanToPlaywright.sh MyProject
+
+# Expose Claude skills to Codex while keeping Claude as SSOT:
+bash ~/.claude/skills/scripts/setup/setupCodexSkills.sh
 
 # Load memory at session start:
 "load context for [project]"
