@@ -12,6 +12,7 @@
 
 | Date | Wing | Summary |
 |------|------|---------|
+| 2026-04-24 | unified-memory | Final SSOT polish: removed non-existent AGENTS.md from reading order in agent-core.md; trust priority now references .claude/shared/ files (skill-map, project-rules, citation-format) ✅ |
 | 2026-04-24 | unified-memory | Finalized SSOT: extracted skill-map.md, project-rules.md, citation-format.md → .claude/shared/; updated sync script to read from files (not markers); removed markers from project CLAUDE.md ✅ |
 | 2026-04-24 | unified-memory | Implemented SSOT architecture: `.claude/shared/agent-core.md` + sync script → generated ~/.codex/CODEX.md, ~/.gemini/GEMINI.md; project CLAUDE.md now thin adapter ✅ |
 | 2026-04-24 | unified-memory | Removed all hooks from settings.json → state.md as CLAUDE.md instruction (turn start: read, turn end: update) ✅ |
