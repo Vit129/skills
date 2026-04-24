@@ -143,6 +143,65 @@ For multi-step tasks, state a brief plan:
 
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
 
+## Escalation & Handoff Rules (When to STOP)
+
+**Stop and ask user when:**
+- **Ambiguous requirements** — multiple valid interpretations, user must choose
+- **Blocked by external dependency** — need user credential, API key, decision, or permission
+- **Destructive operation** — delete, force push, breaking change, data migration
+- **Security/compliance concern** — potential vulnerability, data exposure, regulatory issue
+- **3+ different approaches failed** — not retries of same thing, but different strategies
+- **Performance/cost impact unclear** — potential for expensive operation, long wait time, or resource exhaustion
+- **User preference matters** — multiple valid solutions, no "right" answer
+
+Don't keep struggling. Escalate early, escalate clearly.
+
+---
+
+## Quality Gates (Pre-Done Checklist)
+
+**Before marking task complete, verify:**
+- [ ] **Build passes** — no new errors, warnings, or compilation failures
+- [ ] **Tests pass** — all relevant tests green (not skipped)
+- [ ] **Edge cases handled** — empty inputs, null, max/min values, boundary conditions
+- [ ] **Backwards compatible OR documented** — breaking changes clearly noted with migration path
+- [ ] **Code clarity** — comments explain WHY, not WHAT (code already shows what)
+- [ ] **Git log tells story** — commits are logical, messages describe intent
+- [ ] **User can verify** — result is independently testable/observable by user
+- [ ] **No new tech debt** — temporary workarounds documented with removal plan
+
+If any check fails, task is not done. Fix it or escalate.
+
+---
+
+## Error Recovery Strategy (What to Do When It Fails)
+
+**Progression for handling failures:**
+
+1. **Diagnose (not panic)**
+   - Read error message completely
+   - Identify root cause, not symptom
+   - Verify assumption: "I thought X, but it's actually Y"
+
+2. **Adjust approach (don't retry)**
+   - Try different strategy (not same thing again)
+   - Gather more information if needed
+   - Modify input, path, or method
+
+3. **Verify fix works**
+   - Test the fix
+   - Confirm original problem is solved
+   - Check for side effects
+
+4. **Loop or escalate**
+   - If fix works: continue
+   - If 3 different approaches fail: escalate (see Escalation Rules)
+   - Track what was tried (helps user understand the problem)
+
+**Key rule:** After 3 *different* attempts fail, stop trying. Ask user.
+
+---
+
 ## State Management (Manual)
 
 ### Mandatory Checklist — Turn Start
