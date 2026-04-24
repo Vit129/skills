@@ -71,6 +71,26 @@ generate_agent_config() {
 
 > Generated from `.claude/shared/` (SSOT). Edit shared files or agent-specific overrides, not this file directly.
 
+---
+
+## 🚨 MANDATORY: Plan Mode (Enter Before Non-Trivial Work)
+
+**Use `EnterPlanMode` when:**
+- Implementing new features (unclear scope)
+- Multiple valid approaches exist
+- Code changes affecting behavior/structure
+- Architectural decisions needed
+- Multi-file changes likely
+- Requirements unclear
+
+**Skip plan mode only for:**
+- Single-line fixes
+- One-function additions with clear requirements
+- Research tasks (use Agent tool instead)
+- Explicit detailed instructions
+
+---
+
 ## {{AGENT_UPPERCASE}} Agent Tier (pick before every task)
 
 | Task | Agent |
