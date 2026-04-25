@@ -53,12 +53,14 @@ echo ""
 echo "🧠 Setting up unified-memory..."
 
 UNIFIED_MEM="$ROOT_DIR/.unified-memory"
-if [ ! -d "$UNIFIED_MEM/palace" ]; then
+if [ ! -d "$UNIFIED_MEM/palace" ] || [ "$FORCE" -eq 1 ]; then
   mkdir -p "$UNIFIED_MEM/palace/wings"
   mkdir -p "$UNIFIED_MEM/palace/archive"
   mkdir -p "$UNIFIED_MEM/knowledge/lessons"
 
-  cat > "$UNIFIED_MEM/palace/state.md" << 'STATE_EOF'
+  # ── palace/state.md ──
+  if [ ! -f "$UNIFIED_MEM/palace/state.md" ] || [ "$FORCE" -eq 1 ]; then
+    cat > "$UNIFIED_MEM/palace/state.md" << 'STATE_EOF'
 # 🏛️ Unified Memory Palace — State
 
 ## Active Wings
@@ -75,11 +77,88 @@ if [ ! -d "$UNIFIED_MEM/palace" ]; then
 ## Open Threads
 (none)
 STATE_EOF
+    echo "  ✅ palace/state.md"
+  fi
 
-  echo '{"domains":[],"evolution_log":[]}' > "$UNIFIED_MEM/knowledge/index.json"
-  echo "  ✅ .unified-memory/ created"
+  # ── palace/tunnels.md ──
+  if [ ! -f "$UNIFIED_MEM/palace/tunnels.md" ] || [ "$FORCE" -eq 1 ]; then
+    cat > "$UNIFIED_MEM/palace/tunnels.md" << 'TUNNELS_EOF'
+# Cross-Wing Tunnels
+
+| From | To | Relationship |
+|------|----|-------------|
+TUNNELS_EOF
+    echo "  ✅ palace/tunnels.md"
+  fi
+
+  # ── palace/search-index.md ──
+  if [ ! -f "$UNIFIED_MEM/palace/search-index.md" ] || [ "$FORCE" -eq 1 ]; then
+    cat > "$UNIFIED_MEM/palace/search-index.md" << 'SEARCH_EOF'
+# Session Search Index
+
+| Date | Wing | Keywords | Room Path | Summary |
+|------|------|----------|-----------|---------|
+SEARCH_EOF
+    echo "  ✅ palace/search-index.md"
+  fi
+
+  # ── palace/user-profile.md ──
+  if [ ! -f "$UNIFIED_MEM/palace/user-profile.md" ] || [ "$FORCE" -eq 1 ]; then
+    cat > "$UNIFIED_MEM/palace/user-profile.md" << 'PROFILE_EOF'
+# User Profile
+
+Updated: (auto)
+
+## Preferences
+(auto-captured from interactions)
+
+## Observed Patterns
+(auto-captured from sessions)
+
+## Communication
+(auto-captured from interactions)
+
+## Domain Expertise
+(auto-captured from sessions)
+PROFILE_EOF
+    echo "  ✅ palace/user-profile.md"
+  fi
+
+  # ── palace/date-index.json ──
+  if [ ! -f "$UNIFIED_MEM/palace/date-index.json" ] || [ "$FORCE" -eq 1 ]; then
+    cat > "$UNIFIED_MEM/palace/date-index.json" << 'DATE_EOF'
+{"_meta":{"version":"2.0","description":"Sorted date array for date-range queries.","total_docs":0,"last_updated":null},"by_date":[]}
+DATE_EOF
+    echo "  ✅ palace/date-index.json"
+  fi
+
+  # ── palace/keyword-index.json ──
+  if [ ! -f "$UNIFIED_MEM/palace/keyword-index.json" ] || [ "$FORCE" -eq 1 ]; then
+    cat > "$UNIFIED_MEM/palace/keyword-index.json" << 'KW_EOF'
+{"_meta":{"version":"2.0","description":"Inverted index for keyword search.","total_docs":0,"total_terms":0},"terms":{}}
+KW_EOF
+    echo "  ✅ palace/keyword-index.json"
+  fi
+
+  # ── palace/archive/index.md ──
+  if [ ! -f "$UNIFIED_MEM/palace/archive/index.md" ] || [ "$FORCE" -eq 1 ]; then
+    cat > "$UNIFIED_MEM/palace/archive/index.md" << 'ARCHIVE_EOF'
+# Archive Index
+
+Archived wings and rooms are stored here when compressed or retired.
+ARCHIVE_EOF
+    echo "  ✅ palace/archive/index.md"
+  fi
+
+  # ── knowledge/index.json ──
+  if [ ! -f "$UNIFIED_MEM/knowledge/index.json" ] || [ "$FORCE" -eq 1 ]; then
+    echo '{"domains":[],"evolution_log":[]}' > "$UNIFIED_MEM/knowledge/index.json"
+    echo "  ✅ knowledge/index.json"
+  fi
+
+  echo "  ✅ .unified-memory/ created (full structure)"
 else
-  echo "  skip  .unified-memory/ (already exists)"
+  echo "  skip  .unified-memory/ (already exists, use --force to update)"
 fi
 
 echo ""

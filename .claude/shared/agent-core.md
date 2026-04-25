@@ -473,6 +473,40 @@ If any check fails, task is not done. Fix it or escalate.
 
 ## .unified-memory/ Usage Guide
 
+### Resolution Order (MANDATORY — check before every session)
+
+```
+1. Per-project:  {project_root}/.unified-memory/    ← check first
+2. Global:       ~/.claude/.unified-memory/          ← fallback if no per-project
+
+For knowledge specifically:
+  1. {project_root}/.unified-memory/knowledge/
+  2. {project_root}/ai-agent/skills/ai-dlc/knowledge/
+  3. ~/.claude/skills/ai-dlc/knowledge/
+```
+
+**If per-project `.unified-memory/` does NOT exist:**
+→ Run `setupMemory.sh` to create it (or create manually using structure below)
+→ Do NOT silently use global only — always create per-project first
+
+**Required structure (every `.unified-memory/` must have ALL of these):**
+```
+.unified-memory/
+├── palace/
+│   ├── state.md              ← session state (≤100 lines)
+│   ├── tunnels.md            ← cross-wing links
+│   ├── search-index.md       ← flat search fallback
+│   ├── user-profile.md       ← user preferences (≤80 lines)
+│   ├── date-index.json       ← sorted date array for date-range queries
+│   ├── keyword-index.json    ← inverted index for keyword search
+│   ├── wings/                ← topic wings (hall.md + rooms/ + closets/)
+│   └── archive/
+│       └── index.md          ← archive index
+└── knowledge/
+    ├── index.json            ← domain catalog + utility_score
+    └── lessons/{domain}/     ← captured lessons per domain
+```
+
 **state.md** (Turn tracking)
 - UPDATE if: decision made, direction committed, blocker identified, next steps clearer, implementation/testing progress
 - SKIP if: pure Q&A, no-decision turns, compare-only discussion, brainstorming without commitment, general conversation
@@ -481,15 +515,35 @@ If any check fails, task is not done. Fix it or escalate.
 
 **knowledge/** (Lessons & patterns)
 - CREATE if: discovered a reusable pattern, found a best practice worth repeating, captured a gotcha/lesson learned
+- UPDATE: `knowledge/index.json` utility_score + usage_count after every scoreable outcome
+- UPDATE: `knowledge/lessons/{domain}/*LessonsIndex.json` when new lesson captured
 - Examples: design-tokens.md, error-recovery-strategy.md, testing-best-practices.md
 - Scope: Cross-project patterns (useful in future sessions)
 - Format: Lesson frontmatter + examples + decision rationale
 
 **palace/wings/** (Persistent evolution tracking)
 - CREATE if: major capability added, architecture decision made, significant learning accumulated
+- UPDATE: hall.md when rooms added/removed
+- UPDATE: tunnels.md when cross-wing references created
+- UPDATE: search-index.md + keyword-index.json + date-index.json at session end
 - Examples: agent-rules-evolution.md (tracks rule versions), wings architecture changes
 - Scope: Project evolution & growth over time (visible to future team members)
 - Format: Timestamped rooms with metadata
+
+### Update Contract (Session End — MANDATORY)
+
+When dirty=true, update ALL of the following that apply:
+
+| What changed | Update |
+|---|---|
+| Decision made / direction committed | `palace/state.md` (Current Focus + Open Threads) |
+| New room written | `palace/wings/{wing}/hall.md` + `palace/search-index.md` |
+| Cross-wing reference | `palace/tunnels.md` |
+| New lesson captured | `knowledge/lessons/{domain}/*LessonsIndex.json` |
+| Tool succeeded on project-relevant task | `knowledge/index.json` (utility_score +0.5, usage_count++) |
+| Tool failed on known issue | `knowledge/index.json` (utility_score -1.0) |
+
+**Never update only state.md and skip knowledge/palace — all relevant files must be updated together.**
 
 ## Do Not Store
 
