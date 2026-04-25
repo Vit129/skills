@@ -1,5 +1,14 @@
 {
   "templates": {},
+  "lessons": {
+    "design/craftsmanship-tokens": {
+      "utility_score": 85,
+      "usage_count": 1,
+      "last_used": "2026-04-25",
+      "category": "design",
+      "keywords": ["design-tokens", "craftsmanship", "anti-ai-slop"]
+    }
+  },
   "settings": {
     "scope": "global",
     "version": "3.0.0",
