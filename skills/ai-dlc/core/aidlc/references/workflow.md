@@ -14,6 +14,158 @@
 - **Apply TDD** (Test-Driven Development: RED → GREEN → REFACTOR)
 - **MANDATORY GATES** (dev-task-design and qa-task-design MUST be completed before any implementation or test scripting — they create the iteration path)
 
+## Execution Modes
+
+AIDLC supports 3 execution modes. User selects mode at start — AI detects from command or asks.
+
+### Mode Selection
+
+| Mode | Command | When to use |
+|------|---------|-------------|
+| Full | `"start AI-DLC"` | ทำทั้ง design + QA + Dev (default) |
+| QA Only | `"start AI-DLC QA ..."` | มี specs/PBI แล้ว ต้องการทำ QA เท่านั้น (เลือก sub-mode ด้านล่าง) |
+| Dev Only | `"start AI-DLC Dev only"` | มี specs/PBI แล้ว ต้องการทำ Dev เท่านั้น |
+
+If user intent is ambiguous → ASK: "1. Full (ทั้งหมด) 2. QA only 3. Dev only"
+
+### QA Sub-Modes
+
+When mode = QA Only, ask further:
+
+| QA Sub-Mode | Command | Phases | Output |
+|-------------|---------|--------|--------|
+| QA Scenario Only | `"start AI-DLC QA scenario only"` | Lite Inception (if needed) → 2.1 → 2.2 | test scenarios (CSV/MD) |
+| QA Automation | `"start AI-DLC QA automation"` | Lite Inception (if needed) → 2.1 → 2.2 → 2.3 → 2.4 | test scenarios + test scripts |
+
+When mode = QA Automation, ask platform:
+
+```
+Platform ไหน?
+1. API
+2. Web UI
+3. Android
+4. iOS
+```
+
+Platform affects:
+
+| Platform | QA Architecture | Coding Rules | Labels.ts | TestId Map | Test Framework |
+|----------|----------------|--------------|-----------|------------|----------------|
+| API | `api-arch.md` | `playwright-rules/api.md` | ❌ | ❌ | Playwright |
+| Web UI | `web-arch.md` | `playwright-rules/web-ui.md` | ✅ MANDATORY | ✅ MANDATORY | Playwright |
+| Android | `mobile-arch.md` | `robotframework-rules/android.md` | ❌ | ❌ | Robot Framework |
+| iOS | `mobile-arch.md` | `robotframework-rules/ios.md` | ❌ | ❌ | Robot Framework |
+
+### Mode Phase Matrix
+
+| Phase | Full | QA Scenario Only | QA Automation (API/Web) | Dev Only |
+|-------|------|-------------------|-------------------------|----------|
+| Phase 0 (Project Detection) | ✅ | ✅ | ✅ | ✅ |
+| Lite Inception | ⏭️ skip (does full inception) | ✅ if no specs | ✅ if no specs | ✅ if no specs |
+| Phase 1.1-1.7 (Inception) | ✅ | ⏭️ skip | ⏭️ skip | ⏭️ skip |
+| Phase 2.1 (QA Task Design) | ✅ | ✅ MANDATORY | ✅ MANDATORY | ⏭️ skip |
+| Phase 2.2 (Test Case Design) | ✅ | ✅ → DONE | ✅ | ⏭️ skip |
+| Phase 2.3 (QA Architecture) | ✅ | ⏭️ skip | ✅ | ⏭️ skip |
+| Phase 2.4 (Test Script Design) | ✅ | ⏭️ skip | ✅ → DONE | ⏭️ skip |
+| Phase 2.5 (Dev Task Design) | ✅ | ⏭️ skip | ⏭️ skip | ✅ MANDATORY |
+| Phase 2.6 (Sync Gate) | ✅ | ⏭️ skip | ⏭️ skip | ⏭️ skip |
+| Phase 3.1-3.3 (Construction) | ✅ | ⏭️ skip | ⏭️ skip | ✅ |
+
+### Hard Rules (ALL modes)
+
+- **`.aidlc/` folder is MANDATORY** — every mode creates `.aidlc/[system]/[feature]/` with planning/ + outputs/
+- **DECISIONS → PLAN → EXECUTE** — every mode follows this process for each active phase
+- **qa-task-design is MANDATORY** for QA modes — ห้ามข้ามไป test case design โดยไม่มี qa-task-progress.md
+- **dev-task-design is MANDATORY** for Dev mode — ห้ามข้ามไป implementation โดยไม่มี dev-task-progress.md
+- **audit.md is MANDATORY** — every mode maintains audit trail
+
+### Lite Inception (for QA Only / Dev Only without specs)
+
+When user has only PBI (no Business Spec, no Architecture Spec), run Lite Inception before entering QA/Dev phases.
+Uses existing `core/analysis-skills/` — no new skills needed.
+
+**Trigger:** Mode is QA Only or Dev Only AND no external specs provided
+
+**Steps:**
+1. **Context Analysis** → `core/analysis-skills` (context.md) — extract goals, scope, conflicts from PBI
+2. **Requirements Extraction** → `core/analysis-skills` (requirements.md) — write user stories + BDD AC
+3. **Domain Discovery** → `core/analysis-skills` (discovery-domain.md) — check knowledge base for reuse
+4. **Gap Analysis** → `core/analysis-skills` (gap.md) — identify missing logic
+5. **Figma Analysis** (if link provided) → `ux-ui/ui-designer` (figma.md) — extract UI structure
+6. **Output:** `outputs/inception/mini-spec.md` — consolidated 1-2 page spec
+7. **User approves mini-spec** before proceeding to QA/Dev phases
+
+**Lite Inception output structure:**
+```markdown
+# Mini-Spec: {Feature Name}
+
+## Source
+- PBI: {id + title}
+- External links: {Figma, wiki, MCP — if any}
+
+## Scope
+- In: {features included}
+- Out: {features excluded}
+
+## User Stories (BDD)
+- US-001: {title} — Given/When/Then
+- US-002: ...
+
+## Technical Context
+- API endpoints: {list or "unknown — infer from PBI"}
+- Data storage: {type or "unknown"}
+- UI pages: {list or "API-only"}
+
+## Gaps & Assumptions
+- {list of gaps and assumptions made}
+```
+
+**If user provides external specs** (e.g., `JapanTravelBookingSystem.md` + `JapanTravelArchitectureSpec.md`):
+→ Skip Lite Inception entirely — use provided specs as input for QA/Dev phases
+
+### Mode-Aware Routing Table
+
+For QA Only / Dev Only, the routing table changes:
+
+**QA Scenario Only routing:**
+
+| .aidlc/ has | Missing | Go to | ✅ Done when |
+|---|---|---|---|
+| Nothing | mini-spec or external specs | Lite Inception (or ask for specs) | mini-spec.md exists OR external specs provided |
+| mini-spec.md (or external specs) | qa-task-design | Phase 2.1 QA Task Design | `qa-task-progress.md` exists |
+| qa-task-progress.md | test-cases | Phase 2.2 Test Case Design | test scenario CSV/MD exists |
+| test scenarios | — | ✅ WORKFLOW COMPLETE | — |
+
+**QA Automation routing:**
+
+| .aidlc/ has | Missing | Go to | ✅ Done when |
+|---|---|---|---|
+| Nothing | mini-spec or external specs | Lite Inception (or ask for specs) | mini-spec.md exists OR external specs provided |
+| mini-spec.md (or external specs) | qa-task-design | Phase 2.1 QA Task Design | `qa-task-progress.md` exists |
+| qa-task-progress.md | test-cases | Phase 2.2 Test Case Design | test scenario CSV/MD exists |
+| test scenarios | QA architecture | Phase 2.3 QA Architecture | `implementation-plan.md` exists |
+| QA architecture | test-scripts | Phase 2.4 Test Script Design | spec files exist |
+| test-scripts | — | ✅ WORKFLOW COMPLETE | — |
+
+**Dev Only routing:**
+
+| .aidlc/ has | Missing | Go to | ✅ Done when |
+|---|---|---|---|
+| Nothing | mini-spec or external specs | Lite Inception (or ask for specs) | mini-spec.md exists OR external specs provided |
+| mini-spec.md (or external specs) | dev-task-design | Phase 2.5 Dev Task Design | `dev-task-progress.md` exists |
+| dev-task-progress.md | implementation | Phase 3.1 Implementation | all tasks `[x]` |
+| implementation | test results | Phase 3.2 Automated Testing | tests PASS |
+| test results | PR | Phase 3.3 Create Pull Request | PR created |
+
+### Mode-Aware Anti-Shortcut Rules
+
+| User tries to | Mode | Prerequisite missing | Action |
+|---|---|---|---|
+| "เขียน test scenario เลย" | QA Only | No qa-task-design | STOP → "ต้องทำ QA Task Design ก่อน (Phase 2.1)" |
+| "เขียน test script เลย" | QA Automation | No test scenarios, no QA architecture | STOP → "ต้องทำ test scenario + QA architecture + qa-task-design ก่อน" |
+| "เขียน code เลย" | Dev Only | No dev-task-design | STOP → "ต้องทำ Dev Task Design ก่อน (Phase 2.5)" |
+| Skip Lite Inception | QA/Dev Only | No specs AND no mini-spec | STOP → "ต้องมี specs หรือทำ Lite Inception ก่อน" |
+
 ## Language Policy
 
 | What | Language | Example |
@@ -376,22 +528,33 @@ For detailed patterns → Use `po/architect` skill (architecture-patterns.md)
 
 ## Quick Commands
 
+### Full Mode (default)
 - `"start AI-DLC"` — Begin new project (detects greenfield vs brownfield)
 - `"start AI-DLC greenfield"` — Skip reverse engineering
 - `"start AI-DLC brownfield"` — Include reverse engineering
+
+### QA Only Mode
+- `"start AI-DLC QA scenario only"` — QA Scenario Only: Lite Inception → 2.1 → 2.2
+- `"start AI-DLC QA automation"` — QA Automation: Lite Inception → 2.1 → 2.2 → 2.3 → 2.4 (then asks: API / Web UI / Android / iOS)
+
+### Dev Only Mode
+- `"start AI-DLC Dev only"` — Dev Only: Lite Inception → 2.5 → 3.1 → 3.2 → 3.3
+
+### Phase Entry (any mode)
 - `"start AI-DLC from domain design"` — Begin from phase 1.4
-- `"start AI-DLC from logical design"` — Begin from phase 1.5
-- `"start AI-DLC from UI/UX design"` — Begin from phase 1.5
 - `"start AI-DLC from logical design"` — Begin from phase 1.6
+- `"start AI-DLC from UI/UX design"` — Begin from phase 1.5
 - `"start AI-DLC from testid map"` — Begin from phase 1.7
 - `"start AI-DLC from test case design"` — Begin from phase 2.1
-- `"start AI-DLC from QA architecture"` — Begin from phase 2.2
-- `"start AI-DLC from test script design"` — Begin from phase 2.3 (parallel: also starts 2.5)
-- `"start AI-DLC from dev task design"` — Begin from phase 2.4 (parallel: also starts 2.3)
-- `"start AI-DLC from sync AD"` — Begin from phase 2.6
+- `"start AI-DLC from QA architecture"` — Begin from phase 2.3
+- `"start AI-DLC from test script design"` — Begin from phase 2.4 (parallel: also starts 2.5)
+- `"start AI-DLC from dev task design"` — Begin from phase 2.5 (parallel: also starts 2.4)
+- `"start AI-DLC from sync AD"` — Begin from phase 2.7
 - `"start AI-DLC from implementation"` — Begin from phase 3.1
 - `"start AI-DLC from automation testing"` — Begin from phase 3.2
 - `"start AI-DLC from create pull request"` — Begin from phase 3.3
+
+### Session Control
 - `"resume AI-DLC"` — Resume paused iteration
 - `"reset AI-DLC"` — Reset session
 - `"proceed"` or `"1"` — Approve and continue

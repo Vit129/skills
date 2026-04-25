@@ -8,8 +8,11 @@ description: >
   "ทำ web", "ทำ api", "ทำ feature", "สร้าง app", "build",
   "test scenario", "test case", "สร้าง test", "เขียน test",
   "automate", "automation", "QA", "testing",
+  "QA only", "Dev only", "QA scenario only", "QA automation",
+  "ทำแค่ QA", "ทำแค่ Dev", "ทำ test อย่างเดียว",
   or needs governance for the AI Development Lifecycle.
   ALL coding, development, and QA work MUST go through this skill first.
+  Supports 3 modes: Full (default), QA Only, Dev Only.
   Non-coding tasks (research, analysis, finance, presentation, knowledge management)
   can go directly to the relevant skill or knowledge without AIDLC governance.
 ---
