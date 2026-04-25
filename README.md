@@ -7,25 +7,21 @@ Uses a Single Source of Truth (SSOT) pattern: shared rules in `.claude/shared/` 
 
 ```text
 .claude/                        ← This repo (agent configuration SSOT)
-├── .claude/                    ← Claude Code config folder
-│   ├── shared/                 ← Universal rules (committed to GitHub)
-│   │   ├── agent-core.md       ← Reading order, Karpathy principles, state management
-│   │   ├── skill-map.md        ← Complete skill ecosystem reference
-│   │   ├── project-rules.md    ← Project-specific rules and phase gates
-│   │   ├── citation-format.md  ← Citation conventions
-│   │   └── communication-style.md ← Tone and interaction guidelines
-│   └── scripts/
-│       └── sync-agent-instructions.sh  ← Reads shared/ → generates ~/.codex/CODEX.md, ~/.gemini/GEMINI.md
-├── scripts/                    ← Memory management scripts
-│   ├── consolidate-knowledge.sh
-│   ├── save-memory.sh
-│   ├── update-knowledge.sh
-│   └── update-memory.sh
-├── rules/
+├── .claude/                    ← Claude Code internal config (worktrees only)
+├── .kiro/                      ← Kiro IDE config (hooks, steering, settings)
+├── rules/                      ← Universal rules (SSOT for all agents)
+│   ├── agent-core.md           ← Reading order, Karpathy principles, state management
+│   ├── skill-map.md            ← Complete skill ecosystem reference
+│   ├── project-rules.md        ← Project-specific rules and phase gates
+│   ├── citation-format.md      ← Citation conventions
 │   └── optimization.md         ← Token management standards
+├── output-styles/              ← How agents communicate
+│   └── communication-style.md  ← Tone and interaction guidelines
+├── scripts/                    ← Agent sync scripts
+│   └── sync-agent-instructions.sh  ← Reads rules/ → generates ~/.codex/CODEX.md, ~/.gemini/GEMINI.md
 ├── skills/                     ← Skill library (see below)
-├── agent-memory/            ← Session memory (auto-managed)
-├── CLAUDE.md                   ← Project-level config (thin adapter)
+├── agent-memory/               ← Session memory (auto-managed, Memory Palace)
+├── CLAUDE.md                   ← Claude Code global config
 └── README.md                   ← This file
 
 skills/                         ← Skill library
@@ -67,15 +63,15 @@ agent-memory/                ← Session memory (auto-managed)
 
 | Agent | Entry Point | Source |
 |-------|-------------|--------|
-| **Claude Code** | `CLAUDE.md` (auto-loaded) | Thin adapter → `.claude/shared/` |
+| **Claude Code** | `CLAUDE.md` (auto-loaded) | Global config + `rules/` + `skills/` |
 | **Kiro** | `skills/KIRO.md` (via steering) | Skill map + Karpathy principles |
-| **Codex** | `~/.codex/CODEX.md` (generated) | `.claude/scripts/sync-agent-instructions.sh` |
-| **Gemini CLI** | `~/.gemini/GEMINI.md` (generated) | `.claude/scripts/sync-agent-instructions.sh` |
-| **Any agent** | `.claude/shared/agent-core.md` | Universal rules (inlined in generated configs) |
+| **Codex** | `~/.codex/CODEX.md` (generated) | `scripts/sync-agent-instructions.sh` ← `rules/` |
+| **Gemini CLI** | `~/.gemini/GEMINI.md` (generated) | `scripts/sync-agent-instructions.sh` ← `rules/` |
+| **Any agent** | `rules/agent-core.md` | Universal rules (inlined in generated configs) |
 
 ## Key Concepts
 
-**SSOT Pattern:** Shared rules live in `.claude/shared/`, sync script generates agent-specific configs. Edit shared files once → all agents updated automatically.
+**SSOT Pattern:** Shared rules live in `rules/`, sync script generates agent-specific configs. Edit shared files once → all agents updated automatically.
 
 **Agent-Core (v2.0)** contains universal rules shared by all agents:
 
@@ -84,33 +80,10 @@ agent-memory/                ← Session memory (auto-managed)
 - **State Management:** Mandatory checklists (turn start/end)
 - **Do Not Store:** Secrets, transcripts, speculation
 
+**Agents** are Claude Code subagent personas in `agents/`. Each agent has a frontmatter with `skills:` references to load relevant skill files automatically.
+
 **Skills** are markdown instruction files agents load on demand. Each skill has a `SKILL.md` with triggers, routing table, and references.
 
 **Agent Memory** persists context and learning across sessions without a database — plain markdown + JSON. Includes user modeling, skill crystallization, periodic nudges, evolution audit trail, and session search.
 
 **Setup scripts** bootstrap new projects with agent context layer (`.kiro/`, `agent-memory/`) and COE QA test structure — portable, not tied to any specific agent or path.
-
-## Quick Start
-
-```bash
-# Bootstrap agent context for a new project:
-bash ~/.claude/skills/scripts/setup/setupAgentSkills.sh MyProject
-
-# Bootstrap QA test structure (prompted automatically after agent setup):
-bash ~/.claude/skills/scripts/setup/setupTests.sh MyProject
-
-# Copy postman migration skill to project (optional):
-bash ~/.claude/skills/scripts/setup/postmanToPlaywright.sh MyProject
-
-# Expose Claude skills to Codex while keeping Claude as SSOT:
-bash ~/.claude/skills/scripts/setup/setupCodexSkills.sh
-
-# Load memory at session start:
-"load context for [project]"
-
-# Save memory at session end:
-"save session + learn"
-
-# Invoke a specific skill:
-"use playwright-testing to write tests for [file]"
-```

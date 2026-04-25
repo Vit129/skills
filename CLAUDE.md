@@ -1,29 +1,30 @@
 # Claude Code Workspace (Project Root)
 
 > 🔗 **Full SSOT Architecture:**
-> - Shared rules: `.claude/shared/` (agent-core.md, skill-map.md, project-rules.md, citation-format.md, communication-style.md)
-> - `.claude/scripts/sync-agent-instructions.sh` — Reads shared files + generates agent configs
+> - Shared rules: `rules/` (agent-core.md, skill-map.md, project-rules.md, citation-format.md)
+> - Output styles: `output-styles/` (communication-style.md)
+> - `scripts/sync-agent-instructions.sh` — Reads rules/ + generates agent configs
 > - `~/.codex/CODEX.md` and `~/.gemini/GEMINI.md` — Auto-generated per agent
 >
-> **Workflow:** Edit `.claude/shared/` files → run sync script → all agents updated ✅
+> **Workflow:** Edit `rules/` or `output-styles/` files → run sync script → all agents updated ✅
 
 ---
 
 ## Skill Map Reference
 
-See `.claude/shared/skill-map.md` for the complete skill map used by all agents.
+See `rules/skill-map.md` for the complete skill map used by all agents.
 
 ## Project Rules Reference
 
-See `.claude/shared/project-rules.md` for project-specific rules and phase gates.
+See `rules/project-rules.md` for project-specific rules and phase gates.
 
 ## Citation Format Reference
 
-See `.claude/shared/citation-format.md` for citation conventions.
+See `rules/citation-format.md` for citation conventions.
 
 ## Communication Style Reference
 
-See `.claude/shared/communication-style.md` for tone and interaction guidelines.
+See `output-styles/communication-style.md` for tone and interaction guidelines.
 
 ### Skills (Conditional Activation)
 
