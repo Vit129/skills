@@ -70,6 +70,25 @@ _Older sessions archived_
 - [x] AGENTS.md: adopted Trust Priority, Do-not-store, Minimum Update Contract from agent-context-kit @2026-04-21
 - [x] Fix BASE_DIR walk-up level in setupAgentSkills.sh — replaced hardcoded `../../..` with `.git/` detection loop, all 3 copies synced @2026-04-21
 - [x] Add impeccable-design to AGENTS.md Skill Map under ai-dlc/dev/ section @2026-04-22
+- [x] memory-palace: update SKILL.md to load both project + user level (Unified Memory System)
+- [x] unified-memory: Audit system structure vs system skill (completed 2026-04-18)
+- [x] ai-dlc/core/aidlc: add {knowledge_root} convention to core/aidlc/SKILL.md (Global & Per-Project support)
+- [x] ai-dlc/core/analysis-skills: add {knowledge_root} convention (Global & Per-Project support)
+- [x] ai-dlc/core/storage: add {knowledge_root} convention (Global & Per-Project support)
+- [x] ai-dlc/core/memory-palace (unified-memory): add {knowledge_root} convention (Global & Per-Project support)
+- [x] system/analysis-concept: add {knowledge_root} convention (Global & Per-Project support)
+- [x] skills-wide: standardize all path placeholders to `{project_root}` — replaced {project}/, {PROJECT_ROOT}, ~/.claude/skills/ai-dlc/knowledge/ across 15+ files
+- [ ] ai-dlc-skills: verify {knowledge_root} resolves correctly at runtime
+- [ ] **unified-memory: Dual-mode lessons (global + per-project override)**
+  - Move design-craftsmanship-tokens.md + error-recovery-strategy.md to skills/system/unified-memory/references/
+  - Support per-project duplicate in .unified-memory/knowledge/lessons/{domain}/
+  - Resolution order: .unified-memory/ (project-specific) → skills/system/unified-memory/ (global)
+  - Enable team to inherit global + customize locally
+- [ ] **.claude/shared/: Add unified-memory resolution rules**
+  - Document in CLAUDE.md: Always read .unified-memory/{file} first
+  - If not found: build from skills/system/unified-memory/{file} then create locally
+  - Pattern: "Find local first, fallback to global, create on demand"
+  - Implemented in CLAUDE.md §5 Unified Memory Resolution Rules @2026-04-25
 
 ## Placeholder Convention
 
