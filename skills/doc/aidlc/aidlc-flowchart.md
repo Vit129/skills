@@ -261,11 +261,11 @@ flowchart TD
     style Note1 fill:#475569,color:#fff,stroke:#334155
 ```
 
-## System Skills Integration (Unified Memory + Knowledge)
+## System Skills Integration (Agent Memory + Knowledge)
 
 ```mermaid
 flowchart TD
-    SessionStart([Session Start]) --> Bootstrap{unified-memory exists?}
+    SessionStart([Session Start]) --> Bootstrap{agent-memory exists?}
     Bootstrap -->|No| Init[Step 0: Auto-init]
     Bootstrap -->|Yes| MemLoad[Load state.md + user-profile.md]
     Init --> MemLoad

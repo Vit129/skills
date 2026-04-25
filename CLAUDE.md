@@ -1,11 +1,11 @@
 # Claude Code Workspace (Project Root)
 
-> 🔗 **Full SSOT Architecture:** 
-> - Shared rules: `.claude/shared/` (agent-core.md, skill-map.md, project-rules.md, citation-format.md)
-> - `.claude/scripts/sync-agent-instructions.sh` — Reads shared files + generates agents
+> 🔗 **Full SSOT Architecture:**
+> - Shared rules: `.claude/shared/` (agent-core.md, skill-map.md, project-rules.md, citation-format.md, communication-style.md)
+> - `.claude/scripts/sync-agent-instructions.sh` — Reads shared files + generates agent configs
 > - `~/.codex/CODEX.md` and `~/.gemini/GEMINI.md` — Auto-generated per agent
 >
-> **Workflow:** Edit `.claude/shared/` files, run sync script, all agents updated ✅
+> **Workflow:** Edit `.claude/shared/` files → run sync script → all agents updated ✅
 
 ---
 
@@ -21,19 +21,23 @@ See `.claude/shared/project-rules.md` for project-specific rules and phase gates
 
 See `.claude/shared/citation-format.md` for citation conventions.
 
+## Communication Style Reference
+
+See `.claude/shared/communication-style.md` for tone and interaction guidelines.
+
 ### Skills (Conditional Activation)
 
 | Category | Activated By | Usage |
 |----------|--------------|-------|
 | **ai-dlc** | Hooks (PostToolUse) | Auto-run tests after Write/Edit |
 | **finance** | Manual skill invoke | `/finance-*` or Kiro |
-| **system** | SessionStart hook | unified-memory, skill-creator |
+| **system** | SessionStart hook | agent-memory, skill-creator |
 
 ### Hooks (Configured in settings.json)
 
 | Hook | Matcher | Action |
 |------|---------|--------|
-| **SessionStart** | Always | Load `.unified-memory/palace/state.md` (Memory Palace) |
+| **SessionStart** | Always | Load `agent-memory/palace/state.md` (Memory Palace) |
 | **PreToolUse** | Write/Edit/MultiEdit | Check design → decomposition → implementation sequence |
 | **PostToolUse** | Write/Edit (test files) | Run test, auto-heal if fails, trigger Memory Palace |
 
@@ -44,9 +48,10 @@ See `.claude/shared/citation-format.md` for citation conventions.
 → See `.setup-checklist` for step-by-step migration
 
 **Quick summary:**
+
 1. Copy `~/.claude/` to new workspace
 2. Verify `settings.json` hooks are loaded
-3. Initialize `.memory/state.md` (first SessionStart does this)
+3. Initialize `agent-memory/palace/state.md` (first SessionStart does this)
 4. Confirm test commands match new project structure
 5. Done — skills auto-activate
 
@@ -55,66 +60,65 @@ See `.claude/shared/citation-format.md` for citation conventions.
 ## 4. Workspace Portability Notes
 
 ### What's Portable ✅
+
 - `rules/` — universal standards
-- `skills/system/` — core meta-skills (unified-memory, skill-creator)
+- `skills/system/` — core meta-skills (agent-memory, skill-creator)
 - `skills/ai-dlc/` — dev lifecycle
 - `settings.json` hooks schema
 
 ### What Needs Adjustment ⚠️
-- `rules/test-coverage.md` → Test mapping depends on project structure
+
+- `rules/optimization.md` → Token management (review for new project)
 - `skills/finance/` → Investment portfolio paths (project-specific)
-- `.unified-memory/` → Session-specific state (auto-recreated per workspace)
+- `agent-memory/` → Session-specific state (auto-recreated per workspace)
 
 ### Migration Path
-1. Copy everything except `.unified-memory/`
-2. Update `rules/test-coverage.md` test commands for new project
-3. First SessionStart auto-initializes `.unified-memory/palace/state.md`
-4. Done
+
+1. Copy everything except `agent-memory/`
+2. First SessionStart auto-initializes `agent-memory/palace/state.md`
+3. Done
 
 ---
 
-## 5. Unified Memory Resolution Rules
+## 5. Agent Memory Resolution Rules
 
-### Global + Per-Project Pattern
+### Knowledge = Per-Project Only
 
-Lessons, templates, and knowledge follow a **cascade resolution** pattern:
+Knowledge files (design tokens, error recovery, lessons, index.json) live in `agent-memory/knowledge/` — single source of truth, per-project.
 
-```
-Read order (stop at first match):
-  1. {project_root}/.unified-memory/knowledge/lessons/{domain}/     ← per-project (custom)
-  2. {project_root}/skills/system/unified-memory/references/        ← global shared
-  3. If not found in (1) or (2): Create in (1) based on (2)
+`skills/` contains only execution logic (SKILL.md + references/ = how to work). It does not store knowledge data.
+
+```text
+{project_root}/agent-memory/knowledge/     ← knowledge lives here (per-project)
+{project_root}/skills/                        ← execution engine only (not data)
+
+Bootstrap (new project, no agent-memory/ yet):
+  Agent reads skills/system/agent-memory/SKILL.md → auto-creates agent-memory/ tree
+  Knowledge files are created fresh for the project — not copied from skills/
 ```
 
 ### Key Rules
 
 | Scenario | Action |
 |----------|--------|
-| **Agent needs design-craftsmanship-tokens** | Read .unified-memory/ first, fallback to skills/system/unified-memory/ |
-| **Per-project customization** | Copy from skills/ → .unified-memory/, edit locally (doesn't affect global) |
-| **Global improvement** | Edit skills/system/unified-memory/, then document in state.md |
-| **New lesson discovered** | Write to .unified-memory/ (project-specific), optionally promote to skills/ (global) |
+| **Agent needs design-craftsmanship-tokens** | Read `agent-memory/knowledge/design-craftsmanship-tokens.md` |
+| **New lesson discovered** | Write to `agent-memory/knowledge/lessons/{domain}/` |
+| **Knowledge index** | `agent-memory/knowledge/index.json` |
 
-### Example: Error Recovery Strategy
+### Current Knowledge Files
 
-```
-Agent looking for error-recovery-strategy:
-  ↓
-1. Check: .unified-memory/knowledge/lessons/common/error-recovery-strategy.md
-   ✗ Not found
-  ↓
-2. Check: skills/system/unified-memory/references/error-recovery-strategy.md
-   ✓ Found! Use this
-  ↓
-3. (Optional) Copy to .unified-memory/knowledge/lessons/common/ for project customization
-```
+- `agent-memory/knowledge/design-craftsmanship-tokens.md` — Design token standards
+- `agent-memory/knowledge/error-recovery-strategy.md` — Error recovery patterns
+- `agent-memory/knowledge/index.json` — Knowledge index
+- `agent-memory/knowledge/lessons/` — Per-domain lessons (empty until captured)
 
 ---
 
 ## 6. References
 
-- **Agent Strategy:** `skills/CLAUDE.md` (tier selection, Gemini vs Claude)
-- **Karpathy Principles:** `skills/CLAUDE.md` §5 (Think Before Coding, Simplicity First, Surgical Changes, Goal-Driven Execution)
-- **Test Standards:** `rules/test-coverage.md` + `rules/playwright-standards.md`
+- **Agent Strategy:** `skills/KIRO.md` (tier selection, skill map, Karpathy principles)
+- **Karpathy Principles:** `skills/KIRO.md` §Karpathy Principles (Think Before Coding, Simplicity First, Surgical Changes, Goal-Driven Execution)
 - **Token Management:** `rules/optimization.md`
-- **Unified Memory:** `skills/system/unified-memory/` (Memory Palace + Knowledge Evolution — auto-activated SessionStart)
+- **Agent Memory:** `skills/system/agent-memory/` (Memory Palace + Knowledge Evolution — auto-activated SessionStart)
+- **Memory Palace State:** `agent-memory/palace/state.md`
+- **Search Indexes:** `agent-memory/palace/keyword-index.json` + `date-index.json`

@@ -293,7 +293,7 @@ knowledge/
 ```
 
 **Resolution order (AI ค้นหาตามลำดับ):**
-1. `{project_root}/.unified-memory/knowledge/` — per-project (custom / business version)
+1. `{project_root}/agent-memory/knowledge/` — per-project (custom / business version)
 2. `{project_root}/ai-agent/skills/ai-dlc/knowledge/` — skills copied into project
 3. `~/.claude/skills/ai-dlc/knowledge/` — global fallback (เฉพาะคนที่ติดตั้ง Claude)
 
@@ -327,7 +327,7 @@ knowledge/
 | 4 | sync-steering-on-skill-add | sync steering เมื่อเพิ่ม skill |
 | 5 | sync-hook-to-templates | sync hook ไป templates |
 | 6 | knowledge-score-update | update utility scores หลัง test run |
-| 7 | unified-memory-auto-consolidation | auto-consolidate เมื่อถึง threshold |
+| 7 | agent-memory-auto-consolidation | auto-consolidate เมื่อถึง threshold |
 | 8 | memory-save | บันทึก memory + knowledge ท้ายสุด |
 
 Templates: `templates/kiro/` (Kiro) หรือ `templates/claude-code/settings.json` (Claude Code)
@@ -345,7 +345,7 @@ skill-name/
 
 Progressive disclosure: metadata (100 words) → SKILL.md body → references (unlimited)
 
-### `system/unified-memory/` — Memory Palace + Knowledge Evolution
+### `system/agent-memory/` — Memory Palace + Knowledge Evolution
 **Triggers:** "save memory", "load context", "what did we do last time", "remember this", "track templates", "session summary"
 
 Two systems:
@@ -353,7 +353,7 @@ Two systems:
 - **Knowledge Evolution** — what works (scored templates + lessons)
 
 ```
-.unified-memory/
+agent-memory/
 ├── palace/
 │   ├── state.md          ← palace map (≤100 lines)
 │   ├── wings/{topic}/    ← hall.md + rooms/ + closets/ + skills/

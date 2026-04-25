@@ -33,9 +33,9 @@ When information conflicts, higher items win:
 2. Verified codebase state (grep/read before acting)
 3. `AGENTS.md` — shared rules & skill map (inlined in each agent's config file)
 4. Agent-specific file — tier routing, escalation, cache rules
-5. `.unified-memory/palace/state.md` — active session state
+5. `agent-memory/palace/state.md` — active session state
 6. Skill files at `{skills_root}/` (e.g. `~/.claude/skills/`, `~/ai-agent/skills/`, or project `ai-agent/skills/`)
-7. After any file write or decision → note internally that session has unsaved work (dirty); before ending session, follow the save workflow in `system/unified-memory/` skill
+7. After any file write or decision → note internally that session has unsaved work (dirty); before ending session, follow the save workflow in `system/agent-memory/` skill
 
 If notes conflict with the codebase, trust the codebase.
 
@@ -99,7 +99,7 @@ If notes conflict with the codebase, trust the codebase.
 
 | Keyword | Skill |
 |---------|-------|
-| save memory, load context, session start/end | `system/unified-memory/` |
+| save memory, load context, session start/end | `system/agent-memory/` |
 | CoT, LATS, AoT, reasoning technique | `system/ai-techniques/` |
 | create new skill | `system/skill-creator/` |
 | create hook | `system/hook-creator/` |
@@ -194,12 +194,12 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 ## Do Not Store
 
-Never record: secrets/credentials, raw chat transcripts, chain-of-thought reasoning, speculative notes without evidence, duplicate summaries already in `.unified-memory/`.
+Never record: secrets/credentials, raw chat transcripts, chain-of-thought reasoning, speculative notes without evidence, duplicate summaries already in `agent-memory/`.
 
 ## Minimum Update Contract
 
 After meaningful work, update:
 
-- `.unified-memory/palace/state.md` → Current Focus + Open Threads when focus/blockers/next steps change
-- `.unified-memory/` rooms → when decisions, architecture choices, or lessons are made
+- `agent-memory/palace/state.md` → Current Focus + Open Threads when focus/blockers/next steps change
+- `agent-memory/` rooms → when decisions, architecture choices, or lessons are made
 - Trigger "save session + learn" at session end if dirty=true

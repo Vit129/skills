@@ -994,12 +994,12 @@ export class CollectionHelpers {
 
 ## 32. Knowledge Check (Before Generating) 🧠
 
-Before generating code for each folder, check `.unified-memory/knowledge/lessons/` for postman-related lessons learned from previous migrations. Apply known fixes proactively instead of waiting for failures.
+Before generating code for each folder, check `agent-memory/knowledge/lessons/` for postman-related lessons learned from previous migrations. Apply known fixes proactively instead of waiting for failures.
 
 ### What to check
 
-- `.unified-memory/knowledge/lessons/` — scan for lessons with keywords: postman, playwright, migration, stateStore, auth, collection
-- `.unified-memory/palace/state.md` — check Open Threads for in-progress migration context
+- `agent-memory/knowledge/lessons/` — scan for lessons with keywords: postman, playwright, migration, stateStore, auth, collection
+- `agent-memory/palace/state.md` — check Open Threads for in-progress migration context
 
 ### Known lessons to apply (examples)
 
@@ -1017,4 +1017,4 @@ Before generating code for each folder, check `.unified-memory/knowledge/lessons
 - Once per folder (Step 3 — before generating code)
 - After test failures (Step 4 — check if lesson already exists before debugging)
 
-> 💡 If a new pattern/fix is discovered during migration, capture it as a lesson in `.unified-memory/knowledge/lessons/` for future migrations.
+> 💡 If a new pattern/fix is discovered during migration, capture it as a lesson in `agent-memory/knowledge/lessons/` for future migrations.

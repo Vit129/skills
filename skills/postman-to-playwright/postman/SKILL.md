@@ -221,7 +221,7 @@ stateStore['orderId'] = responseJson.id
 
 ## ⚠️ Gotchas
 
-- **Progress tracking:** At migration start, AI creates `progress.md` from `references/progress-template.md` in the target project's `tests-api/<collection>/` folder. Update status (⬜→✅/❌) after each step completes. Link to `.unified-memory/palace/state.md` Open Threads for cross-session continuity.
+- **Progress tracking:** At migration start, AI creates `progress.md` from `references/progress-template.md` in the target project's `tests-api/<collection>/` folder. Update status (⬜→✅/❌) after each step completes. Link to `agent-memory/palace/state.md` Open Threads for cross-session continuity.
 
 ---
 
@@ -244,7 +244,7 @@ npx cross-env ENV=sit npx playwright test --config=playwright.config.ts tests-ap
 1. User pastes test output (or AI reads from terminal)
 2. AI reads the error message + stack trace
 3. AI checks `references/fix-generated-files.md` for matching pattern
-4. AI checks `.unified-memory/knowledge/lessons/` for known fix
+4. AI checks `agent-memory/knowledge/lessons/` for known fix
 5. AI applies fix → user re-runs → repeat until pass
 
 ### Common Failure Patterns
@@ -261,7 +261,7 @@ npx cross-env ENV=sit npx playwright test --config=playwright.config.ts tests-ap
 ### After All Tests Pass
 
 - Update `progress.md` → Step 4 status ✅
-- Capture any new patterns as lessons in `.unified-memory/knowledge/lessons/`
+- Capture any new patterns as lessons in `agent-memory/knowledge/lessons/`
 
 ---
 

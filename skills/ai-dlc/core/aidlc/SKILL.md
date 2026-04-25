@@ -65,7 +65,7 @@ For skill routing guide → (Read `references/related-skills.md`)
 
 | Priority | Path | When to use |
 |----------|------|-------------|
-| 1. Per-project | `{cwd}/.unified-memory/knowledge/` | Working within a specific project workspace — walk up from cwd until found |
+| 1. Per-project | `{cwd}/agent-memory/knowledge/` | Working within a specific project workspace — walk up from cwd until found |
 | 2. Global fallback | `{project_root}/skills/knowledge/` | No per-project knowledge found — cross-project shared patterns |
 
-**Rule:** Always check per-project first. Fall back to global only if `.unified-memory/knowledge/` does not exist in the project tree.
+**Rule:** Always check per-project first. Fall back to global only if `agent-memory/knowledge/` does not exist in the project tree.

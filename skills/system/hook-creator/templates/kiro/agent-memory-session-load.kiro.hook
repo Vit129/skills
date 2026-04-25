@@ -1,0 +1,12 @@
+{
+  "name": "Agent Memory — Session Load",
+  "version": "2.0.0",
+  "description": "Load palace context on first prompt of session. Skip if already loaded (check if palace state was already read this conversation).",
+  "when": {
+    "type": "promptSubmit"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Check if you have already loaded the Memory Palace in this conversation (look for '🏛️ Memory Palace loaded' in previous messages). If YES → do nothing, silent. If NO → Find workspace root by locating the folder that contains .kiro/hooks/ directory. Read {root}/agent-memory/palace/state.md (if missing, create with empty Palace_Stats, Active_Wings, Recent_Sessions, Open_Threads, Next_Session_Intent). Load Active Wings and Open Threads silently. Initialize dirty tracking: dirty=false. Respond ONLY: '🏛️ Memory Palace loaded' (or '🏛️ Memory Palace initialized' if newly created). Do NOT show palace details. Complete within 10 seconds."
+  }
+}

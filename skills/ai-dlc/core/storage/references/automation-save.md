@@ -50,7 +50,7 @@ Save technical automation knowledge (components, test data, lessons) for API/Web
 }
 ```
 
-> Schema aligned with `system/unified-memory/references/intelligence.md` Lesson Index Schema.
+> Schema aligned with `system/agent-memory/references/intelligence.md` Lesson Index Schema.
 
 ## Rules
 - AI-Direct Mode: write all JSON/TS files directly, no shell scripts

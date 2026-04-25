@@ -6,14 +6,14 @@
 sequenceDiagram
     participant User as User
     participant AI as AI (Kiro/Claude)
-    participant Mem as unified-memory
+    participant Mem as agent-memory
     participant Know as knowledge-evolution
     participant QA as QA Lead
     participant ADO as Azure DevOps
 
     rect rgb(21, 128, 61)
     Note over User,ADO: SESSION START
-    AI->>Mem: Load context (.unified-memory/palace/state.md + user-profile.md)
+    AI->>Mem: Load context (agent-memory/palace/state.md + user-profile.md)
     Mem-->>AI: Last checkpoint + open threads + user preferences (hints only)
     AI->>Know: Check knowledge index (ai-dlc/knowledge/)
     Know-->>AI: Top templates + lessons for this domain
@@ -123,7 +123,7 @@ sequenceDiagram
 
     rect rgb(21, 128, 61)
     Note over User,ADO: SESSION END
-    AI->>Mem: Save state (.unified-memory/palace/ — wings, rooms, keyword-index, date-index, search-index, user-profile)
+    AI->>Mem: Save state (agent-memory/palace/ — wings, rooms, keyword-index, date-index, search-index, user-profile)
     AI->>AI: Skill crystallization check (pattern ≥2x → auto-write DRAFT)
     AI->>Know: Sync scores + evolution_log[] to index.json
     end
@@ -186,7 +186,7 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     participant AIDLC as aidlc skill
-    participant Mem as unified-memory
+    participant Mem as agent-memory
     participant Know as knowledge-evolution
     participant Analysis as analysis-skills
     participant Architect as architect skill

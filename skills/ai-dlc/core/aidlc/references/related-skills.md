@@ -14,4 +14,4 @@
 - UI/UX → `ux-ui/ui-designer`
 
 ## Phase 5: Reflect (Every Session End)
-- Knowledge scoring + Memory persistence → `system/unified-memory` (score templates, auto-capture lessons, save context, update wings/rooms)
+- Knowledge scoring + Memory persistence → `system/agent-memory` (score templates, auto-capture lessons, save context, update wings/rooms)

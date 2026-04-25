@@ -28,7 +28,7 @@ else
             -not -path "*/node_modules/*" \
             -not -path "*/.git/*" \
             -not -path "*/tests/*" \
-            -not -path "*/.unified-memory/*" \
+            -not -path "*/agent-memory/*" \
             -print0 2>/dev/null)
     done
 

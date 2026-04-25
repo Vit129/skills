@@ -28,14 +28,14 @@ Hook ทั้ง 8 ตัวนี้ควรมีในทุก project ท
 | 4 | sync-steering-on-skill-add | `fileCreated` | `FileChanged` | sync steering เมื่อเพิ่ม skill |
 | 5 | sync-hook-to-templates | `fileEdited` | `FileChanged` | sync hook ไป templates |
 | 6 | knowledge-score-update | `postToolUse` (shell) | `PostToolUse` (Bash) | update utility scores หลัง test run |
-| 7 | unified-memory-auto-consolidation | `agentStop` | `Stop` | auto-consolidate เมื่อถึง threshold |
+| 7 | agent-memory-auto-consolidation | `agentStop` | `Stop` | auto-consolidate เมื่อถึง threshold |
 | 8 | memory-save | `agentStop` | `Stop` | บันทึก memory + knowledge ท้ายสุด (always last) |
 
 **กฎสำคัญ:**
 - Hook #3 (test) ยิงเฉพาะเมื่อมี test files อยู่แล้วใน project — ไม่ยิงตอน first-time setup
 - Hook #7 ยิงก่อน #8 — consolidation ก่อน save เสมอ (ลำดับ agentStop hooks = ลำดับ file creation)
 - Hook #8 (memory) ยิงท้ายสุดเสมอ เพราะ `agentStop`/`Stop` เป็น event สุดท้าย
-- Hook #2 (phase-guard) skip `.kiro/`, `.claude/`, `.unified-memory/` เพื่อป้องกัน circular
+- Hook #2 (phase-guard) skip `.kiro/`, `.claude/`, `agent-memory/` เพื่อป้องกัน circular
 - แก้ไข hook ใน `templates/kiro/` ก่อน แล้ว copy ไป `.kiro/hooks/` เพื่อป้องกัน circular
 
 **Kiro Spec Hooks (optional — เพิ่มเมื่อ project ใช้ Kiro Specs):**
@@ -62,7 +62,7 @@ Hook ทั้ง 8 ตัวนี้ควรมีในทุก project ท
 |----------|---------|
 | Memory load on start | `templates/kiro/memory-load.kiro.hook` |
 | Memory save on end | `templates/kiro/memory-save.kiro.hook` |
-| Unified Memory auto-consolidation | `templates/kiro/unified-memory-auto-consolidation.kiro.hook` |
+| Agent Memory auto-consolidation | `templates/kiro/agent-memory-auto-consolidation.kiro.hook` |
 | AIDLC phase guard | `templates/kiro/aidlc-phase-guard.kiro.hook` |
 | Run tests after AI write | `templates/kiro/run-tests-after-write.kiro.hook` |
 | Knowledge score update | `templates/kiro/knowledge-score-update.kiro.hook` |

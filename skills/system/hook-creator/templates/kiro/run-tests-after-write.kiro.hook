@@ -1,7 +1,7 @@
 {
   "enabled": true,
   "name": "Run Tests After AI Write",
-  "description": "After AI writes a test file, run it automatically. Independent of unified-memory system.",
+  "description": "After AI writes a test file, run it automatically. Independent of agent-memory system.",
   "version": "2.4.0",
   "when": {
     "type": "fileEdited",

@@ -9,10 +9,16 @@
 !.github/**
 !.agents/
 !.agents/**
-!.unified-memory/
-!.unified-memory/**
+!.claude/
+!.claude/**
+!agent-memory/
+!agent-memory/**
 !skills/
 !skills/**
+!scripts/
+!scripts/**
+!rules/
+!rules/**
 
 # Re-ignore noise inside tracked folders
 skills/**/.DS_Store
@@ -20,3 +26,5 @@ skills/.DS_Store
 skills/**/_internal/
 skills/.claude/
 skills/**/.claude/
+.claude/worktrees/
+.claude/settings.local.json

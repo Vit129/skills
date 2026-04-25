@@ -32,7 +32,7 @@ Aggregate findings and update the Knowledge Buffer section in the Implementation
 
 After updating the Knowledge Buffer, sync scores back to index files:
 
-1. Check if `.unified-memory/palace/wings/unified-memory/rooms/template-health.md` exists
+1. Check if `agent-memory/palace/wings/agent-memory/rooms/template-health.md` exists
 2. If exists → read `template-health.md` and `lesson-effectiveness.md`
 3. Apply any pending score changes to index files:
    - `{knowledge_root}/automation/{platform}/{platform}Index.json`
