@@ -60,7 +60,11 @@ CLAUDE.md                   ← Project-level config (thin adapter)
 
 **SSOT Pattern:** Shared rules live in `.claude/shared/`, sync script generates agent-specific configs at `~/.codex/CODEX.md` and `~/.gemini/GEMINI.md`. Edit shared files once → all agents updated automatically.
 
-**Agent-Core** contains universal rules shared by all agents: Reading order & trust priority, Karpathy principles, state management checklists, Do Not Store guidelines.
+**Agent-Core (v2.0)** contains universal rules shared by all agents:
+- **10 Mandatory Rules:** Plan Mode, Design & Craftsmanship, Error Recovery, Escalation & Handoff, Quality Gates, Performance Awareness, Security Checklist, Testing Strategy, Backwards Compatibility, Documentation Standard
+- **Foundation:** Karpathy principles (Think, Simplicity, Surgical, Goal-Driven)
+- **State Management:** Mandatory checklists (turn start/end)
+- **Do Not Store:** Secrets, transcripts, speculation
 
 **Skills** are markdown instruction files agents load on demand. Each skill has a `SKILL.md` with triggers, routing table, and references.
 
