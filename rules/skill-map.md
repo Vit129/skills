@@ -60,3 +60,4 @@
 | Keyword | Skill |
 |---------|-------|
 | stock analysis, fundamental research | `finance/research/stock-deep-analysis/` |
+| peer comparison, compare stocks, comparative analysis | `finance/research/stock-peer-comparison/` |
