@@ -61,3 +61,10 @@
 |---------|-------|
 | stock analysis, fundamental research | `finance/research/stock-deep-analysis/` |
 | peer comparison, compare stocks, comparative analysis | `finance/research/stock-peer-comparison/` |
+
+### fitness/ — Health & Fitness (English + Thai)
+| Keyword | Skill |
+|---------|-------|
+| workout plan, จัดตารางออกกำลังกาย, nutrition advice, โภชนาการ, protein tracking, นับโปรตีน | `fitness/` |
+| movement modification, ปรับท่าออกกำลังกาย, BIA review, ตรวจร่างกาย, body composition, physical therapy | `fitness/` |
+| meal plan, แผนฟิตเนส, exercise form, บริหารร่างกาย, fitness goal | `fitness/` |

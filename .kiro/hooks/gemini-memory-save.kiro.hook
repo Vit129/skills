@@ -1,0 +1,12 @@
+{
+  "name": "Gemini Agent Memory — Session Save",
+  "version": "6.0.0",
+  "description": "On agent stop: if dirty=true, update Memory Palace and Markdown Knowledge together for Gemini CLI.",
+  "when": {
+    "type": "agentStop"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Check if this session has dirty=true (file writes, decisions, meaningful learning).\n\nIf dirty=false: silent, do nothing.\n\nIf dirty=true:\n\n1. Determine Target agent-memory (global or project-level).\n\n2. Update Memory Palace:\n- Update palace/state.md (Recent Sessions, Focus, Open Threads).\n- Update palace/search-index.md.\n\n3. Update Knowledge:\n- Update knowledge/index.md and knowledge/evolution.md.\n- Add/Update relevant lessons in knowledge/lessons/.\n\n4. Confirm what was saved concisely."
+  }
+}

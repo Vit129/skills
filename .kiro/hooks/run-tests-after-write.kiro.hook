@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "Run Tests After AI Write",
+  "description": "After AI writes a test file, run it automatically. Independent of agent-memory system.",
+  "version": "2.4.0",
+  "when": {
+    "type": "fileEdited",
+    "patterns": ["**/*.spec.ts", "**/*.robot"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Run the file just saved. .spec.ts: npx playwright test [file] --reporter=line | .robot: robot --outputdir results [file]. PASS → '✅ [file] passes'. FAIL → self-heal max 3 attempts, then report. Complete within 15 seconds."
+  }
+}
