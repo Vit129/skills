@@ -37,6 +37,7 @@ See `output-styles/communication-style.md` for tone and interaction guidelines.
 | **ai-dlc/rules** | Manual (load first) | Coding standards — Playwright, RF, test scenarios, industry rules |
 | **ux-ui** | Manual | UI design, Figma, design system, tokens |
 | **finance** | Manual | Stock analysis, fundamental research |
+| **fitness** | Manual | Workout plans, nutrition tracking, fitness coaching |
 | **system** | SessionStart hook | agent-memory, skill-creator, hook-creator, AI techniques |
 
 > All skill paths in `rules/skill-map.md`. When invoking a skill, announce `[Skill: {path}]` first.

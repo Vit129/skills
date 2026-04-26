@@ -41,6 +41,7 @@ skills/                         ← Skill library
 │   ├── skill-creator/          ← Create new skills
 │   └── hook-creator/           ← Create agent hooks
 ├── finance/                    ← Investment research (local only, not copied to projects)
+├── fitness/                    ← Fitness coaching, nutrition, workout planning
 ├── doc/                        ← Documentation: aidlc flowchart, swimlane
 └── scripts/
     ├── setup/
