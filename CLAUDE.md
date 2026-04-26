@@ -1,4 +1,4 @@
-# Claude Code Workspace (Project Root)
+# Claude Agent Workspace (Global Config)
 
 > 🔗 **Full SSOT Architecture:**
 > - Shared rules: `rules/` (agent-core.md, skill-map.md, project-rules.md, citation-format.md)
@@ -30,9 +30,16 @@ See `output-styles/communication-style.md` for tone and interaction guidelines.
 
 | Category | Activated By | Usage |
 |----------|--------------|-------|
-| **ai-dlc** | Hooks (PostToolUse) | Auto-run tests after Write/Edit |
-| **finance** | Manual skill invoke | `/finance-*` or Kiro |
-| **system** | SessionStart hook | agent-memory, skill-creator |
+| **ai-dlc/core** | Hooks (PostToolUse) | Dev/QA lifecycle — auto-run tests after Write/Edit |
+| **ai-dlc/qa** | Manual or hook | Playwright, Robot Framework, test scenarios, performance |
+| **ai-dlc/dev** | Manual | Backend, frontend, CI/CD, impeccable design |
+| **ai-dlc/po** | Manual | Domain design, DDD, bounded contexts |
+| **ai-dlc/rules** | Manual (load first) | Coding standards — Playwright, RF, test scenarios, industry rules |
+| **ux-ui** | Manual | UI design, Figma, design system, tokens |
+| **finance** | Manual | Stock analysis, fundamental research |
+| **system** | SessionStart hook | agent-memory, skill-creator, hook-creator, AI techniques |
+
+> All skill paths in `rules/skill-map.md`. When invoking a skill, announce `[Skill: {path}]` first.
 
 ### Hooks (Configured in settings.json)
 
@@ -62,14 +69,16 @@ See `output-styles/communication-style.md` for tone and interaction guidelines.
 
 ### What's Portable ✅
 
-- `rules/` — universal standards
+- `rules/` — universal standards (all domains)
 - `skills/system/` — core meta-skills (agent-memory, skill-creator)
-- `skills/ai-dlc/` — dev lifecycle
+- `skills/ai-dlc/` — dev/QA lifecycle
+- `skills/ux-ui/` — UI design
+- `skills/finance/` — investment research (paths may need adjustment)
 - `settings.json` hooks schema
 
 ### What Needs Adjustment ⚠️
 
-- `rules/optimization.md` → Token management (review for new project)
+- `rules/token_efficient.md` → Token management (review for new project)
 - `skills/finance/` → Investment portfolio paths (project-specific)
 - `agent-memory/` → Session-specific state (auto-recreated per workspace)
 
@@ -104,14 +113,15 @@ Bootstrap (new project, no agent-memory/ yet):
 |----------|--------|
 | **Agent needs design-craftsmanship-tokens** | Read `agent-memory/knowledge/design-craftsmanship-tokens.md` |
 | **New lesson discovered** | Write to `agent-memory/knowledge/lessons/{domain}/` |
-| **Knowledge index** | `agent-memory/knowledge/index.json` |
+| **Knowledge index** | `agent-memory/knowledge/index.md` |
 
 ### Current Knowledge Files
 
 - `agent-memory/knowledge/design-craftsmanship-tokens.md` — Design token standards
 - `agent-memory/knowledge/error-recovery-strategy.md` — Error recovery patterns
-- `agent-memory/knowledge/index.json` — Knowledge index
-- `agent-memory/knowledge/lessons/` — Per-domain lessons (empty until captured)
+- `agent-memory/knowledge/index.md` — Knowledge index (Markdown table)
+- `agent-memory/knowledge/evolution.md` — Knowledge evolution log
+- `agent-memory/knowledge/lessons/` — Per-domain lessons
 
 ---
 
@@ -119,7 +129,7 @@ Bootstrap (new project, no agent-memory/ yet):
 
 - **Agent Strategy:** `skills/KIRO.md` (tier selection, skill map, Karpathy principles)
 - **Karpathy Principles:** `skills/KIRO.md` §Karpathy Principles (Think Before Coding, Simplicity First, Surgical Changes, Goal-Driven Execution)
-- **Token Management:** `rules/optimization.md`
+- **Token Management:** `rules/token_efficient.md`
 - **Agent Memory:** `skills/system/agent-memory/` (Memory Palace + Knowledge Evolution — auto-activated SessionStart)
 - **Memory Palace State:** `agent-memory/palace/state.md`
-- **Search Indexes:** `agent-memory/palace/keyword-index.json` + `date-index.json`
+- **Search Index:** `agent-memory/palace/search-index.md`

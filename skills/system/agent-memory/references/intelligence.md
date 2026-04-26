@@ -1,484 +1,208 @@
-# Intelligence — Scoring, Routing, Learning, Semantic Search
+# Intelligence
 
-Everything about HOW the system gets smarter: utility scoring, intent routing, auto-capture, and semantic upgrade.
-
----
+How Agent Memory routes knowledge, scores usefulness, captures lessons, and evolves over time.
 
 ## Core Loop
 
-```
-Read → Execute → Reflect → Write
-  ↑                         ↓
-  └──────── knowledge ───────┘
-
-Every execution produces a signal.
-Good outcomes promote knowledge. Bad outcomes flag it.
+```text
+Read memory → Use knowledge → Observe outcome → Update Palace + Knowledge
 ```
 
+Every durable learning signal must land in Markdown:
+
+- `knowledge/index.md`
+- `knowledge/evolution.md`
+- `knowledge/lessons/{domain}/index.md`
+- optional lesson detail file
+
+## Outcome Signals
+
+Use domain-native signals:
+
+| Domain | Positive | Negative |
+|--------|----------|----------|
+| Code | PASS | FAIL |
+| Design | APPROVE | REJECT |
+| Writing | ACCEPT | REVISE |
+| Decision | POSITIVE | NEGATIVE |
+| Learning | MASTERED | GAP |
+| Research | VALIDATED | DISPROVEN |
+
+## Score Rules
+
+Scores are lightweight routing hints, not truth.
+
+| Event | Score Change | Other Updates |
+|-------|--------------|---------------|
+| Positive outcome | +0.5, max 10.0 | increment applied/usage |
+| Negative outcome | -1.0, min 0.0 | mark review needed if repeated |
+| Lesson prevents failure | +0.5 | increment prevented |
+| Lesson becomes stale | no automatic score | status = stale |
+
+Thresholds:
+
+| Score | Status | Behavior |
+|-------|--------|----------|
+| 7.0-10.0 | proven | prefer first |
+| 3.0-6.9 | active | normal use |
+| 1.0-2.9 | stale | warn before use |
+| 0.0 | deprecated | skip unless requested |
+
+## Routing
+
+1. Extract intent: input → process → output.
+2. Scan `knowledge/index.md` for matching keywords and article titles.
+3. Scan `knowledge/lessons/{domain}/index.md` for relevant lessons.
+4. Prefer higher score and stronger evidence.
+5. If nothing matches, record a gap in `knowledge/index.md`.
+
+## Knowledge Routing at Session Start
+
+At session load, after reading `knowledge/index.md` and `knowledge/evolution.md`, run score-based routing to surface relevant knowledge for the user's current prompt.
+
+### Steps
+
+1. Extract keywords from the user's current prompt.
+2. Scan the Articles table in `knowledge/index.md`: match the Keywords column against prompt keywords.
+3. Scan the Lessons table in `knowledge/index.md` and `knowledge/lessons/{domain}/index.md`: match the Summary column (or Keywords/Confidence) against prompt keywords.
+4. Sort article matches by Score DESC. Sort lesson matches by Confidence DESC.
+5. Apply routing tiers:
+
+| Score / Confidence | Tier | Behavior |
+|--------------------|------|----------|
+| 7.0–10.0 | proven | Surface first — high-value knowledge |
+| 3.0–6.9 | active | Include normally |
+| < 3.0 | stale | Warn before relying on it |
+
+6. Keep the top 3 relevant matches (articles and lessons combined).
+7. Include matched items in the session brief under "Relevant knowledge".
+8. If no matches are found, note the topic as a potential knowledge gap in the brief. Do NOT auto-add to the Gaps table — just mention it so the user is aware.
+
+## Lesson Capture
+
+Capture a lesson when at least one is true:
+
+- A bug or mistake was diagnosed and fixed.
+- A repeated pattern succeeded.
+- The user corrected a preference or workflow.
+- A tool/path/workspace rule prevented future confusion.
+- A decision explains why one approach was chosen over another.
+
+Do not capture:
+
+- transient errors with no future relevance
+- unverified guesses
+- generic advice already covered by an existing lesson
+
+## Lesson Format
+
+Add one row to `knowledge/lessons/{domain}/index.md`:
+
+```markdown
+| LESSON-DOMAIN-001 | bug | active | 1 | 1 | 0.90 | Absolute paths fixed hook routing | LESSON-DOMAIN-001.md |
+```
+
+Create detail file when needed:
+
+```markdown
+---
+id: LESSON-DOMAIN-001
+domain: domain
+type: bug
+status: active
+confidence: 0.90
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
 ---
 
-## 1. Outcome Signals (Domain-Specific)
+# Short Lesson Title
 
-Each domain has its own natural signal vocabulary — do NOT replace with generic SUCCESS/FAILURE:
+## Summary
+{what to remember}
 
-| Domain | POSITIVE Signal | NEGATIVE Signal | When Captured |
-|--------|----------------|-----------------|---------------|
-| **Code** | PASS | FAIL | After test run |
-| **Design** | APPROVE | REJECT | After stakeholder review |
-| **Writing** | ACCEPT | REVISE | After editor feedback |
-| **Decision** | POSITIVE | NEGATIVE | After outcome visible |
-| **Learning** | MASTERED | GAP | After quiz/assessment |
-| **Research** | VALIDATED | DISPROVEN | After experiment |
+## Detail
+{specific context}
 
+## Apply Next Time
+- {actionable rule}
+
+## Evidence
+- {session/path/test}
+```
+
+Then update `knowledge/index.md` Lessons and append to `knowledge/evolution.md`.
+
+## Gap Tracking
+
+When a task needs knowledge that does not exist, add a row:
+
+```markdown
+| {domain} | {missing template/lesson/rule} | YYYY-MM-DD | open | {why it matters} |
+```
+
+Close the gap when an article or lesson is created.
+
+## Evolution Log
+
+Append one row per meaningful change:
+
+```markdown
+| YYYY-MM-DD | {id} | status active→proven | PASS | 6.5 | 7.0 | tests passed in {path} |
+```
+
+Keep entries compact. Move old detail into article evidence sections if the file grows too large.
+
+## Auto-Crystallization
+
+When a pattern appears at least twice with positive outcomes in `knowledge/evolution.md`, it is a candidate for crystallization.
+
+### Detection
+
+Scan the Change Log in `knowledge/evolution.md` for entries that share the same domain or topic AND both have POSITIVE or VALIDATED signal. Two or more such entries indicate a recurring pattern worth capturing.
+
+Safeguard: verify both source entries have the same domain/topic before crystallizing. Do not merge unrelated patterns from different domains.
+
+### Draft Creation
+
+1. Ask the user: "Pattern detected: {description}. Crystallize as draft article? [y/n]"
+2. If confirmed, create `knowledge/{pattern-id}.md` with YAML frontmatter:
+
+```yaml
 ---
-
-## 2. Knowledge Structure (Two Layers)
-
-```
-KNOWLEDGE = {project_root}/agent-memory/knowledge/   ← per-project (single source of truth)
-
-Knowledge files (design-craftsmanship-tokens.md, error-recovery-strategy.md, lessons/, index.json)
-live ONLY in agent-memory/knowledge/. No global fallback needed.
-
-skills/ contains ONLY execution logic (SKILL.md + references/ = how to work).
-skills/ does NOT store knowledge data — it is the engine, not the data.
-
-Bootstrap (new project, no agent-memory/ yet):
-  1. Agent reads skills/system/agent-memory/SKILL.md → sees storage architecture
-  2. Auto-creates agent-memory/ full tree (see references/session.md Step 0)
-  3. Knowledge files are created fresh for this project — not copied from skills/
-```
-
-### Template Index Schema
-```json
-{
-  "templates": {
-    "{category}": [{
-      "id": "template-id",
-      "path": "templates/template.md",
-      "utility_score": 5.0,
-      "usage_count": 0,
-      "outcome_positive_count": 0,
-      "outcome_negative_count": 0,
-      "last_used": null,
-      "last_outcome": null,
-      "auto_captured": false
-    }]
-  }
-}
-```
-
-### Lesson Index Schema
-```json
-{
-  "lessons": [{
-    "id": "LESSON-{DOMAIN}-{TYPE}-{N}",
-    "title": "Short description",
-    "description": "Full lesson text",
-    "effectiveness": {
-      "applied_count": 0,
-      "prevented_failures": 0,
-      "still_relevant": true,
-      "confidence": 1.0
-    },
-    "auto_captured": false,
-    "created": "YYYY-MM-DD",
-    "last_applied": null
-  }]
-}
-```
-
+id: {pattern-id}
+type: pattern
+scope: global
+status: draft
+score: 5.0
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+keywords: [from source entries]
 ---
-
-## 3. Score Update Rules
-
-### After POSITIVE outcome (PASS / APPROVE / ACCEPT / etc.)
-```
-utility_score += 0.5        (max 10.0)
-usage_count += 1
-last_used = today
-last_outcome = "positive"
-outcome_positive_count += 1
 ```
 
-### After NEGATIVE outcome (FAIL / REJECT / REVISE / etc.)
-```
-utility_score -= 1.0        (min 0.0)
-usage_count += 1
-last_used = today
-last_outcome = "negative"
-outcome_negative_count += 1
-```
+3. Add a row to `knowledge/index.md` Articles table with Status = `draft`.
+4. Append a POSITIVE row to `knowledge/evolution.md` noting the crystallization.
 
-### After lesson applied + failure prevented
-```
-effectiveness.applied_count += 1
-effectiveness.prevented_failures += 1
-effectiveness.last_applied = today
-```
+### Lifecycle: draft → active → proven → stale
 
-### After lesson applied (informational, no prevention)
-```
-effectiveness.applied_count += 1
-effectiveness.last_applied = today
-```
+| Transition | Condition | Score Change |
+|------------|-----------|--------------|
+| draft → active | One more positive use of the pattern after creation | +0.5 |
+| active → proven | Score reaches ≥7.0 with multiple positive uses | — |
+| active/proven → stale | Article unused for 60+ days | — |
+| stale → active | Article used again with a positive outcome | +0.5 |
 
----
+Promotion is checked during session-save when a lesson or outcome references an existing draft or active article. Update the Status column in `knowledge/index.md` and append a row to `knowledge/evolution.md` when a promotion occurs.
 
-## 4. Score Thresholds
+Staleness is checked during consolidation or session-save: if an article's `updated` date is more than 60 days old and it has not been referenced in any session, demote its status to `stale`.
 
-| Score | Status | Routing Behavior |
-|-------|--------|-----------------|
-| ≥ 7.0 | ✅ Proven | Prefer first. High confidence. |
-| 3.0–6.9 | 🟡 Active | Normal use. |
-| < 3.0 | ⚠️ Flagged | Warn before use. Review needed. |
-| 0.0 | 🔴 Deprecated | Skip unless explicitly requested. |
+## Nudge Rules
 
-**Warning message for flagged template:**
-```
-"⚠️ Template '{id}' score {score} — failed {n}x recently.
- Next best: '{id2}' (score {score2}). Use flagged? [y/n]"
-```
+At session start, show at most three useful nudges:
 
----
+- stale knowledge relevant to today's task
+- open gaps relevant to today's task
+- repeated lesson that may prevent failure
+- old open thread likely to block the task
 
-## 5. Smart Routing (Intent-Based)
-
-### Intent Pattern Format
-```
-"{Input} → {Process} → {Output}"
-
-Describes ABSTRACT FLOW, not implementation.
-Match when flow matches pattern regardless of naming or domain jargon.
-```
-
-### Intent Patterns in Index
-```json
-{
-  "domains": {
-    "errorHandling": {
-      "keywords": ["error", "exception", "catch", "retry"],
-      "intent_patterns": [
-        "detect error → validate type → respond appropriately",
-        "catch exception → log context → retry or fail gracefully"
-      ]
-    },
-    "formDesign": {
-      "keywords": ["form", "input", "field", "validation"],
-      "intent_patterns": [
-        "user enters data → system validates → show inline feedback",
-        "group related fields → improve scanning → reduce errors"
-      ]
-    },
-    "persuasiveWriting": {
-      "keywords": ["email", "pitch", "proposal", "convince"],
-      "intent_patterns": [
-        "establish problem → propose solution → motivate action",
-        "hook attention → build credibility → clear call to action"
-      ]
-    },
-    "strategicDecision": {
-      "keywords": ["decide", "option", "tradeoff", "criteria"],
-      "intent_patterns": [
-        "define problem → explore options → evaluate tradeoffs → decide",
-        "gather evidence → challenge assumptions → commit"
-      ]
-    }
-  }
-}
-```
-
-### Routing Algorithm
-```
-Step 1 — Extract Intent
-  "What is the Input → Process → Output of this task?"
-
-Step 2 — Intent Match (semantic)
-  Compare against intent_patterns in index.json
-  Match = pattern overlap ≥ 2 steps → load domain
-
-Step 3 — Keyword Fallback
-  If no intent match → scan keywords array → load domain
-
-Step 4 — Deep Abstraction
-  If no match → abstract verbs:
-    "check" = verify, validate, ensure, confirm
-    "send" = emit, dispatch, publish, deliver
-  Retry intent match with abstracted terms
-
-Step 5 — Score Sort
-  Multiple templates → sort by utility_score DESC
-  Top score < 3.0 → warn + offer next best
-  auto_captured + confidence < 0.8 → flag for review
-```
-
-### Lesson Routing
-```
-1. Load lessons for matched domain
-2. Filter: still_relevant = true only
-3. Sort by prevented_failures DESC, then applied_count DESC
-4. Display top 3
-5. Show confidence for auto-captured (if < 1.0)
-6. Skip still_relevant = false
-```
-
----
-
-## 6. Auto-Capture (Failure → Lesson)
-
-When a NEGATIVE outcome has a clear root cause:
-
-```
-NEGATIVE outcome detected
-  → Analyze root cause (what pattern caused this?)
-  → Search existing lessons for same pattern:
-
-  Same content found:
-    → increment applied_count (not a duplicate, reinforce)
-
-  Different content (variant):
-    → Create lesson-v2 entry, keep both
-
-  Contradicts existing lesson:
-    → Flag both, ask human to resolve
-    → DO NOT auto-save
-
-  New pattern:
-    → Auto-capture with confidence: 0.75
-    → Flag in knowledge-evolution hall.md: "📝 Unreviewed"
-    → Append to routing-log.md
-```
-
-### Confidence Levels
-```
-1.0  → Human-curated (always route, highest trust)
-0.8  → Outcome-validated (positive signal after fix)
-0.75 → Inferred from failure (needs human review — warn user)
-< 0.6 → Skip in routing until reviewed
-```
-
-**Human override always wins. Auto-captured = advisory only.**
-
----
-
-## 9. Periodic Nudges (Self-Improvement Reminders)
-
-Proactive reminders at session start to review skills, lessons, and knowledge health.
-
-### Nudge Rules (Checked at Session Start, After Step 5 Brief)
-```
-Check each rule. If triggered → append nudge to brief output.
-Max nudges per session: 3 (prioritize by severity).
-
-Rule 1 — Skill Review Due
-  Condition: skill.Uses ≥ 5 AND no Improvement Log entry in last 30 days
-  Nudge: "🔮 Skill '{name}' used {n}x — review for improvements?"
-  Priority: Medium
-
-Rule 2 — Low Confidence Lesson Aging
-  Condition: lesson.confidence < 0.8 AND lesson.applied_count ≥ 3 AND created > 14 days
-  Nudge: "📝 Lesson '{id}' applied {n}x but still unreviewed — verify or promote?"
-  Priority: High
-
-Rule 3 — Gap Stagnation
-  Condition: gap in gap-tracker.md open > 14 days with no template created
-  Nudge: "🔴 Gap '{domain}' open {n} days — create template or dismiss?"
-  Priority: Medium
-
-Rule 4 — Score Plateau
-  Condition: template.utility_score unchanged for 10+ sessions AND usage_count > 5
-  Nudge: "📊 Template '{id}' score stuck at {score} for {n} sessions — still accurate?"
-  Priority: Low
-
-Rule 5 — Stale Wing
-  Condition: wing.last_updated > 21 days AND wing in Active_Wings
-  Nudge: "🏛️ Wing '{name}' untouched for {n} days — archive or keep?"
-  Priority: Low
-
-Rule 6 — Consolidation Due
-  Condition: sessions_since_consolidation ≥ 5 OR days_since_consolidation ≥ 7
-  Nudge: "🧹 Consolidation due ({n} sessions since last) — run 'consolidate knowledge'?"
-  Priority: High
-```
-
-### Nudge Display Format
-```
-After standard session brief, if nudges triggered:
-
-  "💡 Nudges:
-   1. {nudge text}
-   2. {nudge text}
-   3. {nudge text}
-   
-   Act on any? [1/2/3/skip]"
-```
-
-### Nudge Fatigue Prevention
-```
-- Max 3 nudges per session (highest priority first)
-- Same nudge not repeated within 3 sessions (track in routing-log.md)
-- If user skips same nudge 3x → suppress for 30 days
-- Track: nudge_suppressions[] in knowledge-evolution/hall.md
-```
-
----
-
-## 10. Evolution Audit Trail
-
-Track every score change with full context for debugging and accountability.
-
-### Schema (Added to Template Index in index.json)
-```json
-{
-  "templates": {
-    "{category}": [{
-      "id": "template-id",
-      "utility_score": 5.0,
-      "usage_count": 0,
-      "evolution_log": [
-        {
-          "date": "2026-04-20",
-          "action": "score_change",
-          "before": 5.0,
-          "after": 5.5,
-          "reason": "PASS: auth test suite",
-          "session": "competitive-analysis-roadmap"
-        }
-      ]
-    }]
-  }
-}
-```
-
-### Log Rules
-```
-Every score change MUST append to evolution_log[]:
-  - date: YYYY-MM-DD
-  - action: "score_change" | "recalibration" | "burst_dampen" | "manual_override" | "promote_global"
-  - before: previous score
-  - after: new score
-  - reason: one-line context (outcome signal + what was tested/used)
-  - session: room or session identifier
-
-Every lesson change MUST append:
-  - action: "applied" | "prevented_failure" | "staled" | "merged" | "confidence_change"
-  - before/after: relevant field values
-  - reason: context
-```
-
-### Audit Trail Queries
-```
-User: "why did template X score change?"
-  → Read evolution_log[] for template X
-  → Show chronological history
-
-User: "show score history for {domain}"
-  → Read all templates in domain
-  → Aggregate evolution_log entries by date
-  → Show trend: "auth domain: 5.0 → 6.5 → 7.0 over 3 sessions"
-```
-
-### Maintenance
-```
-evolution_log[] max entries: 50 per template
-When exceeded:
-  1. Archive oldest 25 entries to rooms/template-health.md (append summary)
-  2. Keep newest 25 in index.json
-  3. Log: "📜 Archived {n} evolution entries for {template_id}"
-```
-
-Current routing (Level 0) uses manual intent_patterns. Upgrade when knowledge base grows.
-
-### Level 0: Intent Patterns (Current — Default)
-```
-Manual intent_patterns in index.json
-Deterministic, zero overhead, works for <50 templates
-```
-
-### Level 1: BM25 Text Ranking
-```
-When: > 50 templates OR > 100 lessons
-How:
-  - Ranks by term frequency + inverse document frequency
-  - No model call needed — pure text scoring
-  - Add BM25 index file alongside index.json
-  - Score formula: BM25(query_terms, template_description)
-  
-Implementation:
-  1. Extract all template/lesson descriptions into corpus
-  2. Build BM25 index on session start (cache for session)
-  3. Query: "task description" → rank by BM25 score
-  4. Fall back to intent_patterns if BM25 score < threshold
-```
-
-### Level 2: Vector Embeddings
-```
-When: > 200 templates/lessons OR Level 1 recall < 70%
-How:
-  - Semantic similarity handles synonyms, related concepts
-  - Requires embedding model call per query
-  - Store embeddings in embeddings.json alongside index
-  
-Trade-off: Higher accuracy, higher cost (model call per routing)
-```
-
-### Upgrade Decision
-```
-Stay at Level 0 until: 50+ templates
-Upgrade to Level 1 when: 50–200 templates
-Upgrade to Level 2 when: 200+ templates OR user reports poor routing
-```
-
----
-
-## 8. Parallel Analysis (Batch Failure Processing)
-
-When multiple NEGATIVE outcomes accumulate in one session (> 5 failures):
-
-```
-Protocol:
-  Phase 1 — Read All First
-    Load all failure contexts BEFORE writing any lessons
-    Extract: root cause, domain, pattern, affected template IDs
-
-  Phase 2 — Find Cross-Failure Patterns
-    Group failures by: same root cause, same domain, same template
-    Identify: patterns that span multiple failures
-
-  Phase 3 — Consolidate
-    Write ONE lesson per cross-cutting pattern (not one per failure)
-    Dedup: if two failures have same root cause → one lesson
-    Conflict check: do any new lessons contradict existing ones?
-
-  Phase 4 — Write
-    Batch write all new lessons
-    Set confidence based on frequency: n=1 → 0.75, n=3+ → 0.80
-    Flag all auto-captured for human review
-
-Benefit: Prevents 5 near-duplicate lessons from same root cause
-```
-
-### Cross-Trace Consensus (Confidence Elevation)
-```
-If same pattern appears in ≥ 3 traces across DIFFERENT features/domains:
-  → Elevate to "cross-cutting concern"
-  → Set confidence: 0.9 (higher than single-trace 0.75 or healed 0.8)
-  → Tag as reusable across domains
-  → Consider adding to common/ category in global knowledge
-
-Example:
-  Trace 1 (auth): missing input validation → FAIL
-  Trace 2 (payment): missing input validation → FAIL
-  Trace 3 (profile): missing input validation → FAIL
-  → Cross-cutting: "always validate input at entry point" (confidence: 0.9)
-  → Add to common/ not just one domain
-```
-
-### 5 Conflict-Free Rules (Trace2Skill)
-```
-Rule 1: Never write two lessons with the same ID
-Rule 2: Never write two lessons with opposite guidance on the same pattern
-Rule 3: If conflict detected → write NEITHER, flag both for human review
-Rule 4: Cross-trace consensus (≥3 traces agree) → higher confidence than single-trace
-Rule 5: Healing-derived lessons (outcome positive after fix) → confidence 0.8, not 0.75
-```
+Suppress nudges the user ignored recently.

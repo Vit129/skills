@@ -171,34 +171,26 @@ Describes abstract flow, NOT implementation details.
 ## Global Knowledge Structure (Cross-Project)
 
 ```
-{project_root}/skills/knowledge/      ← KNOWLEDGE_GLOBAL
-├── index.json                          ← master catalog, utility_score per domain
-├── automation/
-│   ├── automationIndex.json
-│   ├── api/        apiIndex.json + templates
-│   ├── webUi/      webUiIndex.json + templates
-│   ├── mobile/     mobileIndex.json + templates
-│   └── common/     commonIndex.json + templates
-├── business/
-│   ├── businessIndex.json
-│   ├── auth/       businessAuthIndex.json + rules
-│   ├── finance/    businessFinIndex.json + rules
-│   └── document/   businessDocIndex.json + rules
-└── lessons/
-    ├── api/        apiLessonsIndex.json + lesson files
-    ├── webUi/      webUiLessonsIndex.json + lesson files
-    └── mobile/     mobileLessonsIndex.json + lesson files
-```
-
-Per-Project Knowledge (overrides global for same domain):
-```
-{project_root}/agent-memory/knowledge/
-├── index.json                          ← project catalog + utility_score
-├── README.md                           ← usage + resolution order note
+{project_root}/agent-memory/knowledge/   ← per-project, single source of truth
+├── index.md                              ← knowledge catalog (Markdown table)
+├── evolution.md                          ← score/status change log
+├── {article}.md                          ← knowledge articles with YAML frontmatter
 └── lessons/
     └── {domain}/
-        ├── *LessonsIndex.json
-        └── *.md
+        ├── index.md                      ← domain lesson table
+        └── {lesson-id}.md               ← lesson detail files
+```
+
+Per-Project Knowledge:
+```
+{project_root}/agent-memory/knowledge/
+├── index.md                              ← project catalog (Markdown table)
+├── evolution.md                          ← evolution log
+├── {article}.md                          ← knowledge articles
+└── lessons/
+    └── {domain}/
+        ├── index.md                      ← domain lesson index
+        └── {lesson-id}.md               ← lesson details
 ```
 
 **Knowledge location:** `{project_root}/agent-memory/knowledge/` (per-project, single source of truth)
@@ -210,8 +202,8 @@ Per-Project Knowledge (overrides global for same domain):
 
 | Concept | Default Value | Your System's Equivalent |
 |---------|--------------|--------------------------|
-| `{knowledge_store}` | `ai-dlc/knowledge/` or `{project_root}/agent-memory/knowledge/` | |
-| `{index_file}` | `index.json` + domain `*Index.json` | |
+| `{knowledge_store}` | `{project_root}/agent-memory/knowledge/` | |
+| `{index_file}` | `index.md` (Markdown table) | |
 | `{execution_trigger}` | test run, review, publish, decision | |
 | `{score_field}` | `utility_score` (0–10 scale) | |
 | `{lesson_store}` | `lessons/` under knowledge | |
@@ -224,48 +216,49 @@ Fill in "Your System's Equivalent" when adapting to a new domain or project.
 
 ---
 
-## Step 4: Create .knowledge/index.json
+## Step 4: Create knowledge/index.md
 
-```json
-{
-  "project": "{your-project-name}",
-  "domain": "{your-domain}",
-  "version": "1.0",
-  "created": "YYYY-MM-DD",
-  "scoring": {
-    "positive_boost": 0.5,
-    "negative_penalty": 1.0,
-    "threshold_proven": 7.0,
-    "threshold_flagged": 3.0,
-    "default_score": 5.0
-  },
-  "domains": {
-    "{domain-1}": {
-      "keywords": ["word1", "word2"],
-      "intent_patterns": [
-        "input → process → output"
-      ]
-    }
-  },
-  "templates": {
-    "{domain-1}": [
-      {
-        "id": "template-001",
-        "path": "templates/template-001.md",
-        "utility_score": 5.0,
-        "usage_count": 0,
-        "outcome_positive_count": 0,
-        "outcome_negative_count": 0,
-        "last_used": null,
-        "last_outcome": null,
-        "auto_captured": false
-      }
-    ]
-  },
-  "lessons": {
-    "{domain-1}": []
-  }
-}
+Create `agent-memory/knowledge/index.md` following the schema in `references/storage.md`:
+
+```markdown
+# Knowledge Index
+
+Updated: YYYY-MM-DD
+
+## Articles
+| ID | Type | Scope | Status | Score | Updated | Path | Keywords |
+|----|------|-------|--------|-------|---------|------|----------|
+
+## Lessons
+| ID | Domain | Type | Status | Applied | Prevented | Updated | Path |
+|----|--------|------|--------|---------|-----------|---------|------|
+
+## Gaps
+| Domain | Gap | First Seen | Status | Notes |
+|--------|-----|------------|--------|-------|
+```
+
+Create `agent-memory/knowledge/evolution.md`:
+
+```markdown
+# Knowledge Evolution
+
+Updated: YYYY-MM-DD
+
+## Change Log
+| Date | ID | Change | Signal | Before | After | Evidence |
+|------|----|--------|--------|--------|-------|----------|
+```
+
+Create domain lesson indexes as needed at `agent-memory/knowledge/lessons/{domain}/index.md`:
+
+```markdown
+# {Domain} Lessons
+
+Updated: YYYY-MM-DD
+
+| ID | Type | Status | Applied | Prevented | Confidence | Summary | Detail |
+|----|------|--------|---------|-----------|------------|---------|--------|
 ```
 
 ---
@@ -325,13 +318,14 @@ No knowledge tracking yet. Just memory.
 Effort: 1 hour
 Goal: Template scoring working
 
-□ Create agent-memory/knowledge/index.json with 3–5 templates
+□ Create agent-memory/knowledge/index.md with 3–5 articles
+□ Create agent-memory/knowledge/evolution.md
 □ Write intent_patterns for your top 2 domains
 □ Start tracking outcomes in session (PASS/FAIL etc.)
-□ At session end: update template-health.md
-□ Sync to index.json (verify match)
+□ At session end: update knowledge/index.md scores
+□ Append changes to knowledge/evolution.md (verify match)
 
-Outcome: Templates start accumulating scores.
+Outcome: Articles start accumulating scores.
 ```
 
 ### Phase C: Cross-Session Learning (Full Loop)
@@ -340,10 +334,10 @@ Effort: 2–3 sessions
 Goal: System learns from history
 
 □ 3+ sessions completed with scoring
-□ Check: knowledge-evolution/hall.md has meaningful data
-□ Verify: top template scores drifting up from baseline 5.0
+□ Check: knowledge/evolution.md has meaningful change log entries
+□ Verify: top article scores drifting up from baseline 5.0
 □ Check: at least 1 lesson captured from a negative outcome
-□ Test routing: "use template for {intent}" → correct template selected
+□ Test routing: "use template for {intent}" → correct article selected
 
 Outcome: System actively prefers proven approaches.
 ```
@@ -369,7 +363,8 @@ Recommendation: Stay at Phase C for most use cases.
 □ Define domain-specific signal names (PASS/FAIL, APPROVE/REJECT, etc.)
 □ List 5 templates you reuse most (any format)
 □ List 3 lessons you've already learned from experience
-□ Create .knowledge/index.json from template above
+□ Create knowledge/index.md from template above (Step 4)
+□ Create knowledge/evolution.md
 □ Write intent_patterns for your 2 most common task types
 □ Create agent-memory/palace/state.md (empty)
 □ Run Phase A (30 min)

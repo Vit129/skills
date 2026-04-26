@@ -15,6 +15,21 @@ When information conflicts, higher items win:
 
 If notes conflict with the codebase, trust the codebase.
 
+## Skill Invocation Rule (Mandatory)
+
+**When invoking a skill, always announce which skill is being loaded.**
+
+Format: `[Skill: {skill-path}]` before using it.
+
+Examples:
+- `[Skill: qa/playwright-testing/]` — writing Playwright tests
+- `[Skill: dev/frontend-dev/]` — React/Next.js implementation
+- `[Skill: ux-ui/ui-designer/]` — UI design work
+- `[Skill: core/aidlc/]` — starting any dev/QA task
+
+Skill paths come from `skill-map.md` (`.claude/rules/skill-map.md` or shared equivalent).
+Never invoke a skill silently — user must know which skill is active.
+
 ## Plan Mode (Mandatory Rule)
 
 **Before any non-trivial implementation, enter plan mode.**

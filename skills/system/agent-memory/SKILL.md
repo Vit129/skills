@@ -11,151 +11,173 @@ concurrency: unsafe
 isolation: shared
 ---
 
-# Agent Memory System 🧠
+# Agent Memory
 
-> **Quick alias:** Wing = domain folder | Hall = index | Room = detail | Closet = summary | Tunnel = cross-link
+Persistent memory has two halves that must move together:
 
-Two systems, one skill: **Memory Palace** (what happened) + **Knowledge Evolution** (what works).
-
-```
-Memory Palace  = storage layer  → WHERE things are remembered
-Knowledge Evo  = learning layer → WHAT improves over time
-Together       = compound growth: remembers past + gets smarter each session
+```text
+Memory Palace      = what happened, decisions, context, open threads
+Knowledge Library  = what works, reusable patterns, lessons, evolution
+Session Save       = update Palace + Knowledge in one operation
 ```
 
----
+## Non-Negotiables
 
-## 🏛️ Storage Architecture
+- Persistent memory data is Markdown-first. Do not create or update JSON memory indexes.
+- Source of truth is `agent-memory/knowledge/index.md`, not `index.json`.
+- Palace updates without Knowledge updates are incomplete saves.
+- Always verify paths on disk before reading or writing remembered facts.
+- Existing `*.json` files under `agent-memory/` are legacy compatibility artifacts. Read only if no Markdown replacement exists; never write them as the primary store.
+- Skills under `skills/` are execution instructions only. Knowledge data lives under `agent-memory/knowledge/`.
 
-```
+## Storage Architecture
+
+```text
 {project_root}/
 └── agent-memory/
-    ├── palace/                           ← Memory Palace (narrative + decisions)
-    │   ├── state.md                      ← palace map (≤100 lines)
-    │   ├── tunnels.md                    ← cross-wing links
-    │   ├── search-index.md              ← grep-searchable session index (legacy fallback)
-    │   ├── keyword-index.json           ← inverted index: keyword→postings O(1) search
-    │   ├── date-index.json              ← sorted date array: O(log n) date-range search
-    │   ├── user-profile.md              ← persistent user model (≤80 lines)
+    ├── palace/
+    │   ├── state.md
+    │   ├── tunnels.md
+    │   ├── search-index.md
+    │   ├── user-profile.md
     │   ├── wings/
-    │   │   ├── {topic}/
-    │   │   │   ├── hall.md               ← wing index (≤50 lines)
-    │   │   │   ├── rooms/{topic}.md      ← full detail
-    │   │   │   ├── closets/{topic}.md    ← AAAK compressed (room >80 lines)
-    │   │   │   ├── skills/{name}.md      ← crystallized execution paths (DRAFT/ACTIVE/STALE)
-    │   │   │   └── raw/YYYY-MM-DD-*.md   ← verbatim records
-    │   │   └── knowledge-evolution/      ← learning tracking wing
-    │   │       ├── hall.md               ← top templates, top lessons, flags
-    │   │       ├── rooms/
-    │   │       │   ├── template-health.md
-    │   │       │   ├── lesson-effectiveness.md
-    │   │       │   ├── gap-tracker.md
-    │   │       │   └── routing-log.md
-    │   │       └── closets/knowledge-state.md
+    │   │   └── {topic}/
+    │   │       ├── hall.md
+    │   │       ├── rooms/{room}.md
+    │   │       ├── closets/{room}.md
+    │   │       ├── skills/{skill}.md
+    │   │       └── raw/YYYY-MM-DD-*.md
     │   └── archive/
-    │       ├── index.md
-    │       └── {topic}/{year}/
-    │
-    └── knowledge/                        ← Knowledge Evolution (scored templates + lessons)
-        ├── index.json                    ← domain catalog + utility_score + evolution_log[]
+    │       └── index.md
+    └── knowledge/
+        ├── index.md
+        ├── evolution.md
+        ├── {knowledge-article}.md
         └── lessons/{domain}/
-            ├── *LessonsIndex.json
-            └── *.md
-
-Global Knowledge: {project_root}/skills/knowledge/ ← cross-project fallback
+            ├── index.md
+            └── {lesson-id}.md
 ```
 
-**Knowledge location:** `{project_root}/agent-memory/knowledge/` (per-project, single source of truth)
+Optional legacy files that may exist but must not be treated as authoritative:
 
----
-
-## 🔄 Session Workflow
-
-### Session Start
-```
-User: "load memory for {project}"
-
-0. Bootstrap: if agent-memory/ doesn't exist → auto-create full tree (see references/session.md)
-1. Read .memory/state.md (palace map)
-2. Read .memory/user-profile.md (user preferences + patterns)
-3. Read .memory/wings/knowledge-evolution/hall.md (learning state)
-4. Classify wings: Hot (relevant) vs Cold (skip)
-5. Load Hot wings: hall.md + closets only
-6. Brief:
-   "Last: {what happened}, Open: {threads}
-    Learning: Template {A} proven (7.5), Lesson {B} prevented 3 failures
-    Gaps: {domains without templates}"
-7. Nudge check: run 6 nudge rules, show max 3 (High→Medium→Low)
-8. Skill suggestions: match Hot wing ACTIVE skills against today's task
+```text
+agent-memory/knowledge/index.json
+agent-memory/knowledge/lessons/**/**Index.json
+agent-memory/palace/keyword-index.json
+agent-memory/palace/date-index.json
 ```
 
-### Session Execute
-```
-- Use templates from .knowledge/index.json
-- Track outcome: SUCCESS or FAILURE after each execution
-- Note reasoning in-session (write at end)
+## Session Start
+
+When the user asks to load memory:
+
+1. Find `{project_root}/agent-memory/`. If missing, bootstrap the Markdown tree from `references/session.md`.
+2. Read `palace/state.md` and `palace/user-profile.md`.
+3. Read `knowledge/index.md` and `knowledge/evolution.md` if present.
+4. Classify wings as Hot, Warm, or Cold for the current task.
+5. Load Hot wing `hall.md` files and closets first; load full rooms on demand.
+6. Brief the user with last session, open threads, relevant knowledge, and gaps.
+
+## During Work
+
+Track saveable items in memory:
+
+- code or file changes
+- decisions made
+- reusable patterns discovered
+- lessons applied or created
+- knowledge gaps
+- unresolved follow-ups
+
+If any of those occur, the session is dirty and should be saved before topic switches or session end.
+
+## Session Save
+
+When the user says "save session + learn", "remember this", or equivalent:
+
+1. Score admission: save if the item has future utility, confidence, novelty, or a decision.
+2. Update Palace:
+   - `palace/state.md`
+   - relevant wing `hall.md`
+   - relevant `rooms/*.md` and `closets/*.md`
+   - `palace/search-index.md`
+   - `palace/tunnels.md` if cross-links changed
+   - `palace/user-profile.md` if preferences changed
+3. Update Knowledge:
+   - `knowledge/index.md` for every new or changed article/lesson
+   - `knowledge/evolution.md` for score/status/history changes
+   - `knowledge/lessons/{domain}/index.md`
+   - `knowledge/lessons/{domain}/{lesson-id}.md` for lesson details
+4. Verify sync:
+   - every saved room appears in the wing hall and `search-index.md`
+   - every new lesson appears in the domain lesson index and global knowledge index
+   - no JSON file was required for the save
+5. Confirm what was saved and what remains open.
+
+## Knowledge Index Format
+
+`agent-memory/knowledge/index.md`:
+
+```markdown
+# Knowledge Index
+
+Updated: YYYY-MM-DD
+
+## Articles
+| ID | Type | Scope | Status | Score | Updated | Path | Keywords |
+|----|------|-------|--------|-------|---------|------|----------|
+
+## Lessons
+| ID | Domain | Type | Status | Applied | Prevented | Updated | Path |
+|----|--------|------|--------|---------|-----------|---------|------|
+
+## Gaps
+| Domain | Gap | First Seen | Status | Notes |
+|--------|-----|------------|--------|-------|
 ```
 
-### Session End (Manual Trigger)
-```
-User: "save session + learn"
+`agent-memory/knowledge/evolution.md`:
 
-1. Admission Control: score ≥0.6? → proceed | skip
-2. Write to .memory/wings/{topic}/ (rooms, closets, hall)
-3. Update search indexes: keyword-index.json (inverted index) + date-index.json (sorted array) + search-index.md (legacy fallback)
-4. Skill auto-crystallize: pattern ≥2x in routing-log → auto-write DRAFT
-5. Skill self-improve: if skill used → compare execution vs Steps → auto-refine on positive
-6. Update user-profile.md (new preferences/patterns observed)
-7. Update knowledge-evolution wing (scores changed, lessons applied)
-8. Sync back: write utility_score + evolution_log[] to .knowledge/index.json
-9. Update state.md + tunnels.md
-10. Confirm: "✅ Saved X rooms, Y templates updated, Z lessons captured"
+```markdown
+# Knowledge Evolution
+
+Updated: YYYY-MM-DD
+
+## Change Log
+| Date | ID | Change | Signal | Before | After | Evidence |
+|------|----|--------|--------|--------|-------|----------|
 ```
 
----
+`agent-memory/knowledge/lessons/{domain}/index.md`:
 
-## 📖 References — Load ONE per Need
+```markdown
+# {Domain} Lessons
+
+Updated: YYYY-MM-DD
+
+| ID | Type | Status | Applied | Prevented | Confidence | Summary | Detail |
+|----|------|--------|---------|-----------|------------|---------|--------|
+```
+
+## References
+
+Load only the reference needed for the current action:
 
 | Need | Load |
 |------|------|
-| Session start/end, admission control, sync, nudges, skill suggestions | `references/session.md` |
-| Wings, rooms, halls, closets, archive, AAAK, skills, search index, user profile | `references/storage.md` |
-| Scoring, routing, auto-capture, semantic search, nudge rules, audit trail | `references/intelligence.md` |
-| Consolidation, dedup, stale, conflict, score normalization | `references/maintenance.md` |
-| Domain setup, PASS/FAIL signals, intent patterns, phases A→D | `references/adaptation.md` |
+| Session load/save, bootstrap, dirty flag | `references/session.md` |
+| Palace and Knowledge file schemas | `references/storage.md` |
+| Scoring, routing, lessons, evolution | `references/intelligence.md` |
+| Known failure modes | `GOTCHAS.md` |
 
----
+`references/adaptation.md` and `references/maintenance.md` are legacy design notes unless updated to this Markdown-first contract.
 
-## ⚠️ Critical Gotchas
+## Operating Principles
 
-See `GOTCHAS.md` for full list (30 items). Top 7:
-
-1. **Recalled facts ≠ truth** — always grep/glob to verify before acting
-2. **hall.md drifts** — update synchronously when adding/removing rooms
-3. **Stale closet** — regenerate after any room edit >10 lines
-4. **Score drift** — recalibrate if templates all converge to same score
-5. **Sync must complete** — verify write-back to index.json before ending session
-6. **Dirty flag missed** — err on side of dirty=true; better to remind than lose data
-7. **Hook prompt drift** — after restructure, cross-check settings.json paths + workflow against SKILL.md
-
----
-
-## 🛠️ Key Principles
-
-- **No dependencies** — markdown + JSON only
-- **Manual triggers** — "save session + learn" (no hooks = no token waste)
-- **Dirty flag safety net** — track saveable content in-session, remind before data loss (see `references/session.md`)
-- **Source of truth** — .knowledge/index.json (memory is session buffer)
-- **Admission control** — score ≥0.6 gates writes (prevents noise)
-- **Human override** — auto-captured = advisory, not authoritative
-- **Any domain** — code, design, writing, decision, learning, anything
-- **Skill Crystallization** — repeated patterns (≥2x) → auto-write as DRAFT, promote to ACTIVE after 1 success (see `references/storage.md`)
-- **Skill Self-improvement** — auto-refine Steps on positive outcome with deviation, rollback on regression (see `references/storage.md`)
-- **User Modeling** — persistent user-profile.md captures preferences, patterns, expertise across sessions (see `references/storage.md`)
-- **Session Search** — Hybrid Inverted Index (keyword-index.json) + Sorted Date Array (date-index.json): O(1) keyword, O(log n) date range, scales to 10K+ sessions (see `references/storage.md`)
-- **Periodic Nudges** — 6 rules checked at session start, max 3 shown, fatigue-protected (see `references/intelligence.md`)
-- **Evolution Audit Trail** — every score change logged with before/after/reason in index.json (see `references/intelligence.md`)
-- **Wing Split** — >15 rooms → auto-split to child wings (see `references/storage.md`)
-- **Burst Mode** — >10 score changes/7d → dampen with factor 0.90 (see `references/maintenance.md`)
-- **Cross-project promote** — `projects_used_in[]` ≥3 → auto-promote to global (see `references/session.md`)
-- **Domain-aware settling** — auto-dream thresholds: arch:5, api:4, ui:2, default:3 (see `references/maintenance.md`)
+- Human-readable first: tables and short Markdown sections beat nested data.
+- One save means one synchronized memory update.
+- Prefer updating existing rooms/articles over creating duplicates.
+- Keep halls and indexes small enough to scan.
+- Capture lessons as concrete reusable behavior, not vague summaries.
+- Mark status explicitly: `draft`, `active`, `proven`, `stale`, or `deprecated`.
+- When facts may have changed, verify from the workspace or authoritative source before treating memory as truth.

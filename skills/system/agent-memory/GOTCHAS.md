@@ -74,15 +74,15 @@ All known failure modes with root causes and solutions.
 
 ## Agent-Memory-Specific Gotchas
 
-### 13. knowledge-evolution wing missing on first session
-**Symptom:** Hall.md doesn't exist, session start crashes  
-**Root cause:** Wing never created  
-**Fix:** At session start, check if `agent-memory/palace/wings/knowledge-evolution/hall.md` exists. If not → create empty template automatically.
+### 13. knowledge/evolution.md missing on first session
+**Symptom:** Learning history cannot be loaded or updated  
+**Root cause:** Markdown knowledge files were not bootstrapped  
+**Fix:** At session start, check if `agent-memory/knowledge/index.md` and `agent-memory/knowledge/evolution.md` exist. If not → create empty Markdown templates from `references/session.md`.
 
 ### 14. Write-back sync fails silently
-**Symptom:** agent-memory/palace/wings/ updated, agent-memory/knowledge/index.json not updated → scores lost next session  
+**Symptom:** `agent-memory/palace/` updated, but `agent-memory/knowledge/index.md` or lesson indexes were not updated → reusable learning is lost next session  
 **Root cause:** Sync step skipped or errored  
-**Fix:** At session end, compare score in memory wing vs index.json. If mismatch → re-sync. Log: "✅ Synced: {template_id} {before}→{after}" or "❌ Sync failed: {reason}".
+**Fix:** At session end, verify every new lesson/article appears in `knowledge/index.md`, the domain lesson `index.md`, and `knowledge/evolution.md`. Do not treat the save as complete until Palace + Knowledge both changed when learning exists.
 
 ### 15. Admission control too strict (nothing gets saved)
 **Symptom:** User asks to save, score <0.6, session notes lost  
@@ -143,10 +143,10 @@ All known failure modes with root causes and solutions.
 **Root cause:** Too many low-priority nudges, or nudges not actionable  
 **Fix:** Track skip count per nudge type. If same nudge skipped 3x → suppress for 30 days. Reduce to max 2 nudges if user skip rate >80%. Only show High priority after 3 consecutive skips.
 
-### 26. Evolution audit trail bloats index.json
-**Symptom:** index.json grows large, slow to parse  
-**Root cause:** evolution_log[] never archived  
-**Fix:** Cap at 50 entries per template. When exceeded: archive oldest 25 to template-health.md room, keep newest 25 in index.json. Run check during consolidation.
+### 26. Evolution audit trail bloats evolution.md
+**Symptom:** `knowledge/evolution.md` grows large and becomes hard to scan  
+**Root cause:** Old change-log rows are never summarized  
+**Fix:** During consolidation, summarize old rows into the relevant article's Evidence section or an archive note. Keep the active evolution log compact and recent.
 
 ### 27. Skill version regression not caught
 **Symptom:** Skill updated to v3 but v3 performs worse than v2, no rollback  
@@ -187,8 +187,8 @@ All known failure modes with root causes and solutions.
 | Auto-capture (#9) | Always | Route only confidence ≥0.8 |
 | Contradictions (#10) | Before writing lesson | Search + flag existing |
 | Routing loop (#11) | During routing | Check routing-log.md for cycles |
-| KE wing missing (#13) | First session | Auto-create empty template |
-| Sync fails (#14) | Session end | Compare + re-sync + log |
+| Knowledge files missing (#13) | First session | Auto-create Markdown templates |
+| Sync fails (#14) | Session end | Verify Palace + Knowledge indexes changed together |
 | Admission too strict (#15) | Score <0.6 | Explain + let user override |
 | Dirty flag missed (#16) | Session with hidden value | Err on side of dirty=true |
 | Reminder fatigue (#17) | User skips 3x in a row | Reduce sensitivity, max 2/session |
@@ -200,7 +200,7 @@ All known failure modes with root causes and solutions.
 | Noise skill (#23) | Before crystallizing | Verify intent match, always ask user confirmation |
 | Search index unbounded (#24) | Consolidation | Archive >180 days, remove archived room refs, cap 500 |
 | Nudge fatigue (#25) | Session start | Track skips, suppress after 3x, reduce to High-only |
-| Audit trail bloat (#26) | Consolidation | Cap 50/template, archive oldest 25 to template-health.md |
+| Audit trail bloat (#26) | Consolidation | Summarize old evolution rows into articles/archive |
 | Skill regression (#27) | After skill use | Keep prev Steps on negative outcome, flag regression |
 | Bootstrap missing (#28) | First session | Auto-create full tree with empty templates |
 | AAAK over-compression (#29) | Creating closet | Never drop Decision+Reason/Core Logic; when in doubt keep it |

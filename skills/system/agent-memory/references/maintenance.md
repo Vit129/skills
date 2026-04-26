@@ -22,14 +22,16 @@ Maintenance restores signal quality.
 Run maintenance ("consolidate knowledge") when ANY:
 
 ```
-Condition 1: sessions_since_last_consolidation >= 5
+Condition 1: sessions_since_consolidation >= 5
 Condition 2: days_since_last_consolidation >= 7
 Condition 3: knowledge items increased by > 20% since last consolidation
 Condition 4: User explicitly asks "consolidate knowledge"
 
-Track in agent-memory/palace/wings/knowledge-evolution/hall.md:
-  Sessions_Since_Consolidation: N
-  Last_Consolidation: YYYY-MM-DD
+Tracked in knowledge/evolution.md → Consolidation State section:
+  sessions_since_consolidation: N
+  last_consolidation: YYYY-MM-DD
+
+days_since_last_consolidation is computed at runtime from last_consolidation date.
 ```
 
 ---
@@ -221,9 +223,32 @@ Run in this order:
 □ 5. Conflict resolution — flag contradictions, resolve with human
 □ 6. Score normalization — recalibrate if >80% templates ≥7.0 (quarterly only)
 □ 7. Auto-dream — distill settled facts, archive sources
-□ 8. Update hall.md: Sessions_Since_Consolidation = 0, Last_Consolidation = today
+□ 8. Update knowledge/evolution.md: sessions_since_consolidation = 0, last_consolidation = today
 □ 9. Log summary: "Consolidated: {N} deduped, {M} staled, {K} conflicts resolved"
 ```
+
+---
+
+## Consolidation State Tracking
+
+Consolidation state is tracked in `knowledge/evolution.md` under the **Consolidation State** section (at the top, before Change Log):
+
+```markdown
+## Consolidation State
+- sessions_since_consolidation: 0
+- last_consolidation: YYYY-MM-DD
+```
+
+**How state is maintained:**
+
+- `sessions_since_consolidation` is incremented by 1 after every session save (see `references/session.md` Session Save step 6).
+- `last_consolidation` is set to today's date when consolidation completes.
+
+**When consolidation completes:**
+
+1. Reset `sessions_since_consolidation` to 0 in `knowledge/evolution.md`.
+2. Set `last_consolidation` to today's date in `knowledge/evolution.md`.
+3. Log a summary row in `knowledge/evolution.md` Change Log: date, "consolidation", change description, POSITIVE signal.
 
 ---
 
@@ -242,5 +267,5 @@ Knowledge Health:
   - Score distribution: mix of Proven/Active/Flagged? ✅ / ❌ (recalibrate)
   - Auto-captured items reviewed? ✅ / ❌ (review queue)
   - Gap tracker: gaps getting resolved? ✅ / ❌ (create templates for top gaps)
-  - Sessions_Since_Consolidation reset to 0? ✅ / ❌
+  - sessions_since_consolidation reset to 0 in knowledge/evolution.md? ✅ / ❌
 ```

@@ -28,3 +28,20 @@ Updated: 2026-04-20
 - Strong: QA automation (Playwright, Robot Framework), AI skill systems, memory architecture
 - Learning: Data structures & algorithms for search optimization, finance/stock analysis
 - Delegated: detailed implementation (prefers AI to write, reviews result)
+
+## Nudge Tracking
+
+| Category | Skipped | Last Shown | Suppressed Until |
+|----------|---------|------------|-----------------|
+
+## Save Preferences
+
+- Sensitivity: normal
+- Auto-capture domains: tooling, code
+- Skip threshold: 3 consecutive skips → reduce to High priority only
+
+## Routing Preferences
+
+- Priority domains: tooling, agent-memory
+- Preferred article types: pattern, rule
+- Score threshold for brief: 3.0 (show active and above)
