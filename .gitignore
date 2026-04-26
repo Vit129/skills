@@ -7,10 +7,6 @@
 !README.md
 !.github/
 !.github/**
-!.agents/
-!.agents/**
-!agents/
-!agents/**
 !.claude/
 !.claude/**
 !agent-memory/

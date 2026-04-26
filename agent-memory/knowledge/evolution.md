@@ -4,7 +4,7 @@ Updated: 2026-04-26
 
 ## Consolidation State
 
-- sessions_since_consolidation: 2
+- sessions_since_consolidation: 5
 - last_consolidation: 2026-04-26
 - next_due: after 5 sessions or 7 days
 
@@ -31,3 +31,6 @@ Updated: 2026-04-26
 | 2026-04-26 | session-2026-04-26-kiro-9 | Phase 3 complete: session-load v3.1.0 full nudge system (5 types, max 3, suppression via user-profile.md); session-save Step 5B counter increment; consolidation/auto-dream fully wired; all hooks valid JSON | POSITIVE | partial Phase 3 | Phase 3 complete | `skills/system/hook-creator/templates/kiro/` |
 | 2026-04-26 | session-2026-04-26-kiro-10 | Found active hooks (.kiro/hooks/) out of sync with templates: load=v3.0.0 vs template v3.1.0, save missing Step 4D+5B; need to copy templates to active | POSITIVE | — | 1 new gap | `knowledge/index.md` Gaps table |
 | 2026-04-26 | session-2026-04-26-kiro-11 | Synced active hooks to templates: load v3.1.0 (nudge+routing), save v6.0.0 (crystallization+consolidation+counter); gap closed | POSITIVE | hooks out of sync | hooks synced | `.kiro/hooks/` |
+| 2026-04-26 | session-2026-04-26-kiro-12 | Identified ~30 JSON files in skills/ai-dlc/knowledge/ needing Markdown migration; new gap added; separate spec needed | POSITIVE | — | 1 new gap | `knowledge/index.md` Gaps table |
+| 2026-04-26 | session-2026-04-26-kiro-13 | Added open thread for ai-dlc-knowledge-migration in both global and workspace state.md | NEUTRAL | — | — | `palace/state.md` open threads |
+| 2026-04-26 | session-2026-04-26-kiro-14 | Updated AGENT_MEMORY_README.md Status (all phases done, hooks listed) + SKILL.md References (added maintenance.md + adaptation.md as proper entries) | POSITIVE | outdated status | current status | `skills/system/agent-memory/` |

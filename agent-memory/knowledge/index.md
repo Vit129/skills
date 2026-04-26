@@ -28,3 +28,4 @@ Updated: 2026-04-26
 | tooling | maintenance.md + adaptation.md still reference JSON | 2026-04-26 | closed | Fixed: removed legacy note headers, replaced all JSON refs with Markdown (index.md, evolution.md, lesson index.md) |
 | tooling | CLAUDE.md still references JSON memory files | 2026-04-26 | closed | Fixed: index.json→index.md, keyword-index.json+date-index.json→search-index.md, added evolution.md |
 | tooling | Active hooks (.kiro/hooks/) out of sync with templates | 2026-04-26 | closed | Synced: load v3.1.0 (nudge+routing), save v6.0.0 (crystallization+consolidation+counter) copied to active |
+| ai-dlc | skills/ai-dlc/knowledge/ has ~30 JSON files needing Markdown migration | 2026-04-26 | open | 14 index files + 16 lesson files + 4 rules files; config files (~5) can stay JSON; separate spec needed — large scope |

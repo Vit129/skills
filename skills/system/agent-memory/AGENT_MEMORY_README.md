@@ -57,17 +57,17 @@ When saving a session:
 
 ## Status
 
-Phase 1 contract is implemented in:
+All phases implemented:
 
-- `SKILL.md`
-- `references/session.md`
-- `references/storage.md`
-- `references/intelligence.md`
-- `agent-memory/knowledge/index.md`
-- `agent-memory/knowledge/evolution.md`
-- `agent-memory/knowledge/lessons/tooling/index.md`
+- `SKILL.md` — Markdown-first contract
+- `references/session.md` — session load/save with routing, nudges, consolidation counter
+- `references/storage.md` — all Markdown schemas including search-index archive
+- `references/intelligence.md` — scoring, routing, crystallization, nudge rules
+- `references/maintenance.md` — consolidation, dedup, stale, auto-dream
+- `references/adaptation.md` — domain setup, Markdown index creation
+- `GOTCHAS.md` — 30 failure modes updated for Markdown-first
+- Hooks: session-load v3.1.0 (routing + nudges), session-save v6.0.0 (Knowledge Sync Gate + crystallization + consolidation counter)
+- `agent-memory/knowledge/index.md`, `evolution.md`, `lessons/tooling/index.md` — live data
 
-Remaining work:
-
-- Update hooks so they enforce Markdown knowledge writes automatically.
-- Add consolidation and skill crystallization in later phases.
+Remaining:
+- `skills/ai-dlc/knowledge/` has ~30 JSON files needing Markdown migration (separate spec, tracked as open thread)

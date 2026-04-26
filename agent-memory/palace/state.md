@@ -53,6 +53,8 @@
 - [ ] Cleanup: delete .claude/shared/ (sync script now reads from rules/)
 - [ ] Rename agent-memory/ → agent-memory/ across 38 files + folder rename; sed replace all references; update .gitignore
 - [-] agent-memory-redesign: bugfix spec in Kiro (.kiro/specs/agent-memory-redesign/). Requirements approved (11 defects, 11 expected, 8 unchanged). Decision: palace/ + knowledge/ stay separate with enforced sync, all-markdown zero JSON. Phase 1 contract implemented; legacy memory JSON removed; Kiro hooks now enforce Markdown Knowledge Sync Gate. Next: real-session verification, consolidation, skill crystallization.
+- [ ] ai-dlc-knowledge-migration: skills/ai-dlc/knowledge/ has ~30 JSON files (14 indexes + 16 lessons + 4 rules) needing Markdown migration. Config files (~5) can stay JSON. Separate spec needed — large scope.
+- [ ] ai-dlc-knowledge-migration: skills/ai-dlc/knowledge/ has ~30 JSON files (14 indexes + 16 lessons + 4 rules) needing Markdown migration. Config files (~5) can stay JSON. Separate spec needed — large scope.
 
 ## Placeholder Convention
 

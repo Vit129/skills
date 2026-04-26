@@ -170,7 +170,8 @@ Load only the reference needed for the current action:
 | Scoring, routing, lessons, evolution | `references/intelligence.md` |
 | Known failure modes | `GOTCHAS.md` |
 
-`references/adaptation.md` and `references/maintenance.md` are legacy design notes unless updated to this Markdown-first contract.
+| Consolidation, dedup, stale, auto-dream | `references/maintenance.md` |
+| Domain setup, signal mapping, phases | `references/adaptation.md` |
 
 ## Operating Principles
 
