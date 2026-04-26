@@ -1,5 +1,5 @@
 {
-  "name": "Global Claude Documentation Sync",
+  "name": "Global Documentation Sync",
   "version": "2.0.0",
   "description": "Final Session Sync: Update documentation before closing session (ideal for release/deploy prep).",
   "when": {
