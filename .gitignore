@@ -19,6 +19,8 @@
 !rules/**
 !.kiro/
 !.kiro/**
+!hooks/
+!hooks/**
 
 # Re-ignore noise inside tracked folders
 skills/**/.DS_Store
