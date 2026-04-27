@@ -4,7 +4,7 @@ Updated: 2026-04-27
 
 ## Consolidation State
 
-- sessions_since_consolidation: 41
+- sessions_since_consolidation: 48
 - last_consolidation: 2026-04-26
 - next_due: after 5 sessions or 7 days
 
@@ -83,4 +83,4 @@ Updated: 2026-04-27
 | 2026-04-27 | session-2026-04-27-copyskills-dest | copySkills.sh: dest now flexible — if arg contains /ai-agent/skills or /skills use as-is; otherwise append /ai-agent/skills to project root | POSITIVE | hardcoded DEST | flexible dest | `.claude/skills/scripts/copyToWork/copySkills.sh` |
 | 2026-04-27 | session-2026-04-27-copyskills-search | copySkills.sh: added folder-name auto-search (same pattern as setupTests.sh); supports name/relative/absolute path; dest always PROJECT/ai-agent/skills | POSITIVE | requires full path | auto-search by name | `.claude/skills/scripts/copyToWork/copySkills.sh` |
 | 2026-04-27 | session-2026-04-27-scripts-overhaul | Full session: setup scripts overhaul — copySkills flexible dest+search, setupMemory Markdown+graph.md, setupTests/postman ROOT_DIR fix, postman UX simplify, README no-hardcode, architecture decision (tests/=git, rest=.gitignore) | POSITIVE | legacy scripts with bugs | production-ready scripts | `.claude/skills/scripts/` |
-| 2026-04-27 | session-2026-04-27-unified-resolve | setupTests.sh + postmanToPlaywright.sh: unified target resolution via _resolveTarget.sh (same as setupMemory/setupKiro); all scripts now support full path, relative, folder name, ., --self | POSITIVE | inconsistent target resolution | unified _resolveTarget.sh | `.claude/skills/scripts/setup/` + `VitProjects/ai-agent/scripts/setup/` |
+| 2026-04-27 | session-2026-04-27-skillmap-semantic | skill-map.md: added semantic matching + bilingual header notes; fitness English-only; pattern: skill-map=English routing, SKILL.md=bilingual triggers | POSITIVE | no matching guidance | explicit semantic+bilingual contract | `.claude/rules/skill-map.md` |

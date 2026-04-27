@@ -1,7 +1,7 @@
 # Skills + SSOT Architecture
 
 Personal knowledge base and skill library for AI-assisted development — works with Claude Code, Kiro, Gemini CLI, and Codex.
-Uses a Single Source of Truth (SSOT) pattern: shared rules in `.claude/shared/` with auto-generated agent configs.
+Uses a Single Source of Truth (SSOT) pattern: shared rules in `rules/` with auto-generated agent configs.
 
 ## Architecture Overview
 
@@ -14,7 +14,7 @@ Uses a Single Source of Truth (SSOT) pattern: shared rules in `.claude/shared/` 
 │   ├── skill-map.md            ← Complete skill ecosystem reference
 │   ├── project-rules.md        ← Project-specific rules and phase gates
 │   ├── citation-format.md      ← Citation conventions
-│   └── optimization.md         ← Token management standards
+│   └── token_efficient.md      ← Token management standards
 ├── output-styles/              ← How agents communicate
 │   └── communication-style.md  ← Tone and interaction guidelines
 ├── scripts/                    ← Agent sync scripts
@@ -35,29 +35,21 @@ skills/                         ← Skill library
 │   ├── po/                     ← architect (DDD, logical design)
 │   └── ux-ui/                  ← ui-designer
 ├── system/                     ← Meta skills
-│   ├── agent-memory/         ← Memory Palace + Knowledge Evolution
+│   ├── agent-memory/           ← Memory Palace + Knowledge Evolution
+│   ├── agent-memory-lite/      ← Lightweight memory (single-file variant)
 │   ├── ai-techniques/          ← CoT, LATS, AoT, reasoning techniques
 │   ├── analysis-concept/       ← Concept analysis patterns
+│   ├── multi-agent-router/     ← Route tasks to Gemini/Codex/Claude by token cost
 │   ├── skill-creator/          ← Create new skills
 │   └── hook-creator/           ← Create agent hooks
 ├── finance/                    ← Investment research (local only, not copied to projects)
 ├── fitness/                    ← Fitness coaching, nutrition, workout planning
 ├── doc/                        ← Documentation: aidlc flowchart, swimlane
-└── scripts/
-    ├── setup/
-    │   ├── setupAgentSkills.sh     ← Bootstrap .kiro/ + agent-memory/ for any project
-    │   ├── setupKiro.sh            ← Setup Kiro IDE config (steering, hooks)
-    │   ├── setupMemory.sh          ← Init agent-memory/ (Memory Palace)
-    │   ├── setupTests.sh           ← Bootstrap COE QA test structure (API/Web/Mobile)
-    │   ├── setupCodexSkills.sh     ← Expose Claude skills to Codex
-    │   ├── postmanToPlaywright.sh  ← Copy postman migration skill to project
-    │   └── _resolveTarget.sh       ← Internal: resolve target project path
-    └── copyToWork/
-        └── copySkills.sh           ← Copy shared skills to project (excludes personal/finance)
+└── scripts/                    ← Scripts: setup system
 
-agent-memory/                ← Session memory (auto-managed)
+agent-memory/                   ← Session memory (auto-managed)
 ├── palace/                     ← Memory Palace: state.md, wings, keyword/date indexes, tunnels
-└── knowledge/                  ← Knowledge: lessons, design tokens, error strategies, index.json
+└── knowledge/                  ← Knowledge: lessons, articles, evolution, index.md
 ```
 
 ## How Agents Load Configuration
@@ -85,6 +77,6 @@ agent-memory/                ← Session memory (auto-managed)
 
 **Skills** are markdown instruction files agents load on demand. Each skill has a `SKILL.md` with triggers, routing table, and references.
 
-**Agent Memory** persists context and learning across sessions without a database — plain markdown + JSON. Includes user modeling, skill crystallization, periodic nudges, evolution audit trail, and session search.
+**Agent Memory** persists context and learning across sessions without a database — plain markdown. Includes user modeling, skill crystallization, periodic nudges, evolution audit trail, and session search.
 
 **Setup scripts** bootstrap new projects with agent context layer (`.kiro/`, `agent-memory/`) and COE QA test structure — portable, not tied to any specific agent or path.

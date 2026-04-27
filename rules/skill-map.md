@@ -2,6 +2,8 @@
 
 > All paths relative to `{skills_root}/` (e.g. `~/.gemini/skills/` or `ai-agent/skills/`)
 > For any dev/QA coding task → start with `ai-dlc/core/aidlc/` first (governance + phase routing)
+> Keywords are semantic — match by meaning, not exact string.
+> Bilingual triggers (TH/EN) are in each SKILL.md description.
 
 ### ai-dlc/core/ — Governance & Foundation
 | Keyword | Skill |
@@ -55,6 +57,7 @@
 | CoT, LATS, AoT, reasoning technique | `system/ai-techniques/` |
 | create new skill | `system/skill-creator/` |
 | create hook | `system/hook-creator/` |
+| route to gemini, route to codex, large codebase read, token budget, multi-agent | `system/multi-agent-router/` |
 
 ### finance/ — Investment Portfolio
 | Keyword | Skill |
@@ -62,9 +65,9 @@
 | stock analysis, fundamental research | `finance/research/stock-deep-analysis/` |
 | peer comparison, compare stocks, comparative analysis | `finance/research/stock-peer-comparison/` |
 
-### fitness/ — Health & Fitness (English + Thai)
+### fitness/ — Health & Fitness
 | Keyword | Skill |
 |---------|-------|
-| workout plan, จัดตารางออกกำลังกาย, nutrition advice, โภชนาการ, protein tracking, นับโปรตีน | `fitness/` |
-| movement modification, ปรับท่าออกกำลังกาย, BIA review, ตรวจร่างกาย, body composition, physical therapy | `fitness/` |
-| meal plan, แผนฟิตเนส, exercise form, บริหารร่างกาย, fitness goal | `fitness/` |
+| workout plan, nutrition, protein tracking, meal plan | `fitness/` |
+| movement modification, BIA review, body composition, physical therapy | `fitness/` |
+| exercise form, fitness goal, training program | `fitness/` |

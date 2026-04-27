@@ -125,7 +125,15 @@ Bootstrap (new project, no agent-memory/ yet):
 
 ---
 
-## 6. References
+## 6. Multi-Agent Routing — Gemini / Codex + Claude
+
+Route high-token tasks (reading entire structure, large-scale planning) through Gemini or Codex first, then let Claude verify + implement.
+
+→ See `skills/system/multi-agent-router/SKILL.md` for routing table, token budget rules, trigger keywords, and CLI commands.
+
+---
+
+## 7. References
 
 - **Agent Strategy:** `skills/KIRO.md` (tier selection, skill map, Karpathy principles)
 - **Karpathy Principles:** `skills/KIRO.md` §Karpathy Principles (Think Before Coding, Simplicity First, Surgical Changes, Goal-Driven Execution)

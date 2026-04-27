@@ -1,6 +1,6 @@
 # Knowledge Index
 
-Updated: 2026-04-27
+Updated: 2026-04-27 (session: gemini-routing)
 
 ## Articles
 

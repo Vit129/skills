@@ -13,6 +13,7 @@
 
 | Date | Wing | Summary |
 |------|------|---------|
+| 2026-04-27 | agent-memory | Kiro session: skill-map.md — added semantic matching + bilingual note to header; fitness keywords English-only; SKILL.md holds Thai triggers ✅ |
 | 2026-04-27 | agent-memory | Kiro session: found real gap — Consolidation State section missing from storage.md Knowledge Evolution schema; not in intelligence.md or maintenance.md; needs to be added to storage.md ✅ |
 | 2026-04-27 | agent-memory | Kiro session: updated AGENT_MEMORY_README.md — removed duplicate section, added graph.md to tree, updated save rules + status to match current spec ✅ |
 | 2026-04-27 | agent-memory | Kiro session: updated KIRO.md — Reading Order added knowledge/index.md, Minimum Update Contract added knowledge sync, finance/ added stock-peer-comparison ✅ |
@@ -68,9 +69,9 @@
 
 ## Current Focus
 
-- focus: "agent-memory spec upgrade COMPLETE — 7.8/10; remaining: VitProjects+HA JSON migration, bootstrap test, existing room frontmatter"
+- focus: "multi-agent-router skill complete + README.md synced with current state"
 - blockers: ""
-- next_action: "Migrate VitProjects + HA JSON→MD; add room YAML frontmatter to existing rooms; test bootstrap on new project"
+- next_action: "Copy multi-agent-router to VitProjects if needed; test Gemini/Codex routing in practice"
 
 ## Open Threads
 
