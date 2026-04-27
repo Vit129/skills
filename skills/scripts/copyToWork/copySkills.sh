@@ -18,7 +18,8 @@ fi
 
 # ── Target ──
 if [ -z "${1:-}" ]; then
-  echo "❌ Usage: bash copySkills.sh <PROJECT_ROOT> [--force]"
+  echo "❌ Usage: bash copySkills.sh <PROJECT_NAME_OR_PATH> [--force]"
+  echo "   e.g. bash copySkills.sh VitProjects"
   echo "   e.g. bash copySkills.sh /path/to/VitProjects"
   exit 1
 fi
@@ -32,7 +33,58 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-DEST="$TARGET/ai-agent/skills"
+# ── Resolve TARGET → project root ──
+if [[ "$TARGET" == /* ]]; then
+  # absolute path — use directly
+  if [ ! -d "$TARGET" ]; then
+    echo "❌ Path not found: $TARGET"
+    exit 1
+  fi
+  PROJECT_ROOT="$TARGET"
+elif [[ "$TARGET" == *"/"* ]] || [ -d "$TARGET" ]; then
+  # relative path
+  if [ ! -d "$TARGET" ]; then
+    echo "❌ Path not found: $TARGET"
+    exit 1
+  fi
+  PROJECT_ROOT="$(cd "$TARGET" && pwd)"
+else
+  # folder name — search from cwd (same pattern as setupTests.sh)
+  echo "🔍 Searching for folder: $TARGET"
+  FOUND_PATHS=()
+  for depth in 1 2 3 4; do
+    while IFS= read -r -d '' p; do
+      FOUND_PATHS+=("$p")
+    done < <(find . -mindepth "$depth" -maxdepth "$depth" -type d -name "$TARGET" \
+      -not -path "*/node_modules/*" \
+      -not -path "*/.git/*" \
+      -not -path "*/agent-memory/*" \
+      -print0 2>/dev/null)
+  done
+
+  if [ ${#FOUND_PATHS[@]} -eq 0 ]; then
+    echo "❌ Folder $TARGET ไม่พบ"
+    exit 1
+  elif [ ${#FOUND_PATHS[@]} -eq 1 ]; then
+    PROJECT_ROOT="$(cd "${FOUND_PATHS[0]}" && pwd)"
+    echo "✅ Found: $PROJECT_ROOT"
+  else
+    echo "⚠️  พบหลายตำแหน่ง:"
+    for i in "${!FOUND_PATHS[@]}"; do
+      echo "  [$((i+1))] ${FOUND_PATHS[$i]#./}"
+    done
+    read -p "เลือกตำแหน่ง (1-${#FOUND_PATHS[@]}): " choice
+    if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le ${#FOUND_PATHS[@]} ]; then
+      PROJECT_ROOT="$(cd "${FOUND_PATHS[$((choice-1))]}" && pwd)"
+      echo "✅ Selected: $PROJECT_ROOT"
+    else
+      echo "❌ Invalid choice"
+      exit 1
+    fi
+  fi
+fi
+
+DEST="$PROJECT_ROOT/ai-agent/skills"
 
 # ── SAFETY: if DEST is a symlink, remove it first (prevents destroying source) ──
 if [ -L "$DEST" ]; then

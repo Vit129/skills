@@ -124,22 +124,6 @@ PROFILE_EOF
     echo "  ✅ palace/user-profile.md"
   fi
 
-  # ── palace/date-index.json ──
-  if [ ! -f "$AGENT_MEM/palace/date-index.json" ] || [ "$FORCE" -eq 1 ]; then
-    cat > "$AGENT_MEM/palace/date-index.json" << 'DATE_EOF'
-{"_meta":{"version":"2.0","description":"Sorted date array for date-range queries.","total_docs":0,"last_updated":null},"by_date":[]}
-DATE_EOF
-    echo "  ✅ palace/date-index.json"
-  fi
-
-  # ── palace/keyword-index.json ──
-  if [ ! -f "$AGENT_MEM/palace/keyword-index.json" ] || [ "$FORCE" -eq 1 ]; then
-    cat > "$AGENT_MEM/palace/keyword-index.json" << 'KW_EOF'
-{"_meta":{"version":"2.0","description":"Inverted index for keyword search.","total_docs":0,"total_terms":0},"terms":{}}
-KW_EOF
-    echo "  ✅ palace/keyword-index.json"
-  fi
-
   # ── palace/archive/index.md ──
   if [ ! -f "$AGENT_MEM/palace/archive/index.md" ] || [ "$FORCE" -eq 1 ]; then
     cat > "$AGENT_MEM/palace/archive/index.md" << 'ARCHIVE_EOF'
@@ -150,10 +134,72 @@ ARCHIVE_EOF
     echo "  ✅ palace/archive/index.md"
   fi
 
-  # ── knowledge/index.json ──
-  if [ ! -f "$AGENT_MEM/knowledge/index.json" ] || [ "$FORCE" -eq 1 ]; then
-    echo '{"domains":[],"evolution_log":[]}' > "$AGENT_MEM/knowledge/index.json"
-    echo "  ✅ knowledge/index.json"
+  # ── palace/graph.md ──
+  if [ ! -f "$AGENT_MEM/palace/graph.md" ] || [ "$FORCE" -eq 1 ]; then
+    cat > "$AGENT_MEM/palace/graph.md" << 'GRAPH_EOF'
+# Palace Graph
+
+Updated: (auto)
+
+## Nodes
+| ID | Type | Status | Tags | Notes |
+|----|------|--------|------|-------|
+
+## Rooms
+| ID | Wing | Status | Tags |
+|----|------|--------|------|
+
+## Edges
+| From | To | Type | Purpose |
+|------|----|------|---------|
+GRAPH_EOF
+    echo "  ✅ palace/graph.md"
+  fi
+
+  # ── knowledge/index.md ──
+  if [ ! -f "$AGENT_MEM/knowledge/index.md" ] || [ "$FORCE" -eq 1 ]; then
+    cat > "$AGENT_MEM/knowledge/index.md" << 'KNOWLEDGE_EOF'
+# Knowledge Index
+
+Updated: (auto)
+
+## Articles
+
+| ID | Type | Scope | Status | Score | Updated | Path | Keywords |
+|----|------|-------|--------|-------|---------|------|----------|
+
+## Lessons
+
+| ID | Domain | Type | Status | Applied | Prevented | Updated | Path |
+|----|--------|------|--------|---------|-----------|---------|------|
+
+## Gaps
+
+| Domain | Gap | First Seen | Status | Notes |
+|--------|-----|------------|--------|-------|
+KNOWLEDGE_EOF
+    echo "  ✅ knowledge/index.md"
+  fi
+
+  # ── knowledge/evolution.md ──
+  if [ ! -f "$AGENT_MEM/knowledge/evolution.md" ] || [ "$FORCE" -eq 1 ]; then
+    cat > "$AGENT_MEM/knowledge/evolution.md" << 'EVOLUTION_EOF'
+# Knowledge Evolution
+
+Updated: (auto)
+
+## Consolidation State
+
+- sessions_since_consolidation: 0
+- last_consolidation: (none)
+- next_due: after 5 sessions or 7 days
+
+## Change Log
+
+| Date | ID | Change | Signal | Before | After | Evidence |
+|------|----|--------|--------|--------|-------|----------|
+EVOLUTION_EOF
+    echo "  ✅ knowledge/evolution.md"
   fi
 
   echo "  ✅ agent-memory/ created (full structure)"

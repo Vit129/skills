@@ -14,6 +14,11 @@
 | Date | Wing | Summary |
 |------|------|---------|
 | 2026-04-27 | agent-memory | Kiro session: found real gap — Consolidation State section missing from storage.md Knowledge Evolution schema; not in intelligence.md or maintenance.md; needs to be added to storage.md ✅ |
+| 2026-04-27 | agent-memory | Kiro session: updated AGENT_MEMORY_README.md — removed duplicate section, added graph.md to tree, updated save rules + status to match current spec ✅ |
+| 2026-04-27 | agent-memory | Kiro session: updated KIRO.md — Reading Order added knowledge/index.md, Minimum Update Contract added knowledge sync, finance/ added stock-peer-comparison ✅ |
+| 2026-04-27 | agent-memory | Kiro session: added knowledge/index.md to Required Reading in HA CLAUDE.md+CODEX.md+GEMINI.md + My Investment Port CLAUDE.md+CODEX.md+GEMINI.md — 5 files updated ✅ |
+| 2026-04-27 | agent-memory | Kiro session: confirmed CLAUDE.md reference pattern replaces hooks for token efficiency — agent reads state.md + knowledge/index.md via Required Reading section, no hook needed ✅ |
+| 2026-04-27 | agent-memory | Kiro session: migrated Home Assistant agent-memory to new spec — index.md+evolution.md, lessons/climate/, graph.md, search-index.md, user-profile.md, tunnels prose, archive/index.md; index.json deleted ✅ |
 | 2026-04-27 | agent-memory | Kiro session: full session review — CoT+AoT+LATS analysis scored 7.8/10; spec+migration done; remaining: VitProjects+HA JSON, bootstrap test, existing room frontmatter ✅ |
 | 2026-04-27 | agent-memory | Kiro session: agent-memory-lite SKILL.md updated — comparison table reflects new Full structure (graph.md, room frontmatter, articles/{domain}/); References fixed (storage.md removed, explicit list) ✅ |
 | 2026-04-27 | agent-memory | Kiro session: SKILL.md rewritten — all schemas inlined (hook-creator pattern); storage.md deleted; SKILL.md now single source of truth for spec + implementation ✅ |
@@ -28,7 +33,7 @@
 | 2026-04-27 | agent-memory | Kiro session: found real gap — Consolidation State section missing from storage.md; confirmed not in intelligence.md or maintenance.md either ✅ |
 | 2026-04-27 | agent-memory | Kiro session: CoT+LATS analysis across 4 projects (My Investment Port, .claude, VitProjects, HA); decision: Tiered hybrid spec — 4 required changes + 4 recommended (optional for >3 wings); VitProjects+HA need JSON→MD migration ✅ |
 | 2026-04-27 | agent-memory | Kiro session: deep analysis My Investment Port agent-memory vs SKILL.md spec — 5 changes: (1) articles/{domain}/ subfolder, (2) graph.md optional, (3) knowledge/README.md, (4) room YAML frontmatter+links, (5) rich hall format; update SKILL.md+storage.md pending ✅ |
-| 2026-04-27 | ai-dlc-skills | Kiro session: fixed postman-to-playwright SKILL.md — added mandatory Generation Order (fixtures→schemas→helpers→mocks→specs); upgraded Section 3 from optional to MANDATORY; synced both .claude + VitProjects copies ✅ |
+| 2026-04-27 | kiro-workspace-setup | AGENT_MEMORY_README Thai, articles/{domain}/, both copies updated | palace/state.md | Translated AGENT_MEMORY_README.md to Thai in both .claude + VitProjects |
 | 2026-04-27 | ai-dlc-skills | Kiro session: ai-dlc-knowledge migration 100% complete — verified all 34 .md files exist; fixed business/auth/index.md path ref (businessAuthRules.json→.md); all lesson indexes + business indexes confirmed complete; 5 config files stay JSON ✅ |
 | 2026-04-27 | ai-dlc-skills | Kiro session: read 3 sample JSON files (index.json, apiLesAuth.json, businessAuthRules.json); designed Markdown schema mapping for migration — index→table, lesson→YAML frontmatter+sections+code blocks, rules→table; ready to execute ✅ |
 | 2026-04-27 | agent-memory | Kiro session: explored ai-dlc/knowledge/ — 35 JSON files inventoried; ~30 to migrate to Markdown, ~5 configs stay JSON; categories: indexes, lesson indexes, lessons, rules, configs ✅ |
@@ -73,9 +78,9 @@
 - [x] agent-memory: add Consolidation State section to storage.md Knowledge Evolution schema ✅ 2026-04-27
 - [x] agent-memory: migrate global flat articles (~/.claude/agent-memory/knowledge/) to articles/{domain}/ structure ✅ 2026-04-27
 - [x] agent-memory: inline all required schemas into SKILL.md (hall, room, graph, tunnels, article, lesson, closet) — follow hook-creator pattern; references/ kept for on-demand only ✅ 2026-04-27
-- [ ] agent-memory: add YAML frontmatter to existing rooms in ~/.claude/agent-memory/palace/wings/
+- [ ] agent-memory: migrate VitProjects JSON→MD (index.json → index.md + evolution.md)
 - [ ] agent-memory: test bootstrap on a brand new project to verify spec works end-to-end
-- [ ] agent-memory: migrate VitProjects + HA JSON→MD (index.json → index.md + evolution.md)
+- [x] agent-memory: migrate Home Assistant JSON→MD ✅ 2026-04-27
 - [ ] ai-dlc-skills: verify {knowledge_root} resolves correctly at runtime
 - [X] Cleanup: delete .claude/shared/ (sync script now reads from rules/)
 - [x] Rename .agent-memory/ → agent-memory/ across 38 files + folder rename; sed replace all references; update .gitignore

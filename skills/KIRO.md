@@ -34,6 +34,7 @@ When information conflicts, higher items win:
 3. `AGENTS.md` — shared rules & skill map (inlined in each agent's config file)
 4. Agent-specific file — tier routing, escalation, cache rules
 5. `agent-memory/palace/state.md` — active session state
+5b. `agent-memory/knowledge/index.md` — knowledge index (keyword routing for lessons + articles)
 6. Skill files at `{skills_root}/` (e.g. `~/.claude/skills/`, `~/ai-agent/skills/`, or project `ai-agent/skills/`)
 7. After any file write or decision → note internally that session has unsaved work (dirty); before ending session, follow the save workflow in `system/agent-memory/` skill
 
@@ -111,6 +112,7 @@ If notes conflict with the codebase, trust the codebase.
 | Keyword | Skill |
 |---------|-------|
 | stock analysis, fundamental research | `finance/research/stock-deep-analysis/` |
+| stock peer comparison, sector comparison | `finance/research/stock-peer-comparison/` |
 
 ## Karpathy Principles (always active)
 
@@ -201,5 +203,6 @@ Never record: secrets/credentials, raw chat transcripts, chain-of-thought reason
 After meaningful work, update:
 
 - `agent-memory/palace/state.md` → Current Focus + Open Threads when focus/blockers/next steps change
+- `agent-memory/knowledge/index.md` + `knowledge/evolution.md` → every dirty save (mandatory Knowledge Sync Gate)
 - `agent-memory/` rooms → when decisions, architecture choices, or lessons are made
 - Trigger "save session + learn" at session end if dirty=true

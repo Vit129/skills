@@ -9,15 +9,36 @@
 #   - npx tsx              → TypeScript runner (npx จะ auto-download)
 #   - @inquirer/prompts    → npm install @inquirer/prompts (ใช้ใน readPostmanEnv.ts)
 
-if [ -z "$1" ]; then
-    echo "❌ กรุณาระบุ folder (เช่น Automate2, AAA/Automate3)"
-    echo "Usage: $0 <PROJECT_FOLDER>"
+if [ -z "${1:-}" ]; then
+    echo "❌ กรุณาระบุ folder (เช่น Automate2, AAA/Automate3, . สำหรับ root)"
+    echo "Usage: $0 [PROJECT_NAME_OR_PATH|.|--self]"
     exit 1
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SKILLS_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-ROOT_DIR="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+
+# Walk up from cwd to find project root
+_dir="$(pwd)"
+while [ "$_dir" != "/" ]; do
+  if [ -d "$_dir/.git" ]; then
+    BASE_DIR="$_dir"
+    break
+  fi
+  _dir="$(dirname "$_dir")"
+done
+if [ -z "${BASE_DIR:-}" ]; then
+  echo "⚠️  .git/ not found — falling back to cwd"
+  BASE_DIR="$(pwd)"
+fi
+
+TARGET_DIR=""
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    *) TARGET_DIR="$1"; shift ;;
+  esac
+done
+
 POSTMAN_SRC="$SKILLS_ROOT/postman-to-playwright/postman"
 
 # --- validate source ---
@@ -26,49 +47,30 @@ if [ ! -d "$POSTMAN_SRC" ]; then
     exit 1
 fi
 
-cd "$ROOT_DIR" || exit 1
-TARGET_DIR="$1"
+# ── Folder detection (same as setupMemory.sh) ──
+cd "$BASE_DIR" || exit 1
+source "$SCRIPT_DIR/_resolveTarget.sh"
 
-# Folder detection logic (same pattern as setupTests.sh)
-if [[ "$TARGET_DIR" == *"/"* ]] || [ -d "$TARGET_DIR" ]; then
-    if [ ! -d "$TARGET_DIR" ]; then
-        echo "❌ Folder $TARGET_DIR ไม่พบ"
-        exit 1
-    fi
-    echo "📁 Using: $TARGET_DIR"
-else
-    echo "🔍 Searching for folder: $TARGET_DIR"
-    FOUND_PATHS=($(find . -maxdepth 3 -type d -name "$TARGET_DIR" -not -path "*/node_modules/*" -not -path "*/.git/*" -not -path "*/tests/*" 2>/dev/null))
-
-    if [ ${#FOUND_PATHS[@]} -eq 0 ]; then
-        echo "❌ Folder $TARGET_DIR ไม่พบ"
-        exit 1
-    elif [ ${#FOUND_PATHS[@]} -eq 1 ]; then
-        TARGET_DIR="${FOUND_PATHS[0]#./}"
-        echo "✅ Found: $TARGET_DIR"
-    else
-        echo "⚠️  พบหลายตำแหน่ง:"
-        for i in "${!FOUND_PATHS[@]}"; do
-            echo "  [$((i+1))] ${FOUND_PATHS[$i]#./}"
-        done
-        read -p "เลือกตำแหน่ง (1-${#FOUND_PATHS[@]}): " choice
-
-        if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le ${#FOUND_PATHS[@]} ]; then
-            TARGET_DIR="${FOUND_PATHS[$((choice-1))]#./}"
-            echo "✅ Selected: $TARGET_DIR"
-        else
-            echo "❌ Invalid choice"
-            exit 1
-        fi
-    fi
-fi
+ROOT_DIR="$(cd "$TARGET_DIR" && pwd)"
 
 cd "$TARGET_DIR" || exit 1
 echo "📁 Working in: $(pwd)"
 echo ""
 
-# --- create target & copy ---
+# --- check if skill already exists in ai-agent/skills/ ---
+SKILL_IN_AIAGENT="$ROOT_DIR/ai-agent/skills/postman-to-playwright"
+if [ -d "$SKILL_IN_AIAGENT" ]; then
+    echo "ℹ️  postman-to-playwright skill already exists at:"
+    echo "   $SKILL_IN_AIAGENT"
+    echo ""
+    echo "✅ ไม่ต้องติดตั้งเพิ่ม — skill พร้อมใช้งานแล้ว"
+    exit 0
+fi
+
+# --- default destination: same level as tests/ ---
 DEST_DIR="postman-to-playwright"
+
+# --- create target & copy ---
 echo "📁 Creating $DEST_DIR ..."
 mkdir -p "$DEST_DIR"
 

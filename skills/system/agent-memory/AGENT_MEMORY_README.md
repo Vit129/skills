@@ -1,73 +1,62 @@
-# Agent Memory
+# Agent Memory — ระบบความจำของ AI
 
-Agent Memory is a Markdown-first memory and learning system.
+ระบบนี้ทำให้ AI จำสิ่งที่เกิดขึ้นในแต่ละ session และเรียนรู้จากประสบการณ์ที่สะสมมา
 
 ```text
-Memory Palace      = what happened
-Knowledge Library  = what works
-Session Save       = update both together
+Memory Palace      = จำว่าเกิดอะไรขึ้น (บริบท, การตัดสินใจ, งานที่ค้างอยู่)
+Knowledge Library  = จำว่าอะไรได้ผล (pattern, บทเรียน, สิ่งที่ควรทำซ้ำ)
+Session Save       = อัปเดตทั้งสองพร้อมกันทุกครั้ง — ทุกอย่างเป็น Markdown
 ```
 
-## Why The Redesign
-
-The previous design split durable memory across Markdown and JSON:
-
-- Palace files were readable Markdown.
-- Knowledge and indexes depended on JSON.
-- JSON indexes often stayed stale.
-- Knowledge did not reliably update when Palace changed.
-
-The new contract is simpler:
-
-- All persistent memory content is Markdown.
-- `agent-memory/knowledge/index.md` is the knowledge source of truth.
-- JSON files under `agent-memory/` are legacy import material only.
-- A valid save must update both `palace/` and `knowledge/`.
-
-## Layout
+## โครงสร้างไฟล์
 
 ```text
 agent-memory/
-├── palace/
-│   ├── state.md
-│   ├── tunnels.md
-│   ├── search-index.md
-│   ├── user-profile.md
-│   ├── wings/
-│   └── archive/index.md
-└── knowledge/
-    ├── index.md
-    ├── evolution.md
-    ├── {article}.md
-    └── lessons/{domain}/
+├── palace/                    ← จำว่าเกิดอะไรขึ้น
+│   ├── state.md               ← สถานะปัจจุบัน, session ล่าสุด, งานค้าง
+│   ├── tunnels.md             ← ความเชื่อมโยงระหว่าง wings (prose + Purpose+Sync)
+│   ├── search-index.md        ← ค้นหา session ย้อนหลัง
+│   ├── user-profile.md        ← preference และ pattern ของผู้ใช้
+│   ├── graph.md               ← structured index ของ Nodes/Rooms/Edges (required)
+│   ├── wings/                 ← แต่ละ topic/project แยกเป็น wing
+│   │   └── {topic}/
+│   │       ├── hall.md        ← summary, decisions, rooms index
+│   │       ├── rooms/         ← รายละเอียดแต่ละ topic (มี YAML frontmatter)
+│   │       └── closets/       ← compressed rooms (AAAK)
+│   └── archive/index.md       ← wings ที่เสร็จแล้ว
+└── knowledge/                 ← จำว่าอะไรได้ผล
+    ├── index.md               ← catalog ของ articles และ lessons ทั้งหมด
+    ├── evolution.md           ← ประวัติการเปลี่ยนแปลง score + Consolidation State
+    ├── articles/{domain}/     ← pattern และ template ที่ใช้ซ้ำได้
+    │   └── {article}.md
+    └── lessons/{domain}/      ← บทเรียนที่เรียนรู้จากประสบการณ์
         ├── index.md
         └── {lesson-id}.md
 ```
 
-## Save Rule
+## กฎการ Save
 
-When saving a session:
+ทุกครั้งที่ save session ต้องทำครบ 6 ขั้น:
 
-1. Update relevant Palace rooms, halls, state, and search index.
-2. Extract reusable lessons, patterns, and gaps.
-3. Update `knowledge/index.md`.
-4. Update the domain lesson index.
-5. Append meaningful score/status changes to `knowledge/evolution.md`.
-6. Verify every saved item is discoverable from Markdown.
+1. อัปเดต Palace — rooms, halls, state, search index, graph
+2. ดึง lesson, pattern, หรือ gap ที่เรียนรู้ได้
+3. อัปเดต `knowledge/index.md`
+4. อัปเดต lesson index ของ domain ที่เกี่ยวข้อง
+5. บันทึกการเปลี่ยนแปลง score/status ลง `knowledge/evolution.md` + increment consolidation counter
+6. ตรวจสอบว่าทุกอย่างค้นหาได้จาก Markdown
 
-## Status
+## สถานะปัจจุบัน
 
-All phases implemented:
+ระบบพร้อมใช้งานครบทุกส่วน:
 
-- `SKILL.md` — Markdown-first contract
-- `references/session.md` — session load/save with routing, nudges, consolidation counter
-- `references/storage.md` — all Markdown schemas including search-index archive
-- `references/intelligence.md` — scoring, routing, crystallization, nudge rules
-- `references/maintenance.md` — consolidation, dedup, stale, auto-dream
-- `references/adaptation.md` — domain setup, Markdown index creation
-- `GOTCHAS.md` — 30 failure modes updated for Markdown-first
-- Hooks: session-load v3.1.0 (routing + nudges), session-save v6.0.0 (Knowledge Sync Gate + crystallization + consolidation counter)
-- `agent-memory/knowledge/index.md`, `evolution.md`, `lessons/tooling/index.md` — live data
+- `SKILL.md` — spec หลักของระบบ (Markdown-first, all schemas inlined)
+- `references/session.md` — วิธี load/save session, nudges, consolidation counter
+- `references/intelligence.md` — scoring, routing, crystallization
+- `references/maintenance.md` — consolidation, dedup, stale detection, auto-dream
+- `references/adaptation.md` — วิธีปรับระบบให้เข้ากับ domain ใหม่
+- `GOTCHAS.md` — 30 failure modes พร้อม fix
+- Hooks: session-load v3.1.0, session-save v6.0.0
 
-Remaining:
-- `skills/ai-dlc/knowledge/` has ~30 JSON files needing Markdown migration (separate spec, tracked as open thread)
+สิ่งที่ยังค้างอยู่:
+- `VitProjects/agent-memory/` ยังใช้ JSON index — ต้อง migrate เป็น Markdown
+- `skills/ai-dlc/knowledge/` มีไฟล์ JSON ประมาณ 5 ไฟล์ที่ยังต้อง migrate (tracked เป็น open thread แยกต่างหาก)

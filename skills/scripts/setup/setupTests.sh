@@ -3,51 +3,41 @@
 # COE Standard Test Automation Setup Script
 # Follows coe-standard-qa-automation structure
 
-if [ -z "$1" ]; then
-    echo "❌ กรุณาระบุ folder (เช่น Automate2, AAA/Automate3)"
-    echo "Usage: $0 [PROJECT_NAME_KEBAB]"
+if [ -z "${1:-}" ]; then
+    echo "❌ กรุณาระบุ folder (เช่น Automate2, AAA/Automate3, . สำหรับ root)"
+    echo "Usage: $0 [PROJECT_NAME_OR_PATH|.|--self] [--force]"
     exit 1
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT_DIR="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 
-cd "$ROOT_DIR" || exit 1
-TARGET_DIR="$1"
-
-# Folder detection logic
-if [[ "$TARGET_DIR" == *"/"* ]] || [ -d "$TARGET_DIR" ]; then
-    if [ ! -d "$TARGET_DIR" ]; then
-        echo "❌ Folder $TARGET_DIR ไม่พบ"
-        exit 1
-    fi
-    echo "📁 Using: $TARGET_DIR"
-else
-    echo "🔍 Searching for folder: $TARGET_DIR"
-    FOUND_PATHS=($(find . -maxdepth 3 -type d -name "$TARGET_DIR" -not -path "*/node_modules/*" -not -path "*/.git/*" -not -path "*/tests/*" 2>/dev/null))
-    
-    if [ ${#FOUND_PATHS[@]} -eq 0 ]; then
-        echo "❌ Folder $TARGET_DIR ไม่พบ"
-        exit 1
-    elif [ ${#FOUND_PATHS[@]} -eq 1 ]; then
-        TARGET_DIR="${FOUND_PATHS[0]#./}"
-        echo "✅ Found: $TARGET_DIR"
-    else
-        echo "⚠️  พบหลายตำแหน่ง:"
-        for i in "${!FOUND_PATHS[@]}"; do
-            echo "  [$((i+1))] ${FOUND_PATHS[$i]#./}"
-        done
-        read -p "เลือกตำแหน่ง (1-${#FOUND_PATHS[@]}): " choice
-        
-        if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le ${#FOUND_PATHS[@]} ]; then
-            TARGET_DIR="${FOUND_PATHS[$((choice-1))]#./}"
-            echo "✅ Selected: $TARGET_DIR"
-        else
-            echo "❌ Invalid choice"
-            exit 1
-        fi
-    fi
+# Walk up from cwd to find project root
+_dir="$(pwd)"
+while [ "$_dir" != "/" ]; do
+  if [ -d "$_dir/.git" ]; then
+    BASE_DIR="$_dir"
+    break
+  fi
+  _dir="$(dirname "$_dir")"
+done
+if [ -z "${BASE_DIR:-}" ]; then
+  echo "⚠️  .git/ not found — falling back to cwd"
+  BASE_DIR="$(pwd)"
 fi
+
+FORCE=0
+TARGET_DIR=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --force) FORCE=1; shift ;;
+    *) TARGET_DIR="$1"; shift ;;
+  esac
+done
+
+# ── Folder detection (same as setupMemory.sh) ──
+cd "$BASE_DIR" || exit 1
+source "$SCRIPT_DIR/_resolveTarget.sh"
 
 cd "$TARGET_DIR" || exit 1
 echo "📁 Working in: $(pwd)"

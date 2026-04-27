@@ -1,6 +1,6 @@
 # Tooling Lessons
 
-Updated: 2026-04-26
+Updated: 2026-04-27
 
 | ID | Type | Status | Applied | Prevented | Confidence | Summary | Detail |
 |----|------|--------|---------|-----------|------------|---------|--------|
@@ -9,3 +9,4 @@ Updated: 2026-04-26
 | LESSON-TOOLING-003 | bug | active | 1 | 1 | 0.95 | Session-save hooks using `~/` can route to the wrong workspace; use absolute paths. | LESSON-TOOLING-003.md |
 | LESSON-TOOLING-004 | workflow | active | 1 | 1 | 0.95 | Dirty session saves need a mandatory Knowledge Sync Gate; never fall back to state-only saves. | LESSON-TOOLING-004.md |
 | LESSON-TOOLING-005 | workflow | active | 1 | 1 | 0.95 | Always sync both Kiro (.kiro/hooks/) and Claude Code (.claude/hooks/) when updating agent-memory hooks. | LESSON-TOOLING-005.md |
+| LESSON-TOOLING-006 | pattern | active | 1 | 1 | 0.90 | CLAUDE.md reference pattern replaces hooks for token efficiency: add state.md + knowledge/index.md to Required Reading. | LESSON-TOOLING-006.md |

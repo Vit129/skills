@@ -2,7 +2,7 @@
 
 | Date | Wing | Keywords | Room Path | Summary |
 |------|------|----------|-----------|---------|
-| 2026-04-27 | agent-memory | session-review,cot-aot-lats,7.8-score,spec-complete,remaining-gaps | .claude/agent-memory/ | Full session review: spec upgrade 7.8/10; done: SKILL.md inlined, migration, graph.md; remaining: VitProjects+HA JSON, bootstrap test, room frontmatter |
+| 2026-04-27 | agent-memory | agent-memory-readme,graph-md,save-rules,status-updated | .claude/skills/system/agent-memory/AGENT_MEMORY_README.md | Updated AGENT_MEMORY_README.md: removed duplicate section, added graph.md to tree, updated save rules + status |
 | 2026-04-27 | ai-dlc-skills | json-deleted,all-markdown,34-files,cleanup-complete | /Users/supavit.cho/.claude/skills/ai-dlc/knowledge/ | Deleted 34 migrated JSON files; 5 config files stay JSON; knowledge base now 100% Markdown |
 | 2026-04-27 | ai-dlc-skills | ai-dlc-migration-complete,business-auth-fix,path-ref,34-md-files | /Users/supavit.cho/.claude/skills/ai-dlc/knowledge/business/auth/index.md | Migration 100% complete; fixed auth/index.md path ref; all indexes+lessons+rules have .md; 5 configs stay JSON |
 | 2026-04-27 | ai-dlc-skills | ai-dlc-knowledge,json-to-markdown,schema-design,migration-plan,index,lesson,rules | /Users/supavit.cho/.claude/skills/ai-dlc/knowledge/ | Read 3 sample JSONs; designed Markdown schema: index→table, lesson→frontmatter+sections, rules→table; 4-phase execution plan |
