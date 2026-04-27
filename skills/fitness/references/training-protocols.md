@@ -154,3 +154,83 @@
 * Barbell Back Squat: 60 kg / 135 lbs → 62.5 kg / 140 lbs → 65 kg / 145 lbs
 * Barbell Bench Press: 60 kg / 135 lbs → 62.5 kg / 140 lbs → 65 kg / 145 lbs
 * Deadlift: 100 kg / 220 lbs → 102.5 kg / 225 lbs → 105 kg / 230 lbs
+
+---
+
+## Periodization — Block Training Structure
+
+### Macrocycle (Full Training Year)
+* 3–4 mesocycles per year
+* Each mesocycle = 4–8 weeks
+* Plan: Accumulation → Intensification → Realization → Deload
+
+### Mesocycle Blocks
+
+**Block 1: Accumulation (4–6 weeks)**
+* Goal: Build work capacity + volume tolerance
+* Rep range: 8–15 reps
+* Intensity: 60–75% 1RM
+* Volume: High (15–20 sets/muscle/week)
+* Focus: Hypertrophy, technique refinement
+
+**Block 2: Intensification (3–4 weeks)**
+* Goal: Convert volume gains to strength
+* Rep range: 3–6 reps
+* Intensity: 80–90% 1RM
+* Volume: Moderate (10–15 sets/muscle/week)
+* Focus: Strength, neural adaptation
+
+**Block 3: Realization / Peak (1–2 weeks)**
+* Goal: Express peak strength (competition or PR attempt)
+* Rep range: 1–3 reps
+* Intensity: 90–100% 1RM
+* Volume: Low (5–8 sets/muscle/week)
+* Focus: Peak performance
+
+**Block 4: Deload (1 week)**
+* Reduce volume 50%, maintain intensity
+* Active recovery, mobility work
+* Mandatory every 4–6 weeks
+
+### When to Use Block Periodization
+* Intermediate–Advanced lifters (6+ months consistent training)
+* Beginners: Linear progression sufficient (no blocks needed)
+* Competition prep: Realization block 2 weeks before event
+
+---
+
+## Cardio & Conditioning Integration
+
+### Zone 2 Training (Aerobic Base)
+* **Heart rate:** 60–70% max HR (can hold conversation)
+* **Duration:** 30–60 min
+* **Frequency:** 2–3x/week
+* **Benefits:** Improves fat oxidation, cardiovascular health, recovery capacity
+* **Examples:** Brisk walk, light cycling, easy jog, rowing
+
+### HIIT (High-Intensity Interval Training)
+* **Protocol:** 20–40 sec work / 20–40 sec rest × 8–12 rounds
+* **Frequency:** 1–2x/week max (high CNS demand)
+* **Benefits:** VO2max improvement, time-efficient fat loss
+* **Caution:** Do NOT combine with heavy strength days (same day)
+
+### Cardio + Strength Interference Effect
+* Concurrent training (cardio + strength same day) can blunt hypertrophy
+* **Minimize interference:**
+  * Separate cardio and strength by 6+ hours
+  * OR do cardio after strength (never before heavy lifts)
+  * Zone 2 has less interference than HIIT
+  * Keep cardio sessions ≤30 min if same day as strength
+
+### VO2max Estimation (Without Lab Test)
+**Cooper Test:** Run as far as possible in 12 minutes
+* VO2max ≈ (distance in meters − 504.9) / 44.73
+* Example: 2,400m in 12 min → (2400 − 504.9) / 44.73 ≈ 42.3 ml/kg/min
+
+**Fitness Norms (ml/kg/min):**
+| Level | Men | Women |
+|---|---|---|
+| Poor | <35 | <28 |
+| Average | 35–45 | 28–38 |
+| Good | 45–55 | 38–48 |
+| Excellent | >55 | >48 |

@@ -124,11 +124,11 @@ Display these options when user triggers the skill:
 
 | User Query | Load Reference |
 |---|---|
-| Movement, form, pain, biomechanics, "ปรับท่า" | `references/biomechanics.md` |
-| Nutrition, protein, meal plan, "นับโปรตีน" | `references/nutrition.md` |
-| BIA, body composition, progress, "ตรวจร่างกาย" | `references/data-auditing.md` |
-| Training split, progression, periodization | `references/training-protocols.md` |
-| 1RM, max strength, load calculation | `references/strength-prediction.md` |
+| Movement, form, pain, biomechanics, 1RM, load, RPE, strength benchmarks | `references/movement-and-load.md` |
+| Nutrition, protein, meal plan, macros | `references/nutrition.md` |
+| BIA, body composition, progress tracking | `references/data-auditing.md` |
+| Training split, progression, periodization, cardio, HIIT | `references/training-protocols.md` |
+| Sleep, recovery, HRV, stress, cortisol, overtraining, supplements, creatine, caffeine | `references/recovery-and-supplements.md` |
 
 ---
 

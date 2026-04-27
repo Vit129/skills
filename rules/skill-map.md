@@ -58,16 +58,3 @@
 | create new skill | `system/skill-creator/` |
 | create hook | `system/hook-creator/` |
 | route to gemini, route to codex, large codebase read, token budget, multi-agent | `system/multi-agent-router/` |
-
-### finance/ — Investment Portfolio
-| Keyword | Skill |
-|---------|-------|
-| stock analysis, fundamental research | `finance/research/stock-deep-analysis/` |
-| peer comparison, compare stocks, comparative analysis | `finance/research/stock-peer-comparison/` |
-
-### fitness/ — Health & Fitness
-| Keyword | Skill |
-|---------|-------|
-| workout plan, nutrition, protein tracking, meal plan | `fitness/` |
-| movement modification, BIA review, body composition, physical therapy | `fitness/` |
-| exercise form, fitness goal, training program | `fitness/` |

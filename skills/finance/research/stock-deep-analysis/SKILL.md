@@ -508,6 +508,15 @@ Short-term (0-6 months) / Medium (6-18 months) / Long-term (2+ years)?
 
 ---
 
+## Reference Loading Guide
+
+| When | Load Reference |
+|---|---|
+| Section 8 (Key Risks), Section 15 (Valuation), macro overlay requested | `references/macro-context.md` |
+| Section 17 (Insider Trading), short interest, options flow, squeeze risk | `references/short-interest.md` |
+
+---
+
 ## ✅ Checklist Before Submitting Report
 
 - ✅ All 20 sections present (no sections skipped)

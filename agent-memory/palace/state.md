@@ -13,7 +13,7 @@
 
 | Date | Wing | Summary |
 |------|------|---------|
-| 2026-04-27 | agent-memory | Kiro session: skill-map.md — added semantic matching + bilingual note to header; fitness keywords English-only; SKILL.md holds Thai triggers ✅ |
+| 2026-04-27 | agent-memory | Kiro session: created finance/etf/SKILL.md — ETF analysis skill (expense ratio, holdings overlap, performance vs benchmark, cost analysis, ETF vs stocks decision); Thai output ✅ |
 | 2026-04-27 | agent-memory | Kiro session: found real gap — Consolidation State section missing from storage.md Knowledge Evolution schema; not in intelligence.md or maintenance.md; needs to be added to storage.md ✅ |
 | 2026-04-27 | agent-memory | Kiro session: updated AGENT_MEMORY_README.md — removed duplicate section, added graph.md to tree, updated save rules + status to match current spec ✅ |
 | 2026-04-27 | agent-memory | Kiro session: updated KIRO.md — Reading Order added knowledge/index.md, Minimum Update Contract added knowledge sync, finance/ added stock-peer-comparison ✅ |
