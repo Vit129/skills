@@ -4,7 +4,7 @@ Updated: 2026-04-26
 
 ## Consolidation State
 
-- sessions_since_consolidation: 5
+- sessions_since_consolidation: 15
 - last_consolidation: 2026-04-26
 - next_due: after 5 sessions or 7 days
 
@@ -34,3 +34,13 @@ Updated: 2026-04-26
 | 2026-04-26 | session-2026-04-26-kiro-12 | Identified ~30 JSON files in skills/ai-dlc/knowledge/ needing Markdown migration; new gap added; separate spec needed | POSITIVE | — | 1 new gap | `knowledge/index.md` Gaps table |
 | 2026-04-26 | session-2026-04-26-kiro-13 | Added open thread for ai-dlc-knowledge-migration in both global and workspace state.md | NEUTRAL | — | — | `palace/state.md` open threads |
 | 2026-04-26 | session-2026-04-26-kiro-14 | Updated AGENT_MEMORY_README.md Status (all phases done, hooks listed) + SKILL.md References (added maintenance.md + adaptation.md as proper entries) | POSITIVE | outdated status | current status | `skills/system/agent-memory/` |
+| 2026-04-27 | LESSON-TOOLING-005 | Synced Claude Code hooks (.claude/hooks/) to match Kiro hooks: load v3.1.0 + save v6.0.0 with full features; lesson: always sync both hook sets when updating agent-memory | POSITIVE | simplified hooks | full-feature hooks | `.claude/hooks/memory-load.hook` + `memory-save.hook` |
+| 2026-04-27 | session-2026-04-27-kiro-2 | Removed outdated Gemini hooks from .kiro/hooks/ (gemini-memory-load/save); Kiro hooks now clean: 3 hooks only | POSITIVE | 5 hooks (2 stale) | 3 hooks (clean) | `.kiro/hooks/` |
+| 2026-04-27 | session-2026-04-27-kiro-3 | Added documentation-sync.kiro.hook to Kiro hooks (copied from Claude Code); cleaned Gemini hooks; synced Claude Code hooks; LESSON-TOOLING-005 captured | NEUTRAL | — | — | `.kiro/hooks/documentation-sync.kiro.hook` |
+| 2026-04-27 | session-2026-04-27-kiro-9 | Deleted 34 migrated JSON files from ai-dlc/knowledge/; 5 config files stay JSON; knowledge base now 100% Markdown | POSITIVE | mixed JSON+MD | all-Markdown | `/Users/supavit.cho/.claude/skills/ai-dlc/knowledge/` |
+| 2026-04-27 | session-2026-04-27-kiro-8 | ai-dlc-knowledge migration 100% complete: 34 .md files verified, business/auth/index.md path ref fixed, open thread closed | POSITIVE | migration in-progress | migration complete | `/Users/supavit.cho/.claude/skills/ai-dlc/knowledge/` |
+| 2026-04-27 | session-2026-04-27-kiro-7 | Read 3 ai-dlc JSON samples; designed Markdown schema mapping (index→table, lesson→frontmatter+sections, rules→table); architecture decision for migration | POSITIVE | unknown schema | concrete schema design | `/Users/supavit.cho/.claude/skills/ai-dlc/knowledge/` |
+| 2026-04-27 | session-2026-04-27-kiro-6 | Explored ai-dlc/knowledge/: 35 JSON files inventoried — ~30 migrate (indexes+lessons+rules), ~5 stay JSON (configs+uiActions); migration scope confirmed | POSITIVE | unknown scope | concrete inventory | `/Users/supavit.cho/.claude/skills/ai-dlc/knowledge/` |
+| 2026-04-27 | session-2026-04-27-kiro-5 | Deduplicated ai-dlc-knowledge-migration open thread in state.md; knowledge reviewed; no new reusable item | NEUTRAL | duplicate thread | single thread | `palace/state.md` open threads |
+| 2026-04-27 | session-2026-04-27-kiro-4 | Added documentation-sync.kiro.hook to templates/kiro/; all 4 templates now match active hooks | NEUTRAL | — | — | `skills/system/hook-creator/templates/kiro/` |
+| 2026-04-27 | agent-memory-lite | Created agent-memory-lite skill: same features as full but merged files (state.md=palace all-in-one, index.md=knowledge+evolution, flat topics/, single-file lessons); upgrade path to full included | POSITIVE | — | new skill | `skills/system/agent-memory-lite/SKILL.md` |

@@ -1,0 +1,12 @@
+{
+  "name": "GitHub Memory — Session Save",
+  "version": "1.0.0",
+  "description": "Push agent-memory to GitHub on session end if dirty=true. Commit + push automatically.",
+  "when": {
+    "type": "agentStop"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Save agent-memory to GitHub if dirty=true.\n\n1. Check dirty flag: dirty=true?\n- NO → silent, do nothing\n- YES → proceed\n\n2. Update local memory (use existing memory-save hook logic):\n- Update palace/state.md, palace/search-index.md\n- Update knowledge/index.md, knowledge/evolution.md\n- Create/update lesson files if new knowledge found\n\n3. Git commit:\n- git add agent-memory/\n- git commit -m \"Memory: [session summary] — [wing/knowledge updates]\"\n- Example: \"Memory: fixed hooks config — updated project-configuration wing + added hooks-decision.md\"\n\n4. Git push:\n- git push origin main (or detect current branch)\n- Handle push failures gracefully (warn user, don't block)\n\n5. Report: 'GitHub Memory pushed'\n- Commit hash\n- Files changed count\n- Knowledge updated (which lessons/articles)\n\nIf push fails due to network: save locally only, warn user to push manually later."
+  }
+}

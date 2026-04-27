@@ -18,6 +18,7 @@ Updated: 2026-04-26
 | LESSON-TOOLING-002 | tooling | pattern | active | 1 | 0 | 2026-04-26 | lessons/tooling/LESSON-TOOLING-002.md |
 | LESSON-TOOLING-003 | tooling | bug | active | 1 | 1 | 2026-04-26 | lessons/tooling/LESSON-TOOLING-003.md |
 | LESSON-TOOLING-004 | tooling | workflow | active | 1 | 1 | 2026-04-26 | lessons/tooling/LESSON-TOOLING-004.md |
+| LESSON-TOOLING-005 | tooling | workflow | active | 1 | 1 | 2026-04-27 | lessons/tooling/LESSON-TOOLING-005.md |
 
 ## Gaps
 

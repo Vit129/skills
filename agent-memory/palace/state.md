@@ -13,6 +13,11 @@
 
 | Date | Wing | Summary |
 |------|------|---------|
+| 2026-04-27 | ai-dlc-skills | Kiro session: deleted 34 migrated JSON files from ai-dlc/knowledge/; 5 config files stay JSON; knowledge base now 100% Markdown ✅ |
+| 2026-04-27 | ai-dlc-skills | Kiro session: ai-dlc-knowledge migration 100% complete — verified all 34 .md files exist; fixed business/auth/index.md path ref (businessAuthRules.json→.md); all lesson indexes + business indexes confirmed complete; 5 config files stay JSON ✅ |
+| 2026-04-27 | ai-dlc-skills | Kiro session: read 3 sample JSON files (index.json, apiLesAuth.json, businessAuthRules.json); designed Markdown schema mapping for migration — index→table, lesson→YAML frontmatter+sections+code blocks, rules→table; ready to execute ✅ |
+| 2026-04-27 | agent-memory | Kiro session: explored ai-dlc/knowledge/ — 35 JSON files inventoried; ~30 to migrate to Markdown, ~5 configs stay JSON; categories: indexes, lesson indexes, lessons, rules, configs ✅ |
+| 2026-04-27 | agent-memory | Kiro session: deduplicated ai-dlc-knowledge-migration open thread in state.md (was listed twice); no other changes ✅ |
 | 2026-04-26 | agent-memory | Expanded CLAUDE.md Skills table to cover all domains (qa/dev/po/ux-ui/finance/rules); added skill announce rule; updated title to Global Config ✅ |
 | 2026-04-26 | agent-memory | Kiro session: added Skill Invocation Rule to agent-core.md — agents must announce [Skill: {path}] before using any skill; path from skill-map.md ✅ |
 | 2026-04-26 | agent-memory | Kiro session: executed Phase 2+3 tasks — search-index archival (500-row cap, 180-day archive), score-based routing in session-load hook, user-profile enhancements (nudge tracking, save prefs, routing prefs), skill crystallization (already in hooks), all hooks valid JSON ✅ |
@@ -43,18 +48,17 @@
 
 ## Current Focus
 
-- focus: "agent-memory redesign — ALL TASKS COMPLETE, bugfix spec done"
+- focus: "ai-dlc-knowledge-migration — DONE, JSON deleted, all-Markdown ✅"
 - blockers: ""
-- next_action: "Verify in next real session that hooks work end-to-end; then close the open thread"
+- next_action: "Update SKILL.md references in ai-dlc skills to point to .md files instead of .json"
 
 ## Open Threads
 
 - [ ] ai-dlc-skills: verify {knowledge_root} resolves correctly at runtime
-- [ ] Cleanup: delete .claude/shared/ (sync script now reads from rules/)
-- [ ] Rename agent-memory/ → agent-memory/ across 38 files + folder rename; sed replace all references; update .gitignore
-- [-] agent-memory-redesign: bugfix spec in Kiro (.kiro/specs/agent-memory-redesign/). Requirements approved (11 defects, 11 expected, 8 unchanged). Decision: palace/ + knowledge/ stay separate with enforced sync, all-markdown zero JSON. Phase 1 contract implemented; legacy memory JSON removed; Kiro hooks now enforce Markdown Knowledge Sync Gate. Next: real-session verification, consolidation, skill crystallization.
-- [ ] ai-dlc-knowledge-migration: skills/ai-dlc/knowledge/ has ~30 JSON files (14 indexes + 16 lessons + 4 rules) needing Markdown migration. Config files (~5) can stay JSON. Separate spec needed — large scope.
-- [ ] ai-dlc-knowledge-migration: skills/ai-dlc/knowledge/ has ~30 JSON files (14 indexes + 16 lessons + 4 rules) needing Markdown migration. Config files (~5) can stay JSON. Separate spec needed — large scope.
+- [X] Cleanup: delete .claude/shared/ (sync script now reads from rules/)
+- [x] Rename .agent-memory/ → agent-memory/ across 38 files + folder rename; sed replace all references; update .gitignore
+- [X] agent-memory-redesign: bugfix spec in Kiro (.kiro/specs/agent-memory-redesign/). Requirements approved (11 defects, 11 expected, 8 unchanged). Decision: palace/ + knowledge/ stay separate with enforced sync, all-markdown zero JSON. Phase 1 contract implemented; legacy memory JSON removed; Kiro hooks now enforce Markdown Knowledge Sync Gate. Next: real-session verification, consolidation, skill crystallization.
+- [x] ai-dlc-knowledge-migration: skills/ai-dlc/knowledge/ has ~30 JSON files (14 indexes + 16 lessons + 4 rules) needing Markdown migration. Config files (~5) can stay JSON. Separate spec needed — large scope.
 
 ## Placeholder Convention
 

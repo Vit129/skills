@@ -2,6 +2,11 @@
 
 | Date | Wing | Keywords | Room Path | Summary |
 |------|------|----------|-----------|---------|
+| 2026-04-27 | ai-dlc-skills | json-deleted,all-markdown,34-files,cleanup-complete | /Users/supavit.cho/.claude/skills/ai-dlc/knowledge/ | Deleted 34 migrated JSON files; 5 config files stay JSON; knowledge base now 100% Markdown |
+| 2026-04-27 | ai-dlc-skills | ai-dlc-migration-complete,business-auth-fix,path-ref,34-md-files | /Users/supavit.cho/.claude/skills/ai-dlc/knowledge/business/auth/index.md | Migration 100% complete; fixed auth/index.md path ref; all indexes+lessons+rules have .md; 5 configs stay JSON |
+| 2026-04-27 | ai-dlc-skills | ai-dlc-knowledge,json-to-markdown,schema-design,migration-plan,index,lesson,rules | /Users/supavit.cho/.claude/skills/ai-dlc/knowledge/ | Read 3 sample JSONs; designed Markdown schema: index→table, lesson→frontmatter+sections, rules→table; 4-phase execution plan |
+| 2026-04-27 | ai-dlc-skills | ai-dlc-knowledge,json-inventory,migration,indexes,lessons,rules,configs | /Users/supavit.cho/.claude/skills/ai-dlc/knowledge/ | Explored ai-dlc/knowledge/: 35 JSON files; ~30 migrate to Markdown (indexes+lessons+rules), ~5 stay JSON (configs+uiActions) |
+| 2026-04-27 | agent-memory | duplicate-thread,state-cleanup,ai-dlc-knowledge-migration | agent-memory/palace/state.md | Deduplicated ai-dlc-knowledge-migration open thread (was listed twice) |
 | 2026-04-26 | agent-memory | CLAUDE.md,global-config,skills-table,all-domains,ux-ui,finance,po,qa | /Users/supavit.cho/.claude/CLAUDE.md | Expanded Skills table to all domains; title→Global Config; added skill announce note; Portable section updated |
 | 2026-04-26 | agent-memory | skill-invocation,agent-core,skill-map,announce,transparency | /Users/supavit.cho/.claude/rules/agent-core.md | Added Skill Invocation Rule: agents must announce [Skill: path] before using any skill; path sourced from skill-map.md |
 | 2026-04-26 | agent-memory | phase3-nudges,session-load-v3.1,counter-increment,consolidation-wired | skills/system/hook-creator/templates/kiro/ | Phase 3 complete: nudge system (5 types, max 3, suppression), counter increment, consolidation fully wired |
