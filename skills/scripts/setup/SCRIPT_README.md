@@ -2,46 +2,53 @@
 
 Scripts สำหรับ bootstrap project ใหม่ให้พร้อมใช้งานกับ AI
 
-## Scripts
-
-| Script | ใช้เมื่อ | Command |
-|--------|---------|---------|
-| `setupAgentSkills.sh` | Bootstrap agent context layer ให้ project ใหม่ | `bash setupAgentSkills.sh <PROJECT_FOLDER>` |
-| `setupCodexSkills.sh` | Expose `~/.claude/skills` ให้ Codex ใช้แบบ SSOT | `bash setupCodexSkills.sh` |
-| `setupKiro.sh` | Setup Kiro IDE config (.kiro/, steering, hooks) | `bash setupKiro.sh <PROJECT_FOLDER>` |
-| `setupMemory.sh` | Init agent-memory/ สำหรับ Memory Palace | `bash setupMemory.sh <PROJECT_FOLDER>` |
-| `setupTests.sh` | Bootstrap COE QA test structure (API/Web/Mobile) | `bash setupTests.sh <PROJECT_FOLDER>` |
-| `postmanToPlaywright.sh` | Copy postman migration skill ไปยัง project | `bash postmanToPlaywright.sh <PROJECT_FOLDER>` |
-| `_resolveTarget.sh` | Helper: resolve target folder (ใช้ภายใน) | — |
-
-## วิธีใช้ทั่วไป
+## 🚀 เริ่มต้นที่นี่ — Main Entry Point
 
 ```bash
-# รันจาก ~/.claude/skills/scripts/setup/
-bash setupAgentSkills.sh MyProject
-
-# หรือระบุ full path
-bash ~/.claude/skills/scripts/setup/setupTests.sh MyProject
+bash <SCRIPTS_DIR>/setupAgentSkills.sh <PROJECT_FOLDER>
 ```
 
-> ⚠️ Scripts ทุกตัวรับ `<PROJECT_FOLDER>` เป็น argument — ค้นหา folder อัตโนมัติถ้าไม่ระบุ full path
+> `<SCRIPTS_DIR>` = path ไปที่ folder นี้ เช่น `~/.claude/skills/scripts/setup` หรือ `ai-agent/scripts/setup`
 
-## ลำดับการ setup project ใหม่
+**`setupAgentSkills.sh` คือ main script** — รันตัวเดียว แล้วมันจะถามทีละขั้น:
 
-```
-1. setupAgentSkills.sh   ← agent context (.kiro/, agent-memory/, KIRO.md)
-2. setupTests.sh         ← QA test structure (API/Web/Mobile)
-3. postmanToPlaywright.sh ← (optional) ถ้าต้องการ migrate Postman
+1. ✅ `setupMemory.sh` — สร้าง `agent-memory/` (รันอัตโนมัติ ไม่ถาม)
+2. ❓ `setupKiro.sh` — setup `.kiro/` hooks + steering (ถามก่อน)
+3. ❓ `setupTests.sh` — bootstrap `tests/` API/Web/Mobile (ถามก่อน)
+4. ❓ `postmanToPlaywright.sh` — copy postman migration skill (ถามก่อน)
 
-## ใช้กับ Codex แบบ SSOT
+> ไม่ต้องรัน script แยกทีละตัว ใช้ `setupAgentSkills.sh` ตัวเดียวพอ
+> แต่ถ้าอยากรันแค่บางตัว ก็รันแยกได้เสมอ
+
+## Scripts ทั้งหมด
+
+| Script | บทบาท |
+|--------|--------|
+| `setupAgentSkills.sh` | **⭐ Main** — wrapper ถามทีละขั้น เรียกทุก script |
+| `setupMemory.sh` | สร้าง `agent-memory/` (palace + knowledge) |
+| `setupKiro.sh` | setup `.kiro/` hooks, steering, MCP config |
+| `setupTests.sh` | bootstrap `tests/` COE structure (API/Web/Mobile) |
+| `postmanToPlaywright.sh` | copy postman migration skill ไปยัง project |
+| `setupCodexSkills.sh` | expose skills ให้ Codex (รันแยก ไม่อยู่ใน flow) |
+| `_resolveTarget.sh` | helper: resolve target folder (ใช้ภายใน) |
+
+## วิธีใช้
 
 ```bash
-# แนะนำ: symlink ให้ Codex อ่านไฟล์เดียวกับ Claude
-bash ~/.claude/skills/scripts/setup/setupCodexSkills.sh
+# แนะนำ: รัน main script ตัวเดียว แล้วตอบ y/N ตามต้องการ
+bash <SCRIPTS_DIR>/setupAgentSkills.sh MyProject
 
-# ถ้าต้องการ snapshot แยกแทน symlink
-bash ~/.claude/skills/scripts/setup/setupCodexSkills.sh --mode copy --force
+# หรือรันแยกเฉพาะตัวที่ต้องการ
+bash <SCRIPTS_DIR>/setupMemory.sh MyProject
+bash <SCRIPTS_DIR>/setupKiro.sh MyProject
+bash <SCRIPTS_DIR>/setupTests.sh MyProject
+bash <SCRIPTS_DIR>/postmanToPlaywright.sh MyProject
 ```
 
-หลัง setup เสร็จ ให้ restart Codex เพื่อให้มัน discover skill ใหม่
+## ใช้กับ Codex (แยกต่างหาก ไม่อยู่ใน flow)
+
+```bash
+bash <SCRIPTS_DIR>/setupCodexSkills.sh
 ```
+
+> ⚠️ `setupCodexSkills.sh` ไม่ได้ copy ไปกับ project — รันจาก source โดยตรง

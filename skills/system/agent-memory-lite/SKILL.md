@@ -46,13 +46,15 @@ Session Save       = update both together, always
 | Feature | Full | Lite |
 |---------|------|------|
 | Files (minimum) | ~15+ | ~3 (state.md, index.md, archive.md) |
-| Palace structure | wings/rooms/halls/closets | flat topics/ folder |
+| Palace structure | wings/rooms/halls/closets + graph.md | flat topics/ folder |
+| Room metadata | YAML frontmatter + links | not applicable |
 | Search index | separate search-index.md | section in state.md |
 | User profile | separate user-profile.md | section in state.md |
-| Cross-links | separate tunnels.md | section in state.md |
+| Cross-links | separate tunnels.md (prose + Purpose+Sync) | section in state.md |
 | Knowledge index | separate index.md | index.md (with evolution) |
 | Evolution log | separate evolution.md | section in index.md |
 | Lesson files | lessons/{domain}/index.md + {id}.md | lessons/{domain}.md (all-in-one) |
+| Articles | articles/{domain}/{article}.md | inline in index.md Articles table |
 | Score routing | ✅ | ✅ |
 | Nudge system | 5 types, max 3 | consolidation + stale + gap (max 2) |
 | Crystallization | ✅ auto-draft | ✅ inline in index.md |
@@ -201,4 +203,9 @@ When Lite becomes too crowded (state.md >150 lines, index.md >200 lines):
 
 ## References
 
-Same as full agent-memory — load from `skills/system/agent-memory/references/` when needed.
+Same as full agent-memory — load from `skills/system/agent-memory/references/` when needed:
+- `references/session.md` — bootstrap, dirty flag details
+- `references/intelligence.md` — scoring, routing, lessons
+- `references/maintenance.md` — consolidation, dedup, stale
+- `references/adaptation.md` — domain setup, signal mapping
+- `references/GOTCHAS.md` — known failure modes

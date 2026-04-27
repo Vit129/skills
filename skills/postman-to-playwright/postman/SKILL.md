@@ -112,11 +112,28 @@ Before writing any Playwright code, AI must read:
 2. `playwright-testing` → `references/workflow.md` (folder structure, write→run cycle)
 3. This skill → `references/fix-generated-files.md` (Postman→Playwright patterns)
 
+### Generation Order (MANDATORY — per workflow.md Step 5-9)
+
+> ⚠️ **HARD RULE:** Generate files in this exact order. NEVER generate spec files before fixtures and schemas exist.
+
+```text
+1. fixtures/[collection]/[folder]/[folder]Data.ts     ← test data (SIT/UAT)
+2. schemas/[collection]/[folder]/[folder]Schema.ts    ← AJV response schemas
+3. helpers/[collection]/[folder]/[folder]Helper.ts    ← shared helpers / services
+4. helpers/[collection]/mockHandlers.ts               ← mock interceptors (shared or per-folder)
+5. tests-api/[collection]/[folder]Passed.spec.ts      ← spec file (imports 1-4)
+```
+
+**Why this order matters:**
+- Spec files MUST import fixtures and schemas — they cannot exist without them
+- AJV schema validation (fix-generated-files.md Section 6) is MANDATORY per api.md
+- Mock handlers must exist before spec files reference them
+
 ### Process
 
 - Read one `## 📁 Folder:` section at a time from collection.md
 - Read env.md for variable declarations
-- Generate: `.spec.ts` + `Helper.ts` + `*Service.ts` + `Schema.ts` + `Data.ts`
+- For each folder: generate fixtures → schemas → helpers → spec (in order above)
 - If missing data detected → ask user before generating
 
 ### Key Postman→Playwright Patterns
@@ -192,14 +209,70 @@ headers: {
 }
 ```
 
-### 3. Missing Fixtures
+### 3. Fixtures & Schemas (MANDATORY — create before spec file)
 
-If `fixtures/` folder is empty, create a minimal fixture file:
+Per `workflow.md` Step 5-6 and `api.md` PART 1, fixtures and schemas MUST exist before generating spec files.
+
+**Fixture file** (`fixtures/[collection]/[folder]/[folder]Data.ts`):
 
 ```typescript
+// Minimal fixture — expand with actual test data from collection.md
 export const <folder>Data = {
   sit: { /* SIT environment test data */ },
   uat: { /* UAT environment test data */ },
+}
+
+// Helper functions for request bodies
+export function defaultBody(overrides = {}) {
+  return { /* base request body from collection.md */ ...overrides };
+}
+```
+
+**Schema file** (`schemas/[collection]/[folder]/[folder]Schema.ts`):
+
+```typescript
+import { validateSchema } from '../../helpers/schema.validator';
+
+// AJV schema for response validation (fix-generated-files.md Section 6)
+export const successResponseSchema = {
+  type: 'object',
+  required: ['success', 'result', 'errorMessage', 'traceId'],
+  properties: {
+    success:      { type: 'boolean', const: true },
+    result:       { },
+    errorMessage: { type: 'null' },
+    traceId:      { type: 'null' },
+  },
+};
+
+export const errorResponseSchema = {
+  type: 'object',
+  required: ['success', 'result', 'errorMessage'],
+  properties: {
+    success:      { type: 'boolean', const: false },
+    result:       { type: 'null' },
+    errorMessage: { type: 'string' },
+  },
+};
+```
+
+**Schema validator** (`helpers/schema.validator.ts`) — create once per project:
+
+```typescript
+import Ajv from 'ajv';
+import addFormats from 'ajv-formats';
+import { expect } from '@playwright/test';
+
+const ajv = new Ajv({ allErrors: true });
+addFormats(ajv);
+
+export function validateSchema(data: unknown, schema: object): void {
+  const validate = ajv.compile(schema);
+  const valid = validate(data);
+  if (!valid) {
+    const errors = validate.errors?.map(e => `${e.instancePath} ${e.message}`).join('; ') ?? 'unknown';
+    expect(valid, `Schema validation failed: ${errors}`).toBe(true);
+  }
 }
 ```
 

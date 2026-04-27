@@ -23,7 +23,7 @@ if [ -z "${1:-}" ]; then
   exit 1
 fi
 
-FORCE=0
+FORCE=1
 TARGET=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -64,6 +64,9 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 # ── Folders to copy ──
 FOLDERS=("ai-dlc" "doc" "system" "postman-to-playwright")
 
+# ── Subfolders to exclude within copied folders ──
+EXCLUDE_SUBFOLDERS=("system/agent-memory-lite")
+
 for folder in "${FOLDERS[@]}"; do
   if [ ! -d "$SRC/$folder" ]; then
     echo "  ⏭️  skip  $folder/ (not found in source)"
@@ -74,6 +77,16 @@ for folder in "${FOLDERS[@]}"; do
   else
     rm -rf "$DEST/$folder"
     cp -R "$SRC/$folder" "$DEST/$folder"
+    # Remove excluded subfolders after copy
+    for excl in "${EXCLUDE_SUBFOLDERS[@]}"; do
+      if [[ "$excl" == "$folder/"* ]] || [[ "$excl" == "$folder" ]]; then
+        sub="${excl#$folder/}"
+        if [ -d "$DEST/$folder/$sub" ]; then
+          rm -rf "$DEST/$folder/$sub"
+          echo "  🚫 removed  $folder/$sub/ (excluded)"
+        fi
+      fi
+    done
     echo "  ✅ $folder/"
   fi
 done

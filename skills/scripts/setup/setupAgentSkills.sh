@@ -29,3 +29,16 @@ if [ -f "$SETUP_TESTS" ]; then
     echo "⏭️  Skipped. Run manually: bash $SETUP_TESTS $1"
   fi
 fi
+
+# Optional: run postmanToPlaywright.sh
+SETUP_POSTMAN="$SCRIPT_DIR/postmanToPlaywright.sh"
+if [ -f "$SETUP_POSTMAN" ]; then
+  echo ""
+  read -p "📬 ต้องการ setup Postman → Playwright migration ด้วยมั้ย? [y/N] " run_postman
+  if [[ "$run_postman" =~ ^[Yy]$ ]]; then
+    echo ""
+    bash "$SETUP_POSTMAN" "$@"
+  else
+    echo "⏭️  Skipped. Run manually: bash $SETUP_POSTMAN $1"
+  fi
+fi

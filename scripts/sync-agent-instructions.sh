@@ -73,9 +73,9 @@ generate_agent_config() {
 
 ---
 
-## 🚨 MANDATORY: Plan Mode (Enter Before Non-Trivial Work)
+## 🚨 MANDATORY: Plan Before Non-Trivial Work
 
-**Use `EnterPlanMode` when:**
+**Make the approach explicit when:**
 - Implementing new features (unclear scope)
 - Multiple valid approaches exist
 - Code changes affecting behavior/structure
@@ -83,7 +83,7 @@ generate_agent_config() {
 - Multi-file changes likely
 - Requirements unclear
 
-**Skip plan mode only for:**
+**Skip explicit planning only for:**
 - Single-line fixes
 - One-function additions with clear requirements
 - Research tasks (use Agent tool instead)

@@ -95,7 +95,7 @@ See `output-styles/communication-style.md` for tone and interaction guidelines.
 
 ### Knowledge = Per-Project Only
 
-Knowledge files (design tokens, error recovery, lessons, index.json) live in `agent-memory/knowledge/` — single source of truth, per-project.
+Knowledge files (articles, lessons, evolution, index.md) live in `agent-memory/knowledge/` — single source of truth, per-project.
 
 `skills/` contains only execution logic (SKILL.md + references/ = how to work). It does not store knowledge data.
 
@@ -112,16 +112,15 @@ Bootstrap (new project, no agent-memory/ yet):
 
 | Scenario | Action |
 |----------|--------|
-| **Agent needs design-craftsmanship-tokens** | Read `agent-memory/knowledge/design-craftsmanship-tokens.md` |
+| **Agent needs reusable project knowledge** | Read `agent-memory/knowledge/index.md`, then the relevant `articles/{domain}/` or `lessons/{domain}/index.md` |
 | **New lesson discovered** | Write to `agent-memory/knowledge/lessons/{domain}/` |
 | **Knowledge index** | `agent-memory/knowledge/index.md` |
 
 ### Current Knowledge Files
 
-- `agent-memory/knowledge/design-craftsmanship-tokens.md` — Design token standards
-- `agent-memory/knowledge/error-recovery-strategy.md` — Error recovery patterns
 - `agent-memory/knowledge/index.md` — Knowledge index (Markdown table)
 - `agent-memory/knowledge/evolution.md` — Knowledge evolution log
+- `agent-memory/knowledge/articles/` — Per-domain articles/playbooks
 - `agent-memory/knowledge/lessons/` — Per-domain lessons
 
 ---

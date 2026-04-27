@@ -1,6 +1,6 @@
 # Agent Core — Shared Instructions (SSOT)
 
-> Used by Claude, Gemini, Codex. Sourced from `.claude/shared/agent-core.md`.
+> Used by Claude, Gemini, Codex. Sourced from `~/.claude/rules/agent-core.md`.
 
 ## Reading Order & Trust Priority
 
@@ -8,7 +8,7 @@ When information conflicts, higher items win:
 
 1. Latest explicit user instruction
 2. Verified codebase state (grep/read before acting)
-3. `.claude/shared/` files (skill-map, project-rules, citation-format — inlined in each agent's config)
+3. `~/.claude/rules/` files (skill-map, project-rules, citation-format — inlined in each agent's config)
 4. Agent-specific file — tier routing, escalation, cache rules
 5. `agent-memory/palace/state.md` — active session state
 6. Skill files at `{skills_root}/` (e.g. `~/.gemini/skills/`, `~/ai-agent/skills/`, or project `ai-agent/skills/`)
@@ -30,11 +30,13 @@ Examples:
 Skill paths come from `skill-map.md` (`.claude/rules/skill-map.md` or shared equivalent).
 Never invoke a skill silently — user must know which skill is active.
 
-## Plan Mode (Mandatory Rule)
+## Planning Rule
 
-**Before any non-trivial implementation, enter plan mode.**
+**Before any non-trivial implementation, make the approach explicit.**
 
-Use `EnterPlanMode` when:
+Use the platform's planning mechanism when available. If the platform has no dedicated plan mode, give the user a concise plan in chat and proceed when the request is clear.
+
+Plan before work when:
 - New feature implementation (multiple files, unclear scope)
 - Multiple valid approaches exist (need to choose one)
 - Code modifications affecting behavior or structure
@@ -53,8 +55,8 @@ Plan output:
 1. Explore codebase (Glob, Grep, Read)
 2. Understand existing patterns
 3. Design implementation approach
-4. Present plan to user for approval via `ExitPlanMode`
-5. Use `AskUserQuestion` if approach unclear
+4. Present the plan clearly when user approval is needed
+5. Ask a concise question only if the approach is unclear or risky
 
 ---
 
@@ -63,7 +65,7 @@ Plan output:
 **Craft UI/code like a senior engineer ships to production.**
 
 ### Foundational Tokens (Centralized)
-- **Color:** Use design tokens from `.claude/shared/` or design system (not hardcoded hex)
+- **Color:** Use design tokens from `agent-memory/knowledge/` or the project design system (not hardcoded hex)
 - **Typography:** Consistent font families, sizes, weights, line heights
 - **Spacing:** Modular scale (8px, 12px, 16px, 24px, 32px base units)
 - **Shadows:** Depth hierarchy (shadow-sm, shadow-md, shadow-lg)
@@ -511,14 +513,15 @@ agent-memory/
 │   ├── state.md              ← session state (≤100 lines)
 │   ├── tunnels.md            ← cross-wing links
 │   ├── search-index.md       ← flat search fallback
+│   ├── graph.md              ← readable node/edge map
 │   ├── user-profile.md       ← user preferences (≤80 lines)
-│   ├── date-index.json       ← sorted date array for date-range queries
-│   ├── keyword-index.json    ← inverted index for keyword search
 │   ├── wings/                ← topic wings (hall.md + rooms/ + closets/)
 │   └── archive/
 │       └── index.md          ← archive index
 └── knowledge/
-    ├── index.json            ← domain catalog + utility_score
+    ├── index.md              ← Markdown source-of-truth catalog
+    ├── evolution.md          ← scored change history
+    ├── articles/{domain}/    ← reusable articles/playbooks
     └── lessons/{domain}/     ← captured lessons per domain
 ```
 
@@ -530,17 +533,18 @@ agent-memory/
 
 **knowledge/** (Lessons & patterns)
 - CREATE if: discovered a reusable pattern, found a best practice worth repeating, captured a gotcha/lesson learned
-- UPDATE: `knowledge/index.json` utility_score + usage_count after every scoreable outcome
-- UPDATE: `knowledge/lessons/{domain}/*LessonsIndex.json` when new lesson captured
+- UPDATE: `knowledge/index.md` score/status/applied/prevented counts after every scoreable outcome
+- UPDATE: `knowledge/evolution.md` when lesson quality, status, or scope changes
+- UPDATE: `knowledge/lessons/{domain}/index.md` when a new lesson is captured
 - Examples: design-tokens.md, error-recovery-strategy.md, testing-best-practices.md
 - Scope: Cross-project patterns (useful in future sessions)
-- Format: Lesson frontmatter + examples + decision rationale
+- Format: Markdown lesson + evidence + reusable rule + checklist
 
 **palace/wings/** (Persistent evolution tracking)
 - CREATE if: major capability added, architecture decision made, significant learning accumulated
 - UPDATE: hall.md when rooms added/removed
 - UPDATE: tunnels.md when cross-wing references created
-- UPDATE: search-index.md + keyword-index.json + date-index.json at session end
+- UPDATE: search-index.md + graph.md at session end when routes or relationships change
 - Examples: agent-rules-evolution.md (tracks rule versions), wings architecture changes
 - Scope: Project evolution & growth over time (visible to future team members)
 - Format: Timestamped rooms with metadata
@@ -554,11 +558,13 @@ When dirty=true, update ALL of the following that apply:
 | Decision made / direction committed | `palace/state.md` (Current Focus + Open Threads) |
 | New room written | `palace/wings/{wing}/hall.md` + `palace/search-index.md` |
 | Cross-wing reference | `palace/tunnels.md` |
-| New lesson captured | `knowledge/lessons/{domain}/*LessonsIndex.json` |
-| Tool succeeded on project-relevant task | `knowledge/index.json` (utility_score +0.5, usage_count++) |
-| Tool failed on known issue | `knowledge/index.json` (utility_score -1.0) |
+| New lesson captured | `knowledge/lessons/{domain}/index.md` + lesson `.md` file |
+| Tool succeeded on project-relevant task | `knowledge/index.md` (score/applied count as appropriate) |
+| Tool failed on known issue | `knowledge/index.md` + `knowledge/evolution.md` with downgrade note |
 
 **Never update only state.md and skip knowledge/palace — all relevant files must be updated together.**
+
+**Do not create or update JSON memory indexes. Memory is Markdown-first. Existing JSON files are legacy compatibility artifacts only.**
 
 ## Do Not Store
 

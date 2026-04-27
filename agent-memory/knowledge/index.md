@@ -1,14 +1,15 @@
 # Knowledge Index
 
-Updated: 2026-04-26
+Updated: 2026-04-27
 
 ## Articles
 
 | ID | Type | Scope | Status | Score | Updated | Path | Keywords |
 |----|------|-------|--------|-------|---------|------|----------|
-| agent-config-transparency-pattern | pattern | global | draft | 5.0 | 2026-04-26 | knowledge/agent-config-transparency-pattern.md | agent-config, skill-invocation, transparency, CLAUDE.md |
-| design-craftsmanship-tokens | lesson | global | active | 5.0 | 2026-04-26 | design-craftsmanship-tokens.md | design tokens, typography, reusable components, craftsmanship |
-| error-recovery-strategy | lesson | global | active | 5.0 | 2026-04-26 | error-recovery-strategy.md | error handling, debugging, escalation, retry logic |
+| agent-memory-structure-pattern | pattern | global | draft | 5.0 | 2026-04-27 | articles/tooling/agent-memory-structure-pattern.md | agent-memory, knowledge-structure, articles-subfolder, graph-md, room-frontmatter, palace-graph, tunnels-prose |
+| agent-config-transparency-pattern | pattern | global | draft | 5.0 | 2026-04-26 | articles/tooling/agent-config-transparency-pattern.md | agent-config, skill-invocation, transparency, CLAUDE.md |
+| design-craftsmanship-tokens | pattern | global | active | 5.0 | 2026-04-27 | articles/design/design-craftsmanship-tokens.md | design tokens, typography, reusable components, craftsmanship |
+| error-recovery-strategy | pattern | global | active | 5.0 | 2026-04-27 | articles/tooling/error-recovery-strategy.md | error handling, debugging, escalation, retry logic |
 
 ## Lessons
 
@@ -25,6 +26,8 @@ Updated: 2026-04-26
 | Domain | Gap | First Seen | Status | Notes |
 |--------|-----|------------|--------|-------|
 | agent-memory | session save must update knowledge automatically | 2026-04-26 | closed | Hook v6.0.0 adds mandatory Knowledge Sync Gate and minimal safe save; verify in future real Kiro sessions. |
+| agent-memory | VitProjects agent-memory still uses index.json + JSON lesson indexes; needs Markdown migration | 2026-04-27 | open | 3 JSON files: index.json, kiroConfigLessonsIndex.json, specWorkflowLessonsIndex.json, toolingLessonsIndex.json |
+| agent-memory | Home Assistant agent-memory still uses index.json; needs Markdown migration + missing evolution.md, search-index.md, user-profile.md | 2026-04-27 | open | 1 JSON file: index.json; palace missing search-index.md + user-profile.md |
 | agent-memory | workspace agent-memory/ still has legacy JSON files | 2026-04-26 | open | index.json, date-index.json, keyword-index.json, toolingLessonsIndex.json exist; no knowledge/index.md or evolution.md in workspace; need migration |
 | tooling | maintenance.md + adaptation.md still reference JSON | 2026-04-26 | closed | Fixed: removed legacy note headers, replaced all JSON refs with Markdown (index.md, evolution.md, lesson index.md) |
 | tooling | CLAUDE.md still references JSON memory files | 2026-04-26 | closed | Fixed: index.json→index.md, keyword-index.json+date-index.json→search-index.md, added evolution.md |

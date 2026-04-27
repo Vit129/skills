@@ -5,7 +5,7 @@ scope: global
 status: draft
 score: 5.0
 created: 2026-04-26
-updated: 2026-04-26
+updated: 2026-04-27
 keywords: agent-config, skill-invocation, transparency, announce, CLAUDE.md, skill-map, global-config
 ---
 
