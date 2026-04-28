@@ -13,7 +13,7 @@
 
 | Date | Wing | Summary |
 |------|------|---------|
-| 2026-04-27 | agent-memory | Kiro session: created finance/etf/SKILL.md — ETF analysis skill (expense ratio, holdings overlap, performance vs benchmark, cost analysis, ETF vs stocks decision); Thai output ✅ |
+| 2026-04-28 | agent-memory | Kiro session: updated hook template v6.2.0→v6.3.0 — article path fixed to knowledge/articles/{domain}/, crystallization path fixed, 4B now explicit about article file creation; project hook synced; checklist pattern moved from knowledge/ root to knowledge/articles/deployment/ ✅ |
 | 2026-04-27 | agent-memory | Kiro session: found real gap — Consolidation State section missing from storage.md Knowledge Evolution schema; not in intelligence.md or maintenance.md; needs to be added to storage.md ✅ |
 | 2026-04-27 | agent-memory | Kiro session: updated AGENT_MEMORY_README.md — removed duplicate section, added graph.md to tree, updated save rules + status to match current spec ✅ |
 | 2026-04-27 | agent-memory | Kiro session: updated KIRO.md — Reading Order added knowledge/index.md, Minimum Update Contract added knowledge sync, finance/ added stock-peer-comparison ✅ |
