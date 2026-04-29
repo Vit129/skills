@@ -248,3 +248,24 @@ Updated: 2026-04-27
 - sessions_since_consolidation: 84
 - last_consolidation: 2026-04-26
 - next_due: after 5 sessions or 7 days
+| 2026-04-29 | session-2026-04-29-load-hook-sync | Load hook v3.1→v3.2: removed tunnels.md+archive/ from Bootstrap. 3 locations synced. Load+save hooks now consistent. | POSITIVE | Load hook still referenced removed files | Both hooks consistent with slim structure | .kiro/hooks/agent-memory-session-load.kiro.hook |
+
+## Consolidation State
+
+- sessions_since_consolidation: 85
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days
+| 2026-04-29 | session-2026-04-29-vitprojects-hooks | VitProjects hooks updated: save v6.4→v8.0 (slim structure, rolling window, suppress repeat), load v2.0→v3.2 (knowledge routing, slim bootstrap). All 3 projects now on latest hooks. | POSITIVE | VitProjects had very old hooks (v6.4/v2.0) | All projects consistent at v8.0/v3.2 | VitProjects/.kiro/hooks/ |
+
+## Consolidation State
+
+- sessions_since_consolidation: 86
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days
+| 2026-04-29 | session-2026-04-29-rolling-window-applied | Rolling window applied to state.md: trimmed from 35→10 rows. Load hook description synced to v3.2 (2 files). | POSITIVE | state.md had 35 rows (unbounded) | 10 rows, rolling window working | palace/state.md |
+
+## Consolidation State
+
+- sessions_since_consolidation: 87
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days
