@@ -49,7 +49,9 @@ If notes conflict with the codebase, trust the codebase.
 
 | Keyword | Skill |
 |---------|-------|
+| brainstorm, คิดก่อน, ยังไม่แน่ใจ, party mode, ให้ทุก role ช่วยคิด, explore idea | `core/brainstorming/` ← use BEFORE aidlc when idea is unclear |
 | any dev/QA task, start AIDLC, plan, build, phases | `core/aidlc/` |
+| spawn subagent, parallel tasks, dispatch agent, subagent-driven, 2-stage review | `core/subagent-driven/` ← use during Phase 3.1 for large task sets |
 | analyze, gap analysis, requirements, reverse-eng | `core/analysis-skills/` |
 | logging, monitoring, observability, alerts | `core/monitoring/` |
 | save knowledge, backup, knowledge buffer | `core/storage/` |

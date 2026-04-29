@@ -19,6 +19,8 @@
 - [2026-04-12] Claude Code leak analysis: 32 insights → 29 upgrade tasks (Phase 0-D)
 - [2026-04-12] Sprint plan: 4 sprints — Sprint 1 (today), Sprint 2 (this week), Sprint 3-4 (later)
 - [2026-04-25] AIDLC mode routing: added 3 modes (Full/QA Only/Dev Only) + Lite Inception + QA sub-modes to workflow.md, KIRO.md, SKILL.md — synced both workspaces
+- [2026-04-29] Created core/brainstorming/ skill (Party Mode multi-role) + core/subagent-driven/ skill — both registered in all routing points
+- [2026-04-29] AIDLC Vibe/Spec mode v2 complete: vibe-mode.md + kiro-spec-integration.md (rewritten as "Dialog & Artifact Integration"). Detection=IDE context, artifacts→.aidlc/ only, dialog=global rule all AI agents. workflow.md + SKILL.md updated.
 
 
 ## Patterns
@@ -37,3 +39,5 @@
 - `impeccable-design-skill.md` — Added impeccable-design skill to dev/ from pbakaus/impeccable repo
 - `rules-folder-restructure.md` — Centralized 4 -rules skills into ai-dlc/rules/ folder
 - `aidlc-mode-routing.md` — AIDLC 3-mode design (Full/QA Only/Dev Only) + Lite Inception + v1↔v2 gap analysis
+- `vibe-spec-mode.md` — AIDLC Vibe/Spec mode: detection, dialog format, escalation, agent-agnostic design
+- `brainstorming-subagent-skills.md` — core/brainstorming/ (Party Mode) + core/subagent-driven/ skills created

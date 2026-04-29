@@ -20,13 +20,27 @@ AIDLC supports 3 execution modes. User selects mode at start — AI detects from
 
 ### Mode Selection
 
-| Mode | Command | When to use |
-|------|---------|-------------|
-| Full | `"start AI-DLC"` | ทำทั้ง design + QA + Dev (default) |
+| Mode | Detection | When to use |
+|------|-----------|-------------|
+| Vibe | Kiro Vibe mode / small complexity / context inference | เร็ว ไม่มี design phases — Lite Inception → Dev → implement |
+| Full | `"start AI-DLC"` / Kiro Spec mode / medium+ complexity | ทำทั้ง design + QA + Dev (default) |
 | QA Only | `"start AI-DLC QA ..."` | มี specs/PBI แล้ว ต้องการทำ QA เท่านั้น (เลือก sub-mode ด้านล่าง) |
 | Dev Only | `"start AI-DLC Dev only"` | มี specs/PBI แล้ว ต้องการทำ Dev เท่านั้น |
 
-If user intent is ambiguous → ASK: "1. Full (ทั้งหมด) 2. QA only 3. Dev only"
+**Detection:** In Kiro, mode is read from IDE context (user selects Vibe/Spec in UI). In other AI agents, detect from context or ask user.
+
+If user intent is ambiguous → ASK:
+
+```text
+ต้องการ mode ไหน?
+1. 🎸 Vibe — เร็ว implement เลย (skip design phases)
+2. 📋 Full — Full AIDLC workflow ทั้งหมด
+3. QA only
+4. Dev only
+```
+
+For Vibe mode details → Read `references/vibe-mode.md`
+For dialog format and artifact rules → Read `references/kiro-spec-integration.md`
 
 ### QA Sub-Modes
 
@@ -58,26 +72,28 @@ Platform affects:
 
 ### Mode Phase Matrix
 
-| Phase | Full | QA Scenario Only | QA Automation (API/Web) | Dev Only |
-|-------|------|-------------------|-------------------------|----------|
-| Phase 0 (Project Detection) | ✅ | ✅ | ✅ | ✅ |
-| Lite Inception | ⏭️ skip (does full inception) | ✅ if no specs | ✅ if no specs | ✅ if no specs |
-| Phase 1.1-1.7 (Inception) | ✅ | ⏭️ skip | ⏭️ skip | ⏭️ skip |
-| Phase 2.1 (QA Task Design) | ✅ | ✅ MANDATORY | ✅ MANDATORY | ⏭️ skip |
-| Phase 2.2 (Test Case Design) | ✅ | ✅ → DONE | ✅ | ⏭️ skip |
-| Phase 2.3 (QA Architecture) | ✅ | ⏭️ skip | ✅ | ⏭️ skip |
-| Phase 2.4 (Test Script Design) | ✅ | ⏭️ skip | ✅ → DONE | ⏭️ skip |
-| Phase 2.5 (Dev Task Design) | ✅ | ⏭️ skip | ⏭️ skip | ✅ MANDATORY |
-| Phase 2.6 (Sync Gate) | ✅ | ⏭️ skip | ⏭️ skip | ⏭️ skip |
-| Phase 3.1-3.3 (Construction) | ✅ | ⏭️ skip | ⏭️ skip | ✅ |
+| Phase | Vibe | Full | QA Scenario Only | QA Automation (API/Web) | Dev Only |
+|-------|------|------|-------------------|-------------------------|----------|
+| Phase 0 (Project Detection) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Lite Inception | ✅ MANDATORY | ⏭️ skip (does full inception) | ✅ if no specs | ✅ if no specs | ✅ if no specs |
+| Phase 1.1-1.7 (Inception) | ⏭️ skip | ✅ | ⏭️ skip | ⏭️ skip | ⏭️ skip |
+| Phase 2.1 (QA Task Design) | ⏭️ skip | ✅ | ✅ MANDATORY | ✅ MANDATORY | ⏭️ skip |
+| Phase 2.2 (Test Case Design) | ⏭️ skip | ✅ | ✅ → DONE | ✅ | ⏭️ skip |
+| Phase 2.3 (QA Architecture) | ⏭️ skip | ✅ | ⏭️ skip | ✅ | ⏭️ skip |
+| Phase 2.4 (Test Script Design) | ⏭️ skip | ✅ | ⏭️ skip | ✅ → DONE | ⏭️ skip |
+| Phase 2.5 (Dev Task Design) | ✅ MANDATORY (lightweight) | ✅ | ⏭️ skip | ⏭️ skip | ✅ MANDATORY |
+| Phase 2.6 (Sync Gate) | ⏭️ skip | ✅ | ⏭️ skip | ⏭️ skip | ⏭️ skip |
+| Phase 3.1-3.3 (Construction) | ✅ | ✅ | ⏭️ skip | ⏭️ skip | ✅ |
 
 ### Hard Rules (ALL modes)
 
 - **`.aidlc/` folder is MANDATORY** — every mode creates `.aidlc/[system]/[feature]/` with planning/ + outputs/
 - **DECISIONS → PLAN → EXECUTE** — every mode follows this process for each active phase
+- **Vibe DECISIONS is lightweight** — use `vibe-mode.md` format (scope + approach + skip rationale + escalation trigger)
 - **qa-task-design is MANDATORY** for QA modes — ห้ามข้ามไป test case design โดยไม่มี qa-task-progress.md
-- **dev-task-design is MANDATORY** for Dev mode — ห้ามข้ามไป implementation โดยไม่มี dev-task-progress.md
+- **dev-task-design is MANDATORY** for Dev/Vibe mode — ห้ามข้ามไป implementation โดยไม่มี dev-task-progress.md
 - **audit.md is MANDATORY** — every mode maintains audit trail
+- **Dialog message format** — ALL AIDLC interactions use structured dialog format, not plain chat. Applies to every mode, every AI agent. See `references/kiro-spec-integration.md`
 
 ### Lite Inception (for QA Only / Dev Only without specs)
 
@@ -527,6 +543,10 @@ Brownfield start from 1.1, Greenfield start from 1.2
 For detailed patterns → Use `po/architect` skill (architecture-patterns.md)
 
 ## Quick Commands
+
+### Vibe Mode
+- `"vibe"` / `"quick"` / `"ลอง {feature}"` — Begin Vibe mode (Lite Inception → Dev Task Design → implement)
+- `"escalate to spec"` — Escalate current Vibe session to Full AIDLC
 
 ### Full Mode (default)
 - `"start AI-DLC"` — Begin new project (detects greenfield vs brownfield)

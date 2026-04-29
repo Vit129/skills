@@ -1,5 +1,8 @@
 # Related Skills Routing
 
+## Pre-AIDLC (mandatory ก่อน Phase 0 ทุก new feature)
+- Brainstorming → `core/brainstorming` (Party Mode: PO+Dev+QA ช่วยกันคิด → output เป็น input ของ DECISIONS phase; scale auto-detect: Small/Medium/Large)
+
 ## Standalone Tools (ไม่เข้า AIDLC loop)
 - Postman migration → `postman-to-playwright/postman` (Postman collection → Playwright tests, trigger ตรงจาก SKILL.md)
 
@@ -12,6 +15,7 @@
 - Frontend → `dev/frontend-dev`, Backend → `dev/backend-dev`
 - Pipeline & PR & DevOps sync → `dev/devops-pipeline`
 - UI/UX → `ux-ui/ui-designer`
+- **Phase 3.1 (large task sets)** → `core/subagent-driven` (dispatch subagent per task, 2-stage review)
 
 ## Phase 5: Reflect (Every Session End)
 - Knowledge scoring + Memory persistence → `system/agent-memory` (score templates, auto-capture lessons, save context, update wings/rooms)

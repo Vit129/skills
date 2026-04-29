@@ -4,7 +4,7 @@ Updated: 2026-04-27
 
 ## Consolidation State
 
-- sessions_since_consolidation: 52
+- sessions_since_consolidation: 63
 - last_consolidation: 2026-04-26
 - next_due: after 5 sessions or 7 days
 
@@ -90,3 +90,161 @@ Updated: 2026-04-27
 |------|----|--------|--------|--------|-------|----------|
 | 2026-04-28 | HOOK-001-session-save-v6.1 | Updated agent-memory-session-save hook v6.0→v6.1: strengthened minimal safe save rule (must include knowledge/index.md, never evolution.md only), increased timeout 15s→30s, added "prefer full sync" instruction | POSITIVE | Minimal safe save could skip knowledge/index.md; 15s timeout caused frequent fallback | knowledge/index.md always required; 30s timeout; full sync preferred | `.kiro/hooks/agent-memory-session-save.kiro.hook`, `~/.claude/skills/system/hook-creator/templates/kiro/agent-memory-session-save.kiro.hook` |
 | 2026-04-28 | HOOK-002-session-save-v6.2 | Updated hook v6.1→v6.2: removed 30s timeout, replaced with "Complete all steps fully regardless of content size" | POSITIVE | 30s timeout implied time pressure | No timeout — always complete fully | `.kiro/hooks/`, template |
+| 2026-04-29 | session-2026-04-29-brainstorming-skill | Created core/brainstorming/ skill for AIDLC: SKILL.md + po-lens.md + dev-lens.md + qa-lens.md + output-template.md; Party Mode multi-role (PO/Dev/QA) brainstorm before DECISIONS phase; AIDLC_README.md updated | POSITIVE | no brainstorming skill | core/brainstorming/ complete | `/Users/supavit.cho/.claude/skills/ai-dlc/core/brainstorming/` |
+| 2026-04-29 | session-2026-04-29-aidlc-preflight | Added Pre-Flight brainstorming section to core/aidlc/SKILL.md: trigger words, skip condition, link to core/brainstorming/; Related Skills updated with direct link | POSITIVE | no brainstorming entry in AIDLC | Pre-Flight section + Related Skills link | `/Users/supavit.cho/.claude/skills/ai-dlc/core/aidlc/SKILL.md` |
+| 2026-04-29 | session-2026-04-29-routing-complete | Added brainstorming to KIRO.md Skill Map (before aidlc row) + related-skills.md Pre-AIDLC section; routing now consistent across all 5 files: KIRO.md, AIDLC_README.md, aidlc/SKILL.md, related-skills.md, brainstorming/SKILL.md | POSITIVE | brainstorming missing from KIRO.md + related-skills.md | routing complete | `/Users/supavit.cho/.claude/skills/KIRO.md` + `related-skills.md` |
+| 2026-04-29 | session-2026-04-29-preflight-mandatory | Upgraded Pre-Flight from optional→mandatory: AIDLC now asks brainstorm question on every new feature (no .aidlc/ folder); skip conditions: resume/ทำต่อ/phase-entry commands; user chooses 1=proceed or 2=brainstorm | POSITIVE | optional pre-flight (user must trigger manually) | mandatory check on new feature start | `/Users/supavit.cho/.claude/skills/ai-dlc/core/aidlc/SKILL.md` |
+| 2026-04-29 | session-2026-04-29-preflight-mandatory-always | Upgraded Pre-Flight to mandatory-always + scale-aware: brainstorming runs on every new feature (no .aidlc/), auto-detects Small(1 round)/Medium(2)/Large(3), no question asked; skip only on resume/phase-entry | POSITIVE | mandatory-check (still asked user) | mandatory-always (runs immediately, scale-aware) | `/Users/supavit.cho/.claude/skills/ai-dlc/core/aidlc/SKILL.md` |
+| 2026-04-29 | session-2026-04-29-global-registration | Added brainstorming to rules/skill-map.md (Claude Code/Codex/Gemini shared) + README.md architecture tree; all 7 registration points now complete across entire skill ecosystem | POSITIVE | brainstorming missing from skill-map.md + README.md | all 7 points registered | `/Users/supavit.cho/.claude/rules/skill-map.md` + `README.md` |
+| 2026-04-29 | session-2026-04-29-subagent-skill | Created core/subagent-driven/ skill: SKILL.md + dispatch-rules.md + context-template.md + review-checklist.md; 2-stage review (Spec Compliance + Code Quality); registered in KIRO.md, skill-map.md, AIDLC_README.md, related-skills.md | POSITIVE | no subagent orchestration skill | core/subagent-driven/ complete | `/Users/supavit.cho/.claude/skills/ai-dlc/core/subagent-driven/` |
+| 2026-04-29 | session-2026-04-29-aidlc-related-skills-fix | Fixed Related Skills in aidlc/SKILL.md: brainstorming wording corrected from "ใช้เมื่อ idea ยังไม่ชัด" → "mandatory ก่อน Phase 0 ทุก new feature"; subagent-driven link added | POSITIVE | inconsistent wording between Pre-Flight and Related Skills | consistent mandatory wording + subagent-driven link | `/Users/supavit.cho/.claude/skills/ai-dlc/core/aidlc/SKILL.md` |
+| 2026-04-29 | session-2026-04-29-connectivity-check | Full ai-dlc/ connectivity verified: all 17 skills registered in AIDLC_README.md; fixed related-skills.md Pre-AIDLC wording → mandatory (was "เมื่อ idea ยังไม่ชัด"); all 7 routing points consistent | POSITIVE | inconsistent wording in related-skills.md | all routing points consistent | `/Users/supavit.cho/.claude/skills/ai-dlc/core/aidlc/references/related-skills.md` |
+| 2026-04-29 | session-2026-04-29-dry-run-validated | DRY-RUN Full AIDLC PBI-002 Japan Travel Health & Safety: brainstorming (Large/3 rounds) invoked at Pre-Flight; subagent-driven invoked at Phase 3.1 (3 independent contexts); full flow validated end-to-end | POSITIVE | dry-run not yet done | full flow validated | DRY-RUN PBI-002 |
+| 2026-04-29 | session-2026-04-29-vibe-spec-open-thread | Open thread noted: vibe/spec mode design for AIDLC — Vibe=Quick brainstorm+Lite Inception+implement, Spec=Full AIDLC+Kiro Spec dialog, Detection=Kiro mode or context inference, Escalation=Vibe→Spec when complexity grows | NEUTRAL | — | open thread for next session | palace/state.md open threads |
+| 2026-04-29 | LESSON-TOOLING-007 | Memory routing rule: global skill design → .claude/agent-memory/ not project agent-memory/. AIDLC Vibe/Spec requirements confirmed: both modes, dialog UX, spec=full workflow, .aidlc/ in sub-project, .kiro/specs/ at workspace root | POSITIVE | Saved AIDLC design to wrong target (My Investment Port) | Rule documented: check what changed (global skill vs project feature) before choosing target | palace/search-index.md row 2026-04-29 |
+
+## Consolidation State
+
+- sessions_since_consolidation: 64
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days
+| 2026-04-29 | LESSON-TOOLING-008 | Found 3 corrections in AIDLC Vibe/Spec mode: (1) detection=Kiro IDE mode not keyword (2) artifacts→.aidlc/ not .kiro/specs/ (3) dialog UX for both modes. Skill files need update. | POSITIVE | Initial implementation had wrong detection source, wrong artifact path, incomplete dialog UX scope | All 3 corrected in lesson; skill files fix pending | palace/search-index.md row 2026-04-29 |
+
+## Consolidation State
+
+- sessions_since_consolidation: 65
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days
+| 2026-04-29 | LESSON-TOOLING-008-update | Clarified correction #3: dialog format = global rule for ALL AIDLC regardless of AI agent (not Kiro-specific). Reason: easier to read + track progress. Updated lesson detail file. | POSITIVE | Thought dialog UX was Kiro-specific | Dialog format is an AIDLC-level rule, applies to Claude/Gemini/Kiro equally | palace/search-index.md row 2026-04-29 |
+
+## Consolidation State
+
+- sessions_since_consolidation: 66
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days
+| 2026-04-29 | LESSON-TOOLING-008-applied | Applied all 3 corrections from LESSON-TOOLING-008: (1) vibe-mode.md detection=IDE context (2) kiro-spec-integration.md rewritten — .aidlc/ only, dialog templates (3) dialog=global rule. workflow.md + SKILL.md updated. | VALIDATED | Skill files had wrong detection, wrong path, incomplete dialog scope | All 4 files corrected and verified | vibe-mode.md, kiro-spec-integration.md, workflow.md, SKILL.md |
+
+## Consolidation State
+
+- sessions_since_consolidation: 67
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days
+| 2026-04-29 | session-2026-04-29-agnostic | Confirmed AIDLC Vibe/Spec is agent-agnostic: Kiro/Claude/Gemini/Cursor all supported. Detection differs per IDE; artifacts+dialog identical. | NEUTRAL | — | — | palace/search-index.md row 2026-04-29 |
+
+## Consolidation State
+
+- sessions_since_consolidation: 68
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days
+| 2026-04-29 | session-2026-04-29-final-cleanup | Final session cleanup: state.md trimmed (sessions ~60→~20, threads cleaned), wing date updated. No new reusable item — housekeeping only. | NEUTRAL | — | — | palace/search-index.md cleanup row |
+
+## Consolidation State
+
+- sessions_since_consolidation: 69
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days
+| 2026-04-29 | session-2026-04-29-deep-sync | Deep sync: hall.md updated (brainstorming+subagent decisions, Vibe/Spec v2 decision, 2 room entries). lessons/tooling/index.md synced with LESSON-007+008. All memory layers now consistent. | NEUTRAL | — | — | palace/wings/ai-dlc-skills/hall.md, knowledge/lessons/tooling/index.md |
+
+## Consolidation State
+
+- sessions_since_consolidation: 70
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days
+| 2026-04-29 | HOOK-003-consolidation-nudge-suppress | Fixed: consolidation nudge repeated every save. Root cause: Step 4D always checks + Step 6 always shows. Fix: suppress repeat after first nudge in conversation. Hook v6.4.0→v6.5.0. Synced 3 locations. | POSITIVE | Nudge shown every save (annoying) | First-time-only nudge; subsequent saves show 'already flagged' | .claude/.kiro/hooks/agent-memory-session-save.kiro.hook |
+
+## Consolidation State
+
+- sessions_since_consolidation: 71
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days
+| 2026-04-29 | session-2026-04-29-full-audit | Full audit all 19 files in .claude/agent-memory/. Updated graph.md, user-profile.md, agent-memory/hall.md. User preference: repeated nudges = annoying → suppressed consolidation 30 days. | POSITIVE | Some files stale (graph missing rooms, user-profile missing nudge pref) | All files verified current | palace/ + knowledge/ full tree |
+
+## Consolidation State
+
+- sessions_since_consolidation: 72
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days
+| 2026-04-29 | GAP-full-audit-hook | Identified gap: session-save hook is incremental-only — misses graph.md, user-profile.md, tunnels.md, wings/hall.md, lessons domain indexes. Decision: create userTriggered full-audit hook (Option C). | POSITIVE | No mechanism to verify all files are current | Open thread: create full-audit hook | palace/state.md open threads |
+
+## Consolidation State
+
+- sessions_since_consolidation: 73
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days
+| 2026-04-29 | HOOK-004-full-audit-step | Added Step 5C Full Audit to session-save hook v7.0.0. Every save now audits ALL files in agent-memory/ (palace + knowledge). No separate hook needed — user decided A+B+C in existing hook. Gap closed. | POSITIVE | Hook only did incremental save, missed graph/tunnels/user-profile/wings/lessons-index | Full audit every save; stale files caught automatically | .claude/.kiro/hooks/agent-memory-session-save.kiro.hook v7.0.0 |
+
+## Consolidation State
+
+- sessions_since_consolidation: 74
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days
+| 2026-04-29 | GAP-agent-memory-complexity | Root cause: hook prompt ~3000 words + 19 files = agent skips tail steps. Proposed: simplify to 7 core files (cut graph, tunnels, archive, domain indexes). Pending user decision. | POSITIVE | 19 files, hook can't update all reliably | 7 core files proposed; hook prompt can be halved | session analysis |
+
+## Consolidation State
+
+- sessions_since_consolidation: 75
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days
+| 2026-04-29 | LESSON-TOOLING-009-over-engineering | Competitive analysis: Hermes (2-3 files), OpenClaw (2-3 files), Claude Code (1-4 files) all work well. Our 19-file system is 5-10x over-engineered. Root cause of hook failures = too many files to sync. Simplify to 3-5 core files. | POSITIVE | Assumed more files = better organization | Industry standard is 2-4 files; derived data (graph, tunnels, domain indexes) should be eliminated | web research: vectorize.io, zenvanriel.nl, nousresearch.com |
+
+## Consolidation State
+
+- sessions_since_consolidation: 76
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days
+| 2026-04-29 | LESSON-TOOLING-009-verified | Verified Hermes memory from official source (github.com/nousresearch/hermes-agent + docs). Key design: bounded memory (2200+1375 chars), frozen snapshot (prefix cache), agent-curated (add/replace/remove tool), SQLite FTS5 for episodic recall, skills separate from memory. Confirms: simple bounded files > complex multi-file indexing. | VALIDATED | Previous analysis from blog posts only | Now verified from official repo + docs | hermes-agent.nousresearch.com/docs/user-guide/features/memory |
+
+## Consolidation State
+
+- sessions_since_consolidation: 77
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days
+| 2026-04-29 | session-2026-04-29-redesign-decision | Decision: incremental fix over full redesign. System works, problem is hook prompt too long. Cut derived files (graph, tunnels, archive, domain indexes) → hook can update all 7 core files reliably. | POSITIVE | Considered full redesign | Incremental fix: lower risk, no data loss, faster | palace/state.md open thread |
+
+## Consolidation State
+
+- sessions_since_consolidation: 78
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days
+| 2026-04-29 | LESSON-TOOLING-010-design-origins | Traced agent-memory design origins: palace/Wings/Rooms/Tunnels/graph from MemPalace (Python+SQLite+MCP), knowledge/lessons+evolution from Hermes, AAAK compression from MemPalace. Key insight: MemPalace uses SQLite+Python for derived data (graph, tunnels, search). We implemented in pure Markdown → derived files become maintenance burden. Fix: cut derived files, keep core Markdown. | POSITIVE | Didn't know why graph/tunnels were hard to maintain | Now clear: they're SQLite-backed in original, not Markdown-native | MemPalace GitHub + Hermes docs |
+
+## Consolidation State
+
+- sessions_since_consolidation: 79
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days
+| 2026-04-29 | session-2026-04-29-slim-down-final | Slim down plan confirmed: cut 15 derived files, keep 7 core + detail files. Not a redesign — preserves all lessons/articles/wings. Hook prompt will be ~40% shorter. Execute next session. | POSITIVE | 19 files, hook unreliable | 7 core files, hook reliable | competitive analysis + design origins research |
+
+## Consolidation State
+
+- sessions_since_consolidation: 80
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days
+| 2026-04-29 | session-2026-04-29-slim-down-complete | Slim down COMPLETE: .claude agent-memory deleted graph+tunnels+archive+tooling/index. Hook v8.0.0 removes all derived file refs from Step 1/3/4B/5/5C. Both targets now 7 core files. No data lost. | POSITIVE | 19 files with derived data | 7 core files, hook reliable | deleteFile + hook updates |
+
+## Consolidation State
+
+- sessions_since_consolidation: 81
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days
+| 2026-04-29 | session-2026-04-29-self-improve-request | User wants Hermes-style self-improve: agent writes memory mid-session not just at agentStop. Options: CLAUDE.md rule + Kiro steering file (A+C). Open thread created. | POSITIVE | Hook-driven only (agentStop) | Agent-driven mid-session writes | Hermes memory tool comparison |
+
+## Consolidation State
+
+- sessions_since_consolidation: 82
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days
+| 2026-04-29 | session-2026-04-29-self-improve-done | Self-improve implemented: steering files (My Investment Port + .claude) + CLAUDE.md Key Rules. Agent now writes lessons/preferences mid-session without waiting for agentStop. Hermes-style agent-driven memory achieved. | POSITIVE | Hook-driven only (agentStop) | Agent-driven mid-session writes via steering file | .kiro/steering/agent-memory-self-improve.md |
+
+## Consolidation State
+
+- sessions_since_consolidation: 83
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days
+| 2026-04-29 | session-2026-04-29-rolling-window | Rolling window added to Recent Sessions (max 10 rows, oldest removed on add). Steering files + all 3 hooks synced. state.md now bounded like Hermes MEMORY.md. | POSITIVE | state.md grew unbounded | Capped at 10 sessions, auto-trim | steering + hook updates |
+
+## Consolidation State
+
+- sessions_since_consolidation: 84
+- last_consolidation: 2026-04-26
+- next_due: after 5 sessions or 7 days

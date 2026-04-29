@@ -1,6 +1,6 @@
 # User Profile
 
-Updated: 2026-04-20
+Updated: 2026-04-29
 
 ## Preferences
 
@@ -20,7 +20,7 @@ Updated: 2026-04-20
 ## Communication
 
 - Likes: tables, comparisons, bullet points, Thai mixed, visual diagrams (ASCII)
-- Dislikes: verbose summaries, unnecessary explanations, repeating what was just said
+- Dislikes: verbose summaries, unnecessary explanations, repeating what was just said, **repeated nudges** (consolidation due shown every save = annoying)
 - Tone: casual-professional, direct, Thai slang OK
 
 ## Domain Expertise
@@ -33,6 +33,7 @@ Updated: 2026-04-20
 
 | Category | Skipped | Last Shown | Suppressed Until |
 |----------|---------|------------|-----------------|
+| consolidation | 10+ | 2026-04-29 | 2026-05-29 |
 
 ## Save Preferences
 

@@ -22,6 +22,7 @@
 - [2026-04-26] Bugfix spec created in Kiro for agent-memory-redesign. Decision: palace/ + knowledge/ stay separate dirs with enforced sync (not merged). All-markdown, zero JSON for storage. Requirements approved: 11 defects, 11 expected behaviors, 8 unchanged behaviors. Phased: P1 core, P2 search+profile, P3 skills+consolidation.
 - [2026-04-26] Implemented Markdown-first Phase 1 contract: `SKILL.md` and active references now define `knowledge/index.md`, `knowledge/evolution.md`, and domain lesson `index.md` as source of truth; legacy JSON files are read-only import material.
 - [2026-04-26] Updated Kiro hooks: session-load v3 reads Markdown knowledge; session-save v6 enforces a mandatory Knowledge Sync Gate, updates `knowledge/evolution.md` every dirty save, and forbids state-only fallback.
+- [2026-04-29] Hook v6.5.0: consolidation nudge suppress-repeat — first-time-only in conversation, then 'already flagged'. Synced 3 locations (.claude, My Investment Port, template).
 
 ## Rooms Index
 

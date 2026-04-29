@@ -28,7 +28,7 @@ skills/                         ← Skill library
 ├── KIRO.md                     ← Kiro agent config: tier routing, skill map, Karpathy principles
 ├── postman-to-playwright/      ← Postman→Playwright migration (standalone, bypasses AI-DLC)
 ├── ai-dlc/                     ← Dev lifecycle: analysis, design, frontend, backend, QA, testing
-│   ├── core/                   ← aidlc governance, analysis, monitoring, storage
+│   ├── core/                   ← brainstorming (party mode), aidlc governance, analysis, monitoring, storage
 │   ├── rules/                  ← coding standards: playwright, robotframework, test-scenario, industry
 │   ├── qa/                     ← playwright-testing, robotframework-testing, performance, test-scenario
 │   ├── dev/                    ← backend, frontend, devops-pipeline, impeccable-design

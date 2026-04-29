@@ -6,13 +6,38 @@
 ## Active Wings
 
 - **agent-memory** — Global memory & intelligence management (last updated: 2026-04-26)
-- **ai-dlc-skills** — AI-DLC skill ecosystem (last updated: 2026-04-23)
+- **ai-dlc-skills** — AI-DLC skill ecosystem: brainstorming, subagent-driven, Vibe/Spec mode (last updated: 2026-04-29)
 - **token-optimization-tooling** — Token optimization research + .claude/rules/token_efficient.md (last updated: 2026-04-26)
 
 ## Recent Sessions
 
 | Date | Wing | Summary |
 |------|------|---------|
+| 2026-04-29 | agent-memory | Kiro session: rolling window + bounded state — steering files + all 3 hooks updated. Recent Sessions capped at 10 rows (oldest removed on add). state.md now bounded. |
+| 2026-04-29 | agent-memory | Kiro session: self-improve implemented — created steering files (My Investment Port + .claude) + updated CLAUDE.md Key Rules. Agent now writes lessons/preferences mid-session without waiting for agentStop. Open thread DONE ✅ |
+| 2026-04-29 | agent-memory | Kiro session: slim down COMPLETE — .claude agent-memory: deleted graph+tunnels+archive+tooling/index. Hook v8.0.0: removed all derived file refs (Step 1/3/4B/5/5C). Synced 3 hook locations. Both agent-memory targets now 7 core files. |
+| 2026-04-29 | agent-memory | Kiro session: slim down plan finalized — cut 15 derived files (graph, tunnels, archive, domain indexes), keep 7 core + lesson/article detail files. All capabilities preserved except visual graph + tunnel tracking. Ready to execute next session. |
+| 2026-04-29 | agent-memory | Kiro session: traced design origins — palace/Wings/Rooms/Tunnels from MemPalace (Python lib), knowledge/lessons+evolution from Hermes, AAAK compression from MemPalace. We implemented MemPalace metaphor in pure Markdown without SQLite/Python backend. That's why derived files (graph, tunnels) are hard to maintain. |
+| 2026-04-29 | agent-memory | Kiro session: competitive analysis — Hermes (2-3 files), OpenClaw (2-3 files), Claude Code (1-4 files) vs ours (19 files). All successful systems use 2-4 files. We are 5-10x over-engineered. Open thread: simplify to 3-5 core files. |
+| 2026-04-29 | ai-dlc-skills | Kiro session: hook v7.0.0 — added Step 5C Full Audit to session-save hook. Every save now audits ALL files in agent-memory/ (graph, tunnels, user-profile, wings, lessons index, articles). Synced 3 locations. Gap closed. |
+| 2026-04-29 | ai-dlc-skills | Kiro session: fixed consolidation nudge spam — hook v6.4.0→v6.5.0: Step 4D suppress repeat, Step 6 first-time-only message. Synced 3 hooks (.claude, My Investment Port, template). Also updated hall.md + lessons/tooling/index.md with LESSON-007+008. |
+| 2026-04-29 | ai-dlc-skills | Kiro session: confirmed AIDLC Vibe/Spec is agent-agnostic — works on Kiro, Claude Code, Gemini, Cursor, Windsurf. Only detection differs (Kiro=IDE context, others=infer/ask). Artifacts+dialog same everywhere. |
+| 2026-04-29 | ai-dlc-skills | Kiro session: applied all 3 corrections to skill files — (1) vibe-mode.md: detection=IDE context not keyword (2) kiro-spec-integration.md: rewritten as "AIDLC Dialog & Artifact Integration" — .aidlc/ only, no .kiro/specs/ (3) dialog format = global rule for all modes + all AI agents. workflow.md + SKILL.md updated. Open thread DONE ✅ |
+| 2026-04-29 | ai-dlc-skills | Kiro session: clarified correction #3 — dialog message format is global rule for ALL AIDLC interactions regardless of AI agent (Kiro/Claude/Gemini). Not Kiro-specific. Reason: easier to read and track progress. |
+| 2026-04-29 | ai-dlc-skills | Kiro session: found 3 corrections needed in AIDLC Vibe/Spec mode — (1) detection = Kiro IDE mode not keyword (2) Spec artifacts → .aidlc/ not .kiro/specs/ (3) dialog UX required for BOTH modes. Open thread to fix skill files. |
+| 2026-04-29 | ai-dlc-skills | Kiro session: implemented AIDLC Vibe/Spec mode — created vibe-mode.md + kiro-spec-integration.md; updated workflow.md (Mode Selection + Phase Matrix + Hard Rules + Quick Commands) + SKILL.md (Pre-Flight Mode Detection section). Open thread DONE ✅ |
+| 2026-04-29 | ai-dlc-skills | Kiro session: confirmed AIDLC Vibe/Spec mode requirements — (1) both modes supported (2) dialog message UX like Kiro Spec (3) spec mode = full AIDLC workflow. Path structure confirmed: .aidlc/ in sub-project, .kiro/specs/ at workspace root. Memory routing lesson: global skill design → .claude/agent-memory/ not project agent-memory/ ✅ |
+| 2026-04-29 | ai-dlc-skills | Kiro session: noted open thread — vibe/spec mode design for AIDLC (next session) ✅ |
+| 2026-04-29 | ai-dlc-skills | Kiro session: full ai-dlc/ connectivity verified + DRY-RUN Full AIDLC PBI-002 passed — brainstorming + subagent-driven both invoked correctly in flow ✅ |
+| 2026-04-29 | ai-dlc-skills | Kiro session: verified full ai-dlc/ connectivity — all 17 skills registered in AIDLC_README.md; fixed related-skills.md Pre-AIDLC wording → mandatory ✅ |
+| 2026-04-29 | ai-dlc-skills | Kiro session: fixed Related Skills in aidlc/SKILL.md — brainstorming wording corrected to mandatory; subagent-driven link added ✅ |
+| 2026-04-29 | ai-dlc-skills | Kiro session: created core/subagent-driven/ skill — SKILL.md + dispatch-rules + context-template + review-checklist; registered in KIRO.md, skill-map.md, AIDLC_README.md, related-skills.md ✅ |
+| 2026-04-29 | ai-dlc-skills | Kiro session: added brainstorming to rules/skill-map.md + README.md architecture tree; all 7 registration points now complete (KIRO.md, skill-map.md, AIDLC_README, aidlc/SKILL.md, related-skills.md, brainstorming/SKILL.md, README.md) ✅ |
+| 2026-04-29 | ai-dlc-skills | Kiro session: upgraded Pre-Flight to mandatory-always + scale-aware — brainstorming runs on every new feature, auto-detects Small/Medium/Large, no question asked; skip only on resume ✅ |
+| 2026-04-29 | ai-dlc-skills | Kiro session: upgraded Pre-Flight from optional→mandatory — AIDLC now asks brainstorm question on every new feature (no .aidlc/ folder); skip on resume/phase-entry commands ✅ |
+| 2026-04-29 | ai-dlc-skills | Kiro session: completed brainstorming skill routing — added brainstorming to KIRO.md Skill Map + related-skills.md Pre-AIDLC section; all 5 routing points now consistent ✅ |
+| 2026-04-29 | ai-dlc-skills | Kiro session: added Pre-Flight brainstorming section to core/aidlc/SKILL.md — triggers, skip condition, link to core/brainstorming/; Related Skills updated ✅ |
+| 2026-04-29 | ai-dlc-skills | Kiro session: created core/brainstorming/ skill — SKILL.md + 4 references (po-lens, dev-lens, qa-lens, output-template); updated AIDLC_README.md with new entry; Party Mode style multi-role brainstorming before AIDLC DECISIONS phase ✅ |
 | 2026-04-28 | agent-memory | Kiro session: updated hook template v6.2.0→v6.3.0 — article path fixed to knowledge/articles/{domain}/, crystallization path fixed, 4B now explicit about article file creation; project hook synced; checklist pattern moved from knowledge/ root to knowledge/articles/deployment/ ✅ |
 | 2026-04-27 | agent-memory | Kiro session: found real gap — Consolidation State section missing from storage.md Knowledge Evolution schema; not in intelligence.md or maintenance.md; needs to be added to storage.md ✅ |
 | 2026-04-27 | agent-memory | Kiro session: updated AGENT_MEMORY_README.md — removed duplicate section, added graph.md to tree, updated save rules + status to match current spec ✅ |
@@ -50,43 +75,33 @@
 | 2026-04-26 | agent-memory | Kiro session: created bugfix spec for agent-memory-redesign (.kiro/specs/); read all SKILL.md + 5 references + GOTCHAS; bugfix.md has 11 defects, 11 expected, 8 unchanged; decision: keep palace/ + knowledge/ separate dirs with enforced sync (not merged); all-markdown, zero JSON for storage; user approved requirements → ready for design phase ✅ |
 | 2026-04-26 | agent-memory | Full session: researched 10 token optimization repos → token_efficient.md 12 sections; fixed hook routing v5.0.0 (absolute paths); migrated wing + lessons to correct workspace; analyzed agent-memory spec vs reality (hook does 40% of spec); decided: redesign to all-markdown, 5 core steps, cut unused features ✅ |
 | 2026-04-26 | token-optimization-tooling | Migrated lessons TOOLING-001/002 to correct location + added TOOLING-003 (hook routing bug); fixed empty lessons/ folder in ~/.claude/agent-memory/knowledge/ ✅ |
-| 2026-04-26 | agent-memory | Upgraded session-save hooks to v5.0.0: replaced ~/ with absolute path /Users/supavit.cho/.claude/, changed routing logic from 'find .kiro/hooks' to 'inspect actual file paths written this session' — fixes ~/.claude/agent-memory never updating ✅ |
-| 2026-04-26 | token-optimization-tooling | Moved wing from VitProjects → ~/.claude/agent-memory/ (correct location — files were in .claude/rules/); cleaned VitProjects state.md ✅ |
-| 2026-04-26 | agent-memory | Upgraded session-save hooks to v4.0.0 in both workspaces: Step 0 workspace-aware routing (files in ~/.claude/ → ~/.claude/agent-memory/, project files → project/agent-memory/), relaxed content filter (tooling/hooks/rules now always captured), both workspaces synced ✅ |
-| 2026-04-25 | agent-memory | Updated sync-agent-instructions.sh: all references changed from .claude/shared/ → rules/; shared/ can now be deleted; open thread updated ✅ |
-| 2026-04-25 | agent-memory | Restructuring shared/ → rules/: copied files to rules/ at root level, communication-style.md included; decided to keep rules/ at root (not strict Anatomy spec) ✅ |
-| 2026-04-25 | agent-memory | Fixed .gitignore: added .claude/, scripts/, rules/ to whitelist; re-ignore worktrees/ + settings.local.json; agents + shared now tracked by git ✅ |
-| 2026-04-25 | agent-memory | Created 5 Claude Code custom agents (po, uxui, qa, dev, architect) in .claude/.claude/agents/ + copied to ~/.claude/agents/ (global scope, available in all projects); agents use skill preloading + project memory + tool restrictions ✅ |
-| 2026-04-25 | agent-memory | Fixed README.md: corrected architecture tree to show .claude/.claude/shared/, added all scripts, added analysis-concept + hook-creator to system/, added Kiro to agent table ✅ |
-| 2026-04-25 | agent-memory | Updated CLAUDE.md: corrected shared/ path, added communication-style.md ref, fixed knowledge resolution, updated References to skills/KIRO.md ✅ |
-| 2026-04-24 | agent-memory | Completed Agent Framework v2.0: 10 mandatory rules; all agents synced; framework 100% complete ✅ |
-| 2026-04-24 | agent-memory | Added 5 mandatory agent rules + communication-style.md; synced all agent configs ✅ |
-| 2026-04-24 | agent-memory | Finalized SSOT: extracted shared files → .claude/shared/; sync script reads files; CLAUDE.md thin adapter ✅ |
-| 2026-04-24 | agent-memory | Implemented SSOT architecture: .claude/shared/agent-core.md + sync script → generated agent configs ✅ |
-| 2026-04-23 | ai-dlc-skills | All 21 SKILL.md files bilingual EN+TH; citation refs fixed; rules/ paths consistent ✅ |
-| 2026-04-23 | ai-dlc-skills | Restructured ai-dlc/rules/: moved 4 rules skills from qa/ and ux-ui/; all Skill Maps updated ✅ |
-| 2026-04-22 | ai-dlc-skills | Added impeccable-design skill to dev/ + registered in Skill Map ✅ |
+| 2026-04-25 | agent-memory | Created 5 Claude Code custom agents + restructured shared/→rules/ + fixed .gitignore ✅ |
+| 2026-04-24 | agent-memory | Completed Agent Framework v2.0 + SSOT architecture ✅ |
+| 2026-04-23 | ai-dlc-skills | All 21 SKILL.md files bilingual EN+TH; rules/ restructured ✅ |
 
 ## Current Focus
 
-- focus: "multi-agent-router skill complete + README.md synced with current state"
+- focus: "agent-memory self-improve COMPLETE — steering files + CLAUDE.md rule. Agent writes mid-session now."
 - blockers: ""
-- next_action: "Copy multi-agent-router to VitProjects if needed; test Gemini/Codex routing in practice"
+- next_action: "Test self-improve in next real session: fix a bug → verify lesson written immediately without waiting for agentStop"
 
 ## Open Threads
 
-- [x] agent-memory: update SKILL.md + storage.md with 9 changes (articles subfolder, graph.md, README.md, room frontmatter, rich hall, Palace Graph schema, Tunnels prose, article path, Related Lessons) ✅ 2026-04-27
-- [x] agent-memory: add Consolidation State section to storage.md Knowledge Evolution schema ✅ 2026-04-27
-- [x] agent-memory: migrate global flat articles (~/.claude/agent-memory/knowledge/) to articles/{domain}/ structure ✅ 2026-04-27
-- [x] agent-memory: inline all required schemas into SKILL.md (hall, room, graph, tunnels, article, lesson, closet) — follow hook-creator pattern; references/ kept for on-demand only ✅ 2026-04-27
+- [x] **agent-memory incremental fix** — ✅ DONE (2026-04-29): deleted graph+tunnels+archive+domain-indexes from both targets. Hook v8.0.0 synced (3 locations). 7 core files remain. No data lost.
+- [x] agent-memory: create full-audit mechanism — ✅ DONE but may be unnecessary after simplification
+- [x] **Self-improve (agent-driven memory)** — ✅ DONE (2026-04-29): steering files created (My Investment Port + .claude), CLAUDE.md Key Rules updated. Agent writes lessons/preferences mid-session immediately.
 - [ ] agent-memory: migrate VitProjects JSON→MD (index.json → index.md + evolution.md)
 - [ ] agent-memory: test bootstrap on a brand new project to verify spec works end-to-end
-- [x] agent-memory: migrate Home Assistant JSON→MD ✅ 2026-04-27
 - [ ] ai-dlc-skills: verify {knowledge_root} resolves correctly at runtime
-- [X] Cleanup: delete .claude/shared/ (sync script now reads from rules/)
-- [x] Rename .agent-memory/ → agent-memory/ across 38 files + folder rename; sed replace all references; update .gitignore
-- [X] agent-memory-redesign: bugfix spec in Kiro (.kiro/specs/agent-memory-redesign/). Requirements approved (11 defects, 11 expected, 8 unchanged). Decision: palace/ + knowledge/ stay separate with enforced sync, all-markdown zero JSON. Phase 1 contract implemented; legacy memory JSON removed; Kiro hooks now enforce Markdown Knowledge Sync Gate. Next: real-session verification, consolidation, skill crystallization.
-- [x] ai-dlc-knowledge-migration: skills/ai-dlc/knowledge/ has ~30 JSON files (14 indexes + 16 lessons + 4 rules) needing Markdown migration. Config files (~5) can stay JSON. Separate spec needed — large scope.
+- [ ] ai-dlc-skills: test Vibe mode with a real feature to validate flow end-to-end
+
+## Completed Threads (2026-04-29)
+
+- [x] AIDLC Vibe/Spec Mode v2 — implemented + 3 corrections applied (detection=IDE context, artifacts→.aidlc/ only, dialog=global rule all agents)
+- [x] agent-memory spec redesign — all-markdown, zero JSON, Knowledge Sync Gate
+- [x] ai-dlc-knowledge migration — 34 .md files complete
+- [x] agent-memory SKILL.md rewrite — schemas inlined, storage.md deleted
+- [x] Home Assistant JSON→MD migration
 
 ## Placeholder Convention
 

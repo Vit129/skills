@@ -1,6 +1,6 @@
 # Knowledge Index
 
-Updated: 2026-04-28
+Updated: 2026-04-29
 
 ## Articles
 
@@ -20,11 +20,16 @@ Updated: 2026-04-28
 | LESSON-TOOLING-003 | tooling | bug | active | 1 | 1 | 2026-04-26 | lessons/tooling/LESSON-TOOLING-003.md |
 | LESSON-TOOLING-004 | tooling | workflow | active | 1 | 1 | 2026-04-26 | lessons/tooling/LESSON-TOOLING-004.md |
 | LESSON-TOOLING-005 | tooling | workflow | active | 1 | 1 | 2026-04-27 | lessons/tooling/LESSON-TOOLING-005.md |
+| LESSON-TOOLING-010 | tooling | pattern | active | 1 | 0 | 2026-04-29 | lessons/tooling/LESSON-TOOLING-010.md |
+| LESSON-TOOLING-009 | tooling | pattern | active | 1 | 0 | 2026-04-29 | lessons/tooling/LESSON-TOOLING-009.md |
+| LESSON-TOOLING-008 | tooling | pattern | active | 2 | 1 | 2026-04-29 | lessons/tooling/LESSON-TOOLING-008.md |
+| LESSON-TOOLING-007 | tooling | pattern | active | 1 | 0 | 2026-04-29 | lessons/tooling/LESSON-TOOLING-007.md |
 | LESSON-TOOLING-006 | tooling | pattern | active | 1 | 1 | 2026-04-27 | lessons/tooling/LESSON-TOOLING-006.md |
 
 ## Gaps
 |--------|-----|------------|--------|-------|
 | agent-memory | session save must update knowledge automatically | 2026-04-26 | closed | Hook v6.0.0 adds mandatory Knowledge Sync Gate and minimal safe save; verify in future real Kiro sessions. |
+| agent-memory | session-save hook is incremental-only — misses graph.md, user-profile.md, tunnels.md, wings/hall.md, lessons domain indexes | 2026-04-29 | closed | Added Step 5C Full Audit to hook v7.0.0 — every save now audits ALL files |
 | agent-memory | VitProjects agent-memory still uses index.json + JSON lesson indexes; needs Markdown migration | 2026-04-27 | open | 3 JSON files: index.json, kiroConfigLessonsIndex.json, specWorkflowLessonsIndex.json, toolingLessonsIndex.json |
 | agent-memory | Home Assistant agent-memory still uses index.json; needs Markdown migration + missing evolution.md, search-index.md, user-profile.md | 2026-04-27 | closed | Migrated 2026-04-27: index.md+evolution.md, lessons/climate/, graph.md, search-index.md, user-profile.md, tunnels prose |
 | agent-memory | workspace agent-memory/ still has legacy JSON files | 2026-04-26 | open | index.json, date-index.json, keyword-index.json, toolingLessonsIndex.json exist; no knowledge/index.md or evolution.md in workspace; need migration |

@@ -21,8 +21,42 @@ description: >
 
 Full governance and planning for the complete development lifecycle.
 
+## Pre-Flight: Mode Detection (Mandatory — before Brainstorming)
+
+> ทำก่อนทุกอย่าง — detect mode แล้วค่อย route ไป Brainstorming หรือ Lite Inception
+
+**Detection:**
+- **Kiro IDE:** reads Vibe/Spec mode from IDE context (user selects in UI, never types it)
+- **Other AI agents:** detect from context (`.aidlc/` exists → Spec resume, complexity → Vibe/Spec) or ask user
+
+**Global rule:** ALL AIDLC interactions use **dialog message format** (structured step-by-step) — not plain chat. Applies to every mode, every AI agent.
+
+For detection logic, Vibe flow, and escalation rules → Read `references/vibe-mode.md`
+For dialog format templates and artifact rules → Read `references/kiro-spec-integration.md`
+
+## Pre-Flight: Brainstorming (Mandatory for New Features)
+
+> ทำก่อน Phase 0 เสมอ เมื่อ user เริ่ม AIDLC ใหม่ (ไม่มี `.aidlc/` folder สำหรับ feature นี้)
+> Load `core/brainstorming/SKILL.md` → run Party Mode → produce output-template.md → handoff to Phase 0
+
+**Skip this step if:**
+- มี `.aidlc/` folder อยู่แล้ว (resume session)
+- User พิมพ์ "resume", "ทำต่อ", หรือ phase entry command เช่น "start from logical design"
+
+**Scale (auto-detect จาก complexity ที่ประเมินได้):**
+
+| Size | Signals | Brainstorming Mode |
+|------|---------|-------------------|
+| Small | bug fix, 1 story, minor tweak | Quick: 1 round, 1 คำถามต่อ role |
+| Medium | 2-5 stories, new feature | Normal: 2 rounds |
+| Large | 6+ stories, new system | Full: 3 rounds |
+
+User สามารถ override ได้: "ขอแบบ quick" หรือ "ขอแบบ deep"
+
 ## Rules & Guides
 
+- **Vibe Mode** — Fast-track flow, detection logic, escalation rules. (Read `references/vibe-mode.md`)
+- **Dialog & Artifact Rules** — Dialog format templates, artifact path rules. (Read `references/kiro-spec-integration.md`)
 - **Workflow Rules** — DECISIONS→PLAN→EXECUTE, phases, naming, quick commands. (Read `references/workflow.md`)
 - **Decision-Plan-Execute** — Structured decision-making with mandatory user approval. (Read `references/decision.md`)
 - **Approval Framework** — (Read `references/guides/approval-framework.md`)
@@ -50,6 +84,9 @@ For full phase list, routing table, and anti-shortcut rules → (Read `reference
 ## Related Skills
 
 For skill routing guide → (Read `references/related-skills.md`)
+
+> **Brainstorming** — mandatory ก่อน Phase 0 ทุก new feature → `core/brainstorming/SKILL.md`
+> **Subagent-Driven** — ใช้ระหว่าง Phase 3.1 เมื่อมี 3+ independent tasks → `core/subagent-driven/SKILL.md`
 
 ## ⚠️ Gotchas
 

@@ -112,8 +112,11 @@ Bootstrap (new project, no agent-memory/ yet):
 
 | Scenario | Action |
 |----------|--------|
-| **Agent needs reusable project knowledge** | Read `agent-memory/knowledge/index.md`, then the relevant `articles/{domain}/` or `lessons/{domain}/index.md` |
-| **New lesson discovered** | Write to `agent-memory/knowledge/lessons/{domain}/` |
+| **Agent needs reusable project knowledge** | Read `agent-memory/knowledge/index.md`, then the relevant `articles/{domain}/` or `lessons/{domain}/` |
+| **New lesson discovered** | Write to `agent-memory/knowledge/lessons/{domain}/` **immediately** — don't wait for session end |
+| **Bug fixed mid-session** | Create lesson file + append to knowledge/index.md + evolution.md right away |
+| **User preference stated** | Update `agent-memory/palace/user-profile.md` immediately |
+| **Decision made** | Add to `agent-memory/palace/state.md` Key Decisions immediately |
 | **Knowledge index** | `agent-memory/knowledge/index.md` |
 
 ### Current Knowledge Files
