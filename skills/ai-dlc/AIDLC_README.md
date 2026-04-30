@@ -370,25 +370,26 @@ skill-name/
 
 Progressive disclosure: metadata (100 words) → SKILL.md body → references (unlimited)
 
-### `system/agent-memory/` — Memory Palace + Knowledge Evolution
-**Triggers:** "save memory", "load context", "what did we do last time", "remember this", "track templates", "session summary"
+### `system/agent-memory/` — Agent Memory System
+**Triggers:** "save memory", "load context", "what did we do last time", "remember this", "bootstrap memory", "session summary"
 
-Two systems:
-- **Memory Palace** — what happened (wings/rooms/halls/closets)
-- **Knowledge Evolution** — what works (scored templates + lessons)
+Lean cross-domain memory: hot state + playbook + skill evolution
 
 ```
 agent-memory/
-├── palace/
-│   ├── state.md          ← palace map (≤100 lines)
-│   ├── wings/{topic}/    ← hall.md + rooms/ + closets/ + skills/
-│   └── knowledge-evolution/  ← template-health, lesson-effectiveness, gap-tracker
-└── knowledge/
-    ├── index.json        ← utility_score, usage_count per domain
-    └── lessons/{domain}/ ← captured lessons
+├── memory.md        ← Hot state (2.5KB max, loaded first)
+├── playbook.md      ← Flat problem resolution table
+├── skill-log.md     ← Append-only skill improvement log
+├── drafts/          ← Temporary resolution drafts (ephemeral)
+└── knowledge/       ← Optional detail files (on-demand)
 ```
 
-Session workflow: `"load memory"` → start | `"save session + learn"` → end
+Automated by 4 Kiro hooks: session-load (promptSubmit), checkpoint (postTaskExecution), session-save (agentStop), skill-check (postToolUse write)
+
+| Reference | ใช้เมื่อ |
+|-----------|---------|
+| `references/session-flow.md` | Session lifecycle, Save/Discard Gate, hook behavior |
+| `references/templates/` | Empty templates for bootstrapping new workspaces |
 
 ---
 

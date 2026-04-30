@@ -25,7 +25,7 @@ bash <SCRIPTS_DIR>/setupAgentSkills.sh <PROJECT_FOLDER>
 | Script | บทบาท |
 |--------|--------|
 | `setupAgentSkills.sh` | **⭐ Main** — wrapper ถามทีละขั้น เรียกทุก script |
-| `setupMemory.sh` | สร้าง `agent-memory/` (palace + knowledge) |
+| `setupMemory.sh` | สร้าง `agent-memory/` (memory.md, playbook.md, skill-log.md) |
 | `setupKiro.sh` | setup `.kiro/` hooks, steering, MCP config |
 | `setupTests.sh` | bootstrap `tests/` COE structure (API/Web/Mobile) |
 | `postmanToPlaywright.sh` | copy postman migration skill ไปยัง project |

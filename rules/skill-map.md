@@ -55,7 +55,6 @@
 ### system/ — Meta Skills
 | Keyword | Skill |
 |---------|-------|
-| save memory, load context, session start/end | `system/agent-memory/` |
 | CoT, LATS, AoT, reasoning technique | `system/ai-techniques/` |
 | create new skill | `system/skill-creator/` |
 | create hook | `system/hook-creator/` |

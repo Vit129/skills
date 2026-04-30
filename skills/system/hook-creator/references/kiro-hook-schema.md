@@ -59,3 +59,10 @@
   }
 }
 ```
+
+## Gotchas
+
+- **askAgent for simple logic** — use `runCommand` + shell for simple checks (file exists, pattern match) — 10-100x cheaper
+- **Circular hook loops** — PreToolUse hook that calls a tool triggers itself. Fix: edit templates first, copy to `.kiro/hooks/`
+- **Hook fires during first-time setup** — guard test hooks with `ls tests/**/*.spec.ts 2>/dev/null | head -1`
+- **Time budget** — askAgent hooks must complete within 15 seconds. Add "Complete within 15 seconds." to all askAgent prompts

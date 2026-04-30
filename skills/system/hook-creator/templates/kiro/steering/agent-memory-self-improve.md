@@ -68,14 +68,12 @@ When using a playbook case during a session:
 - **Applied++**: the case's fix was actively used
 - **Prevented++**: recognizing the trigger helped avoid the problem
 
-Auto-promote: `Applied >= 3` → move case to `knowledge/{case-id}.md` with full detail. Remove from playbook.
-
 Archive: `Applied + Prevented >= 5` AND no use in 30 days → move to `knowledge/archive-playbook.md`.
 
 ## Crystallization
 
-When 3+ promoted knowledge files share the same domain AND at least one trigger keyword → auto-create `knowledge/{domain}-pattern.md`.
-Report the crystallization. No user confirmation needed — safeguard is keyword overlap.
+When 3+ playbook cases share the same domain → suggest merging to `knowledge/{domain}-pattern.md`.
+Report the suggestion. Do NOT auto-create — wait for user confirmation.
 
 ## Do Not Store
 

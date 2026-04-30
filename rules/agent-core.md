@@ -10,8 +10,7 @@ When information conflicts, higher items win:
 2. Verified codebase state (grep/read before acting)
 3. `~/.claude/rules/` files (skill-map, project-rules, citation-format — inlined in each agent's config)
 4. Agent-specific file — tier routing, escalation, cache rules
-5. `agent-memory/palace/state.md` — active session state
-6. Skill files at `{skills_root}/` (e.g. `~/.gemini/skills/`, `~/ai-agent/skills/`, or project `ai-agent/skills/`)
+5. Skill files at `{skills_root}/` (e.g. `~/.gemini/skills/`, `~/ai-agent/skills/`, or project `ai-agent/skills/`)
 
 If notes conflict with the codebase, trust the codebase.
 
@@ -65,7 +64,7 @@ Plan output:
 **Craft UI/code like a senior engineer ships to production.**
 
 ### Foundational Tokens (Centralized)
-- **Color:** Use design tokens from `agent-memory/knowledge/` or the project design system (not hardcoded hex)
+- **Color:** Use design tokens from the project design system (not hardcoded hex)
 - **Typography:** Consistent font families, sizes, weights, line heights
 - **Spacing:** Modular scale (8px, 12px, 16px, 24px, 32px base units)
 - **Shadows:** Depth hierarchy (shadow-sm, shadow-md, shadow-lg)
@@ -474,111 +473,12 @@ If any check fails, task is not done. Fix it or escalate.
 ## State Management (Manual)
 
 ### Mandatory Checklist — Turn Start
-- [ ] **Check** whether `agent-memory/palace/state.md` exists
-- [ ] **Read** it before substantial reasoning or tool use when it exists
-- [ ] **Use** Current Focus, Open Threads, blockers, and next steps as working context
-- [ ] **Continue** normally without blocking the turn if the file is missing or stale
+- [ ] **Continue** normally — use codebase and conversation context as working context
 
 ### Mandatory Checklist — Turn End
 - [ ] **Decide** whether the turn produced meaningful working context
-- [ ] **Update** `state.md` only if at least one is true: a decision was made, a direction was committed, a blocker was identified, next steps became clearer, or concrete implementation/testing progress happened
-- [ ] **Write** only a concise summary that helps the next turn continue work
-- [ ] **Skip** `state.md` updates for pure Q&A, no-decision turns, compare-only discussion, brainstorming without commitment, or general conversation
 - [ ] **Commit** if files changed and the task requires completion proof
-
-> Summary rule: action verbs only (Added, Fixed, Updated, Completed, Migrated). Exclude: discussions, no-decision turns, compare-only turns, and general learnings.
-
-## agent-memory/ Usage Guide
-
-### Resolution Order (MANDATORY — check before every session)
-
-```
-1. Per-project:  {project_root}/agent-memory/    ← check first
-2. Global:       ~/.claude/agent-memory/          ← fallback if no per-project
-
-For knowledge specifically:
-  1. {project_root}/agent-memory/knowledge/
-  2. {project_root}/ai-agent/skills/ai-dlc/knowledge/
-  3. ~/.claude/skills/ai-dlc/knowledge/
-```
-
-**If per-project `agent-memory/` does NOT exist:**
-→ Run `setupMemory.sh` to create it (or create manually using structure below)
-→ Do NOT silently use global only — always create per-project first
-
-**Required structure (every `agent-memory/` must have ALL of these):**
-```
-agent-memory/
-├── palace/
-│   ├── state.md              ← session state (≤100 lines)
-│   ├── tunnels.md            ← cross-wing links
-│   ├── search-index.md       ← flat search fallback
-│   ├── graph.md              ← readable node/edge map
-│   ├── user-profile.md       ← user preferences (≤80 lines)
-│   ├── wings/                ← topic wings (hall.md + rooms/ + closets/)
-│   └── archive/
-│       └── index.md          ← archive index
-└── knowledge/
-    ├── index.md              ← Markdown source-of-truth catalog
-    ├── evolution.md          ← scored change history
-    ├── articles/{domain}/    ← reusable articles/playbooks
-    └── lessons/{domain}/     ← captured lessons per domain
-```
-
-**state.md** (Turn tracking)
-- UPDATE if: decision made, direction committed, blocker identified, next steps clearer, implementation/testing progress
-- SKIP if: pure Q&A, no-decision turns, compare-only discussion, brainstorming without commitment, general conversation
-- Scope: This session's working context + progress
-- Format: Action verbs only (Added, Fixed, Updated, Completed, Migrated)
-
-**knowledge/** (Lessons & patterns)
-- CREATE if: discovered a reusable pattern, found a best practice worth repeating, captured a gotcha/lesson learned
-- UPDATE: `knowledge/index.md` score/status/applied/prevented counts after every scoreable outcome
-- UPDATE: `knowledge/evolution.md` when lesson quality, status, or scope changes
-- UPDATE: `knowledge/lessons/{domain}/index.md` when a new lesson is captured
-- Examples: design-tokens.md, error-recovery-strategy.md, testing-best-practices.md
-- Scope: Cross-project patterns (useful in future sessions)
-- Format: Markdown lesson + evidence + reusable rule + checklist
-
-**palace/wings/** (Persistent evolution tracking)
-- CREATE if: major capability added, architecture decision made, significant learning accumulated
-- UPDATE: hall.md when rooms added/removed
-- UPDATE: tunnels.md when cross-wing references created
-- UPDATE: search-index.md + graph.md at session end when routes or relationships change
-- Examples: agent-rules-evolution.md (tracks rule versions), wings architecture changes
-- Scope: Project evolution & growth over time (visible to future team members)
-- Format: Timestamped rooms with metadata
-
-### Update Contract (Session End — MANDATORY)
-
-When dirty=true, update ALL of the following that apply:
-
-| What changed | Update |
-|---|---|
-| Decision made / direction committed | `palace/state.md` (Current Focus + Open Threads) |
-| New room written | `palace/wings/{wing}/hall.md` + `palace/search-index.md` |
-| Cross-wing reference | `palace/tunnels.md` |
-| New lesson captured | `knowledge/lessons/{domain}/index.md` + lesson `.md` file |
-| Tool succeeded on project-relevant task | `knowledge/index.md` (score/applied count as appropriate) |
-| Tool failed on known issue | `knowledge/index.md` + `knowledge/evolution.md` with downgrade note |
-
-**Never update only state.md and skip knowledge/palace — all relevant files must be updated together.**
-
-**Do not create or update JSON memory indexes. Memory is Markdown-first. Existing JSON files are legacy compatibility artifacts only.**
 
 ## Do Not Store
 
-Never record: secrets/credentials, raw chat transcripts, chain-of-thought reasoning, speculative notes without evidence, duplicate summaries already in `agent-memory/`.
-
-## Placeholder Convention
-
-```
-{project_root}   = root directory of the active project (walk up from cwd)
-{knowledge_root} resolves in order:
-  1. {project_root}/agent-memory/knowledge/
-  2. {project_root}/ai-agent/skills/ai-dlc/knowledge/
-  3. ~/.claude/skills/ai-dlc/knowledge/
-
-{skills_root}    = {project_root}/skills/ or {project_root}/ai-agent/skills/
-{cwd}            = current working directory
-```
+Never record: secrets/credentials, raw chat transcripts, chain-of-thought reasoning, speculative notes without evidence.

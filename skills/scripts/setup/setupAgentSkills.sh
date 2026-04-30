@@ -11,7 +11,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 bash "$SCRIPT_DIR/setupMemory.sh" "$@"
 
 echo ""
-read -p "🔧 ต้องการ setup Kiro IDE ด้วยมั้ย? [y/N] " setup_kiro
+read -p "🔧 ต้องการ setup Kiro IDE ด้วยมั้ย? [Y/n] " setup_kiro
+setup_kiro="${setup_kiro:-y}"
 if [[ "$setup_kiro" =~ ^[Yy]$ ]]; then
     echo ""
     bash "$SCRIPT_DIR/setupKiro.sh" "$@"
@@ -21,7 +22,8 @@ fi
 SETUP_TESTS="$SCRIPT_DIR/setupTests.sh"
 if [ -f "$SETUP_TESTS" ]; then
   echo ""
-  read -p "🧪 ต้องการ setup QA tests (API/Web/Mobile) ด้วยมั้ย? [y/N] " run_tests
+  read -p "🧪 ต้องการ setup QA tests (API/Web/Mobile) ด้วยมั้ย? [Y/n] " run_tests
+  run_tests="${run_tests:-y}"
   if [[ "$run_tests" =~ ^[Yy]$ ]]; then
     echo ""
     bash "$SETUP_TESTS" "$@"
@@ -34,7 +36,8 @@ fi
 SETUP_POSTMAN="$SCRIPT_DIR/postmanToPlaywright.sh"
 if [ -f "$SETUP_POSTMAN" ]; then
   echo ""
-  read -p "📬 ต้องการ setup Postman → Playwright migration ด้วยมั้ย? [y/N] " run_postman
+  read -p "📬 ต้องการ setup Postman → Playwright migration ด้วยมั้ย? [Y/n] " run_postman
+  run_postman="${run_postman:-y}"
   if [[ "$run_postman" =~ ^[Yy]$ ]]; then
     echo ""
     bash "$SETUP_POSTMAN" "$@"

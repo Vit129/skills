@@ -38,7 +38,7 @@ See `output-styles/communication-style.md` for tone and interaction guidelines.
 | **ux-ui** | Manual | UI design, Figma, design system, tokens |
 | **finance** | Manual | Stock analysis, fundamental research |
 | **fitness** | Manual | Workout plans, nutrition tracking, fitness coaching |
-| **system** | SessionStart hook | agent-memory, skill-creator, hook-creator, AI techniques |
+| **system** | Manual or hooks | skill-creator, agent-memory, AI techniques |
 
 > All skill paths in `rules/skill-map.md`. When invoking a skill, announce `[Skill: {path}]` first.
 
@@ -46,9 +46,21 @@ See `output-styles/communication-style.md` for tone and interaction guidelines.
 
 | Hook | Matcher | Action |
 |------|---------|--------|
-| **SessionStart** | Always | Load `agent-memory/palace/state.md` (Memory Palace) |
 | **PreToolUse** | Write/Edit/MultiEdit | Check design → decomposition → implementation sequence |
-| **PostToolUse** | Write/Edit (test files) | Run test, auto-heal if fails, trigger Memory Palace |
+| **PostToolUse** | Write/Edit (test files) | Run test, auto-heal if fails |
+
+### Agent Memory
+
+Persistent cross-session memory at `agent-memory/`:
+
+| File | Purpose |
+|------|---------|
+| `memory.md` | Hot state: tasks, decisions, skill flags, lessons (2.5KB max) |
+| `playbook.md` | Problem resolution cases with Applied/Prevented scoring |
+| `skill-log.md` | Append-only skill improvement proposals |
+
+Hooks (Kiro): session-load v2.0, checkpoint v1.0, skill-check v1.0, session-save v2.1
+Steering: `agent-memory-self-improve.md` (auto-injected every session)
 
 ---
 
@@ -60,9 +72,8 @@ See `output-styles/communication-style.md` for tone and interaction guidelines.
 
 1. Copy `~/.claude/` to new workspace
 2. Verify `settings.json` hooks are loaded
-3. Initialize `agent-memory/palace/state.md` (first SessionStart does this)
-4. Confirm test commands match new project structure
-5. Done — skills auto-activate
+3. Confirm test commands match new project structure
+4. Done — skills auto-activate
 
 ---
 
@@ -71,7 +82,7 @@ See `output-styles/communication-style.md` for tone and interaction guidelines.
 ### What's Portable ✅
 
 - `rules/` — universal standards (all domains)
-- `skills/system/` — core meta-skills (agent-memory, skill-creator)
+- `skills/system/` — core meta-skills (skill-creator)
 - `skills/ai-dlc/` — dev/QA lifecycle
 - `skills/ux-ui/` — UI design
 - `skills/finance/` — investment research (paths may need adjustment)
@@ -81,50 +92,11 @@ See `output-styles/communication-style.md` for tone and interaction guidelines.
 
 - `rules/token_efficient.md` → Token management (review for new project)
 - `skills/finance/` → Investment portfolio paths (project-specific)
-- `agent-memory/` → Session-specific state (auto-recreated per workspace)
 
 ### Migration Path
 
-1. Copy everything except `agent-memory/`
-2. First SessionStart auto-initializes `agent-memory/palace/state.md`
-3. Done
-
----
-
-## 5. Agent Memory Resolution Rules
-
-### Knowledge = Per-Project Only
-
-Knowledge files (articles, lessons, evolution, index.md) live in `agent-memory/knowledge/` — single source of truth, per-project.
-
-`skills/` contains only execution logic (SKILL.md + references/ = how to work). It does not store knowledge data.
-
-```text
-{project_root}/agent-memory/knowledge/     ← knowledge lives here (per-project)
-{project_root}/skills/                        ← execution engine only (not data)
-
-Bootstrap (new project, no agent-memory/ yet):
-  Agent reads skills/system/agent-memory/SKILL.md → auto-creates agent-memory/ tree
-  Knowledge files are created fresh for the project — not copied from skills/
-```
-
-### Key Rules
-
-| Scenario | Action |
-|----------|--------|
-| **Agent needs reusable project knowledge** | Read `agent-memory/knowledge/index.md`, then the relevant `articles/{domain}/` or `lessons/{domain}/` |
-| **New lesson discovered** | Write to `agent-memory/knowledge/lessons/{domain}/` **immediately** — don't wait for session end |
-| **Bug fixed mid-session** | Create lesson file + append to knowledge/index.md + evolution.md right away |
-| **User preference stated** | Update `agent-memory/palace/user-profile.md` immediately |
-| **Decision made** | Add to `agent-memory/palace/state.md` Key Decisions immediately |
-| **Knowledge index** | `agent-memory/knowledge/index.md` |
-
-### Current Knowledge Files
-
-- `agent-memory/knowledge/index.md` — Knowledge index (Markdown table)
-- `agent-memory/knowledge/evolution.md` — Knowledge evolution log
-- `agent-memory/knowledge/articles/` — Per-domain articles/playbooks
-- `agent-memory/knowledge/lessons/` — Per-domain lessons
+1. Copy everything
+2. Done
 
 ---
 
@@ -141,6 +113,3 @@ Route high-token tasks (reading entire structure, large-scale planning) through 
 - **Agent Strategy:** `skills/KIRO.md` (tier selection, skill map, Karpathy principles)
 - **Karpathy Principles:** `skills/KIRO.md` §Karpathy Principles (Think Before Coding, Simplicity First, Surgical Changes, Goal-Driven Execution)
 - **Token Management:** `rules/token_efficient.md`
-- **Agent Memory:** `skills/system/agent-memory/` (Memory Palace + Knowledge Evolution — auto-activated SessionStart)
-- **Memory Palace State:** `agent-memory/palace/state.md`
-- **Search Index:** `agent-memory/palace/search-index.md`

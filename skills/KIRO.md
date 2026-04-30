@@ -18,9 +18,7 @@
 ## Citation format (when answering from knowledge base)
 
 ```
-[from: LESSON-AUTH-001]        ← lesson
 [from: skill:ai-dlc/rules/playwright-rules] ← skill
-[from: memory:{wing}/{room}]   ← memory palace
 ```
 
 <!-- ═══ AGENTS.md — Shared Agent Rules (inlined) ═══ -->
@@ -33,10 +31,7 @@ When information conflicts, higher items win:
 2. Verified codebase state (grep/read before acting)
 3. `AGENTS.md` — shared rules & skill map (inlined in each agent's config file)
 4. Agent-specific file — tier routing, escalation, cache rules
-5. `agent-memory/palace/state.md` — active session state
-5b. `agent-memory/knowledge/index.md` — knowledge index (keyword routing for lessons + articles)
-6. Skill files at `{skills_root}/` (e.g. `~/.claude/skills/`, `~/ai-agent/skills/`, or project `ai-agent/skills/`)
-7. After any file write or decision → note internally that session has unsaved work (dirty); before ending session, follow the save workflow in `system/agent-memory/` skill
+5. Skill files at `{skills_root}/` (e.g. `~/.claude/skills/`, `~/ai-agent/skills/`, or project `ai-agent/skills/`)
 
 If notes conflict with the codebase, trust the codebase.
 
@@ -102,7 +97,6 @@ If notes conflict with the codebase, trust the codebase.
 
 | Keyword | Skill |
 |---------|-------|
-| save memory, load context, session start/end | `system/agent-memory/` |
 | CoT, LATS, AoT, reasoning technique | `system/ai-techniques/` |
 | create new skill | `system/skill-creator/` |
 | create hook | `system/hook-creator/` |
@@ -198,13 +192,4 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 ## Do Not Store
 
-Never record: secrets/credentials, raw chat transcripts, chain-of-thought reasoning, speculative notes without evidence, duplicate summaries already in `agent-memory/`.
-
-## Minimum Update Contract
-
-After meaningful work, update:
-
-- `agent-memory/palace/state.md` → Current Focus + Open Threads when focus/blockers/next steps change
-- `agent-memory/knowledge/index.md` + `knowledge/evolution.md` → every dirty save (mandatory Knowledge Sync Gate)
-- `agent-memory/` rooms → when decisions, architecture choices, or lessons are made
-- Trigger "save session + learn" at session end if dirty=true
+Never record: secrets/credentials, raw chat transcripts, chain-of-thought reasoning, speculative notes without evidence.

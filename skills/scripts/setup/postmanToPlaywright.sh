@@ -33,8 +33,10 @@ if [ -z "${BASE_DIR:-}" ]; then
 fi
 
 TARGET_DIR=""
+FORCE=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    --force) FORCE=1; shift ;;
     *) TARGET_DIR="$1"; shift ;;
   esac
 done
@@ -53,8 +55,7 @@ source "$SCRIPT_DIR/_resolveTarget.sh"
 
 ROOT_DIR="$(cd "$TARGET_DIR" && pwd)"
 
-cd "$TARGET_DIR" || exit 1
-echo "📁 Working in: $(pwd)"
+echo "📁 Working in: $ROOT_DIR"
 echo ""
 
 # --- check if skill already exists in ai-agent/skills/ ---
@@ -67,8 +68,20 @@ if [ -d "$SKILL_IN_AIAGENT" ]; then
     exit 0
 fi
 
-# --- default destination: same level as tests/ ---
-DEST_DIR="postman-to-playwright"
+# --- choose install location ---
+echo "📦 ติดตั้ง postman-to-playwright ที่ไหน?"
+echo "  [1] ai-agent/skills/postman-to-playwright/  (default — รวมกับ skills อื่น)"
+echo "  [2] postman-to-playwright/                  (แยกออกมาระดับ project root)"
+read -p "เลือก [1/2, default=1]: " install_choice
+install_choice="${install_choice:-1}"
+
+if [[ "$install_choice" == "2" ]]; then
+    DEST_DIR="$ROOT_DIR/postman-to-playwright"
+    echo "  → ติดตั้งที่: $DEST_DIR"
+else
+    DEST_DIR="$ROOT_DIR/ai-agent/skills/postman-to-playwright"
+    echo "  → ติดตั้งที่: $DEST_DIR"
+fi
 
 # --- create target & copy ---
 echo "📁 Creating $DEST_DIR ..."
@@ -81,13 +94,13 @@ find "$POSTMAN_SRC" -maxdepth 1 -name '.*' ! -name '.DS_Store' ! -name '.' -exec
 
 echo ""
 echo "✅ Done! postman-to-playwright created at:"
-echo "   $(pwd)/$DEST_DIR"
+echo "   $DEST_DIR"
 echo ""
 
 # --- install dependencies ---
 echo "📦 Installing dependencies..."
-if [ -f "package.json" ]; then
-    npm install --save-dev @inquirer/prompts 2>/dev/null && echo "  ✅ @inquirer/prompts installed" || echo "  ⚠️  npm install failed — install manually: npm install @inquirer/prompts"
+if [ -f "$ROOT_DIR/package.json" ]; then
+    (cd "$ROOT_DIR" && npm install --save-dev @inquirer/prompts 2>/dev/null) && echo "  ✅ @inquirer/prompts installed" || echo "  ⚠️  npm install failed — install manually: npm install @inquirer/prompts"
 else
     echo "  ⚠️  No package.json found — run 'npm init -y' first, then 'npm install @inquirer/prompts'"
 fi

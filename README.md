@@ -20,7 +20,12 @@ Uses a Single Source of Truth (SSOT) pattern: shared rules in `rules/` with auto
 ├── scripts/                    ← Agent sync scripts
 │   └── sync-agent-instructions.sh  ← Reads rules/ → generates ~/.codex/CODEX.md, ~/.gemini/GEMINI.md
 ├── skills/                     ← Skill library (see below)
-├── agent-memory/               ← Session memory (auto-managed, Memory Palace)
+├── agent-memory/               ← Cross-domain persistent memory (hooks automate)
+│   ├── memory.md               ← Hot state (2.5KB max, loaded first)
+│   ├── playbook.md             ← Flat problem resolution table
+│   ├── skill-log.md            ← Append-only skill improvement log
+│   ├── drafts/                 ← Temporary resolution drafts (ephemeral)
+│   └── knowledge/              ← Optional detail files (on-demand)
 ├── CLAUDE.md                   ← Claude Code global config
 └── README.md                   ← This file
 
@@ -35,21 +40,15 @@ skills/                         ← Skill library
 │   ├── po/                     ← architect (DDD, logical design)
 │   └── ux-ui/                  ← ui-designer
 ├── system/                     ← Meta skills
-│   ├── agent-memory/           ← Memory Palace + Knowledge Evolution
-│   ├── agent-memory-lite/      ← Lightweight memory (single-file variant)
 │   ├── ai-techniques/          ← CoT, LATS, AoT, reasoning techniques
 │   ├── analysis-concept/       ← Concept analysis patterns
 │   ├── multi-agent-router/     ← Route tasks to Gemini/Codex/Claude by token cost
 │   ├── skill-creator/          ← Create new skills
-│   └── hook-creator/           ← Create agent hooks
+│   └── agent-memory/           ← Cross-domain agent memory (templates + session flow)
 ├── finance/                    ← Investment research (local only, not copied to projects)
 ├── fitness/                    ← Fitness coaching, nutrition, workout planning
 ├── doc/                        ← Documentation: aidlc flowchart, swimlane
 └── scripts/                    ← Scripts: setup system
-
-agent-memory/                   ← Session memory (auto-managed)
-├── palace/                     ← Memory Palace: state.md, wings, keyword/date indexes, tunnels
-└── knowledge/                  ← Knowledge: lessons, articles, evolution, index.md
 ```
 
 ## How Agents Load Configuration
@@ -77,6 +76,4 @@ agent-memory/                   ← Session memory (auto-managed)
 
 **Skills** are markdown instruction files agents load on demand. Each skill has a `SKILL.md` with triggers, routing table, and references.
 
-**Agent Memory** persists context and learning across sessions without a database — plain markdown. Includes user modeling, skill crystallization, periodic nudges, evolution audit trail, and session search.
-
-**Setup scripts** bootstrap new projects with agent context layer (`.kiro/`, `agent-memory/`) and COE QA test structure — portable, not tied to any specific agent or path.
+**Setup scripts** bootstrap new projects with agent context layer and COE QA test structure — portable, not tied to any specific agent or path.

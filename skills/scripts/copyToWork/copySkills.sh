@@ -116,32 +116,23 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 # ── Folders to copy ──
 FOLDERS=("ai-dlc" "doc" "system" "postman-to-playwright")
 
-# ── Subfolders to exclude within copied folders ──
-EXCLUDE_SUBFOLDERS=("system/agent-memory-lite")
-
-for folder in "${FOLDERS[@]}"; do
-  if [ ! -d "$SRC/$folder" ]; then
-    echo "  ⏭️  skip  $folder/ (not found in source)"
-    continue
-  fi
-  if [ -d "$DEST/$folder" ] && [ "$FORCE" -ne 1 ]; then
-    echo "  ⏭️  skip  $folder/ (exists, use --force to overwrite)"
+# ── Copy scripts/setup/ → $DEST/scripts/setup/ (exclude setupCodexSkills.sh) ──
+SCRIPTS_SRC="$SRC/scripts/setup"
+SCRIPTS_DEST="$DEST/scripts/setup"
+if [ ! -d "$SCRIPTS_SRC" ]; then
+  echo "  ⏭️  skip  scripts/setup/ (not found in source)"
+else
+  if [ -d "$SCRIPTS_DEST" ] && [ "$FORCE" -ne 1 ]; then
+    echo "  ⏭️  skip  scripts/setup/ (exists, use --force to overwrite)"
   else
-    rm -rf "$DEST/$folder"
-    cp -R "$SRC/$folder" "$DEST/$folder"
-    # Remove excluded subfolders after copy
-    for excl in "${EXCLUDE_SUBFOLDERS[@]}"; do
-      if [[ "$excl" == "$folder/"* ]] || [[ "$excl" == "$folder" ]]; then
-        sub="${excl#$folder/}"
-        if [ -d "$DEST/$folder/$sub" ]; then
-          rm -rf "$DEST/$folder/$sub"
-          echo "  🚫 removed  $folder/$sub/ (excluded)"
-        fi
-      fi
-    done
-    echo "  ✅ $folder/"
+    rm -rf "$SCRIPTS_DEST"
+    mkdir -p "$SCRIPTS_DEST"
+    cp -R "$SCRIPTS_SRC"/. "$SCRIPTS_DEST"/
+    rm -f "$SCRIPTS_DEST/setupCodexSkills.sh"
+    find "$SCRIPTS_DEST" -name ".DS_Store" -delete 2>/dev/null || true
+    echo "  ✅ scripts/setup/ (excluded: setupCodexSkills.sh)"
   fi
-done
+fi
 
 # ── Files to copy ──
 FILES=("KIRO.md")

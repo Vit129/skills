@@ -11,6 +11,8 @@ if [ -z "${1:-}" ]; then
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SKILLS_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+TEMPLATES_DIR="$SKILLS_ROOT/system/agent-memory/references/templates"
 
 # Walk up from cwd to find project root
 _dir="$(pwd)"
@@ -53,164 +55,30 @@ echo ""
 echo "🧠 Setting up agent-memory..."
 
 AGENT_MEM="$ROOT_DIR/agent-memory"
-if [ ! -d "$AGENT_MEM/palace" ] || [ "$FORCE" -eq 1 ]; then
-  mkdir -p "$AGENT_MEM/palace/wings"
-  mkdir -p "$AGENT_MEM/palace/archive"
-  mkdir -p "$AGENT_MEM/knowledge/lessons"
 
-  # ── palace/state.md ──
-  if [ ! -f "$AGENT_MEM/palace/state.md" ] || [ "$FORCE" -eq 1 ]; then
-    cat > "$AGENT_MEM/palace/state.md" << 'STATE_EOF'
-# 🏛️ Agent Memory Palace — State
-
-## Active Wings
-(none yet)
-
-## Recent Sessions
-(none yet)
-
-## Current Focus
-- focus: ""
-- blockers: ""
-- next_action: ""
-
-## Open Threads
-(none)
-STATE_EOF
-    echo "  ✅ palace/state.md"
-  fi
-
-  # ── palace/tunnels.md ──
-  if [ ! -f "$AGENT_MEM/palace/tunnels.md" ] || [ "$FORCE" -eq 1 ]; then
-    cat > "$AGENT_MEM/palace/tunnels.md" << 'TUNNELS_EOF'
-# Cross-Wing Tunnels
-
-| From | To | Relationship |
-|------|----|-------------|
-TUNNELS_EOF
-    echo "  ✅ palace/tunnels.md"
-  fi
-
-  # ── palace/search-index.md ──
-  if [ ! -f "$AGENT_MEM/palace/search-index.md" ] || [ "$FORCE" -eq 1 ]; then
-    cat > "$AGENT_MEM/palace/search-index.md" << 'SEARCH_EOF'
-# Session Search Index
-
-| Date | Wing | Keywords | Room Path | Summary |
-|------|------|----------|-----------|---------|
-SEARCH_EOF
-    echo "  ✅ palace/search-index.md"
-  fi
-
-  # ── palace/user-profile.md ──
-  if [ ! -f "$AGENT_MEM/palace/user-profile.md" ] || [ "$FORCE" -eq 1 ]; then
-    cat > "$AGENT_MEM/palace/user-profile.md" << 'PROFILE_EOF'
-# User Profile
-
-Updated: (auto)
-
-## Preferences
-(auto-captured from interactions)
-
-## Observed Patterns
-(auto-captured from sessions)
-
-## Communication
-(auto-captured from interactions)
-
-## Domain Expertise
-(auto-captured from sessions)
-PROFILE_EOF
-    echo "  ✅ palace/user-profile.md"
-  fi
-
-  # ── palace/archive/index.md ──
-  if [ ! -f "$AGENT_MEM/palace/archive/index.md" ] || [ "$FORCE" -eq 1 ]; then
-    cat > "$AGENT_MEM/palace/archive/index.md" << 'ARCHIVE_EOF'
-# Archive Index
-
-Archived wings and rooms are stored here when compressed or retired.
-ARCHIVE_EOF
-    echo "  ✅ palace/archive/index.md"
-  fi
-
-  # ── palace/graph.md ──
-  if [ ! -f "$AGENT_MEM/palace/graph.md" ] || [ "$FORCE" -eq 1 ]; then
-    cat > "$AGENT_MEM/palace/graph.md" << 'GRAPH_EOF'
-# Palace Graph
-
-Updated: (auto)
-
-## Nodes
-| ID | Type | Status | Tags | Notes |
-|----|------|--------|------|-------|
-
-## Rooms
-| ID | Wing | Status | Tags |
-|----|------|--------|------|
-
-## Edges
-| From | To | Type | Purpose |
-|------|----|------|---------|
-GRAPH_EOF
-    echo "  ✅ palace/graph.md"
-  fi
-
-  # ── knowledge/index.md ──
-  if [ ! -f "$AGENT_MEM/knowledge/index.md" ] || [ "$FORCE" -eq 1 ]; then
-    cat > "$AGENT_MEM/knowledge/index.md" << 'KNOWLEDGE_EOF'
-# Knowledge Index
-
-Updated: (auto)
-
-## Articles
-
-| ID | Type | Scope | Status | Score | Updated | Path | Keywords |
-|----|------|-------|--------|-------|---------|------|----------|
-
-## Lessons
-
-| ID | Domain | Type | Status | Applied | Prevented | Updated | Path |
-|----|--------|------|--------|---------|-----------|---------|------|
-
-## Gaps
-
-| Domain | Gap | First Seen | Status | Notes |
-|--------|-----|------------|--------|-------|
-KNOWLEDGE_EOF
-    echo "  ✅ knowledge/index.md"
-  fi
-
-  # ── knowledge/evolution.md ──
-  if [ ! -f "$AGENT_MEM/knowledge/evolution.md" ] || [ "$FORCE" -eq 1 ]; then
-    cat > "$AGENT_MEM/knowledge/evolution.md" << 'EVOLUTION_EOF'
-# Knowledge Evolution
-
-Updated: (auto)
-
-## Consolidation State
-
-- sessions_since_consolidation: 0
-- last_consolidation: (none)
-- next_due: after 5 sessions or 7 days
-
-## Change Log
-
-| Date | ID | Change | Signal | Before | After | Evidence |
-|------|----|--------|--------|--------|-------|----------|
-EVOLUTION_EOF
-    echo "  ✅ knowledge/evolution.md"
-  fi
-
-  echo "  ✅ agent-memory/ created (full structure)"
+if [ -d "$AGENT_MEM" ] && [ "$FORCE" -eq 0 ]; then
+  echo "  skip  agent-memory/ (already exists, use --force to overwrite)"
 else
-  echo "  skip  agent-memory/ (already exists, use --force to update)"
+  mkdir -p "$AGENT_MEM"
+
+  for file in memory.md playbook.md skill-log.md; do
+    if [ ! -f "$AGENT_MEM/$file" ] || [ "$FORCE" -eq 1 ]; then
+      cp "$TEMPLATES_DIR/$file" "$AGENT_MEM/$file"
+      echo "  ✅ agent-memory/$file"
+    else
+      echo "  skip  agent-memory/$file (exists)"
+    fi
+  done
+
+  echo "  ✅ agent-memory/ ready (drafts/ and knowledge/ created on demand)"
 fi
 
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "✅ agent-memory setup complete"
-echo "  agent-memory/           ← persistent memory + knowledge"
+echo "  agent-memory/memory.md     ← hot state (2.5KB max)"
+echo "  agent-memory/playbook.md   ← problem resolution cases"
+echo "  agent-memory/skill-log.md  ← skill improvement log"
 echo ""
 echo "To re-run: bash $(basename "$0") $TARGET_DIR --force"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
