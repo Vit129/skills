@@ -62,6 +62,15 @@ Persistent cross-session memory at `agent-memory/`:
 Hooks (Kiro): session-load v2.0, checkpoint v1.0, skill-check v1.0, session-save v2.1
 Steering: `agent-memory-self-improve.md` (auto-injected every session)
 
+### Agent Memory — update ALL files when code/decisions changed (skip if Q&A only)
+
+| File | When to update | What to write |
+|------|---------------|---------------|
+| `agent-memory/memory.md` | Every meaningful turn | Task_Ledger status · Recent_Lessons (last 5 IDs) · Open_Threads · Decisions_In_Force |
+| `agent-memory/playbook.md` | Bug fixed | Append `CASE-xxx` row: Trigger / Fix / Domain / Outcome |
+| `agent-memory/skill-log.md` | Pattern or improvement found | Append proposal row: Date / Skill / Problem / Proposed Change / Status |
+| `agent-memory/knowledge/lessons.md` | Existing lesson applied | Increment `Applied` or `Prevented` count in the lesson block |
+
 ---
 
 ## 3. New Workspace Setup Checklist
