@@ -34,6 +34,10 @@ See `rules/response-format.md` for the standard response structure:
 Includes: clarifying questions protocol (Tip 9), quality self-assessment to 9/10 (Tip 10),
 test-before-deliver gate (Tip 11), and context window health triggers (Tip 12/26).
 
+## Workflow Rules Reference
+
+See `rules/workflow.md` for the universal do/don't list, context & style guide, and example prompt patterns (Tip 19).
+
 ## Project Specs
 
 Every project must have a `project_specs.md` at its root.

@@ -65,6 +65,21 @@ For any code output:
 
 ---
 
+## Periodic Self-Review (Tip 13)
+
+After completing any task that took more than 3 tool calls, append an unsolicited review block:
+
+```
+Review:
+- What worked well:
+- What could be improved:
+- Suggested next upgrade (with estimated effort):
+```
+
+This replaces the need for the user to ask "what else could be better?" — surface it proactively.
+
+---
+
 ## Context Window Health (Tip 12/26)
 
 Trigger `/compact` when:
