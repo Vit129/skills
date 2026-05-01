@@ -13,6 +13,7 @@ description: >
 The authoritative coding standards for all Playwright automation.
 
 - **Global Coding Standards** — AI governance, strategy, restrictions. (Read `references/coding-standards.md`)
+- **Playwright TypeScript Standards** — variable usage, typing rules, and optional value handling. (Read `references/playwright-standard.md`)
 - **API Testing Rules** — Project structure, naming, assertions, schemas, fixtures. (Read `references/api.md`)
 - **Web UI Testing Rules** — Page Object Model, locators, interactions, fixtures. (Read `references/web-ui.md`)
 
@@ -23,6 +24,7 @@ The authoritative coding standards for all Playwright automation.
 4. Hybrid Testing: API setup over UI navigation
 5. No inline logic: all interactions through Page Objects or Helpers
 6. Labels.ts: TH/EN UI labels in separate file — never hardcode text in `getByRole({ name })`
+7. Follow TypeScript variable and typing rules from `references/playwright-standard.md`
 
 ## ⚠️ Gotchas
 
