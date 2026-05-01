@@ -9,7 +9,7 @@
 | Keyword | Skill |
 |---------|-------|
 | brainstorm, คิดก่อน, ยังไม่แน่ใจ, party mode, explore idea | `core/brainstorming/` ← mandatory before aidlc for new features |
-| any dev/QA task, start AIDLC, plan, build, phases | `core/aidlc/` |
+| **AUTO-DETECT** any SDLC intent: implement, build, create, test, fix bug, deploy, design API/DB, write code, automation — route here WITHOUT waiting for "start AIDLC" | `core/aidlc/` |
 | spawn subagent, parallel tasks, dispatch agent, subagent-driven, 2-stage review | `core/subagent-driven/` ← use during Phase 3.1 for large task sets |
 | analyze, gap analysis, requirements, reverse-eng | `core/analysis-skills/` |
 | logging, monitoring, observability, alerts | `core/monitoring/` |

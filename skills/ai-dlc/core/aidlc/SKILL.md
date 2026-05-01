@@ -1,20 +1,31 @@
 ---
 name: aidlc
 description: >
-  This skill should be used when the user asks to "start AIDLC", "เริ่ม AI-DLC", "start AI-DLC",
-  "create a decision file", "สร้าง decision", "plan the execution", "วางแผน",
-  "break down tasks", "แบ่งงาน", "resume AI-DLC", "ทำต่อ",
+  AUTO-ACTIVATE when the user's intent involves any SDLC activity — do NOT wait for
+  explicit "start AIDLC" command. Detect by intent, not by exact wording.
+
+  AUTO-ACTIVATE signals (match by meaning):
+  - Implement / Build: implement, build, create feature, develop, write code, add, refactor,
+    migrate, integrate, ทำ, สร้าง, เพิ่ม feature, พัฒนา, เขียนโค้ด
+  - Test / QA: test, testing, QA, automation, automate, test scenario, test case,
+    playwright, robot framework, ทดสอบ, เขียน test, สร้าง test scenario, หา bug
+  - Bug / Fix: fix bug, debug, reproduce issue, investigate failure, แก้ bug, หาสาเหตุ error
+  - Deploy / DevOps: deploy, pipeline, CI/CD, release, docker, ขึ้น production
+  - Technical Design: API design, database schema, domain design, architecture, ออกแบบ API
+  - Any "verb + software artifact": write/create/fix/update + file/function/component/service/endpoint
+
+  SKIP AIDLC for: pure research, brainstorming questions, finance/fitness domain tasks,
+  settings/config changes with no code output.
+
+  Explicit triggers (legacy support):
+  "start AIDLC", "เริ่ม AI-DLC", "resume AI-DLC", "ทำต่อ",
   "start from domain design", "start from logical design",
-  "ทำ web", "ทำ api", "ทำ feature", "สร้าง app", "build",
-  "test scenario", "test case", "สร้าง test", "เขียน test",
-  "automate", "automation", "QA", "testing",
   "QA only", "Dev only", "QA scenario only", "QA automation",
   "ทำแค่ QA", "ทำแค่ Dev", "ทำ test อย่างเดียว",
   or needs governance for the AI Development Lifecycle.
+
   ALL coding, development, and QA work MUST go through this skill first.
   Supports 3 modes: Full (default), QA Only, Dev Only.
-  Non-coding tasks (research, analysis, finance, presentation, knowledge management)
-  can go directly to the relevant skill or knowledge without AIDLC governance.
 ---
 
 # AIDLC (AI Development Lifecycle)

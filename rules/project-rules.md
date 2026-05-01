@@ -1,5 +1,20 @@
 # Project Rules (overrides/extends shared)
 
+- **AIDLC auto-detect (mandatory):** If the user's intent matches ANY of the signals below — route to `ai-dlc/core/aidlc/` immediately. Do NOT wait for the user to say "start AIDLC".
+
+  **SDLC intent signals (detect by meaning, not exact wording):**
+  - **Implement / Build:** implement, build, create, develop, write code, add feature, refactor, migrate, integrate, ทำ, สร้าง, เพิ่ม, แก้ไข, พัฒนา, เขียนโค้ด
+  - **Test / QA:** test, testing, QA, automation, automate, test scenario, test case, playwright, robot framework, ทดสอบ, เขียน test, สร้าง test scenario, หา bug
+  - **Bug / Fix:** fix bug, debug, reproduce, investigate failure, แก้ bug, หาสาเหตุ
+  - **Deploy / DevOps:** deploy, pipeline, CI/CD, release, docker, infrastructure, deploy ขึ้น
+  - **Design (technical):** API design, database schema, domain design, architecture, ออกแบบ API, ออกแบบ database
+  - **Any verb + software artifact:** "write X", "create X", "fix X", "update X" where X is a file, function, component, service, endpoint, query, script, workflow
+
+  **Do NOT auto-route AIDLC for:**
+  - Pure research / analysis / brainstorming questions (no intent to produce code)
+  - Finance, fitness, or domain-only knowledge tasks
+  - Configuration or settings changes (no SDLC artifacts)
+
 - **AIDLC first:** All dev/QA work goes through `ai-dlc/core/aidlc/` — never call qa/dev skills directly unless AIDLC routes there
 - **AIDLC modes:** Support 3 modes — Full (default), QA Only, Dev Only. See `workflow.md` → "Execution Modes" for phase matrix and routing tables.
   - `"start AI-DLC QA scenario only"` → QA Scenario Only (Lite Inception → 2.1 → 2.2)
