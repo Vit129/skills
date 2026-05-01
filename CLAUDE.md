@@ -26,6 +26,23 @@ See `rules/citation-format.md` for citation conventions.
 
 See `output-styles/communication-style.md` for tone and interaction guidelines.
 
+## Response Format Reference
+
+See `rules/response-format.md` for the standard response structure:
+**Done → Next → Why → Options** (used by all agents and skills).
+
+Includes: clarifying questions protocol (Tip 9), quality self-assessment to 9/10 (Tip 10),
+test-before-deliver gate (Tip 11), and context window health triggers (Tip 12/26).
+
+## Workflow Rules Reference
+
+See `rules/workflow.md` for the universal do/don't list, context & style guide, and example prompt patterns (Tip 19).
+
+## Project Specs
+
+Every project must have a `project_specs.md` at its root.
+Copy template from `rules/project_specs.template.md` and fill before coding begins.
+
 ### Skills (Conditional Activation)
 
 | Category | Activated By | Usage |

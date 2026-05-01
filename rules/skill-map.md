@@ -52,6 +52,11 @@
 |---------|-------|
 | UI design, figma, design system, tokens | `ux-ui/ui-designer/` ← use before frontend-dev |
 
+### productivity/ — Claude Code Power Use
+| Keyword | Skill |
+|---------|-------|
+| code tips, productivity tips, workspace setup, claude code setup, เคล็ดลับ claude, ตั้งค่า workspace | `skills/claude-code-tips/` |
+
 ### system/ — Meta Skills
 | Keyword | Skill |
 |---------|-------|
