@@ -155,6 +155,107 @@ Resource         ../../pages/android/common/commonKeywords.robot
     Element Should Be Visible    id=error-message
 ```
 
+### 7. Variable Casing by Scope
+
+Variable casing communicates scope at a glance. Follow this rule consistently.
+
+> Source: [docs.robotframework.org/docs/style_guide#variable-scope-and-casing](https://docs.robotframework.org/docs/style_guide#variable-scope-and-casing)
+
+| Scope | Casing | Example |
+|---|---|---|
+| GLOBAL / SUITE / TEST | UPPER_CASE | `${BASE_URL}`, `${SESSION_TOKEN}` |
+| LOCAL (inside keyword) | lower_case | `${response}`, `${element}` |
+| Keyword arguments | lower_case | `${username}`, `${timeout}` |
+
+```robot
+# ✅ CORRECT
+*** Keywords ***
+Login With Credentials
+    [Arguments]    ${username}    ${password}
+    ${response}=    Call Login API    ${username}    ${password}
+    Set Test Variable    ${SESSION_TOKEN}    ${response}[token]
+
+# ❌ WRONG — local variable using UPPER_CASE
+*** Keywords ***
+Login With Credentials
+    [Arguments]    ${USERNAME}    ${PASSWORD}
+    ${RESPONSE}=    Call Login API    ${USERNAME}    ${PASSWORD}
+```
+
+### 8. Error Handling — Use TRY/EXCEPT
+
+Use native `TRY/EXCEPT` (RF 5+) instead of `Run Keyword And Ignore Error` for error handling. It is more readable and explicit.
+
+> Source: [robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#try-except-syntax](https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#try-except-syntax)
+
+```robot
+# ✅ CORRECT — TRY/EXCEPT
+*** Keywords ***
+Tap Element With Fallback
+    [Arguments]    ${primary}    ${fallback}
+    TRY
+        Wait Until Element Is Visible    ${primary}    timeout=5s
+        Click Element    ${primary}
+    EXCEPT
+        Wait Until Element Is Visible    ${fallback}    timeout=5s
+        Click Element    ${fallback}
+    END
+
+# ❌ AVOID — Run Keyword And Ignore Error (harder to read)
+*** Keywords ***
+Tap Element With Fallback
+    [Arguments]    ${primary}    ${fallback}
+    ${status}    ${error}=    Run Keyword And Ignore Error
+    ...    Wait Until Element Is Visible    ${primary}    timeout=5s
+    IF    '${status}' == 'FAIL'
+        Click Element    ${fallback}
+    ELSE
+        Click Element    ${primary}
+    END
+```
+
+### 9. Nesting Depth ≤ 4
+
+Keyword nesting must not exceed 4 levels deep. Deep nesting makes keywords hard to read and debug.
+
+> Source: [docs.robotframework.org/docs/style_guide#indentation](https://docs.robotframework.org/docs/style_guide#indentation)
+
+```robot
+# ✅ CORRECT — max 4 levels
+*** Keywords ***
+Process Items
+    FOR    ${item}    IN    @{ITEMS}
+        IF    ${item}[active]
+            IF    ${item}[valid]
+                Process Single Item    ${item}
+            END
+        END
+    END
+
+# ❌ WRONG — 5+ levels, extract inner logic to a separate keyword instead
+```
+
+### 10. Use `[Documentation]` Instead of Comments
+
+Prefer `[Documentation]` over inline comments. Comments are for TODOs only.
+
+> Source: [docs.robotframework.org/docs/style_guide#comments](https://docs.robotframework.org/docs/style_guide#comments)
+
+```robot
+# ✅ CORRECT — [Documentation] explains the keyword
+*** Keywords ***
+Verify Dashboard Is Loaded
+    [Documentation]    Waits for the dashboard screen to be fully visible after login.
+    Wait Until Element Is Visible    accessibility_id=dashboard    timeout=15s
+    Element Should Be Visible    accessibility_id=welcome-message
+
+# ❌ AVOID — inline comment instead of [Documentation]
+*** Keywords ***
+Verify Dashboard Is Loaded
+    # Wait for dashboard after login
+    Wait Until Element Is Visible    accessibility_id=dashboard    timeout=15s
+```
+
 ---
 
 ## PART 5: Advanced Robot (Expert Tier)
