@@ -4,7 +4,7 @@ description: >
   Rigorous peer-comparison report — 2–5 US stock tickers side-by-side in polished HTML.
   Revenue/Net Income/EPS trends (5Q), valuation (P/E), dividend snapshot, guidance summary.
   All financial figures from live web search — zero training data, N/A if not found.
-  Dark theme + Chart.js visualization. English output.
+  Dark theme + Chart.js visualization. Thai/English mixed language.
   Trigger: "เปรียบเทียบหุ้น [TICKER1] [TICKER2]...", "peer comparison", "comparative analysis",
   "compare stocks [TICKER1] vs [TICKER2]", "stock peer comparison"
 ---

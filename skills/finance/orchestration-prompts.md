@@ -1,6 +1,6 @@
-# Finance Mock Orchestration Prompts
+# Finance Orchestration Prompts
 
-These prompts are intentionally simple and practical. They are meant to help you test selective research delegation without over-engineering the workflow.
+Ready-to-use prompt templates for selective research delegation with `tradingagents-orchestrator`.
 
 ## 1. Full-Mode Batch Stocks
 

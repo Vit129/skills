@@ -15,8 +15,7 @@ This file is the folder-level guidance for `skills/finance/` so the finance skil
 
 ## Which Skill To Use
 
-- `etf-analysis`: ETF comparison (holdings/sector/cost/tracking, ETF vs stocks)
-- `portfolio-analysis`: portfolio-level risk/allocation/rebalancing (no per-stock buy/sell calls)
+- `portfolio-etf-analysis`: portfolio-level risk/allocation/rebalancing + ETF comparison (holdings/sector/cost/tracking, ETF vs stocks)
 - `stock-deep-analysis`: deep single-stock fundamental template (20 sections)
 - `stock-peer-comparison`: 2–5 stock peer comparison as an HTML report
 - `tradingagents-orchestrator`: multi-role decision workflow (debate + risk gate + evidence log) producing Buy/Hold/Sell/No-Trade
@@ -28,12 +27,11 @@ Use this when the user wants the full picture:
 1. Main report: `tradingagents-orchestrator`
 2. Appendices (only if requested / data is available)
 - Appendix A: `stock-deep-analysis`
-- Appendix B: `portfolio-analysis`
+- Appendix B: `portfolio-etf-analysis` (portfolio fit + ETF lens when relevant)
 - Appendix C: `stock-peer-comparison`
-- Appendix D: `etf-analysis` (when analyzing ETFs or when an ETF lens is needed)
 
 For selective research delegation patterns, see `skills/finance/subagent-patterns.md`.
-For copy-ready orchestration examples, see `skills/finance/mock-orchestration-prompts.md`.
+For copy-ready orchestration examples, see `skills/finance/orchestration-prompts.md`.
 
 ## Input Conventions
 

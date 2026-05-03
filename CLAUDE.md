@@ -72,21 +72,38 @@ Persistent cross-session memory at `agent-memory/`:
 
 | File | Purpose |
 |------|---------|
-| `memory.md` | Hot state: tasks, decisions, skill flags, lessons (2.5KB max) |
+| `memory.md` | Hot state: tasks, decisions, skill flags, lessons (2.5KB max, capacity indicator) |
+| `user-profile.md` | User preferences: language, style, IDE, commits (stable, rarely changes) |
 | `playbook.md` | Problem resolution cases with Applied/Prevented scoring |
 | `skill-log.md` | Append-only skill improvement proposals |
+| `knowledge/` | Promoted cases, crystallized patterns, archived playbook |
 
-Hooks (Kiro): session-load v2.0, checkpoint v1.0, skill-check v1.0, session-save v2.1
+Hooks (Kiro — 6 hooks):
+
+| Hook | Version | Event | Role |
+|------|---------|-------|------|
+| session-load | v3.1 | promptSubmit | Load memory + user-profile + playbook search |
+| checkpoint | v1.0 | postTaskExecution | Save progress mid-session |
+| skill-check | v1.0 | postToolUse (write) | Flag underperforming skills |
+| skill-evolve | v1.0 | postTaskExecution | Propose skill improvements |
+| knowledge-curate | v1.0 | agentStop | Promote/crystallize/archive (subagent when threshold) |
+| session-save | v4.0 | agentStop | Final state save + scoring + nudges |
+
 Steering: `agent-memory-self-improve.md` (auto-injected every session)
+
+Closed learning loops:
+- **Skill self-evolution:** skill-check → flag → skill-evolve → propose → apply → verify
+- **Knowledge pipeline:** draft → Save/Discard Gate → playbook (scored) → knowledge (promoted) → pattern (crystallized)
 
 ### Agent Memory — update ALL files when code/decisions changed (skip if Q&A only)
 
 | File | When to update | What to write |
 |------|---------------|---------------|
-| `agent-memory/memory.md` | Every meaningful turn | Task_Ledger status · Recent_Lessons (last 5 IDs) · Open_Threads · Decisions_In_Force |
-| `agent-memory/playbook.md` | Bug fixed | Append `CASE-xxx` row: Trigger / Fix / Domain / Outcome |
+| `agent-memory/memory.md` | Every meaningful turn | Task_Ledger status · Recent_Lessons (last 5 IDs) · Decisions_In_Force · capacity indicator |
+| `agent-memory/user-profile.md` | User explicitly changes preferences | Language, style, IDE, commits |
+| `agent-memory/playbook.md` | Bug fixed | Append `CASE-xxx` row: Trigger / Fix / Domain / Outcome / Applied=0 / Prevented=0 |
 | `agent-memory/skill-log.md` | Pattern or improvement found | Append proposal row: Date / Skill / Problem / Proposed Change / Status |
-| `agent-memory/knowledge/lessons.md` | Existing lesson applied | Increment `Applied` or `Prevented` count in the lesson block |
+| `agent-memory/knowledge/` | Case promoted (Applied >= 3) | Create `{case-id}.md` with full detail; crystallize when 3+ same domain |
 
 ---
 
