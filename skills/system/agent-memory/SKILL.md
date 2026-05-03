@@ -32,6 +32,7 @@ agent-memory/
 | "bootstrap memory", "setup memory", "initialize", "reset" | `references/templates/` — copy templates to `agent-memory/` |
 | "session flow", "how does memory work", "save/discard gate" | `references/session-flow.md` |
 | "draft format", "playbook format", "memory format" | `references/templates/` — show the relevant template |
+| "subagent", "memory curator", "utility worker", "background memory cleanup" | `references/subagent-patterns.md` |
 
 ## Quick Reference
 
@@ -53,3 +54,7 @@ agent-memory/
 - Auto-crystallize: 3+ promoted files same domain + shared keyword → `knowledge/{domain}-pattern.md` (no user confirm needed)
 - Drafts are ephemeral — deleted after Save/Discard Gate evaluation
 - Never store secrets, credentials, or PII in any memory file
+
+## Subagent Note
+
+If you want to use `agent-memory` as a utility subagent, read `references/subagent-patterns.md`.

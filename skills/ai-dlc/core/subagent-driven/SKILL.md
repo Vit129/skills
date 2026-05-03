@@ -12,7 +12,11 @@ description: >
 # Subagent-Driven Development
 
 Orchestrate Phase 3.1 Implementation by dispatching subagents per task with 2-stage review.
-Inspired by Superpowers subagent-driven-development. Works with Kiro `invokeSubAgent` tool.
+Inspired by Superpowers subagent-driven-development.
+
+Supported runtimes (pick what your agent runtime provides):
+- Kiro: `invokeSubAgent`
+- Codex-style agent runners: `spawn_agent` + `send_input` + `wait_agent` (tool names may vary)
 
 ## When to Use
 
@@ -44,6 +48,13 @@ Orchestrator collects results → update dev-task-progress.md
 Next task (sequential) or parallel if tasks are independent
 ```
 
+## Ownership Rules (Non-Negotiable)
+
+- One subagent owns exactly one task.
+- Two subagents must not edit the same file at the same time.
+- Each dispatched task must list an explicit write-scope (file paths / module boundaries).
+- Dependent tasks run sequentially; independent tasks may run in parallel if the runtime supports it.
+
 ## Dispatch Rules
 
 Read `references/dispatch-rules.md` for:
@@ -70,6 +81,20 @@ Read `references/review-checklist.md` for:
 After all tasks complete:
 1. Update `dev-task-progress.md` — all `[ ]` → `[x]`
 2. Return to orchestrator → Phase 3.2 Automated Testing
+
+## Minimal Spawn Flow (Tool-Agnostic)
+
+1. Orchestrator selects 3+ independent tasks from `dev-task-progress.md`.
+2. For each task:
+   - Build a prompt using `references/context-template.md`.
+   - Include task write-scope (exact files) and required skills/rules.
+3. Dispatch subagent.
+4. Subagent must:
+   - Implement only within scope
+   - Run tests (where applicable)
+   - Self-review Stage 1 + Stage 2
+   - Report back with files changed + status
+5. Orchestrator integrates results, resolves conflicts, updates progress file.
 
 ## ⚠️ Gotchas
 

@@ -42,3 +42,4 @@
 - **2026-04-29**: AIDLC dialog format is a global rule for ALL phases, ALL agents (Kiro, Claude Code, Gemini, etc.)
 - **2026-04-29**: Derived files (graph.md, tunnels.md, archive/, domain indexes) cut — Markdown-native core files only
 - **2026-05-01**: 27-tip framework merged to main — rules/response-format.md, rules/workflow.md, rules/project_specs.template.md, .claude/settings.json (bypass), skills/claude-code-tips/SKILL.md all live
+- **2026-05-03**: Finance research subagents are bounded evidence lanes only; the main agent owns the final investment call; major claims need source/date labels and unknowns use `N/A`

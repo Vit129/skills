@@ -47,7 +47,7 @@ Do NOT include:
 
 | Scenario | Strategy |
 |---|---|
-| 3 independent tasks | Dispatch sequentially (Kiro invokeSubAgent is sequential by default) |
+| 3 independent tasks | Dispatch in parallel if supported; otherwise sequentially (keep write-scopes disjoint either way) |
 | Task A → Task B dependency | Wait for A to complete before dispatching B |
 | Task fails Stage 1 review | Fix in same subagent session, re-review before closing |
 | Task fails Stage 2 review | Orchestrator decides: fix inline or re-dispatch |

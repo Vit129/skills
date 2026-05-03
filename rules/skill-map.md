@@ -63,4 +63,3 @@
 | CoT, LATS, AoT, reasoning technique | `system/ai-techniques/` |
 | create new skill | `system/skill-creator/` |
 | create hook | `system/hook-creator/` |
-| route to gemini, route to codex, large codebase read, token budget, multi-agent | `system/multi-agent-router/` |

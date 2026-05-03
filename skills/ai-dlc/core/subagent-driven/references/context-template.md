@@ -1,6 +1,6 @@
 # Subagent Context Template
 
-Use this template when constructing the prompt for `invokeSubAgent`.
+Use this template when constructing the prompt for a subagent (Kiro `invokeSubAgent`, Codex `spawn_agent`, or equivalent).
 
 ---
 
@@ -32,7 +32,7 @@ You are implementing a single development task as part of AIDLC Phase 3.1.
 - Write ONLY the files listed in your task
 - Do NOT modify files outside your task scope
 - Run tests after implementation — all must pass
-- Commit when done — include commit hash in your response
+- If committing is part of your workflow, commit when done and include the commit hash in your response
 
 ## Review Required
 After implementation, self-review against:
@@ -61,3 +61,8 @@ Report: PASS or FAIL with details for each stage.
 - Other tasks' details
 - Brainstorming output
 - Architecture decisions (subagent reads logical-design.md directly if needed)
+
+## Tool Notes (If Supported)
+
+- If your runtime supports multiple subagents in parallel, ensure write-scopes are disjoint.
+- If your runtime is sequential-only, dispatch tasks one at a time but keep the same rules (scope + reviews).
