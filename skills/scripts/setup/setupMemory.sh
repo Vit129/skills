@@ -70,15 +70,33 @@ else
     fi
   done
 
+  # user-profile.md — scaffold empty if not present
+  if [ ! -f "$AGENT_MEM/user-profile.md" ] || [ "$FORCE" -eq 1 ]; then
+    cat > "$AGENT_MEM/user-profile.md" << 'EOF'
+# User Profile
+
+<!-- Stable preferences — update only when user explicitly changes them. -->
+<!-- Loaded at session start alongside memory.md. -->
+
+- **Language:** Thai (interaction), English (docs/code/files)
+- **IDE:** Kiro (Autopilot), Claude Code, Gemini CLI
+- **Commits:** Conventional Commits
+EOF
+    echo "  ✅ agent-memory/user-profile.md"
+  else
+    echo "  skip  agent-memory/user-profile.md (exists)"
+  fi
+
   echo "  ✅ agent-memory/ ready (drafts/ and knowledge/ created on demand)"
 fi
 
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "✅ agent-memory setup complete"
-echo "  agent-memory/memory.md     ← hot state (2.5KB max)"
-echo "  agent-memory/playbook.md   ← problem resolution cases"
-echo "  agent-memory/skill-log.md  ← skill improvement log"
+echo "  agent-memory/memory.md          ← hot state (2.5KB max)"
+echo "  agent-memory/user-profile.md    ← user preferences (stable)"
+echo "  agent-memory/playbook.md        ← problem resolution cases"
+echo "  agent-memory/skill-log.md       ← skill improvement log"
 echo ""
 echo "To re-run: bash $(basename "$0") $TARGET_DIR --force"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

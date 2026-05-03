@@ -21,11 +21,12 @@ Uses a Single Source of Truth (SSOT) pattern: shared rules in `rules/` with auto
 │   └── sync-agent-instructions.sh  ← Reads rules/ → generates ~/.codex/CODEX.md, ~/.gemini/GEMINI.md
 ├── skills/                     ← Skill library (see below)
 ├── agent-memory/               ← Cross-domain persistent memory (hooks automate)
-│   ├── memory.md               ← Hot state (2.5KB max, loaded first)
-│   ├── playbook.md             ← Flat problem resolution table
-│   ├── skill-log.md            ← Append-only skill improvement log
+│   ├── memory.md               ← Hot state (2.5KB max, capacity indicator)
+│   ├── user-profile.md         ← User preferences (stable, loaded at session start)
+│   ├── playbook.md             ← Problem resolution cases (scored: Applied/Prevented)
+│   ├── skill-log.md            ← Append-only skill improvement proposals
 │   ├── drafts/                 ← Temporary resolution drafts (ephemeral)
-│   └── knowledge/              ← Optional detail files (on-demand)
+│   └── knowledge/              ← Promoted cases, crystallized patterns, archive
 ├── CLAUDE.md                   ← Claude Code global config
 └── README.md                   ← This file
 

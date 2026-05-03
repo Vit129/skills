@@ -255,15 +255,13 @@ Data as of: [YYYY-MM-DD]
 - Follow `/skills/finance/research/stock-deep-analysis/SKILL.md`
 - Only include figures found via live web search; otherwise mark `N/A`
 
-### Appendix B — Portfolio Fit (Use portfolio-analysis template)
+### Appendix B — Portfolio Fit & ETF Lens (Use portfolio-etf-analysis template)
 - Follow `/skills/finance/portfolio/SKILL.md`
 - Allocation/risk framing only (no per-stock buy/sell calls inside the appendix)
+- ETF sections included automatically when ETF tickers are present
 
 ### Appendix C — Peer Comparison (Use stock-peer-comparison template)
 - Follow `/skills/finance/research/stock-peer-comparison/SKILL.md`
-
-### Appendix D — ETF Lens (Use etf-analysis template)
-- Follow `/skills/finance/etf/SKILL.md`
 
 ---
 

@@ -16,8 +16,7 @@ This file helps Codex work consistently inside `skills/finance/` (creating/updat
 
 ## Skill Routing (Quick Map)
 
-- ETF: `skills/finance/etf/SKILL.md`
-- Portfolio: `skills/finance/portfolio/SKILL.md`
+- Portfolio & ETF: `skills/finance/portfolio/SKILL.md`
 - Research:
   - Deep single stock: `skills/finance/research/stock-deep-analysis/SKILL.md`
   - Peer compare (HTML): `skills/finance/research/stock-peer-comparison/SKILL.md`
@@ -31,7 +30,7 @@ When the user wants the full picture:
 - Add backwards cross-references in related skills for discoverability when introducing new skills
 
 For selective research delegation and subagent lane design, see `skills/finance/subagent-patterns.md`.
-For copy-ready orchestration examples, see `skills/finance/mock-orchestration-prompts.md`.
+For copy-ready orchestration examples, see `skills/finance/orchestration-prompts.md`.
 
 ## Input Patterns To Support
 

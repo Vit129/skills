@@ -63,3 +63,4 @@
 | CoT, LATS, AoT, reasoning technique | `system/ai-techniques/` |
 | create new skill | `system/skill-creator/` |
 | create hook | `system/hook-creator/` |
+| agent memory, bootstrap memory, setup memory, session flow, save/discard gate, skill evolve, knowledge pipeline | `system/agent-memory/` |
