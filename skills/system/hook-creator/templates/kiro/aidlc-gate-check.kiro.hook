@@ -1,0 +1,13 @@
+{
+  "name": "AIDLC Gate Check",
+  "version": "2.1.0",
+  "disabled": false,
+  "description": "On prompt submit, check if the task requires AIDLC workflow and enforce it. Fires once per prompt, not on every write.",
+  "when": {
+    "type": "promptSubmit"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "AIDLC GATE CHECK (runs once per prompt):\n\nStep 0 — MANDATORY FIRST: Read `ai-agent/KIRO.md` now. It contains the skill map, routing rules, pipelines, and file index. Do NOT proceed until you have read it.\n\nIf this prompt involves ANY dev/QA/implementation work (coding, testing, building, implementing PBI, writing tests, creating features), you MUST complete these steps IN ORDER:\n\n1. READ `ai-agent/skills/ai-dlc/core/aidlc/SKILL.md`\n2. SCAN `.aidlc/[system]/[feature]/` for existing outputs → find first missing phase\n3. TELL the user which phase you will start from\n4. WAIT for user approval before executing\n\nIf ANY step is not done → STOP. Do not write implementation files.\n\nEXCEPTIONS (check KIRO.md Rules section for full list):\n- Postman migration → use `postman-to-playwright/postman/SKILL.md` directly\n- Non-coding tasks (research, analysis, questions, explanations)\n- Editing `.kiro/`, `agent-memory/`, steering, or hook config files\n- User explicitly says to skip workflow\n\nIf this is a non-coding task or exception, proceed normally.\n\n⛔ DIALOG RULE (ALWAYS ACTIVE — applies to ALL prompts, not just AIDLC):\nWhenever you need to ask the user a question with options (decisions, approvals, PBI selection, mode selection, brainstorming questions, or any choice), you MUST use the `userInput` tool with structured `options` parameter. NEVER write options as plain chat text. ONE question per `userInput` call — never combine multiple questions."
+  }
+}

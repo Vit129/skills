@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Sync Skills on Edit",
+  "description": "Auto-runs sync-skills.sh when any SKILL.md file is edited, keeping all AI agent targets (Claude, Kiro) in sync with the source.",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "ai-agent/skills/**/SKILL.md"
+    ]
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "bash ai-agent/scripts/sync-skills.sh"
+  }
+}
