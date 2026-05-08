@@ -1,0 +1,12 @@
+{
+  "name": "Claude Prj — Session Load",
+  "version": "3.1.0",
+  "description": "Load agent memory on first prompt. Score-aware search + auto-score matching cases.",
+  "when": {
+    "type": "promptSubmit"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "[WORKSPACE GUARD: Only execute if the current session context involves files in '.claude/' workspace. If the user is working exclusively in 'VitProjects/' workspace, skip silently.] This is the first message of the session. Before responding: 1) Read agent-memory/memory.md for current task context, decisions, skill flags, and recent lessons. Also read agent-memory/user-profile.md for user preferences (if it exists). 2) Search agent-memory/playbook.md for cases matching the user's prompt keywords or active Task_Ledger domains. Prefer cases with higher Applied+Prevented scores. 3) Auto-score: if a matching case's fix is actively applied during this session, increment its Applied column in playbook.md immediately. If recognizing a trigger helped avoid the problem, increment Prevented. 4) Read agent-memory/skill-log.md for recent improvement proposals — apply any 'applied' entries that match the current task domain. 5) If agent-memory/knowledge/index.md exists, scan its Tags column for keywords matching the user's prompt. Load ONLY matching knowledge files on-demand — never preload all. If no match, skip. 6) Do NOT re-read memory on subsequent prompts in this session."
+  }
+}

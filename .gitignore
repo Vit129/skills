@@ -21,6 +21,7 @@
 !.kiro/**
 !hooks/
 !hooks/**
+!GRAPH_REPORT.md
 
 # Re-ignore noise inside tracked folders
 skills/**/.DS_Store

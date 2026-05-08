@@ -10,6 +10,14 @@
 
 ---
 
+## Knowledge Graph
+
+**[GRAPH_REPORT.md](GRAPH_REPORT.md)** — Full map: rules loading order, skill invocation flow, agent memory pipeline, knowledge pipeline, file index, surprising connections.
+- Read this first when navigating unfamiliar parts of the global config
+- Use "Suggested Questions" section to query the graph
+
+---
+
 ## Skill Map Reference
 
 See `rules/skill-map.md` for the complete skill map used by all agents.

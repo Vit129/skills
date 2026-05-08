@@ -1,6 +1,6 @@
 #!/bin/bash
 # copySkills.sh — Copy shared skills to project's ai-agent/skills/
-# Copies: ai-dlc/, doc/, system/, postman-to-playwright/, KIRO.md
+# Copies: ai-dlc/, doc/, system/, postman-to-playwright/, KIRO.md, GRAPH_REPORT.md
 # Excludes: finance/, GEMINI.md, scripts/ (personal/local-only)
 #
 # Usage: bash copySkills.sh <PROJECT_ROOT> [--force]
@@ -136,6 +136,19 @@ fi
 
 # ── Files to copy ──
 FILES=("KIRO.md")
+
+# ── GRAPH_REPORT.md — copy from ~/.claude/ (not skills/) ──
+GRAPH_SRC="$HOME/.claude/GRAPH_REPORT.md"
+if [ -f "$GRAPH_SRC" ]; then
+  if [ -f "$DEST/GRAPH_REPORT.md" ] && [ "$FORCE" -ne 1 ]; then
+    echo "  ⏭️  skip  GRAPH_REPORT.md (exists, use --force to overwrite)"
+  else
+    cp "$GRAPH_SRC" "$DEST/GRAPH_REPORT.md"
+    echo "  ✅ GRAPH_REPORT.md (from ~/.claude/)"
+  fi
+else
+  echo "  ⏭️  skip  GRAPH_REPORT.md (not found at ~/.claude/GRAPH_REPORT.md)"
+fi
 
 for file in "${FILES[@]}"; do
   if [ ! -f "$SRC/$file" ]; then

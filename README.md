@@ -28,6 +28,7 @@ Uses a Single Source of Truth (SSOT) pattern: shared rules in `rules/` with auto
 │   ├── drafts/                 ← Temporary resolution drafts (ephemeral)
 │   └── knowledge/              ← Promoted cases, crystallized patterns, archive
 ├── CLAUDE.md                   ← Claude Code global config
+├── GRAPH_REPORT.md             ← Knowledge graph: rules/skills/hooks/memory pipeline map
 └── README.md                   ← This file
 
 skills/                         ← Skill library

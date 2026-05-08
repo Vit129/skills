@@ -15,6 +15,12 @@
 - **Cache:** Do NOT edit steering mid-session (breaks prompt cache)
 - **Branch:** Always `git checkout -b feat/...` before starting work
 
+## Knowledge Graph
+
+**[GRAPH_REPORT.md](GRAPH_REPORT.md)** — Full map: rules loading order, skill invocation flow, agent memory pipeline, knowledge pipeline, file index.
+- Read this first when navigating unfamiliar parts of the global config
+- Use "Suggested Questions" section to query the graph
+
 ## Citation format (when answering from knowledge base)
 
 ```

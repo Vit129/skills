@@ -499,6 +499,7 @@ Brownfield start from 1.1, Greenfield start from 1.2
   → Read rules from `ai-dlc/rules/playwright-rules/` or `ai-dlc/rules/robotframework-rules/` first
   → Contract: Test Scenario (Phase 2.2) + TestId Map (Phase 1.7) — shared with Dev
   → Complete test file skeleton first, then 2.5 can start — full script completion not required
+  → **Auto-dispatch:** If `qa-task-progress.md` has 3+ independent test script tasks → `core/subagent-driven` auto-dispatches subagents. Each subagent gets toolsets `["file", "terminal"]` + relevant QA skills/rules.
 - **2.5** Dev Task Design → Task breakdown for implementation — runs **parallel with 2.4**
   → Use `aidlc` reference (dev-task-design.md)
   → Contract: Test Scenario (Phase 2.2) + TestId Map (Phase 1.7) — shared with QA
@@ -517,6 +518,7 @@ Brownfield start from 1.1, Greenfield start from 1.2
 
 - **3.1** Implementation → TDD: GREEN (code to pass tests)
   → Use `frontend-dev` skill and/or `backend-dev` skill
+  → **Auto-dispatch:** If `dev-task-progress.md` has 3+ independent tasks → `core/subagent-driven` auto-dispatches subagents (no user trigger needed). Runtime detected automatically (Kiro/Claude Code/Gemini). Results aggregated in `dispatch-log.md`.
 - **3.2** Automated Testing → TDD: REFACTOR + validation
   → Use `playwright-testing` skill or `robotframework-testing` skill
 - **3.3** Create Pull Request → PR creation + code review

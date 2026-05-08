@@ -38,6 +38,7 @@ agent-memory/
 | "draft format", "playbook format", "memory format" | `references/templates/` — show the relevant template |
 | "subagent", "memory curator", "knowledge curation", "delegate memory" | `references/subagent-patterns.md` |
 | "skill evolve", "self-improve", "skill proposal", "apply proposal" | `references/session-flow.md` → Skill Self-Evolution section |
+| "review rubric", "self-review", "what to save", "grading criteria" | `references/self-review-rubric.md` |
 
 ## Quick Reference
 

@@ -80,12 +80,115 @@ Options:
 2. ทำต่อใน Vibe (รับ risk)
 ```
 
-## Why Dialog Format
+## Dialog Enforcement Rules (MANDATORY)
 
-- **Readable** — structured blocks are easier to scan than wall-of-text chat
-- **Trackable** — each phase/decision/progress has a clear visual marker
-- **Consistent** — same format regardless of AI agent or IDE
-- **Searchable** — emoji markers (📋, 🔷, ✅, ⚠️) make it easy to find specific interactions
+These rules ensure AIDLC interactions are step-by-step, not wall-of-text dumps.
+
+### Rule 1: One Question at a Time
+
+**NEVER ask multiple decisions in one message.** Ask ONE, wait for answer, then ask next.
+
+❌ Bad:
+```
+1. เลือก architecture pattern ไหน?
+2. ใช้ database อะไร?
+3. Frontend framework อะไร?
+```
+
+✅ Good:
+```
+🔷 Decision Required — Architecture Pattern
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Options:
+1. Monolith — simple, fast to start
+2. Microservices — scalable, complex
+3. Modular Monolith — balanced
+
+💡 Recommendation: 3 — ดีสำหรับ team size นี้
+
+→ เลือกข้อไหน?
+```
+
+Then WAIT. Only after user answers → ask next question.
+
+### Rule 2: No Auto-Execute After Plan
+
+After creating a plan → STOP. Show preview. Wait for explicit approval.
+
+```
+📋 Plan Ready — Phase 1.4 Domain Design
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Preview:
+- 3 entities: User, Order, Payment
+- 2 aggregates: OrderAggregate, PaymentAggregate
+- 1 domain event: OrderPlaced
+
+📂 Will write to: outputs/inception/domain-design.md
+
+→ Approve? (yes / แก้ไข / ยกเลิก)
+```
+
+### Rule 3: Structured Options with Recommendation
+
+Every decision MUST have:
+- Numbered options (1, 2, 3...)
+- Brief rationale per option
+- 💡 Recommendation with reason
+- Clear call-to-action ("→ เลือกข้อไหน?")
+
+### Rule 4: Progress Breadcrumb
+
+After each step, show where we are:
+
+```
+✅ Phase 1.3 Complete → Domain Decomposition
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 Progress: Phase 1.3 ✅ | Phase 1.4 ⏳ | Phase 1.5 ⬜ | Phase 1.6 ⬜
+⏭️ Next: Phase 1.4 — Domain Design
+
+→ พร้อมไปต่อ? (yes / ข้ามไป phase อื่น / หยุดก่อน)
+```
+
+### Rule 5: Runtime-Aware Dialog
+
+| Runtime | Dialog Method |
+|---------|--------------|
+| Kiro | Use `userInput` tool with structured options when available |
+| Claude Code | Use numbered text options in chat |
+| Gemini CLI | Use numbered text options in chat |
+
+When `userInput` tool is available (Kiro), prefer it over text-based options for:
+- Mode selection
+- Decision choices
+- Approval prompts
+
+### Rule 6: Batch Limit
+
+If a phase produces many items (e.g., 10 user stories), present in batches:
+- Show first 3-5 items
+- Ask: "ดูต่อ? หรือ approve ทั้งหมด?"
+- Never dump 10+ items without pause
+
+### Rule 7: Escape Hatch
+
+Always provide a way out:
+- "หยุดก่อน" — pause workflow, save state
+- "ข้าม" — skip current question (use default/recommendation)
+- "ย้อนกลับ" — go back to previous decision
+
+## Dialog Anti-Patterns (NEVER DO)
+
+| Anti-Pattern | Why Bad | Fix |
+|---|---|---|
+| Dump 5 decisions at once | User overwhelmed, skips reading | One at a time |
+| Auto-execute after plan | User didn't approve | STOP + wait |
+| No recommendation | User doesn't know which to pick | Always recommend |
+| Wall of text without structure | Hard to scan | Use emoji markers + sections |
+| Ask "anything else?" after every step | Annoying, slows flow | Only ask at phase boundaries |
+| Skip progress breadcrumb | User lost in workflow | Always show position |
 
 ## Kiro-Specific Notes
 
