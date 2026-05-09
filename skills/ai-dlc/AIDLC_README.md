@@ -50,6 +50,48 @@ Full governance: DECISIONS→PLAN→EXECUTE, phase gates, naming, templates
 | `knowledge-buffer.md` | Capture patterns across features |
 | `complexity-examples.md` | Complexity assessment examples |
 
+### `core/source-driven/` — Source-Driven Development
+**Triggers:** "verify docs", "cite source", "official docs", "check API version", "unverified", "documented implementation"
+
+> 🔍 ใช้เมื่อ implement framework-specific code — บังคับ verify กับ official docs, cite sources, flag สิ่งที่ unverified
+> ลด hallucination จาก stale training data
+
+| Reference | ใช้เมื่อ |
+|-----------|---------|
+| (self-contained) | Process: DETECT→FETCH→IMPLEMENT→CITE |
+
+### `core/debugging/` — Debugging and Error Recovery
+**Triggers:** "debug", "fix failing test", "triage error", "reproduce bug", "root cause", "flaky test", "build breaks"
+
+> 🐛 ใช้เมื่อ tests fail, build breaks, หรือ behavior ไม่ตรง expectation
+> Stop-the-line → Reproduce → Localize → Reduce → Fix → Guard
+
+| Reference | ใช้เมื่อ |
+|-----------|---------|
+| (self-contained) | 6-step triage + Playwright-specific patterns |
+
+### `core/doubt-driven/` — Doubt-Driven Development
+**Triggers:** "doubt", "adversarial review", "verify decision", "high stakes", "critical path", "ตรวจก่อน commit"
+
+> ⚠️ ใช้เมื่อ decision เป็น non-trivial (production, security, irreversible, unfamiliar code)
+> CLAIM→EXTRACT→DOUBT→RECONCILE→STOP — bounded 3 cycles max
+
+| Reference | ใช้เมื่อ |
+|-----------|---------|
+| (self-contained) | Adversarial self-review process |
+
+### `core/review-personas/` — Review Personas (Code/Test/Security)
+**Triggers:** "review code", "pre-merge", "security audit", "test coverage", "ship check", "OWASP", "coverage gaps"
+
+> 🔍 3 specialist personas ใน 1 skill: code-reviewer (5-axis), test-engineer (Prove-It), security-auditor (OWASP)
+> ใช้ทีละตัว หรือ fan-out ทั้ง 3 สำหรับ pre-merge gate
+
+| Reference | ใช้เมื่อ |
+|-----------|---------|
+| (self-contained) | Persona 1: Code Reviewer (5-axis + severity labels) |
+| (self-contained) | Persona 2: Test Engineer (coverage analysis + Prove-It) |
+| (self-contained) | Persona 3: Security Auditor (OWASP + severity classification) |
+
 ### `core/analysis-skills/` — Analysis
 **Triggers:** "analyze codebase", "gap analysis", "extract requirements", "reverse engineer", "big picture first"
 
@@ -182,6 +224,7 @@ Browser automation via terminal: YAML snapshots, `eX` references, session persis
 | `k6-scripting.md` | Write load test scripts, scenarios, thresholds |
 | `ci-integration.md` | Run k6 in GitHub Actions / Azure DevOps |
 | `analysis.md` | p95/p99, error rate, Grafana dashboards |
+| `frontend-performance.md` | Core Web Vitals, bundle analysis, image optimization, React re-renders |
 
 ---
 
@@ -243,6 +286,46 @@ Key anti-patterns: no side-stripe borders, no gradient text, no Inter/Roboto, no
 | `motion-design.md` | Easing, timing, `prefers-reduced-motion` |
 | `interaction-design.md` | Forms, focus, loading, modals |
 | `craft.md` | Shape then build workflow |
+
+### `dev/security-hardening/` — Security & Hardening (OWASP)
+**Triggers:** "OWASP", "secure coding", "input validation", "auth hardening", "XSS prevention", "SQL injection", "rate limiting"
+
+> 🔒 Secure coding practices ตอนเขียน code — เสริม `devops-pipeline/security-scanning.md` (CI detection tools)
+> Three-Tier Boundary: Always Do / Ask First / Never Do
+
+| Reference | ใช้เมื่อ |
+|-----------|---------|
+| (self-contained) | OWASP Top 10 prevention + input validation + rate limiting + secrets management |
+
+### `dev/shipping-launch/` — Shipping & Launch
+**Triggers:** "ship", "deploy", "launch", "pre-launch checklist", "rollback plan", "feature flag", "staged rollout", "canary"
+
+> 🚀 Pre-launch checklist + staged rollout + rollback strategy + monitoring setup
+> ใช้เมื่อเตรียม deploy production
+
+| Reference | ใช้เมื่อ |
+|-----------|---------|
+| (self-contained) | Pre-launch checklist, feature flag lifecycle, rollout thresholds, rollback plan |
+
+### `dev/code-simplification/` — Code Simplification
+**Triggers:** "simplify", "refactor", "reduce complexity", "clean up code", "Chesterton's Fence", "too complex", "hard to read"
+
+> 🧹 ลด complexity โดยไม่เปลี่ยน behavior — Chesterton's Fence, Rule of 500, incremental refactoring
+> ใช้เมื่อ code ทำงานได้แต่อ่านยาก/ซับซ้อนเกินจำเป็น
+
+| Reference | ใช้เมื่อ |
+|-----------|---------|
+| (self-contained) | 5 Principles + Process: Understand→Identify→Apply→Verify |
+
+### `dev/deprecation-migration/` — Deprecation & Migration
+**Triggers:** "deprecate", "migrate", "sunset", "remove legacy", "dead code", "strangler fig", "code-as-liability"
+
+> ♻️ จัดการ legacy code/API ที่ต้องเลิกใช้อย่างเป็นระบบ
+> Lifecycle: ANNOUNCE→PROVIDE→MONITOR→DEADLINE→REMOVE
+
+| Reference | ใช้เมื่อ |
+|-----------|---------|
+| (self-contained) | Deprecation lifecycle + 4 migration patterns (Strangler Fig, Parallel Run, Feature Flag, Branch by Abstraction) |
 
 ---
 

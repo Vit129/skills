@@ -322,3 +322,66 @@ flowchart TD
     style AIDLC fill:#475569,color:#fff,stroke:#334155
     style Execute fill:#475569,color:#fff,stroke:#334155
 ```
+
+## Phase 1.8: Brainstorming — 3 Amigos Review
+
+> Runs AFTER Phase 1 (Inception) artifacts exist, BEFORE Phase 2 (Task Design)
+
+```mermaid
+flowchart TD
+    P1Done([Phase 1 Complete<br/>user-stories + logical-design]) --> SizeCheck{Feature Size?}
+    SizeCheck -->|Small: 1-2 stories| Skip[Skip → Phase 2 directly]
+    SizeCheck -->|Medium/Large: 3+ stories| Brain[Phase 1.8: Brainstorming]
+
+    Brain --> GapAnalysis[Run gap analysis on Phase 1 artifacts]
+    GapAnalysis --> Dispatch[Dispatch 3 Amigos subagents]
+
+    Dispatch --> PO[PO Subagent<br/>User value, scope gaps,<br/>success criteria]
+    Dispatch --> Dev[Dev Subagent<br/>Feasibility, architecture risks,<br/>complexity]
+    Dispatch --> QA[QA Subagent<br/>Testability, edge cases,<br/>AC gaps]
+
+    PO --> Synth[Synthesize findings]
+    Dev --> Synth
+    QA --> Synth
+
+    Synth --> Summary[brainstorming-summary.md]
+    Summary --> P2[Phase 2: Task Design]
+    Skip --> P2
+
+    style P1Done fill:#d97706,color:#fff,stroke:#b45309
+    style Brain fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style GapAnalysis fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style Dispatch fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style PO fill:#e11d48,color:#fff,stroke:#be123c
+    style Dev fill:#2563eb,color:#fff,stroke:#1d4ed8
+    style QA fill:#16a34a,color:#fff,stroke:#15803d
+    style Synth fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style Summary fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style Skip fill:#475569,color:#fff,stroke:#334155
+    style P2 fill:#e11d48,color:#fff,stroke:#be123c
+```
+
+## Quick Commands — Entry Points
+
+> 8 shortcuts that route directly to AIDLC phases. Prerequisites still apply.
+
+```mermaid
+flowchart LR
+    Spec([/spec]) --> P01[Phase 0→1<br/>Inception + DECISIONS]
+    Plan([/plan]) --> P2[Phase 2<br/>Task Design]
+    Build([/build]) --> P3[Phase 3<br/>Implement]
+    Test([/test]) --> QATest[playwright-testing<br/>+ debugging]
+    Review([/review]) --> ReviewP[review-personas<br/>code + security + test]
+    Simplify([/simplify]) --> CodeSimp[code-simplification<br/>Chesterton's Fence]
+    Ship([/ship]) --> ShipL[shipping-launch<br/>Pre-launch + rollout]
+    Resume([/resume]) --> Scan[Scan .aidlc/<br/>→ find last phase<br/>→ continue]
+
+    style Spec fill:#d97706,color:#fff,stroke:#b45309
+    style Plan fill:#d97706,color:#fff,stroke:#b45309
+    style Build fill:#2563eb,color:#fff,stroke:#1d4ed8
+    style Test fill:#e11d48,color:#fff,stroke:#be123c
+    style Review fill:#7c3aed,color:#fff,stroke:#6d28d9
+    style Simplify fill:#475569,color:#fff,stroke:#334155
+    style Ship fill:#16a34a,color:#fff,stroke:#15803d
+    style Resume fill:#475569,color:#fff,stroke:#334155
+```

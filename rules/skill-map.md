@@ -6,6 +6,22 @@
 > Keywords are semantic — match by meaning, not exact string.
 > Bilingual triggers (TH/EN) are in each SKILL.md description.
 
+## Quick Commands (`~/.claude/commands/`)
+
+| Command | Route to | What it does |
+|---------|----------|-------------|
+| `/spec` | `core/aidlc/` Phase 0→1 | Define requirements, inception, DECISIONS file |
+| `/plan` | `core/aidlc/` Phase 2 | Break spec into tasks (qa-task-design / dev-task-design) |
+| `/build` | `core/aidlc/` Phase 3 | Implement tasks one by one, commit each |
+| `/test` | `qa/playwright-testing/` + `core/debugging/` | Write/run tests, triage failures |
+| `/review` | `core/review-personas/` | Pre-merge review (code + security + test coverage) |
+| `/simplify` | `dev/code-simplification/` | Reduce complexity, preserve behavior |
+| `/ship` | `dev/shipping-launch/` | Pre-launch checklist, staged rollout, monitoring |
+| `/resume` | Scan `.aidlc/` → find last phase → continue | Pick up where you left off |
+
+> Commands are shortcuts, NOT bypasses — prerequisites still apply.
+> `/resume` scans `.aidlc/[system]/[feature]/` → finds last completed phase → starts next one.
+
 ### ai-dlc/core/ — Governance & Foundation
 | Keyword | Skill |
 |---------|-------|
@@ -14,6 +30,10 @@
 | spawn subagent, parallel tasks, dispatch agent, subagent-driven, 2-stage review | `ai-dlc/core/subagent-driven/` ← use during Phase 3.1 for large task sets |
 | analyze, gap analysis, requirements, reverse-eng | `ai-dlc/core/analysis-skills/` |
 | domain design, DDD, bounded contexts, logical design | `ai-dlc/core/architect/` |
+| verify docs, cite source, official docs, check API version, unverified | `ai-dlc/core/source-driven/` ← use when implementing framework-specific code |
+| debug, fix failing test, triage error, reproduce bug, root cause | `ai-dlc/core/debugging/` ← use when tests fail or behavior is unexpected |
+| doubt, adversarial review, verify decision, high stakes, critical path | `ai-dlc/core/doubt-driven/` ← use for non-trivial decisions before committing |
+| review code, pre-merge, security audit, test coverage, ship check | `ai-dlc/core/review-personas/` ← 3 personas: code-reviewer, test-engineer, security-auditor |
 
 ### ai-dlc/rules/ — Coding Standards & Rules
 | Keyword | Skill |
@@ -39,7 +59,13 @@
 |---------|-------|
 | backend API, node, python, docker | `ai-dlc/dev/backend-dev/` |
 | frontend React, Next.js, Flutter, Swift | `ai-dlc/dev/frontend-dev/` |
+| CI/CD, github actions, PR, pipeline, commit, push, QA pipeline, test pipeline | `ai-dlc/dev/devops-pipeline/` |
 | design quality, anti-AI-slop, typography, OKLCH, craft UI, polish UI, impeccable | `ai-dlc/dev/impeccable-design/` ← use after ui-designer |
+| OWASP, secure coding, input validation, auth hardening, XSS, injection | `ai-dlc/dev/security-hardening/` ← use when writing code that handles user input/auth |
+| ship, deploy, launch, pre-launch checklist, rollback, feature flag, staged rollout | `ai-dlc/dev/shipping-launch/` ← use when preparing production deployment |
+| simplify, refactor, reduce complexity, Chesterton's Fence, clean up code | `ai-dlc/dev/code-simplification/` ← use when code works but is too complex |
+| deprecate, migrate, sunset, remove legacy, dead code, strangler fig | `ai-dlc/dev/deprecation-migration/` ← use when removing old systems or migrating APIs |
+| ADR, architecture decision, document why, changelog, API docs | `ai-dlc/dev/documentation-adrs/` ← use when documenting decisions or APIs |
 
 ### ai-dlc/ux-ui/ — Design
 | Keyword | Skill |

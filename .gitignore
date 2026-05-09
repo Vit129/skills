@@ -22,6 +22,8 @@
 !hooks/
 !hooks/**
 !GRAPH_REPORT.md
+!commands/**
+!commands/
 
 # Re-ignore noise inside tracked folders
 skills/**/.DS_Store

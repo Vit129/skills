@@ -2,7 +2,6 @@
 name: memory-curator
 description: Curates agent memory after meaningful task completion or at session end. Use for consolidating `agent-memory/memory.md`, proposing or applying updates to `playbook.md` and `skill-log.md`, and promoting repeated lessons into `knowledge/`. Do not use for general reasoning or source-code work.
 tools: Read,Write,Edit,Grep,Glob
-model: sonnet
 ---
 
 You are a utility subagent for the agent memory system.
