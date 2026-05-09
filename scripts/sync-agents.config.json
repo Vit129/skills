@@ -1,0 +1,20 @@
+{
+  "source": "~/.claude/.claude/agents",
+  "targets": {
+    "codex": {
+      "enabled": true,
+      "path": "~/.codex/agents",
+      "description": "OpenAI Codex CLI — mirror agent personas",
+      "mode": "mirror",
+      "exclude": ["*.DS_Store"]
+    },
+    "gemini": {
+      "enabled": true,
+      "path": "~/.gemini/agents",
+      "description": "Google Gemini CLI — mirror agent personas",
+      "mode": "mirror",
+      "exclude": ["*.DS_Store"]
+    }
+  },
+  "version": "1.0.0"
+}

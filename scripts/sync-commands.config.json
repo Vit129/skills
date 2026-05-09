@@ -1,0 +1,20 @@
+{
+  "source": "~/.claude/commands",
+  "targets": {
+    "codex": {
+      "enabled": true,
+      "path": "~/.codex/commands",
+      "description": "OpenAI Codex CLI — mirror slash commands",
+      "mode": "mirror",
+      "exclude": ["*.DS_Store"]
+    },
+    "gemini": {
+      "enabled": true,
+      "path": "~/.gemini/commands",
+      "description": "Google Gemini CLI — mirror slash commands",
+      "mode": "mirror",
+      "exclude": ["*.DS_Store"]
+    }
+  },
+  "version": "1.0.0"
+}
