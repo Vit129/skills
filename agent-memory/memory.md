@@ -1,7 +1,7 @@
 # Agent Memory — Hot State
 
 <!-- Max 2,500 bytes. Usage updated at session end. See user-profile.md for user preferences. -->
-<!-- Usage: ~2,480/2,500 bytes (99%) -->
+<!-- Usage: ~2,450/2,500 bytes (98%) -->
 
 ## Task_Ledger
 
@@ -11,15 +11,14 @@
 
 | # | Type | Entry | Last Updated |
 |---|------|-------|--------------|
-| 1 | coding | ai-dlc-skill-testing/pbi-002-health-safety/done — full AIDLC flow (inception+construction+dev+QA, 52 test scenarios, 15 endpoints) | 2026-05-06 |
-| 2 | fix | ai-dlc/core/aidlc/SKILL.md — added 2 gotchas: "dialog skipped on short commands" + "bulk artifact dump" | 2026-05-06 |
-| 3 | open-thread | graph-report-workflow: generateGraphReport.sh needs per-project refactor (HAS_SKILLS bug in global mode) | 2026-05-06 |
+| 1 | coding | ai-dlc/multi-agent-upgrade/done — curator + self-review-rubric + subagent auto-dispatch (Phase 2.4+3.1) + scheduler (daily dev/QA, nightly regression, weekly curator) | 2026-05-05 |
+| 2 | documentation | global-config/GRAPH_REPORT.md created + README.md + KIRO.md (relative ref) + copySkills.sh (bug fix: GRAPH_REPORT.md from ~/.claude/ not skills/) | 2026-05-04 |
+| 3 | open-thread | graph-report-workflow: 1) สร้าง KIRO.md ใหม่ 2) copy to ai-agent via copySkills.sh (GRAPH_REPORT.md included) 3) update GRAPH_REPORT.md เมื่อมีข้อมูลสำคัญ / scripts ready | 2026-05-04 |
 
 ## Recent_Lessons
 
 <!-- Last 5 lesson IDs only. Detail lives in playbook.md or knowledge/. -->
 
-- CASE-005 — AIDLC dialog skip: short user commands (e.g. "PBI-002") don't exempt agent from full dialog flow
 - CASE-001 — memory target routing: global skill changes → `.claude/agent-memory/`, project changes → `{project}/agent-memory/`
 - CASE-002 — AIDLC Vibe/Spec: detection=Kiro IDE mode (not keyword), artifacts→`.aidlc/` only, dialog=global rule all agents
 - CASE-004 — project_specs.md at repo root is ignored by `.gitignore` (`*` rule) — put templates in `rules/` instead
@@ -49,4 +48,4 @@
 - **2026-05-03**: Finance skills merged: `etf-analysis` + `portfolio-analysis` → `portfolio-etf-analysis` (mode detection: Portfolio/ETF/Combined); `mock-orchestration-prompts.md` → `orchestration-prompts.md`
 - **2026-05-03**: agent-memory structure: `user-profile.md` separates stable user prefs from `memory.md` hot state; capacity indicator in memory.md header; zero-score playbook cases archived to `knowledge/archive-playbook.md` after 30 days; session-load hook v3.1.0 loads user-profile.md
 - **2026-05-03**: agent-memory self-evolve: skill-evolve hook (postTaskExecution) proposes skill improvements; knowledge-curate hook (agentStop) handles promotion/crystallization/archive via subagent when threshold met; session-save v4.0 delegates heavy curation to knowledge-curate
-- **2026-05-05**: ai-dlc subagent: `core/curator/` (grade/consolidate/prune, markdown-only, never delete); `system/agent-memory/references/self-review-rubric.md` (rubric-based review fork); `core/subagent-driven/` upgraded (auto-dispatch + runtime detection + dispatch-log.md aggregation)
+- **2026-05-05**: ai-dlc multi-agent: `core/curator/` (grade/consolidate/prune, markdown-only, never delete); `system/agent-memory/references/self-review-rubric.md` (rubric-based review fork); `core/subagent-driven/` upgraded (auto-dispatch + runtime detection + dispatch-log.md aggregation)

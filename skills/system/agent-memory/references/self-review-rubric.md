@@ -70,6 +70,7 @@ At session end, check `memory.md`:
 - **Scoped toolsets:** memory + skills read/write only
 - **No shell access:** cannot run commands
 - **No web access:** cannot fetch external data
+- **Inherits parent runtime:** uses same model/provider as main session
 - **Max 1 proposal per skill per session:** prevents spam
 - **Evidence required:** every proposal must cite the specific moment/output that triggered it
 
@@ -79,3 +80,4 @@ At session end, check `memory.md`:
 - ❌ Saving every minor observation — gate with 2/3 criteria
 - ❌ Proposing skill changes without evidence — cite the failure
 - ❌ Flagging skills for style preferences — only flag for functional failures
+- ❌ Reviewing other agents' outputs — only review your own session

@@ -22,51 +22,88 @@ Use `agent-memory` as a utility-style subagent, not as the main reasoning agent.
 
 ### 1. `memory-curator`
 
-Use when: task/session just completed, memory.md near capacity, useful lesson to save.
+Use when:
+- A task or session just completed
+- `memory.md` is getting noisy or near capacity
+- A useful lesson should be saved
 
 Responsibilities:
-- Read memory files, propose minimal updates
-- Consolidate hot state if near 2,500 byte limit
-- Identify candidate lessons for playbook.md
+- Read `memory.md`, `user-profile.md`, `playbook.md`, and `skill-log.md`
+- Propose the minimal updates needed
+- Consolidate hot state if `memory.md` is near the 2,500 byte limit
+- Identify candidate lessons for `playbook.md`
+- Update capacity indicator in memory.md header
+
+Expected output:
+- Short summary of changes
+- Files to update
+- Any follow-up questions only if strictly necessary
 
 ### 2. `memory-bootstrapper`
 
-Use when: starting a new project, resetting memory structure.
+Use when:
+- Starting a new project
+- Resetting the memory structure
+- Recreating missing memory files
 
 Responsibilities:
-- Create base `agent-memory/` structure
+- Create the base `agent-memory/` structure
 - Ensure required files exist (memory.md, user-profile.md, playbook.md, skill-log.md)
+- Apply the standard templates
+
+Expected output:
+- Created file list
+- Missing optional folders, if any
 
 ### 3. `knowledge-promoter`
 
-Use when: fix reused 3+ times, multiple related lessons to group.
+Use when:
+- A fix or pattern has been reused several times (Applied >= 3)
+- Multiple related lessons should be grouped into `knowledge/`
+- 3+ promoted files share same domain (crystallization candidate)
 
 Responsibilities:
-- Scan playbook for promotion candidates (Applied >= 3)
+- Scan playbook rows for promotion candidates (Applied >= 3)
 - Create `knowledge/{case-id}.md` with full detail
-- Detect domain clusters for crystallization (3+ files, same domain + keyword)
+- Detect domain clusters for crystallization
+- Create `knowledge/{domain}-pattern.md` when 3+ files share domain + keyword
 - Archive cases with Applied+Prevented >= 5 AND no use in 30 days
+- Archive zero-score cases older than 30 days
+
+Expected output:
+- Promotion candidates + actions taken
+- Crystallization candidates + actions taken
+- Archive candidates + actions taken
 
 ### 4. `skill-evolution-checker`
 
-Use when: skill was used successfully, pattern might be missing from skill file.
+Use when:
+- A skill was used successfully and the pattern might be missing from the skill file
+- skill-log.md has pending proposals that need review
 
 Responsibilities:
-- Compare approach used vs skill file content
-- If novel, reusable, evidence-backed pattern missing → propose in skill-log.md
+- Compare the approach used in this session with the skill file content
+- If a novel, reusable, evidence-backed pattern is missing → propose in skill-log.md
+- If a pending proposal has evidence from 2+ sessions → recommend auto-apply
+
+Expected output:
+- Proposals created or recommended for auto-apply
+- Rationale for each
 
 ## Invocation Pattern
 
-1. Main agent finishes primary task
-2. Main agent spawns utility subagent with narrow scope
+Recommended flow:
+
+1. Main agent finishes the primary task
+2. Main agent spawns a utility subagent with a narrow scope
 3. Subagent reads only memory files
-4. Subagent returns compact update plan or applies scoped edits
-5. Main agent verifies and resumes primary thread
+4. Subagent returns a compact update plan or applies the scoped edits
+5. Main agent verifies and resumes the primary thread
 
 ## Scope Rules
 
 - Read scope: `agent-memory/**`
-- Write scope: only files requested or clearly implied by the task
+- Write scope: only the files requested or clearly implied by the task
 - Never touch source code or unrelated project files
 - Never store secrets, credentials, or PII
 
@@ -87,18 +124,23 @@ Poor value:
 ```text
 You are a utility subagent for the agent-memory system.
 
-Task: Curate/update the memory files for this completed task/session.
+Task:
+- Curate/update the memory files for this completed task/session.
 
 Read first:
 - agent-memory/memory.md
+- agent-memory/user-profile.md
 - agent-memory/playbook.md
 - agent-memory/skill-log.md
 
 Constraints:
 - Stay within agent-memory files only.
 - Keep edits minimal and structured.
-- Do not invent lessons not supported by this session.
+- Do not invent lessons that are not supported by this session.
 - Update capacity indicator in memory.md after any changes.
 
-Return: What changed, why it changed, any promotion/crystallization candidates.
+Return:
+- What changed
+- Why it changed
+- Any promotion/crystallization candidates
 ```

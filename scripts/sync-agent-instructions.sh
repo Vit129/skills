@@ -137,36 +137,9 @@ HEADER
 generate_agent_config "Codex" "CODEX" "$HOME/.codex/CODEX.md"
 generate_agent_config "Gemini" "GEMINI" "$HOME/.gemini/GEMINI.md"
 
-# ── Sync skills tree → codex + gemini ───────────────────────
-# ~/.claude/skills/ is the source of truth for all personal + company skills
-# VitProjects syncs ai-dlc/ into ~/.claude/skills/ai-dlc/ separately
-SKILLS_SRC="$PROJECT_ROOT/skills"
-
-sync_skills_mirror() {
-  local target="$1"
-  local name="$2"
-  if [ -d "$SKILLS_SRC" ]; then
-    mkdir -p "$target"
-    rsync -a --delete \
-      --exclude='.DS_Store' \
-      --exclude='__pycache__' \
-      "$SKILLS_SRC/" "$target/"
-    local count
-    count=$(find "$target" -type f | wc -l | tr -d ' ')
-    echo "Synced skills → $name: $count files"
-  else
-    echo "⚠️  Skills source not found: $SKILLS_SRC"
-  fi
-}
-
-sync_skills_mirror "$HOME/.codex/skills" "~/.codex/skills"
-sync_skills_mirror "$HOME/.gemini/skills" "~/.gemini/skills"
-
 echo ""
 echo "Sync complete:"
 echo "  $HOME/.codex/CODEX.md"
 echo "  $HOME/.gemini/GEMINI.md"
-echo "  $HOME/.codex/skills/"
-echo "  $HOME/.gemini/skills/"
 echo ""
 echo "Reminder: commit rules/ and scripts/ to GitHub; generated user-level files remain local."

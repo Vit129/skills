@@ -1,6 +1,7 @@
 # Agent Memory — Hot State
 
-<!-- Max file size: 2,500 bytes. Consolidate when exceeded. -->
+<!-- Max 2,500 bytes. Usage updated at session end. See user-profile.md for user preferences. -->
+<!-- Usage: ~0/2,500 bytes (0%) -->
 
 ## Task_Ledger
 
