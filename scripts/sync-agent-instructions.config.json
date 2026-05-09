@@ -3,7 +3,7 @@
   "targets": {
     "codex": {
       "enabled": true,
-      "path": "~/.codex/CODEX.md",
+      "path": "~/.codex/AGENTS.md",
       "description": "OpenAI Codex CLI — generated from ~/.claude/rules and kept aligned with CLAUDE.md",
       "mode": "generate"
     },

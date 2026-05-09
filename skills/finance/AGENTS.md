@@ -1,4 +1,4 @@
-# Finance Skills (Codex) — Local Instructions
+# Finance Skills — Local Instructions
 
 ## Scope
 

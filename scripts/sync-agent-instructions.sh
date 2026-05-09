@@ -1,5 +1,5 @@
 #!/bin/bash
-# sync-agent-instructions.sh — Generate CODEX.md and GEMINI.md from ~/.claude/rules
+# sync-agent-instructions.sh — Generate AGENTS.md and GEMINI.md from ~/.claude/rules
 # Source of truth: sync-agent-instructions.config.json
 #
 # Usage:
@@ -75,16 +75,17 @@ PY
 
 render_agent_md() {
   local agent_name="$1"
+  local entry_file="$2"
   cat <<EOF
 # ${agent_name} Agent Workspace
 
-\`${agent_name}.md\` is the entry point and index.
+\`${entry_file}\` is the entry point and index.
 
 Source of truth:
 - \`~/.claude/rules/\` for behavior, routing, response format, and skill map
 - \`~/.claude/output-styles/communication-style.md\` for tone
 - \`~/.claude/agent-memory/\` for cross-session memory
-- \`~/.claude/GRAPH_REPORT.md\` for structural navigation
+- \`~/.claude/GRAPH_REPORT.md\` for structural navigation, when present
 
 Key references:
 - \`~/.claude/rules/agent-core.md\`
@@ -98,7 +99,7 @@ Key references:
 - \`~/.claude/skills/KIRO.md\`
 
 Generated agent configs:
-- \`~/.claude/scripts/sync-agent-instructions.sh\` writes \`~/.codex/CODEX.md\`
+- \`~/.claude/scripts/sync-agent-instructions.sh\` writes \`~/.codex/AGENTS.md\`
 - \`~/.claude/scripts/sync-agent-instructions.sh\` writes \`~/.gemini/GEMINI.md\`
 
 Project-specific notes:
@@ -115,6 +116,8 @@ write_target() {
   local agent_uppercase
   agent_uppercase="$(printf '%s' "$target_name" | tr '[:lower:]' '[:upper:]')"
   target_path="$(resolve_path "$target_path")"
+  local entry_file
+  entry_file="$(basename "$target_path")"
 
   echo -e "  ${GREEN}📂 [$target_name]${NC} Generate → $target_path"
 
@@ -122,7 +125,7 @@ write_target() {
     echo "     Would generate from:"
     echo "       - $RULES_DIR"
     echo "       - $STYLE_FILE"
-    echo "       - $GRAPH_FILE"
+    [[ -f "$GRAPH_FILE" ]] && echo "       - $GRAPH_FILE"
     echo "       - $CLAUDE_FILE"
     return
   fi
@@ -131,7 +134,7 @@ write_target() {
   local tmp_file
   tmp_file="$(mktemp "$(dirname "$target_path")/.tmp.${target_name}.XXXXXX")"
   {
-    render_agent_md "$agent_uppercase"
+    render_agent_md "$agent_uppercase" "$entry_file"
     printf '\n'
   } > "$tmp_file"
   mv "$tmp_file" "$target_path"
@@ -165,7 +168,6 @@ done
 require_file "$CONFIG_FILE"
 require_dir "$RULES_DIR"
 require_file "$STYLE_FILE"
-require_file "$GRAPH_FILE"
 require_file "$CLAUDE_FILE"
 
 SOURCE_VALUE="$(python3 -c "import json; print(json.load(open('$CONFIG_FILE')).get('source', 'rules'))")"

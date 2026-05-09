@@ -6,7 +6,7 @@ Source of truth:
 - `rules/` for behavior, routing, response format, and skill map
 - `output-styles/communication-style.md` for tone
 - `agent-memory/` for cross-session memory
-- `GRAPH_REPORT.md` for structural navigation
+- `GRAPH_REPORT.md` for structural navigation when present
 
 Key references:
 - `rules/agent-core.md`
@@ -14,13 +14,14 @@ Key references:
 - `rules/project-rules.md`
 - `rules/response-format.md`
 - `rules/workflow.md`
+- `rules/skills-sync-protocol.md`
 - `rules/citation-format.md`
 - `rules/token_efficient.md`
 - `output-styles/communication-style.md`
 - `skills/KIRO.md`
 
 Generated agent configs:
-- `scripts/sync-agent-instructions.sh` writes `~/.codex/CODEX.md`
+- `scripts/sync-agent-instructions.sh` writes `~/.codex/AGENTS.md`
 - `scripts/sync-agent-instructions.sh` writes `~/.gemini/GEMINI.md`
 
 Project-specific notes:
