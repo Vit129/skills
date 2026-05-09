@@ -74,6 +74,12 @@ Display these options when user triggers the skill:
 
 ## Conversation Flow by User Intent
 
+### Personal Context First
+For personal chat, current logging, current protein totals, workout log review, body-composition status, or known user constraints:
+1. Load `personal/personal.md`
+2. Then load the relevant reference from `references/`
+3. Treat `personal/personal.md` as the user-specific overlay, not as the technical protocol source
+
 ### Intent 1: Direct Training Plan Request
 **Example:** "Create a 12-week muscle-gain program for me"
 1. Ask for Info Collection items (in order: metrics → objectives → experience → schedule → constraints)
@@ -90,21 +96,23 @@ Display these options when user triggers the skill:
 
 ### Intent 3: Movement Correction
 **Example:** "My shoulder hurts during bench press"
-1. Load `references/biomechanics.md`
-2. Ask for: pain location, exercise history, ROM limitations
-3. Provide modified form + alternative exercises
-4. Explain biomechanical reasoning
+1. Load `personal/personal.md` if this is the current user or known personal context
+2. Load `references/movement-and-load.md`
+3. Ask for: pain location, exercise history, ROM limitations
+4. Provide modified form + alternative exercises
+5. Explain biomechanical reasoning
 
 ### Intent 4: Body Composition Review
 **Example:** "Review my BIA results"
-1. Load `references/data-auditing.md`
-2. Ask for: BIA data, progress photos, timeline
-3. Compare against 28-day trend
-4. Report: Goal Achieved / Below Threshold / Stable
+1. Load `personal/personal.md` if this is the current user or known personal context
+2. Load `references/data-auditing.md`
+3. Ask for: BIA data, progress photos, timeline
+4. Compare against 28-day trend
+5. Report: Goal Achieved / Below Threshold / Stable
 
 ### Intent 5: General Fitness Knowledge
 **Example:** "How do I calculate my 1RM?"
-1. Load `references/strength-prediction.md`
+1. Load `references/movement-and-load.md`
 2. Provide formula + worked examples
 3. Explain assumptions & limitations
 
@@ -124,6 +132,7 @@ Display these options when user triggers the skill:
 
 | User Query | Load Reference |
 |---|---|
+| Personal/current tracking, current protein total, current workout logs, known constraints, casual day-to-day coaching | `personal/personal.md` + relevant reference |
 | Movement, form, pain, biomechanics, 1RM, load, RPE, strength benchmarks | `references/movement-and-load.md` |
 | Nutrition, protein, meal plan, macros | `references/nutrition.md` |
 | BIA, body composition, progress tracking | `references/data-auditing.md` |

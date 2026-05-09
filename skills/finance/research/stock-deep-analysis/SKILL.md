@@ -51,14 +51,14 @@ Business & competition:
 6. Revenue breakdown and segment drivers
 7. Customer base and concentration risk
 8. Competitive landscape and moats
-9. Industry trends + macro overlay (use `references/macro-context.md` when needed)
+9. Industry trends + macro overlay (use `macro-context.md` when needed)
 
 Performance & sentiment:
 10. Historical returns vs S&P 500 (1Y/3Y/5Y)
 11. Volatility / beta (if available)
 12. Latest news (5–7 headlines) + sentiment
 13. Insider transactions and ownership
-14. Short interest / options flow (optional; use `references/short-interest.md`)
+14. Short interest / options flow (optional; use `short-interest.md`)
 
 Earnings quality:
 15. Earnings surprise history (last ~8 quarters, if available)
@@ -210,7 +210,7 @@ Interpretation: [2–4 sentences]
 - Checklist (facts verified?):
 - Key documents to read next:
 - Next review date:
-- Orchestration option: for multi-role debate + risk gate, use `tradingagents-orchestrator`
+- Orchestration option: for multi-role debate + risk gate, use `SKILL.md` (TradingAgents Orchestrator)
 
 ════════════════════════════════════════════════════
 ⚠️ Disclaimer: The information provided is for informational purposes only and is NOT financial advice.
@@ -221,5 +221,5 @@ Interpretation: [2–4 sentences]
 
 ## Reference Loading Guide
 
-- Macro overlay: `references/macro-context.md` (use in Risks and Valuation)
-- Short interest / options: `references/short-interest.md` (use in Section 17 when relevant)
+- Macro overlay: `macro-context.md` (use in Risks and Valuation)
+- Short interest / options: `short-interest.md` (use in Section 17 when relevant)

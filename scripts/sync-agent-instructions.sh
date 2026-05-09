@@ -1,145 +1,244 @@
 #!/bin/bash
-# Sync shared SSOT files → ~/.codex/CODEX.md and ~/.gemini/GEMINI.md
-# Usage: ./.claude/scripts/sync-agent-instructions.sh
+# sync-agent-instructions.sh — Generate CODEX.md and GEMINI.md from ~/.claude/rules
+# Source of truth: sync-agent-instructions.config.json
+#
+# Usage:
+#   bash .claude/scripts/sync-agent-instructions.sh
+#   bash .claude/scripts/sync-agent-instructions.sh --dry-run
+#   bash .claude/scripts/sync-agent-instructions.sh --target codex
+#   bash .claude/scripts/sync-agent-instructions.sh --target gemini
+#   bash .claude/scripts/sync-agent-instructions.sh --list
 
 set -euo pipefail
 
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+NC='\033[0m'
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+CONFIG_FILE="$SCRIPT_DIR/sync-agent-instructions.config.json"
 RULES_DIR="$PROJECT_ROOT/rules"
+STYLE_FILE="$PROJECT_ROOT/output-styles/communication-style.md"
+GRAPH_FILE="$PROJECT_ROOT/GRAPH_REPORT.md"
+CLAUDE_FILE="$PROJECT_ROOT/CLAUDE.md"
 
-CORE_FILE="$RULES_DIR/agent-core.md"
-SKILL_MAP_FILE="$RULES_DIR/skill-map.md"
-PROJECT_RULES_FILE="$RULES_DIR/project-rules.md"
-CITATION_FILE="$RULES_DIR/citation-format.md"
+resolve_path() {
+  local path="$1"
+  if [[ "$path" != /* ]] && [[ "$path" != ~* ]]; then
+    path="$PROJECT_ROOT/$path"
+  fi
+  echo "${path/#\~/$HOME}"
+}
 
 require_file() {
-  local path=$1
+  local path="$1"
   if [[ ! -f "$path" ]]; then
-    echo "Error: required file not found: $path" >&2
+    echo -e "${RED}❌ Required file not found: $path${NC}"
     exit 1
   fi
 }
 
-require_file "$CORE_FILE"
-require_file "$SKILL_MAP_FILE"
-require_file "$PROJECT_RULES_FILE"
-require_file "$CITATION_FILE"
-
-resolve_output_path() {
-  local output_file=$1
-  if [[ -L "$output_file" ]]; then
-    readlink "$output_file"
-  else
-    echo "$output_file"
+require_dir() {
+  local path="$1"
+  if [[ ! -d "$path" ]]; then
+    echo -e "${RED}❌ Required directory not found: $path${NC}"
+    exit 1
   fi
 }
 
-append_if_exists() {
-  local file_path=$1
-  local temp_file=$2
-  if [[ -f "$file_path" ]]; then
-    printf '\n' >> "$temp_file"
-    cat "$file_path" >> "$temp_file"
+read_config_value() {
+  local expr="$1"
+  python3 - "$CONFIG_FILE" "$expr" <<'PY'
+import json
+import sys
+
+config_path = sys.argv[1]
+expr = sys.argv[2]
+
+with open(config_path) as f:
+    cfg = json.load(f)
+
+if expr == "source":
+    print(cfg.get("source", "rules"))
+    raise SystemExit
+
+targets = cfg.get("targets", {})
+for name, target in targets.items():
+    if target.get("enabled"):
+        print(f"{name}|{target.get('path','')}|{target.get('mode','')}")
+PY
+}
+
+render_agent_md() {
+  local agent_name="$1"
+  cat <<EOF
+# ${agent_name} Agent Workspace
+
+\`${agent_name}.md\` is the entry point and index.
+
+Source of truth:
+- \`~/.claude/rules/\` for behavior, routing, response format, and skill map
+- \`~/.claude/output-styles/communication-style.md\` for tone
+- \`~/.claude/agent-memory/\` for cross-session memory
+- \`~/.claude/GRAPH_REPORT.md\` for structural navigation
+
+Key references:
+- \`~/.claude/rules/agent-core.md\`
+- \`~/.claude/rules/skill-map.md\`
+- \`~/.claude/rules/project-rules.md\`
+- \`~/.claude/rules/response-format.md\`
+- \`~/.claude/rules/workflow.md\`
+- \`~/.claude/rules/citation-format.md\`
+- \`~/.claude/rules/token_efficient.md\`
+- \`~/.claude/output-styles/communication-style.md\`
+- \`~/.claude/skills/KIRO.md\`
+
+Generated agent configs:
+- \`~/.claude/scripts/sync-agent-instructions.sh\` writes \`~/.codex/CODEX.md\`
+- \`~/.claude/scripts/sync-agent-instructions.sh\` writes \`~/.gemini/GEMINI.md\`
+
+Project-specific notes:
+- Update \`~/.claude/rules/\` first, then resync generated configs.
+- Use \`~/.claude/rules/skill-map.md\` when deciding which skill to load.
+- Use \`~/.claude/agent-memory/\` for session state, playbook, and knowledge promotion.
+EOF
+}
+
+write_target() {
+  local target_name="$1"
+  local target_path="$2"
+  local dry_run="$3"
+  local agent_uppercase
+  agent_uppercase="$(printf '%s' "$target_name" | tr '[:lower:]' '[:upper:]')"
+  target_path="$(resolve_path "$target_path")"
+
+  echo -e "  ${GREEN}📂 [$target_name]${NC} Generate → $target_path"
+
+  if [[ "$dry_run" -eq 1 ]]; then
+    echo "     Would generate from:"
+    echo "       - $RULES_DIR"
+    echo "       - $STYLE_FILE"
+    echo "       - $GRAPH_FILE"
+    echo "       - $CLAUDE_FILE"
+    return
   fi
+
+  mkdir -p "$(dirname "$target_path")"
+  local tmp_file
+  tmp_file="$(mktemp "$(dirname "$target_path")/.tmp.${target_name}.XXXXXX")"
+  {
+    render_agent_md "$agent_uppercase"
+    printf '\n'
+  } > "$tmp_file"
+  mv "$tmp_file" "$target_path"
+  echo -e "     ${GREEN}✅ Generated: $target_path${NC}"
 }
 
-generate_agent_config() {
-  local agent_name=$1
-  local agent_uppercase=$2
-  local output_file=$3
-  local target_file
-  local temp_file
-  local target_dir
-  local agent_lowercase
-  local agent_override_file
+DRY_RUN=0
+TARGET_FILTER=""
+LIST_MODE=0
 
-  agent_lowercase="$(printf '%s' "$agent_uppercase" | tr '[:upper:]' '[:lower:]')"
-  agent_override_file="$RULES_DIR/${agent_lowercase}-overrides.md"
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --dry-run) DRY_RUN=1; shift ;;
+    --target) TARGET_FILTER="$2"; shift 2 ;;
+    --list) LIST_MODE=1; shift ;;
+    -h|--help)
+      echo "Usage: bash sync-agent-instructions.sh [--dry-run] [--target <name>] [--list]"
+      echo ""
+      echo "Options:"
+      echo "  --dry-run        Preview changes without writing"
+      echo "  --target <name>  Sync only specific target (codex|gemini)"
+      echo "  --list           Show current sync configuration"
+      echo ""
+      echo "Source: configured in sync-agent-instructions.config.json"
+      echo "Config: .claude/scripts/sync-agent-instructions.config.json"
+      exit 0 ;;
+    *) echo "❌ Unknown option: $1"; exit 1 ;;
+  esac
+done
 
-  echo "Generating $agent_name config..."
+require_file "$CONFIG_FILE"
+require_dir "$RULES_DIR"
+require_file "$STYLE_FILE"
+require_file "$GRAPH_FILE"
+require_file "$CLAUDE_FILE"
 
-  mkdir -p "$(dirname "$output_file")"
-  target_file="$(resolve_output_path "$output_file")"
-  target_dir="$(dirname "$target_file")"
-  mkdir -p "$target_dir"
+SOURCE_VALUE="$(python3 -c "import json; print(json.load(open('$CONFIG_FILE')).get('source', 'rules'))")"
+SOURCE_PATH="$(resolve_path "$SOURCE_VALUE")"
 
-  temp_file="$(mktemp "$target_dir/.tmp.${agent_lowercase}.XXXXXX")"
+if [[ ! -d "$SOURCE_PATH" ]]; then
+  echo -e "${RED}❌ Source not found: $SOURCE_PATH${NC}"
+  echo "   Check the 'source' value in $CONFIG_FILE."
+  exit 1
+fi
 
-  cat > "$temp_file" <<'HEADER'
-# {{AGENT_NAME}} Agent Configuration
+if [[ "$LIST_MODE" -eq 1 ]]; then
+  echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+  echo -e "${CYAN}📋 Sync Agent Instructions Configuration${NC}"
+  echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+  echo ""
+  echo -e "  ${BLUE}Source:${NC} $SOURCE_PATH"
+  echo ""
+  echo -e "  ${BLUE}Targets:${NC}"
+  python3 -c "
+import json
+with open('$CONFIG_FILE') as f:
+    cfg = json.load(f)
+for name, t in cfg['targets'].items():
+    status = '✅' if t.get('enabled') else '⏸️ '
+    print(f\"    {status} {name:8s} → {t.get('path', '')}\")
+    print(f\"       Mode: {t.get('mode', '')} | {t.get('description', '')}\")
+"
+  echo ""
+  echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+  exit 0
+fi
 
-> Generated from `rules/` (SSOT). Edit rules files or agent-specific overrides, not this file directly.
+echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${CYAN}🔄 Sync Agent Instructions${NC}"
+echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo ""
+echo -e "  ${BLUE}Source:${NC} $SOURCE_PATH"
+[ "$DRY_RUN" -eq 1 ] && echo -e "  ${YELLOW}⚠️  DRY RUN — no files will be written${NC}"
+echo ""
 
----
-
-## 🚨 MANDATORY: Plan Before Non-Trivial Work
-
-**Make the approach explicit when:**
-- Implementing new features (unclear scope)
-- Multiple valid approaches exist
-- Code changes affecting behavior/structure
-- Architectural decisions needed
-- Multi-file changes likely
-- Requirements unclear
-
-**Skip explicit planning only for:**
-- Single-line fixes
-- One-function additions with clear requirements
-- Research tasks (use Agent tool instead)
-- Explicit detailed instructions
-
----
-
-## {{AGENT_UPPERCASE}} Agent Tier (pick before every task)
-
-| Task | Agent |
-|------|-------|
-| Read code / research / scaffold | {{AGENT_NAME}} Flash |
-| Single-file fix, clear spec | {{AGENT_NAME}} Pro |
-| Logic bug / arch / async / critical | {{AGENT_NAME}} Pro |
-
-> One agent owns a task end-to-end — no mid-task handoffs.
-
-## Rules ({{AGENT_UPPERCASE}}-specific)
-
-- **Cache:** Do NOT edit generated {{AGENT_UPPERCASE}}.md directly during normal use; update `rules/` or `{{AGENT_UPPERCASE}}` overrides and resync instead
-- **Token:** Toggle Extended Thinking off (Tab) for simple tasks
-
----
-
-## Shared Core (from `rules/agent-core.md`)
-
-HEADER
-
-  cat "$CORE_FILE" >> "$temp_file"
-
-  printf '\n\n## Shared Skill Map (from `rules/skill-map.md`)\n\n' >> "$temp_file"
-  cat "$SKILL_MAP_FILE" >> "$temp_file"
-
-  printf '\n\n## Shared Project Rules (from `rules/project-rules.md`)\n\n' >> "$temp_file"
-  cat "$PROJECT_RULES_FILE" >> "$temp_file"
-
-  printf '\n\n## Shared Citation Format (from `rules/citation-format.md`)\n\n' >> "$temp_file"
-  cat "$CITATION_FILE" >> "$temp_file"
-
-  append_if_exists "$agent_override_file" "$temp_file"
-
-  sed -i.bak "s/{{AGENT_NAME}}/$agent_name/g" "$temp_file"
-  sed -i.bak "s/{{AGENT_UPPERCASE}}/$agent_uppercase/g" "$temp_file"
-  rm -f "$temp_file.bak"
-
-  mv "$temp_file" "$target_file"
-
-  echo "Generated: $target_file"
-}
-
-generate_agent_config "Codex" "CODEX" "$HOME/.codex/CODEX.md"
-generate_agent_config "Gemini" "GEMINI" "$HOME/.gemini/GEMINI.md"
+SYNC_COUNT=0
+python3 -c "
+import json
+with open('$CONFIG_FILE') as f:
+    cfg = json.load(f)
+for name, t in cfg['targets'].items():
+    if t.get('enabled'):
+        print(f\"{name}|{t.get('path','')}|{t.get('mode','')}\")
+" | while IFS='|' read -r name path mode; do
+  if [[ -n "$TARGET_FILTER" && "$name" != "$TARGET_FILTER" ]]; then
+    continue
+  fi
+  case "$mode" in
+    generate)
+      write_target "$name" "$path" "$DRY_RUN"
+      SYNC_COUNT=$((SYNC_COUNT + 1))
+      ;;
+    *)
+      echo -e "  ${YELLOW}⚠️  Unknown mode '$mode' for $name — skipping${NC}"
+      ;;
+  esac
+done
 
 echo ""
-echo "Sync complete:"
-echo "  $HOME/.codex/CODEX.md"
-echo "  $HOME/.gemini/GEMINI.md"
+echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+if [[ "$DRY_RUN" -eq 1 ]]; then
+  echo -e "${YELLOW}🔍 Dry run complete — no changes made${NC}"
+else
+  echo -e "${GREEN}✅ Sync complete!${NC}"
+fi
 echo ""
-echo "Reminder: commit rules/ and scripts/ to GitHub; generated user-level files remain local."
+echo "  Run again:     bash .claude/scripts/sync-agent-instructions.sh"
+echo "  Preview only:  bash .claude/scripts/sync-agent-instructions.sh --dry-run"
+echo "  Config:        .claude/scripts/sync-agent-instructions.config.json"
+echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"

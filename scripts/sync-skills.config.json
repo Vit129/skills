@@ -1,0 +1,20 @@
+{
+  "source": "~/.claude/skills",
+  "targets": {
+    "codex": {
+      "enabled": true,
+      "path": "~/.codex/skills",
+      "description": "OpenAI Codex CLI — mirror all Claude skills into ~/.codex/skills/",
+      "mode": "mirror",
+      "exclude": ["*.DS_Store"]
+    },
+    "gemini": {
+      "enabled": true,
+      "path": "~/.gemini/skills",
+      "description": "Google Gemini CLI — mirror all Claude skills into ~/.gemini/skills/",
+      "mode": "mirror",
+      "exclude": ["*.DS_Store"]
+    }
+  },
+  "version": "1.2.0"
+}

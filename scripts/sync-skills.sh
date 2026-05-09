@@ -4,19 +4,18 @@
 #
 # Source of truth: configured in sync-skills.config.json
 # Targets:
-#   - ~/.claude/skills/     (Claude Code CLI — mirror mode)
+#   - ~/.codex/skills/      (OpenAI Codex — mirror mode)
+#   - ~/.gemini/skills/     (Google Gemini CLI — mirror mode)
 #   - .kiro/steering/       (Kiro IDE — DISABLED: uses kiro-workspace.md synced from KIRO.md)
-#   - AGENTS.md             (OpenAI Codex — agents-md mode)
-#   - GEMINI.md             (Google Gemini CLI — gemini-md mode)
 #
 # Usage:
-#   bash ai-agent/scripts/sync-skills.sh              # sync all enabled targets
-#   bash ai-agent/scripts/sync-skills.sh --dry-run    # preview without changes
-#   bash ai-agent/scripts/sync-skills.sh --target claude   # sync only Claude
-#   bash ai-agent/scripts/sync-skills.sh --target kiro     # sync only Kiro
-#   bash ai-agent/scripts/sync-skills.sh --list        # show sync config
+#   bash .claude/scripts/sync-skills.sh              # sync all enabled targets
+#   bash .claude/scripts/sync-skills.sh --dry-run    # preview without changes
+#   bash .claude/scripts/sync-skills.sh --target codex   # sync only Codex
+#   bash .claude/scripts/sync-skills.sh --target gemini  # sync only Gemini
+#   bash .claude/scripts/sync-skills.sh --list        # show sync config
 #
-# Config: ai-agent/scripts/sync-skills.config.json
+# Config: .claude/scripts/sync-skills.config.json
 
 set -euo pipefail
 
@@ -69,11 +68,11 @@ while [[ $# -gt 0 ]]; do
       echo ""
       echo "Options:"
       echo "  --dry-run        Preview changes without writing"
-      echo "  --target <name>  Sync only specific target (claude|kiro|codex|gemini)"
+      echo "  --target <name>  Sync only specific target (codex|gemini|kiro)"
       echo "  --list           Show current sync configuration"
       echo ""
       echo "Source: configured in sync-skills.config.json"
-      echo "Config: ai-agent/scripts/sync-skills.config.json"
+      echo "Config: .claude/scripts/sync-skills.config.json"
       exit 0 ;;
     *) echo "❌ Unknown option: $1"; exit 1 ;;
   esac
@@ -84,15 +83,8 @@ if [ ! -f "$CONFIG_FILE" ]; then
   echo -e "${YELLOW}⚠️  Config not found. Creating default: $CONFIG_FILE${NC}"
   cat > "$CONFIG_FILE" << 'EOF'
 {
-  "source": "ai-agent/skills/ai-dlc",
+  "source": "~/.claude/skills",
   "targets": {
-    "claude": {
-      "enabled": true,
-      "path": "~/.claude/skills/ai-dlc",
-      "description": "Claude Code CLI — syncs only ai-dlc skills into ~/.claude/skills/ai-dlc/",
-      "mode": "mirror",
-      "exclude": ["*.DS_Store", "__pycache__"]
-    },
     "kiro": {
       "enabled": true,
       "path": ".kiro/steering",
@@ -101,21 +93,21 @@ if [ ! -f "$CONFIG_FILE" ]; then
       "exclude": ["*.DS_Store", "__pycache__", "references/", "templates/", "scripts/"]
     },
     "codex": {
-      "enabled": false,
-      "path": ".codex/instructions",
-      "description": "OpenAI Codex (future)",
+      "enabled": true,
+      "path": "~/.codex/skills",
+      "description": "OpenAI Codex CLI — mirror all Claude skills into ~/.codex/skills/",
       "mode": "mirror",
       "exclude": ["*.DS_Store"]
     },
     "gemini": {
-      "enabled": false,
-      "path": ".gemini/context",
-      "description": "Google Gemini (future)",
+      "enabled": true,
+      "path": "~/.gemini/skills",
+      "description": "Google Gemini CLI — mirror all Claude skills into ~/.gemini/skills/",
       "mode": "mirror",
       "exclude": ["*.DS_Store"]
     }
   },
-  "version": "1.0.0"
+  "version": "1.1.0"
 }
 EOF
   echo -e "${GREEN}✅ Default config created${NC}"
@@ -179,20 +171,6 @@ sync_mirror() {
 
   # Expand ~ to $HOME
   target_path="${target_path/#\~/$HOME}"
-
-  if [ "$target_name" = "claude" ]; then
-    local expected_target="$HOME/.claude/skills/ai-dlc"
-    if [ "$target_path" != "$expected_target" ]; then
-      echo -e "     ${RED}❌ Refusing to sync Claude target outside $expected_target${NC}"
-      echo "     Configured target: $target_path"
-      exit 1
-    fi
-    if [ "$(basename "$SKILLS_SOURCE")" != "ai-dlc" ]; then
-      echo -e "     ${RED}❌ Refusing to sync Claude from non-ai-dlc source${NC}"
-      echo "     Configured source: $SKILLS_SOURCE"
-      exit 1
-    fi
-  fi
 
   echo -e "  ${GREEN}📂 [$target_name]${NC} Mirror → $target_path"
 

@@ -1,11 +1,8 @@
 # Finance Skills (Claude) — Local Instructions
 
-This file is the folder-level guidance for `skills/finance/` so the finance skills stay consistent.
-
 ## Scope
 
-- Applies to everything under `skills/finance/`
-- Does not override the global rules in `/Users/supavit.cho/.claude/CLAUDE.md`
+- Does not override the global rules in `CLAUDE.md`
 
 ## Safety (Mandatory)
 
@@ -13,25 +10,33 @@ This file is the folder-level guidance for `skills/finance/` so the finance skil
 - No guessing: if you cannot find a number/fact, write `N/A` and state the limitation.
 - Use live web search for unstable facts (prices, latest filings, recent news/events), unless the user explicitly forbids browsing.
 
-## Which Skill To Use
+## Which Markdown To Use
 
-- `portfolio-etf-analysis`: portfolio-level risk/allocation/rebalancing + ETF comparison (holdings/sector/cost/tracking, ETF vs stocks)
-- `stock-deep-analysis`: deep single-stock fundamental template (20 sections)
-- `stock-peer-comparison`: 2–5 stock peer comparison as an HTML report
-- `tradingagents-orchestrator`: multi-role decision workflow (debate + risk gate + evidence log) producing Buy/Hold/Sell/No-Trade
+Use the finance markdown files directly in chat. Do not rely on folder paths.
+If multiple files are named `SKILL.md`, choose by the title shown in parentheses.
+Before answering, state the exact markdown/skill name being used so the user can verify it was actually loaded.
+Format: `Using: SKILL.md (Stock Deep Analysis)` or `Using: macro-context.md`.
+
+- Portfolio / ETF: `SKILL.md` (Portfolio & ETF Analysis)
+- Deep single-stock research: `SKILL.md` (Stock Deep Analysis)
+- Macro overlay: `macro-context.md`
+- Short interest / options: `short-interest.md`
+- Peer comparison: `SKILL.md` (Stock Peer Comparison)
+- Multi-agent decision workflow: `SKILL.md` (TradingAgents Orchestrator)
+
+For deep single-stock research, start with `SKILL.md` (Stock Deep Analysis). That file already routes to `macro-context.md` and `short-interest.md` when those references are relevant.
+
+If separate agent markdown files are also provided, use them only as optional evidence lanes when a report benefits from parallel evidence gathering.
 
 ## Recommended “Full Mode” Composition
 
 Use this when the user wants the full picture:
 
-1. Main report: `tradingagents-orchestrator`
+1. Main report: `SKILL.md` (TradingAgents Orchestrator)
 2. Appendices (only if requested / data is available)
-- Appendix A: `stock-deep-analysis`
-- Appendix B: `portfolio-etf-analysis` (portfolio fit + ETF lens when relevant)
-- Appendix C: `stock-peer-comparison`
-
-For selective research delegation patterns, see `skills/finance/subagent-patterns.md`.
-For copy-ready orchestration examples, see `skills/finance/orchestration-prompts.md`.
+- Appendix A: `SKILL.md` (Stock Deep Analysis)
+- Appendix B: `SKILL.md` (Portfolio & ETF Analysis)
+- Appendix C: `SKILL.md` (Stock Peer Comparison)
 
 ## Input Conventions
 

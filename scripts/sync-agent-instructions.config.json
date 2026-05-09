@@ -1,0 +1,18 @@
+{
+  "source": "rules",
+  "targets": {
+    "codex": {
+      "enabled": true,
+      "path": "~/.codex/CODEX.md",
+      "description": "OpenAI Codex CLI — generated from ~/.claude/rules and kept aligned with CLAUDE.md",
+      "mode": "generate"
+    },
+    "gemini": {
+      "enabled": true,
+      "path": "~/.gemini/GEMINI.md",
+      "description": "Google Gemini CLI — generated from ~/.claude/rules and kept aligned with CLAUDE.md",
+      "mode": "generate"
+    }
+  },
+  "version": "1.0.0"
+}
