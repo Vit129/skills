@@ -177,6 +177,7 @@ Key mandates: Identical keyword names Android/iOS, `accessibility_id` priority, 
 | `visual-regression.md` | Screenshot comparison, baseline management |
 | `accessibility.md` | axe-core, WCAG, keyboard navigation |
 | `component-testing.md` | Test React/Vue/Svelte in isolation |
+| `runtime-inspection.md` | Debug failing tests: console, network, DOM, storage, trace |
 
 ### `qa/playwright-cli/` — Browser CLI
 **Triggers:** "open URL", "take screenshot", "test login flow", "scrape page", "interact with element"
