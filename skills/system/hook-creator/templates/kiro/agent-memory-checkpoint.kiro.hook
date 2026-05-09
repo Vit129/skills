@@ -1,12 +1,13 @@
 {
-  "name": "Agent Memory — Mid-Session Checkpoint",
-  "version": "1.0.0",
-  "description": "After each spec task completes, checkpoint memory state so progress survives session interruptions.",
+  "name": "Agent Memory — Task Checkpoint & Skill Evolve",
+  "version": "2.0.0",
+  "disabled": false,
+  "description": "After each spec task completes: checkpoint memory state + check for skill evolution opportunities.",
   "when": {
     "type": "postTaskExecution"
   },
   "then": {
     "type": "askAgent",
-    "prompt": "A task just completed. Checkpoint agent memory: 1) Update agent-memory/memory.md — refresh Task_Ledger entry for the completed task and update Decisions_In_Force if any decisions were made. 2) If a problem was resolved during this task, create a draft in agent-memory/drafts/ with trigger, fix, domain, and outcome. 3) Report to user: 📝 Checkpoint: [list of files updated]."
+    "prompt": "[WORKSPACE GUARD: Only execute if the current session context involves files in 'VitProjects/' workspace. If the user is working exclusively in '.claude/' workspace, skip silently.] A task just completed. Do both: [CHECKPOINT] 1) Update agent-memory/memory.md — refresh Task_Ledger entry for the completed task and update Decisions_In_Force if any decisions were made. 2) If a problem was resolved during this task, create a draft in agent-memory/drafts/ with trigger, fix, domain, and outcome. [SKILL EVOLVE] 3) Scan agent-memory/skill-log.md for entries with status=proposed that match this task's domain. If found, ask user: '🔧 Skill proposal ready for {skill} — apply now?'. 4) If the task used a skill file and the approach worked well (no rework, no errors), check if the skill file is missing the pattern used. If so, append a NEW proposal to skill-log.md with status=proposed. Only propose if novel, reusable, and evidence-backed. 5) If a Skill_Flag exists for the skill used and this task was a success, increment the success counter. If it reaches 3, clear the flag. 6) Report only if something changed: '📝 Checkpoint + Skill evolve: [changes]'."
   }
 }

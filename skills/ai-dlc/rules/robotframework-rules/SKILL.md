@@ -23,7 +23,3 @@ The authoritative coding standards for all Robot Framework mobile automation.
 4. AAA Pattern: Arrange-Act-Assert in every test
 5. All test data from YAML fixtures, not hardcoded
 6. Labels.yaml: TH/EN UI labels in separate file — never hardcode text in keywords
-7. Variable casing: UPPER_CASE for GLOBAL/SUITE/TEST scope, lower_case for local/arguments
-8. Use `TRY/EXCEPT` instead of `Run Keyword And Ignore Error` (RF 5+)
-9. Nesting depth ≤ 4 levels — extract deeper logic to a separate keyword
-10. Use `[Documentation]` instead of inline comments — comments for TODOs only

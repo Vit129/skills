@@ -49,6 +49,33 @@ agent-memory/
 - **Session end**: Knowledge-curate hook promotes/crystallizes/archives → Session-save hook evaluates drafts + scores
 - **Skill underperformed**: Hook flags in `memory.md` after write ops
 
+## Knowledge Capture
+
+- `memory.md` is the hot state: current task, active decisions, lessons in force, and skill flags.
+- `playbook.md` stores repeatable problem cases with scores. It is the staging area for durable lessons.
+- `skill-log.md` stores skill improvement proposals only. It is not a knowledge archive.
+- `knowledge/biz/` stores business rules and domain logic that should be reused.
+- `knowledge/arch/` stores architecture decisions, tradeoffs, and system patterns.
+- `knowledge/qa/` stores test patterns, edge cases, and verification lessons.
+- `knowledge/bug/` stores bugs, root causes, and the fix that resolved them.
+- `drafts/` is the temporary holding area before a draft passes the Save/Discard Gate.
+
+### Promotion Flow
+
+1. Problem is resolved during a task.
+2. Create a draft in `drafts/` with trigger, fix, domain, and outcome.
+3. At session end, score the draft with Save/Discard Gate.
+4. If the draft passes, append it to `playbook.md`.
+5. If the same case keeps showing up, promote it to `knowledge/{domain}/{case-id}.md` or a shared pattern file.
+6. Use `skill-log.md` only when the skill itself should be improved.
+
+### File Roles
+
+- `memory.md` answers: "What is happening right now?"
+- `playbook.md` answers: "What fix worked before?"
+- `skill-log.md` answers: "What should the skill system learn or change?"
+- `knowledge/` answers: "What should be kept as durable reference knowledge?"
+
 ## Hooks (6 total)
 
 | Hook | Event | Role |

@@ -96,6 +96,5 @@ import testData from '../fixtures/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/[SYSTEM_
 
 For in-depth practical implementation (Technical Details), follow the Domain Rules:
 
-- 🧩 **TypeScript Standards:** `references/playwright-standard.md`
 - 🌐 **UI Standards:** `@ai-agent/rules/playwright/webUi.md`
 - 🔌 **API Standards:** `@ai-agent/rules/playwright/api.md`
