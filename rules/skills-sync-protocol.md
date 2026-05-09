@@ -1,6 +1,6 @@
-# Skills Sync Protocol
+# Agent Sync Protocol
 
-Source inspiration: YouTube video `KHWo3QWvSuM` — "ทำ AI Skills ให้ Claude Code + Codex ใช้งานเป็นระบบ ด้วย npm run skills".
+Source inspiration: YouTube video `https://www.youtube.com/watch?v=KHWo3QWvSuM` — "Building a systematic AI Skills workflow for Claude Code & Codex via npm run skills".
 
 Use this protocol when creating, updating, renaming, or syncing skills across Claude, Codex, Gemini, and Kiro-style workspaces.
 
@@ -15,6 +15,8 @@ Keep one canonical skills source and mirror it to each agent runtime so all agen
 - Skill routing source: `~/.claude/rules/skill-map.md`
 - Skill sync script: `~/.claude/scripts/sync-skills.sh`
 - Skill sync config: `~/.claude/scripts/sync-skills.config.json`
+- Rules sync script: `~/.claude/scripts/sync-rules.sh`
+- Rules sync config: `~/.claude/scripts/sync-rules.config.json`
 - Agent instruction sync script: `~/.claude/scripts/sync-agent-instructions.sh`
 - Agent instruction sync config: `~/.claude/scripts/sync-agent-instructions.config.json`
 
@@ -22,11 +24,11 @@ Do not manually edit mirrored files under `~/.codex/skills/` or `~/.gemini/skill
 
 ## Runtime Targets
 
-| Runtime | Skills target | Instruction file |
-|---|---|---|
-| Claude | `~/.claude/skills/` | `CLAUDE.md` |
-| Codex / ChatGPT coding agent | `~/.codex/skills/` | `AGENTS.md` |
-| Gemini | `~/.gemini/skills/` | `GEMINI.md` |
+| Runtime | Skills target | Rules target | Instruction file |
+|---|---|---|---|
+| Claude | `~/.claude/skills/` | `~/.claude/rules/` | `CLAUDE.md` |
+| Codex / ChatGPT coding agent | `~/.codex/skills/` | `~/.codex/rules/` | `AGENTS.md` |
+| Gemini | `~/.gemini/skills/` | `~/.gemini/rules/` | `GEMINI.md` |
 | Kiro / company workspace | project-specific `.kiro/skills/` when configured | Kiro hook/instruction templates |
 
 Use `AGENTS.md`, not `CODEX.md`, for Codex/ChatGPT coding-agent instructions.
@@ -75,7 +77,13 @@ Preview without writing:
 bash ~/.claude/scripts/sync-skills.sh --dry-run
 ```
 
-Run agent instruction sync after editing global rules:
+Run rules sync after editing global rules files:
+
+```bash
+bash ~/.claude/scripts/sync-rules.sh
+```
+
+Run agent instruction sync to generate the entry files (AGENTS.md / GEMINI.md):
 
 ```bash
 bash ~/.claude/scripts/sync-agent-instructions.sh
@@ -87,6 +95,7 @@ Optional project wrapper, if the project has `package.json`:
 {
   "scripts": {
     "skills": "bash ~/.claude/scripts/sync-skills.sh",
+    "rules": "bash ~/.claude/scripts/sync-rules.sh",
     "agent:instructions": "bash ~/.claude/scripts/sync-agent-instructions.sh"
   }
 }
@@ -100,6 +109,7 @@ npm run skills
 
 ## Safe Update Workflow
 
+**For Skills:**
 1. Edit canonical files in `~/.claude/skills/<skill-name>/`.
 2. Confirm `SKILL.md` describes when the skill should trigger.
 3. Confirm `CLAUDE.md`, `AGENTS.md`, and `GEMINI.md` exist for chat/runtime routing when the skill needs local instructions.
@@ -107,7 +117,12 @@ npm run skills
 5. Update `~/.claude/rules/skill-map.md` if the skill is new or renamed.
 6. Run `bash ~/.claude/scripts/sync-skills.sh`.
 7. Verify target files exist under `~/.codex/skills/` and `~/.gemini/skills/`.
-8. Run `bash ~/.claude/scripts/sync-agent-instructions.sh` only if global rules changed.
+
+**For Rules and Main Instructions:**
+1. Edit canonical files in `~/.claude/rules/` or update `~/.claude/CLAUDE.md`.
+2. Run `bash ~/.claude/scripts/sync-rules.sh` to mirror the rules directory.
+3. Run `bash ~/.claude/scripts/sync-agent-instructions.sh` to generate the entry points (`GEMINI.md`, `AGENTS.md`).
+4. Verify target files exist under `~/.codex/rules/`, `~/.gemini/rules/`, and the root workspaces.
 
 ## Verification Checklist
 

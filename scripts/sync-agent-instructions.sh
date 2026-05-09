@@ -76,37 +76,22 @@ PY
 render_agent_md() {
   local agent_name="$1"
   local entry_file="$2"
-  cat <<EOF
-# ${agent_name} Agent Workspace
-
-\`${entry_file}\` is the entry point and index.
-
-Source of truth:
-- \`~/.claude/rules/\` for behavior, routing, response format, and skill map
-- \`~/.claude/output-styles/communication-style.md\` for tone
-- \`~/.claude/agent-memory/\` for cross-session memory
-- \`~/.claude/GRAPH_REPORT.md\` for structural navigation, when present
-
-Key references:
-- \`~/.claude/rules/agent-core.md\`
-- \`~/.claude/rules/skill-map.md\`
-- \`~/.claude/rules/project-rules.md\`
-- \`~/.claude/rules/response-format.md\`
-- \`~/.claude/rules/workflow.md\`
-- \`~/.claude/rules/citation-format.md\`
-- \`~/.claude/rules/token_efficient.md\`
-- \`~/.claude/output-styles/communication-style.md\`
-- \`~/.claude/skills/KIRO.md\`
-
-Generated agent configs:
-- \`~/.claude/scripts/sync-agent-instructions.sh\` writes \`~/.codex/AGENTS.md\`
-- \`~/.claude/scripts/sync-agent-instructions.sh\` writes \`~/.gemini/GEMINI.md\`
-
-Project-specific notes:
-- Update \`~/.claude/rules/\` first, then resync generated configs.
-- Use \`~/.claude/rules/skill-map.md\` when deciding which skill to load.
-- Use \`~/.claude/agent-memory/\` for session state, playbook, and knowledge promotion.
-EOF
+  local agent_lower
+  agent_lower="$(echo "$agent_name" | tr "[:upper:]" "[:lower:]")"
+  
+  local content
+  content="$(cat "$CLAUDE_FILE")"
+  
+  content="${content//Claude Agent Workspace/${agent_name} Agent Workspace}"
+  content="${content//CLAUDE.md/${entry_file}}"
+  content="${content//rules\//~/.${agent_lower}/rules/}"
+  content="${content//skills\//~/.${agent_lower}/skills/}"
+  content="${content//output-styles\//~/.claude/output-styles/}"
+  content="${content//agent-memory\//~/.claude/agent-memory/}"
+  content="${content//GRAPH_REPORT.md/~/.claude/GRAPH_REPORT.md}"
+  content="${content//scripts\//~/.claude/scripts/}"
+  
+  echo "$content"
 }
 
 write_target() {

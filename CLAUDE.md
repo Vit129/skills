@@ -18,7 +18,6 @@ Key references:
 - `rules/citation-format.md`
 - `rules/token_efficient.md`
 - `output-styles/communication-style.md`
-- `skills/KIRO.md`
 
 Generated agent configs:
 - `scripts/sync-agent-instructions.sh` writes `~/.codex/AGENTS.md`
