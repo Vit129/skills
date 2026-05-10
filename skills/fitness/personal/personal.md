@@ -8,6 +8,17 @@ Do not treat this file as the source of truth for current metrics, current logs,
 
 If current files are unavailable in chat, state the limitation and continue from the user's latest message.
 
+## Training Environment & Schedule
+
+### SM (Smith Machine) Weight Interpretation
+- **<70 kg:** Solo training (weekdays at user's condo)
+- **70–90 kg:** Trainer-assisted sessions (Saturdays at sister's condo gym)
+- Always note which type when logging SM weights
+
+### Training Locations
+- **Weekdays (Mon-Fri, Sun):** User's or my sister's condo (solo training)
+- **Saturdays:** Sister's condo gym (trainer-assisted, heavier loads)
+
 ## Personal Defaults
 
 - Unit system: metric by default

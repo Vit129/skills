@@ -6,17 +6,24 @@ For progress tracking rules, file behavior, master index, and resume protocol �
 
 ## Entry Point Requirements
 
+### Dev Only mode (Phase 2.5 — after Lite Inception)
+Can start this phase if:
+- [ ] Lite Inception complete (mini-spec.md exists) OR external specs provided
+- [ ] Logical design exists (logical-design.md) OR will be created as part of Lite Inception
+
+### Full mode (Phase 2.5 — parallel with Phase 2.4)
 Can start this phase if:
 - [ ] `logical-design.md` exists and is validated
-- [ ] `test-cases` populated (test-case-design phase complete)
-- [ ] `test-scripts` populated (test-script-design phase complete)
+- [ ] Phase 2.4 (Test Script Design) has at least test file skeleton created
 - [ ] Technical specifications are complete
+
+> **Note:** This skill plans the Dev work (task breakdown). Implementation happens AFTER this phase at Phase 3.1. The dev-task-progress.md produced here defines the iteration path for construction phases (3.1, 3.2, 3.3).
 
 ## Required Context from Previous Phases
 
 - From Logical Design: API specs / service contracts, data storage schema, client application components
-- From Test Case Design: scenarios to be supported
-- From Test Script Design: automation scripts to be built first (TDD: RED)
+- From Test Case Design (if available): scenarios to be supported
+- From Test Script Design (if available): automation scripts to be built first (TDD: RED)
 
 ## Critical Success Criteria
 
@@ -29,8 +36,10 @@ Can start this phase if:
 
 ## When to use
 
-- After test script design
-- Before implementation or DevOps sync
+- After Lite Inception or Phase 1 Inception + Phase 2.4 (test script skeleton) is complete
+- As the FIRST Dev phase — plans what Dev work needs to be done
+- Before implementation (Phase 3.1)
+- Need to plan Dev work in manageable chunks with clear iteration path
 
 ## Process
 

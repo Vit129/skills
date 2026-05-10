@@ -23,25 +23,6 @@ Three specialist perspectives for reviewing code before merge. Each persona focu
 3. **Skills are the "how"** — personas invoke skills (playwright-rules, debugging, etc.) as needed
 4. **Output is a report** — personas produce findings, user decides action
 
-## Claude Code: Subagent Spawn
-
-When running in Claude Code, personas can be invoked as isolated subagents (fresh context window per persona):
-
-```
-# Fan-out all three in parallel (Claude Code Agent tool)
-Use the Agent tool with subagent_type: code-reviewer
-Use the Agent tool with subagent_type: test-engineer
-Use the Agent tool with subagent_type: security-auditor
-```
-
-**Why isolated context matters:** Each persona reviews the same artifact independently — no cross-contamination of findings. The main session merges reports and makes the go/no-go decision.
-
-**Rules for subagent invocation:**
-- Pass only ARTIFACT + relevant context (not full session history)
-- Each subagent produces its report independently
-- Main session reconciles findings — personas do NOT invoke each other
-- If Claude Code Agent tool unavailable → run personas sequentially in main session
-
 ## Fan-Out Pattern (Pre-Merge Gate)
 
 ```

@@ -461,8 +461,9 @@ Brownfield start from 1.1, Greenfield start from 1.2
   → **MANDATORY after user stories:** run `core/analysis-skills` skill (domain.md) for cross-domain reuse analysis
     - If `{knowledge_root}/business/businessIndex.json` does not exist → skip Steps 1-2, run Step 3 (Impact Assessment) only — set Reusability Score = 0%
     - Never skip domain.md entirely — Impact Assessment is always required
-  → **MANDATORY after domain analysis:** run `core/analysis-skills` skill (gap.md) to identify missing logic
+  → **MANDATORY after domain analysis:** run `core/analysis-skills` skill (gap.md) to identify missing logic (scope: requirements vs existing knowledge)
     - If domain analysis returned 0% → treat all required logic as "No Match" and proceed to prioritize gaps
+    - Note: gap.md runs again at Phase 1.8 with broader scope (all Phase 1 artifacts) — these are intentionally different invocations
 - **1.3** Domain Decomposition → DDD Strategic Design + Architecture Decision
   → Use `core/architect` skill (decomposition.md, architecture-patterns.md)
 - **1.4** Domain Design → DDD Tactical Patterns (pseudocode)
@@ -478,7 +479,7 @@ Brownfield start from 1.1, Greenfield start from 1.2
   → Skip for API-only features (no UI)
 - **1.8** Brainstorming (3 Amigos) → PO/Dev/QA subagents review Phase 1 artifacts, identify gaps and tensions
   → Use `core/brainstorming` skill — dispatches subagents per role with Phase 1 artifacts as input
-  → Pre-step: run `core/analysis-skills` (gap.md) to feed known gaps to all subagents
+  → Pre-step: run `core/analysis-skills` (gap.md) to feed known gaps to all subagents (scope: all Phase 1 artifacts — broader than Phase 1.2 which only covers requirements)
   → Output: `brainstorming-summary.md` — tensions, open questions, refined scope
   → Skip for Small features (1-2 user stories, single endpoint)
 
@@ -486,6 +487,7 @@ Brownfield start from 1.1, Greenfield start from 1.2
 
 - **2.1** QA Task Design → Task breakdown for QA automation
   → Use `aidlc` reference (qa-task-design.md)
+  → Optional companion: `core/doubt-driven` (for architecture decisions in QA planning)
 - **2.2** Test Case Design → BDD test scenarios
   → Use `ai-dlc/qa/test-scenario/` skill + `ai-dlc/rules/test-scenario-rules/` skill
 
@@ -520,10 +522,13 @@ Brownfield start from 1.1, Greenfield start from 1.2
 
 - **3.1** Implementation → TDD: GREEN (code to pass tests)
   → Use `frontend-dev` skill and/or `backend-dev` skill
+  → Optional companions: `core/source-driven` (when implementing framework-specific code — verify docs before coding), `core/doubt-driven` (for non-trivial implementation decisions)
 - **3.2** Automated Testing → TDD: REFACTOR + validation
   → Use `playwright-testing` skill or `robotframework-testing` skill
+  → On test failure: use `core/debugging` skill (triage error, reproduce bug, root cause analysis)
 - **3.3** Create Pull Request → PR creation + code review
   → Use `devops-pipeline` skill (pull-request.md)
+  → Pre-merge gate: use `core/review-personas` skill (code-reviewer + test-engineer + security-auditor)
 
 ### Operation
 
@@ -565,7 +570,8 @@ For detailed patterns → Use `core/architect` skill (architecture-patterns.md)
 - `"start AI-DLC from UI/UX design"` — Begin from phase 1.5
 - `"start AI-DLC from testid map"` — Begin from phase 1.7
 - `"start AI-DLC from brainstorming"` — Begin from phase 1.8 (3 Amigos review)
-- `"start AI-DLC from test case design"` — Begin from phase 2.1
+- `"start AI-DLC from QA task design"` — Begin from phase 2.1
+- `"start AI-DLC from test case design"` — Begin from phase 2.2
 - `"start AI-DLC from QA architecture"` — Begin from phase 2.3
 - `"start AI-DLC from test script design"` — Begin from phase 2.4 (parallel: also starts 2.5)
 - `"start AI-DLC from dev task design"` — Begin from phase 2.5 (parallel: also starts 2.4)

@@ -31,8 +31,7 @@ Full governance and planning for the complete development lifecycle.
 
 **Global rule:** ALL AIDLC interactions use **dialog message format** (structured step-by-step) — not plain chat. Applies to every mode, every AI agent.
 
-For detection logic, Vibe flow, and escalation rules → Read `references/vibe-mode.md`
-For dialog format templates and artifact rules → Read `references/kiro-spec-integration.md`
+For detection logic, Vibe flow, escalation rules, dialog format, and artifact rules → Read `references/workflow.md` (Mode Selection + Dialog & Artifact Integration sections)
 
 ## Phase 1.8: Brainstorming — 3 Amigos Review (after Inception, before Task Design)
 
@@ -87,7 +86,7 @@ For full phase list, routing table, and anti-shortcut rules → (Read `reference
 
 ## Related Skills
 
-For skill routing guide → (Read `references/related-skills.md`)
+For skill routing guide → see KIRO.md Skill Map (ai-agent/KIRO.md)
 
 > **Brainstorming** — Phase 1.8 (หลัง Inception, ก่อน Task Design) — 3 Amigos review via subagents → `core/brainstorming/SKILL.md`
 > **Subagent-Driven** — ใช้ระหว่าง Phase 3.1 เมื่อมี 3+ independent tasks → `core/subagent-driven/SKILL.md`

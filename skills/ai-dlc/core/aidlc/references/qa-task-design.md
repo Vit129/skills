@@ -6,18 +6,30 @@ For progress tracking rules, file behavior, master index, and resume protocol �
 
 ## Entry Point Requirements
 
+### QA Scenario Only mode (Phase 2.1 → 2.2)
 Can start this phase if:
-- [ ] Test case design is complete (test scenarios exist)
-- [ ] QA architecture is complete (implementation plan exists)
-- [ ] Data storage strategy is defined
+- [ ] Lite Inception complete (mini-spec.md exists) OR external specs provided
+- [ ] Coding rules reviewed (ai-dlc/rules/test-scenario-rules)
+
+### QA Automation mode (Phase 2.1 → 2.2 → 2.3 → 2.4)
+Can start this phase if:
+- [ ] Lite Inception complete (mini-spec.md exists) OR external specs provided
+- [ ] Platform selected (API / Web UI / Android / iOS)
 - [ ] Coding rules reviewed (ai-dlc/rules/playwright-rules or ai-dlc/rules/robotframework-rules)
+
+### Full mode (Phase 2.1 — after Phase 1.8 Brainstorming)
+Can start this phase if:
+- [ ] Phase 1 Inception complete (user-stories.md + domain-design.md + logical-design.md exist)
+- [ ] Brainstorming complete (brainstorming-summary.md exists) OR feature is Small
+- [ ] Coding rules reviewed
+
+> **Note:** This skill plans the QA work (task breakdown). Test scenarios, QA architecture, and test scripts are created AFTER this phase — not before. The qa-task-progress.md produced here defines the iteration path for subsequent phases (2.2, 2.3, 2.4).
 
 ## Required Context from Previous Phases
 
-- From Test Case Design: test scenarios (MD/CSV) with priority and automation status
-- From QA Architecture: implementation plan with file structure, service mapping
-- From Data Storage Strategy: seed/verify/cleanup approach
-- From Coding Rules: platform-specific standards
+- From Inception/Lite Inception: user stories, acceptance criteria, domain context
+- From Brainstorming (if applicable): refined scope, QA-specific concerns
+- From Platform Selection: determines which coding rules and architecture patterns to use
 
 ## Critical Success Criteria
 
@@ -45,9 +57,10 @@ Also read coding rules:
 
 ## When to use
 
-- After test case design and QA architecture are done
-- Before writing test scripts
-- Need to plan QA automation work in manageable chunks
+- After Lite Inception or Phase 1 Inception is complete
+- As the FIRST QA phase — plans what QA work needs to be done
+- Before test case design (Phase 2.2), QA architecture (Phase 2.3), and test scripts (Phase 2.4)
+- Need to plan QA work in manageable chunks with clear iteration path
 
 ## Process
 

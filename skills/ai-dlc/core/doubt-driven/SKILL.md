@@ -81,49 +81,6 @@ Key rules:
 - Do NOT pass the CLAIM (biases toward agreement)
 - Frame as "find issues" not "is this good?"
 
-### Step 3.5: Cross-Model Escalation (Optional)
-
-A single model shares blind spots with itself. A different model catches them.
-
-After single-model review in Step 3, offer cross-model second opinion:
-
-> "Single-model review complete. Want a cross-model second opinion? (gemini / codex / skip)"
-
-**If user picks gemini or codex:**
-
-```bash
-# Write adversarial prompt + ARTIFACT + CONTRACT to temp file
-# Then pipe via stdin (keeps shell metacharacters inert)
-
-# Gemini CLI
-gemini --approval-mode plan -p "" < /tmp/doubt-prompt.md
-
-# Codex CLI
-codex exec --sandbox read-only - < /tmp/doubt-prompt.md
-```
-
-**Format of /tmp/doubt-prompt.md:**
-```
-Adversarial review. Find what is WRONG with this artifact.
-[same adversarial prompt as Step 3]
-
-ARTIFACT:
-[paste artifact]
-
-CONTRACT:
-[paste contract]
-```
-
-**Rules:**
-- Always use `--approval-mode plan` (Gemini) or `--sandbox read-only` (Codex) — read-only, no workspace writes
-- Write to temp file + pipe via stdin — never interpolate artifact into shell argument (breaks on quotes/backticks)
-- Pass ARTIFACT + CONTRACT only — do NOT pass the CLAIM
-- Take output into Step 4 (RECONCILE) alongside single-model findings
-- If CLI unavailable or fails → surface failure, offer manual review or skip
-- If user skips → note "Proceeding with single-model findings only" and continue
-
-**Non-interactive contexts (CI, autonomous runs):** Skip cross-model, announce skip in output.
-
 ### Step 4: RECONCILE — Classify findings
 
 For each finding, classify (first match wins):

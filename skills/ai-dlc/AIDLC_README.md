@@ -179,10 +179,14 @@ Key mandates: Identical keyword names Android/iOS, `accessibility_id` priority, 
 | `component-testing.md` | Test React/Vue/Svelte in isolation |
 | `runtime-inspection.md` | Debug failing tests: console, network, DOM, storage, trace |
 
-### `qa/playwright-cli/` — Browser CLI
+### `.claude/skills/playwright-cli/` — Browser CLI (external)
 **Triggers:** "open URL", "take screenshot", "test login flow", "scrape page", "interact with element"
 
-Browser automation via terminal: YAML snapshots, `eX` references, session persistence
+> 📦 Installed via `npm install -g @playwright/cli@latest` + `playwright-cli install --skills`
+> Source of truth: `.claude/skills/playwright-cli/SKILL.md` (not in `ai-dlc/qa/`)
+> Setup script: `ai-agent/scripts/setup/setupTests.sh` handles installation
+
+Browser automation via terminal: YAML snapshots, `eX` references, session persistence, test generation
 
 ### `qa/qa-architect/` — Test Architecture
 **Triggers:** "design test automation architecture", "API test framework", "page object structure", "test DB strategy"
