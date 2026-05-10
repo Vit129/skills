@@ -47,7 +47,7 @@
 | Keyword | Skill |
 |---------|-------|
 | write/run/fix playwright tests | `ai-dlc/qa/playwright-testing/` |
-| browser CLI, navigate, screenshot | `ai-dlc/qa/playwright-cli/` |
+| browser CLI, navigate, screenshot | `playwright-cli/` ← per-project, installed via `playwright-cli install --skills` |
 | QA architecture, test framework design | `ai-dlc/qa/qa-architect/` |
 | test scenario, test case design | `ai-dlc/qa/test-scenario/` |
 | write/run/fix RF mobile tests | `ai-dlc/qa/robotframework-testing/` |

@@ -321,6 +321,52 @@ else
     echo "⚠️  Playwright CLI global install failed, will use npx fallback"
 fi
 
+# Setup Chrome DevTools MCP (global Kiro/Claude config)
+echo "📝 Setting up Chrome DevTools MCP..."
+KIRO_MCP_DIR="$HOME/.kiro/settings"
+KIRO_MCP_FILE="$KIRO_MCP_DIR/mcp.json"
+mkdir -p "$KIRO_MCP_DIR"
+
+if [ -f "$KIRO_MCP_FILE" ]; then
+    if grep -q '"chrome-devtools"' "$KIRO_MCP_FILE"; then
+        echo "✅ Chrome DevTools MCP already configured in $KIRO_MCP_FILE"
+    else
+        # Inject chrome-devtools into existing mcpServers object
+        if command -v node &> /dev/null; then
+            node -e "
+const fs = require('fs');
+const cfg = JSON.parse(fs.readFileSync('$KIRO_MCP_FILE', 'utf8'));
+if (!cfg.mcpServers) cfg.mcpServers = {};
+cfg.mcpServers['chrome-devtools'] = {
+  command: 'npx',
+  args: ['-y', 'chrome-devtools-mcp@latest'],
+  disabled: false,
+  autoApprove: []
+};
+fs.writeFileSync('$KIRO_MCP_FILE', JSON.stringify(cfg, null, 2));
+"
+            echo "✅ Chrome DevTools MCP added to $KIRO_MCP_FILE"
+        else
+            echo "⚠️  Node.js not available yet, skipping MCP config injection"
+        fi
+    fi
+else
+    # Create new mcp.json with chrome-devtools
+    cat > "$KIRO_MCP_FILE" << 'MCP_EOF'
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest"],
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
+MCP_EOF
+    echo "✅ Chrome DevTools MCP config created at $KIRO_MCP_FILE"
+fi
+
 # Create Playwright CLI config (inside web-testing)
 echo "📝 Setting up Playwright CLI config..."
 mkdir -p tests/web-testing/.playwright
