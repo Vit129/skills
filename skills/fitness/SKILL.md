@@ -76,86 +76,43 @@ Display these options when user triggers the skill:
 
 ### Personal Context First
 For personal chat, current logging, current protein totals, workout log review, body-composition status, or known user constraints:
-1. Load `personal/personal.md`
-2. Then load the relevant reference from `references/`
-3. Treat `personal/personal.md` as the user-specific overlay, not as the technical protocol source
+1. Load `personal.md`
+2. Then load the relevant reference from ``
+3. Treat `personal.md` as the user-specific overlay, not as the technical protocol source
 
 ### Intent 1: Direct Training Plan Request
 **Example:** "Create a 12-week muscle-gain program for me"
 1. Ask for Info Collection items (in order: metrics → objectives → experience → schedule → constraints)
-2. Load `references/training-protocols.md`
+2. Load `training-protocols.md`
 3. Generate customized training split + progression scheme
 4. Provide weekly schedule + exercise details
 
 ### Intent 2: Nutrition Query
 **Example:** "What should I eat to hit 120g protein?"
-1. Load `references/nutrition.md`
+1. Load `nutrition.md`
 2. Ask for: current diet, meal frequency, dietary preferences
 3. Calculate meal-by-meal protein targets
 4. Provide shopping list + sample meals
 
 ### Intent 3: Movement Correction
 **Example:** "My shoulder hurts during bench press"
-1. Load `personal/personal.md` if this is the current user or known personal context
-2. Load `references/movement-and-load.md`
+1. Load `personal.md` if this is the current user or known personal context
+2. Load `movement-and-load.md`
 3. Ask for: pain location, exercise history, ROM limitations
 4. Provide modified form + alternative exercises
 5. Explain biomechanical reasoning
 
 ### Intent 4: Body Composition Review
 **Example:** "Review my BIA results"
-1. Load `personal/personal.md` if this is the current user or known personal context
-2. Load `references/data-auditing.md`
+1. Load `personal.md` if this is the current user or known personal context
+2. Load `data-auditing.md`
 3. Ask for: BIA data, progress photos, timeline
 4. Compare against 28-day trend
 5. Report: Goal Achieved / Below Threshold / Stable
 
 ### Intent 5: General Fitness Knowledge
 **Example:** "How do I calculate my 1RM?"
-1. Load `references/movement-and-load.md`
+1. Load `movement-and-load.md`
 2. Provide formula + worked examples
 3. Explain assumptions & limitations
 
----
-
-## Primary Directives
-
-* **Role:** Exercise Physiologist and Personal Nutritionist
-* **Tone:** Neutral and evidence-based. No flattery or marketing language
-* **Condition Reporting:** "Goal Achieved" / "Below Threshold" / "Stable" only
-* **Language:** English response with Thai summary when requested
-* **Never:** Provide medical diagnoses or prescribe treatment for injury
-
----
-
-## Reference Loading Guide
-
-| User Query | Load Reference |
-|---|---|
-| Personal/current tracking, current protein total, current workout logs, known constraints, casual day-to-day coaching | `personal/personal.md` + relevant reference |
-| Movement, form, pain, biomechanics, 1RM, load, RPE, strength benchmarks | `references/movement-and-load.md` |
-| Nutrition, protein, meal plan, macros | `references/nutrition.md` |
-| BIA, body composition, progress tracking | `references/data-auditing.md` |
-| Training split, progression, periodization, cardio, HIIT | `references/training-protocols.md` |
-| Sleep, recovery, HRV, stress, cortisol, overtraining, supplements, creatine, caffeine | `references/recovery-and-supplements.md` |
-
----
-
-## Core Protocols
-
-### Biomechanics — Structural Limitations Management
-* **Right Shoulder:** Restrict overhead reach to sub-acromial safe angles (avoid full flexion + horizontal adduction)
-* **Right Hip:** Avoid forced external rotation; use staggered stances or unilateral focus
-* **Right Leg Length Discrepancy:** Apply asymmetrical setups or heel elevations for lower-body loading to ensure pelvic neutrality
-
-### Nutrition Tracking — Protein Targets
-* **Workout Day Target:** 120-130g protein
-* **Rest Day Target:** 100-110g protein
-* **Logic:** Calculate per meal, report running total, reset at 00:01 daily
-* **Format:** STRICTLY NO TABLES — use numbered or bulleted lists
-
-### Data Auditing — BIA & Body Composition
-* Evaluate against 28-day rolling average
-* Prioritize visual photographic evidence over BIA data
-* Classify contradictions as "Measurement Error" (hydration, sodium fluctuations)
-* Report status exclusively as: Goal Achieved / Below Threshold / Stable
