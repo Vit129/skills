@@ -72,11 +72,20 @@ Use the output template below and do not skip sections. If a data point cannot b
 
 ## Critical Rules (MANDATORY)
 
-✅ Evidence-based (cite sources / dates for key figures)  
+✅ Evidence-based — every key figure must cite source + date (e.g., "Q3 2024 10-Q filed Nov 8, 2024")  
+✅ Beat/miss quantified — "beat by $120M or 3%" not just "beat"  
+✅ Variance table in Section 19 — actual vs consensus vs prior estimate  
 ✅ No hallucinations (`N/A` if not found)  
 ✅ Disclaimer required at beginning and end  
 ✅ English output (except tickers/numbers/finance terms)  
 ✅ Keep all 20 sections present  
+
+**Citation Enforcement Checklist (run before delivering):**
+- [ ] Section 4 figures cite filing name + date
+- [ ] Section 13 headlines cite source + date
+- [ ] Section 19 beat/miss data cites consensus source + date
+- [ ] Section 17 insider data cites SEC filing or source + date
+- [ ] No training-data numbers used for unstable facts (prices, recent filings)  
 
 ---
 
@@ -129,10 +138,20 @@ Interpretation: [2–4 sentences]
 - Capital intensity: [Low/Medium/High] — why
 
 6) Competitive Advantage (Moat)
-- Moat type(s): Brand / Network / Switching / Scale / Tech / Data / Other
-- Evidence the moat is real:
-- Key competitors:
-- Competitive position summary:
+
+Moat Rating Table:
+| Moat Type | Rating | Evidence |
+|-----------|--------|---------|
+| Network effects | Strong / Moderate / Weak / None | [what drives it] |
+| Switching costs | Strong / Moderate / Weak / None | [integration depth, contracts] |
+| Scale economies | Strong / Moderate / Weak / None | [unit cost advantage] |
+| Intangible assets | Strong / Moderate / Weak / None | [brand, data, patents, licenses] |
+
+- Overall moat verdict: Wide / Narrow / None
+- Durable advantages (hard to replicate): [list with evidence]
+- Structural vulnerabilities (hard to fix): [list]
+- Key competitors: [names + brief positioning]
+- Competitive position summary: [2–3 lines]
 
 7) Optionality & Future Growth
 - Growth opportunities (near/mid/long):

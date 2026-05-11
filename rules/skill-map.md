@@ -80,6 +80,8 @@
 ### finance/ — Research & Portfolio
 | Keyword | Skill |
 |---------|-------|
+| find stocks, screen stocks, new ideas, watchlist, หาหุ้น, หาไอเดีย | `finance/research/idea-generation/` ← start here for new ideas |
+| earnings preview, pre-earnings, before earnings, ก่อน earnings | `finance/research/earnings-preview/` |
 | portfolio review, ETF analysis, allocation, rebalance | `finance/portfolio/` |
 | analyze stock, deep dive stock, fundamental research | `finance/research/stock-deep-analysis/` |
 | compare stocks, peer comparison, valuation comparison | `finance/research/stock-peer-comparison/` |

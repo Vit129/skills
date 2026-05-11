@@ -27,6 +27,8 @@
 State which file is being used before answering.
 Format: `Using: SKILL.md (Stock Deep Analysis)` or `Using: macro-context.md`.
 
+- **Find new stock ideas / screen** → `SKILL.md` (Idea Generation)
+- **Before earnings / pre-earnings setup** → `SKILL.md` (Earnings Preview)
 - Portfolio / ETF analysis → `SKILL.md` (Portfolio & ETF Analysis)
 - Deep single-stock research → `SKILL.md` (Stock Deep Analysis)
 - Macro overlay → `macro-context.md`
