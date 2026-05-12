@@ -176,11 +176,19 @@
 - **Invalid case** - Test case ไม่ถูกต้องหรือไม่สามารถทดสอบได้
 
 ### Effort & Remaining Work
-- Start at **0.5** for simple cases
-- Increment by **0.5** based on complexity
-- Examples: 0.5, 1.0, 1.5, 2.0
+
+Applies to ALL platforms: API, Web UI, Mobile UI
+
+| Level | Effort | Examples |
+|-------|--------|---------|
+| **Simple** | 1 hr | Single endpoint, 1-2 assertions, no DB, no auth |
+| **Standard** | 1.5–2 hr | Multi-step flow, schema validation, basic auth, form submit |
+| **Complex** | 2–3 hr | Multi-page flow, DB verify, edge cases, mock setup |
+| **Full** | 3–5 hr | E2E flow (search→book→pay→confirm), multi-service, stateful |
+
 - Unit = hour
 - **Remaining Work** = **Effort** for new cases
+- Use midpoint when unsure (e.g., Standard → 2 hr)
 
 ---
 
@@ -193,6 +201,6 @@
 - [ ] API tests specify HTTP method, headers, body, and expected status
 - [ ] Priority level set based on definition
 - [ ] Automation Status matches Test Application type
-- [ ] Effort set in 0.5 increments
+- [ ] Effort set per complexity scale (Simple=1, Standard=1.5-2, Complex=2-3, Full=3-5)
 - [ ] Linked to User Story
 - [ ] Written in English

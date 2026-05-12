@@ -1,12 +1,12 @@
 {
   "name": "Claude Prj — Memory Checkpoint",
-  "version": "1.0.0",
-  "description": "After each spec task completes, checkpoint memory state so progress survives session interruptions.",
+  "version": "2.0.0",
+  "description": "After spec task completes: update Task_Ledger in memory.md if a real artifact was produced.",
   "when": {
     "type": "postTaskExecution"
   },
   "then": {
     "type": "askAgent",
-    "prompt": "[WORKSPACE GUARD: Only execute if the current session context involves files in '.claude/' workspace. If the user is working exclusively in 'VitProjects/' workspace, skip silently.] A task just completed. Checkpoint agent memory: 1) Update agent-memory/memory.md — refresh Task_Ledger entry for the completed task and update Decisions_In_Force if any decisions were made. 2) If a problem was resolved during this task, create a draft in agent-memory/drafts/ with trigger, fix, domain, and outcome. 3) Report to user: 📝 Checkpoint: [list of files updated]."
+    "prompt": "[WORKSPACE GUARD: Only execute if the current session context involves files in '.claude/' workspace. If the user is working exclusively in 'VitProjects/' workspace, skip silently.] A spec task just completed. If it produced a real artifact (file created, phase completed, decision made) — update agent-memory/memory.md Task_Ledger entry for this task. If the task was Q&A only or produced no artifact → skip. Report only if something changed: 📝 Checkpoint: [task] [status]."
   }
 }

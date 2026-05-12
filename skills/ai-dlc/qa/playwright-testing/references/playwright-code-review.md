@@ -11,7 +11,7 @@ MUST read `ai-dlc/rules/playwright-rules/` skill first to know the full standard
 
 ## Review Process
 
-1. Load standards: `ai-dlc/rules/playwright-rules/references/coding-standards.md` + `api.md` or `web-ui.md`
+1. Load standards: `ai-dlc/rules/playwright-rules/references/pw-coding-standards.md` + `api.md` or `web-ui.md`
 2. Check every file against checklist below
 3. Output review report
 4. If NEEDS_FIX + autoFixable → fix immediately, re-review

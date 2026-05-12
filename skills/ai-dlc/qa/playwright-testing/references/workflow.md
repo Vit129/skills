@@ -9,7 +9,7 @@ Generate Playwright test files from architecture design.
 **Input:** Architecture Design + Test Structure Blueprint from implementation plan.
 
 **Steps:**
-1. Read coding rules from `ai-dlc/rules/playwright-rules/` skill (api.md or webUi.md + coding-standards.md) — ALL parts
+1. Read coding rules from `ai-dlc/rules/playwright-rules/` skill (api.md or webUi.md + pw-coding-standards.md) — ALL parts
 2. Read architecture and test structure blueprint from implementation plan
 3. Check discovery results — if Resources Discovery found reusable templates, import them instead of creating from scratch
 4. Create directory structure (mkdir -p) — folders kebab-case

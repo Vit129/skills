@@ -52,8 +52,8 @@ Based on the test platform, MUST read the corresponding skill first:
 | iOS | `robotframework-testing` | workflow.md, python-db.md |
 
 Also read coding rules:
-- Web/API → `ai-dlc/rules/playwright-rules/` (coding-standards.md + web-ui.md or api.md)
-- Mobile → `ai-dlc/rules/robotframework-rules/` (standards.md + android.md or ios.md)
+- Web/API → `ai-dlc/rules/playwright-rules/` (pw-coding-standards.md + web-ui.md or api.md)
+- Mobile → `ai-dlc/rules/robotframework-rules/` (rf-coding-standards.md + android.md or ios.md)
 
 ## When to use
 

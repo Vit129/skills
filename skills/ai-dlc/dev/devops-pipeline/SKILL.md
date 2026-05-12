@@ -1,71 +1,42 @@
 ---
 name: devops-pipeline
 description: >
-  CI/CD pipeline creation, git workflow, PR management, and DevSecOps scanning.
-  Use when setting up pipelines, creating PRs, configuring GitHub Actions,
-  or adding security scanning to CI.
+  This skill should be used when the user asks to "create a pipeline", "สร้าง pipeline",
+  "set up CI/CD", "ตั้งค่า CI/CD", "create a pull request", "สร้าง pull request",
+  "link work items", "link work item", "sync to DevOps", "sync DevOps",
+  "set up GitHub Actions", "ตั้งค่า GitHub Actions", "set up GitLab CI", "add workflow YAML",
+  "OIDC authentication", "keyless deployment", "reusable workflows",
+  "concurrency control", "คอมมิต", "พุช", "commit", "push",
+  or needs pipeline YAML generation, cron scheduling, test command selection, or PR creation with work item linking.
+  Supports Azure DevOps, GitHub Actions, and GitLab CI.
+  Also covers DevSecOps: "scan Docker image", "Trivy", "CodeQL", "secret detection",
+  "Gitleaks", "SAST", "SCA", "security gate in pipeline", "shift-left security",
+  "สแกน Docker image", "ตรวจสอบ security".
 ---
 
 # DevOps Pipeline
 
-CI/CD pipelines, git workflow, and DevSecOps — platform-agnostic with examples for GitHub Actions.
+Create CI/CD pipelines and manage pull requests across Azure DevOps, GitHub Actions, and GitLab CI.
 
 ## When to Load Each Reference
 
 | User says | Load |
 |-----------|------|
-| "create pipeline", "CI/CD", "workflow YAML" | `references/pipeline.md` |
-| "commit", "push", "create PR", "git workflow" | `references/git-commit.md` |
-| "security scan", "Trivy", "CodeQL", "Gitleaks", "SAST" | `references/security-scanning.md` |
+| "create pipeline", "CI/CD YAML", "schedule tests", "cron" | `references/pipeline.md` |
+| "create PR", "pull request", "link work items", "test summary" | `references/pull-request.md` |
+| "sync to DevOps", "create work items", "create tasks via MCP" | `references/azure-sync.md` |
+| "GitHub Actions", "workflow YAML", "GitHub CI", "branch protection" | `references/github-actions.md` |
+| "commit", "push", "git commit", "คอมมิต", "พุช" | `references/git-commit.md` |
+| "scan image", "Trivy", "CodeQL", "Gitleaks", "SAST", "SCA", "secret scan", "security gate" | `references/security-scanning.md` |
 
-## Quick Reference
+Ask which platform if not stated, then follow the appropriate reference:
 
-### Git Workflow
+- Azure DevOps → `azure-sync.md` for work items + `pipeline.md` for YAML
+- GitHub → `github-actions.md` for workflow YAML + `pull-request.md` for PRs
+- GitLab CI → follow GitHub Actions patterns but adapt syntax to `.gitlab-ci.yml` (stages, jobs, artifacts)
 
-```bash
-# Feature branch flow
-git checkout main && git pull
-git checkout -b feat/feature-name
-# ... work ...
-git add -A
-git commit -m "feat: description of change"
-git push -u origin feat/feature-name
-# → create PR
-```
-
-### Commit Convention
-
-```
-<type>(<scope>): <description>
-
-Types: feat, fix, test, refactor, docs, ci, chore
-Scope: optional — module or feature name
-```
-
-Examples:
-```bash
-feat(auth): add JWT refresh token rotation
-fix(api): handle null response from payment gateway
-test(checkout): add e2e test for guest checkout flow
-ci: add Trivy image scanning to pipeline
-```
-
-### PR Checklist
-
-Before creating a PR:
-- [ ] All tests pass locally
-- [ ] Build succeeds
-- [ ] Lint/type check passes
-- [ ] Commit messages follow convention
-- [ ] No secrets in code
-- [ ] PR title is descriptive (< 70 chars)
-- [ ] Description includes: what changed, why, how to test
-
-### Safety Rules
-
-Always ask confirmation before:
-- `git push -f` (force push)
-- `git reset --hard`
-- `git branch -D` (delete branch)
-- `git rebase` on shared branches
-- `git clean -fd`
+- **Pipeline** — Generate pipeline YAML files with scheduling, test commands, and notifications. (Read `references/pipeline.md`)
+- **Pull Request** — Create PRs linked to work items with test result summaries. (Read `references/pull-request.md`)
+- **Azure DevOps Sync** — Auto-create work items, tasks, and test cases via MCP. (Read `references/azure-sync.md`)
+- **GitHub Actions** — Workflow YAML for GitHub repositories: triggers, jobs, OIDC keyless auth, reusable workflows, concurrency control, and branch protection. (Read `references/github-actions.md`)
+- **Security Scanning** — Shift-left DevSecOps: Trivy (image/deps), CodeQL (SAST), Gitleaks (secrets), Semgrep. Used by both dev and QA pipelines. (Read `references/security-scanning.md`)

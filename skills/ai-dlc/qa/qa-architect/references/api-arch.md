@@ -8,7 +8,7 @@ Design the file structure and service layer for API test automation using Playwr
 
 ## Process
 1. Read implementation plan — extract test cases, DB strategy, existing assets, templates found
-2. Read coding rules from `ai-dlc/rules/playwright-rules/` skill (api.md + coding-standards.md) — ALL parts
+2. Read coding rules from `ai-dlc/rules/playwright-rules/` skill (api.md + pw-coding-standards.md) — ALL parts
 3. Analyze requirements (CoT) — count endpoints, group by domain, check DB integration, determine complexity
 4. Generate patterns (LATS) — simulate 3-4 architectures, score on reusability/maintainability/compliance, select hybrid
 5. Validate design — check against all coding standards (Constitutional AI)

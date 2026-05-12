@@ -431,8 +431,13 @@ For output depth examples per level → Read `references/complexity-examples.md`
    - `Notes` — one-line summary of what was produced
 8. **PROGRESS** → Update `.aidlc/[SYSTEM_KEBAB]/PROGRESS.md` with current counts
 9. **KNOWLEDGE** → Capture reusable patterns to `audit.md` Knowledge Buffer section (Read `references/knowledge-buffer.md`)
+10. **MEMORY** → Update `agent-memory/memory.md` Task_Ledger entry for this phase:
+    - Format: `[system] / [feature] / Phase [N] [name] [status] — [one-line summary]`
+    - Only update if phase produced a real artifact (decision file, output file, test result)
+    - Skip for Q&A, "ทำต่อ", or phases with no new output
+    - If a new reusable pattern was found → append to `agent-memory/playbook.md` (trigger + fix + domain)
 
-MANDATORY: Steps 1-8 apply to EVERY phase. Do NOT skip decision/plan files even if user says "approve" or "ทำต่อ". Create the files first, then ask for approval.
+MANDATORY: Steps 1-9 apply to EVERY phase. Step 10 applies when a phase produces a real artifact. Do NOT skip decision/plan files even if user says "approve" or "ทำต่อ". Create the files first, then ask for approval.
 
 ## Mid-execution Change Request
 
@@ -491,10 +496,10 @@ Brownfield start from 1.1, Greenfield start from 1.2
 - **2.2** Test Case Design → BDD test scenarios
   → Use `ai-dlc/qa/test-scenario/` skill + `ai-dlc/rules/test-scenario-rules/` skill
   → **MANDATORY read order within test-scenario skill:**
-    1. `test-scenario-rules/references/guidelines.md` — title format, priority, language policy
+    1. `test-scenario-rules/references/ts-standards.md` — title format, priority, language policy
     2. `test-scenario-rules/references/csv-export.md` — 23-column format rules
     3. `test-scenario/references/reuse-analysis.md` — scan testScenarioIndex.json FIRST (never skip)
-    4. `test-scenario/references/designer.md` — 3 batches (Success → Alternative → Edge), each batch pauses for approval
+    4. `test-scenario/references/ts-design.md` — 3 batches (Success → Alternative → Edge), each batch pauses for approval
     5. `test-scenario/references/data-gen.md` — BVA + pairwise test data sets after design approved
     6. `test-scenario/references/csv-validator.md` — run `md2csv.sh` + `csvValidator.sh` after finalization
   → **⚠️ HARD RULES for Phase 2.2:**
@@ -519,13 +524,13 @@ Brownfield start from 1.1, Greenfield start from 1.2
 - **2.4** Test Script Design → Playwright/Robot Framework scripts (TDD: RED) — runs **parallel with 2.5**
   → Use `playwright-testing` skill or `robotframework-testing` skill
   → **MANDATORY read order — Playwright (API or Web UI):**
-    1. `rules/playwright-rules/references/coding-standards.md` — global AI governance + restrictions
+    1. `rules/playwright-rules/references/pw-coding-standards.md` — global AI governance + restrictions
     2. `rules/playwright-rules/references/api.md` — if API platform
     3. `rules/playwright-rules/references/web-ui.md` — if Web UI platform (both if multi-platform)
     4. `playwright-testing/references/workflow.md` — write → review → execute → heal cycle
     5. `playwright-testing/references/db-writer.md` — if test data requires DB setup
   → **MANDATORY read order — Robot Framework (Android or iOS):**
-    1. `rules/robotframework-rules/references/standards.md` — global naming + locator + AAA rules
+    1. `rules/robotframework-rules/references/rf-coding-standards.md` — global naming + locator + AAA rules
     2. `rules/robotframework-rules/references/android.md` — if Android platform
     3. `rules/robotframework-rules/references/ios.md` — if iOS platform
     4. `robotframework-testing/references/workflow.md` — write → review → execute → heal cycle
@@ -554,11 +559,11 @@ Brownfield start from 1.1, Greenfield start from 1.2
 - **3.2** Automated Testing → TDD: REFACTOR + validation
   → Use `playwright-testing` skill or `robotframework-testing` skill
   → **MANDATORY read order — Playwright:**
-    1. `rules/playwright-rules/references/coding-standards.md` — re-read before any code changes
+    1. `rules/playwright-rules/references/pw-coding-standards.md` — re-read before any code changes
     2. `playwright-testing/references/workflow.md` — execute → review → heal cycle
     3. `playwright-testing/references/playwright-code-review.md` — static audit before commit
   → **MANDATORY read order — Robot Framework:**
-    1. `rules/robotframework-rules/references/standards.md` — re-read before any code changes
+    1. `rules/robotframework-rules/references/rf-coding-standards.md` — re-read before any code changes
     2. `robotframework-testing/references/workflow.md` — execute → review → heal cycle
     3. `robotframework-testing/references/rf-code-review.md` — static audit before commit
   → **playwright-cli** (MANDATORY after Phase 3.1 implementation exists):

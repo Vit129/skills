@@ -1,14 +1,14 @@
 {
   "name": "Agent Memory — Skill Flag Check",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "disabled": false,
-  "description": "After write operations, check if the skill used produced correct results. Flag underperforming skills.",
+  "description": "After write operations: flag skills that required significant rework. Clear flags after 3 successes.",
   "when": {
     "type": "postToolUse",
     "toolTypes": ["write"]
   },
   "then": {
     "type": "askAgent",
-    "prompt": "[WORKSPACE GUARD: Only execute if the current session context involves files in 'VitProjects/' workspace. If the user is working exclusively in '.claude/' workspace, skip silently.] After this write operation, briefly evaluate: did the skill used produce the correct result? If the output has errors, incorrect logic, or required significant rework, add or update a Skill_Flag entry in agent-memory/memory.md with the skill path, domain, and failure description. If the skill is already flagged and this was a success, increment its success counter. If success counter reaches 3, remove the flag. Report any flag changes to user: 📝 Skill flag: [skill] [added/updated/cleared]."
+    "prompt": "[WORKSPACE GUARD: Only execute if the current session context involves files in 'VitProjects/' workspace. If the user is working exclusively in '.claude/' workspace, skip silently.] After this write operation: did the skill used require significant rework or produce incorrect output? If yes → add/update Skill_Flag in agent-memory/memory.md (skill path + failure description). If skill was already flagged and this was a success → increment success counter; if counter reaches 3 → remove flag. Only report if flag changed: 📝 Skill flag: [skill] [added/updated/cleared]. Skip if output was correct on first attempt."
   }
 }

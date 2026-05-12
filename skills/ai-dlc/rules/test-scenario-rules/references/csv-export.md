@@ -15,20 +15,20 @@
 4. Title 1 (PBI title, TS = empty)
 5. Title 2 (PBI = empty, TS = scenario title)
 6. Priority (PBI = number, TS = empty but keep comma)
-7. Pre_conditions (HTML)
-8. Test steps with test data (HTML with `<br>`)
-9. Expected test result (HTML)
+7. Pre_conditions (HTML: `<div>...<br>...</div>`)
+8. Test steps with test data (HTML: `<div><ol style="box-sizing:border-box;padding-left:40px;"><li style="box-sizing:border-box;">...</li></ol></div>`)
+9. Expected test result (HTML: `<div>...<br>...</div>`)
 10. Actual test result (empty)
 11. Test result ("Not start")
-12. Priority level (High/Medium/Low)
-13. Test_type (API/Web UI/Mobile UI)
-14. Automation test status
-15. Cannot automate reason
+12. Priority level (Critical/High/Medium/Low)
+13. Test_type (API/Web UI/Mobile UI/WindowsApp UI/Other)
+14. Automation test status (Automated/Automatable/Cannot automate)
+15. Cannot automate reason (if "Cannot automate")
 16. Reason (empty)
-17. Area Path (single backslash)
-18. Iteration Path (single backslash)
+17. Area Path (single backslash, quoted)
+18. Iteration Path (single backslash, quoted)
 19. Tags
-20. Assigned To (email)
+20. Assigned To (email, no quotes)
 21. Remaining Work (hours)
 22. Effort (hours)
 23. Actual Effort (empty)
@@ -52,19 +52,28 @@
 - Column 2: empty (ID)
 - Column 3: "To Do"
 - Column 4: empty (Title 1)
-- Column 5: scenario title with quotes
+- Column 5: scenario title with quotes — format `[TestType][Prefix] Verb + Object` (NO TS ID prefix)
 - Column 11: "Not start"
-- Area/Iteration Path: same as PBI row, single backslash
+- Area/Iteration Path: same as PBI row, single backslash, quoted
+- Pre_conditions (col 7): `<div>...<br>...</div>`
+- Test Steps (col 8): `<div><ol style="box-sizing:border-box;padding-left:40px;"><li style="box-sizing:border-box;">...</li></ol></div>`
+- Expected Result (col 9): `<div>...<br>...</div>`
 
 ## 6. Validation Checklist
 
 - [ ] All 23 columns present in header
-- [ ] PBI row: ID not empty, Title in col 4, 10 empty cols between Priority and Area Path
-- [ ] TS rows: ID empty, State "To Do", Title in col 5, Test result "Not start"
-- [ ] No double backslashes in paths
+- [ ] PBI row: ID not empty, Title in col 4, 10 empty cols between Priority and Area Path, cols 21-23 empty
+- [ ] TS rows: Work Item Type = "Test Scenario", ID empty, State "To Do", Title in col 5, Test result "Not start"
+- [ ] TS Title format: `[TestType][Prefix] Verb + Object` — NO TS ID prefix, NOT starting with "ทดสอบ"/"ตรวจสอบ"
+- [ ] No double backslashes in paths (`\` not `\\`)
+- [ ] Area/Iteration Path fields are quoted
 - [ ] 22 commas per row
 - [ ] UTF-8 encoding, no BOM
-- [ ] HTML format for Pre_conditions, Steps, Expected result
+- [ ] Pre_conditions: `<div>...<br>...</div>` format
+- [ ] Test Steps: `<div><ol style="box-sizing:border-box;padding-left:40px;"><li style="box-sizing:border-box;">...</li></ol></div>` format
+- [ ] Expected Result: `<div>...<br>...</div>` format
+- [ ] JSON data uses single quotes `{'key': 'value'}` not double quotes
+- [ ] Priority level includes "Critical" (not just High/Medium/Low)
 
 ## 7. Export Process
 
@@ -75,8 +84,8 @@
 
 ## 8. Post-Export: Map Work Item IDs
 
-After importing CSV to DevOps:
+After importing CSV to Azure DevOps:
 1. Fetch child work items (Type="Test Scenario")
 2. Match by Title 2
 3. Update ID in both CSV and MD files
-4. Validate accuracy
+4. Validate accuracy and row count

@@ -18,10 +18,24 @@ Automated bash scripts ensure that every CLI tool reads the same rules. It trans
 A vast directory of specialized instructions tailored for various domains (Frontend, Backend, QA, Finance, Fitness, and specific projects). Skills can be loaded dynamically or mirrored to project folders via project-specific scripts.
 
 ### 3. 🧠 Cross-Domain Persistent Memory
-Instead of starting from zero in every chat session, agents read and write to:
-- `memory.md` (Hot state and current tasks)
-- `playbook.md` (Proven bug fixes and solutions)
-- `user-profile.md` (Your coding preferences)
+Two complementary layers work together — neither replaces the other:
+
+**Layer 1 — agent-memory/ (Structured, Cross-Agent)**
+- `memory.md` — Hot state: Task_Ledger, Decisions_In_Force, Skill_Flags
+- `playbook.md` — Proven bug fixes and solutions (CASE-xxx)
+- `skill-log.md` — Skill improvement proposals
+- `user-profile.md` — Stable user preferences
+- `knowledge/` — Promoted domain patterns
+
+Readable by Claude Code, Kiro, Codex, and Gemini via their respective config files.
+
+**Layer 2 — Auto Memory (Claude Code Native)**
+- Stored at `~/.claude/projects/<project>/memory/MEMORY.md` + topic files
+- Claude writes automatically: build commands, debugging patterns, YAML tricks
+- `/dream` consolidates it (dedup, stale removal, date resolution)
+- Auto Dream triggers every 24h after 5+ sessions
+
+**Promote Rule:** When Auto Memory contains a pattern that recurred 2+ times → promote to `agent-memory/playbook.md` or `knowledge/`.
 
 ### 4. 📐 Karpathy Principles & AIDLC
 Enforces strict engineering standards based on Andrej Karpathy's principles (Think, Simplicity, Surgical, Goal-Driven) and implements a robust AI Development Life Cycle (AIDLC) to prevent AI-generated spaghetti code.

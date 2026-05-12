@@ -14,6 +14,8 @@ Standard behaviors that apply to every task, every agent, every project.
 - **Use `/compact`** when context exceeds 80% or response quality degrades
 - **Load the relevant skill** from `rules/skill-map.md` before starting domain work
 - **Update `agent-memory/memory.md`** after every meaningful decision or task change
+- **Promote Auto Memory patterns** that recur 2+ times → `agent-memory/playbook.md` or `knowledge/`
+- **Run `/dream`** when Auto Memory feels cluttered (Auto Dream triggers every 24h after 5+ sessions)
 
 ## Don't
 

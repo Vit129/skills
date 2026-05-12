@@ -12,5 +12,5 @@ description: >
 
 The authoritative rules for designing and exporting test scenarios.
 
-- **Design Guidelines** — Title format, priority levels, categories, paired design, language policy. (Read `references/guidelines.md`)
+- **Design Guidelines** — Title format, priority levels, categories, paired design, language policy. (Read `references/ts-standards.md`)
 - **CSV Export Rules** — 23-column format, validation checklists, data handling rules. (Read `references/csv-export.md`)

@@ -12,7 +12,7 @@ description: >
 
 The authoritative coding standards for all Playwright automation.
 
-- **Global Coding Standards** — AI governance, strategy, restrictions. (Read `references/coding-standards.md`)
+- **Global Coding Standards** — AI governance, strategy, restrictions. (Read `references/pw-coding-standards.md`)
 - **API Testing Rules** — Project structure, naming, assertions, schemas, fixtures. (Read `references/api.md`)
 - **Web UI Testing Rules** — Page Object Model, locators, interactions, fixtures. (Read `references/web-ui.md`)
 
@@ -26,7 +26,7 @@ The authoritative coding standards for all Playwright automation.
 
 ## ⚠️ Gotchas
 
-- **Gemini ignores rules on long prompts** — when Gemini prompt is long, it skips reading coding-standards.md. Fix: put the rule block at the TOP of the Gemini prompt, not the bottom.
+- **Gemini ignores rules on long prompts** — when Gemini prompt is long, it skips reading pw-coding-standards.md. Fix: put the rule block at the TOP of the Gemini prompt, not the bottom.
 - **`waitForTimeout()` re-introduced after heal** — auto-heal often adds `waitForTimeout(500)` as a quick fix. Always grep for `waitForTimeout` after any heal cycle.
 - **Labels.ts not updated for new UI text** — new UI strings added without updating Labels.ts cause `getByRole({ name })` to fail silently with wrong label. Fix: update Labels.ts before writing any test that uses new UI text.
 - **Hybrid test skips API setup** — agent writes full UI navigation instead of API setup for Arrange phase. Fix: explicitly instruct "use API to set up test data, not UI navigation" in every test-writing prompt.

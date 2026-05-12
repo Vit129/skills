@@ -12,7 +12,7 @@ description: >
 
 The authoritative coding standards for all Robot Framework mobile automation.
 
-- **Global Standards** — AI governance, naming, locator priority, AAA pattern, tags. (Read `references/standards.md`)
+- **Global Standards** — AI governance, naming, locator priority, AAA pattern, tags. (Read `references/rf-coding-standards.md`)
 - **Android Rules** — Android-specific locators, actions, deep linking, ADB. (Read `references/android.md`)
 - **iOS Rules** — iOS-specific locators, predicates, biometrics, class chain. (Read `references/ios.md`)
 

@@ -21,11 +21,11 @@ Execute ALL steps in order. Do NOT skip any step.
 ```
 Step 1: Reuse Analysis    → references/reuse-analysis.md
          ↓ (scan testScenarioIndex.json, find reusable patterns)
-Step 2: Design — Batch 1  → references/designer.md
+Step 2: Design — Batch 1  → references/ts-design.md
          ↓ (Success cases only → write to file → show summary → wait for approval)
-Step 3: Design — Batch 2  → references/designer.md
+Step 3: Design — Batch 2  → references/ts-design.md
          ↓ (Alternative cases → write to file → show summary → wait for approval)
-Step 4: Design — Batch 3  → references/designer.md
+Step 4: Design — Batch 3  → references/ts-design.md
          ↓ (Edge cases → write to file → show summary → wait for approval)
 Step 5: Data Generation   → references/data-gen.md
          ↓ (Valid/Boundary/Edge data sets → write to file → wait for approval)
@@ -46,7 +46,7 @@ Step 7: Done ✅
 | Trigger | Load |
 |---------|------|
 | Starting new scenario design (always first) | `references/reuse-analysis.md` |
-| Designing scenarios (batches 1-3) | `references/designer.md` |
+| Designing scenarios (batches 1-3) | `references/ts-design.md` |
 | After design approved — generate test data | `references/data-gen.md` |
 | After data approved — export to CSV | `references/csv-validator.md` |
 | "add scenario", "quick scenario", "modify scenario" | `references/quick-scenario.md` |
@@ -56,7 +56,7 @@ Step 7: Done ✅
 ## Reference Descriptions
 
 - **Reuse Analysis** — Scan `testScenarioIndex.json` for reusable patterns before designing. (Read `references/reuse-analysis.md`)
-- **Designer** — Generate scenarios in 3 batches (Success → Alternative → Edge) with batch approval. HTML format for Azure DevOps. (Read `references/designer.md`)
+- **Designer** — Generate scenarios in 3 batches (Success → Alternative → Edge) with batch approval. HTML format for Azure DevOps. (Read `references/ts-design.md`)
 - **Data Generation** — BVA + pairwise test data sets after scenario design. (Read `references/data-gen.md`)
 - **CSV Validator** — Export MD → CSV with 23-column validation via `md2csv.sh` + `csvValidator.sh`. (Read `references/csv-validator.md`)
 - **Quick Scenario** — Add/modify scenarios without full workflow (surgical edits only). (Read `references/quick-scenario.md`)

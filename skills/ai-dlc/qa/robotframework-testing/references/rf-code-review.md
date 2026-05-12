@@ -11,7 +11,7 @@ MUST read `ai-dlc/rules/robotframework-rules/` skill first to know the full stan
 
 ## Review Process
 
-1. Load standards: `ai-dlc/rules/robotframework-rules/references/standards.md` + `android.md` or `ios.md`
+1. Load standards: `ai-dlc/rules/robotframework-rules/references/rf-coding-standards.md` + `android.md` or `ios.md`
 2. Check every file against checklist below
 3. Output review report
 4. If NEEDS_FIX + autoFixable → fix immediately, re-review
