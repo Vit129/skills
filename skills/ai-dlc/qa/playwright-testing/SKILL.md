@@ -41,6 +41,16 @@ Always read the `ai-dlc/rules/playwright-rules/` skill before writing or reviewi
 - **HAR Mocking** — Use HAR files to mock network traffic for offline/CI testing. (Read `references/har-mocking.md`)
 - **Explore-to-Test** — Combined workflow: Chrome DevTools + HAR + Extension + AI → complete test suite. (Read `references/explore-to-test.md`)
 
+## Inline Process
+
+1. **Load coding rules first** — Read `ai-dlc/rules/playwright-rules/` before writing or reviewing any code. Non-negotiable.
+2. **Write test code** — Create directory structure (kebab-case) → generate fixtures (`Data.ts` + `Labels.ts`) → generate schemas (AJV) → generate helpers/pages → create spec files with AAA pattern and `test.step()`. Use `getByTestId` as primary locator, never `waitForTimeout()`.
+3. **Code review** — Static audit against playwright-rules: locator strategy, AAA pattern, Labels.ts usage, DB patterns, no forbidden patterns. Output: APPROVED or NEEDS_FIX.
+4. **Execute tests** — Run with `--reporter=line` → parse results → if failures, trigger self-healing (max 3 attempts).
+5. **Self-heal failures** — Impact analysis first → visual-first debugging (screenshot before code changes) → triage (environment = skip, code = heal) → fix by error type. Never delete functions or change architecture.
+6. **Record results** — Write to `.aidlc/` audit trail. Log every heal attempt (symptom → root cause → fix → outcome).
+7. **Verify** — No `waitForTimeout()`, `getByTestId` used, AAA pattern, POM fresh per test, DB seed has teardown, tests pass locally.
+
 ## ⚠️ Gotchas
 
 - **`waitForTimeout()` creep** — easy to add as a quick fix for flaky tests. Always replace with `waitForSelector`, `waitForResponse`, or `expect(locator).toBeVisible()` with a timeout option.
@@ -73,3 +83,18 @@ Always read the `ai-dlc/rules/playwright-rules/` skill before writing or reviewi
 - 🚩 POM instance shared across tests → state leak, instantiate fresh per test
 - 🚩 Test file has no AAA comments (Arrange/Act/Assert) → structure unclear, add them
 - 🚩 More than 3 assertions in one test → likely testing multiple things, split it
+
+---
+
+## Verification
+
+Before declaring Playwright test implementation complete, confirm:
+
+- [ ] `playwright-rules/` loaded before writing code
+- [ ] No `waitForTimeout()` in new code
+- [ ] `getByTestId` used as primary locator strategy
+- [ ] AAA pattern followed (Arrange/Act/Assert comments)
+- [ ] POM instantiated fresh per test (no state leak)
+- [ ] DB seed has corresponding teardown in `afterEach`
+- [ ] Tests pass locally: `npx playwright test <spec> --reporter=list`
+- [ ] Code review checklist passed (playwright-code-review.md)

@@ -150,3 +150,16 @@ If you showed this interface to someone and said "AI made this," would they beli
 - 🚩 Interface passes the "AI Slop Test" — someone would immediately say "AI made this" → Lacks bold aesthetic direction; commit to a specific tone and differentiate.
 - 🚩 Heavy use of `rgba()` / alpha transparency throughout the palette → Alpha is a design smell indicating an incomplete palette; define explicit color tokens instead.
 - 🚩 Implementation order starts with colors/animations before HTML structure → Wrong sequence; always structure first → layout → typography → color → states → motion → responsive.
+
+---
+
+## Verification
+
+Before declaring design implementation complete, confirm:
+
+- [ ] No banned fonts used (Inter, Roboto, DM Sans, etc.)
+- [ ] Context gathered from user (audience, use cases, brand tone)
+- [ ] Passes "AI Slop Test" — doesn't look generically AI-generated
+- [ ] No `rgba()` overuse — explicit color tokens defined
+- [ ] Implementation order followed: structure → layout → typography → color → states → motion → responsive
+- [ ] `prefers-reduced-motion` respected for all animations

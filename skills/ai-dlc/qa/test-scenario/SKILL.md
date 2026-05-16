@@ -102,3 +102,16 @@ Step 7: Done ✅
 - 🚩 Scenarios lack `Assigned to`, `Remaining Work`, or `Effort` metadata fields → CSV export will fail validation; add all required metadata before export.
 - 🚩 Agent declared "done" without running CSV export + validation → Export step skipped; run export and verify 23-column output.
 - 🚩 Test data section is empty or says "TBD" → Data Generation was skipped; generate Valid/Boundary/Edge data sets before finalizing.
+
+---
+
+## Verification
+
+Before declaring test scenario design complete, confirm:
+
+- [ ] Reuse analysis ran first (existing scenarios checked)
+- [ ] All 3 batches delivered with user approval between each
+- [ ] Every scenario has: Title, Pre-conditions, Steps, Expected Result
+- [ ] Metadata complete: Test_type, Priority, Automation status, Assigned to, Effort
+- [ ] Test data generated (Valid + Boundary + Edge)
+- [ ] CSV export ran + validated (23 columns, RFC 4180 compliant)

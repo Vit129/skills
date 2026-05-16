@@ -28,6 +28,16 @@ Design systems from requirements to implementation-ready blueprints.
 - **Logical Design** — API contracts, DB schemas, frontend specs. (Read `references/logical-design.md`)
 - **TDD** — Test-Driven Development cycle: Red → Green → Refactor. (Read `references/tdd.md`)
 
+## Inline Process
+
+1. **Identify the design phase** — Match to ONE phase: Strategic Design (bounded contexts), Architecture Patterns (monolith vs microservices), Tactical Design (entities/aggregates/events), Logical Design (API contracts/DB schemas), or TDD (Red→Green→Refactor). Execute phases in order — don't skip ahead.
+2. **Strategic Design** — Group user stories by business function → identify domain boundaries → assess complexity → choose architecture pattern with documented tradeoffs → define bounded contexts.
+3. **Architecture Pattern** — If microservices: define integration patterns per context pair, specify failure handling. If monolith: define module boundaries.
+4. **Tactical Design** — Define entities, aggregate roots, value objects, and domain events per bounded context. Events require aggregate boundaries first.
+5. **Logical Design** — Produce API contracts, DB schemas, and frontend specs. Only after tactical design is complete.
+6. **TDD cycle** — Write a failing test (Red) → implement minimum code to pass (Green) → refactor while keeping tests green.
+7. **Verify** — Bounded contexts defined, pattern chosen with tradeoffs, entities/aggregates specified, logical artifacts produced, only ONE reference loaded per step.
+
 ---
 
 ## Anti-Rationalization Table
@@ -49,3 +59,16 @@ Design systems from requirements to implementation-ready blueprints.
 - 🚩 Multiple references loaded simultaneously → Each reference is a distinct design phase; load only the one matching the current step.
 - 🚩 Domain events defined but no aggregate boundaries drawn → Events without aggregates means you don't know who owns what; define aggregate roots first.
 - 🚩 TDD reference loaded but no failing test written before implementation code → TDD means Red FIRST; if implementation exists without a prior failing test, the cycle was skipped.
+
+---
+
+## Verification
+
+Before advancing from architecture to implementation, confirm:
+
+- [ ] Bounded contexts defined with clear boundaries
+- [ ] Architecture pattern chosen with documented tradeoffs
+- [ ] Domain entities and aggregates specified
+- [ ] API contracts / DB schemas / frontend specs produced (logical design)
+- [ ] TDD cycle started (failing test exists before implementation)
+- [ ] Only ONE reference loaded per design step

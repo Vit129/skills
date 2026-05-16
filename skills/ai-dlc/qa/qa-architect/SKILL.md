@@ -27,6 +27,15 @@ Design test automation frameworks and test data infrastructure.
 - **Mobile Architecture** — Page object blueprints for Android/iOS automation. (Read `references/mobile-arch.md`)
 - **Test DB Strategy** — Seed, verify, and cleanup protocols for test data. (Read `references/test-db-strategy.md`)
 
+## Inline Process
+
+1. **Identify the platform** — Determine: API, Web UI, or Mobile. Load exactly ONE corresponding reference. If not stated, ask.
+2. **Analyze requirements** — Count endpoints/screens, group by domain, check DB integration needs, determine complexity.
+3. **Generate architecture** — API: Multi-Service pattern (Helper → DbService + AuthService + ApiService + Workflows). Web UI: Layout-based POM (header/sidebar/content). Mobile: Screen-based POM (navigation flows, gestures).
+4. **Design test data infrastructure** — Define seed/verify/cleanup protocols, environment switching, auth token management (globalSetup login-once per role), shared-fixtures structure.
+5. **Validate design** — Page objects contain only interactions (no assertions), environment switching defined, no forbidden patterns (hardcoded credentials, missing Storage State).
+6. **Get approval** — Present architecture summary to user. Wait for explicit approval before coding.
+
 ---
 
 ## Anti-Rationalization Table
@@ -48,3 +57,16 @@ Design test automation frameworks and test data infrastructure.
 - 🚩 No seed data strategy defined but integration tests exist → Tests depend on pre-existing data that may not exist; define explicit seed steps per test suite.
 - 🚩 Multiple platform references loaded simultaneously → Each platform (API/Web/Mobile) has its own architecture; load only the one matching the current task.
 - 🚩 Test DB strategy says "share production database" → Production data is unpredictable and tests will be flaky; always use isolated test databases with controlled seed data.
+
+---
+
+## Verification
+
+Before declaring test architecture design complete, confirm:
+
+- [ ] Platform identified (API / Web UI / Mobile) and correct reference loaded
+- [ ] Environment switching mechanism defined
+- [ ] Page objects contain only interactions (no assertions)
+- [ ] Test DB strategy defined (seed/verify/cleanup)
+- [ ] Auth token management pattern specified
+- [ ] Folder structure documented with naming conventions

@@ -41,6 +41,15 @@ Ask which platform if not stated, then follow the appropriate reference:
 - **GitHub Actions** — Workflow YAML for GitHub repositories: triggers, jobs, OIDC keyless auth, reusable workflows, concurrency control, and branch protection. (Read `references/github-actions.md`)
 - **Security Scanning** — Shift-left DevSecOps: Trivy (image/deps), CodeQL (SAST), Gitleaks (secrets), Semgrep. Used by both dev and QA pipelines. (Read `references/security-scanning.md`)
 
+## Inline Process
+
+1. **Identify the task** — Determine: Pipeline YAML creation, PR creation, Git commit/push, Azure DevOps sync, or Security scanning. Ask which platform (Azure DevOps / GitHub / GitLab) if not stated.
+2. **Pipeline creation** — Ask: trigger type, branch, schedule time (convert to UTC cron), test command. Auto-detect: path, feature name, DB strategy, variable groups. Include test stage (non-negotiable) + security scanning.
+3. **Git commit & push** — Format: `[AB#xxxxx] Description` (direct) or `[PR][AB#xxxxx] Description` (feature branch). Stage specific files, not `git add .`. Never force push without permission.
+4. **Create PR** — Prerequisites: all tests must pass (0 failures). Link to work items. Update work item status. FORBIDDEN to create PR with failing tests.
+5. **Security scanning** — Enable Trivy, CodeQL, Gitleaks in pipeline. Never disable "temporarily".
+6. **Verify** — Pipeline has test stage, no secrets in YAML/history, security scanning enabled, branch protection on main, pipeline runs green.
+
 ---
 
 ## Anti-Rationalization Table
@@ -64,3 +73,16 @@ Ask which platform if not stated, then follow the appropriate reference:
 - 🚩 Security scan disabled "temporarily" → re-enable, temporary = permanent
 - 🚩 Pipeline passes but no artifact/report generated → silent failures hidden
 - 🚩 Manual deployment without approval gate → add environment protection rules
+
+---
+
+## Verification
+
+Before declaring pipeline/PR work complete, confirm:
+
+- [ ] Pipeline YAML has test stage (not skipped)
+- [ ] No secrets in YAML or commit history
+- [ ] Security scanning enabled (Trivy/CodeQL/Gitleaks)
+- [ ] Branch protection rules configured on main
+- [ ] PR linked to work items (if Azure DevOps)
+- [ ] Pipeline runs successfully (green check)

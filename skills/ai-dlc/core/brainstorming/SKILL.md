@@ -286,3 +286,16 @@ When Kiro supports parallel `invokeSubAgent`:
 - 🚩 Brainstorming output references information not in Phase 1 artifacts → Subagents are hallucinating context instead of analyzing what's written; re-anchor them to actual artifact content.
 - 🚩 No `brainstorming-summary.md` written to `.aidlc/` folder → Output was presented in chat only and will be lost; always persist to the designated output path.
 - 🚩 Phase 2 started without user confirming "พร้อมไป Phase 2 ไหม?" via userInput → Handoff rule violated; go back and get explicit user approval before proceeding.
+
+---
+
+## Verification
+
+Before handing off to Phase 2, confirm:
+
+- [ ] Gap analysis ran on Phase 1 artifacts (Step 1 complete)
+- [ ] All 3 roles produced output (PO, Dev, QA)
+- [ ] Tensions & Tradeoffs section exists (roles disagreed on something)
+- [ ] `brainstorming-summary.md` written to `.aidlc/` folder
+- [ ] User confirmed "พร้อมไป Phase 2" via userInput
+- [ ] Open Questions listed (not silently resolved)

@@ -131,3 +131,38 @@ Score: 3/4 (75%)
 - Store eval reports in `.aidlc/[system]/[feature]/evals/` if project-specific
 - Store skill-level evals in `ai-dlc/knowledge/lessons/` for reuse
 - Flag skills with pass@3 < 67% in `agent-memory/memory.md`
+
+---
+
+## Anti-Rationalization Table
+
+| Excuse to Skip | Counter-Argument |
+|---|---|
+| "The skill works fine — I don't need to run an eval" | "Works fine" is subjective. pass@3 gives you a number. A skill that passes 2/3 times has a 33% failure rate that compounds across tasks. Measure, don't assume. |
+| "Running k=3 attempts wastes tokens — one successful run is enough" | One success proves nothing about consistency. pass@1 = 70% means 30% of users hit failures. k=3 reveals the true reliability that single runs hide. |
+| "I'll grade it myself — automated grading is overkill" | Manual grading is inconsistent and biased toward "good enough." Define clear pass/fail criteria upfront so grading is reproducible across sessions. |
+| "The eval report format is bureaucracy — I'll just note pass/fail" | The report format captures run-by-run details that reveal PATTERNS (e.g., "fails on edge cases but passes happy path"). A bare pass/fail loses diagnostic value. |
+| "I'll eval after the feature ships — no time now" | Post-ship evals discover problems after users hit them. Pre-ship evals catch skill degradation before it affects output quality. Eval during development, not after. |
+
+---
+
+## Red Flags
+
+- 🚩 Skill flagged in `memory.md` but no eval report exists → Measurement skipped; run pass@3 eval before attempting fixes.
+- 🚩 Eval report shows pass@3 = 100% on a skill known to be problematic → Eval task was too easy or grading too lenient; use realistic prompts that exercise edge cases.
+- 🚩 Agent ran eval during active implementation (mid-Phase 3) → Context waste; eval should run before or after implementation, not during.
+- 🚩 Eval results stored only in chat, not persisted to file → Results will be lost; write to `.aidlc/evals/` or `knowledge/lessons/`.
+- 🚩 Skill with pass@3 < 67% not flagged in `agent-memory/memory.md` → Escalation rule violated; flag underperforming skills for rework.
+
+---
+
+## Verification
+
+Before declaring an eval complete, confirm:
+
+- [ ] Eval task defined with clear expected output
+- [ ] k runs completed (minimum k=3)
+- [ ] Each run graded with consistent criteria
+- [ ] Score calculated and verdict assigned
+- [ ] Report written to persistent location (not just chat)
+- [ ] Action taken if score < 67% (flag or fix)

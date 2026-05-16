@@ -168,3 +168,16 @@ Phase 3: Implementation
 - 🚩 Build passes but you didn't run tests → incomplete verification
 - 🚩 You're fixing the same test for the 3rd time → escalate, don't loop
 - 🚩 You marked a step as "N/A" without explaining why → document the reason
+
+---
+
+## Verification
+
+Before marking a task as done and committing, confirm:
+
+- [ ] Build: zero errors (`tsc --noEmit` / `npm run build`)
+- [ ] Lint: zero warnings on new code
+- [ ] Tests: 100% pass rate on affected specs
+- [ ] Coverage: new code has corresponding test cases
+- [ ] Security: no secrets, inputs validated (if applicable)
+- [ ] Commit: one commit per task with descriptive message

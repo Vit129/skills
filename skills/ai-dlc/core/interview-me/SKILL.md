@@ -169,3 +169,16 @@ Phase 1 → Phase 2 → Phase 3 (normal flow)
 - **Accept uncertainty** — "ยังไม่แน่ใจ" is a valid answer, note it and move on
 - **Max 10 questions** — if you need more, the scope is probably too big → suggest splitting
 - **Always end with summary** — never proceed without explicit user confirmation of the summary
+
+---
+
+## Verification
+
+Before proceeding from interview to /spec, confirm:
+
+- [ ] Confidence ≥ 95% (explicitly stated)
+- [ ] Summary presented to user with all key decisions
+- [ ] User explicitly confirmed the summary (not assumed)
+- [ ] Scope (in/out) clearly defined
+- [ ] Unconfirmed assumptions flagged (not hidden)
+- [ ] Max 10 questions asked (or scope split suggested)

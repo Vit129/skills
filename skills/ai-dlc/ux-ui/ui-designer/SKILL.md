@@ -140,3 +140,17 @@ PRE-DELIVERY CHECKLIST:
 - 🚩 No stack detection performed before generating code → Output may use wrong syntax (Tailwind vs ThemeData vs SwiftUI); identify the tech stack first.
 - 🚩 Agent jumped to component design without defining tokens first → Workflow order violated (aesthetic direction → tokens → components); go back and define tokens.
 - 🚩 Pre-delivery checklist items unchecked (WCAG, responsive, touch targets, dark mode, focus states) → Design is incomplete; validate all checklist items before declaring done.
+
+---
+
+## Verification
+
+Before declaring design system complete, confirm:
+
+- [ ] Industry identified (SaaS/Finance/Healthcare/etc.)
+- [ ] Existing design system checked (Phase 0)
+- [ ] Tech stack detected (Tailwind/ThemeData/SwiftUI)
+- [ ] Color tokens defined (no pure #000/#fff)
+- [ ] WCAG AA contrast ratios validated
+- [ ] Pre-delivery checklist passed (responsive, touch targets, dark mode, focus states)
+- [ ] Tokens defined BEFORE component design started

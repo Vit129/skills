@@ -57,6 +57,17 @@ Use `ui-designer` first if design tokens, visual language, or component specs ha
 - **Testability** — data-testid, accessibilityIdentifier, testTag naming conventions. (Read `references/shared/testability-standards.md`)
 - **UI States** — Loading, Success, Empty, Error state patterns. (Read `references/shared/ui-states-standards.md`)
 
+## Inline Process
+
+1. **Check prerequisites** — If design tokens/component specs don't exist yet, use `ui-designer` skill first. This skill is for IMPLEMENTATION, not design decisions.
+2. **Identify the stack** — Match to ONE platform: React, Next.js 15, Tailwind CSS, Vite, Flutter, Android Kotlin, or iOS Swift. Load the corresponding reference.
+3. **Implement with testability** — Add `data-testid` on ALL interactive elements during component creation. Use platform equivalents: `accessibilityIdentifier` (iOS), `testTag` (Android).
+4. **Handle all 4 UI states** — Every component must handle: Loading, Success, Empty, and Error states. These are part of the component contract, not polish for later.
+5. **Write LLM-friendly comments** — Non-trivial functions get JSDoc/TSDoc with: what + why + who calls + params/return/throws.
+6. **Follow platform patterns** — React 19: useActionState, useOptimistic. Next.js 15: Server vs Client Components. Mobile: MVVM, proper state management.
+7. **Apply shared standards** — Environment config, error handling, logging, navigation, fresh provider/store per test.
+8. **Verify build** — `data-testid` present, all 4 UI states handled, build passes, TypeScript clean (`tsc --noEmit`).
+
 ## ⚠️ Gotchas
 
 - **Gemini introduces bugs on logic-heavy edits** — Gemini tends to fix one bug and introduce another (e.g., `null` vs `[]` conditional logic). Fix: use Claude Sonnet for any task graded 🟡 Medium or above. Never hand off Gemini output to Claude without flagging the cost.
@@ -105,3 +116,17 @@ Write comments that AI agents can understand — not just humans:
 - 🚩 Agent used Gemini for a logic-heavy edit without flagging the risk → Gemini introduces subtle bugs on medium+ complexity; escalate to Claude Sonnet for logic-heavy work.
 - 🚩 Component handles only the success state → Missing loading/empty/error states; load `ui-states-standards.md` and implement all 4 states.
 - 🚩 Functions lack JSDoc/TSDoc with params + return + throws → LLM-friendly comment standard not followed; add documentation for non-trivial functions.
+
+---
+
+## Verification
+
+Before declaring frontend implementation complete, confirm:
+
+- [ ] `data-testid` on all interactive elements
+- [ ] All 4 UI states handled (Loading, Success, Empty, Error)
+- [ ] LLM-friendly comments on non-trivial functions
+- [ ] Correct reference loaded for stack (React/Next.js/Flutter/Kotlin/Swift)
+- [ ] No shared state leaking between component instances
+- [ ] Build passes: `npm run build` / `flutter build` / `xcodebuild`
+- [ ] TypeScript: `tsc --noEmit` clean

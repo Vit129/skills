@@ -218,3 +218,16 @@ Pre-merge review
 - 🚩 "LGTM" without specific observations → rubber-stamp, not a review
 - 🚩 Skipping a persona because "it's not relevant" → all three catch different things
 - 🚩 Approving with known TODO items → those TODOs become permanent debt
+
+---
+
+## Verification
+
+Before approving a review as complete, confirm:
+
+- [ ] At least one persona ran (code-reviewer, test-engineer, or security-auditor)
+- [ ] Every Critical/Important finding has a specific fix recommendation
+- [ ] No Critical issues remain unresolved (block merge if any exist)
+- [ ] Output follows the persona's template format
+- [ ] "What's Done Well" section included (not just negatives)
+- [ ] For pre-merge gate: all 3 personas ran and findings merged

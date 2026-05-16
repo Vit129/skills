@@ -25,6 +25,16 @@ Load and performance testing with K6 — script, run, analyze, integrate into CI
 - **CI Integration** — Run K6 in GitHub Actions / Azure DevOps with performance gates. (Read `references/ci-integration.md`)
 - **Analysis** — Interpret results: p95/p99 latency, error rate, throughput, Grafana dashboards. (Read `references/analysis.md`)
 
+## Inline Process
+
+1. **Define test scope** — Identify endpoints/flows to test. Include auth, search, file uploads — not just the "main" endpoint. Determine test type: Smoke, Load, Stress, Spike, or Soak.
+2. **Write k6 script** — Use `setup()` for dynamic auth → define scenarios with ramping VUs → add `thresholds` block (p95, p99, error_rate) → parameterize test data from CSV/JSON.
+3. **Add performance gates** — Thresholds ARE the test: `http_req_duration: ['p(95)<500', 'p(99)<1000']`, `http_req_failed: ['rate<0.01']`. K6 exits code 99 on failure.
+4. **Run locally first** — Smoke test with 1-2 VUs to verify script works before scaling.
+5. **Integrate into CI** — Configure pipeline with k6 step. Performance gates prevent regressions from reaching production.
+6. **Analyze results** — Interpret p95/p99, error rate, throughput. Compare against baseline or SLA targets.
+7. **Verify** — Thresholds exist, scenarios use ramping VUs, auth is dynamic, CI configured, results compared against baseline, analysis report produced.
+
 ---
 
 ## Anti-Rationalization Table
@@ -46,3 +56,16 @@ Load and performance testing with K6 — script, run, analyze, integrate into CI
 - 🚩 Results reported without comparing against baseline → Numbers without context are meaningless; always compare against previous run or SLA targets.
 - 🚩 Load test uses hardcoded auth tokens → Tokens expire; use k6's `setup()` function to authenticate dynamically before test execution.
 - 🚩 Analysis section missing but agent declared "performance testing done" → Running the test is half the job; load `analysis.md` and interpret p95/p99/error rate/throughput.
+
+---
+
+## Verification
+
+Before declaring performance testing complete, confirm:
+
+- [ ] k6 script has `thresholds` block (p95, p99, error_rate)
+- [ ] Scenarios use ramping VUs (not fixed count)
+- [ ] Auth tokens generated dynamically in `setup()` (not hardcoded)
+- [ ] CI pipeline config exists (not just local runs)
+- [ ] Results compared against baseline or SLA targets
+- [ ] Analysis report produced (p95/p99/error rate/throughput interpreted)

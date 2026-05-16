@@ -123,3 +123,16 @@ After all tasks complete:
 - 🚩 Subagent prompt doesn't include which skills to load → Subagent will code without standards (e.g., missing playwright-rules); always specify skills in the dispatch prompt.
 - 🚩 Task count is 1-2 but subagent-driven mode was activated → Overhead exceeds benefit; switch to inline execution for small task sets.
 - 🚩 Orchestrator moved to Phase 3.2 but `dev-task-progress.md` still has unchecked items → Premature handoff; all tasks must be `[x]` before advancing phases.
+
+---
+
+## Verification
+
+Before advancing from Phase 3.1 to 3.2, confirm:
+
+- [ ] All tasks in `dev-task-progress.md` marked `[x]`
+- [ ] Each task passed Stage 1 (Spec Compliance) review
+- [ ] Each task passed Stage 2 (Code Quality) review
+- [ ] No file conflicts between parallel subagents
+- [ ] Commit hash recorded for each completed task
+- [ ] No subagent prompt was sent without specifying skills to load

@@ -31,6 +31,16 @@ Always read the `ai-dlc/rules/robotframework-rules/` skill before writing or rev
 - **Browser Library** — Playwright-powered web testing with RF: auto-wait, network mocking, modern locators. (Read `references/browser-library.md`)
 - **RF 7.x Features** — Secret variables, typed keywords, TRY/EXCEPT, WHILE, VAR syntax, Listener API v3. (Read `references/rf7-features.md`)
 
+## Inline Process
+
+1. **Load coding rules first** — Read `ai-dlc/rules/robotframework-rules/` before writing or reviewing any code. Non-negotiable.
+2. **Write test code** — Create directory structure (kebab-case) → generate YAML fixtures → generate page objects with accessibility_id locators → generate .robot files with AAA pattern, `[TC-xxxx]` prefix, mandatory tags. Keyword names MUST be identical across Android/iOS.
+3. **Code review** — Static audit: identical naming across platforms, AAA pattern, YAML fixtures (no hardcoded data), accessibility_id priority, Expert Gems implementation. Output: APPROVED or NEEDS_FIX.
+4. **Execute tests** — Run: `robot --outputdir results --variable ENV:sit [path]` → parse output.xml → if failures, trigger healer (max 3 attempts).
+5. **Self-heal failures** — Impact analysis → triage (environment = skip, code = heal) → fix by type (element not found → accessibility_id + XML source; timeout → Wait Until...; assertion → verify YAML data). Never add `Sleep` as a fix.
+6. **Record results** — Write test results + Reflexion Log to audit.md.
+7. **Verify** — All data in YAML, identical keyword names, accessibility_id locators, AAA pattern, tests pass on target platform.
+
 ---
 
 ## Anti-Rationalization Table
@@ -52,3 +62,17 @@ Always read the `ai-dlc/rules/robotframework-rules/` skill before writing or rev
 - 🚩 `workflow.md` not loaded but agent is writing + running + fixing tests → The full cycle (write → review → run → heal) requires the workflow reference; load it.
 - 🚩 Agent fixed a failing test by adding `Sleep` or arbitrary timeout → Masking the real failure; find the actual root cause instead of adding waits.
 - 🚩 Browser Library features used without loading `browser-library.md` reference → Web RF tests need the Browser Library reference for correct auto-wait and network mocking patterns.
+
+---
+
+## Verification
+
+Before declaring RF test implementation complete, confirm:
+
+- [ ] `robotframework-rules/` loaded before writing any code
+- [ ] All test data in YAML fixtures (no hardcoded values)
+- [ ] Keyword names identical across Android/iOS (no platform suffix)
+- [ ] Locators use accessibility_id priority (not XPath)
+- [ ] AAA pattern followed (Arrange/Act/Assert comments)
+- [ ] Code review checklist passed (rf-code-review.md)
+- [ ] Tests run successfully on target platform

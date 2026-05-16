@@ -45,6 +45,17 @@ Build and maintain backend services and APIs.
 ## Code Quality
 - **Backend Code Review** — Static audit checklist: architecture, validation, auth, DB, security, logging. (Read `references/backend-code-review.md`)
 
+## Inline Process
+
+1. **Identify the concern** — Match to ONE area: API Design, Database Design, Authentication, Framework-specific (Node.js/Python/C#/.NET/C++), or Docker. Load the corresponding reference.
+2. **Design contract first (API)** — Define resource schemas (request + response), error codes, pagination, versioning, and auth requirements per endpoint BEFORE writing implementation.
+3. **Implement with validation** — Every endpoint MUST validate input (Zod/Pydantic/FluentValidation) before processing. Apply auth middleware on all routes. No secrets in source code.
+4. **Database discipline** — Create migration files for EVERY schema change. Use batch queries (WHERE IN, JOIN) — never DB calls inside loops. Include timestamps on all resources.
+5. **Write LLM-friendly comments** — Every non-trivial function gets: what + why + who calls + params/return/throws.
+6. **Framework patterns** — Node.js: Express/Fastify/NestJS. Python: FastAPI/Django. C#: ASP.NET Core + EF Core + Clean Architecture. C++: Modern C++17/20, CMake, RAII.
+7. **Code review** — Static audit: validation present, auth applied, no N+1, no secrets, migrations exist, comments present.
+8. **Verify build** — `npm run build` / `dotnet build` / `python -m py_compile` passes clean.
+
 ## ⚠️ Gotchas
 
 - **Missing input validation on new endpoints** — agent adds endpoint without validation layer. Fix: every endpoint must validate input with Zod/Pydantic before processing.
@@ -94,3 +105,17 @@ Write comments that AI agents can understand — not just humans:
 - 🚩 Database query appears inside a `.map()`, `.forEach()`, or `for` loop → N+1 query pattern; refactor to batch query outside the loop.
 - 🚩 Code comments say only "// validate input" without explaining what/why/who-calls → LLM-friendly comment standard not followed; expand to include context for future AI edits.
 - 🚩 Model file changed but no new migration file in the migrations folder → Schema change will break other environments; create the migration immediately.
+
+---
+
+## Verification
+
+Before declaring backend implementation complete, confirm:
+
+- [ ] Input validation present on all new endpoints (Zod/Pydantic/FluentValidation)
+- [ ] Auth middleware applied (or explicitly marked `@public`)
+- [ ] No N+1 queries (no DB calls inside loops)
+- [ ] No secrets in source code (all in env vars)
+- [ ] Migration file created for any schema change
+- [ ] LLM-friendly comments on non-trivial functions (what + why + who calls)
+- [ ] Build passes: `npm run build` / `dotnet build` / `python -m py_compile`
