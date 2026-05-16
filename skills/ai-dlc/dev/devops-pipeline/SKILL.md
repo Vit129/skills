@@ -40,3 +40,27 @@ Ask which platform if not stated, then follow the appropriate reference:
 - **Azure DevOps Sync** — Auto-create work items, tasks, and test cases via MCP. (Read `references/azure-sync.md`)
 - **GitHub Actions** — Workflow YAML for GitHub repositories: triggers, jobs, OIDC keyless auth, reusable workflows, concurrency control, and branch protection. (Read `references/github-actions.md`)
 - **Security Scanning** — Shift-left DevSecOps: Trivy (image/deps), CodeQL (SAST), Gitleaks (secrets), Semgrep. Used by both dev and QA pipelines. (Read `references/security-scanning.md`)
+
+---
+
+## Anti-Rationalization Table
+
+| Excuse to Skip | Counter-Argument |
+|---|---|
+| "Security scanning slows down the pipeline" | A 2-minute scan is cheaper than a 2-week incident response. Shift-left is faster overall. |
+| "We'll add security gates later" | Pipelines without gates ship vulnerabilities to production. Add gates from day 1. |
+| "It's an internal tool, security doesn't matter" | Internal tools get compromised too. Lateral movement starts from internal services. |
+| "I'll just hardcode the secret for now" | "For now" becomes "forever". Use env vars or secret managers from the start. |
+| "The test stage isn't needed for this PR" | Every PR can introduce regressions. Test stage is non-negotiable. |
+| "OIDC is too complex, I'll use long-lived tokens" | Long-lived tokens are the #1 credential leak vector. OIDC is worth the setup cost. |
+
+---
+
+## Red Flags
+
+- 🚩 Pipeline has no test stage → incomplete, add test execution
+- 🚩 Secrets in YAML files or commit history → rotate immediately
+- 🚩 No branch protection on main → anyone can push directly
+- 🚩 Security scan disabled "temporarily" → re-enable, temporary = permanent
+- 🚩 Pipeline passes but no artifact/report generated → silent failures hidden
+- 🚩 Manual deployment without approval gate → add environment protection rules

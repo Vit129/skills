@@ -195,3 +195,26 @@ Pre-merge review
 - **Pre-commit:** Use as part of doubt-driven development (doubt step can invoke a persona)
 - **Pre-merge:** Fan-out all three for comprehensive gate
 - **With brainstorming:** QA lens in brainstorming covers test-engineer perspective at design time
+
+---
+
+## Anti-Rationalization Table
+
+| Excuse to Skip | Counter-Argument |
+|---|---|
+| "The change is too small to review" | Small changes cause big outages. A 1-line auth bypass is a Critical finding. Review everything. |
+| "I wrote it, I know it's correct" | Self-review has 50% miss rate. Fresh eyes catch what familiarity hides. |
+| "We're in a hurry, skip security" | Security debt compounds. A 5-minute audit now prevents a 5-day incident later. |
+| "Tests pass, so it's fine" | Tests verify behavior, not quality. Passing tests don't catch N+1 queries, missing error handling, or architectural drift. |
+| "It's just a refactor, no review needed" | Refactors are the #1 source of subtle regressions. Review MORE carefully, not less. |
+| "I'll do a thorough review next time" | "Next time" accumulates. Each skipped review is a landmine for future you. |
+
+---
+
+## Red Flags
+
+- 🚩 Review took < 2 minutes for 100+ lines → too shallow, re-review
+- 🚩 Zero Critical/Important findings on a large change → suspiciously clean, look harder
+- 🚩 "LGTM" without specific observations → rubber-stamp, not a review
+- 🚩 Skipping a persona because "it's not relevant" → all three catch different things
+- 🚩 Approving with known TODO items → those TODOs become permanent debt

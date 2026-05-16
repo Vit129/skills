@@ -1,172 +1,136 @@
-# CI/CD Pipeline
+# DevOps Pipeline
 
-## GitHub Actions — Basic Structure
+Create and configure Azure DevOps Pipeline YAML files.
 
-```yaml
-name: CI
+## When to use
+- After a new feature test has been developed and validated
+- New automation project needs Azure DevOps integration
+- Updating pipeline configurations
 
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+## Required Questions (ask one at a time)
 
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+**Q1a:** Trigger type? (Schedule / Auto push / Manual only)
+**Q1b:** Branch? (main / develop / both)
+**Q2:** Schedule time? (if Schedule — user says in plain Thai/English, AI converts to cron using Bangkok UTC+7)
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
+Examples: "ทุกวันจันทร์-ศุกร์ 13:00", "ทุกวัน 09:00", "ทุก 6 ชั่วโมง"
+**Q3:** Test command?
+  - Scan `package.json` in `[RELATIVE-TEST-PATH]`
+  - Filter scripts matching `(api|ui):*:cliMode` pattern
+  - Show numbered list for user to select
+  - If no matching scripts found → auto-create missing scripts in `package.json` first, then generate pipeline
+**Q4:** Notification? (Teams webhook / Email / None)
 
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run build
-      - run: npm test
-```
+All other data (path, feature name, DB strategy, variable groups) must be auto-detected — do NOT ask.
 
-## Common Patterns
+## Defaults (auto-applied unless user specifies otherwise)
 
-### Test + Build + Deploy
+| Setting | Default | Override by saying |
+|---|---|---|
+| `continueOnError` | `true` (pipeline continues even if tests fail) | "fail pipeline if tests fail" |
+| Agent pool | `YOUR-PROJECT` | "use pool [name]" |
+| Publish results | Always publish | "skip publishing results" |
+| External templates | Use `qaTemplates` repo | "generate inline, no templates" |
 
-```yaml
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 20, cache: npm }
-      - run: npm ci
-      - run: npm test
+## Path Resolution
+- `[RELATIVE-TEST-PATH]`: relative path from project_root to folder containing package.json
+- `[PIPELINE-OUT-PATH]`: final destination for YAML file
+- `[Database Base Path]`: from `### 🗄️ Database Strategy` in plan
 
-  build:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 20, cache: npm }
-      - run: npm ci
-      - run: npm run build
-      - uses: actions/upload-artifact@v4
-        with:
-          name: build
-          path: dist/
+## Naming
+- Folder: `[system-feature-kebab]` (all lowercase with hyphens)
+- File: `[system-feature-camel].yaml` (starts with lowercase, no hyphens)
+- API/WebUI: `pipelines/[system-feature-kebab]/[system-feature-camel].yaml`
+- Mobile: `pipelines/[platform]/[system-feature-kebab]/[system-feature-camel].yaml`
 
-  deploy:
-    needs: build
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@v4
-        with: { name: build }
-      # deploy steps...
-```
+## DB Strategy Injection
 
-### Playwright Tests in CI
+Before generating YAML, check `### 🗄️ Database Strategy` in the implementation plan:
+
+**If DB strategy exists:**
+- Uncomment `- group: database-connection-config` in variables section
+- Add DB seed step BEFORE the test run step:
 
 ```yaml
-  e2e:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 20, cache: npm }
-      - run: npm ci
-      - run: npx playwright install --with-deps chromium
-      - run: npx playwright test
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 7
+- script: |
+    PGPASSWORD="$(DB_PASSWORD)" psql \
+      -h $(DB_HOST) -p $(DB_PORT) \
+      -d $(DB_NAME) -U $(DB_USERNAME) \
+      -f $(workingDirectory)/[DB-SEED-SCRIPT-PATH]
+  displayName: "Seed Test Data"
+  env:
+    DB_PASSWORD: $(DB_PASSWORD)
 ```
 
-### Scheduled Runs
+- Add DB cleanup step AFTER publish results:
 
 ```yaml
-on:
-  schedule:
-    # Cron: minute hour day-of-month month day-of-week (UTC)
-    - cron: '0 2 * * 1-5'    # Mon-Fri 2am UTC (9am Bangkok)
-    - cron: '0 6 * * 1-5'    # Mon-Fri 6am UTC (1pm Bangkok)
-  workflow_dispatch:           # manual trigger button
+- script: |
+    PGPASSWORD="$(DB_PASSWORD)" psql \
+      -h $(DB_HOST) -p $(DB_PORT) \
+      -d $(DB_NAME) -U $(DB_USERNAME) \
+      -f $(workingDirectory)/[DB-CLEANUP-SCRIPT-PATH]
+  displayName: "Cleanup Test Data"
+  condition: always()
+  env:
+    DB_PASSWORD: $(DB_PASSWORD)
 ```
 
-### Concurrency Control
+**If no DB strategy:** skip variable group and DB steps entirely.
 
-```yaml
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true    # cancel previous run on same branch
-```
+**Verification:** Physically check that `[Database Base Path]` directory and SQL files exist before generating YAML.
 
-### Reusable Workflows
+## Test Command Patterns
 
-```yaml
-# .github/workflows/reusable-test.yml
-on:
-  workflow_call:
-    inputs:
-      node-version:
-        type: string
-        default: '20'
+| Type | Environment | Command |
+|---|---|---|
+| API | SIT | `npm run api:sit:[feature]:cliMode` |
+| API | UAT | `npm run api:uat:[feature]:cliMode` |
+| UI | SIT | `npm run ui:sit:[feature]:cliMode` |
+| UI | UAT | `npm run ui:uat:[feature]:cliMode` |
 
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ inputs.node-version }}
-          cache: npm
-      - run: npm ci && npm test
-```
+| Human Input | Cron | Note |
+|---|---|---|
+| Mon-Fri 08:30 | `30 1 * * 1-5` | subtract 7hrs for UTC |
+| Mon-Fri 13:00 | `0 6 * * 1-5` | |
+| Daily 09:00 | `0 2 * * *` | |
+| Daily 02:00 | `0 19 * * *` | previous day UTC |
+| Every 6 hours | `0 */6 * * *` | |
 
-```yaml
-# Caller workflow
-jobs:
-  test:
-    uses: ./.github/workflows/reusable-test.yml
-    with:
-      node-version: '20'
-```
+## Critical Constraints
+- NEVER hardcode sub-directories — resolve dynamically
+- No `NodeTool@0` — use pre-installed Node
+- No `npx playwright install` — use `BROWSER_CHANNEL: chrome`
+- Report path must match `outputFolder` in `playwright.config.ts`
+- Use `cross-env` in package.json for Windows support
 
-### Environment Variables & Secrets
+## Validation Checklist
+- [ ] `[RELATIVE-TEST-PATH]` physically exists
+- [ ] `package.json` contains the test command
+- [ ] DB path exists if DB strategy present
+- [ ] cron expression is valid
+- [ ] playwright-report matches outputFolder
+- [ ] File path follows naming convention
 
-```yaml
-env:
-  NODE_ENV: test
+## Pipeline Templates
 
-jobs:
-  deploy:
-    environment: production    # requires approval
-    env:
-      API_URL: ${{ vars.API_URL }}           # non-secret variable
-      API_KEY: ${{ secrets.API_KEY }}         # secret
-```
+Choose the correct template based on the agent pool:
 
-## Pipeline Design Principles
+| Pool | OS | Template |
+|---|---|---|
+| `YOUR-PROJECT` | Windows | #[[file:ai-agent/templates/pipeline-templates/windowsAzureTemplate.md]] |
+| `qa-automation` | Linux | #[[file:ai-agent/templates/pipeline-templates/linuxAzureTemplate.md]] |
 
-1. **Fail fast** — run cheapest checks first (lint → type check → unit → integration → e2e)
-2. **Cache aggressively** — `actions/cache` or built-in cache in setup actions
-3. **Parallelize** — independent jobs run concurrently
-4. **Artifacts** — upload test reports, build outputs for debugging
-5. **Concurrency** — cancel stale runs on the same branch
-6. **Environments** — use GitHub environments for deployment approvals
+**How to select:**
+- If user says "BCIBOT" or project uses Windows agent → use `windowsAzureTemplate.md`
+- If user says "qa-automation" or project uses Linux agent → use `linuxAzureTemplate.md`
+- If not specified → ask: "ใช้ pool ไหนครับ? (YOUR-PROJECT / qa-automation)"
 
-## Cron Cheat Sheet (UTC)
-
-| Human time (Bangkok UTC+7) | Cron (UTC) |
-|---|---|
-| Mon-Fri 09:00 | `0 2 * * 1-5` |
-| Mon-Fri 13:00 | `0 6 * * 1-5` |
-| Daily 02:00 | `0 19 * * *` (prev day) |
-| Every 6 hours | `0 */6 * * *` |
-| Sunday midnight | `0 17 * * 6` (Sat UTC) |
+Both templates support:
+- Multi-folder test execution with isolated results per folder
+- Per-folder JUnit publishing
+- HTML report index generation
+- Shared template integration (qaTemplates)
+- DB strategy injection
+- Teams notification (optional)
+- Schedule / auto-push / manual triggers

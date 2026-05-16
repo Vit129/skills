@@ -53,6 +53,34 @@ Combine similar Boundary/Edge/Failure cases where appropriate.
 - **Automation test status:** `Automatable`
 - **Cannot automate reason:** Empty
 
+## 5.1 Sprint Tag & Assigned To — Ask at Start
+
+⚠️ **MANDATORY — Ask BEFORE writing any TS (2 questions, one at a time):**
+
+**Step 1 — Sprint number:**
+- Auto-derive YYYY from current date (e.g. `new Date().getFullYear()` → `2026`)
+- Ask user only for sprint number via `userInput`:
+  ```
+  Sprint number คือเท่าไหร่ครับ? (default จาก context เช่น 52)
+  → tag จะเป็น: 2026SP52
+  ```
+- Combine into tag: `${YYYY}SP${sprintNumber}` → e.g. `2026SP52`
+
+**Step 2 — Assigned To (QA executor):**
+- Check `projects.json` for `qaEmail` field under the current project/team first
+- If found → use it directly, show: `"QA Assigned To: {email} (จาก projects.json)"`
+- If NOT found → ask user via `userInput`:
+  ```
+  Assigned To (QA email) สำหรับ TS ชุดนี้คืออะไรครับ? (เว้นว่างได้)
+  ```
+  Then **save the email to `projects.json`** under the current project/team as `qaEmail` immediately
+- This is the QA who will execute the TS (col 20) — not the PBI owner
+
+**After both confirmed:**
+- Save both values to session context
+- Apply to ALL TS in this session: tag → col 19, assigned to → col 20
+- Do NOT ask again during export
+
 ## 6. Complete User Flow Coverage
 
 Login/Auth → Navigation → Action → Confirmation → Result.

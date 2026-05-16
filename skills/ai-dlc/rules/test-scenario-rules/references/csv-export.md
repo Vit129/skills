@@ -27,8 +27,8 @@
 16. Reason (empty)
 17. Area Path (single backslash, quoted)
 18. Iteration Path (single backslash, quoted)
-19. Tags
-20. Assigned To (email, no quotes)
+19. Tags (sprint tag format: `YYYYSPxx`, e.g. `2026SP52` — ask user to confirm before export, default = current sprint year+number)
+20. Assigned To — **PBI row:** PO/BA email from `System.AssignedTo` of the PBI (auto-populated from ADO) | **TS row:** QA executor email (from user input at session start)
 21. Remaining Work (hours)
 22. Effort (hours)
 23. Actual Effort (empty)
@@ -45,6 +45,7 @@
 - Columns 7-16 must be empty (10 commas between Priority and Area Path)
 - Columns 21-23 empty (3 commas)
 - Title in column 4 with quotes
+- Column 20 (Assigned To): populate from `System.AssignedTo` of the PBI in ADO (PO/BA email)
 
 ## 5. Test Scenario Row Rules
 
@@ -59,7 +60,16 @@
 - Test Steps (col 8): `<div><ol style="box-sizing:border-box;padding-left:40px;"><li style="box-sizing:border-box;">...</li></ol></div>`
 - Expected Result (col 9): `<div>...<br>...</div>`
 
-## 6. Validation Checklist
+## 6. Sprint Tag Rules
+
+- **Format:** `YYYYSPxx` where YYYY = year, xx = sprint number (zero-padded if needed), e.g. `2026SP52`
+- **When to apply:** Tag is added to column 19 (Tags) of every TS row in the CSV
+- **PBI rows:** Tags column stays empty
+- **Multiple tags:** Separate with semicolons e.g. `2026SP52; regression`
+- **Ask user before export:** "Sprint tag จะใส่เป็น `2026SP52` ใช่ไหมครับ? (กด Enter เพื่อยืนยัน หรือพิมพ์ tag ที่ต้องการ)"
+- **Default:** Derive from sprint name in context — if sprint name is "Sprint 52" and year is 2026 → `2026SP52`
+
+## 7. Validation Checklist
 
 - [ ] All 23 columns present in header
 - [ ] PBI row: ID not empty, Title in col 4, 10 empty cols between Priority and Area Path, cols 21-23 empty
@@ -74,17 +84,20 @@
 - [ ] Expected Result: `<div>...<br>...</div>` format
 - [ ] JSON data uses single quotes `{'key': 'value'}` not double quotes
 - [ ] Priority level includes "Critical" (not just High/Medium/Low)
+- [ ] Tags column (col 19): TS rows have sprint tag in `YYYYSPxx` format, PBI rows have empty Tags
 
-## 7. Export Process
+## 8. Export Process
 
 1. Read data from `testScenario{id}.md` only — do NOT re-fetch from DevOps
-2. Generate CSV content
-3. Validate all fields, rows, columns
-4. Export to `test-scenario/[system]/[feature]/testScenario{id}.csv`
+2. Apply sprint tag confirmed at TS design start (col 19 of all TS rows) — do NOT ask again
+3. Generate CSV content
+4. Validate all fields, rows, columns
+5. Export to `test-scenario/[system]/[feature]/testScenario{id}.csv`
 
-## 8. Post-Export: Map Work Item IDs
+## 9. Post-Export: Map Work Item IDs
 
 After importing CSV to Azure DevOps:
+
 1. Fetch child work items (Type="Test Scenario")
 2. Match by Title 2
 3. Update ID in both CSV and MD files

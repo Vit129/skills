@@ -128,3 +128,25 @@ If you showed this interface to someone and said "AI made this," would they beli
 - **Theme should match context** — Dark/light mode is derived from audience and viewing context, not personal preference.
 - **Alpha is a design smell** — Heavy use of transparency usually means an incomplete palette.
 - **Cards are overused** — Spacing and alignment create visual grouping naturally without cards.
+
+---
+
+## Anti-Rationalization Table
+
+| Excuse to Skip | Counter-Argument |
+|---|---|
+| "I'll use Inter/Roboto — they're clean and professional" | Inter and Roboto are explicitly banned as overused AI-default fonts. Your first 3 font instincts are from training data. Reject them and look further for distinctive choices. |
+| "I'll skip the context gathering step — I can infer the audience from the codebase" | The skill explicitly states: "You cannot infer this by reading the codebase. Code tells you what was built, not who it's for." Ask the user for audience, use cases, and brand tone. |
+| "Dark mode with glowing accents looks modern and polished" | This is literally the "AI color palette" anti-pattern (cyan-on-dark, purple-to-blue gradients, neon accents). It screams "AI made this." Choose a direction that doesn't. |
+| "I'll wrap each section in a card with rounded corners and drop shadow" | Cards are explicitly called out as overused. Spacing and alignment create visual grouping naturally. Not everything needs a container — use whitespace as a design element. |
+| "I'll add bounce animations to make it feel alive" | Bounce/elastic easing is explicitly banned as dated. Use exponential easing (ease-out-quart/quint/expo) and only animate transform + opacity to avoid layout recalculation. |
+
+---
+
+## Red Flags
+
+- 🚩 Design uses Inter, Roboto, DM Sans, or any font from the banned list → Font selection reflex triggered; reject and find a distinctive alternative.
+- 🚩 No context gathering happened (audience, use cases, brand tone unknown) → Design decisions have no foundation; stop and ask the user before proceeding.
+- 🚩 Interface passes the "AI Slop Test" — someone would immediately say "AI made this" → Lacks bold aesthetic direction; commit to a specific tone and differentiate.
+- 🚩 Heavy use of `rgba()` / alpha transparency throughout the palette → Alpha is a design smell indicating an incomplete palette; define explicit color tokens instead.
+- 🚩 Implementation order starts with colors/animations before HTML structure → Wrong sequence; always structure first → layout → typography → color → states → motion → responsive.

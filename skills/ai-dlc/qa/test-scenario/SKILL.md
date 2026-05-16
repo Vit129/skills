@@ -80,3 +80,25 @@ Step 7: Done ✅
 - **Missing metadata** — agent omits `Assigned to`, `Remaining Work`, `Effort` fields → CSV export incomplete
 - **Skipping data-gen** — agent finishes scenarios without generating test data → QA has no data to run tests with
 - **Skipping CSV export** — agent considers Phase 2.2 done without running `md2csv.sh` + `csvValidator.sh` → scenarios not importable to Azure DevOps
+
+---
+
+## Anti-Rationalization Table
+
+| Excuse to Skip | Counter-Argument |
+|---|---|
+| "I'll skip reuse analysis — this is a brand new feature with nothing to reuse" | Even new features share patterns with existing scenarios (auth flows, CRUD operations, error handling). Skipping Step 1 guarantees duplicate scenarios and inconsistent naming. |
+| "I'll write all 3 batches (Success + Alternative + Edge) at once to save time" | Each batch MUST pause for user approval. Dumping all at once means the user can't course-correct early — they'll reject 60% of scenarios after you've already written everything. |
+| "Data generation isn't needed — the scenarios are self-explanatory" | QA cannot execute tests without concrete test data. Scenarios without data are specifications, not executable test cases. Data generation is mandatory, not optional. |
+| "I'll skip CSV export — the markdown file is good enough" | Azure DevOps import requires the 23-column CSV format. Markdown stays in the repo but never reaches the test management tool. Export completes the delivery. |
+| "The HTML format requirement is just cosmetic — plain markdown works fine" | Azure DevOps renders `<ul><li>` in test step fields. Plain markdown shows as raw text in the UI, making scenarios unreadable for manual testers. Format is functional, not cosmetic. |
+
+---
+
+## Red Flags
+
+- 🚩 All 3 batches appear in a single output without approval pauses between them → Batch approval rule violated; split into 3 separate presentations with userInput between each.
+- 🚩 Scenario file has no reuse notes or index reference → Reuse Analysis was skipped; go back and scan the index before designing.
+- 🚩 Scenarios lack `Assigned to`, `Remaining Work`, or `Effort` metadata fields → CSV export will fail validation; add all required metadata before export.
+- 🚩 Agent declared "done" without running CSV export + validation → Export step skipped; run export and verify 23-column output.
+- 🚩 Test data section is empty or says "TBD" → Data Generation was skipped; generate Valid/Boundary/Edge data sets before finalizing.

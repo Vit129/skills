@@ -1,121 +1,111 @@
-# Git Commit & PR Workflow
+# Git Commit, Push & Pull Request
 
-## Branching Strategy (Trunk-Based)
+Complete flow: commit → push → create PR, following Azure DevOps work item linking conventions.
 
-```
-main (always deployable)
-  └── feat/feature-name (short-lived, < 2 days)
-  └── fix/bug-description
-  └── test/test-feature
-```
+## When to use
 
-**Rules:**
-- Branch from `main`, merge back to `main`
-- Keep branches short-lived (< 2 days ideal)
-- Delete branch after merge
-- Never commit directly to `main` for team projects
+- After completing any implementation or test scripting task
+- User says "commit", "push", "create PR", "คอมมิต", "พุช"
 
-## Commit Flow
+---
+
+## Step 1: Commit & Push
+
+### Option A: Direct Commit to Main
+
+Suitable for: minor fixes, hotfixes, solo work.
 
 ```bash
-# 1. Create feature branch
 git checkout main && git pull origin main
-git checkout -b feat/feature-name
-
-# 2. Work in small commits
-git add -A
-git commit -m "feat(scope): description"
-
-# 3. Push and create PR
-git push -u origin feat/feature-name
+git add .
+git commit -m "[AB#xxxxx,AB#yyyyy] Description"
+git push origin main
 ```
 
-## Commit Message Convention
+Commit format: `[AB#xxxxx,AB#yyyyy] Description`
 
-```
-<type>(<scope>): <subject>
+### Option B: Feature Branch (for PR)
 
-[optional body]
-
-[optional footer]
-```
-
-### Types
-
-| Type | When |
-|------|------|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `test` | Adding or fixing tests |
-| `refactor` | Code change that neither fixes nor adds |
-| `docs` | Documentation only |
-| `ci` | CI/CD pipeline changes |
-| `chore` | Build process, tooling, deps |
-| `perf` | Performance improvement |
-
-### Rules
-- Subject: imperative mood, lowercase, no period, < 72 chars
-- Body: explain what and why (not how)
-- Footer: breaking changes, issue references
-
-### Examples
+Suitable for: new features, major changes, team collaboration.
 
 ```bash
-# Good
-feat(auth): add JWT refresh token rotation
-fix(api): handle null response from payment gateway
-test(checkout): add e2e test for guest checkout
-ci: add Trivy image scanning to pipeline
-refactor(db): extract query builder into separate module
-
-# Bad
-Fixed stuff                    # ❌ no type, vague
-feat: Add new feature.         # ❌ period, capitalized, vague
-FEAT(auth): ADD LOGIN          # ❌ uppercase
+git checkout main && git pull origin main
+git checkout -b automated-files/[sprint]
+git add .
+git commit -m "[PR][AB#xxxxx,AB#yyyyy] Description"
+git push -u origin automated-files/[sprint]
 ```
 
-## Pull Request
+Commit format: `[PR][AB#xxxxx,AB#yyyyy] Description`
 
-### PR Title
+---
+
+## Step 2: Create Pull Request (Option B only)
+
+### Prerequisites
+
+- All tests must pass (tests_failed = 0)
+- Code pushed to feature branch
+- DevOps MCP tools available (or manual)
+
+### PR Creation
+
+1. Create PR with title: `AB#{work_item_id}: {feature description}`
+2. PR description includes:
+   - Summary of changes
+   - Work item references (`AB#xxxxx`)
+   - Test results (passed/failed/skipped counts)
+   - TDD summary (if applicable)
+3. Link PR to work items via MCP
+4. Update work item status: "In Progress" → "Code Review"
+5. Add comment with PR ID and test results
+
+### PR Rules
+
+- **FORBIDDEN** to create PR if any tests are still failing
+- If MCP unavailable, provide manual instructions instead
+- Never push directly to `main` when using PR workflow
+
+---
+
+## Work Item Linking
+
+`AB#xxxxx` = Azure DevOps Work Item ID (numeric)
+
+To find Work Items:
+1. Ask user for keyword + tags (e.g., `F3S1 and 2024SP24`)
+2. Search Azure DevOps for "Test Scenario V2" with "Automate" in title
+3. Let user select → generate `AB#xxxxx,AB#yyyyy` string
+
+---
+
+## Commit Message Examples
+
+```bash
+# Option A (Direct to main)
+[AB#107778,AB#107779] Add test script F3S1, F3S2
+[AB#107780] Fix login API test data
+
+# Option B (Feature branch for PR)
+[PR][AB#107778,AB#107779] Add test script F3S1, F3S2
+[PR][AB#107780] Add automated test files for F3S1
 ```
-feat(scope): concise description (< 70 chars)
+
+### Bad Commit Messages
+
+```bash
+Add test files              # ❌ Missing Work Items
+[AB#107778] Update          # ❌ Unclear description
+AB#107778 Add test files    # ❌ Missing brackets
 ```
 
-### PR Description Template
-
-```markdown
-## What
-Brief description of the change.
-
-## Why
-Context and motivation.
-
-## How to Test
-1. Step to verify
-2. Expected result
-
-## Checklist
-- [ ] Tests pass
-- [ ] Build succeeds
-- [ ] No secrets in code
-- [ ] Reviewed own diff before requesting review
-```
-
-### PR Size Guidelines
-- Ideal: ~100 lines changed
-- Max: ~400 lines (split if larger)
-- Single concern per PR
+---
 
 ## Safety Rules
 
-**Always ask user before:**
-- `git push --force` / `git push -f`
+Always ask confirmation before:
+- `git push -f` (force push)
 - `git reset --hard`
-- `git rebase` on shared branches
-- `git branch -D` (force delete)
+- `git branch -d` / `-D` (delete branch)
+- `git rebase`
 - `git clean -fd`
-
-**Never:**
-- Force push to `main`
-- Amend commits that are already pushed (unless solo branch)
-- Delete branches others are working on

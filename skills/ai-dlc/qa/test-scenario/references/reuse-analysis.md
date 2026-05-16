@@ -5,12 +5,12 @@ Identify reusable test scenarios and patterns across features before designing n
 ## When to use
 - Before designing any new test scenario
 - Mapping requirements to existing test scenarios
-- Finding reusable data patterns from `testScenarioIndex.json`
+- Finding reusable patterns from existing test scenario files
 
 ## Process
 
 ### Part 1: Test Pattern Matching
-1. Read `testScenarioIndex.json`
+1. Scan existing test scenario files in `.aidlc/` for the current system
 2. Abstract Intent: extract core intent (e.g., "Create X", "Validate Y status")
 3. Fuzzy Search: compare intent vs existing features
 4. Deep Comparison — compare by LOGIC, not by entity name:
@@ -33,7 +33,7 @@ Identify reusable test scenarios and patterns across features before designing n
 3. New Logic: what is unique to this feature that must be newly written?
 
 ## Rules
-- Always scan testScenarioIndex.json before designing
+- Always scan existing test scenario files in `.aidlc/` before designing
 - Never ignore matches because "Feature Name" doesn't match exactly
 - Compare Logic not Labels
 - Explicitly state what needs to change (Gap)

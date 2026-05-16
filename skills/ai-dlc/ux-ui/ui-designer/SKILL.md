@@ -118,3 +118,25 @@ PRE-DELIVERY CHECKLIST:
 | Tech stack guidance | `references/tech-stacks.md` |
 | Figma integration | `references/figma.md` |
 
+
+---
+
+## Anti-Rationalization Table
+
+| Excuse to Skip | Counter-Argument |
+|---|---|
+| "I'll skip Phase 0 (existing design system detection) — this is a new project" | Even "new" projects may have a Tailwind config, shadcn/ui setup, or MUI installation. Skipping Phase 0 means you might rebuild what already exists or create conflicting token systems. |
+| "I don't need to identify the industry — good design is universal" | The skill has 161 industry-specific rules because finance ≠ e-commerce ≠ healthcare. A playful e-commerce palette on a banking app destroys user trust. Industry context is mandatory. |
+| "I'll pick colors based on what looks good to me" | Color selection must be psychology-backed and industry-aligned (161 palettes exist for this reason). Personal preference without validation against industry norms creates inconsistency. |
+| "I'll generate the design system without asking about existing Figma/tokens" | The skill explicitly requires asking: "Do you have an existing design system or Figma file?" Skipping this question risks overwriting established design decisions the team already made. |
+| "WCAG AA compliance can be checked at the end" | The pre-delivery checklist includes WCAG AA contrast ratios as a hard requirement. Designing first and checking contrast last means redesigning colors when they fail — check during selection. |
+
+---
+
+## Red Flags
+
+- 🚩 Design system output has no industry identification → Reasoning engine was skipped; identify the sector (SaaS/Finance/Healthcare/etc.) before generating tokens.
+- 🚩 Color tokens use hex values like `#000` or `#fff` → Pure black/white violates impeccable-design principles; always tint neutrals toward brand hue.
+- 🚩 No stack detection performed before generating code → Output may use wrong syntax (Tailwind vs ThemeData vs SwiftUI); identify the tech stack first.
+- 🚩 Agent jumped to component design without defining tokens first → Workflow order violated (aesthetic direction → tokens → components); go back and define tokens.
+- 🚩 Pre-delivery checklist items unchecked (WCAG, responsive, touch targets, dark mode, focus states) → Design is incomplete; validate all checklist items before declaring done.

@@ -101,3 +101,25 @@ After all tasks complete:
 - **Review skip** — never mark task done without passing both review stages
 - **Token cost** — each subagent = fresh context load; use only for tasks that justify it
 - **One agent per task** — never spawn 2 subagents on the same task
+
+---
+
+## Anti-Rationalization Table
+
+| Excuse to Skip | Counter-Argument |
+|---|---|
+| "The tasks are small — I'll just do them all inline instead of dispatching subagents" | If there are 3+ independent tasks, subagent isolation prevents context pollution. Inline execution for many tasks causes context drift and missed details in later tasks. |
+| "I'll skip Stage 2 (Code Quality) review since Stage 1 (Spec Compliance) passed" | Stage 1 checks IF the right thing was built. Stage 2 checks if it was built WELL. Passing spec compliance with spaghetti code creates tech debt that blocks future tasks. |
+| "Two tasks touch the same file but I'll dispatch them in parallel anyway" | File conflicts between parallel subagents cause silent overwrites. Tasks sharing files MUST run sequentially — this is a hard rule, not a suggestion. |
+| "The subagent can rely on what I told it verbally — no need to pass contextFiles" | Context drift is the #1 subagent failure mode. Each subagent must re-read the task spec and relevant files from disk, not depend on orchestrator memory. |
+| "I'll mark the task done now and review it later" | Never mark a task `[x]` without both review stages passing. A "done" task that fails review pollutes `dev-task-progress.md` and misleads the orchestrator about actual progress. |
+
+---
+
+## Red Flags
+
+- 🚩 `dev-task-progress.md` shows all tasks marked `[x]` but no review comments recorded → Reviews were skipped; re-run both stages on each completed task.
+- 🚩 Two subagents were dispatched on tasks that edit the same source file → File conflict risk; stop the second agent and serialize those tasks.
+- 🚩 Subagent prompt doesn't include which skills to load → Subagent will code without standards (e.g., missing playwright-rules); always specify skills in the dispatch prompt.
+- 🚩 Task count is 1-2 but subagent-driven mode was activated → Overhead exceeds benefit; switch to inline execution for small task sets.
+- 🚩 Orchestrator moved to Phase 3.2 but `dev-task-progress.md` still has unchecked items → Premature handoff; all tasks must be `[x]` before advancing phases.

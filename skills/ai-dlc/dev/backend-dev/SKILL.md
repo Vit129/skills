@@ -5,7 +5,9 @@ description: >
   "set up authentication", "ตั้งค่า authentication", "design the database schema", "ออกแบบ database schema",
   "build a backend service", "สร้าง backend service", "create a REST endpoint", "สร้าง REST endpoint",
   "dockerize the app", "ทำ Docker", "use Pydantic v2", "SQLAlchemy 2.0", "async SQLAlchemy",
-  or needs guidance on Node.js, Python, Express, FastAPI, Django, or Docker.
+  "C# API", "ASP.NET Core", ".NET", "Entity Framework", "EF Core", "Minimal API",
+  "C++ project", "CMake", "RAII", "smart pointer", "GoogleTest", "C project",
+  or needs guidance on Node.js, Python, Express, FastAPI, Django, C#/.NET, C/C++, or Docker.
 ---
 
 # Backend Development
@@ -21,6 +23,8 @@ Build and maintain backend services and APIs.
 | "set up auth", "JWT", "OAuth2", "RBAC", "sessions" | `references/authentication.md` |
 | "Node.js", "Express", "Fastify", "NestJS" | `references/nodejs.md` |
 | "Python", "FastAPI", "Django" | `references/python.md` |
+| "C#", ".NET", "ASP.NET", "Entity Framework", "EF Core", "Minimal API" | `references/csharp-dotnet.md` |
+| "C", "C++", "CMake", "RAII", "smart pointer", "GoogleTest" | `references/cpp.md` |
 | "Docker", "Dockerfile", "docker-compose", "multi-stage build" | `references/docker.md` |
 | "code review", "review backend code", "check quality", "audit code" | `references/backend-code-review.md` |
 
@@ -32,6 +36,8 @@ Build and maintain backend services and APIs.
 ## Frameworks
 - **Node.js** — Express, Fastify, NestJS patterns. (Read `references/nodejs.md`)
 - **Python** — FastAPI, Django patterns. (Read `references/python.md`)
+- **C# / .NET** — ASP.NET Core, Entity Framework Core, Minimal APIs, Clean Architecture. (Read `references/csharp-dotnet.md`)
+- **C / C++** — Modern C++ (17/20/23), CMake, RAII, memory safety, GoogleTest. (Read `references/cpp.md`)
 
 ## Infrastructure
 - **Docker** — Dockerfile, docker-compose, multi-stage builds. (Read `references/docker.md`)
@@ -66,3 +72,25 @@ Write comments that AI agents can understand — not just humans:
 - Include context AI needs to edit correctly (dependencies, side effects, constraints)
 - Add docstrings/JSDoc with params + return + raises/throws
 - Complex business logic: add comment block explaining the rule before the code
+
+---
+
+## Anti-Rationalization Table
+
+| Excuse to Skip | Counter-Argument |
+|---|---|
+| "I'll add input validation later — let me get the endpoint working first" | Every endpoint must validate input BEFORE processing. "Working" without validation means working for happy path only — any malformed input causes crashes or security holes. |
+| "Auth middleware isn't needed for this route — it's internal" | Internal routes get exposed through misconfiguration, API gateways, or future refactoring. Apply auth middleware by default; explicitly mark routes as public only when intentional. |
+| "I'll write the query inside the loop — it's only a few items" | N+1 queries are the #1 backend performance killer. Even "a few items" becomes hundreds in production. Always use batch queries (WHERE IN, JOIN) from the start. |
+| "I'll put the API key in the code for now and move it to env vars before deploy" | Secrets committed to git persist in history forever. Use environment variables from the first line of code — there is no "temporary" for secrets in source control. |
+| "The schema change is small — I don't need a migration file" | Every schema change without a migration is a deployment landmine. Other developers and CI/CD pipelines depend on migrations to sync database state. No exceptions. |
+
+---
+
+## Red Flags
+
+- 🚩 New endpoint added without corresponding Zod/Pydantic validation schema → Input validation skipped; add validation layer before the handler logic.
+- 🚩 Route file has no auth middleware import or explicit `@public` annotation → Auth was forgotten, not intentionally skipped; verify and add middleware.
+- 🚩 Database query appears inside a `.map()`, `.forEach()`, or `for` loop → N+1 query pattern; refactor to batch query outside the loop.
+- 🚩 Code comments say only "// validate input" without explaining what/why/who-calls → LLM-friendly comment standard not followed; expand to include context for future AI edits.
+- 🚩 Model file changed but no new migration file in the migrations folder → Schema change will break other environments; create the migration immediately.

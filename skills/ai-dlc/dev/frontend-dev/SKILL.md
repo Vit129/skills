@@ -83,3 +83,25 @@ Write comments that AI agents can understand — not just humans:
 - Include context AI needs to edit correctly (dependencies, side effects, constraints)
 - Function signatures: add JSDoc/TSDoc with params + return + throws
 - Complex logic: add comment block before section explaining the business rule
+
+---
+
+## Anti-Rationalization Table
+
+| Excuse to Skip | Counter-Argument |
+|---|---|
+| "I'll add data-testid later when QA needs it" | Missing testability attributes break Playwright tests silently — QA discovers the gap only after writing tests that can't find elements. Add `data-testid` during component creation, always. |
+| "I don't need to load the reference file — I know React/Next.js well enough" | References contain project-specific conventions (React 19 hooks like useActionState, Next.js 15 App Router patterns). Using outdated patterns from training data introduces inconsistencies. |
+| "UI states (loading, empty, error) can be added in a follow-up PR" | Components without state handling crash or show blank screens in production. Loading/empty/error states are part of the component contract, not polish. Ship them together. |
+| "I'll skip LLM-friendly comments — the code is self-documenting" | Future AI edits on uncommented code produce bugs because the agent can't infer intent, dependencies, or side effects. Comments with what+why+who-calls prevent regression. |
+| "I'll use the same state management approach for all components" | Server Components, Client Components, and shared state have different patterns in Next.js 15. Using client-side state where server state suffices bloats the bundle and breaks streaming. |
+
+---
+
+## Red Flags
+
+- 🚩 New component has no `data-testid` attributes → Testability standard violated; add identifiers before merging.
+- 🚩 Test file creates components without wrapping in fresh provider/store → Shared state leaks between tests causing flaky failures; isolate each test's state.
+- 🚩 Agent used Gemini for a logic-heavy edit without flagging the risk → Gemini introduces subtle bugs on medium+ complexity; escalate to Claude Sonnet for logic-heavy work.
+- 🚩 Component handles only the success state → Missing loading/empty/error states; load `ui-states-standards.md` and implement all 4 states.
+- 🚩 Functions lack JSDoc/TSDoc with params + return + throws → LLM-friendly comment standard not followed; add documentation for non-trivial functions.

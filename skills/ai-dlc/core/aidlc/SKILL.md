@@ -21,9 +21,20 @@ description: >
 
 Full governance and planning for the complete development lifecycle.
 
-## Pre-Flight: Mode Detection (Mandatory — before Brainstorming)
+## Pre-Flight: Mode + Approach Detection (Mandatory — before Phase 2)
 
-> ทำก่อนทุกอย่าง — detect mode แล้วค่อย route ไป Brainstorming หรือ Lite Inception
+> ถามตามลำดับ: 1) Mode (Full/QA/Dev) → 2) Development Approach (TDD vs SDLC) ก่อนเข้า Phase 2
+
+**Question 1 — Execution Mode:**
+- Full / QA Only / Dev Only (detect from command or ask)
+
+**Question 2 — Development Approach (ถามก่อนเข้า Phase 2):**
+- `"TDD"` / `"เขียน test ก่อน"` / `"test-first"` → TDD (Recommended)
+- `"SDLC"` / `"code ก่อน"` / `"implement ก่อน"` → SDLC
+- Not specified → default to TDD (Recommended)
+
+**TDD (Recommended):** QA ก่อน Dev — เขียน test ก่อน แล้วค่อยเขียน code ให้ผ่าน (RED→GREEN→REFACTOR)
+**SDLC:** Dev ก่อน QA — เขียน code ก่อน แล้วค่อยเขียน test ทีหลัง
 
 **Detection:**
 - **Kiro IDE:** reads Vibe/Spec mode from IDE context (user selects in UI, never types it)
@@ -31,7 +42,7 @@ Full governance and planning for the complete development lifecycle.
 
 **Global rule:** ALL AIDLC interactions use **dialog message format** (structured step-by-step) — not plain chat. Applies to every mode, every AI agent.
 
-For detection logic, Vibe flow, escalation rules, dialog format, and artifact rules → Read `references/workflow.md` (Mode Selection + Dialog & Artifact Integration sections)
+For detection logic, approach comparison, phase matrices, Vibe flow, escalation rules, dialog format, and artifact rules → Read `references/workflow.md` (Development Approach + Mode Selection + Dialog & Artifact Integration sections)
 
 ## Phase 1.8: Brainstorming — 3 Amigos Review (after Inception, before Task Design)
 
@@ -86,7 +97,7 @@ For full phase list, routing table, and anti-shortcut rules → (Read `reference
 
 ## Related Skills
 
-For skill routing guide → see KIRO.md Skill Map (ai-agent/KIRO.md)
+For skill routing guide → see AGENTS.md Skill Map (workspace root)
 
 > **Brainstorming** — Phase 1.8 (หลัง Inception, ก่อน Task Design) — 3 Amigos review via subagents → `core/brainstorming/SKILL.md`
 > **Subagent-Driven** — ใช้ระหว่าง Phase 3.1 เมื่อมี 3+ independent tasks → `core/subagent-driven/SKILL.md`
@@ -118,3 +129,27 @@ For skill routing guide → see KIRO.md Skill Map (ai-agent/KIRO.md)
 | 2. Global fallback | `{project_root}/skills/knowledge/` | No per-project knowledge found — cross-project shared patterns |
 
 **Rule:** Always check per-project first. Fall back to global only if `agent-memory/knowledge/` does not exist in the project tree.
+
+---
+
+## Anti-Rationalization Table
+
+| Excuse to Skip | Counter-Argument |
+|---|---|
+| "เขียน code เลย ไม่ต้อง plan" | Code without plan = rework. DECISIONS file takes 5 minutes, saves 5 hours. |
+| "Feature เล็ก ไม่ต้องผ่าน AIDLC" | "เล็ก" is subjective. Even 1-endpoint features need DECISIONS + PLAN. The overhead is minimal. |
+| "มี spec อยู่แล้ว ข้าม Phase 1 ได้" | Spec ≠ DECISIONS file. Phase 1 formalizes scope, constraints, and approach. Don't skip. |
+| "Resume แล้ว ทำต่อเลย" | Resume MUST read existing artifacts first. Starting fresh wastes previous work. |
+| "User บอก 'ทำเลย' = skip dialog" | Short commands are NOT permission to skip. Dialog flow is mandatory regardless of message length. |
+| "Brainstorming ไม่จำเป็น feature นี้เล็ก" | Check the scale table. If medium+, brainstorming catches gaps that save rework in Phase 3. |
+
+---
+
+## Red Flags
+
+- 🚩 Writing code without a DECISIONS file → STOP, create DECISIONS first
+- 🚩 Phase 2 started without Phase 1 output → prerequisites missing
+- 🚩 Agent auto-executing without dialog → must present options and wait for approval
+- 🚩 All inception docs written in one shot without pauses → bulk dump, not phased execution
+- 🚩 Task marked done without commit hash → not done
+- 🚩 `.aidlc/` folder doesn't exist but agent is writing implementation → governance bypassed

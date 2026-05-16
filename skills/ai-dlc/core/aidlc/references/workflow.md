@@ -15,9 +15,149 @@
 - **Apply TDD** (Test-Driven Development: RED → GREEN → REFACTOR)
 - **MANDATORY GATES** (dev-task-design and qa-task-design MUST be completed before any implementation or test scripting — they create the iteration path)
 
-## Execution Modes
+## Development Approach (Question 2 — after Mode, before Phase 2)
+
+> ถามหลังเลือก Mode แล้ว ก่อนเข้า Phase 2 — กำหนดลำดับ QA กับ Dev
+
+When entering Phase 2 (after Inception or Lite Inception), ask **Development Approach**:
+
+```text
+อยากทำแบบไหน?
+1. 🧪 TDD (Recommended) — เขียน test ก่อน แล้วค่อยเขียน code ให้ผ่าน
+   ✓ Test coverage สูงตั้งแต่เริ่ม
+   ✓ Code ถูก design ให้ testable
+   ✓ รู้ว่า "เสร็จ" เมื่อไหร่ (test ผ่าน = เสร็จ)
+   ✓ ลด bug ที่หลุดไป production
+
+2. 📋 SDLC — เขียน code ก่อน แล้วค่อยเขียน test ทีหลัง
+   ✓ เห็น working code เร็วกว่า
+   ✓ เหมาะกับ prototype / UI ที่ยังเปลี่ยนบ่อย
+   ✓ ไม่ต้องแก้ test ถ้า design เปลี่ยน
+   ✓ เหมาะกับ exploratory development
+```
+
+**Detection:** If user explicitly says "TDD" or "เขียน test ก่อน" → auto-select TDD. If not specified → default to TDD (Recommended).
+
+---
+
+### 🧪 TDD (Recommended) — QA ก่อน Dev
+
+**Philosophy:** "RED → GREEN → REFACTOR" — เขียน test ที่ fail ก่อน → เขียน code ให้ test ผ่าน → refactor
+
+**ลำดับ:**
+```text
+Phase 2.1 QA Task Design — วาง task breakdown สำหรับ test
+    │
+    ▼
+Phase 2.2 Test Case Design — ออกแบบ test scenarios (BDD)
+    │
+    ▼
+Phase 2.3 QA Architecture — กำหนด test framework structure
+    │
+    ▼
+Phase 2.4 Test Script Design — เขียน test scripts (RED — tests FAIL)
+    │
+    ▼
+Phase 2.5 Dev Task Design — วาง task breakdown สำหรับ code
+    │
+    ▼
+Phase 2.6 Sync Gate — QA + Dev align
+    │
+    ▼
+Phase 3.1 Implementation — เขียน code ให้ tests PASS (GREEN)
+    │
+    ▼
+Phase 3.2 Refactor + Validation — refactor แล้ว run tests อีกรอบ (REFACTOR)
+    │
+    ▼
+Phase 3.3 Create PR
+```
+
+**เหมาะกับ:**
+- มี specs/PBI/requirements ชัดเจนแล้ว (รู้ว่าต้องทำอะไร)
+- ต้องการ confidence สูงว่า code ทำงานถูกต้อง
+- ป้องกัน regression — test เป็น safety net ตั้งแต่แรก
+- Team ที่คุ้นเคยกับ test-first workflow
+
+**ข้อดี:**
+- Test coverage สูงตั้งแต่เริ่ม
+- Code ถูก design ให้ testable
+- ลด bug ที่หลุดไป production
+- Dev รู้ว่า "เสร็จ" เมื่อไหร่ (test ผ่าน = เสร็จ)
+
+**ข้อเสีย:**
+- ถ้า requirements เปลี่ยนบ่อย → test ต้องแก้ตาม
+- ใช้เวลามากกว่าตอนเริ่ม (แต่ประหยัดตอน debug)
+
+---
+
+### 📋 SDLC — Dev ก่อน QA
+
+**Philosophy:** "Design → Build → Test → Ship" — เขียน code ให้ทำงานได้ก่อน แล้วค่อยเขียน test ยืนยัน
+
+**ลำดับ:**
+```text
+Phase 2.5 Dev Task Design — วาง task breakdown สำหรับ code
+    │
+    ▼
+Phase 3.1 Implementation — เขียน code ก่อน
+    │
+    ▼
+Phase 2.1 QA Task Design — วาง task breakdown สำหรับ test
+    │
+    ▼
+Phase 2.2 Test Case Design — ออกแบบ test scenarios (BDD)
+    │
+    ▼
+Phase 2.3 QA Architecture — กำหนด test framework structure
+    │
+    ▼
+Phase 2.4 Test Script Design — เขียน test scripts
+    │
+    ▼
+Phase 3.2 Automated Testing — run tests กับ code ที่มีแล้ว
+    │
+    ▼
+Phase 3.3 Create PR
+```
+
+**เหมาะกับ:**
+- Prototype / MVP ที่ต้องการ working code เร็ว
+- Feature ที่ UI/UX ยังไม่ stable (เปลี่ยนบ่อย)
+- Team ที่ไม่คุ้นกับ test-first
+- Exploratory development — ยังไม่แน่ใจว่า solution จะหน้าตาเป็นยังไง
+
+**ข้อดี:**
+- เห็น working code เร็วกว่า
+- เหมาะกับ rapid prototyping
+- ไม่ต้องเขียน test ใหม่ถ้า design เปลี่ยน
+
+**ข้อเสีย:**
+- Test coverage อาจไม่ครบ (เขียนทีหลังมักลืม edge cases)
+- Code อาจไม่ testable (ไม่ได้ design ให้ test ตั้งแต่แรก)
+- Bug อาจหลุดไป PR ก่อนมี test
+
+---
+
+### Approach Comparison
+
+| มิติ | TDD 🧪 (Recommended) | SDLC 📋 |
+|------|----------------------|----------|
+| **ลำดับ** | QA → Dev (test ก่อน code) | Dev → QA (code ก่อน test) |
+| **Phase order** | 2.1→2.2→2.3→2.4→2.5→3.1→3.2→3.3 | 2.5→3.1→2.1→2.2→2.3→2.4→3.2→3.3 |
+| **Test timing** | เขียน test ก่อน code (RED→GREEN) | เขียน test หลัง code |
+| **Confidence** | สูง (test-first = safety net) | ปานกลาง (test-after = verification) |
+| **Speed to working code** | ช้ากว่า (ต้องเขียน test ก่อน) | เร็วกว่า (code ก่อน) |
+| **เหมาะกับ** | Stable requirements, production code | Prototype, exploratory, unstable UI |
+| **Default** | ✅ Recommended | ใช้เมื่อมีเหตุผลชัดเจน |
+
+---
+
+## Execution Modes (Question 1 — Mode Selection)
 
 AIDLC supports 3 execution modes. User selects mode at start — AI detects from command or asks.
+
+> **Note:** After mode is selected, ask Development Approach (TDD vs SDLC) before entering Phase 2. See "Development Approach" section above.
 
 ### Mode Selection
 
@@ -66,7 +206,7 @@ Platform affects:
 | Android | `mobile-arch.md` | `robotframework-rules/android.md` | ✅ Labels.yaml | ✅ testid-map.md | Robot Framework |
 | iOS | `mobile-arch.md` | `robotframework-rules/ios.md` | ✅ Labels.yaml | ✅ testid-map.md | Robot Framework |
 
-### Mode Phase Matrix
+### Mode Phase Matrix (SDLC Approach — Dev before QA)
 
 | Phase | Full | QA Scenario Only | QA Automation (API/Web) | Dev Only |
 |-------|------|-------------------|-------------------------|----------|
@@ -74,13 +214,32 @@ Platform affects:
 | Lite Inception | ⏭️ skip (does full inception) | ✅ if no specs | ✅ if no specs | ✅ if no specs |
 | Phase 1.1-1.7 (Inception) | ✅ | ⏭️ skip | ⏭️ skip | ⏭️ skip |
 | Phase 1.8 (Brainstorming 3 Amigos) | ✅ (skip for Small) | ⏭️ skip | ⏭️ skip | ⏭️ skip |
+| Phase 2.5 (Dev Task Design) | ✅ **FIRST** | ⏭️ skip | ⏭️ skip | ✅ MANDATORY |
+| Phase 3.1 (Implementation) | ✅ | ⏭️ skip | ⏭️ skip | ✅ |
 | Phase 2.1 (QA Task Design) | ✅ | ✅ MANDATORY | ✅ MANDATORY | ⏭️ skip |
 | Phase 2.2 (Test Case Design) | ✅ | ✅ → DONE | ✅ | ⏭️ skip |
 | Phase 2.3 (QA Architecture) | ✅ | ⏭️ skip | ✅ | ⏭️ skip |
 | Phase 2.4 (Test Script Design) | ✅ | ⏭️ skip | ✅ → DONE | ⏭️ skip |
+| Phase 3.2 (Automated Testing) | ✅ | ⏭️ skip | ⏭️ skip | ⏭️ skip |
+| Phase 3.3 (Create PR) | ✅ | ⏭️ skip | ⏭️ skip | ✅ |
+
+### Mode Phase Matrix (TDD Approach — QA before Dev) ⭐ Recommended
+
+| Phase | Full | QA Scenario Only | QA Automation (API/Web) | Dev Only |
+|-------|------|-------------------|-------------------------|----------|
+| Phase 0 (Project Detection) | ✅ | ✅ | ✅ | ✅ |
+| Lite Inception | ⏭️ skip (does full inception) | ✅ if no specs | ✅ if no specs | ✅ if no specs |
+| Phase 1.1-1.7 (Inception) | ✅ | ⏭️ skip | ⏭️ skip | ⏭️ skip |
+| Phase 1.8 (Brainstorming 3 Amigos) | ✅ (skip for Small) | ⏭️ skip | ⏭️ skip | ⏭️ skip |
+| Phase 2.1 (QA Task Design) | ✅ **FIRST** | ✅ MANDATORY | ✅ MANDATORY | ⏭️ skip |
+| Phase 2.2 (Test Case Design) | ✅ | ✅ → DONE | ✅ | ⏭️ skip |
+| Phase 2.3 (QA Architecture) | ✅ | ⏭️ skip | ✅ | ⏭️ skip |
+| Phase 2.4 (Test Script Design — RED) | ✅ | ⏭️ skip | ✅ → DONE | ⏭️ skip |
 | Phase 2.5 (Dev Task Design) | ✅ | ⏭️ skip | ⏭️ skip | ✅ MANDATORY |
 | Phase 2.6 (Sync Gate) | ✅ | ⏭️ skip | ⏭️ skip | ⏭️ skip |
-| Phase 3.1-3.3 (Construction) | ✅ | ⏭️ skip | ⏭️ skip | ✅ |
+| Phase 3.1 (Implementation — GREEN) | ✅ | ⏭️ skip | ⏭️ skip | ✅ |
+| Phase 3.2 (Refactor + Validation) | ✅ | ⏭️ skip | ⏭️ skip | ✅ |
+| Phase 3.3 (Create PR) | ✅ | ⏭️ skip | ⏭️ skip | ✅ |
 
 ### Hard Rules (ALL modes)
 
@@ -318,9 +477,9 @@ When writing test scripts before UI exists (TDD RED phase):
 ```text
 .aidlc/
 ├── [SYSTEM_KEBAB]/
-│   ├── PROGRESS.md                                ← system-level index (all features in this system)
+│   ├── PROGRESS.md                                ← system-level index (all iterations in this system)
 │   ├── [SYSTEM_FEATURE_KEBAB]/
-│   │   ├── audit.md
+│   │   ├── audit.md                               ← iteration info + phase history
 │   │   ├── dev-task-progress.md                   ← dev task tracking
 │   │   ├── qa-task-progress.md                    ← QA task tracking
 │   │   ├── planning/
@@ -341,7 +500,7 @@ When writing test scripts before UI exists (TDD RED phase):
 │   │           └── implementation-plan.md
 ```
 
-Example: `.aidlc/ecommerce/PROGRESS.md` tracks all ecommerce features (payment, refund, etc.)
+Example: `.aidlc/ecommerce/PROGRESS.md` tracks all ecommerce iterations (payment, refund, etc.)
 
 ## Naming Conventions
 
@@ -358,13 +517,96 @@ ALWAYS maintain `.aidlc/[SYSTEM_KEBAB]/PROGRESS.md`:
 ```markdown
 # AIDLC Progress — {System Name}
 
-| # | Feature | Dev | QA | Status | Date |
-|---|---------|-----|-----|--------|------|
-| 1 | payment | 12/12 | 8/8 | ✅ | 2026-01 |
-| 2 | refund | 0/10 | 0/6 | 🔄 | 2026-02 |
+| Iter | Feature | Sprint | Approach | Mode | Dev | QA | Status | Date |
+|------|---------|--------|----------|------|-----|-----|--------|------|
+| 1 | payment | Sprint 3 | TDD | Full | 12/12 | 8/8 | ✅ | 2026-01 |
+| 2 | refund | Sprint 4 | SDLC | Full | 0/10 | 0/6 | 🔄 Phase 2.5 | 2026-02 |
+| 3 | loyalty | Sprint 4 | TDD | QA Only | — | 5/12 | 🔄 Phase 2.2 | 2026-02 |
 ```
 
-Update when: new feature starts (add row), tasks complete (update counts), feature completes (mark ✅)
+**Columns:**
+- **Iter** — Running iteration number per system (never resets)
+- **Feature** — Feature folder name (kebab-case)
+- **Sprint** — Sprint this iteration belongs to
+- **Approach** — TDD or SDLC (set before Phase 2)
+- **Mode** — Full / QA Only / QA Automation / Dev Only
+- **Dev** — Dev tasks completed/total (or `—` if mode has no dev)
+- **QA** — QA tasks completed/total (or `—` if mode has no QA)
+- **Status** — ✅ Done / 🔄 In Progress (+ current phase) / ⏸️ Paused
+- **Date** — Start date (or completion date if ✅)
+
+**Update when:**
+- New feature starts → add row (assign next iteration #)
+- Tasks complete → update Dev/QA counts
+- Phase changes → update Status
+- Feature completes → mark ✅, update Date to completion date
+
+**Iteration number assignment:**
+- Scan PROGRESS.md → find highest Iter number → +1
+- If PROGRESS.md doesn't exist → start at 1
+
+## Iteration Info (per feature — in audit.md)
+
+Every `audit.md` MUST start with an Iteration Info section:
+
+```markdown
+# Audit Trail — {Feature Name}
+
+## Iteration Info
+
+| Field | Value |
+|-------|-------|
+| Iteration | #{N} |
+| Sprint | Sprint {X} |
+| Mode | Full / QA Only / Dev Only |
+| Approach | TDD / SDLC |
+| PBI | #{id} — {title} |
+| Start Date | YYYY-MM-DD |
+| Branch | feat/{system}-{feature} |
+
+## Phase History
+
+| Phase | Status | Date | Skills Used | Notes |
+|---|---|---|---|---|
+| ... | ... | ... | ... | ... |
+```
+
+**Set at Phase 0:**
+- Iteration #, Sprint, Mode, PBI, Start Date, Branch
+
+**Set before Phase 2:**
+- Approach (TDD / SDLC) — after user answers the approach question
+
+**Used by `/resume`:**
+- AI reads Iteration Info → knows approach → routes Phase 2-3 correctly (TDD: QA→Dev / SDLC: Dev→QA)
+
+## Iteration Lifecycle
+
+```text
+Phase 0 (Project Detection)
+    │
+    ├── Assign iteration # (scan PROGRESS.md → max + 1)
+    ├── Ask: Sprint? (or detect from config/ADO)
+    ├── Ask: Mode? (Full / QA Only / Dev Only)
+    ├── Create folder + audit.md with Iteration Info
+    └── Update PROGRESS.md (add new row)
+    │
+    ▼
+Inception (Phase 1) — if SDLC Full mode
+    │
+    ▼
+Before Phase 2:
+    ├── Ask: Approach? (TDD / SDLC)
+    └── Update audit.md Iteration Info (Approach field)
+    │
+    ▼
+Phase 2-3 (route based on Approach)
+    │
+    ▼
+Feature Complete:
+    ├── Update PROGRESS.md → Status = ✅, Date = completion date
+    └── Update audit.md → final phase entry
+```
 
 ## Multi-Feature Requirements
 
@@ -431,11 +673,23 @@ For output depth examples per level → Read `references/complexity-examples.md`
    - `Notes` — one-line summary of what was produced
 8. **PROGRESS** → Update `.aidlc/[SYSTEM_KEBAB]/PROGRESS.md` with current counts
 9. **KNOWLEDGE** → Capture reusable patterns to `audit.md` Knowledge Buffer section (Read `references/knowledge-buffer.md`)
-10. **MEMORY** → Update `agent-memory/memory.md` Task_Ledger entry for this phase:
+10. **MEMORY** → Update `agent-memory/` (business + coding lessons only):
+
+    **A) Task_Ledger** (`memory.md`) — update if phase produced a real artifact:
     - Format: `[system] / [feature] / Phase [N] [name] [status] — [one-line summary]`
-    - Only update if phase produced a real artifact (decision file, output file, test result)
     - Skip for Q&A, "ทำต่อ", or phases with no new output
-    - If a new reusable pattern was found → append to `agent-memory/playbook.md` (trigger + fix + domain)
+
+    **B) Playbook** (`playbook.md`) — append ONLY if a new lesson matches these domains:
+    | Domain | What to capture | Example |
+    |--------|----------------|---------|
+    | `biz` | Business rules, domain logic, edge cases that affect correctness | Payment 3-call sequence, booking expiry rules |
+    | `arch` | Architecture decisions, patterns, integration gotchas | Microservice boundary, shared service reuse |
+    | `qa` | Test patterns, flaky fixes, data strategies that worked/failed | Interceptor pattern, mock server setup |
+    | `dev` | Coding patterns, build issues, dependency gotchas | Next.js config, Docker compose networking |
+
+    **DO NOT capture:** process/workflow meta, tool config, hook tuning, AIDLC itself, comparisons without decisions (e.g. "A vs B" with no chosen action), program/tool installation steps
+    **Gate:** Only append if trigger+fix is concrete (not "be careful" or "remember to check")
+    **Format:** `| CASE-NNN | [trigger 120 chars max] | [fix 120 chars max] | [domain] | [outcome] | 0 | 0 |`
 
 MANDATORY: Steps 1-9 apply to EVERY phase. Step 10 applies when a phase produces a real artifact. Do NOT skip decision/plan files even if user says "approve" or "ทำต่อ". Create the files first, then ask for approval.
 
@@ -461,8 +715,10 @@ Brownfield start from 1.1, Greenfield start from 1.2
 
 - **1.1** Reverse Engineering → Analyze existing codebase (brownfield only)
   → Use `core/analysis-skills` skill (reverse-eng.md)
+  → **[Kiro]** `invokeSubAgent(name="context-gatherer")` — scan existing codebase before reverse-engineering; pass source folder(s) as contextFiles
 - **1.2** Requirements Gathering → User stories with BDD acceptance criteria
   → Use `core/analysis-skills` skill (requirements.md)
+  → **[Kiro]** `invokeSubAgent(name="requirement-detailer")` — invoke ONCE per user story / PBI item to expand edge cases + AC; if 3+ stories exist, invoke in parallel
   → **MANDATORY after user stories:** run `core/analysis-skills` skill (domain.md) for cross-domain reuse analysis
     - If `{knowledge_root}/business/businessIndex.json` does not exist → skip Steps 1-2, run Step 3 (Impact Assessment) only — set Reusability Score = 0%
     - Never skip domain.md entirely — Impact Assessment is always required
@@ -485,6 +741,7 @@ Brownfield start from 1.1, Greenfield start from 1.2
 - **1.8** Brainstorming (3 Amigos) → PO/Dev/QA subagents review Phase 1 artifacts, identify gaps and tensions
   → Use `core/brainstorming` skill — dispatches subagents per role with Phase 1 artifacts as input
   → Pre-step: run `core/analysis-skills` (gap.md) to feed known gaps to all subagents (scope: all Phase 1 artifacts — broader than Phase 1.2 which only covers requirements)
+  → **[Kiro]** `invokeSubAgent(name="general-task-execution")` × 3 in parallel — one per role (PO, Dev, QA); pass all Phase 1 artifacts + gap.md output as contextFiles; collect all 3 outputs before writing `brainstorming-summary.md`
   → Output: `brainstorming-summary.md` — tensions, open questions, refined scope
   → Skip for Small features (1-2 user stories, single endpoint)
 
@@ -493,6 +750,7 @@ Brownfield start from 1.1, Greenfield start from 1.2
 - **2.1** QA Task Design → Task breakdown for QA automation
   → Use `aidlc` reference (qa-task-design.md)
   → Optional companion: `core/doubt-driven` (for architecture decisions in QA planning)
+  → **[Kiro]** `invokeSubAgent(name="context-gatherer")` — invoke ONCE at start; scan `ai-dlc/knowledge/automation/` + existing test root for reusable patterns before designing tasks
 - **2.2** Test Case Design → BDD test scenarios
   → Use `ai-dlc/qa/test-scenario/` skill + `ai-dlc/rules/test-scenario-rules/` skill
   → **MANDATORY read order within test-scenario skill:**
@@ -507,6 +765,17 @@ Brownfield start from 1.1, Greenfield start from 1.2
     - Each batch (step 4) MUST pause and wait for user approval — never dump all 3 batches at once
     - Data generation (step 5) is MANDATORY after design — never skip
     - CSV export (step 6) is MANDATORY to complete Phase 2.2 — scenarios not exported = phase not done
+
+  ✅ **Upload Gate** (หลัง CSV approved — ก่อน Phase 2.3):
+  - ถาม user: "อัพ Test Scenario ขึ้น Azure DevOps ไหม?"
+  - ถ้า Yes → run script (ไม่ใช้ MCP — ประหยัด token):
+    ```bash
+    npx ts-node --project ai-agent/scripts/azure-devops/tsconfig.json \
+      ai-agent/scripts/azure-devops/upload-ts/uploadTsToAdo.ts \
+      --csv <path-to-csv> --pbi-id <PBI_ID> --ado-project "<project>" --company AXONS
+    ```
+  - Output: `<csv-dir>/ts-azure-ids.md` → TS title → Azure ID mapping
+  - ถ้า No → skip (ทำทีหลังได้ด้วย `azure-devops-bridge/` skill)
 
   ✅ **PO Sign-off Gate** (MANDATORY before Phase 2.3):
   - Present test scenario titles + batch summary to PO
@@ -523,6 +792,7 @@ Brownfield start from 1.1, Greenfield start from 1.2
     - Multi-platform (API + Web UI) → read BOTH api-arch.md + web-arch.md
 - **2.4** Test Script Design → Playwright/Robot Framework scripts (TDD: RED) — runs **parallel with 2.5**
   → Use `playwright-testing` skill or `robotframework-testing` skill
+  → **[Kiro]** `invokeSubAgent(name="general-task-execution")` — when writing 3+ spec files; dispatch per file or per platform; pass `implementation-plan.md`, `testid-map.md`, and coding rules as contextFiles
   → **MANDATORY read order — Playwright (API or Web UI):**
     1. `rules/playwright-rules/references/pw-coding-standards.md` — global AI governance + restrictions
     2. `rules/playwright-rules/references/api.md` — if API platform
@@ -540,6 +810,7 @@ Brownfield start from 1.1, Greenfield start from 1.2
 - **2.5** Dev Task Design → Task breakdown for implementation — runs **parallel with 2.4**
   → Use `aidlc` reference (dev-task-design.md)
   → Contract: Test Scenario (Phase 2.2) + TestId Map (Phase 1.7) — shared with QA
+  → **[Kiro]** `invokeSubAgent(name="context-gatherer")` — invoke ONCE at start; scan source root + `logical-design.md` for existing patterns before designing dev tasks
   → ⚠️ "Parallel" means non-blocking — 2.5 starts as soon as 2.4 has test file skeleton, NOT waiting for full script completion
   → When Kiro executes both: run 2.4 until skeleton exists → immediately start 2.5 → both proceed independently
 - **2.6** Mid-Parallel Sync Gate → QA + Dev align before implementation starts
@@ -556,8 +827,10 @@ Brownfield start from 1.1, Greenfield start from 1.2
 - **3.1** Implementation → TDD: GREEN (code to pass tests)
   → Use `frontend-dev` skill and/or `backend-dev` skill
   → Optional companions: `core/source-driven` (when implementing framework-specific code — verify docs before coding), `core/doubt-driven` (for non-trivial implementation decisions)
+  → **[Kiro]** `invokeSubAgent(name="general-task-execution")` — MANDATORY when 3+ independent tasks exist; dispatch per task batch (group tasks with no shared file dependency); pass `dev-task-progress.md`, `logical-design.md`, and relevant source files as contextFiles
 - **3.2** Automated Testing → TDD: REFACTOR + validation
   → Use `playwright-testing` skill or `robotframework-testing` skill
+  → **[Kiro]** `invokeSubAgent(name="general-task-execution")` — when running/healing 3+ test files in parallel; pass spec files + `implementation-plan.md` as contextFiles
   → **MANDATORY read order — Playwright:**
     1. `rules/playwright-rules/references/pw-coding-standards.md` — re-read before any code changes
     2. `playwright-testing/references/workflow.md` — execute → review → heal cycle
@@ -576,6 +849,7 @@ Brownfield start from 1.1, Greenfield start from 1.2
 - **3.3** Create Pull Request → PR creation + code review
   → Use `devops-pipeline` skill (pull-request.md)
   → Pre-merge gate: use `core/review-personas` skill (code-reviewer + test-engineer + security-auditor)
+  → **[Kiro]** `invokeSubAgent(name="general-task-execution")` × 3 in parallel — dispatch one per review persona (code-reviewer, test-engineer, security-auditor); pass changed files + `audit.md` as contextFiles; collect all 3 outputs before creating PR
 
 ### Operation
 
@@ -628,9 +902,15 @@ For detailed patterns → Use `core/architect` skill (architecture-patterns.md)
 - `"start AI-DLC from create pull request"` — Begin from phase 3.3
 
 ### Session Control
-- `"resume AI-DLC"` — Resume paused iteration
+- `"resume AI-DLC"` — Resume paused iteration (scans PROGRESS.md → finds 🔄 → resumes)
+- `"resume AI-DLC #3"` — Resume specific iteration #3 by number
 - `"reset AI-DLC"` — Reset session
 - `"proceed"` or `"1"` — Approve and continue
+
+### Iteration & Sprint
+- `"/status"` — Show PROGRESS.md (all iterations in current system)
+- `"/sprint Sprint 8"` — Filter PROGRESS.md → show only Sprint 8 iterations
+- `"/retro Sprint 8"` — Generate sprint retrospective summary from PROGRESS.md
 
 ## Mocking Fallback Strategy
 
@@ -675,8 +955,19 @@ If 🔴 Large detected:
 
 ## Project Detection (Phase 0)
 
-Before starting any AIDLC workflow, detect project structure:
+Before starting any AIDLC workflow, detect project structure AND assign iteration:
 
+> **[Kiro]** `invokeSubAgent(name="context-gatherer")` — invoke ALWAYS at Phase 0 before writing any `.aidlc/` file; pass workspace root as context; use output to populate items 1-4 below
+
+**Step A — Iteration Assignment (MANDATORY):**
+1. Determine system name (from user request or existing `.aidlc/` folders)
+2. Read `.aidlc/[system]/PROGRESS.md` → find highest Iter number → assign next #
+3. If PROGRESS.md doesn't exist → this is iteration #1, create PROGRESS.md
+4. Ask user: Sprint? (or detect from ADO config / user message)
+5. Create feature folder + `audit.md` with Iteration Info header
+6. Add new row to PROGRESS.md (Status = 🔄, Approach = TBD until Phase 2)
+
+**Step B — Project Structure Detection:**
 1. **Test Root:** Scan for `playwright.config.ts` or `package.json` with playwright — use parent folder as test root. If not found at `tests/`, ask user.
 2. **Data Storage:** Identify type — SQL DB (PostgreSQL, MySQL), NoSQL (MongoDB, DynamoDB), Spreadsheet, LocalStorage, Firebase Realtime DB, etc.
 3. **Server Logic:** Identify type — REST API (Express, FastAPI), Serverless Functions (AWS Lambda, Cloud Functions), GraphQL, none (frontend-only with external APIs)
@@ -712,274 +1003,26 @@ Store detected values in the feature's progress files (Context section).
 
 ## Decision-Plan-Execute Process
 
-Structured decision-making with mandatory user approval at every phase.
+> ⚠️ MANDATORY: Read `references/workflow-process.md` before starting ANY decision dialog.
+> This section is a summary only — full rules, dialog flow, anti-patterns, and approval patterns are in that file.
 
-### ⛔ HARD STOP — Read Before Anything Else
-
-**NEVER present multiple decisions in one message. Ask ONE at a time. Wait for answer. Then ask next.**
-**NEVER create a decision file BEFORE asking user interactively — dialog FIRST, file AFTER.**
-**Ask ONE question per message as a numbered list. STOP and WAIT for user's answer before asking the next question.**
-
-Violation = broken workflow. If you catch yourself writing D1 + D2 + D3 in one response → DELETE and start over with D1 only.
-
-### When to use
-
-- Before any AIDLC phase that requires user decisions
-- When creating structured deliverables
-- When governance and traceability are required
-
-### Process
-
-1. **Interactive Dialog** — ask decisions ONE at a time (see "Interactive Decision Dialog" below)
-2. **Summarize** — after all Ds answered, confirm with user
-3. **Create Decision File** — write file with all answers filled in
-4. **Create Plan File** — task breakdown based on resolved decisions
-5. **Wait for approval** — user must explicitly approve ("yes", "proceed", "approved")
-6. **Execute Plan** — implement tasks, update checkboxes every 3-5 tasks
-7. **Update Audit Trail** — record phase completion, deliverables, decisions
-
-### Rules
-
-- INTERACTIVE DIALOG FIRST — ask per-question BEFORE creating any file
-- NEVER fill decision answers without asking user first
-- NEVER create decision file with blank answers — file is created AFTER dialog completes
-- STOP after plan — never auto-execute without approval
-- Update plan checkboxes incrementally during execution
+**Key rules (summary):**
+- Dialog FIRST → file AFTER — never create decision file before asking user interactively
+- ONE decision per message — never dump D1+D2+D3 together
+- STOP after plan — never auto-execute without explicit approval
 - Update audit.md at every phase completion
 
-### Interactive Decision Dialog (MANDATORY)
-
-**HARD RULE: Ask ONE decision at a time. Do NOT dump all decisions in a single message.**
-
-#### Flow
-
-1. **Ask D1** — present options as numbered list with recommendation → STOP, wait for answer
-2. **Record D1 answer** → if D1 answer unlocks conditional decisions (e.g., QA Automation → ask Platform), ask that next
-3. **Ask D2** → STOP, wait for answer
-4. **Repeat** until all decisions resolved
-5. **Summarize** all answers in one confirmation message → ask "ถูกต้องมั้ย? ถ้าใช่จะสร้าง Plan"
-6. **Create Decision File** with all answers filled → then create Plan File
-
-#### Format per question
-
-```text
-**D{N}: {Question Title}**
-
-1. {Option A} — {brief description} ← แนะนำ (if applicable)
-2. {Option B} — {brief description}
-3. {Option C} — {brief description}
-
-> แนะนำ: {N} ({reason})
-```
-
-#### Conditional branching
-
-- If D1 = QA Automation → ask Platform (API/Web/Android/iOS) as next question
-- If D1 = QA Scenario Only → skip Platform question
-- If D1 = Dev Only → skip Platform question
-- If D1 = Full → ask Platform later when reaching QA phases
-- Skip questions that become irrelevant based on previous answers
-
-#### Anti-patterns (Do NOT)
-
-- ❌ Present all D1-D4 in one message
-- ❌ Create decision file before asking user interactively
-- ❌ Ask next question before user answers current one
-- ❌ Assume default if user hasn't responded
-
-#### Handling non-answer responses (MANDATORY — applies to EVERY D, EVERY question)
-
-**Scope: This rule applies to D1, D2, D3, D4, and ANY decision question throughout the entire AIDLC workflow — not just the initial mode selection.**
-
-When user responds to a decision question but does NOT give a clear answer (e.g., asks a follow-up, requests comparison, says "อันไหนดีกว่า?", "ต่างกันยังไง?"):
-
-1. **Answer the user's question** — explain, compare, give pros/cons as requested
-2. **Re-ask the SAME decision** — repeat the D{N} question at the end of your response
-3. **Do NOT advance** — stay on the same D{N} until user gives a clear answer (number, letter, or explicit choice)
-4. **Do NOT answer for the user** — never say "I'll go with A since..." or pick a default because user seems unsure
-
-**Example:**
-```text
-User: "ต่างกันยังไง ระหว่าง 1 กับ 2?"
-Agent: [อธิบายความแตกต่าง...]
-       "กลับมาที่ D2 — เลือก 1 หรือ 2?"
-```
-
-**Clear answer patterns:**
-- "1", "2", "A", "B" → accepted
-- "เอา 1", "เลือก A", "แบบแรก" → accepted
-- "ตามที่แนะนำ", "เอาตามนั้น" → use recommended option
-- "อันไหนดี?", "ต่างกันยังไง?", "ถ้าเลือก A จะเป็นยังไง?" → NOT an answer, explain then re-ask
-
-### Approval Patterns
-
-| User says | Action |
-| --------- | ------ |
-| "yes", "proceed", "approved", "ได้", "โอเค", "อนุมัติ", "ตกลง", "เอา" | Continue |
-| "1", "A", "B", "เลือก A", "เอา B" | Use selected option |
-| "yes but...", "ได้ แต่...", "โอเค แต่..." | Address condition first |
-| "no", "wait", "ไม่", "รอก่อน", "ยังไม่", "แก้ก่อน" | Stop and clarify |
-
-### Conversation Guidance (Thai)
-
-All user-facing prompts MUST be in Thai (per Language Policy). Adapt wording to context — these are templates, not scripts.
-
-**Starting decisions (interactive dialog):**
-"เริ่ม AIDLC สำหรับ [feature] — มี [N] ข้อต้องตัดสินใจ ถามทีละข้อนะ"
-
-**Per decision question:**
-"**D{N}: {Question}**\n1. ... 2. ... 3. ...\n> แนะนำ: ..."
-
-**After all decisions answered (summary):**
-"สรุปคำตอบ:\n- D1: ...\n- D2: ...\nถูกต้องมั้ย? ถ้าใช่จะสร้าง Decision file + Plan"
-
-**After creating decision file:**
-"สร้าง Decision file แล้วที่ `[path]` — คำตอบครบแล้ว กำลังสร้าง Plan..."
-
-**After creating plan file:**
-"Plan มี [N] tasks ใน [N] phases — [สรุปสั้นๆ]. เริ่มได้เลยมั้ย?"
-
-**After completing a phase:**
-"Phase [N] เสร็จแล้ว — สร้าง `[file]`. ต่อไป [next phase name] ทำต่อเลยมั้ย?"
-
-**When user intent is ambiguous (dev vs QA):**
-"งานนี้จะทำ Dev, QA, หรือทั้งสอง? 1) Dev (implement) 2) QA (test) 3) ทั้งสอง"
+→ Full details: `references/workflow-process.md`
 
 ## Dialog & Artifact Integration (Kiro)
 
-How AIDLC interacts with users and stores artifacts — applies to ALL AI agents and ALL modes.
+> ⚠️ MANDATORY: Read `references/workflow-dialogs.md` when using Kiro tools or setting up dialog format.
+> This section is a summary only — full tool mapping, examples, and format templates are in that file.
 
-### Core Rules
+**Key rules (summary):**
+- ALL artifacts → `.aidlc/[system]/[feature]/` — never write to `.kiro/specs/`
+- Use `userInput` tool for ALL decisions/approvals — never plain chat text
+- Use `invokeSubAgent` for Phase 3.1 when 3+ independent tasks exist
+- ONE question per `userInput` call — never combine
 
-1. **ALL artifacts → `.aidlc/`** — all modes write everything to `.aidlc/[system]/[feature]/`
-2. **Dialog message format** — ALL AIDLC interactions use structured dialog, not plain chat
-3. **Agent-agnostic** — these rules apply to Kiro, Claude Code, Gemini, and any other AI agent
-4. **⛔ Dialog format: ONE question per message** — Present options as a numbered list. STOP and WAIT for user's answer before asking the next question. Never combine multiple decisions in one response.
-
-### Artifact Path (Single Target)
-
-```text
-ALL modes → .aidlc/[system]/[feature]/
-             ├── planning/decisions/
-             ├── planning/plans/
-             ├── outputs/inception/
-             ├── outputs/construction/
-             ├── dev-task-progress.md
-             ├── qa-task-progress.md
-             └── audit.md
-```
-
-There is no secondary target. AIDLC does NOT write to `.kiro/specs/` or any other location.
-
-### Dialog Message Format
-
-Every AIDLC phase interaction MUST use structured dialog format:
-
-#### Phase Announcement
-
-```text
-📋 Phase {N}: {Phase Name}
-Mode: {Full/QA Only/Dev Only}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-{Phase description — what will happen}
-
-📎 Prerequisites: {list or "✅ all met"}
-📂 Output: {expected file path}
-```
-
-#### Decision Dialog
-
-```text
-🔷 Decision Required — {topic}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-{Context}
-
-Options:
-1. {Option A} — {rationale}
-2. {Option B} — {rationale}
-3. {Option C} — {rationale}
-
-💡 Recommendation: {N} — {why}
-```
-
-#### Progress Update
-
-```text
-✅ {Task/Phase} Complete
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📂 Output: {file path}
-📊 Progress: {N}/{Total} tasks done
-⏭️ Next: {next phase or task}
-```
-
-### Why Dialog Format
-
-- **Readable** — structured blocks are easier to scan than wall-of-text chat
-- **Trackable** — each phase/decision/progress has a clear visual marker
-- **Consistent** — same format regardless of AI agent or IDE
-- **Searchable** — emoji markers (📋, 🔷, ✅, ⚠️) make it easy to find specific interactions
-
-### Kiro-Specific Notes
-
-When running in Kiro IDE:
-
-- Kiro Spec dialog system is separate from AIDLC — AIDLC uses its own `.aidlc/` artifacts
-- If user wants to use Kiro's native Spec feature alongside AIDLC, they can — but AIDLC does not write to `.kiro/specs/`
-
-### Kiro Tool Mapping (MANDATORY)
-
-| AIDLC Interaction | Kiro Tool | Usage |
-|-------------------|-----------|-------|
-| Decision Dialog (options for user) | `userInput` | Use `options` param with title/description/recommended fields |
-| Phase Approval ("→ พร้อมไปต่อ?") | `userInput` | Use options: ["Proceed", "Wait", "Change approach"] |
-| Mode Selection | `userInput` | Use options: ["Full", "QA Only", "Dev Only"] |
-| Brainstorming Scale | `userInput` | Use options: ["Quick", "Normal", "Full"] |
-| Brainstorming Questions | `userInput` | Ask ONE role's question per call — wait for answer — then next role |
-| Task Execution (Phase 3.1) | `invokeSubAgent` | Dispatch per-task with name="general-task-execution" |
-
-**Rules:**
-
-- **NEVER use plain chat text** for decisions/approvals — always `userInput` tool with structured options
-- **ONE question per `userInput` call** — NEVER combine multiple decisions in one call
-- **NEVER skip `invokeSubAgent`** when Phase 3.1 has 3+ independent tasks
-- `userInput` supports `options` (array of strings or objects with title/description/recommended/subOptions)
-- `invokeSubAgent` supports `name`, `prompt`, `explanation`, `contextFiles`
-
-**Example — Decision Dialog via userInput:**
-
-```text
-userInput(
-  question: "🔷 D1: ต้องการเริ่มจาก PBI ไหนก่อนครับ?",
-  options: [
-    { title: "PBI-001 Travel Core", description: "ระบบเดินทางครบวงจร: Flight, JR Pass & AI Trip Planner (Medium)", recommended: true },
-    { title: "PBI-002 Health & Safety", description: "ระบบสุขภาพและความปลอดภัย: Insurance, Allergy & Emergency SOS (Hard)" },
-    { title: "PBI-003 Hospitality", description: "ระบบที่พักและร้านอาหาร: Accommodation & Dining (Easy)" }
-  ]
-)
-```
-
-**Example — Brainstorming Question via userInput:**
-
-```text
-userInput(
-  question: "🧑‍💼 PO Lens (Round 1): ถ้าต้องตัด scope ให้เหลือ MVP — อะไรคือ must-have 3 อันดับแรก?",
-  reason: "general-question"
-)
-```
-
-**Example — Subagent Dispatch:**
-
-```text
-invokeSubAgent(
-  name: "general-task-execution",
-  prompt: "Implement task 3.1.2: Create flight search mock handler...",
-  explanation: "Dispatching independent task to subagent for isolated execution",
-  contextFiles: [
-    { path: ".aidlc/japan-travel/pbi-001/outputs/construction/logical-design.md" },
-    { path: "ai-dlc-skill-testing/tests/api-testing/helpers/japan-travel/shared/mockSetup.ts" }
-  ]
-)
-```
+→ Full details: `references/workflow-dialogs.md`

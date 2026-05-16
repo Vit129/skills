@@ -264,3 +264,25 @@ When Kiro supports parallel `invokeSubAgent`:
    - Option A: All 3 run independently (no cross-role context) — faster but less integrated
    - Option B: PO runs first, then Dev+QA run in parallel with PO context — balanced
 4. Recommended: Option B when parallel support arrives
+
+---
+
+## Anti-Rationalization Table
+
+| Excuse to Skip | Counter-Argument |
+|---|---|
+| "The feature is simple enough — I'll skip gap analysis and go straight to subagent dispatch" | Gap analysis (Step 1) feeds ALL 3 subagents with known unknowns. Without it, roles brainstorm in the dark and miss obvious holes already visible in Phase 1 artifacts. |
+| "I'll combine all 3 role outputs in one subagent call to save tokens" | The context chain is intentional — Dev builds on PO output, QA builds on PO+Dev. Merging them removes the progressive refinement that catches cross-role tensions. |
+| "The user didn't explicitly ask for brainstorming, so I'll skip Phase 1.8" | If the feature has 3+ user stories or multi-context complexity, brainstorming is the default. Skipping it means Phase 2 task design starts without multi-perspective validation. |
+| "I'll let the subagent ask the user clarifying questions directly" | Only the orchestrator uses userInput. Subagents analyze artifacts and flag unknowns — they never interact with the user. Breaking this rule creates chaotic multi-agent conversations. |
+| "Round 2 isn't needed — the first round covered everything" | If any role flagged Open Questions or tensions exist between roles, Round 2 is required. Silently resolving tensions without user input violates the synthesis step. |
+
+---
+
+## Red Flags
+
+- 🚩 Output has no "Tensions & Tradeoffs" section → Roles were not allowed to disagree; re-run synthesis and explicitly look for conflicts between PO/Dev/QA perspectives.
+- 🚩 All 3 role outputs look identical in structure and depth → Subagents were not given their specific lens files; verify each subagent loaded its own `po-lens.md`, `dev-lens.md`, or `qa-lens.md`.
+- 🚩 Brainstorming output references information not in Phase 1 artifacts → Subagents are hallucinating context instead of analyzing what's written; re-anchor them to actual artifact content.
+- 🚩 No `brainstorming-summary.md` written to `.aidlc/` folder → Output was presented in chat only and will be lost; always persist to the designated output path.
+- 🚩 Phase 2 started without user confirming "พร้อมไป Phase 2 ไหม?" via userInput → Handoff rule violated; go back and get explicit user approval before proceeding.

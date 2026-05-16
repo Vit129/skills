@@ -18,8 +18,8 @@ Generate detailed test scenarios and steps using AI reasoning, adhering to 2026 
 - Technical terms can be used in Thai script (e.g., คลิกปุ่ม, เลือก Dropdown)
 
 ## Process
-1. Load `testScenario2026.md` standards
-2. Load tester assignment from `qaAssignTo.json`
+1. Load `ai-dlc/rules/test-scenario-rules/references/ts-standards.md` for design standards
+2. Check `## QA Config` section below for `qaEmail` — if empty, ask user via `userInput` then save it here
 3. Execute Chain-of-Thought (internal only — never show to user)
 4. Generate scenarios in 3 sequential batches:
 
@@ -39,7 +39,7 @@ Generate detailed test scenarios and steps using AI reasoning, adhering to 2026 
 - `Test_type`: API / Mobile UI / Web UI / WindowsApp UI / Other
 - `Priority level`: Critical / High / Medium / Low
 - `Automation test status`: Automated / Automatable / Cannot automate
-- `Assigned to`: tester email from qaAssignTo.json
+- `Assigned to`: tester email from `## QA Config` section in this file
 - `Remaining Work` / `Effort`: hours — use scale below
 
 ### Effort Scale (ALL platforms: API, Web UI, Mobile UI)
@@ -80,7 +80,7 @@ Generate detailed test scenarios and steps using AI reasoning, adhering to 2026 
 **Test_type:** [API/Mobile UI/Web UI/WindowsApp UI/Other]
 **Priority level:** [Critical/High/Medium/Low]
 **Automation test status:** [Automated/Automatable/Cannot automate]
-**Assigned to:** [Tester email from qaAssignTo.json]
+**Assigned to:** [Tester email from ## QA Config section]
 **Remaining Work:** [Hours]
 **Effort:** [Hours]
 ```
@@ -92,3 +92,18 @@ Generate detailed test scenarios and steps using AI reasoning, adhering to 2026 
 - Accepted approval keywords: "อนุมัติ", "โอเค", "ok", "ได้เลย", "ผ่าน", "ใช่", "approve", "yes"
 - Title has NO TS ID prefix — format is `[TestType][Prefix] Verb + Object` only
 - Brief Description: optional, use only for complex scenarios
+
+---
+
+## QA Config
+
+> Auto-saved by agent when user provides QA email. Edit directly if needed.
+
+| Field | Value |
+|-------|-------|
+| `qaEmail` | |
+
+**Rules:**
+- If `qaEmail` is empty → ask user via `userInput` before starting TS design
+- After user confirms → save email to the `qaEmail` row above immediately
+- Use this email for `Assigned to` field in all TS in this session

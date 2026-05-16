@@ -116,8 +116,21 @@ Output in task progress file:
 | Dependency | Mock Type | Success Response | Edge Case Behavior |
 |-----------|----------|-----------------|-------------------|
 | External API | `page.route()` interceptor | return fixture JSON | slow (>5s) → return cached + warning |
+| External API (many endpoints) | HAR replay (`routeFromHAR`) | recorded responses | service down → auto-fallback |
 | Third-party service | mock service class | return stub data | unavailable → fallback to fixture |
 | DB (brownfield) | real DB + TEST_ prefix | real data | conflict → skip with warning |
+
+**HAR vs page.route() Decision:**
+
+| Situation | Use |
+|-----------|-----|
+| Feature has 5+ API endpoints to mock | HAR (record once, mock all) |
+| Need specific error response (4xx, 5xx) | `page.route()` |
+| Backend not ready / unstable | HAR (offline replay) |
+| Dynamic response per test case | `page.route()` |
+| CI/CD needs to run without backend | HAR + `page.route()` hybrid |
+
+> For HAR patterns and recording workflow → see `playwright-testing/references/har-mocking.md`
 
 **Edge Case Mock Rules (MANDATORY):**
 

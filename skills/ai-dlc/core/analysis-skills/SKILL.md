@@ -41,3 +41,25 @@ Foundational analysis tools used across all AIDLC phases.
 | 2. Global fallback | `{project_root}/skills/knowledge/` | No per-project knowledge found — cross-project shared patterns |
 
 **Rule:** Always check per-project first. Fall back to global only if `agent-memory/knowledge/` does not exist in the project tree.
+
+---
+
+## Anti-Rationalization Table
+
+| Excuse to Skip | Counter-Argument |
+|---|---|
+| "I'll load both gap.md and requirements.md together to be thorough" | Hard rule: load ONE reference per request. Each reference is self-contained. Loading multiple creates conflicting instructions and bloated context that degrades output quality. |
+| "The user said 'analyze' so I'll pick whichever reference seems closest" | If the match isn't clear, ASK the user to clarify. Guessing wrong means running the wrong analysis framework entirely — wasted effort and misleading output. |
+| "I'll skip checking per-project knowledge and just use the global fallback" | Per-project knowledge (agent-memory/knowledge/) has project-specific patterns that override generic ones. Skipping it means missing lessons already learned for this exact codebase. |
+| "I don't need discovery-domain.md — I already know what exists from reading code" | Discovery-domain maps business logic and reusable patterns systematically. Ad-hoc code reading misses cross-cutting concerns and domain boundaries that structured discovery catches. |
+| "Gap analysis isn't needed — the requirements are clear enough" | Gap analysis compares required vs actual state. Even "clear" requirements often have implicit assumptions that only surface when systematically compared against what exists. |
+
+---
+
+## Red Flags
+
+- 🚩 Multiple reference files loaded in a single turn → Violates the "load EXACTLY ONE" rule; identify which single analysis the user actually needs and load only that one.
+- 🚩 Analysis output references Figma frames or test scenarios → Wrong skill invoked; Figma analysis belongs to `ux-ui/ui-designer`, test scenario reading belongs to `qa/test-scenario`.
+- 🚩 Knowledge root resolved to global fallback without checking per-project first → Walk up from cwd to find `agent-memory/knowledge/` before falling back to `skills/knowledge/`.
+- 🚩 Agent ran reverse-eng analysis but user asked for gap analysis → Keyword mismatch; re-read the sub-skill routing table and match the user's actual intent.
+- 🚩 Analysis produced recommendations without citing what was found in the codebase → Analysis must be grounded in discovered artifacts, not assumptions; re-run with actual file reads.
