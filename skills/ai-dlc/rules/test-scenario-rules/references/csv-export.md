@@ -92,7 +92,10 @@
 2. Apply sprint tag confirmed at TS design start (col 19 of all TS rows) — do NOT ask again
 3. Generate CSV content
 4. Validate all fields, rows, columns
-5. Export to `test-scenario/[system]/[feature]/testScenario{id}.csv`
+5. Export to `{ts_root}/[system]/[feature]/testScenario{id}.csv`
+   - `{ts_root}` resolves from `qa-task-progress.md` → `## Context` → `Test Scenario Root` field
+   - If `Test Scenario Root` is not set in context → ask user: "Test Scenario Root path คืออะไรครับ? (เช่น `tests/test-scenario`)"
+   - NEVER hardcode the path — always read from context first
 
 ## 9. Post-Export: Map Work Item IDs
 

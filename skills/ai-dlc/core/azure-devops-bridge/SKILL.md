@@ -78,7 +78,7 @@ npx ts-node --project ai-agent/scripts/azure-devops/tsconfig.json \
   --csv <path-to-test-scenarios-api.csv> \
   --pbi-id <PBI_ID> \
   --ado-project "<project>" \
-  --company AXONS
+  --company
 ```
 
 **Script:** `ai-agent/scripts/azure-devops/upload-ts/uploadTsToAdo.ts`

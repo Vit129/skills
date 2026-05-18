@@ -26,7 +26,7 @@ get_network_request       login + navigate           + error mocks
 ```bash
 npx playwright open \
   --save-har=tests/fixtures/har/[system]/[feature].har \
-  https://smartsoft-sit.axonstech.com/salesreturn/login
+  url
 ```
 - Login + navigate ทุกหน้าที่ต้อง test
 - ปิด browser → HAR file ถูกบันทึก

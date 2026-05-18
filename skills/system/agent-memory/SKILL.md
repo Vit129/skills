@@ -118,6 +118,9 @@ task → skill-check (flag if bad) → skill-evolve (propose if good pattern mis
 problem resolved → drafts/ → Save/Discard Gate (2/3 criteria)
   → playbook.md (scored each session) → Applied >= 3 → knowledge/{case-id}.md
   → 3+ same domain → knowledge/{domain}-pattern.md (crystallized)
+  → auto-create skill draft if pattern is actionable + no existing skill covers it
+  → ~/.claude/skills/drafts/{domain}-{name}/SKILL.md (status=draft in skill-log.md)
+  → user approves → move to ~/.claude/skills/{name}/ + sync to all runtimes
 ```
 
 ## Subagent Note

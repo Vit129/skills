@@ -190,12 +190,18 @@ When mode = QA Only, ask further:
 When mode = QA Automation, ask platform:
 
 ```
-Platform ไหน?
+Platform ไหน? (เลือกได้มากกว่า 1)
 1. API
 2. Web UI
 3. Android
 4. iOS
+5. API + Web UI
+6. API + Web UI + Mobile (Android & iOS)
+7. API + Mobile (Android & iOS)
 ```
+
+> **Combined Platform:** เลือก option 5-7 เมื่อ feature มี test ข้าม layer (เช่น API setup + Web UI verify, หรือ API + Mobile deep link)
+> Combined platform ใช้ `shared-fixtures/` เป็น single source of truth สำหรับ test data ที่ใช้ร่วมกัน
 
 Platform affects:
 
@@ -205,6 +211,56 @@ Platform affects:
 | Web UI | `web-arch.md` | `playwright-rules/web-ui.md` | ✅ Labels.ts | ✅ testid-map.md | Playwright |
 | Android | `mobile-arch.md` | `robotframework-rules/android.md` | ✅ Labels.yaml | ✅ testid-map.md | Robot Framework |
 | iOS | `mobile-arch.md` | `robotframework-rules/ios.md` | ✅ Labels.yaml | ✅ testid-map.md | Robot Framework |
+
+### Combined Platform Rules
+
+When multiple platforms are selected (options 5-7):
+
+**Architecture:** Read ALL relevant arch files — produce a single `implementation-plan.md` with sections per platform.
+
+**Coding Rules:** Load ALL relevant coding rules. When conflicts exist, platform-specific rules win over general rules.
+
+**Task Ordering:** Infrastructure (shared) → API tests → Web UI tests → Mobile tests (Android before iOS)
+
+**Shared Fixtures (MANDATORY for combined):**
+- `tests/shared-fixtures/[system]/[feature]/` — cross-layer test data
+- API seed/setup payloads used by Web UI or Mobile tests go here
+- Business data (codes, keywords) shared across platforms go here
+
+**Combined Platform Matrix:**
+
+| Combined Option | Arch Files | Coding Rules | Labels | TestId Map | Frameworks |
+|----------------|-----------|--------------|--------|------------|------------|
+| API + Web UI | `api-arch.md` + `web-arch.md` | `playwright-rules/api.md` + `web-ui.md` | ✅ Labels.ts (Web) | ✅ testid-map.md (Web) | Playwright (both) |
+| API + Web UI + Mobile | `api-arch.md` + `web-arch.md` + `mobile-arch.md` | `playwright-rules/api.md` + `web-ui.md` + `robotframework-rules/android.md` + `ios.md` | ✅ Labels.ts (Web) + Labels.yaml (Mobile) | ✅ testid-map.md (both) | Playwright (API+Web) + Robot Framework (Mobile) |
+| API + Mobile | `api-arch.md` + `mobile-arch.md` | `playwright-rules/api.md` + `robotframework-rules/android.md` + `ios.md` | ✅ Labels.yaml (Mobile) | ✅ testid-map.md (Mobile) | Playwright (API) + Robot Framework (Mobile) |
+
+**Phase behavior for combined platforms:**
+- Phase 2.1 (QA Task Design): Create ONE `qa-task-progress.md` with sections per platform
+- Phase 2.2 (Test Case Design): Tag each scenario with `Test_type` (API / Web UI / Mobile UI)
+- Phase 2.3 (QA Architecture): Produce `implementation-plan.md` with per-platform sections
+- Phase 2.4 (Test Script Design): Write scripts per platform in their respective folders, share fixtures via `shared-fixtures/`
+
+**Folder structure for combined:**
+```text
+tests/
+├── shared-fixtures/[system]/[feature]/
+│   ├── web/[featureName]SharedData.ts
+│   ├── web/[featureName]ApiSetup.ts
+│   ├── mobile/[featureName]SharedData.yaml
+│   └── mobile/[featureName]ApiSetup.yaml
+├── api-testing/[system]/[feature]/
+│   └── [feature].spec.ts
+├── web-testing/[system]/[feature]/
+│   ├── pages/
+│   ├── helpers/
+│   └── [feature].spec.ts
+└── mobile-testing/
+    ├── android/[system]/[feature]/
+    │   └── [feature].robot
+    └── ios/[system]/[feature]/
+        └── [feature].robot
+```
 
 ### Mode Phase Matrix (SDLC Approach — Dev before QA)
 
@@ -772,7 +828,7 @@ Brownfield start from 1.1, Greenfield start from 1.2
     ```bash
     npx ts-node --project ai-agent/scripts/azure-devops/tsconfig.json \
       ai-agent/scripts/azure-devops/upload-ts/uploadTsToAdo.ts \
-      --csv <path-to-csv> --pbi-id <PBI_ID> --ado-project "<project>" --company AXONS
+      --csv <path-to-csv> --pbi-id <PBI_ID> --ado-project "<project>" --company 
     ```
   - Output: `<csv-dir>/ts-azure-ids.md` → TS title → Azure ID mapping
   - ถ้า No → skip (ทำทีหลังได้ด้วย `azure-devops-bridge/` skill)

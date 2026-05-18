@@ -61,21 +61,19 @@ Generate detailed test scenarios and steps using AI reasoning, adhering to 2026 
 
 ## Output Format (Mandatory)
 
+> ⚠️ Format นี้ต้องตรงทุกตัวอักษร — `md2csv.sh` parse โดย regex ที่ exact match
+
 ```markdown
-### Test Scenario: [TS_ID] - [Title]
-**Title:** [TestType][Prefix] คำกริยา + Object + Context
+#### Test Scenario: TS-[NNN] - [TestType][Prefix] Verb + Object
 
-**Brief Description:** (Optional - Use only for complex scenarios)
-[Description text]
+**Pre_conditions:**
+<ul><li>Condition 1</li><li>Condition 2</li></ul>
 
-**Pre_conditions:** (HTML format)
-<div>Condition 1<br>Condition 2</div>
-
-**Test Steps with test data:** (HTML format)
+**Test Steps with test data:**
 <div><ol style="box-sizing:border-box;padding-left:40px;"><li style="box-sizing:border-box;">Action 1</li><li style="box-sizing:border-box;">Action 2</li></ol></div>
 
-**Expected test result:** (HTML format)
-<div>Result 1<br>Result 2</div>
+**Expected test result:**
+<ul><li>Result 1</li><li>Result 2</li></ul>
 
 **Test_type:** [API/Mobile UI/Web UI/WindowsApp UI/Other]
 **Priority level:** [Critical/High/Medium/Low]
@@ -84,6 +82,30 @@ Generate detailed test scenarios and steps using AI reasoning, adhering to 2026 
 **Remaining Work:** [Hours]
 **Effort:** [Hours]
 ```
+
+### PBI Header (MANDATORY — must appear at top of file before any scenario)
+
+```markdown
+**ID Title:** [PBI title]
+**State:** To Do
+**Priority:** 2
+**Area:** [System]\[Feature]
+**Iteration:** [System]\Sprint [N]
+**Assigned To (PO):** [PO email]
+
+### Assign To: [QA email]
+```
+
+### Format Rules (for md2csv.sh compatibility)
+
+| Element | Correct | Wrong |
+|---------|---------|-------|
+| Scenario heading | `#### Test Scenario: TS-001 - Title` | `### Test Scenario:` (3 hashes) |
+| Pre_conditions | `<ul><li>...</li></ul>` | `<div>...<br>...</div>` |
+| Expected result | `<ul><li>...</li></ul>` | `<div>...<br>...</div>` |
+| Test Steps | `<div><ol style="..."><li style="...">...</li></ol></div>` | plain text |
+| JSON in steps | single quotes `{'key': 'value'}` | double quotes `{"key": "value"}` |
+| Path separator | single backslash `\` | double backslash `\\` |
 
 ## Rules
 - API+UI Pairing: separate scenarios (TS-001 API, TS-002 UI) — NOT combined

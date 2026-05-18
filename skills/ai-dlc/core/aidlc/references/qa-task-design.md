@@ -14,8 +14,8 @@ Can start this phase if:
 ### QA Automation mode (Phase 2.1 → 2.2 → 2.3 → 2.4)
 Can start this phase if:
 - [ ] Lite Inception complete (mini-spec.md exists) OR external specs provided
-- [ ] Platform selected (API / Web UI / Android / iOS)
-- [ ] Coding rules reviewed (ai-dlc/rules/playwright-rules or ai-dlc/rules/robotframework-rules)
+- [ ] Platform selected (single: API / Web UI / Android / iOS — or combined: API+Web UI / API+Web UI+Mobile / API+Mobile)
+- [ ] Coding rules reviewed (ai-dlc/rules/playwright-rules and/or ai-dlc/rules/robotframework-rules — load ALL relevant rules for combined platforms)
 
 ### Full mode (Phase 2.1 — after Phase 1.8 Brainstorming)
 Can start this phase if:

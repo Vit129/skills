@@ -104,6 +104,7 @@
 | create new skill | `system/skill-creator/` |
 | create hook | `system/hook-creator/` |
 | agent memory, bootstrap memory, setup memory, session flow, save/discard gate, skill evolve, knowledge pipeline | `system/agent-memory/` |
+| approve skill draft, review draft skill, apply draft | `drafts/` ← review + move to final location + sync |
 | stocktake, skill audit, skill health, stale skills, orphan files | `/stocktake` command ← scan all skills and report health |
 | agent status, dashboard, system health | `ai-agent/scripts/agent-status.sh` ← CLI dashboard |
 

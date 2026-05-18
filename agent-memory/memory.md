@@ -1,7 +1,7 @@
 # Agent Memory — Hot State
 
 <!-- Max 2,500 bytes. Usage updated at session end. See user-profile.md for user preferences. -->
-<!-- Usage: ~2,450/2,500 bytes (98%) -->
+<!-- Usage: ~2,350/2,500 bytes (94%) -->
 
 ## Task_Ledger
 
@@ -11,10 +11,9 @@
 
 | # | Type | Entry | Last Updated |
 |---|------|-------|--------------|
-| 1 | coding | ai-dlc/multi-agent-upgrade/done — curator + self-review-rubric + subagent auto-dispatch (Phase 2.4+3.1) + scheduler | 2026-05-05 |
-| 2 | non-coding | .claude hooks simplified — session-save v5, session-load v4, checkpoint v2, skill-check v2. Skip Q&A, shorter prompts | 2026-05-11 |
-| 3 | non-coding | .claude skills synced — ai-dlc/ synced from VitProjects (AXONS→Test Scenario replace), hook-creator templates updated | 2026-05-11 |
-| 4 | non-coding | Auto Memory research — Dream feature is complementary (not replacement). Keep agent-memory/ for structured AIDLC state, use Auto Memory for session knowledge | 2026-05-11 |
+| 1 | non-coding | .claude hooks simplified — session-save v5, session-load v4, checkpoint v2, skill-check v2. Skip Q&A, shorter prompts | 2026-05-11 |
+| 2 | non-coding | .claude skills synced — ai-dlc/ synced from VitProjects (Test Scenario replace), hook-creator templates updated | 2026-05-11 |
+| 3 | non-coding | Auto-create skill drafts — knowledge-curate hook v2.0: promote/crystallize → auto-draft SKILL.md in skills/drafts/ if criteria pass. skill-map + SKILL.md updated | 2026-05-18 |
 
 ## Recent_Lessons
 
@@ -53,3 +52,5 @@
 - **2026-05-05**: ai-dlc multi-agent: `core/curator/` (grade/consolidate/prune, markdown-only, never delete); `system/agent-memory/references/self-review-rubric.md` (rubric-based review fork); `core/subagent-driven/` upgraded (auto-dispatch + runtime detection + dispatch-log.md aggregation)
 - **2026-05-11**: Auto Memory = complementary layer (not replacement). agent-memory/ keeps structured AIDLC state (Task_Ledger, Playbook, Skill_Flags). Auto Memory keeps session knowledge (build commands, debugging insights). Dream consolidation = manual trigger when needed.
 - **2026-05-11**: Hooks simplified — skip Q&A/ทำต่อ sessions. Memory update moved to AIDLC workflow Step 10 (agent writes directly) instead of relying on askAgent hooks.
+- **2026-05-18**: Hermes Agent evaluated but not adopted (API cost concern). Configs removed. No Hermes integration in any workspace.
+- **2026-05-18**: Auto-create skill drafts: knowledge-curate hook v2.0 creates `skills/drafts/{domain}-{name}/SKILL.md` when promoted/crystallized pattern passes criteria (Applied>=3 OR crystallized, actionable, no existing skill). User approves with "approve skill draft {name}".

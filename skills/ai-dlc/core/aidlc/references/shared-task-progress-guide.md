@@ -17,10 +17,20 @@ Every progress file MUST have these sections:
 - System: {SYSTEM_KEBAB}
 - Feature: {SYSTEM_FEATURE_KEBAB}
 - Workflow: {AIDLC Full | AIDLC Inception Only | QA Automation}
-- Platform: {API | Web UI | Android | iOS}  ← QA only
+- Platform: {API | Web UI | Android | iOS | API+Web UI | API+Web UI+Mobile | API+Mobile}  ← QA only
 - Complexity: {Lightweight | Standard | Full}
 - Test Root: {detected test root path}
+- Test Scenario Root: {path to test-scenario/ folder — e.g. tests/test-scenario}  ← QA only
+- Shared Fixtures: {path to shared-fixtures/ — required for combined platforms}
 ```
+
+> **Combined Platform Note:** When platform is combined (e.g., API+Web UI), list ALL test root paths:
+> ```markdown
+> - Test Root (API): tests/api-testing/[system]/[feature]/
+> - Test Root (Web): tests/web-testing/[system]/[feature]/
+> - Test Root (Mobile): tests/mobile-testing/[platform]/[system]/[feature]/
+> - Shared Fixtures: tests/shared-fixtures/[system]/[feature]/
+> ```
 
 ### Artifacts (MANDATORY)
 

@@ -41,6 +41,30 @@ Step 7: Done ✅
 - Step 6 (CSV Export) is MANDATORY after finalization — never skip
 - AI MUST NOT self-approve any batch — always wait for user
 
+## Batch Skip Guard (MANDATORY — applies when user skips any batch)
+
+When user says "ข้าม", "skip", "ไม่ทำ", "ข้ามไป automation", or any phrase that skips Batch 2, Batch 3, or Data Generation:
+
+**AI MUST immediately ask (via userInput or plain text if userInput unavailable):**
+
+```
+⚠️ คุณกำลังข้าม [Batch 2 / Batch 3 / Data Generation]
+ขั้นตอนที่จะถูกข้ามด้วย:
+- [รายการ steps ที่จะหายไป]
+- Step 6: CSV Export (จะถูกข้ามด้วยถ้าข้าม Data Generation)
+
+ต้องการ:
+1. ข้ามทั้งหมดรวม CSV Export (ไม่ต้อง import Azure DevOps)
+2. ข้าม Batch แต่ยัง Export CSV จาก Batch 1 ที่มีอยู่
+3. ทำต่อตามปกติ (ไม่ข้าม)
+```
+
+**Rules:**
+- NEVER silently skip CSV Export — always surface the consequence to user
+- If user confirms skip including CSV → record in session: `csv_export_skipped = true`
+- If user wants CSV from partial batches → proceed to Step 5 (Data Gen) → Step 6 (CSV Export) using only completed batches
+- This guard fires ONCE per skip event — do not repeat on every message
+
 ## When to Load Each Reference
 
 | Trigger | Load |
@@ -80,6 +104,7 @@ Step 7: Done ✅
 - **Missing metadata** — agent omits `Assigned to`, `Remaining Work`, `Effort` fields → CSV export incomplete
 - **Skipping data-gen** — agent finishes scenarios without generating test data → QA has no data to run tests with
 - **Skipping CSV export** — agent considers Phase 2.2 done without running `md2csv.sh` + `csvValidator.sh` → scenarios not importable to Azure DevOps
+- **Silent batch skip** — user says "ข้ามไป automation" or "ไม่ทำ Batch 2" and agent silently skips CSV Export without asking → user loses Azure DevOps import. Fix: Batch Skip Guard MUST fire immediately when any batch/step is skipped — ask user whether to also skip CSV or export from partial batches.
 
 ---
 

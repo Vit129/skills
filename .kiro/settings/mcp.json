@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "serena": {
+      "command": "serena",
+      "args": ["--project-root", "."],
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
