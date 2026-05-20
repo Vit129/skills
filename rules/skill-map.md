@@ -32,9 +32,12 @@
 | analyze, gap analysis, requirements, reverse-eng | `ai-dlc/core/analysis-skills/` |
 | domain design, DDD, bounded contexts, logical design | `ai-dlc/core/architect/` |
 | verify docs, cite source, official docs, check API version, unverified | `ai-dlc/core/source-driven/` ← use when implementing framework-specific code |
-| debug, fix failing test, triage error, reproduce bug, root cause | `ai-dlc/core/debugging/` ← use when tests fail or behavior is unexpected |
+| debug, fix failing test, triage error, reproduce bug, root cause, /debug-mantra | `ai-dlc/core/debugging/` ← 4-mantra discipline: reproduce → trace → falsify → cross-reference |
 | doubt, adversarial review, verify decision, high stakes, critical path | `ai-dlc/core/doubt-driven/` ← use for non-trivial decisions before committing |
 | review code, pre-merge, security audit, test coverage, ship check | `ai-dlc/core/review-personas/` ← 3 personas: code-reviewer, test-engineer, security-auditor |
+| scrutinize, outsider review, sanity check plan, second opinion on PR | `ai-dlc/core/scrutinize/` ← questions intent first, then traces actual code path end-to-end |
+| post-mortem, RCA, root cause record, document bug fix | `ai-dlc/core/post-mortem/` ← canonical engineering record after fix is validated |
+| management talk, exec summary, rewrite for leadership, status update | `ai-dlc/core/management-talk/` ← rewrite engineer content for management audience |
 
 ### ai-dlc/rules/ — Coding Standards & Rules
 | Keyword | Skill |
