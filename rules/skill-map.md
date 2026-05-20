@@ -79,6 +79,14 @@
 | Keyword | Skill |
 |---------|-------|
 | code tips, productivity tips, workspace setup, claude code setup, เคล็ดลับ claude, ตั้งค่า workspace | `claude-code-tips/` |
+| rewrite for management, exec summary, leadership update, status update, slack update, standup note, make less technical, เขียนให้ management, สรุปให้ผู้บริหาร | `management-talk/` |
+
+### engineering/ — Debugging & Code Review
+| Keyword | Skill |
+|---------|-------|
+| debug, debugging discipline, reproduce bug, trace fail path, falsify hypothesis, /debug-mantra | `debug-mantra/` ← recites 4-mantra at session start, applies in order before any fix |
+| post-mortem, RCA, root cause analysis, document fix, write up bug, postmortem, /post-mortem | `post-mortem/` ← write canonical engineering record after fix is validated |
+| review plan, review PR, review code change, sanity check, second opinion, audit, /scrutinize | `scrutinize/` ← outsider-perspective end-to-end review; questions intent before line-by-line |
 
 ### finance/ — Research & Portfolio
 | Keyword | Skill |
