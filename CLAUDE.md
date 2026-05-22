@@ -11,16 +11,27 @@ Source of truth:
 Cross-session memory (loaded every session):
 - @agent-memory/memory.md
 
-Key references:
-- `rules/agent-core.md`
-- `rules/skill-map.md`
-- `rules/project-rules.md`
-- `rules/response-format.md`
-- `rules/workflow.md`
-- `rules/skills-sync-protocol.md`
-- `rules/citation-format.md`
-- `rules/token_efficient.md`
-- `output-styles/communication-style.md`
+## Rules — Auto (every session)
+
+- `rules/project-rules.md` — AIDLC enforcement, phase gates, language rules
+- `rules/response-format.md` — Done/Next/Why/Options structure
+- `rules/workflow.md` — working style, do/don't list
+
+## Rules — On-demand (read when triggered)
+
+- `rules/agent-core.md` — Read when: complex multi-file implementation, security review, architecture decision, or planning phase
+- `rules/skill-map.md` — Read when: routing to a skill, user invokes `/skill-name`, or skill selection is unclear
+- `rules/frontend.md` — Read when: React, TypeScript, Tailwind, or UI component work
+- `rules/skills-sync-protocol.md` — Read when: creating, updating, or syncing skills across agents
+- `rules/token_efficient.md` — Read when: user asks about context, token optimization, or `/compact`
+- `output-styles/communication-style.md` — Read when: adjusting tone or formatting style
+
+## Skills — On-demand (load via Skill tool when triggered)
+
+Skills are invoked via the `Skill` tool — not auto-loaded. Trigger by keyword or `/skill-name`:
+- `finance/` — investment research, portfolio analysis, stock screening
+- `thai-accountant/` — Thai tax, TFRS, accounting (invoke explicitly)
+- `fitness/` — workout, nutrition, body composition (invoke explicitly)
 
 Generated agent configs:
 - `scripts/sync-agent-instructions.sh` writes `~/.codex/AGENTS.md`
@@ -28,7 +39,7 @@ Generated agent configs:
 
 Project-specific notes:
 - Update `rules/` first, then resync generated configs.
-- Use `rules/skill-map.md` when deciding which skill to load.
+- Use `rules/skill-map.md` (on-demand) when deciding which skill to load.
 - Use `agent-memory/` for session state, playbook, and knowledge promotion.
 
 ## Agent Routing (Plugin-based)
