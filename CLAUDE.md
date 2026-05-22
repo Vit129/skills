@@ -24,6 +24,7 @@ Cross-session memory (loaded every session):
 - `rules/frontend.md` — Read when: React, TypeScript, Tailwind, or UI component work
 - `rules/skills-sync-protocol.md` — Read when: creating, updating, or syncing skills across agents
 - `rules/token_efficient.md` — Read when: user asks about context, token optimization, or `/compact`
+- `rules/graphify-ssot.md` — Single source of truth for Graphify install paths, triggers, Codex config, and Claude/Codex entrypoint wiring
 - `output-styles/communication-style.md` — Read when: adjusting tone or formatting style
 
 ## Skills — On-demand (load via Skill tool when triggered)
@@ -72,3 +73,7 @@ When Auto Memory contains a pattern that has recurred 2+ times or prevented a mi
 
 ### Dream
 Run `/dream` when Auto Memory feels cluttered or after 5+ sessions. It deduplicates entries, removes stale notes, and resolves relative dates. Auto Dream runs automatically every 24h after 5+ sessions — no manual trigger needed unless memory is degraded.
+# graphify
+- Routing SSOT: `rules/graphify-ssot.md`
+- **graphify** - any input to knowledge graph. Trigger: `/graphify`
+When the user types `/graphify`, invoke the Skill tool with `skill: "graphify"` before doing anything else.
