@@ -3,17 +3,17 @@
 #
 # Source of truth: ~/.claude/commands/
 # Targets:
-#   - ~/.codex/commands/    (OpenAI Codex CLI — mirror mode)
+#   - ~/.codex/commands/    (OpenAI Codex — mirror mode)
 #   - ~/.gemini/commands/   (Google Gemini CLI — mirror mode)
 #
 # Usage:
-#   bash .claude/scripts/sync-commands.sh              # sync all enabled targets
-#   bash .claude/scripts/sync-commands.sh --dry-run    # preview without changes
-#   bash .claude/scripts/sync-commands.sh --target codex   # sync only Codex
-#   bash .claude/scripts/sync-commands.sh --target gemini  # sync only Gemini
-#   bash .claude/scripts/sync-commands.sh --list        # show sync config
+#   bash ~/.claude/scripts/sync-commands.sh              # sync all enabled targets
+#   bash ~/.claude/scripts/sync-commands.sh --dry-run    # preview without changes
+#   bash ~/.claude/scripts/sync-commands.sh --target codex
+#   bash ~/.claude/scripts/sync-commands.sh --target gemini
+#   bash ~/.claude/scripts/sync-commands.sh --list
 #
-# Config: .claude/scripts/sync-commands.config.json
+# Config: ~/.claude/scripts/sync-commands.config.json
 
 set -euo pipefail
 
@@ -185,7 +185,7 @@ else
   echo -e "${GREEN}✅ Sync complete!${NC}"
 fi
 echo ""
-echo "  Run again:     bash .claude/scripts/sync-commands.sh"
-echo "  Preview only:  bash .claude/scripts/sync-commands.sh --dry-run"
-echo "  Config:        .claude/scripts/sync-commands.config.json"
+echo "  Run again:     bash ~/.claude/scripts/sync-commands.sh"
+echo "  Preview only:  bash ~/.claude/scripts/sync-commands.sh --dry-run"
+echo "  Config:        ~/.claude/scripts/sync-commands.config.json"
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"

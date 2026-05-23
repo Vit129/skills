@@ -1,21 +1,97 @@
-# Workflow Rules (Tip 19)
+# Workflow, Response Format & Citation
 
 Standard behaviors that apply to every task, every agent, every project.
+
+---
+
+## Response Structure
+
+Every non-trivial response MUST follow this order:
+
+1. **Done** — What was just completed (1–3 bullet points, past tense)
+2. **Next** — What the user needs to do or decide right now (1–3 items)
+3. **Why** — Brief reasoning for the approach taken (1–2 sentences max)
+4. **Options** — (Optional) Proposed next steps for the user to pick from
+
+**Example:**
+```
+Done:
+- Created auth middleware with JWT validation
+- Added 401 error handling
+
+Next:
+- Run: npm test src/auth
+- Confirm token expiry (currently 24h — change if needed)
+
+Why: JWT over session cookies avoids server-side state and works cleanly with the existing REST API.
+
+Options:
+A) Add refresh token rotation now
+B) Ship as-is and revisit in v2
+```
+
+---
+
+## Clarifying Questions Protocol
+
+Before executing any task with ambiguous scope, ask AT MOST 3 targeted questions:
+
+1. What is the expected output/end state?
+2. Are there constraints I should know about (tech, time, budget)?
+3. Should I propose options or just pick the best approach?
+
+Do NOT start generating output before clarifying questions are answered when scope is unclear.
+
+---
+
+## Quality Self-Assessment
+
+Before delivering any output, internally score it 1–10 on: Correctness, Completeness, Clarity.
+
+If score < 9, list specific improvements and apply them before responding.
+
+---
+
+## Test Before Deliver
+
+For any code output:
+- Run the relevant test suite or lint check
+- If tests fail → fix before responding
+- State test result in **Done** section: `Tests: ✓ 12 passed` or `Tests: ✗ 2 failed (fixed)`
+
+---
+
+## Periodic Self-Review
+
+After completing any task that took more than 3 tool calls, append:
+
+```
+Review:
+- What worked well:
+- What could be improved:
+- Suggested next upgrade (with estimated effort):
+```
+
+---
+
+## Context Window Health
+
+Trigger `/compact` when:
+- Conversation exceeds 50 messages, OR
+- Response quality or consistency noticeably degrades
 
 ---
 
 ## Do
 
 - **Read `project_specs.md` first** before writing any code or plan
-- **Ask 3 clarifying questions** when scope is ambiguous (see `rules/response-format.md`)
+- **Ask 3 clarifying questions** when scope is ambiguous
 - **Follow Done→Next→Why→Options** structure for every non-trivial reply
 - **Run tests after every edit** — fix failures before responding
 - **Self-score output to 9/10** — list and apply improvements before delivering
 - **Use `/compact`** when context exceeds 80% or response quality degrades
 - **Load the relevant skill** from `rules/skill-map.md` before starting domain work
 - **Update `agent-memory/memory.md`** after every meaningful decision or task change
-- **Promote Auto Memory patterns** that recur 2+ times → `agent-memory/playbook.md` or `knowledge/`
-- **Run `/dream`** when Auto Memory feels cluttered (Auto Dream triggers every 24h after 5+ sessions)
 
 ## Don't
 
@@ -33,11 +109,21 @@ Standard behaviors that apply to every task, every agent, every project.
 - **Language:** Thai for user interaction, English for generated files and code
 - **Tone:** Direct, evidence-based, no flattery
 - **Code comments:** Only when the WHY is non-obvious — never narrate WHAT
-- **Commit style:** Describe the why, not the what; include session URL
+- **Commit style:** Describe the why, not the what
 
 ---
 
-## Examples of Good Prompts to Give Claude
+## Citation Format
+
+```
+[from: LESSON-AUTH-001]                      ← lesson
+[from: skill:qa/playwright-testing]          ← skill (new paths)
+[from: memory:{wing}/{room}]                 ← memory palace
+```
+
+---
+
+## Example Prompts
 
 | Goal | Prompt Pattern |
 |------|---------------|

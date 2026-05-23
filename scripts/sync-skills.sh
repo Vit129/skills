@@ -1,21 +1,22 @@
 #!/bin/bash
-# sync-skills.sh — Sync AI skills from central source to all AI agent targets
-# Inspired by: James AppzStory's _skills concept (single source → multi-agent sync)
+# sync-skills.sh — Sync AI skills from ~/.claude/skills/ to all AI agent targets
 #
-# Source of truth: configured in sync-skills.config.json
+# Source of truth: ~/.claude/skills/ (configured in sync-skills.config.json)
 # Targets:
 #   - ~/.codex/skills/      (OpenAI Codex — mirror mode)
 #   - ~/.gemini/skills/     (Google Gemini CLI — mirror mode)
-#   - .kiro/steering/       (Kiro IDE — DISABLED: uses kiro-workspace.md synced from KIRO.md)
+#
+# Note: Kiro IDE uses ~/.kiro/skills/ directly — NOT synced from here.
+#       To sync from Kiro → Claude: bash ~/.kiro/scripts/sync-skills-to-claude.sh
 #
 # Usage:
-#   bash .claude/scripts/sync-skills.sh              # sync all enabled targets
-#   bash .claude/scripts/sync-skills.sh --dry-run    # preview without changes
-#   bash .claude/scripts/sync-skills.sh --target codex   # sync only Codex
-#   bash .claude/scripts/sync-skills.sh --target gemini  # sync only Gemini
-#   bash .claude/scripts/sync-skills.sh --list        # show sync config
+#   bash ~/.claude/scripts/sync-skills.sh              # sync all enabled targets
+#   bash ~/.claude/scripts/sync-skills.sh --dry-run    # preview without changes
+#   bash ~/.claude/scripts/sync-skills.sh --target codex
+#   bash ~/.claude/scripts/sync-skills.sh --target gemini
+#   bash ~/.claude/scripts/sync-skills.sh --list
 #
-# Config: .claude/scripts/sync-skills.config.json
+# Config: ~/.claude/scripts/sync-skills.config.json
 
 set -euo pipefail
 
@@ -431,7 +432,7 @@ else
   echo -e "${GREEN}✅ Sync complete!${NC}"
 fi
 echo ""
-echo "  Run again:     bash ai-agent/scripts/sync-skills.sh"
-echo "  Preview only:  bash ai-agent/scripts/sync-skills.sh --dry-run"
-echo "  Config:        ai-agent/scripts/sync-skills.config.json"
+echo "  Run again:     bash ~/.claude/scripts/sync-skills.sh"
+echo "  Preview only:  bash ~/.claude/scripts/sync-skills.sh --dry-run"
+echo "  Config:        ~/.claude/scripts/sync-skills.config.json"
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"

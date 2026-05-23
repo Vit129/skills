@@ -1,13 +1,17 @@
 #!/bin/bash
-# sync-agent-instructions.sh — Generate AGENTS.md and GEMINI.md from ~/.claude/rules
-# Source of truth: sync-agent-instructions.config.json
+# sync-agent-instructions.sh — Generate AGENTS.md and GEMINI.md from ~/.claude/CLAUDE.md
+#
+# Source of truth: ~/.claude/CLAUDE.md + ~/.claude/rules/
+# Targets:
+#   - ~/.codex/AGENTS.md    (OpenAI Codex — generated)
+#   - ~/.gemini/GEMINI.md   (Google Gemini CLI — generated)
 #
 # Usage:
-#   bash .claude/scripts/sync-agent-instructions.sh
-#   bash .claude/scripts/sync-agent-instructions.sh --dry-run
-#   bash .claude/scripts/sync-agent-instructions.sh --target codex
-#   bash .claude/scripts/sync-agent-instructions.sh --target gemini
-#   bash .claude/scripts/sync-agent-instructions.sh --list
+#   bash ~/.claude/scripts/sync-agent-instructions.sh
+#   bash ~/.claude/scripts/sync-agent-instructions.sh --dry-run
+#   bash ~/.claude/scripts/sync-agent-instructions.sh --target codex
+#   bash ~/.claude/scripts/sync-agent-instructions.sh --target gemini
+#   bash ~/.claude/scripts/sync-agent-instructions.sh --list
 
 set -euo pipefail
 
@@ -225,7 +229,7 @@ else
   echo -e "${GREEN}✅ Sync complete!${NC}"
 fi
 echo ""
-echo "  Run again:     bash .claude/scripts/sync-agent-instructions.sh"
-echo "  Preview only:  bash .claude/scripts/sync-agent-instructions.sh --dry-run"
-echo "  Config:        .claude/scripts/sync-agent-instructions.config.json"
+echo "  Run again:     bash ~/.claude/scripts/sync-agent-instructions.sh"
+echo "  Preview only:  bash ~/.claude/scripts/sync-agent-instructions.sh --dry-run"
+echo "  Config:        ~/.claude/scripts/sync-agent-instructions.config.json"
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"

@@ -1,21 +1,21 @@
 #!/bin/bash
-# sync-rules.sh — Sync AI skills from central source to all AI agent targets
-# Inspired by: James AppzStory's _skills concept (single source → multi-agent sync)
+# sync-rules.sh — Sync rules from ~/.claude/rules/ to all AI agent targets
 #
-# Source of truth: configured in sync-rules.config.json
+# Source of truth: ~/.claude/rules/ (configured in sync-rules.config.json)
 # Targets:
-#   - ~/.codex/skills/      (OpenAI Codex — mirror mode)
-#   - ~/.gemini/skills/     (Google Gemini CLI — mirror mode)
-#   - .kiro/steering/       (Kiro IDE — DISABLED: uses kiro-workspace.md synced from KIRO.md)
+#   - ~/.codex/rules/       (OpenAI Codex — mirror mode)
+#   - ~/.gemini/rules/      (Google Gemini CLI — mirror mode)
+#
+# Note: Kiro IDE uses ~/.kiro/rules/ directly — NOT synced from here.
 #
 # Usage:
-#   bash .claude/scripts/sync-rules.sh              # sync all enabled targets
-#   bash .claude/scripts/sync-rules.sh --dry-run    # preview without changes
-#   bash .claude/scripts/sync-rules.sh --target codex   # sync only Codex
-#   bash .claude/scripts/sync-rules.sh --target gemini  # sync only Gemini
-#   bash .claude/scripts/sync-rules.sh --list        # show sync config
+#   bash ~/.claude/scripts/sync-rules.sh              # sync all enabled targets
+#   bash ~/.claude/scripts/sync-rules.sh --dry-run    # preview without changes
+#   bash ~/.claude/scripts/sync-rules.sh --target codex
+#   bash ~/.claude/scripts/sync-rules.sh --target gemini
+#   bash ~/.claude/scripts/sync-rules.sh --list
 #
-# Config: .claude/scripts/sync-rules.config.json
+# Config: ~/.claude/scripts/sync-rules.config.json
 
 set -euo pipefail
 
@@ -431,7 +431,7 @@ else
   echo -e "${GREEN}✅ Sync complete!${NC}"
 fi
 echo ""
-echo "  Run again:     bash ai-agent/scripts/sync-rules.sh"
-echo "  Preview only:  bash ai-agent/scripts/sync-rules.sh --dry-run"
-echo "  Config:        ai-agent/scripts/sync-rules.config.json"
+echo "  Run again:     bash ~/.claude/scripts/sync-rules.sh"
+echo "  Preview only:  bash ~/.claude/scripts/sync-rules.sh --dry-run"
+echo "  Config:        ~/.claude/scripts/sync-rules.config.json"
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
