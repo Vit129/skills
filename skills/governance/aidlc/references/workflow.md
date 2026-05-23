@@ -828,7 +828,7 @@ Brownfield start from 1.1, Greenfield start from 1.2
     ```bash
     npx ts-node --project ai-agent/scripts/azure-devops/tsconfig.json \
       ai-agent/scripts/azure-devops/upload-ts/uploadTsToAdo.ts \
-      --csv <path-to-csv> --pbi-id <PBI_ID> --ado-project "<project>" --company AXONS
+      --csv <path-to-csv> --pbi-id <PBI_ID> --ado-project "<project>" --company Org
     ```
   - Output: `<csv-dir>/ts-azure-ids.md` → TS title → Azure ID mapping
   - ถ้า No → skip (ทำทีหลังได้ด้วย `azure-devops-bridge/` skill)

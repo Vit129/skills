@@ -74,7 +74,7 @@ Commit format: `[PR][AB#xxxxx,AB#yyyyy] Description`
 
 To find Work Items:
 1. Ask user for keyword + tags (e.g., `F3S1 and 2024SP24`)
-2. Search Azure DevOps for "Test Scenario V2" with "Automate" in title
+2. Search Azure DevOps for "Org Test Scenario V2" with "Automate" in title
 3. Let user select → generate `AB#xxxxx,AB#yyyyy` string
 
 ---

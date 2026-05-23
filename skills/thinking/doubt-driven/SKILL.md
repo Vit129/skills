@@ -1,6 +1,7 @@
 ---
 name: doubt-driven
 description: Adversarial self-review for non-trivial decisions. Use when stakes are high (production, security, irreversible), working in unfamiliar code, or when a confident output is cheaper to verify now than debug later. Also serves as outsider-perspective review of plans, PRs, or code changes.
+credit: Inspired by 9arm-skills (https://github.com/thananon/9arm-skills) — engineering/scrutinize
 ---
 
 # Doubt-Driven Development
