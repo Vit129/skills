@@ -47,12 +47,12 @@ Project-specific notes:
 
 | Task | Agent | Trigger |
 |------|-------|---------|
-| **Read / explore project structure** | Google Gemini 3 Flash (`/gemini:rescue`) | อ่านโค้ด, หาไฟล์, ดู structure, grep, explore codebase |
+| **Read / explore project structure** | Google Gemini 3 Flash (`/gemini:rescue`) + Hermes (`hermes`) + Graphify (`/graphify`) | อ่านโค้ด, หาไฟล์, ดู structure, grep, explore codebase |
 | **Planning / architecture** | Claude (main) | วางแผน, ออกแบบ, เลือก approach, spec |
 | **Coding / implementation** | Codex (`/codex:rescue`) | เขียนโค้ด, แก้ bug, refactor, implement feature |
 
 **Rules:**
-- ถ้าต้องการอ่าน project structure → spawn Gemini 3 Flash ก่อน แล้วนำผลลัพธ์มาวางแผน
+- ถ้าต้องการอ่าน project structure → spawn Gemini 3 Flash, Hermes, และ Graphify ก่อน แล้วนำผลลัพธ์มาวางแผน
 - วางแผนใน Claude แล้ว delegate implementation ให้ Codex
 - Claude เป็น orchestrator — ไม่เขียนโค้ดเองถ้า Codex ทำได้
 
