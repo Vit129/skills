@@ -6,6 +6,7 @@
 #
 # Source of truth: ~/.claude/
 # Targets: ~/.codex/  ~/.gemini/
+# Shared skills target for Codex + Gemini: ~/.agents/skills/
 #
 # Usage:
 #   bash ~/.claude/scripts/sync-all.sh              # sync everything
@@ -82,6 +83,35 @@ mirror_dir() {
   echo -e "    ${GREEN}✅ $label → $dst ($count files)${NC}"
 }
 
+# Merge skills into the shared Agent Skills directory without deleting skills
+# installed by tool-specific installers, such as graphify.
+merge_skills_dir() {
+  local label="$1"
+  local src="$2"
+  local dst="$3"
+
+  src="$(expand_path "$src")"
+  dst="$(expand_path "$dst")"
+
+  if [ ! -d "$src" ]; then
+    echo -e "    ${YELLOW}⚠️  Source not found, skipping: $src${NC}"
+    return
+  fi
+
+  if [ "$DRY_RUN" -eq 1 ]; then
+    local count
+    count=$(find "$src" -type f | wc -l | tr -d ' ')
+    echo -e "    ${DIM}would rsync $src/ → $dst/ ($count files, no delete)${NC}"
+    return
+  fi
+
+  mkdir -p "$dst"
+  rsync -a --exclude="*.DS_Store" "$src/" "$dst/" > /dev/null 2>&1
+  local count
+  count=$(find "$dst" -type f | wc -l | tr -d ' ')
+  echo -e "    ${GREEN}✅ $label → $dst ($count files, merged)${NC}"
+}
+
 # Generate AGENTS.md / GEMINI.md from CLAUDE.md with token substitution
 generate_instruction_file() {
   local agent_name="$1"   # e.g. CODEX or GEMINI
@@ -110,11 +140,10 @@ generate_instruction_file() {
   content="${content//Claude Agent Workspace/${agent_name} Agent Workspace}"
   content="${content//CLAUDE.md/${entry_file}}"
   content="${content//rules\//$HOME/.${agent_lower}/rules/}"
-  content="${content//skills\//$HOME/.${agent_lower}/skills/}"
-  content="${content//output-styles\//$HOME/.claude/output-styles/}"
-  content="${content//agent-memory\//$HOME/.claude/agent-memory/}"
+  content="${content//\`output-styles\//\`$HOME/.claude/output-styles/}"
+  content="${content//@agent-memory\//@$HOME/.claude/agent-memory/}"
   content="${content//GRAPH_REPORT.md/$HOME/.claude/GRAPH_REPORT.md}"
-  content="${content//scripts\//$HOME/.claude/scripts/}"
+  content="${content//\`scripts\//\`$HOME/.claude/scripts/}"
 
   printf '%s\n' "$content" > "$dst"
   echo -e "    ${GREEN}✅ Generated $dst${NC}"
@@ -133,7 +162,7 @@ if [ "$LIST_MODE" -eq 1 ]; then
   echo ""
   printf "  %-14s %-30s %s\n" "Step" "Source" "Targets"
   printf "  %-14s %-30s %s\n" "────────────" "──────────────────────────" "──────────────────────────────"
-  printf "  %-14s %-30s %s\n" "skills"       "~/.claude/skills/"         "~/.codex/skills/  ~/.gemini/skills/"
+  printf "  %-14s %-30s %s\n" "skills"       "~/.claude/skills/"         "~/.agents/skills/ (shared Codex + Gemini)"
   printf "  %-14s %-30s %s\n" "rules"        "~/.claude/rules/"          "~/.codex/rules/   ~/.gemini/rules/"
   printf "  %-14s %-30s %s\n" "commands"     "~/.claude/commands/"       "~/.codex/commands/ ~/.gemini/commands/"
   printf "  %-14s %-30s %s\n" "agents"       "~/.claude/.claude/agents/" "~/.codex/agents/  ~/.gemini/agents/"
@@ -153,9 +182,8 @@ echo ""
 
 # ── 1. Skills ────────────────────────────────────────────────────────────────
 if should_run "skills"; then
-  echo -e "  ${BLUE}[1/5] Skills${NC}  ~/.claude/skills/ → codex + gemini"
-  mirror_dir "codex/skills"  "~/.claude/skills" "~/.codex/skills"
-  mirror_dir "gemini/skills" "~/.claude/skills" "~/.gemini/skills"
+  echo -e "  ${BLUE}[1/5] Skills${NC}  ~/.claude/skills/ → ~/.agents/skills/ (shared Codex + Gemini)"
+  merge_skills_dir "agents/skills" "~/.claude/skills" "~/.agents/skills"
   echo ""
 fi
 

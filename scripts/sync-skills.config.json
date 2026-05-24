@@ -1,18 +1,11 @@
 {
   "source": "~/.claude/skills",
   "targets": {
-    "codex": {
+    "agents": {
       "enabled": true,
-      "path": "~/.codex/skills",
-      "description": "OpenAI Codex CLI — mirror all Claude skills into ~/.codex/skills/",
-      "mode": "mirror",
-      "exclude": ["*.DS_Store"]
-    },
-    "gemini": {
-      "enabled": true,
-      "path": "~/.gemini/skills",
-      "description": "Google Gemini CLI — mirror all Claude skills into ~/.gemini/skills/",
-      "mode": "mirror",
+      "path": "~/.agents/skills",
+      "description": "Shared Agent Skills directory used by Codex and Gemini; merge Claude skills here without deleting installer-owned skills.",
+      "mode": "merge",
       "exclude": ["*.DS_Store"]
     }
   },

@@ -36,6 +36,7 @@ Skills are invoked via the `Skill` tool — not auto-loaded. Trigger by keyword 
 - `finance/` — investment research, portfolio analysis, stock screening
 - `thai-accountant/` — Thai tax, TFRS, accounting
 - `fitness/` — workout, nutrition, body composition
+- Shared Codex/Gemini skill root: `~/.agents/skills/`
 - `meta-skills/agent-memory/` — memory bootstrap, session flow, knowledge pipeline
 - See `rules/skill-map.md` for full routing table
 
@@ -102,7 +103,7 @@ Run `/dream` when Auto Memory feels cluttered or after 5+ sessions. Auto Dream t
 Generated agent configs:
 
 - `scripts/sync-agent-instructions.sh` writes `~/.codex/AGENTS.md` and `~/.gemini/GEMINI.md`
-- `scripts/sync-skills.sh` mirrors `skills/` to Codex + Gemini
+- `scripts/sync-all.sh --only skills` merges `skills/` to `~/.agents/skills/` for Codex + Gemini
 - `~/.kiro/scripts/sync-skills-to-claude.sh` syncs `~/.kiro/skills/` → `~/.claude/skills/`
 
 Update `rules/` first, then resync generated configs.

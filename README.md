@@ -22,7 +22,7 @@ Automated bash scripts ensure every CLI tool reads the same rules. Translates gl
 ```bash
 bash scripts/sync-rules.sh              # Mirror rules/ to all agents
 bash scripts/sync-agent-instructions.sh # Regenerate GEMINI.md and AGENTS.md
-bash scripts/sync-skills.sh             # Mirror skills/ to Codex + Gemini
+bash scripts/sync-all.sh --only skills  # Merge skills/ to ~/.agents/skills for Codex + Gemini
 ```
 
 For syncing from `~/.kiro/skills/` (redesigned) → `~/.claude/skills/`:
@@ -152,8 +152,8 @@ bash scripts/sync-agent-instructions.sh  # Regenerate GEMINI.md and AGENTS.md
 ### Managing Skills
 
 ```bash
-# Sync ~/.claude/skills/ → Codex + Gemini
-bash scripts/sync-skills.sh
+# Sync ~/.claude/skills/ → shared Codex + Gemini runtime
+bash scripts/sync-all.sh --only skills
 
 # Sync ~/.kiro/skills/ (redesigned) → ~/.claude/skills/
 bash ~/.kiro/scripts/sync-skills-to-claude.sh

@@ -12,8 +12,8 @@ Use this protocol when creating, updating, renaming, or syncing skills across Cl
       ▼ sync-skills-to-claude.sh
 ~/.claude/skills/        ← CANONICAL (Claude source of truth)
       │
-      ├── sync-skills.sh → ~/.codex/skills/
-      └── sync-skills.sh → ~/.gemini/skills/
+      ▼ sync-all.sh --only skills
+~/.agents/skills/        ← SHARED RUNTIME (Codex + Gemini)
 ```
 
 **Rule:** Edit `~/.kiro/skills/` first (company/shared skills), then sync down. Edit `~/.claude/skills/` directly only for personal skills (finance, fitness, thai-accountant, etc.).
@@ -55,8 +55,8 @@ Each skill folder contains `SKILL.md` (required). No per-skill `CLAUDE.md`/`AGEN
 | Runtime | Skills | Rules | Instruction file |
 |---------|--------|-------|-----------------|
 | Claude | `~/.claude/skills/` | `~/.claude/rules/` | `CLAUDE.md` |
-| Codex | `~/.codex/skills/` | `~/.codex/rules/` | `AGENTS.md` |
-| Gemini | `~/.gemini/skills/` | `~/.gemini/rules/` | `GEMINI.md` |
+| Codex | `~/.agents/skills/` + bundled `~/.codex/skills/.system/` | `~/.codex/rules/` | `AGENTS.md` |
+| Gemini | `~/.agents/skills/` | `~/.gemini/rules/` | `GEMINI.md` |
 | Kiro | `~/.kiro/skills/` | `~/.kiro/rules/` | `~/.kiro/AGENTS.md` |
 
 ---
@@ -73,23 +73,23 @@ bash ~/.kiro/scripts/sync-skills-to-claude.sh --dry-run
 bash ~/.kiro/scripts/sync-skills-to-claude.sh
 ```
 
-### Sync from Claude → Codex + Gemini
+### Sync from Claude → shared Codex + Gemini skills
 
 ```bash
 # Skills
-bash ~/.claude/scripts/sync-skills.sh
+bash ~/.claude/scripts/sync-all.sh --only skills
 
 # Rules
-bash ~/.claude/scripts/sync-rules.sh
+bash ~/.claude/scripts/sync-all.sh --only rules
 
 # Agent instruction files (AGENTS.md, GEMINI.md)
-bash ~/.claude/scripts/sync-agent-instructions.sh
+bash ~/.claude/scripts/sync-all.sh --only instructions
 
 # Commands
-bash ~/.claude/scripts/sync-commands.sh
+bash ~/.claude/scripts/sync-all.sh --only commands
 
 # Agent personas
-bash ~/.claude/scripts/sync-agents.sh
+bash ~/.claude/scripts/sync-all.sh --only agents
 ```
 
 Preview any script: append `--dry-run`
@@ -98,9 +98,7 @@ Preview any script: append `--dry-run`
 
 ```bash
 bash ~/.kiro/scripts/sync-skills-to-claude.sh && \
-bash ~/.claude/scripts/sync-skills.sh && \
-bash ~/.claude/scripts/sync-rules.sh && \
-bash ~/.claude/scripts/sync-agent-instructions.sh
+bash ~/.claude/scripts/sync-all.sh
 ```
 
 ---
@@ -112,14 +110,14 @@ bash ~/.claude/scripts/sync-agent-instructions.sh
 1. Edit in `~/.kiro/skills/<folder>/<skill-name>/SKILL.md`
 2. Update `~/.kiro/AGENTS.md` skill map if new or renamed
 3. Run `bash ~/.kiro/scripts/sync-skills-to-claude.sh`
-4. Run `bash ~/.claude/scripts/sync-skills.sh`
-5. Verify: `ls ~/.codex/skills/<folder>/<skill-name>/`
+4. Run `bash ~/.claude/scripts/sync-all.sh --only skills`
+5. Verify: `ls ~/.agents/skills/<folder>/<skill-name>/`
 
 ### Adding/updating a personal skill (Claude-only)
 
 1. Edit directly in `~/.claude/skills/<skill-name>/SKILL.md`
 2. Update `~/.claude/rules/skill-map.md` if new or renamed
-3. Run `bash ~/.claude/scripts/sync-skills.sh` (mirrors to Codex/Gemini if desired)
+3. Run `bash ~/.claude/scripts/sync-all.sh --only skills` (merges to shared Codex/Gemini runtime)
 
 ### Updating rules
 
@@ -133,10 +131,10 @@ bash ~/.claude/scripts/sync-agent-instructions.sh
 
 ```bash
 # Check skill synced to Codex
-ls ~/.codex/skills/<folder>/<skill-name>/
+ls ~/.agents/skills/<folder>/<skill-name>/
 
 # Check skill synced to Gemini
-ls ~/.gemini/skills/<folder>/<skill-name>/
+gemini skills list | grep <skill-name>
 
 # Check rules synced
 diff ~/.claude/rules/skill-map.md ~/.codex/rules/skill-map.md
@@ -146,7 +144,7 @@ diff ~/.claude/rules/skill-map.md ~/.codex/rules/skill-map.md
 
 ## What NOT To Do
 
-- Do NOT edit `~/.codex/skills/` or `~/.gemini/skills/` directly — they are mirrors
+- Do NOT edit `~/.codex/skills/` or `~/.gemini/skills/` directly — Codex/Gemini runtime skills are centralized in `~/.agents/skills/`
 - Do NOT add per-skill `CLAUDE.md`/`AGENTS.md`/`GEMINI.md` — routing is in `skill-map.md`
 - Do NOT put personal skills in `~/.kiro/skills/` — they belong in `~/.claude/skills/` only
 - Do NOT skip `sync-skills-to-claude.sh` when editing Kiro skills — Claude won't see the changes
