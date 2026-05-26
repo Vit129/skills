@@ -19,6 +19,17 @@ description: >
 
 # AIDLC (AI Development Lifecycle)
 
+## ⛔ Mode Lock
+
+ALLOWED_MODES: [QA Only]
+BLOCKED_MODES: [Full, Dev Only]
+
+If user selects Full or Dev Only → STOP immediately and respond:
+"This mode is temporarily disabled — only QA Only is available."
+Do NOT proceed with any blocked mode regardless of user insistence.
+
+---
+
 Full governance and planning for the complete development lifecycle.
 
 ## Pre-Flight: Mode + Approach Detection (Mandatory — before Phase 2)
@@ -88,6 +99,16 @@ User สามารถ override ได้: "ขอแบบ quick" หรือ
 ## Phase Instructions & Routing
 
 For full phase list, routing table, and anti-shortcut rules → (Read `references/workflow.md`)
+
+## CONTEXT.md — Per-Project Domain Glossary
+
+Every project should have a `CONTEXT.md` at its root — a shared language between human and AI.
+Generated as a side-effect of Phase 1 (domain-design step). Updated inline during interview-me and brainstorming.
+
+- **Format:** See `references/CONTEXT-FORMAT.md`
+- **Create lazily:** Only when the first domain term is resolved
+- **Update inline:** When a term is sharpened during any session, update immediately — don't batch
+- **No implementation details:** Glossary only — what terms mean, not how they're built
 
 ## Templates
 

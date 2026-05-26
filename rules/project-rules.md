@@ -31,3 +31,4 @@
 - **Build:** Build must pass + commit hash required before task is done
 - **Playwright:** no `waitForTimeout()` · `getByTestId` > `getByRole` · AAA pattern
 - **Escalate:** Don't retry the same failing approach 3+ times — hand off or ask
+- **CONTEXT.md (domain glossary):** Every project should have `{project-root}/CONTEXT.md` — a shared language between human and AI. Create lazily during AIDLC Phase 1 (domain-design) or interview-me when the first domain term is resolved. Update inline whenever a term is sharpened — don't batch. Challenge fuzzy/overloaded terms against existing glossary. Format: `governance/aidlc/references/CONTEXT-FORMAT.md`

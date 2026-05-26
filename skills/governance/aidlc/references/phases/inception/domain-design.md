@@ -76,6 +76,19 @@ After completing one context, Continue with next bounded context (repeat from St
 - Which context do other contexts depend on?
 - Which context would provide the most learning for the team?
 
+## CONTEXT.md Generation (Side-Effect)
+
+After domain design is complete, generate or update `{project-root}/CONTEXT.md`:
+
+1. Extract all domain terms (entities, value objects, aggregates, events) from the domain design
+2. Write precise definitions using business language (no implementation details)
+3. Record relationships between terms
+4. If CONTEXT.md already exists — merge new terms, don't overwrite existing definitions
+5. Use format from `references/CONTEXT-FORMAT.md`
+
+**Create lazily** — only when domain terms are resolved. Don't create an empty file.
+**Update inline** — if a term is sharpened later (brainstorming, interview), update immediately.
+
 ## Phase Transition Validation
 
 ### For Microservices (Per Context):

@@ -65,7 +65,16 @@ Remaining unknowns: [list]
 Next most important question: [...]
 ```
 
-### Step 4: Summarize When Done
+### Step 4: Update CONTEXT.md Inline
+
+When a domain term is resolved during the interview:
+- If `{project-root}/CONTEXT.md` exists → add/update the term immediately
+- If it doesn't exist yet → create it when the first term is resolved
+- Use format from `governance/aidlc/references/CONTEXT-FORMAT.md`
+- Challenge fuzzy language: "คุณพูดว่า 'account' — หมายถึง Customer หรือ User? คนละอย่างกันนะ"
+- When user uses a term that conflicts with existing CONTEXT.md → call it out
+
+### Step 5: Summarize When Done
 
 When confidence ≥ 95%, present a summary:
 
