@@ -12,9 +12,7 @@ Graphify turns this workspace into a persistent knowledge graph. Use it as the *
 | Agent | Skill Path |
 |-------|-----------|
 | Claude Code | `~/.claude/skills/graphify/SKILL.md` |
-| Claude Hermes delegation | `~/.claude/skills/meta-skills/hermes-graphify/SKILL.md` |
 | Codex | `~/.agents/skills/graphify/SKILL.md` |
-| Hermes | `~/.hermes/skills/software-development/graphify/SKILL.md` |
 
 ---
 
@@ -83,22 +81,6 @@ graphify path "skills" "rules"
 
 ---
 
-## Hermes Delegation
-
-Use Hermes for second opinions, parallel read-heavy exploration, Home Assistant automation review, and investment codebase cross-referencing.
-
-All Hermes prompts must include the Graphify-first requirement:
-
-```bash
-hermes chat -q "Use graphify query/path/explain first, then answer: <question>"
-```
-
-Chain: **Claude plans → Hermes+Graphify explores → Claude synthesizes.**
-
-Hermes config: `~/.hermes/config.yaml`
-Hermes CLI: `~/.local/bin/hermes`
-
----
 
 ## Platform Install (run once per workspace)
 
@@ -119,7 +101,6 @@ Codex also needs `multi_agent = true` under `[features]` in `~/.codex/config.tom
 | Claude Code / CLI | `graphify cluster-only .` |
 | Gemini CLI | `/graphify .` |
 | Codex CLI | `graphify cluster-only .` or `$graphify .` |
-| Hermes CLI | `graphify cluster-only .` |
 
 ---
 

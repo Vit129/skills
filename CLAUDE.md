@@ -7,7 +7,7 @@ Source of truth:
 - `rules/` for behavior, routing, response format, and skill map
 - `output-styles/communication-style.md` for tone
 - `agent-memory/` for cross-session memory
-- `GRAPHIFY_USAGE.md` for Graphify routing, install paths, and Hermes delegation
+- `GRAPHIFY_USAGE.md` for Graphify routing and install paths
 - `GRAPH_REPORT.md` for structural navigation when present
 
 Cross-session memory (loaded every session):
@@ -46,14 +46,13 @@ Skills are invoked via the `Skill` tool — not auto-loaded. Trigger by keyword 
 
 | Task | Agent | Trigger |
 |------|-------|---------|
-| Read / explore project structure | Gemini 3 Flash + Hermes + Graphify | อ่านโค้ด, หาไฟล์, ดู structure |
-| Hermes CLI delegation | Hermes + Graphify | codebase question, second opinion |
+| Read / explore project structure | Gemini 3 Flash + Graphify | อ่านโค้ด, หาไฟล์, ดู structure |
 | Planning / architecture | Claude (main) | วางแผน, ออกแบบ, เลือก approach |
 | Coding / implementation | Codex | เขียนโค้ด, แก้ bug, refactor |
 
 Rules:
 
-- อ่าน project structure → spawn Gemini 3 Flash, Hermes, Graphify ก่อน แล้วนำผลลัพธ์มาวางแผน
+- อ่าน project structure → spawn Gemini 3 Flash + Graphify ก่อน แล้วนำผลลัพธ์มาวางแผน
 - วางแผนใน Claude แล้ว delegate implementation ให้ Codex
 - Claude เป็น orchestrator — ไม่เขียนโค้ดเองถ้า Codex ทำได้
 

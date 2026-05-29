@@ -114,33 +114,7 @@ graphify path "A" "B"         # Find connection between two nodes
 
 Outputs: `graphify-out/graph.json`, `graphify-out/graph.html`, `graphify-out/GRAPH_REPORT.md`
 
-See `GRAPHIFY_USAGE.md` for full routing, Hermes delegation, and install instructions.
-
-### 6. 🤖 Hermes Delegation
-
-Hermes Agent (NousResearch) handles read-heavy exploration, second opinions, and cross-project analysis:
-
-```bash
-hermes chat -q "Use graphify query/path/explain first, then answer: <question>"
-```
-
-Chain: **Claude plans → Hermes+Graphify explores → Claude synthesizes.**
-
----
-
-## 💻 Tech Stack
-
-| Layer | Technology |
-|:------|:-----------|
-| **Agent CLI** | Claude Code, Google Gemini CLI, OpenAI Codex CLI, Kiro IDE, Hermes Agent |
-| **Knowledge Graph** | Graphify (graphifyy) — tree-sitter AST + community detection |
-| **Sync Engine** | Bash, Python 3, `rsync` |
-| **Data Format** | Markdown (MD), JSON |
-| **Memory Storage** | Flat Markdown tables & lists |
-
----
-
-## 🚀 Quick Start
+See `GRAPHIFY_USAGE.md` for full routing and install instructions.
 
 ### Managing Rules
 
@@ -176,7 +150,7 @@ graphify cluster-only .       # Rerun clustering only (fastest)
 | Path | Purpose |
 |------|---------|
 | `CLAUDE.md` | Entry point — rules index, agent routing, memory protocol |
-| `GRAPHIFY_USAGE.md` | Graphify routing SSOT — install paths, triggers, Hermes delegation |
+| `GRAPHIFY_USAGE.md` | Graphify routing SSOT — install paths and triggers |
 | `rules/agent-core.md` | Core standards: Karpathy principles, security, testing, documentation |
 | `rules/skill-map.md` | Keyword → skill routing table (updated to new flat structure) |
 | `rules/project-rules.md` | AIDLC enforcement, phase gates, language rules |

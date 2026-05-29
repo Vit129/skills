@@ -1,5 +1,6 @@
 ---
 name: interview-me
+description: Use when the user asks to be interviewed, grilled, or clarified one question at a time before writing a spec, plan, or code; helps resolve vague or underspecified requirements until confidence is high.
 version: 1.0.0
 keywords: [interview, สัมภาษณ์, ถามทีละข้อ, clarify requirements, ไม่ชัด, underspecified, grill me, ถามจนชัด]
 last-updated: 2026-05-16
