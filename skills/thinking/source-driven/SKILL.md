@@ -1,6 +1,10 @@
 ---
 name: source-driven
+version: 1.0.0
 description: Grounds framework/library decisions in official documentation. Use when implementing code that depends on specific API versions — verify, cite, flag unverified.
+keywords: [verify docs, cite source, official docs, source-driven, documentation, API version, framework, library, deprecated, unverified]
+last-updated: 2026-05-28
+dependencies: []
 ---
 
 # Source-Driven Development

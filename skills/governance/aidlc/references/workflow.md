@@ -186,6 +186,7 @@ When mode = QA Only, ask further:
 |-------------|---------|--------|--------|
 | QA Scenario Only | `"start AI-DLC QA scenario only"` | Lite Inception (if needed) → 2.1 → 2.2 | test scenarios (CSV/MD) |
 | QA Automation | `"start AI-DLC QA automation"` | Lite Inception (if needed) → 2.1 → 2.2 → 2.3 → 2.4 | test scenarios + test scripts |
+| QA Scenario + Automation | `"start AI-DLC QA scenario automation"` | Lite Inception (if needed) → 2.1 → 2.2 → 2.3 → 2.4 | test scenarios + test scripts (ออก scenario แล้วต่อ automation เลย) |
 
 When mode = QA Automation, ask platform:
 
@@ -729,7 +730,12 @@ For output depth examples per level → Read `references/complexity-examples.md`
    - `Notes` — one-line summary of what was produced
 8. **PROGRESS** → Update `.aidlc/[SYSTEM_KEBAB]/PROGRESS.md` with current counts
 9. **KNOWLEDGE** → Capture reusable patterns to `audit.md` Knowledge Buffer section (Read `references/knowledge-buffer.md`)
-10. **MEMORY** → Update `agent-memory/` (business + coding lessons only):
+10. **GRAPH_REPORT** → Update `{project-root}/GRAPH_REPORT.md` when:
+    - First working feature completed (Phase 2.4 done) → create initial graph
+    - Feature completed (all tests PASS + PR merged) → update affected sections
+    - Use `meta-skills/graph-report/SKILL.md` process (scan → contract → corpus → god nodes → deps → index → surprising)
+    - Skip if no new files were created in this phase
+11. **MEMORY** → Update `agent-memory/` (business + coding lessons only):
 
     **A) Task_Ledger** (`memory.md`) — update if phase produced a real artifact:
     - Format: `[system] / [feature] / Phase [N] [name] [status] — [one-line summary]`
@@ -809,6 +815,10 @@ Brownfield start from 1.1, Greenfield start from 1.2
   → **[Kiro]** `invokeSubAgent(name="context-gatherer")` — invoke ONCE at start; scan `ai-dlc/knowledge/automation/` + existing test root for reusable patterns before designing tasks
 - **2.2** Test Case Design → BDD test scenarios
   → Use `ai-dlc/qa/test-scenario/` skill + `ai-dlc/rules/test-scenario-rules/` skill
+  → **⚠️ MANDATORY PRE-STEP (before any TS design):**
+    1. **PBI Assigned To:** Fetch from ADO via `az boards work-item show --id {PBI_ID}` → `System.AssignedTo.uniqueName` → populate col 20 of PBI row
+    2. **QA Assigned To:** Check `projects.json` for `qaEmail` → if not found, ASK user: "Assigned To (QA email) สำหรับ TS ชุดนี้คืออะไรครับ?" → save to `projects.json` → populate col 20 of all TS rows
+    3. Both values MUST be resolved before writing any CSV — never leave col 20 empty
   → **MANDATORY read order within test-scenario skill:**
     1. `test-scenario-rules/references/ts-standards.md` — title format, priority, language policy
     2. `test-scenario-rules/references/csv-export.md` — 23-column format rules
@@ -938,6 +948,7 @@ For detailed patterns → Use `core/architect` skill (architecture-patterns.md)
 ### QA Only Mode
 - `"start AI-DLC QA scenario only"` — QA Scenario Only: Lite Inception → 2.1 → 2.2
 - `"start AI-DLC QA automation"` — QA Automation: Lite Inception → 2.1 → 2.2 → 2.3 → 2.4 (then asks: API / Web UI / Android / iOS)
+- `"start AI-DLC QA scenario automation"` — QA Scenario + Automation: Lite Inception → 2.1 → 2.2 → 2.3 → 2.4 (ออก scenario แล้วต่อ automation เลย)
 
 ### Dev Only Mode
 - `"start AI-DLC Dev only"` — Dev Only: Lite Inception → 2.5 → 3.1 → 3.2 → 3.3

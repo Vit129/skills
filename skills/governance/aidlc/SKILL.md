@@ -8,7 +8,7 @@ description: >
   "ทำ web", "ทำ api", "ทำ feature", "สร้าง app", "build",
   "test scenario", "test case", "สร้าง test", "เขียน test",
   "automate", "automation", "QA", "testing",
-  "QA only", "Dev only", "QA scenario only", "QA automation",
+  "QA only", "Dev only", "QA scenario only", "QA automation", "QA scenario automation",
   "ทำแค่ QA", "ทำแค่ Dev", "ทำ test อย่างเดียว",
   or needs governance for the AI Development Lifecycle.
   ALL coding, development, and QA work MUST go through this skill first.
@@ -34,10 +34,39 @@ Full governance and planning for the complete development lifecycle.
 
 ## Pre-Flight: Mode + Approach Detection (Mandatory — before Phase 2)
 
-> ถามตามลำดับ: 1) Mode (Full/QA/Dev) → 2) Development Approach (TDD vs SDLC) ก่อนเข้า Phase 2
+> ถามตามลำดับ: 1) Mode (Full/QA/Dev) → 2) QA Sub-Mode (ถ้า QA Only) → 3) Development Approach (TDD vs SDLC) ก่อนเข้า Phase 2
 
 **Question 1 — Execution Mode:**
 - Full / QA Only / Dev Only (detect from command or ask)
+
+**Question 1b — QA Sub-Mode (ถามเฉพาะเมื่อ Mode = QA Only):**
+
+| Sub-Mode | Command | Phases | Output |
+|----------|---------|--------|--------|
+| QA Scenario Only | `"start AI-DLC QA scenario only"` | 2.1 → 2.2 | test scenarios (CSV/MD) |
+| QA Automation | `"start AI-DLC QA automation"` | 2.1 → 2.2 → 2.3 → 2.4 | test scenarios + test scripts |
+| QA Scenario + Automation | `"start AI-DLC QA scenario automation"` | 2.1 → 2.2 → pause → 2.3 → 2.4 | test scenarios (approve first) + test scripts |
+
+ถ้าไม่ระบุ → ถามด้วย 3 ตัวเลือก:
+```
+QA Phase ที่ต้องการทำ?
+A) QA Scenario Only — ออกแบบ Test Scenario (2.1 → 2.2) แล้วจบ
+B) QA Automation — ออกแบบ + เขียน Playwright automation (2.1 → 2.2 → 2.3 → 2.4)
+C) QA Scenario + Automation — ออก scenario ก่อน pause ให้ approve แล้วต่อ automation เลย (2.1 → 2.2 → pause → 2.3 → 2.4)
+```
+
+**QA Scenario + Automation behavior:**
+- Phase 2.1 → 2.2 เสร็จ → pause → แสดง Progress Breadcrumb → รอ user approve scenarios
+- หลัง approve → ต่อ Phase 2.3 → 2.4 ทันที (ไม่ต้องถาม mode อีก)
+
+**When mode = QA Automation or QA Scenario + Automation → ask platform:**
+```
+Platform ไหน? (เลือกได้มากกว่า 1)
+1. API
+2. Web UI
+3. API + Web UI
+4. Android / iOS / Mobile
+```
 
 **Question 2 — Development Approach (ถามก่อนเข้า Phase 2):**
 - `"TDD"` / `"เขียน test ก่อน"` / `"test-first"` → TDD (Recommended)
