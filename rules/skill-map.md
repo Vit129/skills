@@ -18,6 +18,7 @@
 | `/simplify` | `dev/code-simplification/` | Reduce complexity, preserve behavior |
 | `/ship` | `dev/shipping-launch/` | Pre-launch checklist, staged rollout, monitoring |
 | `/resume` | Scan `.aidlc/` → find last phase → continue | Pick up where you left off |
+| `/skill-review` | `agent-memory/skill-usage.log` + `agent-memory/skill-log.md` | Read usage counts → propose improvements → auto-draft for crystallized skills |
 
 > Commands are shortcuts, NOT bypasses — prerequisites still apply.
 
@@ -118,7 +119,8 @@
 | create hook | `meta-skills/hook-creator/` |
 | agent memory, bootstrap memory, setup memory, session flow | `meta-skills/agent-memory/` |
 | hermes delegate, ask hermes, hermes second opinion, hermes graphify | `meta-skills/hermes-graphify/` |
-| approve skill draft, review draft skill | `drafts/` |
+| approve skill draft, review draft skill | `drafts/` → merge `skills/drafts/{name}/SKILL.md` into target skill |
+| skill-review, skill usage, improve skill, skills better | run `/skill-review` — reads `skill-usage.log`, diffs against `skill-log.md`, proposes or drafts improvements |
 
 ## Personal Skills (Claude-only, not synced to Kiro)
 

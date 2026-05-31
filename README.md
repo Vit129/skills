@@ -50,7 +50,7 @@ skills/
 ├── knowledge/           # Reference data (automation, business, lessons)
 ├── templates/           # Reusable templates
 ├── meta-skills/         # Generic reusable skills (agent-memory, skill-creator, graph-report, ...)
-├── drafts/              # Staging area for new skills
+├── drafts/              # Staging area — auto-created by /skill-review when a skill hits ≥3 uses
 │
 │ ── Personal (Claude-only, not synced to Kiro) ──
 ├── finance/             # Investment research, portfolio analysis
@@ -72,7 +72,8 @@ Two complementary layers — neither replaces the other:
 |------|---------|
 | `memory.md` | Hot state: Task_Ledger, Decisions_In_Force, Skill_Flags (2.5KB max) |
 | `playbook.md` | Proven bug fixes and solutions (CASE-xxx, scored) |
-| `skill-log.md` | Skill improvement proposals |
+| `skill-log.md` | Skill improvement proposals (proposed → approved → applied) |
+| `skill-usage.log` | Raw skill invocation log (`DATE\|skill-name`) written by PostToolUse hook |
 | `user-profile.md` | Stable user preferences + inferred work patterns |
 | `knowledge/` | Promoted domain patterns (biz, arch, qa, bug) |
 
@@ -89,7 +90,32 @@ Readable by Claude Code, Kiro, Codex, and Gemini via their respective config fil
 
 **Session Search:** Use `grep_search` across `knowledge/` + `playbook.md` + `memory.md` for cross-session recall before starting a new task.
 
-### 4. 📐 Karpathy Principles & AIDLC
+### 4. 🔁 Skill Self-Improvement Loop
+
+Skills get better automatically over time through a three-layer feedback loop:
+
+```
+Use skill → PostToolUse hook logs DATE|skill-name → skill-usage.log
+                    ↓ (weekly)
+              /skill-review reads log
+              → counts uses per skill
+              → diffs against skill-log.md
+              → writes "proposed" entries for skills with ≥3 uses
+              → auto-drafts skills/drafts/{name}/SKILL.md for crystallized patterns
+                    ↓ (user-gated)
+              "approve skill draft {name}"
+              → Claude merges draft into live skill
+```
+
+**Key rule (CASE-005):** The capture hook is shell-only — no model calls. Only `/skill-review` does model-driven judgment. This prevents the unreliable askAgent pattern.
+
+```bash
+/skill-review                        # Weekly review — propose + draft improvements
+"approve skill draft {name}"         # Merge a draft into the live skill
+"reject skill draft {name}"          # Discard + update skill-log status
+```
+
+### 5. 📐 Karpathy Principles & AIDLC
 
 Enforces strict engineering standards based on Andrej Karpathy's 4 principles (always active via `rules/agent-core.md`):
 
@@ -100,7 +126,7 @@ Enforces strict engineering standards based on Andrej Karpathy's 4 principles (a
 
 Combined with **AIDLC** (AI Development Life Cycle) — a structured workflow that enforces phase gates (Inception → Task Design → Execute) before any code is written.
 
-### 5. 🗺️ Graphify Knowledge Graph
+### 6. 🗺️ Graphify Knowledge Graph
 
 Graphify maps the workspace into a queryable knowledge graph. Agents use it as the **first navigation layer** before broad file reading.
 
@@ -134,6 +160,14 @@ bash ~/.kiro/scripts/sync-skills-to-claude.sh
 ```
 
 Append `--dry-run` to any script to preview changes before applying.
+
+### Skill Self-Improvement
+
+```bash
+/skill-review                        # Review usage log → propose/draft improvements
+"approve skill draft {name}"         # Merge skills/drafts/{name}/SKILL.md into live skill
+cat ~/.claude/agent-memory/skill-usage.log  # Raw usage log (DATE|skill-name per line)
+```
 
 ### Building the Knowledge Graph
 

@@ -91,6 +91,18 @@ When Auto Memory contains a pattern that recurred 2+ times or prevented a mistak
 - Domain knowledge → `agent-memory/knowledge/{domain}.md`
 - Skill improvement → `agent-memory/skill-log.md`
 
+### Skill Self-Improvement Loop
+
+Skills improve automatically through three layers:
+
+| Layer | Mechanism | Who acts |
+|-------|-----------|----------|
+| Capture | `PostToolUse:Skill` hook → appends `DATE\|skill` to `agent-memory/skill-usage.log` | Automatic (shell only, no model call) |
+| Review | `/skill-review` reads log, diffs `skill-log.md`, writes proposals, auto-drafts at ≥3 uses | Claude (model-driven) |
+| Approve | User says `"approve skill draft {name}"` → Claude merges `skills/drafts/{name}/SKILL.md` | User-gated |
+
+Run `/skill-review` weekly or after 5+ skill-heavy sessions.
+
 ### Dream
 
 Run `/dream` when Auto Memory feels cluttered or after 5+ sessions. Auto Dream triggers every 24h after 5+ sessions.

@@ -82,6 +82,29 @@ Trigger `/compact` when:
 
 ---
 
+## Skill Self-Improvement Loop
+
+Skills improve through three layers working together:
+
+**Layer 1 — Capture (automatic)**
+- Every Skill tool invocation → `PostToolUse` hook → appends `DATE|skill-name` to `~/.claude/agent-memory/skill-usage.log`
+- Every session end → `Stop` hook → appends session boundary marker
+- No model call involved — deterministic shell logging only (CASE-005)
+
+**Layer 2 — Review (weekly, run `/skill-review`)**
+- Reads `skill-usage.log` → counts uses per skill
+- Diffs against `skill-log.md` → finds skills with ≥3 uses and no open proposal
+- Writes `proposed` entries to `skill-log.md`
+- Auto-drafts `~/.claude/skills/drafts/{name}/SKILL.md` for crystallized patterns (Applied ≥ 3)
+
+**Layer 3 — Approve (user-triggered)**
+- User says: `"approve skill draft {name}"` → Claude merges draft into live skill
+- Rejected drafts: user says `"reject skill draft {name}"` → Claude removes draft, updates status
+
+**Rule:** Never modify a live skill file from a proposal alone — drafts require explicit approval.
+
+---
+
 ## Do
 
 - **Read `project_specs.md` first** before writing any code or plan
@@ -92,6 +115,7 @@ Trigger `/compact` when:
 - **Use `/compact`** when context exceeds 80% or response quality degrades
 - **Load the relevant skill** from `rules/skill-map.md` before starting domain work
 - **Update `agent-memory/memory.md`** after every meaningful decision or task change
+- **Run `/skill-review`** weekly or after 5+ skill-heavy sessions — never skip the loop
 
 ## Don't
 
@@ -132,3 +156,5 @@ Trigger `/compact` when:
 | Parallel work | "Spawn subagents: A builds X, B builds Y, C writes tests for both." |
 | Create a skill | "I keep doing X — turn this into a reusable skill." |
 | Review quality | "Score this output 1–10 and list specific improvements to reach 9/10." |
+| Improve skills | `/skill-review` — reads usage log, proposes improvements, auto-drafts for ≥3-use patterns |
+| Approve a draft | "approve skill draft {name}" — merges `skills/drafts/{name}/SKILL.md` into live skill |
