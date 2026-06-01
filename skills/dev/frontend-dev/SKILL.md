@@ -1,11 +1,11 @@
 ---
 name: frontend-dev
 description: >
-  This skill should be used when the user asks to "build a React app", "สร้าง React app",
-  "create a Flutter widget", "สร้าง Flutter widget", "set up Tailwind", "ตั้งค่า Tailwind",
-  "configure Vite", "ตั้งค่า Vite", "build Android Kotlin UI", "สร้าง Android UI",
-  "build iOS Swift UI", "สร้าง iOS UI", "write a component", "เขียน component",
-  "implement this design in code", "implement design", "set up Next.js", "ตั้งค่า Next.js",
+  This skill should be used when the user asks to "build a React app",
+  "create a Flutter widget", "set up Tailwind",
+  "configure Vite", "build Android Kotlin UI",
+  "build iOS Swift UI", "write a component",
+  "implement this design in code", "implement design", "set up Next.js",
   "use Server Components", "use React 19 hooks", "use useActionState", "use useOptimistic",
   or needs frontend development guidance for web or mobile applications.
   Use this for IMPLEMENTATION (how to code it), not design decisions (what to build).

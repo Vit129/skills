@@ -918,13 +918,13 @@ Postman uses `eval(pm.collectionVariables.get('fnName'))` to load reusable funct
 ```typescript
 // ❌ Postman — eval pattern
 var verifyError = eval(pm.collectionVariables.get('verifyErrorMessage'));
-verifyError(jsonData, "ข้อมูลไม่ถูกต้อง", "Invalid data");
+verifyError(jsonData, "Invalid data", "Invalid data");
 
 // ✅ Playwright — CollectionHelpers class
 import { CollectionHelpers } from '../helpers/CollectionHelpers';
 
 // Call directly
-CollectionHelpers.verifyErrorMessage(responseJson, "ข้อมูลไม่ถูกต้อง", "Invalid data");
+CollectionHelpers.verifyErrorMessage(responseJson, "Invalid data", "Invalid data");
 ```
 
 ### Creating the CollectionHelpers class

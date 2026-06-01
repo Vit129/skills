@@ -60,24 +60,24 @@ Relationships:
 
 ## Integration Pattern Decision (MANDATORY for Microservices)
 
-เมื่อ architecture = Microservices และมี service-to-service communication ต้องตัดสินใจก่อนออกแบบ:
+When architecture = Microservices and there is service-to-service communication, decide before design:
 
 ### Decision: Sync vs Async
 
-| Pattern | เมื่อไหร่ใช้ | ตัวอย่าง |
+| Pattern | When to Use | Example |
 |---------|------------|---------|
-| **Synchronous (REST/gRPC)** | ต้องการ response ทันที, user รอผล | GET user profile, validate payment |
-| **Asynchronous (Event Bus)** | fire-and-forget, eventual consistency OK | send notification, update audit log |
-| **Async + Outbox Pattern** | async แต่ต้องการ guaranteed delivery | FlightDelayedEvent → Insurance claim |
+| **Synchronous (REST/gRPC)** | Need immediate response, user waits for result | GET user profile, validate payment |
+| **Asynchronous (Event Bus)** | Fire-and-forget, eventual consistency OK | send notification, update audit log |
+| **Async + Outbox Pattern** | Async but need guaranteed delivery | FlightDelayedEvent → Insurance claim |
 
-### Failure Handling (ถ้าเลือก Async)
+### Failure Handling (if choosing Async)
 
-ต้องระบุ failure strategy ด้วย:
-- **Outbox Pattern** — store event ใน DB ก่อน, retry ทีหลัง (guaranteed delivery)
-- **Dead Letter Queue** — event ที่ fail ซ้ำ → ส่งไป DLQ สำหรับ manual review
-- **Idempotency** — consumer ต้อง handle duplicate events ได้
+Must specify failure strategy:
+- **Outbox Pattern** — store event in DB first, retry later (guaranteed delivery)
+- **Dead Letter Queue** — events that fail repeatedly → send to DLQ for manual review
+- **Idempotency** — consumer must handle duplicate events
 
-### Output เพิ่มเติม (Microservices)
+### Additional Output (Microservices)
 
 ```text
 Integration Patterns:

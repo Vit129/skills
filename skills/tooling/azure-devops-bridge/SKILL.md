@@ -2,7 +2,7 @@
 name: azure-devops-bridge
 description: >
   Bridge between Azure DevOps and AIDLC workflow.
-  Triggers: "ทำ PBI #xxx", "ดู Bug #xxx", "upload TS", "close PBI",
+  Triggers: "PBI #xxx", "Bug #xxx", "upload TS", "close PBI",
   "sync Azure", "sprint report", "PBI xxx", "bug workflow"
   This skill uses MCP azure-devops tools directly — no scripts needed.
 version: 1.0.0
@@ -23,13 +23,13 @@ When a user message matches any of these patterns → activate this skill:
 
 | Pattern | Action |
 |---------|--------|
-| `PBI #xxx` or `ทำ PBI xxx` | → fetch-pbi → AIDLC |
-| `Bug #xxx` or `ดู Bug xxx` or `แก้ Bug xxx` | → bug-workflow |
-| `upload TS` or `อัพ test scenario` | → upload-ts |
-| `close PBI` or `ปิด PBI xxx` | → close-pbi |
-| `sprint report` or `สรุป sprint` | → sprint-report |
-| `pipeline status` or `ดู pipeline` or `build status` or `CI status` | → pipeline-status |
-| `pipeline พัง` or `build failed` or `CI แดง` or `แก้ pipeline` | → pipeline-fix |
+| `PBI #xxx` | → fetch-pbi → AIDLC |
+| `Bug #xxx` | → bug-workflow |
+| `upload TS` | → upload-ts |
+| `close PBI` | → close-pbi |
+| `sprint report` | → sprint-report |
+| `pipeline status` or `build status` or `CI status` | → pipeline-status |
+| `pipeline failed` or `build failed` or `CI error` | → pipeline-fix |
 | Azure DevOps URL (dev.azure.com/...) | → extract ID → route |
 
 ---
@@ -198,7 +198,7 @@ npx ts-node --project ai-agent/scripts/azure-devops/tsconfig.json \
 
 ### 5. Sprint Report (sprint-report)
 
-**When:** "สรุป sprint" or "sprint report"
+**When:** "sprint report" or "sprint summary"
 
 **Steps:**
 
@@ -221,7 +221,7 @@ npx ts-node --project ai-agent/scripts/azure-devops/tsconfig.json \
 
 ### 6. Pipeline Status (pipeline-status)
 
-**When:** "ดู pipeline", "pipeline status", "build status", "CI status", "view latest build"
+**When:** "pipeline status", "build status", "CI status", "view latest build"
 
 **Method A: Script (preferred — fast, no token cost)**
 
@@ -259,7 +259,7 @@ curl -s -u ":$AZURE_DEVOPS_PAT" \
 
 ### 7. Pipeline Diagnose & Fix (pipeline-fix)
 
-**When:** "pipeline พัง", "build failed fix it", "view error in pipeline", "CI แดง"
+**When:** "pipeline failed", "build failed fix it", "view error in pipeline", "CI error"
 
 **Flow:**
 

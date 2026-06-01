@@ -1,17 +1,16 @@
 ---
 name: devops-pipeline
 description: >
-  This skill should be used when the user asks to "create a pipeline", "สร้าง pipeline",
-  "set up CI/CD", "ตั้งค่า CI/CD", "create a pull request", "สร้าง pull request",
+  This skill should be used when the user asks to "create a pipeline",
+  "set up CI/CD", "create a pull request",
   "link work items", "link work item", "sync to DevOps", "sync DevOps",
-  "set up GitHub Actions", "ตั้งค่า GitHub Actions", "set up GitLab CI", "add workflow YAML",
+  "set up GitHub Actions", "set up GitLab CI", "add workflow YAML",
   "OIDC authentication", "keyless deployment", "reusable workflows",
-  "concurrency control", "คอมมิต", "พุช", "commit", "push",
+  "concurrency control", "commit", "push",
   or needs pipeline YAML generation, cron scheduling, test command selection, or PR creation with work item linking.
   Supports Azure DevOps, GitHub Actions, and GitLab CI.
   Also covers DevSecOps: "scan Docker image", "Trivy", "CodeQL", "secret detection",
-  "Gitleaks", "SAST", "SCA", "security gate in pipeline", "shift-left security",
-  "สแกน Docker image", "ตรวจสอบ security".
+  "Gitleaks", "SAST", "SCA", "security gate in pipeline", "shift-left security".
 version: 1.0.0
 last_improved: 2026-05-31
 improvement_count: 0
@@ -37,7 +36,7 @@ Create CI/CD pipelines and manage pull requests across Azure DevOps, GitHub Acti
 | "create PR", "pull request", "link work items", "test summary" | `references/pull-request.md` |
 | "sync to DevOps", "create work items", "create tasks via MCP" | `references/azure-sync.md` |
 | "GitHub Actions", "workflow YAML", "GitHub CI", "branch protection" | `references/github-actions.md` |
-| "commit", "push", "git commit", "คอมมิต", "พุช" | `references/git-commit.md` |
+| "commit", "push", "git commit" | `references/git-commit.md` |
 | "scan image", "Trivy", "CodeQL", "Gitleaks", "SAST", "SCA", "secret scan", "security gate" | `references/security-scanning.md` |
 
 Ask which platform if not stated, then follow the appropriate reference:

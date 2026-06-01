@@ -1,15 +1,14 @@
 ---
 name: aidlc
 description: >
-  This skill should be used when the user asks to "start AIDLC", "เริ่ม AI-DLC", "start AI-DLC",
-  "create a decision file", "สร้าง decision", "plan the execution", "วางแผน",
-  "break down tasks", "แบ่งงาน", "resume AI-DLC", "ทำต่อ",
+  This skill should be used when the user asks to "start AIDLC", "start AI-DLC",
+  "create a decision file", "plan the execution",
+  "break down tasks", "resume AI-DLC",
   "start from domain design", "start from logical design",
-  "ทำ web", "ทำ api", "ทำ feature", "สร้าง app", "build",
-  "test scenario", "test case", "สร้าง test", "เขียน test",
+  "build web", "build api", "build feature", "create app", "build",
+  "test scenario", "test case", "create test", "write test",
   "automate", "automation", "QA", "testing",
   "QA only", "Dev only", "QA scenario only", "QA automation", "QA scenario automation",
-  "ทำแค่ QA", "ทำแค่ Dev", "ทำ test อย่างเดียว",
   or needs governance for the AI Development Lifecycle.
   ALL coding, development, and QA work MUST go through this skill first.
   Supports 3 modes: Full (default), QA Only, Dev Only.
@@ -45,7 +44,7 @@ Full governance and planning for the complete development lifecycle.
 
 ## Pre-Flight: Mode + Approach Detection (Mandatory — before Phase 2)
 
-> ถามตามลำดับ: 1) Mode (Full/QA/Dev) → 2) QA Sub-Mode (ถ้า QA Only) → 3) Development Approach (TDD vs SDLC) ก่อนเข้า Phase 2
+> Ask in order: 1) Mode (Full/QA/Dev) → 2) QA Sub-Mode (if QA Only) → 3) Development Approach (TDD vs SDLC) before entering Phase 2
 
 **Question 1 — Execution Mode:**
 - Full / QA Only / Dev Only (detect from command or ask)
@@ -58,34 +57,34 @@ Full governance and planning for the complete development lifecycle.
 | QA Automation | `"start AI-DLC QA automation"` | 2.1 → 2.2 → 2.3 → 2.4 | test scenarios + test scripts |
 | QA Scenario + Automation | `"start AI-DLC QA scenario automation"` | 2.1 → 2.2 → pause → 2.3 → 2.4 | test scenarios (approve first) + test scripts |
 
-ถ้าไม่ระบุ → ถามด้วย 3 ตัวเลือก:
+If not specified → ask with 3 options:
 ```
-QA Phase ที่ต้องการทำ?
-A) QA Scenario Only — ออกแบบ Test Scenario (2.1 → 2.2) แล้วจบ
-B) QA Automation — ออกแบบ + เขียน Playwright automation (2.1 → 2.2 → 2.3 → 2.4)
-C) QA Scenario + Automation — ออก scenario ก่อน pause ให้ approve แล้วต่อ automation เลย (2.1 → 2.2 → pause → 2.3 → 2.4)
+Which QA Phase do you want?
+A) QA Scenario Only — Design Test Scenario (2.1 → 2.2) then done
+B) QA Automation — Design + write Playwright automation (2.1 → 2.2 → 2.3 → 2.4)
+C) QA Scenario + Automation — Design scenario first, pause for approval, then continue automation (2.1 → 2.2 → pause → 2.3 → 2.4)
 ```
 
 **QA Scenario + Automation behavior:**
-- Phase 2.1 → 2.2 เสร็จ → pause → แสดง Progress Breadcrumb → รอ user approve scenarios
-- หลัง approve → ต่อ Phase 2.3 → 2.4 ทันที (ไม่ต้องถาม mode อีก)
+- Phase 2.1 → 2.2 complete → pause → show Progress Breadcrumb → wait for user to approve scenarios
+- After approval → continue Phase 2.3 → 2.4 immediately (no need to ask mode again)
 
 **When mode = QA Automation or QA Scenario + Automation → ask platform:**
 ```
-Platform ไหน? (เลือกได้มากกว่า 1)
+Which platform? (can select more than 1)
 1. API
 2. Web UI
 3. API + Web UI
 4. Android / iOS / Mobile
 ```
 
-**Question 2 — Development Approach (ถามก่อนเข้า Phase 2):**
-- `"TDD"` / `"เขียน test ก่อน"` / `"test-first"` → TDD (Recommended)
-- `"SDLC"` / `"code ก่อน"` / `"implement ก่อน"` → SDLC
+**Question 2 — Development Approach (ask before entering Phase 2):**
+- `"TDD"` / `"write test first"` / `"test-first"` → TDD (Recommended)
+- `"SDLC"` / `"code first"` / `"implement first"` → SDLC
 - Not specified → default to TDD (Recommended)
 
-**TDD (Recommended):** QA ก่อน Dev — เขียน test ก่อน แล้วค่อยเขียน code ให้ผ่าน (RED→GREEN→REFACTOR)
-**SDLC:** Dev ก่อน QA — เขียน code ก่อน แล้วค่อยเขียน test ทีหลัง
+**TDD (Recommended):** QA first, then Dev — write test first, then write code to pass (RED→GREEN→REFACTOR)
+**SDLC:** Dev first, then QA — write code first, then write test later
 
 **Detection:**
 - **Kiro IDE:** reads Vibe/Spec mode from IDE context (user selects in UI, never types it)
@@ -97,11 +96,11 @@ For detection logic, approach comparison, phase matrices, Vibe flow, escalation 
 
 ## Phase 1.8: Brainstorming — 3 Amigos Review (after Inception, before Task Design)
 
-> ทำหลัง Phase 1 (Inception) เสร็จ — ก่อนเข้า Phase 2 (Task Design)
+> Execute after Phase 1 (Inception) completes — before entering Phase 2 (Task Design)
 > Load `thinking/brainstorming/SKILL.md` → dispatch PO/Dev/QA subagents → synthesize → refine if needed → proceed to Phase 2
 
-**Why here?** เหมือนทำงานจริง — PO ให้ requirement มาแล้ว (Phase 1) → ทีมคุยกัน (3 amigos)
-→ ตกผลึก → แล้วค่อยแบ่งงาน (Phase 2)
+**Why here?** Like real work — PO provides requirements (Phase 1) → team discusses (3 amigos)
+→ crystallizes → then break down tasks (Phase 2)
 
 **Input:** Phase 1 artifacts (user-stories.md, domain-design.md, logical-design.md)
 **Output:** `.aidlc/[system]/[feature]/outputs/inception/brainstorming-summary.md`
@@ -111,7 +110,7 @@ For detection logic, approach comparison, phase matrices, Vibe flow, escalation 
 **Skip this step if:**
 - Small feature (1-2 user stories, single endpoint) — go directly to Phase 2
 - Resume session where brainstorming already completed (`brainstorming-summary.md` exists)
-- User explicitly says "ข้าม brainstorming" or "ไปต่อเลย"
+- User explicitly says "skip brainstorming" or "continue"
 
 **Scale (auto-detect จาก Phase 1 output volume):**
 
@@ -121,7 +120,7 @@ For detection logic, approach comparison, phase matrices, Vibe flow, escalation 
 | Medium | 3-5 user stories, multi-page | Normal: 2 rounds |
 | Large | 6+ user stories, multi-context | Full: 3 rounds |
 
-User สามารถ override ได้: "ขอแบบ quick" หรือ "ขอแบบ deep"
+User can override: "request quick" or "request deep"
 
 ## Rules & Guides
 
@@ -154,9 +153,9 @@ Generated as a side-effect of Phase 1 (domain-design step). Updated inline durin
 
 | Situation | Skill |
 |-----------|-------|
-| ยังไม่มี code, ต้องการ extract ความต้องการ | `thinking/interview-me` |
-| มี codebase แล้ว, ต้องการ align language กับ code | `thinking/interview-doc` |
-| หลัง Phase 1 Inception เสร็จ, ทีมคุยกัน | `thinking/brainstorming` |
+| No code yet, want to extract requirements | `thinking/interview-me` |
+| Have codebase, want to align language with code | `thinking/interview-doc` |
+| After Phase 1 Inception completes, team discusses | `thinking/brainstorming` |
 
 ## Templates
 
@@ -168,10 +167,10 @@ Generated as a side-effect of Phase 1 (domain-design step). Updated inline durin
 
 For skill routing guide → see AGENTS.md Skill Map (workspace root)
 
-> **Brainstorming** — Phase 1.8 (หลัง Inception, ก่อน Task Design) — 3 Amigos review via subagents → `thinking/brainstorming/SKILL.md`
-> **Subagent-Driven** — ใช้ระหว่าง Phase 3.1 เมื่อมี 3+ independent tasks → `governance/subagent-driven/SKILL.md`
-> **Interview-Me** — ก่อน Phase 0 เมื่อยังไม่มี code — extract ความต้องการ → `thinking/interview-me`
-> **Interview-Doc** — ก่อน Phase 0 เมื่อมี codebase แล้ว — align language + cross-ref code + update CONTEXT.md → `thinking/interview-doc`
+> **Brainstorming** — Phase 1.8 (after Inception, before Task Design) — 3 Amigos review via subagents → `thinking/brainstorming/SKILL.md`
+> **Subagent-Driven** — use during Phase 3.1 when 3+ independent tasks exist → `governance/subagent-driven/SKILL.md`
+> **Interview-Me** — before Phase 0 when no code yet — extract requirements → `thinking/interview-me`
+> **Interview-Doc** — before Phase 0 when codebase exists — align language + cross-ref code + update CONTEXT.md → `thinking/interview-doc`
 
 ## ⚠️ Gotchas
 
@@ -180,13 +179,13 @@ For skill routing guide → see AGENTS.md Skill Map (workspace root)
 - **Resume without reading context** — on resume, agent starts from scratch instead of reading the existing decision/plan files. Fix: always read `planning/decisions/` and `planning/plans/` before any action on resume.
 - **Multiple agents on same task** — two agents (e.g., Gemini + Claude) edit the same file simultaneously, causing conflicts. Fix: one agent owns one task start-to-finish.
 - **Task marked done without commit** — agent reports completion but hasn't committed. Fix: commit hash is the only proof of completion — no hash = not done.
-- **Dialog skipped on short commands** — user gives a brief command like "PBI-002" or "ทำต่อ feature X" and agent auto-executes everything without dialog. Fix: ANY AIDLC trigger — regardless of how short the user's message is — MUST still follow the full dialog flow (Phase Announcement → Decision Dialog → wait for approval → execute). Short commands are NOT permission to skip dialog. The agent must:
+- **Dialog skipped on short commands** — user gives a brief command like "PBI-002" or "continue feature X" and agent auto-executes everything without dialog. Fix: ANY AIDLC trigger — regardless of how short the user's message is — MUST still follow the full dialog flow (Phase Announcement → Decision Dialog → wait for approval → execute). Short commands are NOT permission to skip dialog. The agent must:
   1. Detect the feature/PBI
   2. Check `.aidlc/` for existing state (resume vs new)
   3. If new: run Brainstorming first
   4. Present Phase Announcement with structured options
   5. Wait for user approval before writing any artifact
-- **Bulk artifact dump** — agent writes all inception docs (user-stories, domain-decomposition, domain-design, logical-design) in one shot without pausing between phases. Fix: each phase MUST end with a Progress Breadcrumb and "→ พร้อมไปต่อ?" before starting the next phase. User must explicitly approve or say "ทำต่อเลย" / "approve all remaining".
+- **Bulk artifact dump** — agent writes all inception docs (user-stories, domain-decomposition, domain-design, logical-design) in one shot without pausing between phases. Fix: each phase MUST end with a Progress Breadcrumb and "→ ready to continue?" before starting the next phase. User must explicitly approve or say "continue" / "approve all remaining".
 - **Brainstorming skipped or misplaced** — agent runs brainstorming before Phase 1 (no artifacts to analyze) or skips it entirely for medium+ features. Fix: brainstorming is Phase 1.8 — runs AFTER Inception produces artifacts, BEFORE Phase 2 Task Design. Check `brainstorming-summary.md` exists before entering Phase 2 for medium+ features.
 - **Output path not confirmed** — agent writes QA test files or Dev source files to wrong project folder (e.g., `Automation/` instead of `ai-dlc-skill-testing/`) because workspace has multiple sibling project folders. Fix: Phase 0 MUST ask user to confirm output root for `.aidlc/`, QA test files, and Dev source files before writing the first file of each type. Use `userInput` tool. Store confirmed paths in `qa-task-progress.md` and `dev-task-progress.md` Context section so subagents inherit correct paths. Skip only if user already specified folder explicitly in their message.
 
@@ -207,12 +206,12 @@ For skill routing guide → see AGENTS.md Skill Map (workspace root)
 
 | Excuse to Skip | Counter-Argument |
 |---|---|
-| "เขียน code เลย ไม่ต้อง plan" | Code without plan = rework. DECISIONS file takes 5 minutes, saves 5 hours. |
-| "Feature เล็ก ไม่ต้องผ่าน AIDLC" | "เล็ก" is subjective. Even 1-endpoint features need DECISIONS + PLAN. The overhead is minimal. |
-| "มี spec อยู่แล้ว ข้าม Phase 1 ได้" | Spec ≠ DECISIONS file. Phase 1 formalizes scope, constraints, and approach. Don't skip. |
-| "Resume แล้ว ทำต่อเลย" | Resume MUST read existing artifacts first. Starting fresh wastes previous work. |
-| "User บอก 'ทำเลย' = skip dialog" | Short commands are NOT permission to skip. Dialog flow is mandatory regardless of message length. |
-| "Brainstorming ไม่จำเป็น feature นี้เล็ก" | Check the scale table. If medium+, brainstorming catches gaps that save rework in Phase 3. |
+| "Just write code, no need to plan" | Code without plan = rework. DECISIONS file takes 5 minutes, saves 5 hours. |
+| "Feature is small, doesn't need AIDLC" | "Small" is subjective. Even 1-endpoint features need DECISIONS + PLAN. The overhead is minimal. |
+| "Already have spec, can skip Phase 1" | Spec ≠ DECISIONS file. Phase 1 formalizes scope, constraints, and approach. Don't skip. |
+| "Resume, just continue" | Resume MUST read existing artifacts first. Starting fresh wastes previous work. |
+| "User said 'do it' = skip dialog" | Short commands are NOT permission to skip. Dialog flow is mandatory regardless of message length. |
+| "Brainstorming not needed, feature is small" | Check the scale table. If medium+, brainstorming catches gaps that save rework in Phase 3. |
 
 ---
 
@@ -300,12 +299,12 @@ Every phase MUST execute steps 1-9 in this order:
 
 ### Phase 2.5 Internal Steps (Performance Testing — Optional)
 
-> Trigger: หลัง Phase 2.4 tests PASS ทั้งหมดแล้ว + user ต้องการ performance testing
-> Skip condition: user says "ข้ามไป" หรือ feature ไม่มี performance requirement
+> Trigger: after Phase 2.4 tests ALL PASS + user wants performance testing
+> Skip condition: user says "skip" or feature has no performance requirement
 
 | Step | Action | Skip Condition |
 |------|--------|----------------|
-| 1 | Ask user: "ต้องการ performance testing มั้ย? (Frontend / Backend / Both / Skip)" | Never skip (ask is mandatory) |
+| 1 | Ask user: "Do you want performance testing? (Frontend / Backend / Both / Skip)" | Never skip (ask is mandatory) |
 | 2 | If Frontend: run Chrome DevTools MCP trace → Core Web Vitals + resource waterfall | User chose Backend only or Skip |
 | 3 | If Backend: profile API endpoints (per-endpoint p95 + E2E flow) | User chose Frontend only or Skip |
 | 4 | Compare against thresholds (p95 < 500ms, LCP < 2.5s) | Never skip if step 2 or 3 ran |

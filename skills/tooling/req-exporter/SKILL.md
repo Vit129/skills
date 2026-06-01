@@ -2,9 +2,9 @@
 name: req-exporter
 description: >
   Export requirements/specifications to multiple formats (CSV, Text, PDF, Markdown).
-  Trigger: "export req", "export requirements", "แปลง req เป็น csv", "req to pdf",
-  "ส่งออก requirements", "convert spec to markdown", "download requirements",
-  "export ออกมา", "ส่งออกเป็น csv", "ส่งออกเป็น pdf", "แปลงเป็น text"
+  Trigger: "export req", "export requirements", "convert req to csv", "req to pdf",
+  "export requirements", "convert spec to markdown", "download requirements",
+  "export to csv", "export to pdf", "convert to text"
 version: 1.0.0
 last_improved: 2026-05-31
 improvement_count: 0

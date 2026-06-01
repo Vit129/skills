@@ -164,14 +164,14 @@ data-testid="booking-status"
 - Example: VISA_CHECK_API_URL: external visa check endpoint
 ```
 
-QA ใช้ section นี้เพื่อ:
-1. สร้าง `.env` ที่ถูกต้อง
-2. ออกแบบ mock strategy ก่อนเขียน test scripts
-3. ขอ test accounts จาก admin ก่อนเริ่ม QA phase
+QA uses this section to:
+1. Create correct `.env` files
+2. Design mock strategy before writing test scripts
+3. Request test accounts from admin before starting QA phase
 
 ## API Field Optionality (MANDATORY)
 
-ทุก field ใน API request/response ต้องระบุ optional/required **per context** ไม่ใช่แค่ชื่อ field:
+Every field in API request/response must specify optional/required **per context**, not just field name:
 
 ### Format
 

@@ -1,10 +1,10 @@
 ---
 name: backend-dev
 description: >
-  This skill should be used when the user asks to "design an API", "ออกแบบ API",
-  "set up authentication", "ตั้งค่า authentication", "design the database schema", "ออกแบบ database schema",
-  "build a backend service", "สร้าง backend service", "create a REST endpoint", "สร้าง REST endpoint",
-  "dockerize the app", "ทำ Docker", "use Pydantic v2", "SQLAlchemy 2.0", "async SQLAlchemy",
+  This skill should be used when the user asks to "design an API",
+  "set up authentication", "design the database schema",
+  "build a backend service", "create a REST endpoint",
+  "dockerize the app", "use Pydantic v2", "SQLAlchemy 2.0", "async SQLAlchemy",
   "C# API", "ASP.NET Core", ".NET", "Entity Framework", "EF Core", "Minimal API",
   "C++ project", "CMake", "RAII", "smart pointer", "GoogleTest", "C project",
   or needs guidance on Node.js, Python, Express, FastAPI, Django, C#/.NET, C/C++, or Docker.

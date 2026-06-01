@@ -32,8 +32,8 @@ Phase 1.8: Brainstorming ← THIS SKILL (3 Amigos review)
 Phase 2: Construction Planning (QA task design, Dev task design)
 ```
 
-**Why here?** เหมือนทำงานจริง — PO ให้ requirement มาแล้ว (Phase 1) → ทีมคุยกัน (3 amigos)
-→ ตกผลึก → แล้วค่อยแบ่งงาน (Phase 2)
+**Why here?** Like real work — PO provides requirements (Phase 1) → team discusses (3 amigos)
+→ crystallizes → then break down tasks (Phase 2)
 
 ## When to Use
 
@@ -46,7 +46,7 @@ Phase 2: Construction Planning (QA task design, Dev task design)
 
 - Small features (1-2 user stories, single endpoint) — go directly to Phase 2
 - Resume session where brainstorming already completed
-- User explicitly says "ข้าม brainstorming" or "ไปต่อเลย"
+- User explicitly says "skip brainstorming" or "continue"
 
 ## Execution Mode
 
@@ -101,7 +101,7 @@ Step 8: If user has clarification → dispatch Round 2 (same flow, updated conte
     ↓
 Step 9: Produce output-template.md → present to user
     ↓
-Step 10: Ask user via userInput: "พร้อมไป Phase 2 (Task Design) ไหม?"
+Step 10: Ask user via userInput: "Ready for Phase 2 (Task Design)?"
     ↓
 Step 11: If yes → proceed to Phase 2.1 (QA Task Design) or 2.5 (Dev Task Design)
 ```
@@ -171,7 +171,7 @@ invokeSubAgent(
 | Medium | 3-5 user stories, multi-page | 2 | 2 questions answered per role |
 | Large | 6+ user stories, multi-context | 3 | Full lens exploration |
 
-Agent auto-detects size from Phase 1 output volume. User can override: "ขอแบบ quick" or "ขอแบบ deep".
+Agent auto-detects size from Phase 1 output volume. User can override: "request quick" or "request deep".
 
 ---
 
@@ -288,7 +288,7 @@ When Kiro supports parallel `invokeSubAgent`:
 - 🚩 All 3 role outputs look identical in structure and depth → Subagents were not given their specific lens files; verify each subagent loaded its own `po-lens.md`, `dev-lens.md`, or `qa-lens.md`.
 - 🚩 Brainstorming output references information not in Phase 1 artifacts → Subagents are hallucinating context instead of analyzing what's written; re-anchor them to actual artifact content.
 - 🚩 No `brainstorming-summary.md` written to `.aidlc/` folder → Output was presented in chat only and will be lost; always persist to the designated output path.
-- 🚩 Phase 2 started without user confirming "พร้อมไป Phase 2 ไหม?" via userInput → Handoff rule violated; go back and get explicit user approval before proceeding.
+- 🚩 Phase 2 started without user confirming "Ready for Phase 2?" via userInput → Handoff rule violated; go back and get explicit user approval before proceeding.
 
 ---
 

@@ -46,27 +46,27 @@ Business Rules: [pseudocode]
 
 ## Concurrency Rules (MANDATORY for shared resources)
 
-สำหรับ Aggregate ที่มี concurrent access ต้องระบุ locking strategy ก่อน implement:
+For Aggregates with concurrent access, specify locking strategy before implementation:
 
 ### Decision: Optimistic vs Pessimistic Locking
 
-| Strategy | เมื่อไหร่ใช้ | Trade-off |
+| Strategy | When to Use | Trade-off |
 |---------|------------|---------|
-| **Optimistic Locking** (version field) | Conflict น้อย, read-heavy | ต้อง retry เมื่อ conflict |
-| **Pessimistic Locking** (SELECT FOR UPDATE) | Conflict บ่อย, write-heavy | Block concurrent reads |
-| **Idempotency Key** | Duplicate request prevention | ต้องเก็บ key history |
+| **Optimistic Locking** (version field) | Low conflict, read-heavy | Must retry on conflict |
+| **Pessimistic Locking** (SELECT FOR UPDATE) | High conflict, write-heavy | Blocks concurrent reads |
+| **Idempotency Key** | Duplicate request prevention | Must store key history |
 
-### Output เพิ่มเติม (ต่อท้าย Business Rules)
+### Additional Output (append to Business Rules)
 
 ```text
 Concurrency Rules:
 - [AggregateName]: [optimistic | pessimistic | idempotency]
-  Reason: [ทำไมเลือก strategy นี้]
+  Reason: [why this strategy was chosen]
   Conflict behavior: [retry N times | throw ConflictError | queue]
   DB isolation: [READ COMMITTED | REPEATABLE READ | SERIALIZABLE]
 ```
 
-### ตัวอย่าง
+### Example
 
 ```text
 Concurrency Rules:

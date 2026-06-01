@@ -2,7 +2,7 @@
 name: test-scenario-rules
 description: >
   This skill should be used when the user asks to "check test scenario rules",
-  "เช็ค test scenario rules", "what's the CSV format", "CSV format คืออะไร",
+  "what's the CSV format", "CSV format",
   "review scenario design standards", "review scenario standards",
   or needs the authoritative design guidelines and CSV export rules for test scenarios.
   Always activate when designing or exporting test scenarios.
