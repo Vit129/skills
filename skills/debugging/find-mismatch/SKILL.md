@@ -1,6 +1,9 @@
 ---
 name: find-mismatch
 description: Systematic bug detection with full Bug Life Cycle — scans codebase for cross-boundary mismatches, serialization gaps, logic bugs, async bugs, and stub code. Then manages the lifecycle DETECT→CLASSIFY→REPRODUCE→FIX→GUARD. Trigger on /find-mismatch and proactively when user asks to find bugs, hunt mismatches, audit for hidden issues, or run a systematic code scan.
+version: 1.0.0
+last_improved: 2026-05-31
+improvement_count: 0
 ---
 
 # Find Mismatch — Systematic Bug Detection + Bug Life Cycle
@@ -298,3 +301,10 @@ After user confirms findings and fixes:
 2. **Record false positives:** If findings were rejected → note why, to improve future scan accuracy
 3. **Progressive update:** If a new detection heuristic proved effective, append to this skill's Detection Checklist
 4. **Pattern aggregation:** If 3+ findings share the same category → create `knowledge/lessons/{category}-pattern.md`
+
+### Improvement Tracking
+
+- **Hook:** `session-save.json` appends to `agent-memory/skill-log.md` after every session using this skill
+- **Hook:** `skill-improve.json` logs when user corrects this skill's output (silent)
+- **Promotion:** 3x same issue in skill-log → auto-apply fix to this SKILL.md + bump version
+- **Eval:** `eval-check.json` runs pass@3 weekly if this skill is flagged in `memory.md`

@@ -233,6 +233,13 @@ Status: In Progress | Completed
 - [ ] Pipeline YAML
 - [ ] PR template
 
+## Performance Testing (Optional — after all tests PASS)
+- [ ] Ask user: Frontend / Backend / Both / Skip
+- [ ] Frontend: Chrome DevTools MCP trace → Core Web Vitals report
+- [ ] Backend: Per-endpoint p95 + E2E flow timing report
+- [ ] Compare against thresholds
+- [ ] Performance report generated
+
 ## Final Review
 - [ ] Code review — standards compliance
 - [ ] ✅ Full test suite run (all scenarios PASS)

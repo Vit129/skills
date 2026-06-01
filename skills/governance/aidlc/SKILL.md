@@ -15,9 +15,20 @@ description: >
   Supports 3 modes: Full (default), QA Only, Dev Only.
   Non-coding tasks (research, analysis, finance, presentation, knowledge management)
   can go directly to the relevant skill or knowledge without AIDLC governance.
+version: 1.0.0
+last_improved: 2026-05-31
+improvement_count: 0
 ---
 
 # AIDLC (AI Development Lifecycle)
+
+## AIDLC Gate
+
+⚠️ If this skill is triggered as part of a coding/QA task:
+- AIDLC governance MUST be active (`.aidlc/` folder exists with DECISIONS + PLAN)
+- If not → STOP and route to `governance/aidlc/` first
+- Exception: pure investigation/analysis (no code changes) can proceed without AIDLC
+
 
 ## ⛔ Mode Lock
 
@@ -207,6 +218,99 @@ For skill routing guide → see AGENTS.md Skill Map (workspace root)
 
 ---
 
+
+## Consistency Contract
+
+> These steps MUST execute in the same order every time this skill runs.
+> Output may vary, but the workflow is fixed.
+> If any step is skipped without a documented skip condition, the session-save hook will flag this skill.
+
+### Per-Phase Mandatory Steps (Standard Process)
+
+Every phase MUST execute steps 1-9 in this order:
+
+| Step | Action | Skip Condition |
+|------|--------|----------------|
+| 1 | Create DECISIONS file (`planning/decisions/{NN}-{phase-name}.md`) | Never skip |
+| 2 | Wait for user to resolve decisions | Never skip |
+| 3 | Create PLAN file (`planning/plans/{NN}-{phase-name}.md`) | Never skip |
+| 4 | Show PREVIEW (draft output summary) to user | Never skip |
+| 5 | Wait for user APPROVAL | Never skip |
+| 6 | EXECUTE — write output files | Never skip |
+| 7 | Update `audit.md` with phase entry | Never skip |
+| 8 | Update `PROGRESS.md` with current counts | Never skip |
+| 9 | Capture knowledge to Knowledge Buffer | No new pattern learned |
+| 10 | Update GRAPH_REPORT.md | No new files created |
+| 11 | Update agent-memory (Task_Ledger + Playbook) | No real artifact produced |
+
+### Phase Routing (must follow mode matrix)
+
+| Mode | Phase Order |
+|------|-------------|
+| QA Scenario Only | Lite Inception → 2.1 → 2.2 → DONE |
+| QA Automation (TDD) | Lite Inception → 2.1 → 2.2 → 2.3 → 2.4 → (2.5 optional) → DONE |
+| Full (TDD) | 0 → 1.1-1.8 → 2.1 → 2.2 → 2.3 → 2.4 → (2.5 optional) → 2.5 → 2.6 → 3.1 → 3.2 → 3.3 |
+| Full (SDLC) | 0 → 1.1-1.8 → 2.5 → 3.1 → 2.1 → 2.2 → 2.3 → 2.4 → (2.5 optional) → 3.2 → 3.3 |
+| Dev Only | Lite Inception → 2.5 → 3.1 → 3.2 → 3.3 → DONE |
+
+### Phase 2.2 Internal Steps (Test Case Design)
+
+| Step | Action | Skip Condition |
+|------|--------|----------------|
+| 1 | Resolve PBI Assigned To + QA Assigned To | Never skip |
+| 2 | Read `test-scenario-rules/references/ts-standards.md` | Never skip |
+| 3 | Read `test-scenario-rules/references/csv-export.md` | Never skip |
+| 4 | Run reuse analysis (`test-scenario/references/reuse-analysis.md`) | Never skip |
+| 5 | Design batch 1 (Success) → pause for approval | Never skip |
+| 6 | Design batch 2 (Alternative) → pause for approval | Never skip |
+| 7 | Design batch 3 (Edge) → pause for approval | Never skip |
+| 8 | Generate test data (`test-scenario/references/data-gen.md`) | Never skip |
+| 9 | Export CSV + validate (`csv-validator.md`) | Never skip |
+| 10 | Upload Gate — ask user about Azure upload | Never skip (ask is mandatory, upload is optional) |
+| 11 | PO Sign-off Gate | Never skip |
+
+### Phase 2.3 Internal Steps (QA Architecture)
+
+| Step | Action | Skip Condition |
+|------|--------|----------------|
+| 1 | Read platform-specific arch file (api-arch/web-arch/mobile-arch) | Never skip |
+| 2 | Read platform-specific coding rules | Never skip |
+| 3 | Design test structure (folders, page objects, helpers) | Never skip |
+| 4 | Write `implementation-plan.md` | Never skip |
+
+### Phase 2.4 Internal Steps (Test Script Design)
+
+| Step | Action | Skip Condition |
+|------|--------|----------------|
+| 1 | Read `implementation-plan.md` | Never skip |
+| 2 | Read coding rules (playwright-rules or robotframework-rules) | Never skip |
+| 3 | Check `knowledge/lessons/` for prior patterns | Never skip |
+| 4 | Write test scripts (RED — should fail if TDD) | Never skip |
+| 5 | Run tests to confirm state (FAIL for TDD, PASS for SDLC) | Never skip |
+
+### Phase 2.5 Internal Steps (Performance Testing — Optional)
+
+> Trigger: หลัง Phase 2.4 tests PASS ทั้งหมดแล้ว + user ต้องการ performance testing
+> Skip condition: user says "ข้ามไป" หรือ feature ไม่มี performance requirement
+
+| Step | Action | Skip Condition |
+|------|--------|----------------|
+| 1 | Ask user: "ต้องการ performance testing มั้ย? (Frontend / Backend / Both / Skip)" | Never skip (ask is mandatory) |
+| 2 | If Frontend: run Chrome DevTools MCP trace → Core Web Vitals + resource waterfall | User chose Backend only or Skip |
+| 3 | If Backend: profile API endpoints (per-endpoint p95 + E2E flow) | User chose Frontend only or Skip |
+| 4 | Compare against thresholds (p95 < 500ms, LCP < 2.5s) | Never skip if step 2 or 3 ran |
+| 5 | Generate performance report (Quick Review format) | Never skip if step 2 or 3 ran |
+| 6 | If thresholds fail → flag for optimization before release | Never skip |
+
+**Skill loaded:** `qa/performance-testing/` → `references/frontend-performance.md` and/or `references/backend-performance.md`
+
+### Violation Detection
+
+The `session-save.json` hook checks at end of session:
+- Were all mandatory steps executed for each phase that ran?
+- Were any steps skipped without a documented skip condition?
+- If yes → flag skill in `agent-memory/skill-log.md` with specific step that was skipped
+
 ## Verification
 
 Before advancing to the next phase, confirm:
@@ -250,3 +354,10 @@ After user approves the output:
 2. **Record failures:** If output was rejected → note what went wrong for next time
 3. **Progressive update:** If a new pattern proved effective → append to relevant knowledge index
 4. **Confidence tracking:** `confidence: 1.0` (user-approved) vs `confidence: 0.7` (auto-generated)
+
+### Improvement Tracking
+
+- **Hook:** `session-save.json` appends to `agent-memory/skill-log.md` after every session using this skill
+- **Hook:** `skill-improve.json` logs when user corrects this skill's output (silent)
+- **Promotion:** 3x same issue in skill-log → auto-apply fix to this SKILL.md + bump version
+- **Eval:** `eval-check.json` runs pass@3 weekly if this skill is flagged in `memory.md`

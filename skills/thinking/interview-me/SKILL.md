@@ -1,10 +1,9 @@
 ---
 name: interview-me
-description: Use when the user asks to be interviewed, grilled, or clarified one question at a time before writing a spec, plan, or code; helps resolve vague or underspecified requirements until confidence is high.
+description: One-question-at-a-time interview that extracts what the user actually wants until ~95% confidence — before writing any spec or code.
 version: 1.0.0
-keywords: [interview, สัมภาษณ์, ถามทีละข้อ, clarify requirements, ไม่ชัด, underspecified, grill me, ถามจนชัด]
-last-updated: 2026-05-16
-dependencies: [core/aidlc, core/brainstorming]
+last_improved: 2026-05-31
+improvement_count: 0
 ---
 
 # Interview Me
@@ -223,3 +222,10 @@ After user approves the output:
 2. **Record failures:** If output was rejected → note what went wrong for next time
 3. **Progressive update:** If a new pattern proved effective → append to relevant knowledge index
 4. **Confidence tracking:** `confidence: 1.0` (user-approved) vs `confidence: 0.7` (auto-generated)
+
+### Improvement Tracking
+
+- **Hook:** `session-save.json` appends to `agent-memory/skill-log.md` after every session using this skill
+- **Hook:** `skill-improve.json` logs when user corrects this skill's output (silent)
+- **Promotion:** 3x same issue in skill-log → auto-apply fix to this SKILL.md + bump version
+- **Eval:** `eval-check.json` runs pass@3 weekly if this skill is flagged in `memory.md`

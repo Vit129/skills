@@ -2,6 +2,9 @@
 name: doubt-driven
 description: Adversarial self-review for non-trivial decisions. Use when stakes are high (production, security, irreversible), working in unfamiliar code, or when a confident output is cheaper to verify now than debug later. Also serves as outsider-perspective review of plans, PRs, or code changes.
 credit: Inspired by 9arm-skills (https://github.com/thananon/9arm-skills) — engineering/scrutinize
+version: 1.0.0
+last_improved: 2026-05-31
+improvement_count: 0
 ---
 
 # Doubt-Driven Development
@@ -220,3 +223,10 @@ After user accepts the final decision:
 2. **Record false positives:** If findings were mostly noise → note what context was missing to avoid next time
 3. **Progressive update:** If a new doubt heuristic proved valuable, append to this skill's Red Flags section
 4. **Confidence:** `confidence: 1.0` (user validated) vs `confidence: 0.5` (doubt found nothing actionable)
+
+### Improvement Tracking
+
+- **Hook:** `session-save.json` appends to `agent-memory/skill-log.md` after every session using this skill
+- **Hook:** `skill-improve.json` logs when user corrects this skill's output (silent)
+- **Promotion:** 3x same issue in skill-log → auto-apply fix to this SKILL.md + bump version
+- **Eval:** `eval-check.json` runs pass@3 weekly if this skill is flagged in `memory.md`

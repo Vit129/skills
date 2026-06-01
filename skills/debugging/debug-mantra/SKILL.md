@@ -2,6 +2,9 @@
 name: debug-mantra
 description: Four-mantra debugging discipline — reproduce, trace the fail path, falsify the hypothesis, cross-reference every breadcrumb. Recite the mantra block verbatim at the start of any debugging session, then apply the four steps in order before proposing any fix. Trigger on /debug-mantra and proactively whenever debugging starts — user reports a bug, says something is broken/throwing/failing, asks to debug/diagnose/investigate an issue, or pastes a stack trace or error log.
 credit: Based on 9arm-skills (https://github.com/thananon/9arm-skills) — engineering/debug-mantra
+version: 1.0.0
+last_improved: 2026-05-31
+improvement_count: 0
 ---
 
 # Debug Mantra
@@ -141,3 +144,10 @@ agent-memory (playbook → knowledge/bug/)
 1. Write a regression test (`qa/playwright-testing/` or `qa/robotframework-testing/`) — this is the GUARD state
 2. Offer to write a post-mortem (`debugging/post-mortem/`) — this is the CLOSED state
 3. If bug came from `find-mismatch` scan → update the Lifecycle Tracker in the scan report
+
+### Improvement Tracking
+
+- **Hook:** `session-save.json` appends to `agent-memory/skill-log.md` after every session using this skill
+- **Hook:** `skill-improve.json` logs when user corrects this skill's output (silent)
+- **Promotion:** 3x same issue in skill-log → auto-apply fix to this SKILL.md + bump version
+- **Eval:** `eval-check.json` runs pass@3 weekly if this skill is flagged in `memory.md`

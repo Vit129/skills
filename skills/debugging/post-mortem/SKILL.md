@@ -2,6 +2,9 @@
 name: post-mortem
 description: Write the canonical engineering record of a fixed bug — root cause, mechanism, fix, validation, and how it slipped through. Engineer-audience, code identifiers welcome. Use after a debug session lands a fix, before closing the ticket. Trigger on /post-mortem, when the user says "write the post-mortem / postmortem / RCA / root cause analysis", "document this fix", "write up the root cause", "close out this bug with a writeup", or hands you a fixed-and-validated bug and asks for the writeup.
 credit: Based on 9arm-skills (https://github.com/thananon/9arm-skills) — engineering/post-mortem
+version: 1.0.0
+last_improved: 2026-05-31
+improvement_count: 0
 ---
 
 # Post-mortem
@@ -225,3 +228,10 @@ agent-memory (knowledge/bug/) — lesson persisted for future
 **After post-mortem is posted:**
 - If bug came from `find-mismatch` scan → mark finding as CLOSED in Lifecycle Tracker
 - If bug came from Azure DevOps → `tooling/azure-devops-bridge/` updates Bug state + adds comment
+
+### Improvement Tracking
+
+- **Hook:** `session-save.json` appends to `agent-memory/skill-log.md` after every session using this skill
+- **Hook:** `skill-improve.json` logs when user corrects this skill's output (silent)
+- **Promotion:** 3x same issue in skill-log → auto-apply fix to this SKILL.md + bump version
+- **Eval:** `eval-check.json` runs pass@3 weekly if this skill is flagged in `memory.md`

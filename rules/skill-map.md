@@ -49,7 +49,7 @@
 | backend API, node, python, C#, docker | `dev/backend-dev/` |
 | frontend React, Next.js, Flutter, Swift | `dev/frontend-dev/` |
 | CI/CD, github actions, pipeline, commit, push | `dev/devops-pipeline/` |
-| design quality, anti-AI-slop, craft UI, impeccable | `dev/impeccable-design/` |
+| design quality, anti-AI-slop, craft UI, impeccable, polish UI, audit design, make it look better, improve colors, fix typography | `ux-ui/ui-designer/` |
 | OWASP, secure coding, auth hardening, XSS, injection | `dev/security-hardening/` |
 | ship, deploy, launch, rollback, feature flag, staged rollout | `dev/shipping-launch/` |
 | simplify, refactor, reduce complexity, Chesterton's Fence | `dev/code-simplification/` |
@@ -106,7 +106,7 @@
 
 | Keyword | Skill |
 |---------|-------|
-| UI design, figma, design system, tokens | `ux-ui/ui-designer/` ← use before frontend-dev |
+| UI design, figma, design system, tokens, polish UI, audit design, anti-AI-slop, craft UI, make it look better, improve colors, fix typography | `ux-ui/ui-designer/` ← use before frontend-dev |
 
 ## meta-skills/ — Generic Reusable Skills
 

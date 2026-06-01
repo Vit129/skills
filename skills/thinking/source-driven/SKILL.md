@@ -1,10 +1,10 @@
 ---
 name: source-driven
 version: 1.0.0
+last_improved: 2026-05-31
+improvement_count: 0
 description: Grounds framework/library decisions in official documentation. Use when implementing code that depends on specific API versions — verify, cite, flag unverified.
-keywords: [verify docs, cite source, official docs, source-driven, documentation, API version, framework, library, deprecated, unverified]
-last-updated: 2026-05-28
-dependencies: []
+
 ---
 
 # Source-Driven Development
@@ -178,3 +178,10 @@ After user approves the output:
 2. **Record failures:** If output was rejected → note what went wrong for next time
 3. **Progressive update:** If a new pattern proved effective → append to relevant knowledge index
 4. **Confidence tracking:** `confidence: 1.0` (user-approved) vs `confidence: 0.7` (auto-generated)
+
+### Improvement Tracking
+
+- **Hook:** `session-save.json` appends to `agent-memory/skill-log.md` after every session using this skill
+- **Hook:** `skill-improve.json` logs when user corrects this skill's output (silent)
+- **Promotion:** 3x same issue in skill-log → auto-apply fix to this SKILL.md + bump version
+- **Eval:** `eval-check.json` runs pass@3 weekly if this skill is flagged in `memory.md`

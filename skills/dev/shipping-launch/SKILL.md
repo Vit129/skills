@@ -1,9 +1,20 @@
 ---
 name: shipping-launch
 description: Pre-launch checklist, staged rollout, feature flags, rollback strategy, and monitoring setup. Use when preparing to deploy to production.
+version: 1.0.0
+last_improved: 2026-05-31
+improvement_count: 0
 ---
 
 # Shipping and Launch
+
+## AIDLC Gate
+
+⚠️ If this skill is triggered as part of a coding/QA task:
+- AIDLC governance MUST be active (`.aidlc/` folder exists with DECISIONS + PLAN)
+- If not → STOP and route to `governance/aidlc/` first
+- Exception: pure investigation/analysis (no code changes) can proceed without AIDLC
+
 
 ## Overview
 
@@ -200,6 +211,13 @@ Client (if frontend):
 - No one monitoring the deploy for the first hour
 - Production config done by memory, not code
 
+
+## Consistency Contract
+
+> These steps MUST execute in the same order every time this skill runs.
+> Output may vary, but the workflow is fixed.
+> If any step is skipped without a documented skip condition, the session-save hook will flag this skill.
+
 ## Verification
 
 **Before deploying:**
@@ -248,3 +266,10 @@ After user approves the output:
 2. **Record failures:** If output was rejected → note what went wrong for next time
 3. **Progressive update:** If a new pattern proved effective → append to relevant knowledge index
 4. **Confidence tracking:** `confidence: 1.0` (user-approved) vs `confidence: 0.7` (auto-generated)
+
+### Improvement Tracking
+
+- **Hook:** `session-save.json` appends to `agent-memory/skill-log.md` after every session using this skill
+- **Hook:** `skill-improve.json` logs when user corrects this skill's output (silent)
+- **Promotion:** 3x same issue in skill-log → auto-apply fix to this SKILL.md + bump version
+- **Eval:** `eval-check.json` runs pass@3 weekly if this skill is flagged in `memory.md`
