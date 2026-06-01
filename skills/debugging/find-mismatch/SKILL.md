@@ -1,6 +1,7 @@
 ---
 name: find-mismatch
 description: Systematic bug detection with full Bug Life Cycle — scans codebase for cross-boundary mismatches, serialization gaps, logic bugs, async bugs, and stub code. Then manages the lifecycle DETECT→CLASSIFY→REPRODUCE→FIX→GUARD. Trigger on /find-mismatch and proactively when user asks to find bugs, hunt mismatches, audit for hidden issues, or run a systematic code scan.
+credit: Inspired by 9arm-skills (https://github.com/thananon/9arm-skills) — engineering/find-mismatch
 version: 1.0.0
 last_improved: 2026-05-31
 improvement_count: 0

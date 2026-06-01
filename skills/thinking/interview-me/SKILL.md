@@ -1,6 +1,7 @@
 ---
 name: interview-me
 description: One-question-at-a-time interview that extracts what the user actually wants until ~95% confidence — before writing any spec or code.
+credit: Adapted from Addy Osmani's agent-skills — interview-me concept
 version: 1.0.0
 last_improved: 2026-05-31
 improvement_count: 0

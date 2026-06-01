@@ -191,7 +191,7 @@ Before advancing from Phase 3.1 to 3.2, confirm:
 
 After user approves the output:
 
-1. **Record good example:** Save approved output to `knowledge/lessons/governance/{pattern}.md`
+1. **Record good example:** Save approved output to `agent-memory/knowledge/arch/{pattern}.md`
 2. **Record failures:** If output was rejected → note what went wrong for next time
 3. **Progressive update:** If a new pattern proved effective → append to relevant knowledge index
 4. **Confidence tracking:** `confidence: 1.0` (user-approved) vs `confidence: 0.7` (auto-generated)

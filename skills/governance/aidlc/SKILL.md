@@ -98,7 +98,7 @@ For detection logic, approach comparison, phase matrices, Vibe flow, escalation 
 ## Phase 1.8: Brainstorming — 3 Amigos Review (after Inception, before Task Design)
 
 > ทำหลัง Phase 1 (Inception) เสร็จ — ก่อนเข้า Phase 2 (Task Design)
-> Load `core/brainstorming/SKILL.md` → dispatch PO/Dev/QA subagents → synthesize → refine if needed → proceed to Phase 2
+> Load `thinking/brainstorming/SKILL.md` → dispatch PO/Dev/QA subagents → synthesize → refine if needed → proceed to Phase 2
 
 **Why here?** เหมือนทำงานจริง — PO ให้ requirement มาแล้ว (Phase 1) → ทีมคุยกัน (3 amigos)
 → ตกผลึก → แล้วค่อยแบ่งงาน (Phase 2)
@@ -168,8 +168,8 @@ Generated as a side-effect of Phase 1 (domain-design step). Updated inline durin
 
 For skill routing guide → see AGENTS.md Skill Map (workspace root)
 
-> **Brainstorming** — Phase 1.8 (หลัง Inception, ก่อน Task Design) — 3 Amigos review via subagents → `core/brainstorming/SKILL.md`
-> **Subagent-Driven** — ใช้ระหว่าง Phase 3.1 เมื่อมี 3+ independent tasks → `core/subagent-driven/SKILL.md`
+> **Brainstorming** — Phase 1.8 (หลัง Inception, ก่อน Task Design) — 3 Amigos review via subagents → `thinking/brainstorming/SKILL.md`
+> **Subagent-Driven** — ใช้ระหว่าง Phase 3.1 เมื่อมี 3+ independent tasks → `governance/subagent-driven/SKILL.md`
 > **Interview-Me** — ก่อน Phase 0 เมื่อยังไม่มี code — extract ความต้องการ → `thinking/interview-me`
 > **Interview-Doc** — ก่อน Phase 0 เมื่อมี codebase แล้ว — align language + cross-ref code + update CONTEXT.md → `thinking/interview-doc`
 

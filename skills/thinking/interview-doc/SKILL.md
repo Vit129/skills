@@ -6,6 +6,7 @@ description: >
   Use when user wants to stress-test a plan against their project's language and documented decisions,
   or says "interview-doc", "grill with docs", "ถามกับ code", "ตรวจสอบกับ codebase".
   Requires an existing codebase — use interview-me instead if starting from scratch.
+credit: Adapted from Matt Pocock's /grill-with-docs (https://www.aihero.dev/grill-with-docs)
 version: 1.0.0
 last_improved: 2026-06-01
 improvement_count: 0
