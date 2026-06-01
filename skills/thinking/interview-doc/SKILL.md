@@ -139,14 +139,21 @@ CONTEXT.md defines "Order" as "a confirmed purchase request"
 - เพิ่ม Flagged Ambiguities ถ้ามี naming conflict ที่ resolve แล้ว
 - ห้ามใส่ implementation details — glossary เท่านั้น
 
-**Create ADR เมื่อครบ 3 เงื่อนไข:**
+**ADR — delegate ไปหา `dev/documentation-adrs/`:**
+
+เมื่อ decision ครบ 3 เงื่อนไข → บอก user แล้ว load `dev/documentation-adrs/SKILL.md`:
 1. **Hard to reverse** — cost of changing later is meaningful
 2. **Surprising without context** — future reader จะงงว่าทำไมถึงทำแบบนี้
 3. **Real trade-off** — มี alternatives จริงๆ และเลือกด้วยเหตุผล
 
-ถ้าขาดข้อใดข้อหนึ่ง → skip ADR
+```
+ADR NEEDED:
+Decision: [ชื่อ decision]
+เหตุผล: ครบ 3 เงื่อนไข (hard-to-reverse + surprising + real trade-off)
+→ Loading dev/documentation-adrs/ เพื่อสร้าง ADR
+```
 
-ADR format → ดู `dev/documentation-adrs/SKILL.md`
+ถ้าขาดข้อใดข้อหนึ่ง → skip ADR ไม่ต้อง load `documentation-adrs`
 
 ---
 
@@ -260,7 +267,7 @@ Before declaring session complete, confirm:
 | Codebase (src/) | Read access | Cross-reference plan against actual code |
 | `docs/adr/` | Decision history | Avoid contradicting previous decisions |
 | `governance/aidlc/references/CONTEXT-FORMAT.md` | Format standard | Update CONTEXT.md correctly |
-| `dev/documentation-adrs/SKILL.md` | ADR format | Create ADRs when needed |
+| `dev/documentation-adrs/SKILL.md` | ADR workflow (delegate) | Load เมื่อ decision ครบ 3 เงื่อนไข — ไม่ implement ADR เอง |
 | `knowledge/lessons/` | Lessons learnt | Check before execute |
 
 ## Human-in-the-Loop Points
