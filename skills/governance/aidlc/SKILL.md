@@ -49,7 +49,7 @@ Full governance and planning for the complete development lifecycle.
 **Question 1 — Execution Mode:**
 - Full / QA Only / Dev Only (detect from command or ask)
 
-**Question 1b — QA Sub-Mode (ถามเฉพาะเมื่อ Mode = QA Only):**
+**Question 1b — QA Sub-Mode (ask only when Mode = QA Only):**
 
 | Sub-Mode | Command | Phases | Output |
 |----------|---------|--------|--------|
@@ -112,7 +112,7 @@ For detection logic, approach comparison, phase matrices, Vibe flow, escalation 
 - Resume session where brainstorming already completed (`brainstorming-summary.md` exists)
 - User explicitly says "skip brainstorming" or "continue"
 
-**Scale (auto-detect จาก Phase 1 output volume):**
+**Scale (auto-detect from Phase 1 output volume):**
 
 | Size | Signals | Brainstorming Mode |
 |------|---------|-------------------|
