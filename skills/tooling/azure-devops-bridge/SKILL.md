@@ -12,24 +12,24 @@ improvement_count: 0
 
 # Azure DevOps Bridge
 
-> เชื่อม Azure DevOps ↔ AIDLC workflow ผ่าน MCP tools
-> ไม่ต้องใช้ hook — agent detect PBI/Bug ID จาก user message แล้วทำเอง
+> Connects Azure DevOps ↔ AIDLC workflow via MCP tools.
+> No hook needed — agent detects PBI/Bug ID from user message and acts automatically.
 
 ---
 
 ## Trigger Detection
 
-เมื่อ user message มี pattern เหล่านี้ → activate skill นี้:
+When a user message matches any of these patterns → activate this skill:
 
 | Pattern | Action |
 |---------|--------|
-| `PBI #xxx` หรือ `ทำ PBI xxx` | → fetch-pbi → AIDLC |
-| `Bug #xxx` หรือ `ดู Bug xxx` หรือ `แก้ Bug xxx` | → bug-workflow |
-| `upload TS` หรือ `อัพ test scenario` | → upload-ts |
-| `close PBI` หรือ `ปิด PBI xxx` | → close-pbi |
-| `sprint report` หรือ `สรุป sprint` | → sprint-report |
-| `pipeline status` หรือ `ดู pipeline` หรือ `build status` หรือ `CI status` | → pipeline-status |
-| `pipeline พัง` หรือ `build failed` หรือ `CI แดง` หรือ `แก้ pipeline` | → pipeline-fix |
+| `PBI #xxx` or `ทำ PBI xxx` | → fetch-pbi → AIDLC |
+| `Bug #xxx` or `ดู Bug xxx` or `แก้ Bug xxx` | → bug-workflow |
+| `upload TS` or `อัพ test scenario` | → upload-ts |
+| `close PBI` or `ปิด PBI xxx` | → close-pbi |
+| `sprint report` or `สรุป sprint` | → sprint-report |
+| `pipeline status` or `ดู pipeline` or `build status` or `CI status` | → pipeline-status |
+| `pipeline พัง` or `build failed` or `CI แดง` or `แก้ pipeline` | → pipeline-fix |
 | Azure DevOps URL (dev.azure.com/...) | → extract ID → route |
 
 ---
@@ -38,29 +38,29 @@ improvement_count: 0
 
 ### 1. Fetch PBI → AIDLC (fetch-pbi)
 
-**When:** User ระบุ PBI ID หรือ Azure URL ที่มี workitem ID
+**When:** User specifies a PBI ID or Azure URL containing a work item ID
 
 **Steps:**
 
 ```
 1. MCP: get_work_item(id, expand="relations")
-   → ดึง Title, Description, AcceptanceCriteria, State, Relations
+   → Fetch Title, Description, AcceptanceCriteria, State, Relations
 
 2. Extract:
-   - system = AreaPath.split('\\')[0] หรือ project name
+   - system = AreaPath.split('\\')[0] or project name
    - feature = PBI Title (kebab-case)
    - children = filter relations → Bug, Task, Test Scenario
 
-3. Format PBI data เป็น AIDLC input:
+3. Format PBI data as AIDLC input:
    - Description → Goal + Persona + Requirements
    - AcceptanceCriteria → AC list (Given/When/Then)
    - Children summary → existing work
 
 4. Route to AIDLC:
-   - ถ้า .aidlc/[system]/[feature]/ มีอยู่แล้ว → /resume
-   - ถ้าไม่มี → Phase 0 (Lite Inception หรือ Full ตาม mode)
+   - If .aidlc/[system]/[feature]/ already exists → /resume
+   - If not → Phase 0 (Lite Inception or Full depending on mode)
 
-5. Store PBI metadata ใน .aidlc/[system]/[feature]/planning/decisions/pbi-source.md:
+5. Store PBI metadata in .aidlc/[system]/[feature]/planning/decisions/pbi-source.md:
    - PBI ID, URL, Title, State, Priority
    - Linked Bugs, Tasks, Test Scenarios
 ```
@@ -73,9 +73,9 @@ improvement_count: 0
 
 ### 2. Upload Test Scenarios (upload-ts)
 
-**When:** Phase 2.2 (Test Case Design) เสร็จ + CSV approved แล้ว
+**When:** Phase 2.2 (Test Case Design) is complete and CSV is approved
 
-**⚡ ใช้ Script (ไม่ใช้ MCP) — ประหยัด token 100%**
+**⚡ Uses Script (not MCP) — saves 100% token cost**
 
 ```bash
 npx ts-node --project ai-agent/scripts/azure-devops/tsconfig.json \
@@ -96,14 +96,14 @@ npx ts-node --project ai-agent/scripts/azure-devops/tsconfig.json \
     Priority level, Test_type, Automation status, Effort)
 
 2. For each TS:
-   a. POST /wit/workitems/$Test Scenario (fields ครบ)
+   a. POST /wit/workitems/$Test Scenario (all fields)
    b. PATCH /wit/workitems/{TS_ID} → add Hierarchy-Reverse link to PBI
 
 3. Output: <csv-dir>/ts-azure-ids.md
-   → TS title → Azure ID mapping (ใช้ใน queryTestScenarios.ts ต่อ)
+   → TS title → Azure ID mapping (used in queryTestScenarios.ts next)
 ```
 
-**Dry run (ทดสอบก่อน upload จริง):**
+**Dry run (test before actual upload):**
 ```bash
 ... uploadTsToAdo.ts --csv <path> --pbi-id <id> --ado-project <project> --dry-run
 ```
@@ -113,13 +113,13 @@ npx ts-node --project ai-agent/scripts/azure-devops/tsconfig.json \
 `Expected test result` | `Priority level` | `Test_type` | `Automation test status` |
 `Effort` | `Iteration Path` | `Area Path`
 
-**Output file:** `<csv-dir>/ts-azure-ids.md` — ID mapping สำหรับ automation workflow
+**Output file:** `<csv-dir>/ts-azure-ids.md` — ID mapping for automation workflow
 
 ---
 
 ### 3. Bug Workflow (bug-workflow)
 
-**When:** User ระบุ Bug ID หรือ "ดู Bug ใน PBI xxx"
+**When:** User specifies a Bug ID or "view Bugs in PBI xxx"
 
 **Flow:**
 
@@ -130,29 +130,29 @@ npx ts-node --project ai-agent/scripts/azure-devops/tsconfig.json \
 │    → Title, Repro Steps, State, Parent PBI      │
 ├─────────────────────────────────────────────────┤
 │ 2. Analyze                                      │
-│    → อ่าน Description + Repro Steps             │
-│    → ดู Parent PBI context (AC ที่เกี่ยวข้อง)    │
-│    → ดู linked Test Scenarios                   │
+│    → Read Description + Repro Steps             │
+│    → Review Parent PBI context (related ACs)    │
+│    → Review linked Test Scenarios               │
 ├─────────────────────────────────────────────────┤
 │ 3. Plan Fix                                     │
-│    → ระบุ root cause                            │
-│    → เสนอ fix approach                          │
-│    → ระบุ test ที่ต้อง verify                    │
+│    → Identify root cause                        │
+│    → Propose fix approach                       │
+│    → Identify tests that need to verify         │
 ├─────────────────────────────────────────────────┤
-│ 4. Implement Fix (ถ้า user approve)             │
-│    → แก้ code                                   │
-│    → run test ที่เกี่ยวข้อง                      │
-│    → commit                                     │
+│ 4. Implement Fix (if user approves)             │
+│    → Fix code                                   │
+│    → Run related tests                          │
+│    → Commit                                     │
 ├─────────────────────────────────────────────────┤
 │ 5. Update Azure                                 │
 │    MCP: update_work_item(bugId,                 │
-│      state → "Resolved" หรือ "Closed")          │
+│      state → "Resolved" or "Closed")            │
 │    MCP: add_work_item_comment(bugId,            │
 │      "Fixed in commit {hash}. Root cause: ...")  │
 ├─────────────────────────────────────────────────┤
 │ 6. Verify                                       │
-│    → re-run related test scenarios              │
-│    → update TS state if needed                  │
+│    → Re-run related test scenarios              │
+│    → Update TS state if needed                  │
 └─────────────────────────────────────────────────┘
 ```
 
@@ -172,13 +172,13 @@ npx ts-node --project ai-agent/scripts/azure-devops/tsconfig.json \
 
 ```
 1. MCP: get_work_item(pbiId, expand=relations)
-   → check all children states
+   → Check all children states
 
 2. Validate:
    - All Tasks = Done ✅
    - All Test Scenarios = Done/Pass ✅
    - All Bugs = Closed/Resolved ✅
-   - (ถ้ามี item ที่ยังไม่ done → แจ้ง user)
+   - (If any item is not done → notify user)
 
 3. MCP: update_work_item(pbiId, state → "Done")
 
@@ -198,19 +198,19 @@ npx ts-node --project ai-agent/scripts/azure-devops/tsconfig.json \
 
 ### 5. Sprint Report (sprint-report)
 
-**When:** "สรุป sprint" หรือ "sprint report"
+**When:** "สรุป sprint" or "sprint report"
 
 **Steps:**
 
 ```
-1. ถ้ามี querySprintReport.ts → แนะนำ run script
+1. If querySprintReport.ts exists → recommend running the script
    Path: ai-agent/scripts/azure-devops/query-sprint-report/querySprintReport.ts
 
-2. หรือ ใช้ MCP tools โดยตรง:
+2. Or use MCP tools directly:
    - list_team_iterations(project, team, timeframe="current")
    - get_work_items_for_iteration(iterationId)
    - get_work_items_batch_by_ids(ids)
-   → format เป็น MD report ใน chat
+   → Format as MD report in chat
 
 3. Output: MD with 2 sections
    - Section 1: PBI ↔ Test Scenario mapping
@@ -221,7 +221,7 @@ npx ts-node --project ai-agent/scripts/azure-devops/tsconfig.json \
 
 ### 6. Pipeline Status (pipeline-status)
 
-**When:** "ดู pipeline", "pipeline status", "build status", "CI status", "ดู build ล่าสุด"
+**When:** "ดู pipeline", "pipeline status", "build status", "CI status", "view latest build"
 
 **Method A: Script (preferred — fast, no token cost)**
 
@@ -252,38 +252,38 @@ curl -s -u ":$AZURE_DEVOPS_PAT" \
 
 **Additional scripts:**
 - `pipeline-releases.sh` — list pipeline definitions
-- `pipeline-logs.sh` — ดึง build log ของ failed build เพื่อวิเคราะห์ error
+- `pipeline-logs.sh` — fetch build log of a failed build for error analysis
 - Future: `pipeline-trigger.sh` — trigger a pipeline run
 
 ---
 
 ### 7. Pipeline Diagnose & Fix (pipeline-fix)
 
-**When:** "pipeline พัง", "build failed แก้ให้", "ดู error ใน pipeline", "CI แดง"
+**When:** "pipeline พัง", "build failed fix it", "view error in pipeline", "CI แดง"
 
 **Flow:**
 
 ```
 ┌─────────────────────────────────────────────────┐
-│ 1. ดึง failed build log                         │
+│ 1. Fetch failed build log                       │
 │    Script: pipeline-logs.sh latest              │
-│    หรือ: pipeline-logs.sh <buildId>             │
-│    → ได้ error message + failed step            │
+│    Or: pipeline-logs.sh <buildId>               │
+│    → Get error message + failed step            │
 ├─────────────────────────────────────────────────┤
-│ 2. วิเคราะห์ error                              │
-│    → Permission issue? → แนะนำ fix permission   │
-│    → Code error? → ระบุ file + line             │
-│    → Config error? → ระบุ setting ที่ต้องแก้     │
-│    → Dependency error? → ระบุ package issue     │
+│ 2. Analyze error                                │
+│    → Permission issue? → Recommend fix          │
+│    → Code error? → Identify file + line         │
+│    → Config error? → Identify setting to fix    │
+│    → Dependency error? → Identify package issue │
 ├─────────────────────────────────────────────────┤
-│ 3. แก้ code (ถ้าเป็น code issue)                │
-│    → แก้ไฟล์ที่เกี่ยวข้อง                        │
-│    → run test locally                           │
-│    → commit + push                              │
+│ 3. Fix code (if code issue)                     │
+│    → Edit relevant files                        │
+│    → Run test locally                           │
+│    → Commit + push                              │
 ├─────────────────────────────────────────────────┤
-│ 4. Verify (ถ้าเป็น config/permission issue)     │
-│    → แนะนำ steps ที่ต้องทำใน Azure DevOps UI    │
-│    → ให้ user ทำแล้วกลับมา confirm              │
+│ 4. Verify (if config/permission issue)          │
+│    → Recommend steps to take in Azure DevOps UI │
+│    → Have user complete then confirm            │
 └─────────────────────────────────────────────────┘
 ```
 
@@ -291,11 +291,11 @@ curl -s -u ":$AZURE_DEVOPS_PAT" \
 
 | Error | Root Cause | Fix |
 |-------|-----------|-----|
-| `TF401027: GenericContribute permission` | Build identity ไม่มี push permission | Project Settings → Repos → Security → Build Service → Allow Contribute |
-| `npm ERR! code ERESOLVE` | Dependency conflict | `npm ci --legacy-peer-deps` หรือ fix package.json |
-| `ENOSPC: no space left` | Agent disk full | Clean pipeline cache หรือ use larger agent |
-| `Error: Timeout` | Test/step took too long | Increase timeout หรือ optimize test |
-| `##[error]Process completed with exit code 1` | Generic script failure | ดู log ด้านบน error line |
+| `TF401027: GenericContribute permission` | Build identity lacks push permission | Project Settings → Repos → Security → Build Service → Allow Contribute |
+| `npm ERR! code ERESOLVE` | Dependency conflict | `npm ci --legacy-peer-deps` or fix package.json |
+| `ENOSPC: no space left` | Agent disk full | Clean pipeline cache or use larger agent |
+| `Error: Timeout` | Test/step took too long | Increase timeout or optimize test |
+| `##[error]Process completed with exit code 1` | Generic script failure | Check log lines above the error |
 
 ---
 
@@ -303,30 +303,30 @@ curl -s -u ":$AZURE_DEVOPS_PAT" \
 
 ### Phase 0 (Lite Inception) — Enhanced with Azure Data
 
-เมื่อ user ระบุ PBI ID:
-- ไม่ต้องถาม requirements — ดึงจาก Azure
+When user specifies a PBI ID:
+- No need to ask for requirements — fetch from Azure
 - Description → Goal + Persona + Requirements
 - AcceptanceCriteria → AC list
-- ข้าม user-stories.md generation ถ้า AC ครบอยู่แล้ว
+- Skip user-stories.md generation if AC is already complete
 
 ### Phase 2.2 (Test Case Design) — Auto-upload
 
-หลัง test-scenarios-*.md เสร็จ:
-- ถาม user: "อัพ Test Scenario ขึ้น Azure ไหม?"
-- ถ้า Yes → upload-ts workflow
-- ถ้า No → skip (ทำทีหลังได้)
+After test-scenarios-*.md is complete:
+- Ask user: "Upload Test Scenarios to Azure?"
+- If Yes → upload-ts workflow
+- If No → skip (can be done later)
 
 ### Phase 3.3 (PR) — Link to PBI
 
-หลัง PR created:
+After PR is created:
 - MCP: link_work_item_to_pull_request(pbiId, prId, repoId)
-- MCP: update_work_item(pbiId, state → "Developing" หรือ "Testing")
+- MCP: update_work_item(pbiId, state → "Developing" or "Testing")
 
 ---
 
 ## MCP Tool Reference
 
-| Tool | ใช้ตอนไหน |
+| Tool | When to use |
 |------|-----------|
 | `wit_get_work_item` | Fetch PBI/Bug details |
 | `wit_get_work_items_batch_by_ids` | Batch fetch children |
@@ -343,12 +343,12 @@ curl -s -u ":$AZURE_DEVOPS_PAT" \
 
 ## Rules
 
-1. **Always fetch fresh data** — ไม่ cache PBI state, ดึงใหม่ทุกครั้ง
-2. **Confirm before state change** — ถาม user ก่อน update state ใน Azure
-3. **Comment on every state change** — ทุกครั้งที่เปลี่ยน state ต้อง add comment
-4. **PBI source file** — ทุก feature ที่มาจาก Azure ต้องมี `pbi-source.md`
-5. **Don't close incomplete** — ถ้ามี child ที่ยัง active → ห้าม close PBI
-6. **Language** — Comments ใน Azure เป็น English, chat กับ user เป็น Thai
+1. **Always fetch fresh data** — Do not cache PBI state; fetch fresh every time
+2. **Confirm before state change** — Ask user before updating state in Azure
+3. **Comment on every state change** — Every state change must include a comment
+4. **PBI source file** — Every feature sourced from Azure must have a `pbi-source.md`
+5. **Don't close incomplete** — If any child is still active → do not close PBI
+6. **Language** — Comments in Azure in English, chat with user in Thai
 
 
 ---

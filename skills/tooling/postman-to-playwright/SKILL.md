@@ -30,7 +30,7 @@ Always read the `ai-dlc/rules/playwright-rules/` skill before writing or reviewi
 
 ```text
 Step 1+2:   USER runs script in terminal → produces collection.md + env.md
-Step 2.5:   AI reads summary sections → ออกแบบ structure → ถาม user approve
+Step 2.5:   AI reads summary sections → designs structure → asks user to approve
 Step 3:     AI generates Playwright files per folder
 Step 3.1:   Data Completeness Check (MANDATORY before generating)
 Step 3.2:   Apply standard fixes (URL, auth, stateStore, fixtures)
@@ -83,27 +83,27 @@ npx tsx {skills_root}/postman-to-playwright/postman/scripts/readPostmanEnv.ts \
 
 ---
 
-## Step 2.5: AI ออกแบบ Structure (ก่อน generate)
+## Step 2.5: AI Designs Structure (before generating)
 
-หลังได้ `.md` แล้ว AI อ่านแค่ 2 summary sections — ไม่ต้องอ่าน MD ทั้งหมด:
+After receiving the `.md` files, AI reads only 2 summary sections — no need to read the entire MD:
 
-**จาก `collection.md`** → `## 🏗️ Structure Summary`
+**From `collection.md`** → `## 🏗️ Structure Summary`
 
 - Auth Strategy — type + recommendation (Basic/Bearer/OAuth2)
-- Top-Level Folders — list ทุก folder
-- Shared Patterns — request names ที่ซ้ำกันข้าม folders → ควรเป็น shared Service
-- Cross-Folder State — vars ที่ set ใน folder หนึ่ง ใช้ใน folder อื่น → global stateStore
-- Runtime-Set Variables — vars ทั้งหมดที่ต้องใช้ stateStore (ไม่ใช่ process.env)
+- Top-Level Folders — list all folders
+- Shared Patterns — request names repeated across folders → should be a shared Service
+- Cross-Folder State — vars set in one folder and used in another → global stateStore
+- Runtime-Set Variables — all vars that require stateStore (not process.env)
 - Recommended File Structure — tree overview
 
-**จาก `env.md`** → `## 🏗️ Env Summary`
+**From `env.md`** → `## 🏗️ Env Summary`
 
-- Base URLs — domain vars ที่ใช้ใน requests
-- Secrets — vars ที่ต้อง fill manually (token, secretKey, accessToken)
-- Runtime-set vars — vars ที่ set ตอน runtime (ใช้ stateStore)
-- Empty vars — vars ที่ยังไม่มีค่า (ต้องถาม user)
+- Base URLs — domain vars used in requests
+- Secrets — vars that must be filled manually (token, secretKey, accessToken)
+- Runtime-set vars — vars set at runtime (use stateStore)
+- Empty vars — vars with no value yet (ask user)
 
-AI เสนอ structure ให้ user approve ก่อน generate code ทีละ folder
+AI proposes structure for user to approve before generating code folder by folder
 
 ---
 

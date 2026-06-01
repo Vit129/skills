@@ -271,9 +271,9 @@ Every heal attempt (success or fail) MUST be logged to the implementation plan o
 
 **Purpose:** Prevent repeating the same failed fix. Successful heals become reusable patterns for future features.
 
-## Bug Report Template (เมื่อ QA ไม่สามารถ self-heal ได้)
+## Bug Report Template (When QA cannot self-heal)
 
-เมื่อ max attempts ถึงแล้วยังไม่ผ่าน หรือ bug เป็น logic issue ที่ต้องให้ Dev แก้:
+When max attempts are reached and tests still fail, or the bug is a logic issue that needs to be fixed by Dev:
 
 ```markdown
 ## 🐛 Bug Report — [TS-XXX] [Test Name]
@@ -283,7 +283,7 @@ Every heal attempt (success or fail) MUST be logged to the implementation plan o
 **Severity:** Critical | High | Medium | Low
 
 ### Symptom
-[อธิบายสิ่งที่เห็น — error message, wrong behavior]
+[Explain what is observed — error message, wrong behavior]
 
 ### Steps to Reproduce
 1. [step 1]
@@ -291,19 +291,19 @@ Every heal attempt (success or fail) MUST be logged to the implementation plan o
 3. [step 3]
 
 ### Expected vs Actual
-- Expected: [สิ่งที่ควรเกิด]
-- Actual: [สิ่งที่เกิดจริง]
+- Expected: [What should have happened]
+- Actual: [What actually happened]
 
 ### Environment
 - ENV: SIT | UAT
-- Test data: [testId หรือ seed data ที่ใช้]
-- Browser/Platform: [ถ้า relevant]
+- Test data: [testId or seed data used]
+- Browser/Platform: [If relevant]
 
 ### Reflexion Log Reference
 [Link หรือ paste entry จาก Reflexion Log]
 
 ### Hypothesis
-[QA คิดว่า root cause น่าจะเป็นอะไร — optional แต่ช่วย Dev มาก]
+[What QA thinks the root cause might be — optional but very helpful for Dev]
 ```
 
 **Location:** สร้างใน `.aidlc/[system]/[feature]/audit.md` ใต้ `## Bug Reports` section

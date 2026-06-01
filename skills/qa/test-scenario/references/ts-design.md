@@ -71,7 +71,7 @@ Generate detailed test scenarios and steps using AI reasoning, adhering to 2026 
 
 ## Output Format (Mandatory)
 
-> ⚠️ Format นี้ต้องตรงทุกตัวอักษร — `md2csv.sh` parse โดย regex ที่ exact match
+> ⚠️ This format must match exactly down to every character — md2csv.sh parses using an exact match regex
 
 ```markdown
 #### Test Scenario: TS-[NNN] - [TestType][Prefix] Verb + Object

@@ -55,11 +55,11 @@ Violation = broken workflow. If you catch yourself writing D1 + D2 + D3 in one r
 ```text
 **D{N}: {Question Title}**
 
-1. {Option A} — {brief description} ← แนะนำ (if applicable)
+1. {Option A} — {brief description} ← Recommended (if applicable)
 2. {Option B} — {brief description}
 3. {Option C} — {brief description}
 
-> แนะนำ: {N} ({reason})
+> Recommended: {N} ({reason})
 ```
 
 ### Conditional branching

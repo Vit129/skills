@@ -1,4 +1,25 @@
 ---
+name: eval-harness
+description: >
+  Measure skill consistency and reliability using pass@k and checkpoint evals.
+  Use when a skill is flagged in memory.md, after creating/updating a skill,
+  or for periodic skill health checks. Trigger on "eval skill", "measure skill quality",
+  "pass@k", "consistency check", "skill health", "eval harness".
+version: 1.0.0
+last_improved: 2026-05-31
+improvement_count: 0
+---
+
+# Eval Harness
+
+Measure skill consistency and reliability before trusting it in production workflows.
+
+## AIDLC Gate
+
+⚠️ If this skill is triggered as part of a coding/QA task:
+- AIDLC governance MUST be active (`.aidlc/` folder exists with DECISIONS + PLAN)
+- If not → STOP and route to `governance/aidlc/` first
+- Exception: pure investigation/analysis (no code changes) can proceed without AIDLC
 
 ## When to Use
 
@@ -6,9 +27,7 @@
 - When a skill is flagged in `agent-memory/memory.md` — measure improvement
 - Periodic skill health checks (monthly)
 - Before promoting a playbook entry to knowledge
-version: 1.0.0
-last_improved: 2026-05-31
-improvement_count: 0
+
 ---
 
 ## Eval Types
@@ -153,7 +172,6 @@ Score: 3/4 (75%)
 
 ---
 
-
 ## Consistency Contract
 
 > These steps MUST execute in the same order every time this skill runs.
@@ -170,7 +188,6 @@ Before declaring an eval complete, confirm:
 - [ ] Score calculated and verdict assigned
 - [ ] Report written to persistent location (not just chat)
 - [ ] Action taken if score < 67% (flag or fix)
-
 
 ---
 
@@ -209,11 +226,3 @@ After user approves the output:
 - **Hook:** `skill-improve.json` logs when user corrects this skill's output (silent)
 - **Promotion:** 3x same issue in skill-log → auto-apply fix to this SKILL.md + bump version
 - **Eval:** `eval-check.json` runs pass@3 weekly if this skill is flagged in `memory.md`
-
-## AIDLC Gate
-
-⚠️ If this skill is triggered as part of a coding/QA task:
-- AIDLC governance MUST be active (`.aidlc/` folder exists with DECISIONS + PLAN)
-- If not → STOP and route to `governance/aidlc/` first
-- Exception: pure investigation/analysis (no code changes) can proceed without AIDLC
-

@@ -17,7 +17,7 @@
 
 ## Development Approach (Question 2 — after Mode, before Phase 2)
 
-> ถามหลังเลือก Mode แล้ว ก่อนเข้า Phase 2 — กำหนดลำดับ QA กับ Dev
+> Ask after selecting Mode, before entering Phase 2 — determine sequence of QA and Dev
 
 When entering Phase 2 (after Inception or Lite Inception), ask **Development Approach**:
 
@@ -40,116 +40,116 @@ When entering Phase 2 (after Inception or Lite Inception), ask **Development App
 
 ---
 
-### 🧪 TDD (Recommended) — QA ก่อน Dev
+### 🧪 TDD (Recommended) — QA before Dev
 
-**Philosophy:** "RED → GREEN → REFACTOR" — เขียน test ที่ fail ก่อน → เขียน code ให้ test ผ่าน → refactor
+**Philosophy:** "RED → GREEN → REFACTOR" — write failing test first → write code to make test pass → refactor
 
-**ลำดับ:**
+**Sequence:**
 ```text
-Phase 2.1 QA Task Design — วาง task breakdown สำหรับ test
+Phase 2.1 QA Task Design — Create task breakdown for test
     │
     ▼
-Phase 2.2 Test Case Design — ออกแบบ test scenarios (BDD)
+Phase 2.2 Test Case Design — Design test scenarios (BDD)
     │
     ▼
-Phase 2.3 QA Architecture — กำหนด test framework structure
+Phase 2.3 QA Architecture — Define test framework structure
     │
     ▼
-Phase 2.4 Test Script Design — เขียน test scripts (RED — tests FAIL)
+Phase 2.4 Test Script Design — Write test scripts (RED — tests FAIL)
     │
     ▼
-Phase 2.5 Dev Task Design — วาง task breakdown สำหรับ code
+Phase 2.5 Dev Task Design — Create task breakdown for code
     │
     ▼
 Phase 2.6 Sync Gate — QA + Dev align
     │
     ▼
-Phase 3.1 Implementation — เขียน code ให้ tests PASS (GREEN)
+Phase 3.1 Implementation — Write code to make tests PASS (GREEN)
     │
     ▼
-Phase 3.2 Refactor + Validation — refactor แล้ว run tests อีกรอบ (REFACTOR)
+Phase 3.2 Refactor + Validation — refactor and run tests again (REFACTOR)
     │
     ▼
 Phase 3.3 Create PR
 ```
 
-**เหมาะกับ:**
-- มี specs/PBI/requirements ชัดเจนแล้ว (รู้ว่าต้องทำอะไร)
-- ต้องการ confidence สูงว่า code ทำงานถูกต้อง
-- ป้องกัน regression — test เป็น safety net ตั้งแต่แรก
-- Team ที่คุ้นเคยกับ test-first workflow
+**Suitable for:**
+- Clear specs/PBI/requirements exist (knowing what to do)
+- High confidence needed that code works correctly
+- Prevent regression — test acts as a safety net from the start
+- Teams familiar with test-first workflow
 
-**ข้อดี:**
-- Test coverage สูงตั้งแต่เริ่ม
-- Code ถูก design ให้ testable
-- ลด bug ที่หลุดไป production
-- Dev รู้ว่า "เสร็จ" เมื่อไหร่ (test ผ่าน = เสร็จ)
+**Pros:**
+- High test coverage from the start
+- Code is designed to be testable
+- Reduces bugs leaking to production
+- Dev knows when it is "done" (test passes = done)
 
-**ข้อเสีย:**
-- ถ้า requirements เปลี่ยนบ่อย → test ต้องแก้ตาม
-- ใช้เวลามากกว่าตอนเริ่ม (แต่ประหยัดตอน debug)
+**Cons:**
+- If requirements change frequently → tests must be updated accordingly
+- Takes more time at the start (but saves time during debugging)
 
 ---
 
-### 📋 SDLC — Dev ก่อน QA
+### 📋 SDLC — Dev before QA
 
-**Philosophy:** "Design → Build → Test → Ship" — เขียน code ให้ทำงานได้ก่อน แล้วค่อยเขียน test ยืนยัน
+**Philosophy:** "Design → Build → Test → Ship" — write working code first, then write tests to verify
 
-**ลำดับ:**
+**Sequence:**
 ```text
-Phase 2.5 Dev Task Design — วาง task breakdown สำหรับ code
+Phase 2.5 Dev Task Design — Create task breakdown for code
     │
     ▼
-Phase 3.1 Implementation — เขียน code ก่อน
+Phase 3.1 Implementation — Write code first
     │
     ▼
-Phase 2.1 QA Task Design — วาง task breakdown สำหรับ test
+Phase 2.1 QA Task Design — Create task breakdown for test
     │
     ▼
-Phase 2.2 Test Case Design — ออกแบบ test scenarios (BDD)
+Phase 2.2 Test Case Design — Design test scenarios (BDD)
     │
     ▼
-Phase 2.3 QA Architecture — กำหนด test framework structure
+Phase 2.3 QA Architecture — Define test framework structure
     │
     ▼
-Phase 2.4 Test Script Design — เขียน test scripts
+Phase 2.4 Test Script Design — Write test scripts
     │
     ▼
-Phase 3.2 Automated Testing — run tests กับ code ที่มีแล้ว
+Phase 3.2 Automated Testing — run tests against existing code
     │
     ▼
 Phase 3.3 Create PR
 ```
 
-**เหมาะกับ:**
-- Prototype / MVP ที่ต้องการ working code เร็ว
-- Feature ที่ UI/UX ยังไม่ stable (เปลี่ยนบ่อย)
-- Team ที่ไม่คุ้นกับ test-first
-- Exploratory development — ยังไม่แน่ใจว่า solution จะหน้าตาเป็นยังไง
+**Suitable for:**
+- Prototype / MVP requiring fast working code
+- Features where UI/UX is not yet stable (changes frequently)
+- Teams unfamiliar with test-first
+- Exploratory development — not yet sure what the solution will look like
 
-**ข้อดี:**
-- เห็น working code เร็วกว่า
-- เหมาะกับ rapid prototyping
-- ไม่ต้องเขียน test ใหม่ถ้า design เปลี่ยน
+**Pros:**
+- See working code faster
+- Suitable for rapid prototyping
+- No need to write new tests if design changes
 
-**ข้อเสีย:**
-- Test coverage อาจไม่ครบ (เขียนทีหลังมักลืม edge cases)
-- Code อาจไม่ testable (ไม่ได้ design ให้ test ตั้งแต่แรก)
-- Bug อาจหลุดไป PR ก่อนมี test
+**Cons:**
+- Test coverage may be incomplete (writing later often misses edge cases)
+- Code might not be testable (not designed for testing from the start)
+- Bugs might leak to the PR before tests exist
 
 ---
 
 ### Approach Comparison
 
-| มิติ | TDD 🧪 (Recommended) | SDLC 📋 |
+| Dimension | TDD 🧪 (Recommended) | SDLC 📋 |
 |------|----------------------|----------|
-| **ลำดับ** | QA → Dev (test ก่อน code) | Dev → QA (code ก่อน test) |
+| **Sequence** | QA → Dev (test before code) | Dev → QA (code before test) |
 | **Phase order** | 2.1→2.2→2.3→2.4→2.5→3.1→3.2→3.3 | 2.5→3.1→2.1→2.2→2.3→2.4→3.2→3.3 |
-| **Test timing** | เขียน test ก่อน code (RED→GREEN) | เขียน test หลัง code |
-| **Confidence** | สูง (test-first = safety net) | ปานกลาง (test-after = verification) |
-| **Speed to working code** | ช้ากว่า (ต้องเขียน test ก่อน) | เร็วกว่า (code ก่อน) |
-| **เหมาะกับ** | Stable requirements, production code | Prototype, exploratory, unstable UI |
-| **Default** | ✅ Recommended | ใช้เมื่อมีเหตุผลชัดเจน |
+| **Test timing** | Write test before code (RED→GREEN) | Write test after code |
+| **Confidence** | High (test-first = safety net) | Medium (test-after = verification) |
+| **Speed to working code** | Slower (must write test first) | Faster (code first) |
+| **Suitable for** | Stable requirements, production code | Prototype, exploratory, unstable UI |
+| **Default** | ✅ Recommended | Use when there is a clear reason |
 
 ---
 
@@ -163,9 +163,9 @@ AIDLC supports 3 execution modes. User selects mode at start — AI detects from
 
 | Mode | Detection | When to use |
 |------|-----------|-------------|
-| Full | `"start AI-DLC"` / Kiro Spec mode / medium+ complexity | ทำทั้ง design + QA + Dev (default) |
-| QA Only | `"start AI-DLC QA ..."` | มี specs/PBI แล้ว ต้องการทำ QA เท่านั้น (เลือก sub-mode ด้านล่าง) |
-| Dev Only | `"start AI-DLC Dev only"` | มี specs/PBI แล้ว ต้องการทำ Dev เท่านั้น |
+| Full | `"start AI-DLC"` / Kiro Spec mode / medium+ complexity | Do both design + QA + Dev (default) |
+| QA Only | `"start AI-DLC QA ..."` | Specs/PBI already exist, only want to do QA (select sub-mode below) |
+| Dev Only | `"start AI-DLC Dev only"` | Specs/PBI already exist, only want to do Dev |
 
 **Detection:** In Kiro, mode is read from IDE context. In other AI agents, detect from context or ask user.
 
@@ -186,7 +186,7 @@ When mode = QA Only, ask further:
 |-------------|---------|--------|--------|
 | QA Scenario Only | `"start AI-DLC QA scenario only"` | Lite Inception (if needed) → 2.1 → 2.2 | test scenarios (CSV/MD) |
 | QA Automation | `"start AI-DLC QA automation"` | Lite Inception (if needed) → 2.1 → 2.2 → 2.3 → 2.4 | test scenarios + test scripts |
-| QA Scenario + Automation | `"start AI-DLC QA scenario automation"` | Lite Inception (if needed) → 2.1 → 2.2 → 2.3 → 2.4 | test scenarios + test scripts (ออก scenario แล้วต่อ automation เลย) |
+| QA Scenario + Automation | `"start AI-DLC QA scenario automation"` | Lite Inception (if needed) → 2.1 → 2.2 → 2.3 → 2.4 | test scenarios + test scripts (generate scenarios then proceed to automation immediately) |
 
 When mode = QA Automation, ask platform:
 
@@ -201,8 +201,8 @@ Platform ไหน? (เลือกได้มากกว่า 1)
 7. API + Mobile (Android & iOS)
 ```
 
-> **Combined Platform:** เลือก option 5-7 เมื่อ feature มี test ข้าม layer (เช่น API setup + Web UI verify, หรือ API + Mobile deep link)
-> Combined platform ใช้ `shared-fixtures/` เป็น single source of truth สำหรับ test data ที่ใช้ร่วมกัน
+> **Combined Platform:** Choose options 5-7 when the feature has cross-layer tests (e.g., API setup + Web UI verify, or API + Mobile deep link)
+> Combined platform uses `shared-fixtures/` as a single source of truth for shared test data
 
 Platform affects:
 
@@ -302,8 +302,8 @@ tests/
 
 - **`.aidlc/` folder is MANDATORY** — every mode creates `.aidlc/[system]/[feature]/` with planning/ + outputs/
 - **DECISIONS → PLAN → EXECUTE** — every mode follows this process for each active phase
-- **qa-task-design is MANDATORY** for QA modes — ห้ามข้ามไป test case design โดยไม่มี qa-task-progress.md
-- **dev-task-design is MANDATORY** for Dev mode — ห้ามข้ามไป implementation โดยไม่มี dev-task-progress.md
+- **qa-task-design is MANDATORY** for QA modes — do not skip to test case design without qa-task-progress.md
+- **dev-task-design is MANDATORY** for Dev mode — do not skip to implementation without dev-task-progress.md
 - **audit.md is MANDATORY** — every mode maintains audit trail
 - **Dialog message format** — ALL AIDLC interactions use structured dialog format, not plain chat. Applies to every mode, every AI agent. See "Dialog & Artifact Integration (Kiro)" section below.
 
@@ -434,7 +434,7 @@ ALL work goes through AIDLC. AI determines the correct phase by checking what ex
 
 If user intent is ambiguous (dev vs QA) → ASK: "1. Dev (implement) 2. QA (test) 3. ทั้งสอง (AIDLC full)"
 
-## Anti-Shortcut Rules (ป้องกันลักไก่)
+## Anti-Shortcut Rules (Shortcut Prevention)
 
 AI MUST NOT skip mandatory prerequisites. **This is a hard gate — NEVER bypass regardless of user instruction.**
 
@@ -757,17 +757,17 @@ MANDATORY: Steps 1-9 apply to EVERY phase. Step 10 applies when a phase produces
 
 ## Mid-execution Change Request
 
-เมื่อ user ต้องการเปลี่ยนแปลงระหว่าง execute:
+When the user wants to make changes during execution:
 
-| ประเภทการเปลี่ยน | เกณฑ์ | วิธีจัดการ |
+| Change Type | Criteria | How to Handle |
 |---|---|---|
-| **Minor** | ไม่กระทบ scope, แก้ได้ใน task ปัจจุบัน | Amend in-place → update output file → continue |
-| **Major** | กระทบ scope หรือ prerequisite phases | Pause → สร้าง decision file ใหม่ → re-plan → get approval → resume |
+| **Minor** | Does not affect scope, can be fixed in current task | Amend in-place → update output file → continue |
+| **Major** | Affects scope or prerequisite phases | Pause → create a new decision file → re-plan → get approval → resume |
 
-**Minor examples:** แก้ field name, เพิ่ม validation rule, เปลี่ยน error message
-**Major examples:** เพิ่ม user story ใหม่, เปลี่ยน architecture pattern, เพิ่ม bounded context
+**Minor examples:** edit field name, add validation rule, change error message
+**Major examples:** add new user story, change architecture pattern, add bounded context
 
-> ⚠️ ถ้าไม่แน่ใจว่า minor หรือ major → ถาม user ก่อนเสมอ
+> ⚠️ If unsure whether minor or major → always ask the user first
 
 ## Workflow Phases
 
@@ -832,23 +832,23 @@ Brownfield start from 1.1, Greenfield start from 1.2
     - Data generation (step 5) is MANDATORY after design — never skip
     - CSV export (step 6) is MANDATORY to complete Phase 2.2 — scenarios not exported = phase not done
 
-  ✅ **Upload Gate** (หลัง CSV approved — ก่อน Phase 2.3):
-  - ถาม user: "อัพ Test Scenario ขึ้น Azure DevOps ไหม?"
-  - ถ้า Yes → run script (ไม่ใช้ MCP — ประหยัด token):
+  ✅ **Upload Gate** (After CSV approved — Before Phase 2.3):
+  - Ask user: "อัพ Test Scenario ขึ้น Azure DevOps ไหม?"
+  - If Yes → run script (no MCP — saves tokens):
     ```bash
     npx ts-node --project ai-agent/scripts/azure-devops/tsconfig.json \
       ai-agent/scripts/azure-devops/upload-ts/uploadTsToAdo.ts \
       --csv <path-to-csv> --pbi-id <PBI_ID> --ado-project "<project>" --company Org
     ```
   - Output: `<csv-dir>/ts-azure-ids.md` → TS title → Azure ID mapping
-  - ถ้า No → skip (ทำทีหลังได้ด้วย `azure-devops-bridge/` skill)
+  - If No → skip (can be done later using `azure-devops-bridge/` skill)
 
   ✅ **PO Sign-off Gate** (MANDATORY before Phase 2.3):
   - Present test scenario titles + batch summary to PO
   - PO confirms: "scenarios ครอบคลุม requirements ที่ตั้งใจไว้"
-  - ถ้า PO พบ missing scenarios → เพิ่มก่อน proceed
-  - ถ้า PO พบ scenarios ที่ไม่ตรง requirement → แก้ก่อน proceed
-  - เหตุผล: catch misunderstanding ก่อน invest ใน automation — แก้ตอนนี้ถูกกว่าแก้หลัง test script เสร็จ
+  - If PO finds missing scenarios → add them before proceeding
+  - If PO finds scenarios that do not match the requirement → fix them before proceeding
+  - Rationale: catch misunderstandings before investing in automation — fixing now is cheaper than fixing after test scripts are done
 - **2.3** QA Architecture → Test automation framework blueprints
   → Use `qa-architect` skill (api-arch.md, web-arch.md, mobile-arch.md, test-db-strategy.md)
   → **MANDATORY read order within qa-architect skill:**
@@ -948,7 +948,7 @@ For detailed patterns → Use `core/architect` skill (architecture-patterns.md)
 ### QA Only Mode
 - `"start AI-DLC QA scenario only"` — QA Scenario Only: Lite Inception → 2.1 → 2.2
 - `"start AI-DLC QA automation"` — QA Automation: Lite Inception → 2.1 → 2.2 → 2.3 → 2.4 (then asks: API / Web UI / Android / iOS)
-- `"start AI-DLC QA scenario automation"` — QA Scenario + Automation: Lite Inception → 2.1 → 2.2 → 2.3 → 2.4 (ออก scenario แล้วต่อ automation เลย)
+- `"start AI-DLC QA scenario automation"` — QA Scenario + Automation: Lite Inception → 2.1 → 2.2 → 2.3 → 2.4 (generate scenarios then proceed to automation immediately)
 
 ### Dev Only Mode
 - `"start AI-DLC Dev only"` — Dev Only: Lite Inception → 2.5 → 3.1 → 3.2 → 3.3
