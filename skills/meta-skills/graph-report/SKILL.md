@@ -7,6 +7,7 @@ description: >
   Triggers: "create graph report", "update graph report", "dependency map",
   "codebase overview", "god nodes", "surprising connections", "สร้าง graph report",
   "graph query", "graph path", "graph explain"
+credit: Inspired by Graphify (https://github.com/safishamsi/graphify) by Safi Shamsi — adapted as a pure-markdown skill without external tooling
 version: 1.0.0
 last_improved: 2026-05-31
 improvement_count: 0
