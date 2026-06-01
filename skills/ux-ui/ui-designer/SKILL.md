@@ -6,6 +6,10 @@ description: >
   recommend colors for industry, build landing page, define design tokens.
   Covers design decisions (what to build) AND implementation quality (how it looks/feels).
   Industry-validated patterns (8 sectors) + pbakaus/impeccable anti-slop principles.
+credit: >
+  Inspired by impeccable (https://github.com/pbakaus/impeccable) by Paul Bakaus
+  and UI-UX Pro skill (https://github.com/saifyxpro/ui-ux-design-pro-skill) by saifyxpro
+  — merged and adapted into our own design system workflow
 version: 2.0.0
 last_improved: 2026-06-01
 improvement_count: 1
