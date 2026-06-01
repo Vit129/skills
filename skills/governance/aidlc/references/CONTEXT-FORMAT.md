@@ -84,6 +84,8 @@ Manages the lifecycle of video courses from authoring through delivery.
 | Trigger | Action |
 |---------|--------|
 | AIDLC Phase 1 (domain-design step) | Generate initial CONTEXT.md from domain model |
-| During interview-me / brainstorming | Update inline when term is resolved |
+| During `interview-me` | Update inline when term is resolved (pre-inception, no code) |
+| During `interview-doc` | Update inline when term is resolved (has codebase, cross-ref code) |
+| During brainstorming | Update inline when term is sharpened |
 | Term conflict discovered in code review | Add to Flagged Ambiguities |
 | New bounded context added | Create per-context CONTEXT.md |

@@ -4,36 +4,44 @@ Capture reusable patterns, business rules, and lessons learned across features f
 
 ## Storage Boundary Rules (MANDATORY)
 
-Prevents AI from confusing `.aidlc/` with `.memory/`:
+Prevents AI from confusing `.aidlc/` (working dir) with `agent-memory/` (long-term store):
 
 | Store in | Content | Examples |
 |----------|---------|---------|
 | **`.aidlc/[system]/[feature]/`** | Working directory — plans and technical evidence for that specific project | decisions, plans, outputs, audit.md, task progress |
 | **`.aidlc/[system]/PROGRESS.md`** | Task status for that system (short-term, project-scoped) | feature status, task counts |
-| **`.memory/wings/`** | Long-term context — patterns, lessons, decisions reusable across projects | architecture decisions, reusable patterns, session summaries |
-| **`.memory/state.md`** | Palace map — active wings, recent sessions, open threads (cross-project) | NOT project status |
+| **`agent-memory/knowledge/{domain}/`** | Long-term patterns, lessons, decisions reusable across features | arch decisions, QA patterns, biz rules |
+| **`agent-memory/memory.md`** | Hot state — active task context, open threads (project-scoped) | current task, decisions in flight |
+| **`GRAPH_REPORT.md`** | Codebase knowledge graph — god nodes, deps, file index | updated after each feature completes |
 
 **Rules:**
+
 - `.aidlc/` = **temporary** — used during that project, can be archived after PR merge
-- `.memory/` = **permanent** — information worth remembering across projects and sessions
-- No duplication: if data is already in `.aidlc/`, do NOT copy it to `.memory/`
-- Move to `.memory/` only: patterns reusable in ≥2 projects, decisions affecting long-term architecture
+- `agent-memory/` = **permanent** — information worth remembering across features and sessions
+- No duplication: if data is already in `.aidlc/`, do NOT copy it to `agent-memory/`
+- Move to `agent-memory/knowledge/` only: patterns reusable in ≥2 features, decisions affecting long-term architecture
+- `GRAPH_REPORT.md` lives at project root — update when new files are created or feature completes
 
 **Correct:**
-```
-.aidlc/japan-travel/flight-booking/audit.md  ← technical evidence (temporary)
-.memory/wings/ai-dlc-skills/rooms/japan-travel-patterns.md  ← reusable patterns (permanent)
+
+```text
+.aidlc/ordering/cash-payment/audit.md              ← technical evidence (temporary)
+agent-memory/knowledge/qa/web-ordering-patterns.md ← reusable QA patterns (permanent)
+GRAPH_REPORT.md                                    ← codebase graph (project root)
 ```
 
 **Wrong:**
-```
-❌ copying entire PROGRESS.md into .memory/state.md
-❌ storing the same architecture decision in both .aidlc/ and .memory/
+
+```text
+❌ copying entire PROGRESS.md into agent-memory/memory.md
+❌ storing the same architecture decision in both .aidlc/ and agent-memory/knowledge/
+❌ writing patterns to agent-memory/ before they've been used in ≥2 features
 ```
 
 ---
 
 ## When to use
+
 - After completing any AIDLC phase — capture what was learned
 - Before starting a new feature — check what's reusable from past features
 - After test execution — record healing patterns and debugging insights
@@ -44,22 +52,33 @@ Prevents AI from confusing `.aidlc/` with `.memory/`:
 
 At the end of each phase, AI silently extracts and appends to `audit.md`:
 
-**Phase 1.2 (Requirements):**
+**Phase 1.2 (Requirements Gathering):**
+
 - New business rules discovered
 - Reusable logic candidates (from domain analysis)
 - Missing logic patterns (from gap analysis)
 
-**Phase 1.3-1.5 (Architecture & Design):**
+**Phase 1.3-1.6 (Domain Decomposition → Domain Design → UI/UX → Logical Design):**
+
 - Architecture patterns chosen and why
 - Shared components identified
 - Database strategy decisions
+- UI/UX design decisions and component specs
 
-**Phase 2.1-2.4 (QA):**
+**Phase 2.1-2.4 (QA Task Design → Test Cases → QA Architecture → Test Scripts):**
+
 - Test patterns (scenario design, data generation)
 - Edge cases identified
 - Reusable test data structures
+- Framework and folder structure decisions
 
-**Phase 3.1-3.2 (Implementation & Testing):**
+**Phase 2.5-2.7 (Dev Task Design → Mid-Parallel Sync → DevOps Sync):**
+
+- Task decomposition patterns
+- Cross-team alignment decisions
+
+**Phase 3.1-3.3 (Implementation → Automated Testing → Pull Request):**
+
 - Implementation patterns used
 - Healing strategies that worked/failed (from Reflexion Log)
 - Flaky test patterns and fixes
@@ -89,12 +108,15 @@ Append to `.aidlc/[system]/[feature]/audit.md`:
 ### Reuse (before starting new feature)
 
 At Phase 1.2 of a new feature, AI SHOULD:
+
 1. Scan `.aidlc/[system]/*/audit.md` for Knowledge Buffer sections in sibling features
-2. Extract patterns relevant to the new feature
-3. Apply "Lego Assembly" — combine best parts from multiple features
-4. Report: "📚 Found [N] reusable patterns from [feature1], [feature2]"
+2. Scan `agent-memory/knowledge/{domain}/` for cross-feature patterns
+3. Extract patterns relevant to the new feature
+4. Apply "Lego Assembly" — combine best parts from multiple features
+5. Report: "📚 Found [N] reusable patterns from [feature1], [feature2]"
 
 ## Rules
+
 - Capture is silent — show only "✅ Knowledge Buffer updated"
 - Never duplicate — check existing entries before appending
 - Common logic only if reusable across 2+ features
@@ -115,9 +137,17 @@ After test execution completes, update knowledge scores:
 
 When scanning lessons before task creation:
 
-1. Load `{knowledge_root}/lessons/{platform}/` index
+1. Load `agent-memory/knowledge/{domain}/` index (per-project first, then global fallback `~/.kiro/skills/knowledge/`)
 2. Filter: `still_relevant = true` only
 3. Sort: `effectiveness.prevented_failures DESC`, then `applied_count DESC`
 4. Surface top 3 most effective lessons first
 5. Report: "📚 Top lessons: {lesson_id} (prevented {n}x failures)"
 6. Note: if `auto_captured = true` AND `confidence < 0.8` → flag as "📝 Auto-captured — verify before applying"
+
+## GRAPH_REPORT Update (after feature completes)
+
+After Phase 2.4 done (first working feature) or all tests PASS + PR merged:
+
+1. Update `{project-root}/GRAPH_REPORT.md` — god nodes, deps, file index, surprising connections
+2. Use `meta-skills/graph-report/SKILL.md` process
+3. Skip if no new files were created in this phase

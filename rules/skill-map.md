@@ -36,7 +36,8 @@
 | Keyword | Skill |
 |---------|-------|
 | brainstorm, คิดก่อน, party mode, explore idea, 3 amigos, คุยก่อนแบ่งงาน | `thinking/brainstorming/` ← Phase 1.8 (หลัง Inception, ก่อน Task Design) |
-| interview me, ถามทีละข้อ, grill me, สัมภาษณ์, underspecified | `thinking/interview-me/` ← BEFORE Phase 0 |
+| interview me, ถามทีละข้อ, grill me, สัมภาษณ์, underspecified | `thinking/interview-me/` ← BEFORE Phase 0 (ยังไม่มี code) |
+| interview-doc, grill with docs, ถามกับ code, ตรวจสอบกับ codebase, align language | `thinking/interview-doc/` ← BEFORE Phase 0 (มี codebase แล้ว) |
 | doubt, adversarial review, verify decision, scrutinize, second opinion | `thinking/doubt-driven/` |
 | analyze, gap analysis, requirements, reverse-eng | `thinking/analysis-skills/` |
 | verify docs, cite source, official docs, check API version | `thinking/source-driven/` |

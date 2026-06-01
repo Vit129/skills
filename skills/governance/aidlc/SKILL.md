@@ -143,12 +143,20 @@ For full phase list, routing table, and anti-shortcut rules → (Read `reference
 ## CONTEXT.md — Per-Project Domain Glossary
 
 Every project should have a `CONTEXT.md` at its root — a shared language between human and AI.
-Generated as a side-effect of Phase 1 (domain-design step). Updated inline during interview-me and brainstorming.
+Generated as a side-effect of Phase 1 (domain-design step). Updated inline during interview-me, interview-doc, and brainstorming.
 
 - **Format:** See `references/CONTEXT-FORMAT.md`
 - **Create lazily:** Only when the first domain term is resolved
 - **Update inline:** When a term is sharpened during any session, update immediately — don't batch
 - **No implementation details:** Glossary only — what terms mean, not how they're built
+
+**When to use which skill to update CONTEXT.md:**
+
+| Situation | Skill |
+|-----------|-------|
+| ยังไม่มี code, ต้องการ extract ความต้องการ | `thinking/interview-me` |
+| มี codebase แล้ว, ต้องการ align language กับ code | `thinking/interview-doc` |
+| หลัง Phase 1 Inception เสร็จ, ทีมคุยกัน | `thinking/brainstorming` |
 
 ## Templates
 
@@ -162,6 +170,8 @@ For skill routing guide → see AGENTS.md Skill Map (workspace root)
 
 > **Brainstorming** — Phase 1.8 (หลัง Inception, ก่อน Task Design) — 3 Amigos review via subagents → `core/brainstorming/SKILL.md`
 > **Subagent-Driven** — ใช้ระหว่าง Phase 3.1 เมื่อมี 3+ independent tasks → `core/subagent-driven/SKILL.md`
+> **Interview-Me** — ก่อน Phase 0 เมื่อยังไม่มี code — extract ความต้องการ → `thinking/interview-me`
+> **Interview-Doc** — ก่อน Phase 0 เมื่อมี codebase แล้ว — align language + cross-ref code + update CONTEXT.md → `thinking/interview-doc`
 
 ## ⚠️ Gotchas
 
