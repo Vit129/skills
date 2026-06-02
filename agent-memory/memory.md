@@ -1,7 +1,7 @@
 # Agent Memory — Hot State
 
 <!-- Max 2,500 bytes. Usage updated at session end. See user-profile.md for user preferences. -->
-<!-- Usage: ~2,350/2,500 bytes (94%) -->
+<!-- Usage: ~1,800/2,500 bytes (72%) after 2026-06-02 optimization -->
 
 ## Task_Ledger
 
@@ -11,9 +11,7 @@
 
 | # | Type | Entry | Last Updated |
 |---|------|-------|--------------|
-| 1 | non-coding | .claude hooks simplified — session-save v5, session-load v4, checkpoint v2, skill-check v2. Skip Q&A, shorter prompts | 2026-05-11 |
-| 2 | non-coding | .claude skills synced — ai-dlc/ synced from VitProjects (Test Scenario replace), hook-creator templates updated | 2026-05-11 |
-| 3 | non-coding | Auto-create skill drafts — knowledge-curate hook v2.0: promote/crystallize → auto-draft SKILL.md in skills/drafts/ if criteria pass. skill-map + SKILL.md updated | 2026-05-18 |
+| 1 | non-coding | Auto-create skill drafts — knowledge-curate hook v2.0: promote/crystallize → auto-draft SKILL.md in skills/drafts/ if criteria pass. skill-map + SKILL.md updated | 2026-05-18 |
 
 ## Recent_Lessons
 
