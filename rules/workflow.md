@@ -82,6 +82,20 @@ Trigger `/compact` when:
 
 ---
 
+## Skill Invocation Rule
+
+**Before calling the Skill tool, always output a declaration line in the conversation:**
+
+```
+[Skill: {skill-name}]
+```
+
+This makes it visible to the user that a skill is actually being invoked, not just mentioned.
+
+Example: before `Skill(skill="ha-dev")` → write `[Skill: ha-dev]` in text first.
+
+---
+
 ## Skill Self-Improvement Loop
 
 Skills improve through three layers working together:
