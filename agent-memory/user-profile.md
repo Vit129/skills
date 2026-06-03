@@ -11,13 +11,26 @@
 
 ## Dev Preferences
 
-- **Language:** English (interaction + docs/code) — Vit is practicing English; correct grammar inline when needed; switch to Thai only when explaining complex concepts or when Vit signals confusion
+- **Language:** English (interaction + docs/code) — Vit is practicing English; **always correct grammar on every message, inline, before responding** (format: *"Correction: ..."*); switch to Thai only when explaining complex concepts or when Vit signals confusion
 - **Style:** Minimal, no verbose summaries, no repeated nudges
 - **Testing:** Vitest/Playwright, TDD priority
 - **Architecture:** Domain-Layered, Modular
 - **IDE:** Claude Code CLI, Gemini CLI, Codex CLI, Kiro (Autopilot)
 - **Commits:** Conventional Commits
 - **Memory routing:** global skill/hook/rule edits → `.claude/agent-memory/`; project edits → `{project}/agent-memory/`
+
+## Side Projects
+
+- **Investment:** Runs a Terry/Nora/Cleo multi-agent research pipeline on US equities — paper portfolio ($5K) validates conviction before routing to Thai RMF/PVD mutual funds. See: `/Users/supavit.cho/Git/My Investment Port/`
+- **Home Assistant:** Builds HVAC automations (AC scheduling, pre-cooling, arrival triggers, power outage handling) for his home. See: `/Users/supavit.cho/Git/Home Assistant/`
+
+## Thinking Style
+
+- Encodes *how to think*, not just what to do — frameworks have phase sequencing, decision trees, escalation conditions, and reusability formulas
+- Deep Abstraction instinct: strips domain names and matches on `Input → Process → Output` flow — catches cross-domain reuse others miss
+- Designs against AI verbosity by default: silent execution phases, file-first output, no chat dumps
+- QA origin gave him phase gates + anti-pattern discipline that most AI Infrastructure engineers lack
+- Skills in `~/.claude/skills/thinking/analysis-skills/` are cognitive engineering artifacts — not prompts
 
 ## Work Context
 
