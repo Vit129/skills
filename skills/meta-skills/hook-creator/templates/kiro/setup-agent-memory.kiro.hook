@@ -1,0 +1,13 @@
+{
+  "name": "Auto-Setup Agent Memory",
+  "version": "1.0.0",
+  "description": "On session start, check if agent-memory/ exists in current project. If not, auto-run setupMemory.sh to bootstrap it. Eliminates 'skip silently' behavior — every project gets memory.",
+  "when": {
+    "type": "promptSubmit"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "[ -d agent-memory ] || bash ~/.kiro/scripts/setup/setupMemory.sh . 2>&1 | tail -5",
+    "timeout": 30
+  }
+}

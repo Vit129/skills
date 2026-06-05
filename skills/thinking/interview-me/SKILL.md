@@ -1,7 +1,7 @@
 ---
 name: interview-me
 description: One-question-at-a-time interview that extracts what the user actually wants until ~95% confidence — before writing any spec or code.
-credit: Adapted from Addy Osmani's agent-skills — interview-me concept
+credit: Adapted from Addy Osmani's agent-skills + Matt Pocock's grill-me (https://www.aihero.dev/skills-grill-me)
 version: 1.0.0
 last_improved: 2026-05-31
 improvement_count: 0
@@ -52,8 +52,17 @@ Rules:
 - **ONE question per message** — never batch multiple questions
 - Ask the MOST important unknown first
 - Frame questions to reduce ambiguity maximally
+- **Provide a recommended answer** with each question — user can confirm/modify instead of typing from scratch
+- **If answer can be found by exploring codebase → explore code first, don't ask** — only ask what code can't tell you
 - Offer options when possible (easier to pick than to generate)
 - Accept "ไม่รู้" / "ยังไม่แน่ใจ" — note it and move on
+
+**Question format:**
+```
+Q: [คำถาม]
+💡 Recommended: [คำตอบที่แนะนำ — based on codebase/PBI/context]
+→ ตอบ confirm, แก้ หรือ ปฏิเสธ
+```
 
 ### Step 3: Track Progress
 

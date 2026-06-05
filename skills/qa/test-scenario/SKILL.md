@@ -131,9 +131,9 @@ Every scenario file MUST have a Quick Review Summary section at the top, before 
 
 ## 📋 Quick Review Summary
 
-| # | Scenario | Priority | Effort | Domain |
-|---|----------|----------|--------|--------|
-| TS-001 | [title] | Critical | 2h | [domain] |
+| # | Azure ID | Scenario | Spec File | Priority | Effort | Domain |
+|---|----------|----------|-----------|----------|--------|--------|
+| TS-001 | — | [title] | — | Critical | 2h | [domain] |
 ...
 
 **Total: N scenarios | Effort: Xh | Critical: N | High: N | Medium: N**
@@ -142,6 +142,11 @@ Every scenario file MUST have a Quick Review Summary section at the top, before 
 - Domain A: N (description)
 - Domain B: N (description)
 ```
+
+**Column population timeline:**
+- `Azure ID`: populated after `uploadTsToAdo.ts` runs (Phase 2.2 upload gate) — initially "—"
+- `Spec File`: populated after Phase 2.4 writes each spec file — initially "—"
+- Both columns start as "—" and get filled as workflow progresses
 
 ### Divider between Quick Review and Full Detail (MANDATORY):
 

@@ -78,13 +78,16 @@ Which platform? (can select more than 1)
 4. Android / iOS / Mobile
 ```
 
-**Question 2 — Development Approach (ask before entering Phase 2):**
+**Question 2 — Development Approach (ask ONLY when mode = Full):**
+- ⚠️ **SKIP this question entirely for QA Only and Dev Only modes** — not applicable
 - `"TDD"` / `"write test first"` / `"test-first"` → TDD (Recommended)
 - `"SDLC"` / `"code first"` / `"implement first"` → SDLC
 - Not specified → default to TDD (Recommended)
 
 **TDD (Recommended):** QA first, then Dev — write test first, then write code to pass (RED→GREEN→REFACTOR)
 **SDLC:** Dev first, then QA — write code first, then write test later
+
+**⚠️ When mode = QA Only:** Do NOT ask TDD/SDLC. QA Only always follows: Lite Inception → 2.1 → 2.2 → 2.3 → 2.4. There is no "code first" option in QA Only mode.
 
 **Detection:**
 - **Kiro IDE:** reads Vibe/Spec mode from IDE context (user selects in UI, never types it)
@@ -252,6 +255,22 @@ Every phase MUST execute steps 1-9 in this order:
 | 10 | Update GRAPH_REPORT.md | No new files created |
 | 11 | Update agent-memory (Task_Ledger + Playbook) | No real artifact produced |
 
+### Lite Inception Internal Steps (QA Only / QA Automation / Dev Only)
+
+> Used by: QA Scenario Only, QA Automation, Dev Only modes (replaces Full Phase 0–1.8)
+> Full details + output format: see `references/workflow.md` → "Lite Inception" section
+> This table = execution checklist. workflow.md = detailed reference with examples.
+
+| Step | Action | Skip Condition |
+|------|--------|----------------|
+| 0 | **Load skill:** Read `tooling/azure-devops-bridge/SKILL.md` | Never skip |
+| 1 | Fetch PBI details via MCP → extract Title, Description, Acceptance Criteria | Never skip |
+| 2 | **Codebase exists?** YES → Read `thinking/interview-doc/SKILL.md` → align terms, cross-ref code, update CONTEXT.md. NO → Read `thinking/interview-me/SKILL.md` → extract requirements via Q&A | Never skip |
+| 3 | **Read `meta-skills/graph-report/SKILL.md`** → scan codebase structure, identify affected modules | Skip if no codebase yet |
+| 4 | Confirm output paths with user: `.aidlc/` folder, QA test files root, Dev source root | Never skip |
+| 5 | Write DECISIONS.md → scope, constraints, approach | Never skip |
+| 6 | Write PLAN.md → phase sequence for chosen mode | Never skip |
+
 ### Phase Routing (must follow mode matrix)
 
 | Mode | Phase Order |
@@ -262,10 +281,22 @@ Every phase MUST execute steps 1-9 in this order:
 | Full (SDLC) | 0 → 1.1-1.8 → 2.5 → 3.1 → 2.1 → 2.2 → 2.3 → 2.4 → (2.5 optional) → 3.2 → 3.3 |
 | Dev Only | Lite Inception → 2.5 → 3.1 → 3.2 → 3.3 → DONE |
 
+### Phase 2.1 Internal Steps (QA Task Design)
+
+| Step | Action | Skip Condition |
+|------|--------|----------------|
+| 0 | **Load skill:** Read `tooling/azure-devops-bridge/SKILL.md` | Never skip |
+| 1 | Re-read PBI Acceptance Criteria from Azure (always fresh, never from memory) | Never skip |
+| 2 | Read `thinking/interview-doc/SKILL.md` → validate domain terms against CONTEXT.md | Skip if CONTEXT.md already complete |
+| 3 | Read `thinking/brainstorming/SKILL.md` → run lightweight 3-Amigos check on AC gaps | Skip if feature is trivial |
+| 4 | Write `qa-task-progress.md` → list planned scenarios + assigned QA | Never skip |
+
 ### Phase 2.2 Internal Steps (Test Case Design)
 
 | Step | Action | Skip Condition |
 |------|--------|----------------|
+| 0 | **Load skill:** Read `qa/test-scenario/SKILL.md` + `rules/test-scenario-rules/SKILL.md` | Never skip |
+| 0b | **Load UI context:** Read `tooling/ui-to-text/SKILL.md` → check `agent-memory/knowledge/biz/` for existing UI KB. If not found → use Figma MCP or screenshot to build KB first. If no Figma KB and no screenshot available → Read `ux-ui/ui-designer/SKILL.md` to generate mockup description first. **Applies to ALL platforms (API + Web UI)** — API tests also need UI flow understanding for end-to-end context | Never skip |
 | 1 | Resolve PBI Assigned To + QA Assigned To | Never skip |
 | 2 | Read `test-scenario-rules/references/ts-standards.md` | Never skip |
 | 3 | Read `test-scenario-rules/references/csv-export.md` | Never skip |
@@ -273,15 +304,17 @@ Every phase MUST execute steps 1-9 in this order:
 | 5 | Design batch 1 (Success) → pause for approval | Never skip |
 | 6 | Design batch 2 (Alternative) → pause for approval | Never skip |
 | 7 | Design batch 3 (Edge) → pause for approval | Never skip |
-| 8 | Generate test data (`test-scenario/references/data-gen.md`) | Never skip |
-| 9 | Export CSV + validate (`csv-validator.md`) | Never skip |
-| 10 | Upload Gate — ask user about Azure upload | Never skip (ask is mandatory, upload is optional) |
-| 11 | PO Sign-off Gate | Never skip |
+| 8 | **Add Quick Review Summary table** at top of scenario .md file (columns: #, Azure ID, Scenario, Spec File, Priority, Effort, Domain) — Azure ID and Spec File start as "—" | Never skip |
+| 9 | Generate test data (`test-scenario/references/data-gen.md`) | Never skip |
+| 10 | Export CSV + validate (`csv-validator.md`) | Never skip |
+| 11 | Upload Gate — ask user about Azure upload → if yes, fill Azure ID column | Never skip (ask is mandatory, upload is optional) |
+| 12 | PO Sign-off Gate | Never skip |
 
 ### Phase 2.3 Internal Steps (QA Architecture)
 
 | Step | Action | Skip Condition |
 |------|--------|----------------|
+| 0 | **Load skill:** Read `qa/qa-architect/SKILL.md` + `rules/playwright-rules/SKILL.md` (or `rules/robotframework-rules/SKILL.md` for mobile) | Never skip |
 | 1 | Read platform-specific arch file (api-arch/web-arch/mobile-arch) | Never skip |
 | 2 | Read platform-specific coding rules | Never skip |
 | 3 | Design test structure (folders, page objects, helpers) | Never skip |
@@ -291,11 +324,17 @@ Every phase MUST execute steps 1-9 in this order:
 
 | Step | Action | Skip Condition |
 |------|--------|----------------|
+| 0 | **Load skill:** Read `qa/playwright-testing/SKILL.md` + `rules/playwright-rules/SKILL.md` + `debugging/debug-mantra/SKILL.md` (or RF equivalents for mobile). **debug-mantra is ALWAYS loaded regardless of platform (API/Web/Mobile)** | Never skip |
 | 1 | Read `implementation-plan.md` | Never skip |
 | 2 | Read coding rules (playwright-rules or robotframework-rules) | Never skip |
 | 3 | Check `knowledge/lessons/` for prior patterns | Never skip |
 | 4 | Write test scripts (RED — should fail if TDD) | Never skip |
 | 5 | Run tests to confirm state (FAIL for TDD, PASS for SDLC) | Never skip |
+| 5b | **Self-heal loop (max 3x):** If tests fail → Read `qa/verification-loop/SKILL.md` → fix → re-run | Skip if tests pass on first run |
+| 5c | **If still failing after 3x:** Read `debugging/debug-mantra/SKILL.md` → root-cause analysis before continuing | Skip if tests pass |
+| 6 | **Update Quick Review Summary** → fill `Spec File` column in testScenario-*.md for each spec written | Never skip |
+| 7 | **Upload Test Result Gate** — ask user: "Upload test result to Azure?" → if yes, trigger `tooling/upload-test-result/SKILL.md` | Never skip (ask is mandatory, upload is optional) |
+| 8 | **Git Push + Pipeline Gate** — ask user: "Git commit + push + trigger pipeline?" → if yes: `git add . && git commit -m "test: {feature} - all tests pass" && git push` | Never skip (ask is mandatory, push is optional) |
 
 ### Phase 2.5 Internal Steps (Performance Testing — Optional)
 
@@ -304,6 +343,7 @@ Every phase MUST execute steps 1-9 in this order:
 
 | Step | Action | Skip Condition |
 |------|--------|----------------|
+| 0 | **Load skill:** Read `qa/performance-testing/SKILL.md` | Never skip |
 | 1 | Ask user: "Do you want performance testing? (Frontend / Backend / Both / Skip)" | Never skip (ask is mandatory) |
 | 2 | If Frontend: run Chrome DevTools MCP trace → Core Web Vitals + resource waterfall | User chose Backend only or Skip |
 | 3 | If Backend: profile API endpoints (per-endpoint p95 + E2E flow) | User chose Frontend only or Skip |
@@ -311,7 +351,57 @@ Every phase MUST execute steps 1-9 in this order:
 | 5 | Generate performance report (Quick Review format) | Never skip if step 2 or 3 ran |
 | 6 | If thresholds fail → flag for optimization before release | Never skip |
 
-**Skill loaded:** `qa/performance-testing/` → `references/frontend-performance.md` and/or `references/backend-performance.md`
+### Phase 2.5-Dev Internal Steps (Dev Task Design) — Full/Dev Only
+
+> ⚠️ Currently BLOCKED by Mode Lock. Prepared for future use.
+
+| Step | Action | Skip Condition |
+|------|--------|----------------|
+| 0 | **Load skill:** Read `dev/dev-architect/SKILL.md` + relevant dev skill (backend/frontend) | Never skip |
+| 1 | Read `references/dev-task-design.md` | Never skip |
+| 2 | Break feature into implementation tasks | Never skip |
+| 3 | Write `dev-task-progress.md` | Never skip |
+| 4 | Confirm task order with user | Never skip |
+
+### Phase 3.1 Internal Steps (Implementation) — Full/Dev Only
+
+> ⚠️ Currently BLOCKED by Mode Lock. Prepared for future use.
+
+| Step | Action | Skip Condition |
+|------|--------|----------------|
+| 0 | **Load skill:** Read `dev/backend-dev/SKILL.md` or `dev/frontend-dev/SKILL.md` + `dev/security-hardening/SKILL.md` (if auth-related) | Never skip |
+| 1 | Read task from `dev-task-progress.md` | Never skip |
+| 2 | Read coding rules for target stack | Never skip |
+| 3 | Check `knowledge/lessons/` for prior patterns | Never skip |
+| 4 | Implement code (follow TDD if applicable — make tests pass) | Never skip |
+| 5 | Run tests + lint | Never skip |
+| 6 | Commit with task reference | Never skip |
+| 7 | Update `dev-task-progress.md` status | Never skip |
+
+### Phase 3.2 Internal Steps (Integration + Review) — Full/Dev Only
+
+> ⚠️ Currently BLOCKED by Mode Lock. Prepared for future use.
+
+| Step | Action | Skip Condition |
+|------|--------|----------------|
+| 0 | **Load skill:** Read `review/review-personas/SKILL.md` | Never skip |
+| 1 | Run full test suite (integration) | Never skip |
+| 2 | Code review (security + quality + coverage) | Never skip |
+| 3 | Fix review findings | If no findings |
+| 4 | All tests pass after fixes | Never skip |
+
+### Phase 3.3 Internal Steps (PR + Ship) — Full/Dev Only
+
+> ⚠️ Currently BLOCKED by Mode Lock. Prepared for future use.
+
+| Step | Action | Skip Condition |
+|------|--------|----------------|
+| 0 | **Load skill:** Read `dev/shipping-launch/SKILL.md` + `tooling/azure-devops-bridge/SKILL.md` | Never skip |
+| 1 | Create PR (git push + PR via CLI) | Never skip |
+| 2 | Link PR to PBI (`wit_link_work_item_to_pull_request`) | Never skip |
+| 3 | Update PBI state → "Testing" or "Developing" | Never skip |
+| 4 | Pipeline pass confirmation | Never skip |
+| 5 | Merge + close PBI (if all children done) | Never skip |
 
 ### Violation Detection
 

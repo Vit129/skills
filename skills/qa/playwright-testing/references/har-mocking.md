@@ -26,7 +26,7 @@ get_network_request       login + navigate           + error mocks
 ```bash
 npx playwright open \
   --save-har=tests/fixtures/har/[system]/[feature].har \
-  https://smartsoft-sit.axonstech.com/salesreturn/login
+  https://your-app-sit.your-company.com/salesreturn/login
 ```
 - Login + navigate ทุกหน้าที่ต้อง test
 - ปิด browser → HAR file ถูกบันทึก
@@ -35,7 +35,7 @@ npx playwright open \
 ```typescript
 const context = await browser.newContext({
   recordHar: {
-    path: 'tests/fixtures/har/smartsoft/dashboard.har',
+    path: 'tests/fixtures/har/your-app/dashboard.har',
     urlFilter: '**/api/**'  // จับเฉพาะ API calls
   }
 })
@@ -51,7 +51,7 @@ await context.close() // HAR saved
 ### Basic replay
 ```typescript
 test('dashboard shows correct cards', async ({ page }) => {
-  await page.routeFromHAR('tests/fixtures/har/smartsoft/dashboard.har', {
+  await page.routeFromHAR('tests/fixtures/har/your-app/dashboard.har', {
     url: '**/api/**'
   })
   await page.goto('/salesreturn/dashboard')
@@ -67,7 +67,7 @@ test.beforeAll(async ({ request, page }) => {
   const up = await isServiceUp(request, BASE_URL)
   if (!up) {
     console.log('⚠️ Service unavailable — using HAR mock [HAR_MOCK]')
-    await page.routeFromHAR('tests/fixtures/har/smartsoft/dashboard.har', {
+    await page.routeFromHAR('tests/fixtures/har/your-app/dashboard.har', {
       url: '**/api/**'
     })
   }
@@ -77,7 +77,7 @@ test.beforeAll(async ({ request, page }) => {
 ### Update HAR when API changes
 ```typescript
 // update: true → re-record URLs not found in existing HAR
-await page.routeFromHAR('tests/fixtures/har/smartsoft/dashboard.har', {
+await page.routeFromHAR('tests/fixtures/har/your-app/dashboard.har', {
   url: '**/api/**',
   update: true  // fetch from real server + merge into HAR
 })

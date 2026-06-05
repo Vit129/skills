@@ -28,7 +28,7 @@ All other data (path, feature name, DB strategy, variable groups) must be auto-d
 | Setting | Default | Override by saying |
 |---|---|---|
 | `continueOnError` | `true` (pipeline continues even if tests fail) | "fail pipeline if tests fail" |
-| Agent pool | `WINDOWS-AGENT-POOL` | "use pool [name]" |
+| Agent pool | `windows-agent-pool` | "use pool [name]" |
 | Publish results | Always publish | "skip publishing results" |
 | External templates | Use `qaTemplates` repo | "generate inline, no templates" |
 
@@ -118,13 +118,13 @@ Choose the correct template based on the agent pool:
 
 | Pool | OS | Template |
 |---|---|---|
-| `WINDOWS-AGENT-POOL` | Windows | #[[file:templates/pipeline-templates/windows-pipeline-template.md]] |
-| `LINUX-AGENT-POOL` | Linux | #[[file:templates/pipeline-templates/linux-pipeline-template.md]] |
+| `windows-agent-pool` | Windows | #[[file:templates/pipeline-templates/windows-pipeline-template.md]] |
+| `linux-agent-pool` | Linux | #[[file:templates/pipeline-templates/linux-pipeline-template.md]] |
 
 **How to select:**
 - If user says "BCIBOT" or project uses Windows agent → use `windows-pipeline-template.md`
-- If user says "LINUX-AGENT-POOL" or project uses Linux agent → use `linux-pipeline-template.md`
-- If not specified → ask: "ใช้ pool ไหนครับ? (WINDOWS-AGENT-POOL / LINUX-AGENT-POOL)"
+- If user says "linux-agent-pool" or project uses Linux agent → use `linux-pipeline-template.md`
+- If not specified → ask: "ใช้ pool ไหนครับ? (windows-agent-pool / linux-agent-pool)"
 
 Both templates support:
 - Multi-folder test execution with isolated results per folder

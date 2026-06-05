@@ -1,7 +1,7 @@
 {
   "name": "Session Save — Skill Log",
-  "version": "1.0.0",
-  "description": "On session end, reflect on skills used and append improvement proposals to skill-log.md. Ensures skills improve every session.",
+  "version": "1.1.0",
+  "description": "On session end, reflect on skills used and append improvement proposals to skill-log.md. Ensures skills improve every session. agent-memory/ is guaranteed to exist (auto-created by setup-agent-memory hook on first prompt).",
   "when": {
     "type": "agentStop"
   },

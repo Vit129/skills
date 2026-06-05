@@ -33,11 +33,23 @@ agent-memory/
     └── archive-playbook.md  ← Zero-score/retired cases
 ```
 
+## Bootstrap (Auto-Setup)
+
+Before any memory operation, check if `agent-memory/` exists in the current project:
+
+```bash
+# Check and auto-create if missing
+[ -d agent-memory ] || bash ~/.kiro/scripts/setup/setupMemory.sh .
+```
+
+**Rule:** NEVER skip silently if `agent-memory/` is missing — always run `setupMemory.sh .` to create it.
+The script is idempotent (safe to run multiple times) and creates all required files from templates.
+
 ## When to Load Each Reference
 
 | User says | Load |
 |-----------|------|
-| "bootstrap memory", "setup memory", "initialize", "reset" | `references/templates/` — copy templates to `agent-memory/` |
+| "bootstrap memory", "setup memory", "initialize", "reset" | Run `bash ~/.kiro/scripts/setup/setupMemory.sh .` then read `references/templates/` |
 | "session flow", "how does memory work", "save/discard gate" | `references/session-flow.md` |
 | "draft format", "playbook format", "memory format" | `references/templates/` — show the relevant template |
 | "subagent", "memory curator", "knowledge curation", "delegate memory" | `references/subagent-patterns.md` |
@@ -180,7 +192,7 @@ Build a deepening model of the user across sessions via `user-profile.md`.
 | **Work patterns** | Preferred frameworks, naming conventions, commit style | Inferred after 3+ consistent observations |
 | **Domain expertise** | Strong in QA, learning backend, expert in Playwright | Inferred from task complexity + questions asked |
 | **Communication style** | Prefers bullet points, dislikes long explanations | Inferred after 5+ interactions |
-| **Active projects** | CPI QA, VitProjects, YOUR-PROJECT | Updated each session |
+| **Active projects** | CPI QA, VitProjects, your-project | Updated each session |
 
 ### Modeling Rules
 
@@ -262,6 +274,136 @@ After memory operations:
 - [ ] Knowledge files have tags in `index.md`
 - [ ] Drafts are ephemeral (deleted after gate evaluation)
 - [ ] User-profile inferences marked with confidence level
+
+---
+
+## Skill Stocktake (Audit & Health Check)
+
+> Trigger: "skill stocktake", "audit skills", "skill health", "ตรวจ skills"
+> Run manually or schedule via eval-check hook (weekly)
+
+### What it checks
+
+| Check | Source | Flag if |
+|-------|--------|---------|
+| **Unused skills** | `skill-log.md` — last used date | Not used in 30+ days |
+| **Underperforming skills** | `memory.md` Skill_Flags | Flagged 3+ times without fix |
+| **Outdated skills** | SKILL.md `last_improved` field | Not improved in 60+ days + has flags |
+| **Duplicate coverage** | AGENTS.md Skill Map keywords | 2+ skills with overlapping keywords |
+| **Missing Step 0** | AIDLC Internal Steps | Phase exists but no "Load skill" step |
+| **Orphan references** | SKILL.md references section | Points to file that doesn't exist |
+| **Draft backlog** | `drafts/` folder | Pending drafts older than 14 days |
+
+### Output format
+
+```markdown
+## 📋 Skill Stocktake Report — {date}
+
+### 🟢 Healthy (N skills)
+[list of skills with recent use + no flags]
+
+### 🟡 Needs Attention (N skills)
+| Skill | Issue | Recommendation |
+|-------|-------|----------------|
+| ... | unused 45d | Archive or remove from Skill Map |
+| ... | flagged 3x | Read skill-log.md → apply fix |
+
+### 🔴 Critical (N skills)
+| Skill | Issue | Action Required |
+|-------|-------|-----------------|
+| ... | orphan reference | Fix path or remove reference |
+| ... | duplicate keywords | Merge or differentiate |
+
+### Summary
+- Total: N skills | Healthy: N | Attention: N | Critical: N
+- Last stocktake: {previous date}
+```
+
+### Integration
+
+- Add to `qa/eval-harness/` eval rotation (weekly)
+- Results stored in `agent-memory/evals/skill-stocktake-{date}.md`
+- If Critical > 0 → block session-save from marking session as healthy
+
+---
+
+## Continuous Learning v2 (Confidence-Based Instincts)
+
+> Enhances existing Knowledge from Lessons pipeline with confidence scoring + auto-evolve
+
+### Confidence Scoring
+
+Every playbook entry and knowledge file gets a confidence score:
+
+```markdown
+## Entry Format (enhanced)
+| Field | Description |
+|-------|-------------|
+| confidence | 0.0–1.0 (auto-calculated) |
+| source | user-approved / auto-captured / inferred |
+| last_validated | date when last confirmed still valid |
+| applied_count | times successfully applied |
+| contradicted_count | times found incorrect |
+```
+
+**Confidence formula:**
+```
+confidence = (applied_count - contradicted_count * 2) / max(applied_count + contradicted_count, 1)
+clamp(confidence, 0.0, 1.0)
+```
+
+**Thresholds:**
+| Confidence | Status | Action |
+|-----------|--------|--------|
+| 0.9–1.0 | ✅ Verified | Trust fully, auto-apply |
+| 0.7–0.89 | ⚠️ Probable | Trust but verify on new contexts |
+| 0.5–0.69 | 🟡 Uncertain | Ask user before applying |
+| < 0.5 | 🔴 Unreliable | Archive or delete |
+
+### Auto-Evolve (Instinct → Skill)
+
+When patterns accumulate enough confidence:
+
+```
+playbook entries (confidence > 0.8, same domain, 3+ entries)
+  │
+  ▼
+Auto-cluster by keyword similarity
+  │
+  ▼
+Generate skill draft: drafts/{domain}-{pattern}/SKILL.md
+  │
+  ▼
+Log in skill-log.md: "auto-evolve proposal"
+  │
+  ▼
+User approves → move to skills/{category}/{name}/SKILL.md
+```
+
+**Rules:**
+- Never auto-evolve without 3+ high-confidence entries from same domain
+- Always create as draft first — never auto-promote to final skills
+- Include source entries as evidence in the draft SKILL.md
+- User must explicitly approve evolve (via session-save nudge or direct command)
+
+### Integration with existing pipeline
+
+| Existing mechanism | Enhanced with |
+|-------------------|--------------|
+| playbook.md Applied counter | + confidence score + last_validated date |
+| knowledge/ promotion (Applied >= 3) | + confidence >= 0.8 requirement |
+| skill-log.md proposals | + auto-evolve proposals from clustered entries |
+| Save/Discard Gate (2/3 criteria) | + initial confidence = 0.5 (uncertain until validated) |
+| session-save hook | + confidence decay: -0.05 if not validated in 30 days |
+
+### Commands
+
+| Trigger | Action |
+|---------|--------|
+| "confidence report" | Show all entries sorted by confidence |
+| "evolve skills" | Cluster high-confidence patterns → propose drafts |
+| "validate playbook" | Re-check all entries against current codebase |
+| "decay check" | Flag entries not validated in 30+ days |
 
 ### Improvement Tracking
 

@@ -1,0 +1,13 @@
+{
+  "name": "Graph Report — Auto Update",
+  "version": "1.0.0",
+  "disabled": false,
+  "description": "After each spec task completes, remind agent to update GRAPH_REPORT.md if the task changed project structure, dependencies, or state.",
+  "when": {
+    "type": "postTaskExecution"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "[GRAPH REPORT UPDATE] A task just completed. Evaluate if this task changed the project's structure in a way that GRAPH_REPORT.md should reflect (new files, new dependencies, new state keys, new services, changed data flow). If YES: 1) Read the current GRAPH_REPORT.md (or note it doesn't exist yet). 2) Read `~/.kiro/skills/meta-skills/graph-report/SKILL.md` for the generation process. 3) Update ONLY the affected sections (don't regenerate the whole file for small changes). 4) Update the date in the header comment. 5) Report: '📊 GRAPH_REPORT.md updated: [sections changed]'. If NO (task was a bug fix, test-only, config tweak, or documentation change that doesn't affect architecture): Report: '📊 GRAPH_REPORT.md: no structural changes — skipped.' If GRAPH_REPORT.md doesn't exist yet and the project now has enough structure to warrant one (3+ source files with dependencies): Generate the initial GRAPH_REPORT.md following the full template in `~/.kiro/skills/meta-skills/graph-report/references/graph-report-template.md`. Report: '📊 GRAPH_REPORT.md created (initial generation).'"
+  }
+}

@@ -170,7 +170,7 @@ rows.append(ID_row)
 
 for scenario in test_scenarios:
     ts_row = [
-        'Test Scenario', '', 'To Do', '', 
+        'Test Case', '', 'To Do', '', 
         clean_single_line(scenario['title']),
         '', 
         clean_single_line(scenario['pre_conditions'], is_html=True), 
@@ -212,8 +212,8 @@ if '\\\\' in ID[17]: print("❌ ID Row: Iteration Path has double backslash"); e
 
 # C. Scenario Rows Validation
 for idx, row in enumerate(rows[2:], 3):
-    if row[0] != "Test Scenario":
-        print(f"❌ Row {idx}: Col 1 is '{row[0]}' (Expected 'Test Scenario')")
+    if row[0] != "Test Case":
+        print(f"❌ Row {idx}: Col 1 is '{row[0]}' (Expected 'Test Case')")
         errors += 1
     if row[1]: print(f"❌ Row {idx}: Col 2 (ID) must be empty (Auto-gen)"); errors += 1
     if row[2] != "To Do": print(f"❌ Row {idx}: Col 3 is '{row[2]}' (Expected 'To Do')"); errors += 1
@@ -254,7 +254,7 @@ print(f"{'Type':<22} | {'ID':<8} | {'State':<10} | {'Title':<40} | {'Pri':<5} | 
 print("-" * 140)
 print(f"{ID_row[0]:<22} | {ID_row[1]:<8} | {ID_row[2]:<10} | {truncate(ID_row[3], 40):<40} | {ID_row[5]:<5} | {'-':<8} | {'-':<12} | {truncate(ID_row[19], 20):<20}")
 for i, sc in enumerate(test_scenarios, 1):
-    print(f"{'Test Scenario':<22} | {i:<8} | {'To Do':<10} | {truncate(sc['title'], 40):<40} | {truncate(sc['priority'], 5):<5} | {sc['test_type']:<8} | {truncate(sc['automation_status'], 12):<12} | {truncate(sc.get('assigned_to', ''), 20):<20}")
+    print(f"{'Test Case':<22} | {i:<8} | {'To Do':<10} | {truncate(sc['title'], 40):<40} | {truncate(sc['priority'], 5):<5} | {sc['test_type']:<8} | {truncate(sc['automation_status'], 12):<12} | {truncate(sc.get('assigned_to', ''), 20):<20}")
 print("-" * 140)
 print(f"✅ Total Scenarios: {len(test_scenarios)}")
 print("="*140)

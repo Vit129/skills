@@ -26,6 +26,7 @@ When a user message matches any of these patterns → activate this skill:
 | `PBI #xxx` | → fetch-pbi → AIDLC |
 | `Bug #xxx` | → bug-workflow |
 | `upload TS` | → upload-ts |
+| `upload test result` or `แปะผล test` | → `tooling/upload-test-result/` |
 | `close PBI` | → close-pbi |
 | `sprint report` | → sprint-report |
 | `pipeline status` or `build status` or `CI status` | → pipeline-status |
@@ -83,7 +84,7 @@ npx ts-node --project ai-agent/scripts/azure-devops/tsconfig.json \
   --csv <path-to-test-scenarios-api.csv> \
   --pbi-id <PBI_ID> \
   --ado-project "<project>" \
-  --company Org
+  --company Your Company
 ```
 
 **Script:** `ai-agent/scripts/azure-devops/upload-ts/uploadTsToAdo.ts`
@@ -91,12 +92,12 @@ npx ts-node --project ai-agent/scripts/azure-devops/tsconfig.json \
 **Steps:**
 
 ```
-1. Parse CSV → extract Test Scenario rows
+1. Parse CSV → extract Test Case rows
    (Title 2, Pre_conditions, Test steps, Expected result,
     Priority level, Test_type, Automation status, Effort)
 
 2. For each TS:
-   a. POST /wit/workitems/$Test Scenario (all fields)
+   a. POST /wit/workitems/$Test Case (all fields)
    b. PATCH /wit/workitems/{TS_ID} → add Hierarchy-Reverse link to PBI
 
 3. Output: <csv-dir>/ts-azure-ids.md
@@ -221,81 +222,21 @@ npx ts-node --project ai-agent/scripts/azure-devops/tsconfig.json \
 
 ### 6. Pipeline Status (pipeline-status)
 
+> **⚡ Delegated to:** `tooling/query-pipeline/SKILL.md`
+
 **When:** "pipeline status", "build status", "CI status", "view latest build"
 
-**Method A: Script (preferred — fast, no token cost)**
-
-```bash
-~/.kiro/scripts/azure-devops/pipeline-status.sh [org] [project] [top]
-# Default: YOUR-ORG / YOUR-PROJECT / top 5
-```
-
-**Method B: REST API via shell (when script not available)**
-
-```bash
-curl -s -u ":$AZURE_DEVOPS_PAT" \
-  "https://dev.azure.com/{org}/{project}/_apis/build/builds?\$top=5&api-version=7.1" \
-  | jq '.value[] | {id, buildNumber, status, result, definition: .definition.name, startTime}'
-```
-
-**Output format:**
-
-```
-📊 Pipeline Status: YOUR-ORG / YOUR-PROJECT (last 5)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[SUCCEEDED] #20260529.1 — CPI-QA-Automation
-   Started: 2026-05-29 | Finished: 2026-05-29
-   Reason: manual | Requested by: Supavit C.
-
-📈 Summary: 5 total | ✅ 4 passed | ❌ 1 failed | 🔄 0 running
-```
-
-**Additional scripts:**
-- `pipeline-releases.sh` — list pipeline definitions
-- `pipeline-logs.sh` — fetch build log of a failed build for error analysis
-- Future: `pipeline-trigger.sh` — trigger a pipeline run
+**Action:** Read and follow `tooling/query-pipeline/SKILL.md` — it contains all scripts, workflows, URLs, and common error patterns.
 
 ---
 
 ### 7. Pipeline Diagnose & Fix (pipeline-fix)
 
+> **⚡ Delegated to:** `tooling/query-pipeline/SKILL.md` (diagnose workflow)
+
 **When:** "pipeline failed", "build failed fix it", "view error in pipeline", "CI error"
 
-**Flow:**
-
-```
-┌─────────────────────────────────────────────────┐
-│ 1. Fetch failed build log                       │
-│    Script: pipeline-logs.sh latest              │
-│    Or: pipeline-logs.sh <buildId>               │
-│    → Get error message + failed step            │
-├─────────────────────────────────────────────────┤
-│ 2. Analyze error                                │
-│    → Permission issue? → Recommend fix          │
-│    → Code error? → Identify file + line         │
-│    → Config error? → Identify setting to fix    │
-│    → Dependency error? → Identify package issue │
-├─────────────────────────────────────────────────┤
-│ 3. Fix code (if code issue)                     │
-│    → Edit relevant files                        │
-│    → Run test locally                           │
-│    → Commit + push                              │
-├─────────────────────────────────────────────────┤
-│ 4. Verify (if config/permission issue)          │
-│    → Recommend steps to take in Azure DevOps UI │
-│    → Have user complete then confirm            │
-└─────────────────────────────────────────────────┘
-```
-
-**Common error patterns:**
-
-| Error | Root Cause | Fix |
-|-------|-----------|-----|
-| `TF401027: GenericContribute permission` | Build identity lacks push permission | Project Settings → Repos → Security → Build Service → Allow Contribute |
-| `npm ERR! code ERESOLVE` | Dependency conflict | `npm ci --legacy-peer-deps` or fix package.json |
-| `ENOSPC: no space left` | Agent disk full | Clean pipeline cache or use larger agent |
-| `Error: Timeout` | Test/step took too long | Increase timeout or optimize test |
-| `##[error]Process completed with exit code 1` | Generic script failure | Check log lines above the error |
+**Action:** Read and follow `tooling/query-pipeline/SKILL.md` → "Diagnose & Fix" section.
 
 ---
 
@@ -308,6 +249,13 @@ When user specifies a PBI ID:
 - Description → Goal + Persona + Requirements
 - AcceptanceCriteria → AC list
 - Skip user-stories.md generation if AC is already complete
+
+### Phase 2.4 (Test Script) — Auto-upload Test Result
+
+After all tests pass in Phase 2.4:
+- Ask user: "Upload test result to Azure?"
+- If Yes → upload-test-result workflow (ask FE/BE version → compile → update TS card)
+- If No → skip (can be done later with "upload test result" command)
 
 ### Phase 2.2 (Test Case Design) — Auto-upload
 

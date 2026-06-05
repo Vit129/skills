@@ -73,7 +73,7 @@ test.describe('Dashboard', () => {
   test.beforeAll(async ({ request, page }) => {
     const up = await isServiceUp(request, BASE_URL)
     if (!up) {
-      await page.routeFromHAR('tests/fixtures/har/smartsoft/dashboard.har', {
+      await page.routeFromHAR('tests/fixtures/har/your-app/dashboard.har', {
         url: '**/api/**'
       })
     }

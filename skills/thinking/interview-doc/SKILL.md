@@ -73,7 +73,15 @@ Rules เหมือน `interview-me`:
 - **ONE question per message** — ไม่ batch
 - ถามสิ่งที่สำคัญที่สุดก่อน
 - **ให้ recommended answer** ทุกคำถาม — อย่าถามเฉยๆ
+- **If answer can be found by exploring codebase → explore code first, don't ask** — only ask what code can't tell you
 - รอคำตอบก่อนถามต่อ
+
+**Question format:**
+```
+Q: [คำถาม]
+💡 Recommended (from code/docs): [คำตอบที่ extract จาก codebase/PBI/Figma]
+→ ตอบ confirm, แก้ หรือ ปฏิเสธ
+```
 
 **ลำดับคำถาม:**
 1. WHAT — แผนนี้ต้องการทำอะไร?

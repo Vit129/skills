@@ -20,7 +20,7 @@ Final CSV must contain exactly 23 columns in correct order.
 ## Validation Rules
 - **Checklist A:** Header must have 23 columns
 - **Checklist B:** PBI Row — Col 1="Product Backlog Item", ID not empty, single backslash paths
-- **Checklist C:** Test Scenario Row — Col 1="Test Scenario", State="To Do", Test result="Not start", Actual Result empty, single backslash paths
+- **Checklist C:** Test Scenario Row — Col 1="Test Case", State="To Do", Test result="Not start", Actual Result empty, single backslash paths
 
 ## Auto-Fix Actions
 - Column alignment (Pre-conditions shifted)

@@ -15,20 +15,20 @@ improvement_count: 0
 
 # Backend Development
 
+Build and maintain backend services and APIs.
+
 ## AIDLC Gate
 
 ⚠️ If this skill is triggered as part of a coding/QA task:
+
 - AIDLC governance MUST be active (`.aidlc/` folder exists with DECISIONS + PLAN)
 - If not → STOP and route to `governance/aidlc/` first
 - Exception: pure investigation/analysis (no code changes) can proceed without AIDLC
 
-
-Build and maintain backend services and APIs.
-
 ## When to Load Each Reference
 
 | User says | Load |
-|-----------|------|
+| --- | --- |
 | "design API", "REST endpoint", "GraphQL", "versioning", "error handling" | `references/api-design.md` |
 | "design schema", "normalization", "indexing", "migrations" | `references/database-design.md` |
 | "set up auth", "JWT", "OAuth2", "RBAC", "sessions" | `references/authentication.md` |
@@ -40,20 +40,24 @@ Build and maintain backend services and APIs.
 | "code review", "review backend code", "check quality", "audit code" | `references/backend-code-review.md` |
 
 ## Core
+
 - **API Design** — REST/GraphQL/gRPC conventions, versioning, error handling. (Read `references/api-design.md`)
 - **Database Design** — Schema design, normalization, indexing, migrations. (Read `references/database-design.md`)
 - **Authentication** — JWT, OAuth2, sessions, role-based access control. (Read `references/authentication.md`)
 
 ## Frameworks
+
 - **Node.js** — Express, Fastify, NestJS patterns. (Read `references/nodejs.md`)
 - **Python** — FastAPI, Django patterns. (Read `references/python.md`)
 - **C# / .NET** — ASP.NET Core, Entity Framework Core, Minimal APIs, Clean Architecture. (Read `references/csharp-dotnet.md`)
 - **C / C++** — Modern C++ (17/20/23), CMake, RAII, memory safety, GoogleTest. (Read `references/cpp.md`)
 
 ## Infrastructure
+
 - **Docker** — Dockerfile, docker-compose, multi-stage builds. (Read `references/docker.md`)
 
 ## Code Quality
+
 - **Backend Code Review** — Static audit checklist: architecture, validation, auth, DB, security, logging. (Read `references/backend-code-review.md`)
 
 ## Inline Process
@@ -90,6 +94,7 @@ Write comments that AI agents can understand — not just humans:
 ```
 
 **Principles:**
+
 - State **what** + **why** + **who calls** — not just what
 - Include context AI needs to edit correctly (dependencies, side effects, constraints)
 - Add docstrings/JSDoc with params + return + raises/throws
@@ -100,7 +105,7 @@ Write comments that AI agents can understand — not just humans:
 ## Anti-Rationalization Table
 
 | Excuse to Skip | Counter-Argument |
-|---|---|
+| --- | --- |
 | "I'll add input validation later — let me get the endpoint working first" | Every endpoint must validate input BEFORE processing. "Working" without validation means working for happy path only — any malformed input causes crashes or security holes. |
 | "Auth middleware isn't needed for this route — it's internal" | Internal routes get exposed through misconfiguration, API gateways, or future refactoring. Apply auth middleware by default; explicitly mark routes as public only when intentional. |
 | "I'll write the query inside the loop — it's only a few items" | N+1 queries are the #1 backend performance killer. Even "a few items" becomes hundreds in production. Always use batch queries (WHERE IN, JOIN) from the start. |
@@ -119,13 +124,6 @@ Write comments that AI agents can understand — not just humans:
 
 ---
 
-
-## Consistency Contract
-
-> These steps MUST execute in the same order every time this skill runs.
-> Output may vary, but the workflow is fixed.
-> If any step is skipped without a documented skip condition, the session-save hook will flag this skill.
-
 ## Verification
 
 Before declaring backend implementation complete, confirm:
@@ -138,13 +136,12 @@ Before declaring backend implementation complete, confirm:
 - [ ] LLM-friendly comments on non-trivial functions (what + why + who calls)
 - [ ] Build passes: `npm run build` / `dotnet build` / `python -m py_compile`
 
-
 ---
 
 ## Required Context
 
 | Dependency | Type | Purpose |
-|-----------|------|---------|
+| --- | --- | --- |
 | Framework docs (Express/FastAPI/ASP.NET) | Official documentation | Verify API patterns against current version |
 | Existing API patterns in codebase | Source code | Match conventions, avoid inconsistency |
 | DB schema / migrations folder | Database | Understand current data model |
@@ -154,7 +151,7 @@ Before declaring backend implementation complete, confirm:
 ## Human-in-the-Loop Points
 
 | Step | Approval Type | When |
-|------|--------------|------|
+| --- | --- | --- |
 | After API design (endpoints + schemas) | Checkbox (confirm contract) | Before writing implementation code |
 | After implementation approach selection | Single select (framework/pattern choice) | When multiple valid approaches exist |
 | After security review | Open field | Before deploying auth/data changes |

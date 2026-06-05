@@ -318,10 +318,14 @@ Uses existing `core/analysis-skills/` — no new skills needed.
 1. **Context Analysis** → `core/analysis-skills` (context.md) — extract goals, scope, conflicts from PBI
 2. **Requirements Extraction** → `core/analysis-skills` (requirements.md) — write user stories + BDD AC
 3. **Domain Discovery** → `core/analysis-skills` (discovery-domain.md) — check knowledge base for reuse
-4. **Gap Analysis** → `core/analysis-skills` (gap.md) — identify missing logic
-5. **Figma Analysis** (if link provided) → `ux-ui/ui-designer` (figma.md) — extract UI structure
-6. **Output:** `outputs/inception/mini-spec.md` — consolidated 1-2 page spec
-7. **User approves mini-spec** before proceeding to QA/Dev phases
+4. **Interview** (MANDATORY — pick based on context):
+   - **If codebase exists** → `thinking/interview-doc/SKILL.md` — cross-ref PBI + Figma + codebase → ask user about gaps + sharpen domain language
+   - **If no codebase (new project)** → `thinking/interview-me/SKILL.md` — one-question-at-a-time until 95% confidence
+   - **Rule:** Never skip. At minimum 3 questions must be asked before proceeding.
+5. **Gap Analysis** → `core/analysis-skills` (gap.md) — identify missing logic
+6. **Figma Analysis** (if link provided) → `ux-ui/ui-designer` (figma.md) — extract UI structure
+7. **Output:** `outputs/inception/mini-spec.md` — consolidated 1-2 page spec
+8. **User approves mini-spec** before proceeding to QA/Dev phases
 
 **Lite Inception output structure:**
 ```markdown
@@ -838,7 +842,7 @@ Brownfield start from 1.1, Greenfield start from 1.2
     ```bash
     npx ts-node --project ai-agent/scripts/azure-devops/tsconfig.json \
       ai-agent/scripts/azure-devops/upload-ts/uploadTsToAdo.ts \
-      --csv <path-to-csv> --pbi-id <PBI_ID> --ado-project "<project>" --company Org
+      --csv <path-to-csv> --pbi-id <PBI_ID> --ado-project "<project>" --company Your Company
     ```
   - Output: `<csv-dir>/ts-azure-ids.md` → TS title → Azure ID mapping
   - If No → skip (can be done later using `azure-devops-bridge/` skill)

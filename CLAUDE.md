@@ -13,6 +13,7 @@ Source of truth:
 Cross-session memory (loaded every session):
 
 - @agent-memory/memory.md
+- @agent-memory/user-profile.md
 
 ---
 

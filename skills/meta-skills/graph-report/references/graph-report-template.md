@@ -231,7 +231,7 @@ Write 3-5 questions a developer would actually ask, with answers referencing spe
 
 ---
 
-## For Test Projects (like cpi-LINUX-AGENT-POOL)
+## For Test Projects (like cpi-linux-agent-pool)
 
 Adapt each section as follows:
 

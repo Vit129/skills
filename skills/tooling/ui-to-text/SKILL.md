@@ -1,208 +1,362 @@
 ---
 name: ui-to-text
 description: >
-  Convert UI screenshots, mockups, or Figma frames into structured text descriptions
-  for QA test design, accessibility review, and developer handoff.
+  Convert UI from any source (screenshot, Figma, or live Chrome DevTools) into structured
+  knowledge base entries for agent-memory/knowledge/biz/ (LLM Wiki pattern).
+  Primary goal: build persistent KB so AI never re-discovers UI structure from scratch.
   Trigger: "แปลง UI เป็น text", "UI to text", "describe this screen", "อธิบาย UI",
   "extract UI elements", "screen to text", "mockup to description",
   "วิเคราะห์หน้าจอ", "UI description", "แปลง screenshot เป็น text",
-  "อ่าน UI ให้หน่อย", "UI inventory"
-version: 1.0.0
-last_improved: 2026-05-31
-improvement_count: 0
+  "อ่าน UI ให้หน่อย", "UI inventory", "สร้าง KB จาก UI", "build KB",
+  "ingest UI", "chrome devtools KB", "figma KB", "screenshot KB"
+version: 2.0.0
+last_improved: 2026-06-03
+improvement_count: 1
+credit: LLM Wiki pattern by Karpathy (https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)
 ---
 
-# UI to Text
+# UI to Text — Knowledge Base Builder
 
-Convert UI screenshots/mockups into structured text descriptions that QA, Dev, and PO can use directly.
+Convert UI into structured KB entries for `agent-memory/knowledge/biz/`.
+Goal: compile knowledge once → AI reuses forever (LLM Wiki pattern).
 
-## Use Cases
+> **Primary output:** `agent-memory/knowledge/biz/{feature}.md` — NOT just chat output.
+> Every ingest MUST produce a persistent file. Chat-only output = incomplete.
 
-| Who | Why |
-|-----|-----|
-| QA | Generate test scenarios from UI elements without manual screen reading |
-| Dev | Understand component structure before implementation |
-| PO | Verify UI matches requirements without opening design tool |
-| Accessibility | Generate element inventory for WCAG compliance check |
+---
 
-## Input Types
+## Smart Router — KB-First with Figma Fallback
 
-| Input | How to provide |
-|-------|---------------|
-| Screenshot (PNG/JPG) | Drag into chat or attach via clip icon |
-| Figma frame | Use Figma power → export frame → attach image |
-| Live page | Use `qa/playwright-cli/` → take screenshot → feed here |
-| Wireframe | Attach hand-drawn or low-fi wireframe image |
-
-## Output Formats
-
-### 1. Element Inventory (default)
-
-Structured list of all visible UI elements:
+**Core rule:** หน้าไหน KB มีแล้ว → ใช้ KB | หน้าไหนยังไม่มี → Figma → สร้าง KB ไปในตัว
 
 ```text
-=== UI Element Inventory ===
-Screen: {screen_name}
-Source: {image_filename or URL}
-Generated: {date}
-
-## Layout Structure
-- Header (top bar)
-  - Logo (left)
-  - Navigation: [Home] [Products] [About] [Contact]
-  - User menu (right): Avatar + dropdown
-- Main Content (center)
-  - Hero section
-    - Heading: "Welcome to Our Platform"
-    - Subtext: "Get started in minutes"
-    - CTA Button: [Sign Up Free] (primary, blue)
-  - Feature cards (3-column grid)
-    - Card 1: Icon + "Fast Setup" + description
-    - Card 2: Icon + "Secure" + description
-    - Card 3: Icon + "Scalable" + description
-- Footer
-  - Links: Privacy | Terms | Support
-  - Copyright text
+Agent needs UI info for page X
+        │
+        ▼
+Check: agent-memory/knowledge/biz/ มี page X มั้ย?
+        │
+   ┌────┴────┐
+   │ YES     │ NO
+   ▼         ▼
+ Use KB     Figma available?
+ (fast,     ├── YES → Figma MCP → extract → write KB → continue
+ 0 token)   ├── NO but screenshot available → Screenshot → write KB → continue
+            └── NO and app accessible → Chrome DevTools → write KB → continue
 ```
 
-### 2. Interaction Map
-
-Focus on interactive elements and user flows:
+### Incremental Build Pattern (across sprints)
 
 ```text
-=== Interaction Map ===
-Screen: {screen_name}
+Sprint 1: Login → Home → Feature P1, P2
+  ├── Login KB: ❌ → Figma → สร้าง KB ✅
+  ├── Home KB: ❌ → Figma → สร้าง KB ✅
+  └── Feature P1,P2 KB: ❌ → Figma → สร้าง KB ✅
 
-## Interactive Elements
-| # | Element | Type | Action | Validation |
-|---|---------|------|--------|------------|
-| 1 | Email field | text input | accepts email format | required, email pattern |
-| 2 | Password field | password input | masked input | required, min 8 chars |
-| 3 | Remember me | checkbox | toggle state | optional |
-| 4 | Login button | button (primary) | submit form | enabled when form valid |
-| 5 | Forgot password | link | navigate to reset page | - |
-| 6 | Sign up link | link | navigate to registration | - |
+Sprint 2: Login → Home → Feature P1,P2 → Feature P3,P4, Success
+  ├── Login KB: ✅ → use KB (ไม่ต้อง Figma)
+  ├── Home KB: ✅ → use KB (ไม่ต้อง Figma)
+  ├── Feature P1,P2 KB: ✅ → use KB (ไม่ต้อง Figma)
+  └── Feature P3,P4,Success KB: ❌ → Figma → สร้าง KB ✅
 
-## States
-- Default: form empty, login button disabled
-- Valid: all required fields filled, button enabled
-- Error: red border on invalid field + error message below
-- Loading: button shows spinner, form disabled
+Sprint N: KB ครบเกือบทุกหน้า → Figma เรียกเฉพาะหน้าใหม่เท่านั้น
 ```
 
-### 3. Component Spec (for Dev handoff)
+**Result:** ยิ่ง sprint เยอะ → Figma ถูกเรียกน้อยลง → เร็วขึ้นเรื่อยๆ (compound effect)
+
+### Router Decision (agent ทำ auto — ไม่ต้องถาม user)
 
 ```text
-=== Component Spec ===
-Screen: {screen_name}
-
-## Components Identified
-1. **NavBar** — sticky top, contains logo + nav links + user menu
-2. **HeroSection** — full-width, background image, centered text + CTA
-3. **FeatureCard** — icon + title + description, 3-column responsive grid
-4. **Footer** — dark background, link columns + copyright
-
-## Visual Properties (estimated)
-- Primary color: #2563EB (blue)
-- Font: Sans-serif (likely Inter or system font)
-- Spacing: 16px grid
-- Border radius: 8px on cards
-- Shadow: subtle on cards (0 2px 4px rgba)
+for each page in user's requested flow:
+  if KB exists for this page:
+    → read KB, continue to next page
+  else:
+    → pick best available source:
+        1st priority: Figma (ถ้ามี link/node ID)
+        2nd priority: Screenshot (ถ้า user attach)
+        3rd priority: Chrome DevTools (ถ้า app accessible)
+    → ingest → write KB → continue to next page
 ```
 
-### 4. Test-Ready Format (for QA pipeline)
+**Agent ไม่ต้องถาม "จะใช้ source ไหน" ทุกหน้า** — ถามครั้งเดียวตอนเริ่ม session:
+- "มี Figma link มั้ย?" → ถ้ามี = ใช้ Figma เป็น default สำหรับทุกหน้าใหม่
+- ถ้าไม่มี → fall back to screenshot/DevTools
+
+---
+
+## Source Types & Workflow
+
+### Source A: Screenshot / Image (fastest)
+
+**When to use:** User has screenshots ready. Best for quick KB building.
+
+**Steps:**
+```text
+1. User attaches image(s) to chat
+2. Agent analyzes: layout → clickable elements → states → navigation
+3. Write KB file to agent-memory/knowledge/biz/{feature}.md
+4. Update knowledge/index.md
+5. Mark missing sub-pages with 🟡
+```
+
+**Token cost:** Low — image tokens fixed regardless of complexity
+
+---
+
+### Source B: Chrome DevTools (live app — most accurate)
+
+**When to use:** App is accessible, need exact labels/locators for test writing.
+
+**Steps:**
+```text
+1. Navigate to the target page
+2. take_snapshot → get a11y tree (role, name, state of every element)
+3. Filter: keep only interactive elements (button, link, input, combobox, tab)
+4. Extract: label text, role, current state (disabled/enabled/selected)
+5. Cross-check with take_screenshot for visual context
+6. Write KB file to agent-memory/knowledge/biz/{feature}.md
+```
+
+**DevTools Tool Sequence:**
+```text
+navigate_page(url)
+  → take_snapshot()           ← a11y tree: exact labels + roles
+  → take_screenshot()         ← visual: layout, colors, states
+  → evaluate_script(fn)       ← only if need to extract dynamic data
+```
+
+**What to extract from a11y tree:**
+- `button` role → clickable buttons
+- `link` role → navigation links
+- `tab` role → tab panels
+- `combobox` / `listbox` → dropdowns
+- `textbox` / `searchbox` → inputs
+- `checkbox` / `radio` → toggles
+- Ignore: `img`, `StaticText` (unless it's a label for an element)
+
+**Token cost:** Higher than screenshot — a11y tree can be large. Filter aggressively.
+
+---
+
+### Source C: Figma MCP (design source — most complete)
+
+**When to use:** Figma Power is installed, design file is available, need full component spec.
+
+**Steps:**
+```text
+1. Get Figma file URL or node ID from user
+2. Use Figma MCP tools to fetch frame/component data
+3. Extract: component hierarchy, interactive elements, variants, auto-layout
+4. Write KB file to agent-memory/knowledge/biz/{feature}.md
+```
+
+**Figma MCP notes:**
+- Use `figma` power → activate first to get tool names
+- Focus on: frame names, component names, visible text, button variants
+- Skip: exact pixel values, color tokens (unless design system matters)
+- If Figma Power not installed → fall back to screenshot mode
+
+**Token cost:** Medium — structured JSON from Figma API is compact
+
+---
+
+## KB Output Format (MANDATORY for all sources)
+
+All sources must produce this format in `agent-memory/knowledge/biz/{feature}.md`:
+
+```markdown
+# {Feature Name} — UI Knowledge Base
+
+> Source: {Screenshot | Chrome DevTools | Figma} | Role: {role if applicable}
+> App: {URL if known}
+> Last updated: {YYYY-MM-DD}
+
+---
+
+## Navigation Map
+
+\`\`\`text
+{parent page} → {this page}
+  ├── {sub-page 1} (via {button/link label})
+  ├── {sub-page 2} (via {button/link label})
+  └── {sub-page 3} (via {button/link label})
+\`\`\`
+
+---
+
+## {Page Name}
+
+### Entry Point
+- From: {parent} → click "{label}"
+
+### Clickable Elements
+
+| Element | Type | Label | Action/Notes |
+|---------|------|-------|--------------|
+| {name} | Button/Tab/Link/Input/Filter | {visible text} | {what happens or where it goes} |
+
+### States (if applicable)
+
+| State | Indicator | Notes |
+|-------|-----------|-------|
+| {state name} | {color/icon/badge/disabled} | {meaning for testing} |
+
+### Role-Based Access (if applicable)
+
+| Feature | Role A | Role B |
+|---------|--------|--------|
+| {feature} | ✅ / ❌ | ✅ / ❌ |
+
+---
+
+## 🟡 Missing Pages (need screenshot/exploration)
+
+- [ ] {Sub-page 1} — entry: click "{button}"
+- [ ] {Sub-page 2} — entry: click "{button}"
+```
+
+---
+
+## What to Capture vs Skip
+
+| ✅ Capture | ❌ Skip |
+|-----------|---------|
+| Button/link labels (exact text) | Static display text (prices, counts, dates) |
+| Tab names + which tab is active | CSS classes, IDs, data-testid |
+| Input placeholders | Pixel dimensions, colors |
+| Dropdown options (if visible) | Internal API endpoints |
+| Disabled/enabled state | Animation timing |
+| Role-based access (can/cannot) | Content inside data tables |
+| Navigation paths | Repeated patterns (note once, reference after) |
+| Status badges + colors | Decorative images |
+
+---
+
+## Output Routing
+
+| Context | Output goes to |
+|---------|---------------|
+| Building biz KB (primary) | `agent-memory/knowledge/biz/{feature}.md` |
+| QA test scenario design | Feed directly to `qa/test-scenario` Phase 2.2 |
+| Architecture notes | `agent-memory/knowledge/arch/{feature}.md` |
+| Quick chat (no persistence) | Only if user explicitly says "just tell me, don't save" |
+
+**Default behavior:** ALWAYS write to KB file. Never chat-only unless user explicitly requests it.
+
+---
+
+## Multi-Page Ingest Strategy
+
+When ingesting an entire feature (multiple pages):
 
 ```text
-=== Test-Ready UI Description ===
-Screen: Login Page
-URL: /login
+Session planning:
+1. Start with Dashboard/Home → establish navigation map
+2. Explore each top-level feature → fill in nav map
+3. For each feature: List page → Detail page → Create/Edit form
+4. Mark each page as:
+   ✅ Done      → content written to KB
+   🟡 Missing   → seen a link/button to it, not yet explored
+   ❌ No access → role restriction confirmed
 
-## Testable Elements
-- [input:email] — placeholder "Enter your email", required
-- [input:password] — placeholder "Password", required, masked
-- [checkbox:remember] — label "Remember me", unchecked by default
-- [button:submit] — text "Log In", disabled until form valid
-- [link:forgot] — text "Forgot password?", navigates to /reset-password
-- [link:signup] — text "Don't have an account? Sign up", navigates to /register
-
-## Expected Behaviors
-- Empty form → submit button disabled
-- Invalid email → show "Please enter a valid email"
-- Wrong credentials → show "Invalid email or password"
-- Successful login → redirect to /dashboard
-- "Remember me" checked → persist session 30 days
+Stop when: all ✅ or user says "enough for now"
 ```
 
-## Workflow
+---
 
-### Step 1: Receive Image
-- User attaches screenshot/mockup to chat
-- Agent uses vision capability to analyze the image
+## Chrome DevTools Practical Workflow
 
-### Step 2: Identify Output Format
-- If user specifies format → use that
-- If from QA context → default to "Test-Ready Format"
-- If from Dev context → default to "Component Spec"
-- If unclear → default to "Element Inventory"
+### Step 1: Navigate and snapshot
 
-### Step 3: Analyze & Generate
 ```text
-Vision analysis:
-  1. Identify page layout (header/main/footer/sidebar)
-  2. List all visible text content
-  3. Identify interactive elements (buttons, inputs, links, dropdowns)
-  4. Note visual states (active, disabled, error, hover indicators)
-  5. Identify navigation patterns
-  6. Note responsive hints (if visible)
+navigate_page(url: "https://app.example.com/feature")
+→ wait_for(text: ["Page Title", "Main Heading"])
+→ take_snapshot()
 ```
 
-### Step 4: Output
-- Write to file if user requests save
-- Default save location: `.aidlc/[system]/[feature]/ui-descriptions/`
-- Or output directly in chat for quick use
+### Step 2: Filter a11y tree
+
+From snapshot, extract ONLY:
+```text
+button, link, tab → clickable navigation
+textbox, searchbox, combobox → inputs
+checkbox, radio, switch → toggles
+Skip: img, StaticText (non-interactive), generic landmark regions
+```
+
+### Step 3: Screenshot for visual context
+
+```text
+take_screenshot()
+→ note: layout zones, color coding of status badges,
+         which tabs are active, disabled elements
+```
+
+### Step 4: Explore sub-pages
+
+For each clickable element that leads to a new page:
+```text
+click(uid: {uid})
+→ wait_for(text: [{expected heading}])
+→ take_snapshot()
+→ extract clickable elements
+→ navigate_page(type: "back")
+```
+
+### Step 5: Write KB file
+
+Compile all findings → write to `agent-memory/knowledge/biz/{feature}.md`
+
+---
 
 ## Hard Rules
 
-- NEVER hallucinate elements not visible in the image
-- If text is unreadable → mark as `[unreadable]` not guess
-- If element purpose is ambiguous → describe visually, don't assume function
-- Always note what's VISIBLE vs what's INFERRED
-- Language: output in English, interaction in Thai
-- If no image provided → ask user to attach one, don't proceed without visual input
+- NEVER hallucinate elements not seen in source
+- NEVER write chat-only KB (must persist to file)
+- If text is unreadable → mark `[unreadable]`, don't guess
+- If access is role-restricted → mark `❌ no access` not skip silently
+- ALWAYS note source type (Screenshot/DevTools/Figma) in KB file header
+- ALWAYS update `knowledge/index.md` after writing new KB file
+- ALWAYS mark 🟡 for pages you know exist but haven't captured yet
 
-## Integration with AIDLC Pipeline
+---
+
+## Integration with LLM Wiki Pipeline
 
 ```text
-UI Mockup/Screenshot
+UI Source (Screenshot / DevTools / Figma)
         │
         ▼
-  ui-to-text → Structured Text Description
+  ui-to-text → agent-memory/knowledge/biz/{feature}.md  (Stage 1: clickable elements + nav)
         │
-        ├──► req-exporter (export as part of requirements)
-        └──► qa/test-scenario (direct input for scenario design at Phase 2.2)
+        ├──► ux-ui/ui-designer (figma.md) → deep analysis (business rules + states + edge cases)
+        ├──► qa/test-scenario Phase 2.1 → reads KB → plans tasks
+        ├──► qa/test-scenario Phase 2.2 → reads KB + figma analysis → writes entry points + edge cases
+        └──► qa/playwright-testing Phase 2.4 → reads KB → writes correct locators
 ```
 
-## Tips for Best Results
+### Related Skills
 
-1. **High resolution** — clearer image = more accurate extraction
-2. **Full screen** — capture entire page, not partial
-3. **Multiple states** — provide screenshots of different states (empty, filled, error)
-4. **Annotate if needed** — circle or highlight areas of interest
-5. **Provide context** — "this is the checkout page" helps agent focus
+| When you need... | Use instead/also |
+|-----------------|-----------------|
+| **Clickable elements + navigation map** (KB building) | This skill (`tooling/ui-to-text`) |
+| **Business rules + validation + error states from UI** (test design) | `ux-ui/ui-designer/references/figma.md` |
+| **Both** | Run `ui-to-text` first (Stage 1 KB) → then `figma.md` for deep analysis (Stage 2) |
 
+**Compound effect:** Every KB page built today = faster test writing for all future features in this area.
 
 ---
 
 ## Verification
 
-Before declaring UI-to-text conversion complete, confirm:
+Before declaring KB ingest complete, confirm:
 
-- [ ] Image/screenshot was provided (not proceeding without visual input)
-- [ ] No hallucinated elements (only what's visible in the image)
-- [ ] Unreadable text marked as `[unreadable]` (not guessed)
-- [ ] Output format matches context (QA → Test-Ready, Dev → Component Spec)
-- [ ] Layout structure identified (header/main/footer/sidebar)
-- [ ] Interactive elements listed with types and actions
+- [ ] Source type noted in file header (Screenshot/DevTools/Figma)
+- [ ] Navigation map written (even if partial)
+- [ ] Clickable elements table complete for this page
+- [ ] Missing sub-pages marked with 🟡
+- [ ] File written to `agent-memory/knowledge/biz/{feature}.md`
+- [ ] `knowledge/index.md` updated with new entry
+- [ ] No hallucinated elements (only what was seen)
 
 ---
 
@@ -210,34 +364,33 @@ Before declaring UI-to-text conversion complete, confirm:
 
 | Dependency | Type | Purpose |
 |-----------|------|---------|
-| Screenshot/mockup image | Visual input | Primary source for element extraction |
-| Vision capability (multimodal) | AI feature | Analyze image content |
-| Target output format | User preference | Element Inventory / Interaction Map / Component Spec / Test-Ready |
-| `.aidlc/[system]/[feature]/ui-descriptions/` | Output location | Persist structured descriptions |
-| `knowledge/lessons/` | Lessons learnt | Check before execute |
+| Screenshot / a11y snapshot / Figma data | Visual input | Primary source |
+| Chrome DevTools MCP tools | Browser automation | Live page exploration |
+| Figma Power (optional) | MCP server | Design file access |
+| `agent-memory/knowledge/biz/` | Output location | KB persistence |
+| `knowledge/references/ingest-and-maintenance.md` | Guide | Format standards + lint rules |
 
 ## Human-in-the-Loop Points
 
-| Step | Approval Type | When |
-|------|--------------|------|
-| After format selection | Single select (Inventory / Interaction / Component / Test-Ready) | When output format is ambiguous |
-| After element inventory | Checkbox (confirm accuracy) | After generating structured description |
-| Ambiguous elements | Open field | When element purpose cannot be determined from image |
+| Step | Type | When |
+|------|------|------|
+| Source type selection | Single select (Screenshot/DevTools/Figma) | When source ambiguous |
+| Page coverage scope | Open field | "Which pages do you want in KB?" |
+| Role context | Single select | "Which user role am I documenting?" |
+| After each page written | Checkbox | Confirm before moving to next page |
 
-**Rule:** At decision points, always present 2-3 options with tradeoffs — never a single answer.
+---
 
 ## Self-Learning
 
-After user approves the output:
+After KB is built and used in test scenarios/scripts:
 
-1. **Record good example:** Save approved output to `knowledge/lessons/tooling/{pattern}.md`
-2. **Record failures:** If output was rejected → note what went wrong for next time
-3. **Progressive update:** If a new pattern proved effective → append to relevant knowledge index
-4. **Confidence tracking:** `confidence: 1.0` (user-approved) vs `confidence: 0.7` (auto-generated)
+1. **Record pattern:** If KB led to 0-retry test scripts → note in `knowledge/lessons/tooling/`
+2. **Record failures:** If KB was wrong/stale → note in playbook for lint reminder
+3. **Promote:** If same UI pattern appears in 3+ features → crystallize to `knowledge/business/`
 
 ### Improvement Tracking
 
-- **Hook:** `session-save.json` appends to `agent-memory/skill-log.md` after every session using this skill
-- **Hook:** `skill-improve.json` logs when user corrects this skill's output (silent)
-- **Promotion:** 3x same issue in skill-log → auto-apply fix to this SKILL.md + bump version
-- **Eval:** `eval-check.json` runs pass@3 weekly if this skill is flagged in `memory.md`
+- **Hook:** `session-save.json` appends to `agent-memory/skill-log.md` after every session
+- **Hook:** `skill-improve.json` logs user corrections (silent)
+- **Promotion:** 3x same issue → auto-apply fix to this SKILL.md + bump version

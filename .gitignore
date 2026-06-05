@@ -31,6 +31,9 @@
 !commands/**
 !commands/
 
+# Personal sync scripts (contain company-specific replace patterns — do not commit)
+scripts/sync-skills-to-claude.sh
+
 # Re-ignore noise inside tracked folders
 skills/**/.DS_Store
 skills/.DS_Store

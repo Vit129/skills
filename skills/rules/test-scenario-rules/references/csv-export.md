@@ -9,7 +9,7 @@
 
 ## 2. 23 Columns
 
-1. Work Item Type ("Product Backlog Item" / "Test Scenario")
+1. Work Item Type ("Product Backlog Item" / "Test Case")
 2. ID (numeric for PBI, empty for TS)
 3. State (PBI = state, TS = "To Do")
 4. Title 1 (PBI title, TS = empty)
@@ -49,7 +49,7 @@
 
 ## 5. Test Scenario Row Rules
 
-- Column 1: "Test Scenario"
+- Column 1: "Test Case"
 - Column 2: empty (ID)
 - Column 3: "To Do"
 - Column 4: empty (Title 1)
@@ -73,7 +73,7 @@
 
 - [ ] All 23 columns present in header
 - [ ] PBI row: ID not empty, Title in col 4, 10 empty cols between Priority and Area Path, cols 21-23 empty
-- [ ] TS rows: Work Item Type = "Test Scenario", ID empty, State "To Do", Title in col 5, Test result "Not start"
+- [ ] TS rows: Work Item Type = "Test Case", ID empty, State "To Do", Title in col 5, Test result "Not start"
 - [ ] TS Title format: `[TestType][Prefix] Verb + Object` — NO TS ID prefix, NOT starting with "ทดสอบ"/"ตรวจสอบ"
 - [ ] No double backslashes in paths (`\` not `\\`)
 - [ ] Area/Iteration Path fields are quoted
@@ -101,7 +101,7 @@
 
 After importing CSV to Azure DevOps:
 
-1. Fetch child work items (Type="Test Scenario")
+1. Fetch child work items (Type="Test Case")
 2. Match by Title 2
 3. Update ID in both CSV and MD files
 4. Validate accuracy and row count
