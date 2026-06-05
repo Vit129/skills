@@ -74,7 +74,7 @@ Each subagent gets Phase 1 artifacts as context — not just a rough idea:
 | QA | user-stories.md + logical-design.md | testability, edge cases, acceptance criteria gaps |
 
 **Pre-analysis step:** Before dispatching subagents, orchestrator runs
-`core/analysis-skills` (gap.md) to identify known gaps — this feeds into all 3 subagents as context.
+`thinking/analysis-skills` (gap.md) to identify known gaps — this feeds into all 3 subagents as context.
 
 ---
 
@@ -118,7 +118,7 @@ invokeSubAgent(
   explanation: "Dispatching [PO/Dev/QA] role for brainstorming Phase 1.8 round [N]",
   prompt: """
     You are the [PO/Dev/QA] role in a 3 Amigos brainstorming session.
-    Read your lens file: ai-agent/skills/ai-dlc/core/brainstorming/references/[po/dev/qa]-lens.md
+    Read your lens file: thinking/brainstorming/references/[po/dev/qa]-lens.md
 
     ## Phase 1 Artifacts (your primary input)
     - User Stories: .aidlc/[system]/[feature]/outputs/inception/user-stories.md
@@ -148,8 +148,8 @@ invokeSubAgent(
     Return ONLY your role's output section. No preamble.
   """,
   contextFiles: [
-    { path: "ai-agent/skills/ai-dlc/core/brainstorming/references/[role]-lens.md" },
-    { path: "ai-agent/skills/ai-dlc/core/brainstorming/references/output-template.md" },
+    { path: "thinking/brainstorming/references/[role]-lens.md" },
+    { path: "thinking/brainstorming/references/output-template.md" },
     { path: ".aidlc/[system]/[feature]/outputs/inception/user-stories.md" },
     { path: ".aidlc/[system]/[feature]/outputs/construction/logical-design.md" }
   ]
@@ -311,9 +311,10 @@ Before handing off to Phase 2, confirm:
 | Dependency | Type | Purpose |
 |-----------|------|---------|
 | Phase 1 artifacts (`user-stories.md`, `domain-design.md`, `logical-design.md`) | Inception outputs | Primary input for all 3 role subagents |
+| `ux-ui/ui-designer/SKILL.md` + Figma/wireframe (if exists) | UI/UX context | PO validates UX flow vs user stories; Dev references component specs |
 | `references/po-lens.md`, `dev-lens.md`, `qa-lens.md` | Role lenses | Question banks and output format per role |
 | `references/output-template.md` | Template | Synthesis output structure |
-| `core/analysis-skills` (gap.md) | Pre-analysis | Identify known gaps before dispatching |
+| `thinking/analysis-skills` (gap.md) | Pre-analysis | Identify known gaps before dispatching |
 | `knowledge/lessons/` | Lessons learnt | Check before execute |
 
 ## Human-in-the-Loop Points

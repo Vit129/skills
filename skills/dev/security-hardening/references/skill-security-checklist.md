@@ -112,6 +112,6 @@ rg -n 'sk-|ghp_|AKIA|password.*=|token.*=|secret.*=' ai-agent/skills/ .kiro/hook
 
 ## Integration
 
-- Run as part of `core/review-personas/` (security-auditor persona)
+- Run as part of `review/review-personas/` (security-auditor persona)
 - Run before `/ship` command
 - Run when `skill-sync-reminder` hook fires (new skill being synced)

@@ -2,7 +2,7 @@
 
 Transform needs into structured stories with testable acceptance criteria.
 
-Adapted from: `ai-dlc/core/analysis-skills/references/requirements.md`
+Adapted from: `thinking/analysis-skills/references/requirements.md`
 
 ## When to use
 

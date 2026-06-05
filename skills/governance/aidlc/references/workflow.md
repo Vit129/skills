@@ -310,19 +310,19 @@ tests/
 ### Lite Inception (for QA Only / Dev Only without specs)
 
 When user has only PBI (no Business Spec, no Architecture Spec), run Lite Inception before entering QA/Dev phases.
-Uses existing `core/analysis-skills/` — no new skills needed.
+Uses existing `thinking/analysis-skills/` — no new skills needed.
 
 **Trigger:** Mode is QA Only or Dev Only AND no external specs provided
 
 **Steps:**
-1. **Context Analysis** → `core/analysis-skills` (context.md) — extract goals, scope, conflicts from PBI
-2. **Requirements Extraction** → `core/analysis-skills` (requirements.md) — write user stories + BDD AC
-3. **Domain Discovery** → `core/analysis-skills` (discovery-domain.md) — check knowledge base for reuse
+1. **Context Analysis** → `thinking/analysis-skills` (context.md) — extract goals, scope, conflicts from PBI
+2. **Requirements Extraction** → `thinking/analysis-skills` (requirements.md) — write user stories + BDD AC
+3. **Domain Discovery** → `thinking/analysis-skills` (discovery-domain.md) — check knowledge base for reuse
 4. **Interview** (MANDATORY — pick based on context):
    - **If codebase exists** → `thinking/interview-doc/SKILL.md` — cross-ref PBI + Figma + codebase → ask user about gaps + sharpen domain language
    - **If no codebase (new project)** → `thinking/interview-me/SKILL.md` — one-question-at-a-time until 95% confidence
    - **Rule:** Never skip. At minimum 3 questions must be asked before proceeding.
-5. **Gap Analysis** → `core/analysis-skills` (gap.md) — identify missing logic
+5. **Gap Analysis** → `thinking/analysis-skills` (gap.md) — identify missing logic
 6. **Figma Analysis** (if link provided) → `ux-ui/ui-designer` (figma.md) — extract UI structure
 7. **Output:** `outputs/inception/mini-spec.md` — consolidated 1-2 page spec
 8. **User approves mini-spec** before proceeding to QA/Dev phases
@@ -386,7 +386,7 @@ For QA Only / Dev Only, the routing table changes:
 | Nothing | mini-spec or external specs | Lite Inception (or ask for specs) | mini-spec.md exists OR external specs provided |
 | mini-spec.md (or external specs) | dev-task-design | Phase 2.5 Dev Task Design | `dev-task-progress.md` exists |
 | dev-task-progress.md | implementation | Phase 3.1 Implementation | all tasks `[x]` |
-| implementation | test results | Phase 3.2 Automated Testing | tests PASS |
+| implementation | test results | Phase 3.2 Integration + Review | tests PASS |
 | test results | PR | Phase 3.3 Create Pull Request | PR created |
 
 ### Mode-Aware Anti-Shortcut Rules
@@ -727,7 +727,7 @@ For output depth examples per level → Read `references/complexity-examples.md`
 ```markdown
 | Phase | Status | Date | Skills Used | Notes |
 |---|---|---|---|---|
-| 1.2 - Requirements Gathering | ✅ | YYYY-MM-DD | core/analysis-skills (requirements.md) | Brief summary of output |
+| 1.2 - Requirements Gathering | ✅ | YYYY-MM-DD | thinking/analysis-skills (requirements.md) | Brief summary of output |
 ```
 
    - `Skills Used` — list every skill and reference file read during this phase
@@ -780,33 +780,33 @@ When the user wants to make changes during execution:
 Brownfield start from 1.1, Greenfield start from 1.2
 
 - **1.1** Reverse Engineering → Analyze existing codebase (brownfield only)
-  → Use `core/analysis-skills` skill (reverse-eng.md)
+  → Use `thinking/analysis-skills` skill (reverse-eng.md)
   → **[Kiro]** `invokeSubAgent(name="context-gatherer")` — scan existing codebase before reverse-engineering; pass source folder(s) as contextFiles
 - **1.2** Requirements Gathering → User stories with BDD acceptance criteria
-  → Use `core/analysis-skills` skill (requirements.md)
+  → Use `thinking/analysis-skills` skill (requirements.md)
   → **[Kiro]** `invokeSubAgent(name="requirement-detailer")` — invoke ONCE per user story / PBI item to expand edge cases + AC; if 3+ stories exist, invoke in parallel
-  → **MANDATORY after user stories:** run `core/analysis-skills` skill (domain.md) for cross-domain reuse analysis
+  → **MANDATORY after user stories:** run `thinking/analysis-skills` skill (domain.md) for cross-domain reuse analysis
     - If `{knowledge_root}/business/businessIndex.json` does not exist → skip Steps 1-2, run Step 3 (Impact Assessment) only — set Reusability Score = 0%
     - Never skip domain.md entirely — Impact Assessment is always required
-  → **MANDATORY after domain analysis:** run `core/analysis-skills` skill (gap.md) to identify missing logic (scope: requirements vs existing knowledge)
+  → **MANDATORY after domain analysis:** run `thinking/analysis-skills` skill (gap.md) to identify missing logic (scope: requirements vs existing knowledge)
     - If domain analysis returned 0% → treat all required logic as "No Match" and proceed to prioritize gaps
     - Note: gap.md runs again at Phase 1.8 with broader scope (all Phase 1 artifacts) — these are intentionally different invocations
 - **1.3** Domain Decomposition → DDD Strategic Design + Architecture Decision
-  → Use `core/architect` skill (decomposition.md, architecture-patterns.md)
+  → Use `dev/dev-architect` skill (decomposition.md, architecture-patterns.md)
 - **1.4** Domain Design → DDD Tactical Patterns (pseudocode)
-  → Use `core/architect` skill (domain-design.md)
+  → Use `dev/dev-architect` skill (domain-design.md)
 - **1.5** UI/UX Design → Design system, Figma analysis, component specs, wireframes
   → Use `ux-ui/ui-designer` skill (design-system.md) + `ux-ui/ui-designer` skill (figma.md)
   → Skip for API-only features (no UI)
 - **1.6** Logical Design → Technical specifications (Server Logic, Data Storage, Client Application)
-  → Use `core/architect` skill (logical-design.md)
+  → Use `dev/dev-architect` skill (logical-design.md)
   → Frontend component tree + state design informed by Phase 1.5 wireframes
 - **1.7** TestId Map Sync → Agree testId naming between QA and Dev based on actual UI structure from Phase 1.5
   → Output: `testid-map.md` — maps component/element → testId → owner (QA uses, Dev implements)
   → Skip for API-only features (no UI)
 - **1.8** Brainstorming (3 Amigos) → PO/Dev/QA subagents review Phase 1 artifacts, identify gaps and tensions
-  → Use `core/brainstorming` skill — dispatches subagents per role with Phase 1 artifacts as input
-  → Pre-step: run `core/analysis-skills` (gap.md) to feed known gaps to all subagents (scope: all Phase 1 artifacts — broader than Phase 1.2 which only covers requirements)
+  → Use `thinking/brainstorming` skill — dispatches subagents per role with Phase 1 artifacts as input
+  → Pre-step: run `thinking/analysis-skills` (gap.md) to feed known gaps to all subagents (scope: all Phase 1 artifacts — broader than Phase 1.2 which only covers requirements)
   → **[Kiro]** `invokeSubAgent(name="general-task-execution")` × 3 in parallel — one per role (PO, Dev, QA); pass all Phase 1 artifacts + gap.md output as contextFiles; collect all 3 outputs before writing `brainstorming-summary.md`
   → Output: `brainstorming-summary.md` — tensions, open questions, refined scope
   → Skip for Small features (1-2 user stories, single endpoint)
@@ -815,7 +815,7 @@ Brownfield start from 1.1, Greenfield start from 1.2
 
 - **2.1** QA Task Design → Task breakdown for QA automation
   → Use `aidlc` reference (qa-task-design.md)
-  → Optional companion: `core/doubt-driven` (for architecture decisions in QA planning)
+  → Optional companion: `thinking/doubt-driven` (for architecture decisions in QA planning)
   → **[Kiro]** `invokeSubAgent(name="context-gatherer")` — invoke ONCE at start; scan `ai-dlc/knowledge/automation/` + existing test root for reusable patterns before designing tasks
 - **2.2** Test Case Design → BDD test scenarios
   → Use `ai-dlc/qa/test-scenario/` skill + `ai-dlc/rules/test-scenario-rules/` skill
@@ -896,7 +896,7 @@ Brownfield start from 1.1, Greenfield start from 1.2
 
 - **3.1** Implementation → TDD: GREEN (code to pass tests)
   → Use `frontend-dev` skill and/or `backend-dev` skill
-  → Optional companions: `core/source-driven` (when implementing framework-specific code — verify docs before coding), `core/doubt-driven` (for non-trivial implementation decisions)
+  → Optional companions: `thinking/source-driven` (when implementing framework-specific code — verify docs before coding), `thinking/doubt-driven` (for non-trivial implementation decisions)
   → **[Kiro]** `invokeSubAgent(name="general-task-execution")` — MANDATORY when 3+ independent tasks exist; dispatch per task batch (group tasks with no shared file dependency); pass `dev-task-progress.md`, `logical-design.md`, and relevant source files as contextFiles
 - **3.2** Automated Testing → TDD: REFACTOR + validation
   → Use `playwright-testing` skill or `robotframework-testing` skill
@@ -915,11 +915,11 @@ Brownfield start from 1.1, Greenfield start from 1.2
     - Read `playwright-cli/references/playwright-tests.md` — running and debugging tests
     - Use `playwright-cli open` → `snapshot` → `click/fill` to verify UI behavior against testId map
     - Use `playwright-cli tracing-start/stop` for debugging failures
-  → On test failure: use `core/debugging` skill (4-mantra: reproduce → trace fail path → falsify hypothesis → cross-reference breadcrumbs)
-  → After fix validated: use `core/post-mortem` skill (document root cause, mechanism, fix, how it slipped through)
+  → On test failure: use `debugging/debug-mantra` skill (4-mantra: reproduce → trace fail path → falsify hypothesis → cross-reference breadcrumbs)
+  → After fix validated: use `debugging/post-mortem` skill (document root cause, mechanism, fix, how it slipped through)
 - **3.3** Create Pull Request → PR creation + code review
   → Use `devops-pipeline` skill (pull-request.md)
-  → Pre-merge gate: use `core/review-personas` skill (code-reviewer + test-engineer + security-auditor)
+  → Pre-merge gate: use `review/review-personas` skill (code-reviewer + test-engineer + security-auditor)
   → **[Kiro]** `invokeSubAgent(name="general-task-execution")` × 3 in parallel — dispatch one per review persona (code-reviewer, test-engineer, security-auditor); pass changed files + `audit.md` as contextFiles; collect all 3 outputs before creating PR
 
 ### Operation
@@ -940,7 +940,7 @@ Brownfield start from 1.1, Greenfield start from 1.2
 - Single files with context sections (`domain-design.md`)
 - Single `outputs/construction/` folder
 
-For detailed patterns → Use `core/architect` skill (architecture-patterns.md)
+For detailed patterns → Use `dev/dev-architect` skill (architecture-patterns.md)
 
 ## Quick Commands
 

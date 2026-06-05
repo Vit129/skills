@@ -68,7 +68,7 @@ Is this API available in OUR version?
 
 When citing sources in code or docs:
 ```
-[from: skill:ai-dlc/core/source-driven] — verified against playwright.dev v1.44
+[from: skill:thinking/source-driven] — verified against playwright.dev v1.44
 ```
 
 ---

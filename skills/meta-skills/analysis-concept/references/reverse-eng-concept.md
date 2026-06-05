@@ -2,7 +2,7 @@
 
 Scan an existing system to understand its structure before starting new work.
 
-Adapted from: `ai-dlc/core/analysis-skills/references/reverse-eng.md`
+Adapted from: `thinking/analysis-skills/references/reverse-eng.md`
 
 ## When to use
 

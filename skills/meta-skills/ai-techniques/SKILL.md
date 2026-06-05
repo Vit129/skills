@@ -27,8 +27,8 @@ Reasoning techniques that improve decision quality across any project.
 - **LATS Simulation** — Compare multiple strategies, pick the best hybrid. (Read `references/lats.md`)
 - **Algorithm of Thought (AoT)** — Explore branching decisions like a search tree, backtrack from dead-ends, pick the best path. (Read `references/aot.md`)
 
-> **Note:** Step-Back Prompting is embedded in `ai-dlc/core/analysis-skills/references/context.md` (Phase 1).
-> Resources Discovery is embedded in `ai-dlc/core/analysis-skills/references/discovery-domain.md` (Phases 1-3).
+> **Note:** Step-Back Prompting is embedded in `thinking/analysis-skills/references/context.md` (Phase 1).
+> Resources Discovery is embedded in `thinking/analysis-skills/references/discovery-domain.md` (Phases 1-3).
 
 ### Improvement Tracking
 

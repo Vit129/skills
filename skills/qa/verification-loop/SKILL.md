@@ -114,7 +114,7 @@ After completing all steps, produce:
 → Fix immediately. These are always your responsibility.
 
 ### If Step 3 fails (Tests)
-→ Apply `core/debugging/` skill:
+→ Apply `debugging/debug-mantra/` skill:
 1. Read error message
 2. Identify root cause (your code vs environment vs flaky)
 3. Fix or document

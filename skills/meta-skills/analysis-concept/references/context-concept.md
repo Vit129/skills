@@ -2,7 +2,7 @@
 
 Extract the full picture before starting work. Zoom out first, then extract structured context.
 
-Adapted from: `ai-dlc/core/analysis-skills/references/context.md`
+Adapted from: `thinking/analysis-skills/references/context.md`
 
 ## When to use
 

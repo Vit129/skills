@@ -1,7 +1,7 @@
 ---
 name: analysis-concept
 description: >
-  Reusable analysis thinking patterns extracted from ai-dlc/core/analysis-skills.
+  Reusable analysis thinking patterns extracted from thinking/analysis-skills.
   Each reference is a domain-agnostic concept that any skill can adapt by filling in
   its own context (wings/rooms, code/tests, business/technical, etc.).
   Use these as abstract templates — not copy-paste instructions.

@@ -29,15 +29,6 @@ improvement_count: 0
 - Exception: pure investigation/analysis (no code changes) can proceed without AIDLC
 
 
-## ⛔ Mode Lock
-
-ALLOWED_MODES: [QA Only]
-BLOCKED_MODES: [Full, Dev Only]
-
-If user selects Full or Dev Only → STOP immediately and respond:
-"This mode is temporarily disabled — only QA Only is available."
-Do NOT proceed with any blocked mode regardless of user insistence.
-
 ---
 
 Full governance and planning for the complete development lifecycle.
@@ -105,10 +96,11 @@ For detection logic, approach comparison, phase matrices, Vibe flow, escalation 
 **Why here?** Like real work — PO provides requirements (Phase 1) → team discusses (3 amigos)
 → crystallizes → then break down tasks (Phase 2)
 
-**Input:** Phase 1 artifacts (user-stories.md, domain-design.md, logical-design.md)
+**Input:** Phase 1 artifacts (user-stories.md, domain-design.md, logical-design.md) + UI/UX context (ui-ux-design.md, Figma/wireframe if exists)
 **Output:** `.aidlc/[system]/[feature]/outputs/inception/brainstorming-summary.md`
 
-**Pre-step:** Run `core/analysis-skills` (gap.md) on Phase 1 outputs → feed gaps to all subagents
+**Pre-step:** Run `thinking/analysis-skills` (gap.md) on Phase 1 outputs → feed gaps to all subagents
+**Pre-step 2:** Load `ux-ui/ui-designer/SKILL.md` context → PO subagent validates UX flow vs user stories
 
 **Skip this step if:**
 - Small feature (1-2 user stories, single endpoint) — go directly to Phase 2
@@ -182,8 +174,8 @@ For skill routing guide → see AGENTS.md Skill Map (workspace root)
 - **Resume without reading context** — on resume, agent starts from scratch instead of reading the existing decision/plan files. Fix: always read `planning/decisions/` and `planning/plans/` before any action on resume.
 - **Multiple agents on same task** — two agents (e.g., Gemini + Claude) edit the same file simultaneously, causing conflicts. Fix: one agent owns one task start-to-finish.
 - **Task marked done without commit** — agent reports completion but hasn't committed. Fix: commit hash is the only proof of completion — no hash = not done.
-- **Dialog skipped on short commands** — user gives a brief command like "PBI-002" or "continue feature X" and agent auto-executes everything without dialog. Fix: ANY AIDLC trigger — regardless of how short the user's message is — MUST still follow the full dialog flow (Phase Announcement → Decision Dialog → wait for approval → execute). Short commands are NOT permission to skip dialog. The agent must:
-  1. Detect the feature/PBI
+- **Dialog skipped on short commands** — user gives a brief command like "TICKET-002" or "continue feature X" and agent auto-executes everything without dialog. Fix: ANY AIDLC trigger — regardless of how short the user's message is — MUST still follow the full dialog flow (Phase Announcement → Decision Dialog → wait for approval → execute). Short commands are NOT permission to skip dialog. The agent must:
+  1. Detect the feature/ticket
   2. Check `.aidlc/` for existing state (resume vs new)
   3. If new: run Brainstorming first
   4. Present Phase Announcement with structured options
@@ -263,8 +255,8 @@ Every phase MUST execute steps 1-9 in this order:
 
 | Step | Action | Skip Condition |
 |------|--------|----------------|
-| 0 | **Load skill:** Read `tooling/azure-devops-bridge/SKILL.md` | Never skip |
-| 1 | Fetch PBI details via MCP → extract Title, Description, Acceptance Criteria | Never skip |
+| 0 | **Load skill:** Read project management bridge skill (`tooling/azure-devops-bridge/SKILL.md` or Jira equivalent) | Never skip |
+| 1 | Fetch ticket details → extract Title, Description, Acceptance Criteria | Never skip |
 | 2 | **Codebase exists?** YES → Read `thinking/interview-doc/SKILL.md` → align terms, cross-ref code, update CONTEXT.md. NO → Read `thinking/interview-me/SKILL.md` → extract requirements via Q&A | Never skip |
 | 3 | **Read `meta-skills/graph-report/SKILL.md`** → scan codebase structure, identify affected modules | Skip if no codebase yet |
 | 4 | Confirm output paths with user: `.aidlc/` folder, QA test files root, Dev source root | Never skip |
@@ -285,8 +277,8 @@ Every phase MUST execute steps 1-9 in this order:
 
 | Step | Action | Skip Condition |
 |------|--------|----------------|
-| 0 | **Load skill:** Read `tooling/azure-devops-bridge/SKILL.md` | Never skip |
-| 1 | Re-read PBI Acceptance Criteria from Azure (always fresh, never from memory) | Never skip |
+| 0 | **Load skill:** Read project management bridge skill (`tooling/azure-devops-bridge/SKILL.md` or Jira equivalent) | Never skip |
+| 1 | Re-read ticket Acceptance Criteria (always fresh, never from memory) | Never skip |
 | 2 | Read `thinking/interview-doc/SKILL.md` → validate domain terms against CONTEXT.md | Skip if CONTEXT.md already complete |
 | 3 | Read `thinking/brainstorming/SKILL.md` → run lightweight 3-Amigos check on AC gaps | Skip if feature is trivial |
 | 4 | Write `qa-task-progress.md` → list planned scenarios + assigned QA | Never skip |
@@ -297,17 +289,17 @@ Every phase MUST execute steps 1-9 in this order:
 |------|--------|----------------|
 | 0 | **Load skill:** Read `qa/test-scenario/SKILL.md` + `rules/test-scenario-rules/SKILL.md` | Never skip |
 | 0b | **Load UI context:** Read `tooling/ui-to-text/SKILL.md` → check `agent-memory/knowledge/biz/` for existing UI KB. If not found → use Figma MCP or screenshot to build KB first. If no Figma KB and no screenshot available → Read `ux-ui/ui-designer/SKILL.md` to generate mockup description first. **Applies to ALL platforms (API + Web UI)** — API tests also need UI flow understanding for end-to-end context | Never skip |
-| 1 | Resolve PBI Assigned To + QA Assigned To | Never skip |
+| 1 | Resolve ticket Assigned To + QA Assigned To | Never skip |
 | 2 | Read `test-scenario-rules/references/ts-standards.md` | Never skip |
 | 3 | Read `test-scenario-rules/references/csv-export.md` | Never skip |
 | 4 | Run reuse analysis (`test-scenario/references/reuse-analysis.md`) | Never skip |
 | 5 | Design batch 1 (Success) → pause for approval | Never skip |
 | 6 | Design batch 2 (Alternative) → pause for approval | Never skip |
 | 7 | Design batch 3 (Edge) → pause for approval | Never skip |
-| 8 | **Add Quick Review Summary table** at top of scenario .md file (columns: #, Azure ID, Scenario, Spec File, Priority, Effort, Domain) — Azure ID and Spec File start as "—" | Never skip |
+| 8 | **Add Quick Review Summary table** at top of scenario .md file (columns: #, Ticket ID, Scenario, Spec File, Priority, Effort, Domain) — Ticket ID and Spec File start as "—" | Never skip |
 | 9 | Generate test data (`test-scenario/references/data-gen.md`) | Never skip |
 | 10 | Export CSV + validate (`csv-validator.md`) | Never skip |
-| 11 | Upload Gate — ask user about Azure upload → if yes, fill Azure ID column | Never skip (ask is mandatory, upload is optional) |
+| 11 | Upload Gate — ask user: "Upload test scenarios to project management tool?" → if yes, fill ticket ID column | Never skip (ask is mandatory, upload is optional) |
 | 12 | PO Sign-off Gate | Never skip |
 
 ### Phase 2.3 Internal Steps (QA Architecture)
@@ -333,7 +325,7 @@ Every phase MUST execute steps 1-9 in this order:
 | 5b | **Self-heal loop (max 3x):** If tests fail → Read `qa/verification-loop/SKILL.md` → fix → re-run | Skip if tests pass on first run |
 | 5c | **If still failing after 3x:** Read `debugging/debug-mantra/SKILL.md` → root-cause analysis before continuing | Skip if tests pass |
 | 6 | **Update Quick Review Summary** → fill `Spec File` column in testScenario-*.md for each spec written | Never skip |
-| 7 | **Upload Test Result Gate** — ask user: "Upload test result to Azure?" → if yes, trigger `tooling/upload-test-result/SKILL.md` | Never skip (ask is mandatory, upload is optional) |
+| 7 | **Upload Test Result Gate** — ask user: "Upload test result to project management tool?" → if yes, trigger upload workflow | Never skip (ask is mandatory, upload is optional) |
 | 8 | **Git Push + Pipeline Gate** — ask user: "Git commit + push + trigger pipeline?" → if yes: `git add . && git commit -m "test: {feature} - all tests pass" && git push` | Never skip (ask is mandatory, push is optional) |
 
 ### Phase 2.5 Internal Steps (Performance Testing — Optional)
@@ -349,59 +341,72 @@ Every phase MUST execute steps 1-9 in this order:
 | 3 | If Backend: profile API endpoints (per-endpoint p95 + E2E flow) | User chose Frontend only or Skip |
 | 4 | Compare against thresholds (p95 < 500ms, LCP < 2.5s) | Never skip if step 2 or 3 ran |
 | 5 | Generate performance report (Quick Review format) | Never skip if step 2 or 3 ran |
-| 6 | If thresholds fail → flag for optimization before release | Never skip |
+| 6 | If thresholds PASS → ✅ done | — |
+| 7 | If thresholds FAIL → create ticket (Bug or Task) in project management tool + link to parent ticket | Never skip if thresholds fail |
+| 8 | Route back to Phase 3.1 (Dev fixes performance issue) | Never skip if thresholds fail |
+| 9 | After fix → re-run Phase 2.5 (loop until thresholds pass) | Never skip if thresholds fail |
 
 ### Phase 2.5-Dev Internal Steps (Dev Task Design) — Full/Dev Only
-
-> ⚠️ Currently BLOCKED by Mode Lock. Prepared for future use.
 
 | Step | Action | Skip Condition |
 |------|--------|----------------|
 | 0 | **Load skill:** Read `dev/dev-architect/SKILL.md` + relevant dev skill (backend/frontend) | Never skip |
+| 0b | **Load UI context:** Read `ux-ui/ui-designer/SKILL.md` → reference design tokens, component specs, wireframes for frontend task breakdown | Skip if feature is API-only with no UI |
 | 1 | Read `references/dev-task-design.md` | Never skip |
 | 2 | Break feature into implementation tasks | Never skip |
 | 3 | Write `dev-task-progress.md` | Never skip |
 | 4 | Confirm task order with user | Never skip |
 
-### Phase 3.1 Internal Steps (Implementation) — Full/Dev Only
+### Phase 2.6 Internal Steps (Sync Gate) — Full Only (TDD)
 
-> ⚠️ Currently BLOCKED by Mode Lock. Prepared for future use.
+> QA + Dev align before implementation starts. Conversation checkpoint — no file output required.
+> Skip condition: mode is QA Only, Dev Only, or Full (SDLC)
 
 | Step | Action | Skip Condition |
 |------|--------|----------------|
-| 0 | **Load skill:** Read `dev/backend-dev/SKILL.md` or `dev/frontend-dev/SKILL.md` + `dev/security-hardening/SKILL.md` (if auth-related) | Never skip |
+| 1 | QA presents: test file list + scenario count per file + edge cases found during scripting | Never skip |
+| 2 | Dev confirms: task breakdown covers all scenarios — add tasks to `dev-task-progress.md` if gaps found | Never skip |
+| 3 | If gaps found → update test scenarios (Minor: amend in-place / Major: re-plan Phase 2.2) | Skip if no gaps |
+| 4 | ✅ Gate passes when: Dev acknowledges coverage, no unresolved gaps | Never skip |
+
+### Phase 3.1 Internal Steps (Implementation) — Full/Dev Only
+
+| Step | Action | Skip Condition |
+|------|--------|----------------|
+| 0 | **Load skill:** Read `dev/backend-dev/SKILL.md` or `dev/frontend-dev/SKILL.md` + `dev/security-hardening/SKILL.md` + `debugging/debug-mantra/SKILL.md` | Never skip |
+| 0b | **Conditional:** If task involves architecture decision → Read `dev/documentation-adrs/SKILL.md`. If task involves replacing legacy code → Read `dev/deprecation-migration/SKILL.md` | Skip if not applicable |
+| 0c | **Load UI context (frontend tasks):** Read `ux-ui/ui-designer/SKILL.md` → reference design tokens, component specs, spacing/color system for implementation | Skip if task is backend-only |
 | 1 | Read task from `dev-task-progress.md` | Never skip |
 | 2 | Read coding rules for target stack | Never skip |
 | 3 | Check `knowledge/lessons/` for prior patterns | Never skip |
 | 4 | Implement code (follow TDD if applicable — make tests pass) | Never skip |
 | 5 | Run tests + lint | Never skip |
+| 5b | **Self-heal loop (max 3x):** If tests fail → Read `qa/verification-loop/SKILL.md` → fix → re-run | Skip if tests pass on first run |
+| 5c | **If still failing after 3x:** Apply `debugging/debug-mantra/SKILL.md` → root-cause analysis | Skip if tests pass |
 | 6 | Commit with task reference | Never skip |
 | 7 | Update `dev-task-progress.md` status | Never skip |
 
 ### Phase 3.2 Internal Steps (Integration + Review) — Full/Dev Only
 
-> ⚠️ Currently BLOCKED by Mode Lock. Prepared for future use.
-
 | Step | Action | Skip Condition |
 |------|--------|----------------|
-| 0 | **Load skill:** Read `review/review-personas/SKILL.md` | Never skip |
+| 0 | **Load skill:** Read `review/review-personas/SKILL.md` + `qa/verification-loop/SKILL.md` | Never skip |
 | 1 | Run full test suite (integration) | Never skip |
 | 2 | Code review (security + quality + coverage) | Never skip |
-| 3 | Fix review findings | If no findings |
-| 4 | All tests pass after fixes | Never skip |
+| 3 | Apply `dev/code-simplification/SKILL.md` for refactoring opportunities | If no complexity issues found |
+| 4 | Fix review findings | If no findings |
+| 5 | All tests pass after fixes | Never skip |
 
 ### Phase 3.3 Internal Steps (PR + Ship) — Full/Dev Only
 
-> ⚠️ Currently BLOCKED by Mode Lock. Prepared for future use.
-
 | Step | Action | Skip Condition |
 |------|--------|----------------|
-| 0 | **Load skill:** Read `dev/shipping-launch/SKILL.md` + `tooling/azure-devops-bridge/SKILL.md` | Never skip |
+| 0 | **Load skill:** Read `dev/shipping-launch/SKILL.md` + project management bridge skill + `dev/devops-pipeline/SKILL.md` | Never skip |
 | 1 | Create PR (git push + PR via CLI) | Never skip |
-| 2 | Link PR to PBI (`wit_link_work_item_to_pull_request`) | Never skip |
-| 3 | Update PBI state → "Testing" or "Developing" | Never skip |
+| 2 | Link PR to ticket | Never skip |
+| 3 | Update ticket state → "Testing" or "In Review" | Never skip |
 | 4 | Pipeline pass confirmation | Never skip |
-| 5 | Merge + close PBI (if all children done) | Never skip |
+| 5 | Merge + close ticket (if all children done) | Never skip |
 
 ### Violation Detection
 
@@ -430,7 +435,7 @@ Before advancing to the next phase, confirm:
 | `references/workflow.md` | Workflow reference | Phase routing, dialog format, mode selection rules |
 | `.aidlc/` folder | Artifact store | Resume state, phase outputs, decisions, plans |
 | `knowledge/` (per-project or global) | Lessons learnt | Check before execute |
-| MCP `azure-devops` tools | Integration | Sync work items, update boards, link commits |
+| Project management tools (Azure DevOps MCP / Jira API) | Integration | Sync tickets, update boards, link commits |
 | `references/templates/` | Templates | Planning, output, and framework templates |
 
 ## Human-in-the-Loop Points
