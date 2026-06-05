@@ -34,6 +34,9 @@
 # Personal sync scripts (contain company-specific replace patterns — do not commit)
 scripts/sync-skills-to-claude.sh
 
+# Personal health/fitness logs (PII — do not commit)
+skills/fitness/personal/
+
 # Re-ignore noise inside tracked folders
 skills/**/.DS_Store
 skills/.DS_Store
