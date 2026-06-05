@@ -352,10 +352,11 @@ Every phase MUST execute steps 1-9 in this order:
 |------|--------|----------------|
 | 0 | **Load skill:** Read `dev/dev-architect/SKILL.md` + relevant dev skill (backend/frontend) | Never skip |
 | 0b | **Load UI context:** Read `ux-ui/ui-designer/SKILL.md` → reference design tokens, component specs, wireframes for frontend task breakdown | Skip if feature is API-only with no UI |
-| 1 | Read `references/dev-task-design.md` | Never skip |
-| 2 | Break feature into implementation tasks | Never skip |
-| 3 | Write `dev-task-progress.md` | Never skip |
-| 4 | Confirm task order with user | Never skip |
+| 1 | Resolve Dev Assigned To → read `agent-memory/user-profile.md` § QA Work Context → `Dev Email`. If placeholder → ask user → save back | Never skip |
+| 2 | Read `references/dev-task-design.md` | Never skip |
+| 3 | Break feature into implementation tasks (with effort estimate per task) | Never skip |
+| 4 | Write `dev-task-progress.md` (include Dev Assigned To + total effort) | Never skip |
+| 5 | Confirm task order with user | Never skip |
 
 ### Phase 2.6 Internal Steps (Sync Gate) — Full Only (TDD)
 
