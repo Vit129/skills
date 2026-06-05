@@ -38,3 +38,9 @@
 - **AI infrastructure:** Builds AI-DLC and agent skill systems across `.claude/` and `.kiro/`; skills sync from `.kiro/skills/` → `.claude/skills/` via `sync-skills-to-claude.sh`
 - **Postman → Playwright:** Active migration work; dedicated skill + setup script exists
 - **Agent orchestration:** Claude = architect/orchestrator; Codex = implementation; Gemini = fast read/explore; Kiro Autopilot = repo-level AI coding
+
+## QA Work Context
+
+- **QA Email:** <!-- PLACEHOLDER — agent will ask on first use -->
+- **Dev Email:** <!-- PLACEHOLDER — agent will ask on first use -->
+- **Project Management Tool:** Azure DevOps / Jira (detect per project)

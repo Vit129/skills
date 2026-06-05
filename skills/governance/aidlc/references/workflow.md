@@ -820,8 +820,8 @@ Brownfield start from 1.1, Greenfield start from 1.2
 - **2.2** Test Case Design → BDD test scenarios
   → Use `ai-dlc/qa/test-scenario/` skill + `ai-dlc/rules/test-scenario-rules/` skill
   → **⚠️ MANDATORY PRE-STEP (before any TS design):**
-    1. **PBI Assigned To:** Fetch from ADO via `az boards work-item show --id {PBI_ID}` → `System.AssignedTo.uniqueName` → populate col 20 of PBI row
-    2. **QA Assigned To:** Check `projects.json` for `qaEmail` → if not found, ASK user: "Assigned To (QA email) สำหรับ TS ชุดนี้คืออะไรครับ?" → save to `projects.json` → populate col 20 of all TS rows
+    1. **PBI Assigned To:** Read `agent-memory/user-profile.md` § QA Work Context → `Dev Email`. If placeholder → fetch from project management tool → save back to user-profile.md
+    2. **QA Assigned To:** Read `agent-memory/user-profile.md` § QA Work Context → `QA Email`. If placeholder → ask user → save back to user-profile.md
     3. Both values MUST be resolved before writing any CSV — never leave col 20 empty
   → **MANDATORY read order within test-scenario skill:**
     1. `test-scenario-rules/references/ts-standards.md` — title format, priority, language policy

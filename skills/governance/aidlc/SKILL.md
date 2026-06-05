@@ -289,7 +289,7 @@ Every phase MUST execute steps 1-9 in this order:
 |------|--------|----------------|
 | 0 | **Load skill:** Read `qa/test-scenario/SKILL.md` + `rules/test-scenario-rules/SKILL.md` | Never skip |
 | 0b | **Load UI context:** Read `tooling/ui-to-text/SKILL.md` → check `agent-memory/knowledge/biz/` for existing UI KB. If not found → use Figma MCP or screenshot to build KB first. If no Figma KB and no screenshot available → Read `ux-ui/ui-designer/SKILL.md` to generate mockup description first. **Applies to ALL platforms (API + Web UI)** — API tests also need UI flow understanding for end-to-end context | Never skip |
-| 1 | Resolve ticket Assigned To + QA Assigned To | Never skip |
+| 1 | Resolve ticket Assigned To + QA Assigned To → read `agent-memory/user-profile.md` § QA Work Context. If placeholder → ask user → save back to user-profile.md | Never skip |
 | 2 | Read `test-scenario-rules/references/ts-standards.md` | Never skip |
 | 3 | Read `test-scenario-rules/references/csv-export.md` | Never skip |
 | 4 | Run reuse analysis (`test-scenario/references/reuse-analysis.md`) | Never skip |
