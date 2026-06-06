@@ -15,6 +15,23 @@
   - Finance, fitness, or domain-only knowledge tasks
   - Configuration or settings changes (no SDLC artifacts)
 
+- **Tech stack auto-detect (mandatory):** When the user's message contains tech stack keywords — invoke the matching skill via `Skill()` tool immediately, before responding. Do NOT wait for the user to say "use skill X". Detection is semantic, not exact-match.
+
+  | Tech keyword signals | Auto-invoke skill |
+  |----------------------|-------------------|
+  | TypeScript, JavaScript, Node.js, Express, NestJS, Fastify, REST API, GraphQL | `dev/backend-dev/` |
+  | React, Next.js, Tailwind, Vite, Vue, component, hook, state management | `dev/frontend-dev/` |
+  | Flutter, Dart, mobile app, Android, iOS (non-SwiftUI) | `dev/frontend-dev/` |
+  | macOS, SwiftUI, NSHostingView, AppKit, drag-drop | `dev/macos-swiftui/` |
+  | Docker, GitHub Actions, CI/CD, pipeline, deploy, infrastructure | `dev/devops-pipeline/` |
+  | Playwright, Vitest, Jest, test automation, E2E, unit test | `qa/playwright-testing/` |
+  | k6, load test, performance, Core Web Vitals, LCP, INP | `qa/performance-testing/` |
+  | OWASP, XSS, injection, auth hardening, secure coding | `dev/security-hardening/` |
+  | DDD, bounded context, event storming, system architecture | `dev/dev-architect/` |
+
+  **Priority:** AIDLC auto-detect fires first — tech skill runs inside AIDLC flow, not instead of it.
+  **Do NOT auto-invoke for:** pure questions about a language ("what is X?") with no code intent.
+
 - **AIDLC first:** All dev/QA work goes through `governance/aidlc/` — never call qa/dev skills directly unless AIDLC routes there
 - **AIDLC modes:** Support 3 modes — Full (default), QA Only, Dev Only. See `workflow.md` → "Execution Modes" for phase matrix and routing tables.
   - `"start AI-DLC QA scenario only"` → QA Scenario Only (Lite Inception → 2.1 → 2.2)
