@@ -32,10 +32,10 @@ Build and maintain backend services and APIs.
 | "design API", "REST endpoint", "GraphQL", "versioning", "error handling" | `references/api-design.md` |
 | "design schema", "normalization", "indexing", "migrations" | `references/database-design.md` |
 | "set up auth", "JWT", "OAuth2", "RBAC", "sessions" | `references/authentication.md` |
-| "Node.js", "Express", "Fastify", "NestJS" | `references/nodejs.md` |
-| "Python", "FastAPI", "Django" | `references/python.md` |
-| "C#", ".NET", "ASP.NET", "Entity Framework", "EF Core", "Minimal API" | `references/csharp-dotnet.md` |
-| "C", "C++", "CMake", "RAII", "smart pointer", "GoogleTest" | `references/cpp.md` |
+| "Node.js", "Express", "Fastify", "NestJS" | `references/nodejs-modern.md` |
+| "Python", "FastAPI", "Django" | `references/python-modern.md` |
+| "C#", ".NET", "ASP.NET", "Entity Framework", "EF Core", "Minimal API" | `references/csharp-dotnet-modern.md` |
+| "C", "C++", "CMake", "RAII", "smart pointer", "GoogleTest" | `references/cpp-modern.md` |
 | "Docker", "Dockerfile", "docker-compose", "multi-stage build" | `references/docker.md` |
 | "code review", "review backend code", "check quality", "audit code" | `references/backend-code-review.md` |
 
@@ -47,10 +47,10 @@ Build and maintain backend services and APIs.
 
 ## Frameworks
 
-- **Node.js** — Express, Fastify, NestJS patterns. (Read `references/nodejs.md`)
-- **Python** — FastAPI, Django patterns. (Read `references/python.md`)
-- **C# / .NET** — ASP.NET Core, Entity Framework Core, Minimal APIs, Clean Architecture. (Read `references/csharp-dotnet.md`)
-- **C / C++** — Modern C++ (17/20/23), CMake, RAII, memory safety, GoogleTest. (Read `references/cpp.md`)
+- **Node.js** — Express, Fastify, NestJS patterns. (Read `references/nodejs-modern.md`)
+- **Python** — FastAPI, Django patterns. (Read `references/python-modern.md`)
+- **C# / .NET** — ASP.NET Core, Entity Framework Core, Minimal APIs, Clean Architecture. (Read `references/csharp-dotnet-modern.md`)
+- **C / C++** — Modern C++ (17/20/23), CMake, RAII, memory safety, GoogleTest. (Read `references/cpp-modern.md`)
 
 ## Infrastructure
 

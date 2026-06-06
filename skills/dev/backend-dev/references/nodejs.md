@@ -2,6 +2,14 @@
 
 Guidelines for building Node.js backend services.
 
+## Official Node.js References
+
+- Current docs: https://nodejs.org/api/
+- ECMAScript modules: https://nodejs.org/api/esm.html
+- TypeScript support: https://nodejs.org/api/typescript.html
+- Test runner: https://nodejs.org/api/test.html
+- Fetch global: https://nodejs.org/api/globals.html#fetch
+
 ## Framework Choice
 - **Express** — minimal, flexible, huge ecosystem (default choice)
 - **Fastify** — faster than Express, schema-based validation, good DX
@@ -40,6 +48,9 @@ src/
 - Controllers: parse request, call service, return response — no business logic
 - Services: business logic, validation, orchestration
 - Repositories: database queries only
+- Make the module system explicit (`type: module`, `.mjs`, `.cjs`, or project
+  convention) and avoid ad hoc ESM/CommonJS mixing
+- Use `node:` imports for built-in modules in new ESM code
 
 ## Error Handling
 ```typescript
@@ -56,6 +67,12 @@ app.use((err, req, res, next) => {
 - Use Zod, Joi, or class-validator for request validation
 - Validate at the edge (middleware/controller) — not deep in services
 - Return 400 with specific field errors
+
+## Runtime
+- Validate environment variables at startup
+- Use `AbortController` or framework-supported cancellation for outbound calls
+- Consume or cancel Fetch response bodies
+- Run TypeScript checks separately from tests when the runner does not typecheck
 
 ## Cross-Language Standards
 

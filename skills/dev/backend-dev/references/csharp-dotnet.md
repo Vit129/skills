@@ -5,6 +5,15 @@
 
 ---
 
+## Official .NET References
+
+- .NET docs: https://learn.microsoft.com/en-us/dotnet/
+- ASP.NET Core docs: https://learn.microsoft.com/en-us/aspnet/core/
+- Minimal APIs: https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis
+- Entity Framework Core: https://learn.microsoft.com/en-us/ef/core/
+- Dependency injection: https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection
+- Testing ASP.NET Core: https://learn.microsoft.com/en-us/aspnet/core/test/
+
 ## Architecture Patterns
 
 ### Clean Architecture (Recommended)
@@ -21,6 +30,8 @@ src/
 - **Dependency Inversion:** Domain/Application never reference Infrastructure
 - **CQRS light:** Separate read models (queries) from write models (commands)
 - **Mediator pattern:** Use MediatR for decoupling handlers from controllers
+- **Cancellation:** Pass `CancellationToken` through async endpoint, service, and database calls
+- **Contracts:** Use DTOs/request models instead of exposing EF entities directly
 
 ---
 

@@ -2,6 +2,16 @@
 
 Guidelines for building Python backend services.
 
+## Official Python References
+
+- Python docs: https://docs.python.org/3/
+- asyncio: https://docs.python.org/3/library/asyncio.html
+- typing: https://docs.python.org/3/library/typing.html
+- FastAPI: https://fastapi.tiangolo.com/
+- Pydantic: https://docs.pydantic.dev/
+- SQLAlchemy 2.0: https://docs.sqlalchemy.org/20/
+- Django: https://docs.djangoproject.com/
+
 ## Framework Choice
 - **FastAPI** — modern, async, auto-generated docs, type hints (recommended for APIs)
 - **Django** — batteries-included, ORM, admin panel, auth (recommended for full-stack)
@@ -45,6 +55,8 @@ project/
 - DRF Serializers for validation (Django)
 - Repository pattern for data access — keep ORM queries out of views/endpoints
 - Dependency injection via FastAPI `Depends()` or Django middleware
+- Validate settings at startup and fail fast on missing required config
+- Keep framework-specific request objects out of domain logic where possible
 
 ## Pydantic v2 (FastAPI 0.100+)
 
@@ -114,6 +126,8 @@ class FlightRepository:
 - FastAPI: `async def` for I/O-bound endpoints
 - Use `asyncpg` with SQLAlchemy 2.0 for async DB access
 - Django 5.x: async views and ORM support improving — use `sync_to_async` for legacy ORM calls
+- Do not call blocking I/O from the event loop
+- Keep async tests isolated with the project's async test fixtures
 
 ## Testing
 - `pytest` as test runner (both FastAPI and Django)

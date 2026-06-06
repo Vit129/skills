@@ -2,6 +2,15 @@
 
 Guidelines for building React and Next.js applications.
 
+## Official React References
+
+- React hooks: https://react.dev/reference/react/hooks
+- `useState`: https://react.dev/reference/react/useState
+- `useEffect`: https://react.dev/reference/react/useEffect
+- Next.js App Router: https://nextjs.org/docs/app
+- Next.js Server and Client Components: https://nextjs.org/docs/app/getting-started/server-and-client-components
+- Next.js mutating data: https://nextjs.org/docs/app/getting-started/mutating-data
+
 ## Component Design
 - Functional components only — no class components
 - One component per file, named export preferred
@@ -14,6 +23,10 @@ Guidelines for building React and Next.js applications.
 - Follow rules of hooks: only call at top level, only call in React functions
 - Prefix with `use`: `usePortfolio`, not `getPortfolio`
 - Split hooks with independent dependencies — don't combine unrelated state
+- Use effects to synchronize with external systems; derive render-only data
+  during render instead of copying it through `useEffect`
+- Keep dependency arrays honest; do not suppress hook lint rules without a
+  documented project-specific reason
 
 ## React 19 New Hooks
 - `useActionState` — replaces `useFormState`, handles form actions + state
@@ -42,6 +55,8 @@ function SubmitButton() {
 - Avoid prop drilling >2 levels — use context or composition instead
 - Use functional setState for stable callbacks: `setState(prev => ...)`
 - Derive state during render, not in effects
+- In Next.js App Router, prefer server data loading and Server Components unless
+  the feature needs browser-only APIs or client interactivity
 
 ## Folder Structure
 

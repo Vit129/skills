@@ -7,6 +7,8 @@ Guidelines for building native Android applications with Kotlin + Jetpack Compos
 - Use Android Architecture Components: ViewModel, StateFlow, Room
 - Single Activity + Compose Navigation (no Fragments for new projects)
 - Clean Architecture layers: presentation → domain → data
+- Expose immutable screen state from ViewModels and collect it in Compose with
+  `collectAsStateWithLifecycle()`
 
 ## Folder Structure
 ```
@@ -31,6 +33,8 @@ app/src/main/
 ## Jetpack Compose (2025 Best Practices)
 - Composable functions: small, focused, reusable
 - State hoisting: state up, events down
+- Hoist state to the lowest common ancestor; use ViewModel when business logic
+  owns the state
 - Use `remember` and `rememberSaveable` for local state
 - `collectAsStateWithLifecycle()` for Flow → Compose state (lifecycle-aware)
 - Preview with `@Preview` annotation — use `@PreviewParameter` for data variants
@@ -55,6 +59,9 @@ fun CounterContent(count: Int, onIncrement: () -> Unit) {
 ```
 
 ## Compose Navigation
+- Prefer centralized route definitions and pass stable IDs or small route
+  values, not large mutable domain objects.
+
 ```kotlin
 // NavHost setup
 NavHost(navController, startDestination = "home") {
@@ -111,6 +118,16 @@ class ProductViewModel @Inject constructor(
 - Unit tests: JUnit + MockK for ViewModels and repositories
 - UI tests: Compose Testing (`composeTestRule`)
 - Use fake repositories for testing — avoid mocking everything
+- Use semantics and `Modifier.testTag(...)` for critical dynamic UI targets
+- Cover loading, success, empty, and error states
+
+## Official Android References
+
+- Compose state: https://developer.android.com/develop/ui/compose/state
+- State hoisting: https://developer.android.com/develop/ui/compose/state-hoisting
+- Lifecycle Flow collection: https://developer.android.com/reference/kotlin/androidx/lifecycle/compose/collectAsStateWithLifecycle
+- Navigation Compose: https://developer.android.com/develop/ui/compose/navigation
+- Compose semantics: https://developer.android.com/jetpack/compose/semantics
 
 ## Cross-Platform Standards
 

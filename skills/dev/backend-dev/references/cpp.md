@@ -5,6 +5,14 @@
 
 ---
 
+## Official C++ References
+
+- C++ Core Guidelines: https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
+- C++23 reference: https://en.cppreference.com/w/cpp/23
+- `std::span`: https://en.cppreference.com/w/cpp/container/span
+- CMake tutorial: https://cmake.org/cmake/help/latest/guide/tutorial/index.html
+- GoogleTest CMake quickstart: https://google.github.io/googletest/quickstart-cmake.html
+
 ## Modern C++ Standards
 
 ### Prefer C++17+ Features
@@ -104,6 +112,9 @@ project/
 ```
 
 ### CMakeLists.txt (Modern CMake)
+
+Prefer target-based CMake. Set compile features and include paths on targets,
+not through broad global flags.
 
 ```cmake
 cmake_minimum_required(VERSION 3.20)

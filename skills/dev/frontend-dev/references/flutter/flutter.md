@@ -2,6 +2,15 @@
 
 Guidelines for building Flutter applications.
 
+## Official Flutter References
+
+- Flutter docs: https://docs.flutter.dev/
+- State management: https://docs.flutter.dev/data-and-backend/state-mgmt/intro
+- Navigation: https://docs.flutter.dev/ui/navigation
+- Testing: https://docs.flutter.dev/testing
+- Accessibility: https://docs.flutter.dev/ui/accessibility
+- DevTools: https://docs.flutter.dev/tools/devtools
+
 ## Widget Design
 - Prefer `StatelessWidget` unless state is needed
 - Keep `build()` methods small — extract sub-widgets as private methods or separate classes
@@ -12,6 +21,8 @@ Guidelines for building Flutter applications.
 - Local state: `setState` for simple widget-level state
 - App state: Provider (simple), Riverpod (recommended), Bloc (complex)
 - Avoid global state — scope state to the smallest widget tree possible
+- Keep networking and persistence out of widgets; use repositories/services
+- Model loading, success, empty, and error states explicitly
 
 ## Folder Structure
 ```
@@ -54,6 +65,8 @@ lib/
 - Widget tests for UI components
 - Integration tests for critical user flows
 - Use `mocktail` or `mockito` for mocking
+- Add stable `Key` values or semantics for critical dynamic UI targets
+- Use Flutter accessibility guideline tests for meaningful accessibility risk
 
 ## Cross-Platform Standards
 

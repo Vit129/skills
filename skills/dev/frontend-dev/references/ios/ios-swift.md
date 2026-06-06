@@ -5,7 +5,10 @@ Guidelines for building native iOS applications with Swift and SwiftUI.
 ## Architecture
 - MVVM as default pattern
 - SwiftUI for new projects, UIKit for legacy
-- Combine or async/await for reactive data flow
+- Observation with `@Observable` for iOS 17+ state models
+- Combine only when the project already depends on it or older OS support
+  requires it
+- async/await for asynchronous data flow
 - Clean Architecture layers: presentation → domain → data
 
 ## Folder Structure
@@ -14,7 +17,7 @@ App/
 ├── Features/           — feature-based modules
 │   └── Auth/
 │       ├── Views/      — SwiftUI views
-│       ├── ViewModels/ — ObservableObject classes
+│       ├── ViewModels/ — @Observable models or ObservableObject classes
 │       └── Models/     — feature-specific models
 ├── Core/
 │   ├── Network/        — API client, endpoints, interceptors
@@ -31,15 +34,18 @@ App/
 
 ## SwiftUI
 - Small, focused views — extract sub-views when >50 lines
-- `@State` for local state, `@StateObject` for owned ViewModels
-- `@ObservedObject` for passed ViewModels, `@EnvironmentObject` for shared
-- Use `@Published` properties in ViewModels
+- `@State` for local value state and owned `@Observable` models
+- `@Bindable` when a child view needs bindings into an observable model
+- `@StateObject` / `@ObservedObject` only for legacy `ObservableObject`
+  compatibility
+- Prefer value-driven `NavigationStack` and `navigationDestination`
 - Preview with `#Preview` macro (Swift 5.9+)
 
 ## Swift Observation (iOS 17+)
 ```swift
-// New @Observable macro replaces ObservableObject
+// New @Observable macro replaces ObservableObject for iOS 17+ targets.
 @Observable
+@MainActor
 class UserViewModel {
     var name = ""
     var isLoading = false
@@ -68,6 +74,11 @@ struct UserView: View {
 
 ## Data Persistence
 - SwiftData (iOS 17+) or CoreData for structured data
+- SwiftData can also support local server-data cache and offline continuity
+- Define freshness, invalidation, and conflict behavior before using SwiftData
+  as cache
+- Use SwiftData History when changes from widgets, app intents, or other
+  processes must be tracked over time
 - UserDefaults for small preferences only
 - Keychain for sensitive data (tokens, passwords)
 
@@ -82,6 +93,17 @@ struct UserView: View {
 - Mock protocols, not concrete classes
 - Use `@testable import` for internal access
 - Snapshot testing with `swift-snapshot-testing` for UI regression
+- Add `.accessibilityIdentifier(...)` to interactive controls and critical
+  dynamic content
+- UI tests should prefer stable identifiers over visible text selectors
+
+## Official Apple References
+
+- SwiftUI: https://developer.apple.com/documentation/swiftui/
+- Observation: https://developer.apple.com/documentation/Observation/Observable%28%29
+- SwiftData: https://developer.apple.com/documentation/swiftdata
+- NavigationStack: https://developer.apple.com/documentation/SwiftUI/NavigationStack
+- Accessibility: https://developer.apple.com/documentation/accessibility/
 
 ## Cross-Platform Standards
 

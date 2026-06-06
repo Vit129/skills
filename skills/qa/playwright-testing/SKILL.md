@@ -50,6 +50,7 @@ Always read the `rules/playwright-rules/` skill before writing or reviewing any 
 | "component test", "test component in isolation", "mount component", "ct test" | `references/component-testing.md` |
 | "HAR mock", "routeFromHAR", "offline test", "record HAR", "network mock" | `references/har-mocking.md` |
 | "explore API", "discover endpoints", "Chrome DevTools", "explore-to-test", "capture API" | `references/explore-to-test.md` |
+| "TypeScript", "tsconfig", "fixtures", "POM", "locator", "trace", "best practices" | `references/typescript-modern.md` |
 
 - **Playwright Code Review** — Static audit checklist: locators, AAA pattern, Labels.ts, DB patterns, reliability. (Read `references/playwright-code-review.md`)
 - **Workflow** — Write, review, execute, and self-heal Playwright tests. (Read `references/workflow.md`)
@@ -61,11 +62,12 @@ Always read the `rules/playwright-rules/` skill before writing or reviewing any 
 - **Component Testing** — Test React/Vue/Svelte components in isolation in a real browser. (Read `references/component-testing.md`)
 - **HAR Mocking** — Use HAR files to mock network traffic for offline/CI testing. (Read `references/har-mocking.md`)
 - **Explore-to-Test** — Combined workflow: Chrome DevTools + HAR + Extension + AI → complete test suite. (Read `references/explore-to-test.md`)
+- **TypeScript Modern Playwright** — Official-doc-backed TypeScript, locators, fixtures, config, traces, and CI type checks. (Read `references/typescript-modern.md`)
 
 ## Inline Process
 
 1. **Load coding rules first** — Read `rules/playwright-rules/` before writing or reviewing any code. Non-negotiable.
-2. **Write test code** — Create directory structure (kebab-case) → generate fixtures (`Data.ts` + `Labels.ts`) → generate schemas (AJV) → generate helpers/pages → create spec files with AAA pattern and `test.step()`. Use `getByTestId` as primary locator, never `waitForTimeout()`.
+2. **Write test code** — Create directory structure (kebab-case) → generate fixtures (`Data.ts` + `Labels.ts`) → generate schemas (AJV) → generate helpers/pages → create spec files with AAA pattern and `test.step()`. Use resilient locators (`getByRole`, `getByLabel`, `getByTestId` for explicit app contracts), never `waitForTimeout()`.
 3. **Code review** — Static audit against playwright-rules: locator strategy, AAA pattern, Labels.ts usage, DB patterns, no forbidden patterns. Output: APPROVED or NEEDS_FIX.
 4. **Execute tests** — Run with `--reporter=line` → parse results → if failures, trigger self-healing (max 3 attempts).
 5. **Self-heal failures** — Impact analysis first → visual-first debugging (screenshot before code changes) → triage (environment = skip, code = heal) → fix by error type. Never delete functions or change architecture.
@@ -104,6 +106,18 @@ Always read the `rules/playwright-rules/` skill before writing or reviewing any 
 - 🚩 POM instance shared across tests → state leak, instantiate fresh per test
 - 🚩 Test file has no AAA comments (Arrange/Act/Assert) → structure unclear, add them
 - 🚩 More than 3 assertions in one test → likely testing multiple things, split it
+
+## Official Documentation Anchors
+
+- Best practices: https://playwright.dev/docs/best-practices
+- TypeScript: https://playwright.dev/docs/test-typescript
+- Locators: https://playwright.dev/docs/locators
+- Fixtures: https://playwright.dev/docs/test-fixtures
+- Configuration: https://playwright.dev/docs/test-configuration
+- Network: https://playwright.dev/docs/network
+- Page object models: https://playwright.dev/docs/pom
+- Auto-waiting: https://playwright.dev/docs/actionability
+- Assertions: https://playwright.dev/docs/test-assertions
 
 ---
 
