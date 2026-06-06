@@ -15,22 +15,78 @@
   - Finance, fitness, or domain-only knowledge tasks
   - Configuration or settings changes (no SDLC artifacts)
 
-- **Tech stack auto-detect (mandatory):** When the user's message contains tech stack keywords — invoke the matching skill via `Skill()` tool immediately, before responding. Do NOT wait for the user to say "use skill X". Detection is semantic, not exact-match.
+- **Skill auto-detect (mandatory):** When the user's message matches ANY keyword below — invoke the matching skill via `Skill()` tool immediately, before responding. Detection is semantic (match by meaning, not exact string). Do NOT wait for the user to say "use skill X".
 
-  | Tech keyword signals | Auto-invoke skill |
-  |----------------------|-------------------|
-  | TypeScript, JavaScript, Node.js, Express, NestJS, Fastify, REST API, GraphQL | `dev/backend-dev/` |
+  **Priority order:** AIDLC fires first → then skill auto-detect runs inside that flow (or standalone for non-SDLC tasks).
+
+  **thinking/ — Ideation & Analysis**
+  | Keyword signals | Auto-invoke skill |
+  |-----------------|-------------------|
+  | brainstorm, คิดก่อน, party mode, explore idea, 3 amigos, คุยก่อน | `thinking/brainstorming/` |
+  | interview me, ถามทีละข้อ, grill me, underspecified, ยังไม่มี code | `thinking/interview-me/` |
+  | interview with docs, ถามกับ code, ตรวจสอบกับ codebase, align language | `thinking/interview-doc/` |
+  | doubt, adversarial review, second opinion, scrutinize, verify decision | `thinking/doubt-driven/` |
+  | analyze, gap analysis, requirements, reverse-eng | `thinking/analysis-skills/` |
+  | verify docs, cite source, official docs, check API version | `thinking/source-driven/` |
+
+  **dev/ — Implementation & Architecture**
+  | Keyword signals | Auto-invoke skill |
+  |-----------------|-------------------|
+  | TypeScript, JavaScript, Node.js, Express, NestJS, REST API, GraphQL | `dev/backend-dev/` |
   | React, Next.js, Tailwind, Vite, Vue, component, hook, state management | `dev/frontend-dev/` |
   | Flutter, Dart, mobile app, Android, iOS (non-SwiftUI) | `dev/frontend-dev/` |
   | macOS, SwiftUI, NSHostingView, AppKit, drag-drop | `dev/macos-swiftui/` |
   | Docker, GitHub Actions, CI/CD, pipeline, deploy, infrastructure | `dev/devops-pipeline/` |
-  | Playwright, Vitest, Jest, test automation, E2E, unit test | `qa/playwright-testing/` |
-  | k6, load test, performance, Core Web Vitals, LCP, INP | `qa/performance-testing/` |
   | OWASP, XSS, injection, auth hardening, secure coding | `dev/security-hardening/` |
   | DDD, bounded context, event storming, system architecture | `dev/dev-architect/` |
+  | ship, launch, rollback, feature flag, staged rollout | `dev/shipping-launch/` |
+  | simplify, refactor, reduce complexity | `dev/code-simplification/` |
+  | deprecate, migrate, sunset, strangler fig | `dev/deprecation-migration/` |
+  | ADR, architecture decision, changelog, API docs | `dev/documentation-adrs/` |
 
-  **Priority:** AIDLC auto-detect fires first — tech skill runs inside AIDLC flow, not instead of it.
-  **Do NOT auto-invoke for:** pure questions about a language ("what is X?") with no code intent.
+  **qa/ — Testing**
+  | Keyword signals | Auto-invoke skill |
+  |-----------------|-------------------|
+  | Playwright, Vitest, Jest, E2E, unit test, write test, fix test | `qa/playwright-testing/` |
+  | QA architecture, test framework design | `qa/qa-architect/` |
+  | test scenario, test case design | `qa/test-scenario/` |
+  | Robot Framework, RF mobile test | `qa/robotframework-testing/` |
+  | k6, load test, performance, Core Web Vitals, LCP, INP | `qa/performance-testing/` |
+  | verify, quality gate, pre-commit check, verification loop | `qa/verification-loop/` |
+
+  **debugging/ — Bug Lifecycle**
+  | Keyword signals | Auto-invoke skill |
+  |-----------------|-------------------|
+  | debug, fix failing test, triage error, root cause, reproduce | `debugging/debug-mantra/` |
+  | find bugs, hunt mismatches, scan for bugs, bug lifecycle | `debugging/find-mismatch/` |
+  | post-mortem, RCA, root cause record, document fix | `debugging/post-mortem/` |
+
+  **review/ — Code Review**
+  | Keyword signals | Auto-invoke skill |
+  |-----------------|-------------------|
+  | review code, pre-merge, security audit, find bugs | `review/review-personas/` |
+  | management talk, exec summary, status update, less technical | `review/management-talk/` |
+
+  **tooling/ — Integrations**
+  | Keyword signals | Auto-invoke skill |
+  |-----------------|-------------------|
+  | postman migration to playwright | `tooling/postman-to-playwright/` |
+  | PBI, azure devops, sprint report, upload test scenario, ADO | `tooling/azure-devops-bridge/` |
+  | UI to text, screenshot to description | `tooling/ui-to-text/` |
+
+  **ux-ui/ — Design**
+  | Keyword signals | Auto-invoke skill |
+  |-----------------|-------------------|
+  | UI design, figma, design system, polish UI, anti-AI-slop, improve colors, fix typography | `ux-ui/ui-designer/` |
+
+  **Personal skills**
+  | Keyword signals | Auto-invoke skill |
+  |-----------------|-------------------|
+  | find stocks, screen stocks, portfolio review, earnings preview | `finance/` |
+  | workout plan, nutrition, body composition | `fitness/` |
+  | accounting, tax, VAT, WHT, Thai GAAP, TFRS | `thai-accountant/` |
+
+  **Do NOT auto-invoke for:** pure "what is X?" questions with no task intent.
 
 - **AIDLC first:** All dev/QA work goes through `governance/aidlc/` — never call qa/dev skills directly unless AIDLC routes there
 - **AIDLC modes:** Support 3 modes — Full (default), QA Only, Dev Only. See `workflow.md` → "Execution Modes" for phase matrix and routing tables.
