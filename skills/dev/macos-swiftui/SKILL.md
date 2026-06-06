@@ -1,3 +1,14 @@
+---
+name: macos-swiftui
+description: >
+  Use when working with SwiftUI on macOS: NSHostingView, NSViewRepresentable, List onDrag,
+  SwiftUI drag-drop, OutlineGroup, NavigationSplitView, @Observable, Transferable,
+  or any macOS UI component integration with AppKit.
+version: 1.0.0
+last_improved: 2026-05-31
+improvement_count: 0
+---
+
 # macOS SwiftUI Skill
 
 ## Trigger

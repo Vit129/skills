@@ -1,4 +1,13 @@
 ---
+name: verification-loop
+description: >
+  Use after implementing any AIDLC Phase 3 task, before marking a task done in PLAN.md,
+  before creating a commit, or when /review is invoked. Runs build, lint, test, coverage,
+  and security checks in mandatory order before sign-off.
+version: 1.0.0
+last_improved: 2026-05-31
+improvement_count: 0
+---
 
 ## When to Use
 
@@ -6,10 +15,6 @@
 - Before marking a task as `[x] done` in PLAN.md
 - Before creating a commit
 - When `/review` is invoked
-version: 1.0.0
-last_improved: 2026-05-31
-improvement_count: 0
----
 
 
 ## Consistency Contract
