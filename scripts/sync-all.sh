@@ -142,6 +142,9 @@ generate_instruction_file() {
   content="${content//rules\//$HOME/.${agent_lower}/rules/}"
   content="${content//\`output-styles\//\`$HOME/.claude/output-styles/}"
   content="${content//@agent-memory\//@$HOME/.claude/agent-memory/}"
+  if [ "$agent_name" = "CODEX" ]; then
+    content="${content//@$HOME/.claude/agent-memory/user-profile.md/@$HOME/.codex/agent-memory/user-profile.md}"
+  fi
   content="${content//GRAPH_REPORT.md/$HOME/.claude/GRAPH_REPORT.md}"
   content="${content//\`scripts\//\`$HOME/.claude/scripts/}"
 

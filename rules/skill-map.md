@@ -49,6 +49,7 @@
 | domain design, DDD, bounded contexts, system architecture | `dev/dev-architect/` |
 | backend API, node, python, C#, docker | `dev/backend-dev/` |
 | frontend React, Next.js, Flutter, Swift | `dev/frontend-dev/` |
+| macOS SwiftUI, NSHostingView, List onDrag, SwiftUI macOS drag-drop | `dev/macos-swiftui/` |
 | CI/CD, github actions, pipeline, commit, push | `dev/devops-pipeline/` |
 | design quality, anti-AI-slop, craft UI, impeccable, polish UI, audit design, make it look better, improve colors, fix typography | `ux-ui/ui-designer/` |
 | OWASP, secure coding, auth hardening, XSS, injection | `dev/security-hardening/` |
