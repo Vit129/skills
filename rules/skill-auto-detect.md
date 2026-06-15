@@ -9,7 +9,7 @@ When the user's message matches ANY keyword below — invoke the matching skill 
 **thinking/ — Ideation & Analysis**
 | Keyword signals | Auto-invoke skill |
 |-----------------|-------------------|
-| brainstorm, คิดก่อน, party mode, explore idea, 3 amigos, คุยก่อน | `thinking/brainstorming/` |
+| brainstorm, คิดก่อน, party mode, explore idea, 3 amigos, คุยก่อน | `brainstorming` |
 | interview me, ถามทีละข้อ, grill me, underspecified, ยังไม่มี code | `thinking/interview-me/` |
 | interview with docs, ถามกับ code, ตรวจสอบกับ codebase, align language | `thinking/interview-doc/` |
 | doubt, adversarial review, second opinion, scrutinize, verify decision | `thinking/doubt-driven/` |
