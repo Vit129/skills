@@ -60,9 +60,11 @@ Combine similar Boundary/Edge/Failure cases where appropriate.
 
 **Step 0 — PBI Assigned To (auto-fetch, no user input needed):**
 - Read `agent-memory/user-profile.md` § QA Work Context → `Dev Email` field
-- If has value → use it for col 20 of PBI row
-- If placeholder → fetch from project management tool (ADO: `System.AssignedTo.uniqueName` / Jira: issue assignee)
-- If fetch fails → ask user: "PBI Assigned To email คืออะไรครับ?" → save back to user-profile.md
+- If has value → use it for col 20 of PBI row in CSV
+- If placeholder/missing → fetch from project management tool:
+  - ADO: `System.AssignedTo.uniqueName` via MCP `wit_get_work_item`
+  - Jira: issue assignee field
+- If fetch fails → ask user: "PBI Assigned To email คืออะไรครับ?" → save back to `user-profile.md` § QA Work Context → `Dev Email`
 
 **Step 0.5 — File & Folder Naming (set BEFORE creating any file):**
 - MD filename: `testScenarioPbi{PBI_ID}.md` (e.g. `testScenarioPbi275957.md`)
@@ -80,15 +82,13 @@ Combine similar Boundary/Edge/Failure cases where appropriate.
 - Combine into tag: `${YYYY}SP${sprintNumber}` → e.g. `2026SP52`
 
 **Step 2 — Assigned To (QA executor):**
-- Read `agent-memory/user-profile.md` § QA Work Context → `QA Email` field
-- If has value → use it directly, show: `"QA Assigned To: {email} (จาก user-profile.md)"`
-- If placeholder → check `projects.json` for `qaEmail` field under the current project/team
-- If found in projects.json → use it, save back to user-profile.md
-- If NOT found anywhere → ask user via `userInput`:
+- Check `projects.json` for `qaEmail` field under the current project/team first
+- If found → use it directly, show: `"QA Assigned To: {email} (จาก projects.json)"`
+- If NOT found → ask user via `userInput`:
   ```
   Assigned To (QA email) สำหรับ TS ชุดนี้คืออะไรครับ? (เว้นว่างได้)
   ```
-  Then **save the email to `user-profile.md`** § QA Work Context immediately
+  Then **save the email to `projects.json`** under the current project/team as `qaEmail` immediately
 - This is the QA who will execute the TS (col 20) — not the PBI owner
 
 **After both confirmed:**

@@ -280,6 +280,32 @@ Input Username
     Input Text Into Field    ios=type == 'XCUIElementTypeTextField' AND name == 'email_input'    ${username}
 ```
 
+### 🦋 Flutter App Locator Strategy (iOS)
+
+> **When:** App is built with Flutter + `automationName=Flutter` in capabilities.
+> **Reference:** See `qa/robotframework-testing/references/flutter-appium.md` for full details.
+
+| Priority | Locator | RF Syntax | Stability |
+|----------|---------|-----------|-----------|
+| 🥇 #1 | **byValueKey** | `flutter=byValueKey('login_button')` | Most stable — requires `Key('xxx')` in Flutter code |
+| 🥈 #2 | **byText** | `flutter=byText('Login')` | Stable for unique visible text |
+| 🥉 #3 | **byType** | `flutter=byType('ElevatedButton')` | Only when single widget of type on screen |
+| 🚫 #4 | **bySemanticsLabel** | `flutter=bySemanticsLabel('Login')` | Fallback — requires `Semantics` widget |
+
+**Context switching:** Use `Switch Application Context    FLUTTER` for Flutter widgets, `NATIVE_APP` for system dialogs/permissions.
+
+```robot
+*** Keywords ***
+Tap Login Button (Flutter)
+    # ✅ BEST: Use Flutter Key
+    Click Element    flutter=byValueKey('login_button')
+
+Handle Permission Then Return
+    Switch Application Context    NATIVE_APP
+    Click Element    accessibility_id=permission_allow_button
+    Switch Application Context    FLUTTER
+```
+
 ### 2. 🤖 iOS-Specific Actions
 
 iOS-specific mechanisms supported by Appium:

@@ -2,7 +2,7 @@
 
 Find what already exists (concrete scan) and match abstract patterns across domains (abstract scan) before creating anything new.
 
-Adapted from: `thinking/analysis-skills/references/discovery-domain.md`
+Adapted from: `ai-dlc/core/analysis-skills/references/discovery-domain.md`
 
 ## When to use
 

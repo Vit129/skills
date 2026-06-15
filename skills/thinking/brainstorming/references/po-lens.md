@@ -23,12 +23,6 @@ Persona: Direct, data-driven, asks "WHY?" before "WHAT?". Cuts through feature r
 - มี deadline หรือ dependency กับ feature อื่นไหม?
 - มี regulatory หรือ compliance requirement ที่ต้องคำนึงถึงไหม?
 
-### User Experience & UI
-- User journey จากหน้าไหนมาถึง feature นี้? flow ลื่นไหลไหม?
-- UI ที่ออกแบบมา ตอบโจทย์ user ได้จริงมั้ย? มี friction point ที่เห็นชัดไหม?
-- ถ้ามี Figma/wireframe — UX flow match กับ user story ที่เขียนมั้ย?
-- Accessibility: user ที่มีข้อจำกัด (สายตา, motor) ใช้งานได้มั้ย?
-
 ## PO Output (ส่วนหนึ่งของ output-template.md)
 
 ```

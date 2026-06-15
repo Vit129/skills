@@ -6,10 +6,11 @@ description: >
   "fix failing mobile tests", "แก้ mobile test ที่ fail", "heal mobile test failures",
   "use Browser Library", "use Playwright with Robot Framework", "RF 7 features",
   "secret variables", "typed keywords",
+  "Flutter test", "test Flutter app", "Flutter Appium", "appium-mcp setup", "setup Appium MCP",
   or needs the full Robot Framework + Appium automation cycle: write code, review quality, execute tests, and auto-heal failures.
-version: 1.0.0
-last_improved: 2026-05-31
-improvement_count: 0
+version: 1.1.0
+last_improved: 2026-06-11
+improvement_count: 1
 ---
 
 # Robot Framework Testing
@@ -35,12 +36,54 @@ Always read the `ai-dlc/rules/robotframework-rules/` skill before writing or rev
 | "generate DB config", "create Python DB service", "seed mobile test data" | `references/python-db.md` |
 | "Browser Library", "Playwright RF", "web test with RF", "rfbrowser" | `references/browser-library.md` |
 | "RF 7 features", "secret variables", "typed keywords", "WHILE loop", "TRY EXCEPT", "VAR syntax" | `references/rf7-features.md` |
+| "Flutter test", "Flutter Appium", "test Flutter app", "byValueKey", "Flutter driver" | `references/flutter-appium.md` |
+| "appium-mcp setup", "setup Appium MCP", "install appium-mcp", "mobile MCP" | `references/appium-mcp-setup.md` |
+| "property test", "hypothesis", "property-based", "invariant test" | Hypothesis pattern (inline below) |
 
 - **RF Code Review** — Static audit checklist: locators, AAA, identical naming, YAML fixtures, Expert Gems. (Read `references/rf-code-review.md`)
 - **Workflow** — Write, review, execute, and self-heal Robot Framework tests. (Read `references/workflow.md`)
 - **Python DB Writer** — Generate Python database config and service classes for mobile test data. (Read `references/python-db.md`)
 - **Browser Library** — Playwright-powered web testing with RF: auto-wait, network mocking, modern locators. (Read `references/browser-library.md`)
 - **RF 7.x Features** — Secret variables, typed keywords, TRY/EXCEPT, WHILE, VAR syntax, Listener API v3. (Read `references/rf7-features.md`)
+- **Flutter + Appium** — Flutter Driver locators (byValueKey, byText), context switching, capabilities, page objects. (Read `references/flutter-appium.md`)
+- **Appium MCP Setup** — Installation guide: mcpSetup.sh, Android SDK, iOS, Flutter builds, capabilities.json. (Read `references/appium-mcp-setup.md`)
+
+## Property-based Testing Pattern (Hypothesis)
+
+Use when test-scenario/SKILL.md Step 1.5 has identified invariants.
+
+**Install:**
+```bash
+pip install hypothesis
+```
+
+**Standard pattern (Python keyword library + RF):**
+```python
+# keywords/property_keywords.py
+from hypothesis import given, settings
+from hypothesis import strategies as st
+
+@given(amount=st.integers(min_value=1, max_value=100000))
+@settings(max_examples=20)  # mobile E2E: 20, unit: 100
+def test_total_invariant(amount):
+    # property: must hold for any valid input
+    result = calculate_total(amount)
+    assert result >= amount
+```
+
+```robot
+# tests/property_test.robot
+*** Test Cases ***
+[TC-PROP-001] Property: Total must be >= amount for any valid input
+    [Tags]    property
+    Run Property Test    amount_invariant
+```
+
+**Rules:**
+- Tag every property test with `property` to filter: `robot --include property`
+- When a property fails, Hypothesis auto-shrinks to minimal failing input — read output before debugging
+- Invariants come from Quick Review Summary Properties section (test-scenario Step 1.5)
+- Use Python keyword library for logic-heavy properties, RF keyword for UI flow properties
 
 ## Inline Process
 

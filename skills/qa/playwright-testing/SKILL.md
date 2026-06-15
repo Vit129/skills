@@ -36,6 +36,53 @@ Full automation cycle for Playwright: write → review → run → heal.
 
 Always read the `rules/playwright-rules/` skill before writing or reviewing any Playwright code.
 
+## Playwright-CLI Prerequisite (MANDATORY — ทำก่อนทุก workflow)
+
+### Step 1 — ตรวจสอบการติดตั้ง
+
+```bash
+npx --no-install playwright-cli --version
+```
+
+- **มี** (`0.x.x` ปรากฎ) → ไป Step 2
+- **ไม่มี** → ติดตั้งด้วย:
+
+```bash
+# Option A — ถ้าใช้ Kiro (ติดตั้ง playwright-cli + ตั้งค่า MCP ทั้งหมด)
+bash ~/.kiro/scripts/setup/mcpSetup.sh
+
+# Option B — ติดตั้งตรงๆ เฉพาะ playwright-cli
+npm install -g @playwright/cli@latest
+```
+
+ถ้า global install ล้มเหลว → ใช้ `npx playwright-cli` แทนทุกคำสั่งในขั้นตอนถัดไป
+
+### Step 2 — อ่าน playwright-cli SKILL.md (บังคับ ไม่มี exception)
+
+```
+.claude/skills/playwright-cli/SKILL.md  ← ใน project root (installed โดย CLI)
+```
+
+อ่านทุกครั้งก่อนใช้งาน playwright-cli ไม่ว่าจะเป็น debug, explore, หรือ visual check
+
+### Step 3 — Screenshot ทุก action (บังคับ)
+
+Pattern มาตรฐาน: **action → screenshot → snapshot**
+
+```bash
+playwright-cli goto https://your-app.com
+playwright-cli screenshot --filename=step-01-initial.png
+
+playwright-cli click e15
+playwright-cli screenshot --filename=step-02-after-click.png
+
+playwright-cli fill e5 "test@example.com"
+playwright-cli screenshot --filename=step-03-after-fill.png
+playwright-cli snapshot
+```
+
+Naming: `step-{NN}-{action}.png` | Location: `.playwright/output/` (auto-created)
+
 ## When to Load Each Reference
 
 | User says | Load |
@@ -50,7 +97,7 @@ Always read the `rules/playwright-rules/` skill before writing or reviewing any 
 | "component test", "test component in isolation", "mount component", "ct test" | `references/component-testing.md` |
 | "HAR mock", "routeFromHAR", "offline test", "record HAR", "network mock" | `references/har-mocking.md` |
 | "explore API", "discover endpoints", "Chrome DevTools", "explore-to-test", "capture API" | `references/explore-to-test.md` |
-| "TypeScript", "tsconfig", "fixtures", "POM", "locator", "trace", "best practices" | `references/typescript-modern.md` |
+| "property test", "fast-check", "property-based", "invariant test" | `references/workflow.md` + fast-check pattern (inline below) |
 
 - **Playwright Code Review** — Static audit checklist: locators, AAA pattern, Labels.ts, DB patterns, reliability. (Read `references/playwright-code-review.md`)
 - **Workflow** — Write, review, execute, and self-heal Playwright tests. (Read `references/workflow.md`)
@@ -62,7 +109,43 @@ Always read the `rules/playwright-rules/` skill before writing or reviewing any 
 - **Component Testing** — Test React/Vue/Svelte components in isolation in a real browser. (Read `references/component-testing.md`)
 - **HAR Mocking** — Use HAR files to mock network traffic for offline/CI testing. (Read `references/har-mocking.md`)
 - **Explore-to-Test** — Combined workflow: Chrome DevTools + HAR + Extension + AI → complete test suite. (Read `references/explore-to-test.md`)
-- **TypeScript Modern Playwright** — Official-doc-backed TypeScript, locators, fixtures, config, traces, and CI type checks. (Read `references/typescript-modern.md`)
+| "TypeScript", "tsconfig", "fixtures", "POM", "locator", "trace", "best practices" | `references/typescript-modern.md` |
+
+## Property-based Testing Pattern (fast-check)
+
+Use when test-scenario/SKILL.md Step 1.5 has identified invariants.
+
+**Install:**
+```bash
+npm install --save-dev fast-check
+```
+
+**Standard pattern:**
+```typescript
+import * as fc from 'fast-check';
+import { test, expect } from '@playwright/test';
+
+test('property: [invariant description] @property', async ({ page }) => {
+  await fc.assert(
+    fc.asyncProperty(
+      fc.record({ amount: fc.integer({ min: 1, max: 100000 }) }),
+      async ({ amount }) => {
+        await page.goto('/checkout');
+        await page.fill('[data-testid="amount"]', String(amount));
+        const total = await page.textContent('[data-testid="total"]');
+        // property: must hold for any valid input
+        expect(Number(total)).toBeGreaterThanOrEqual(amount);
+      }
+    ),
+    { numRuns: 20 } // E2E: 20 runs, unit/integration: 100
+  );
+});
+```
+
+**Rules:**
+- Tag every property test with `@property` to filter separately from example-based tests
+- When a property fails, fast-check auto-shrinks to minimal failing input — read output before debugging
+- Invariants come from Quick Review Summary Properties section (test-scenario Step 1.5)
 
 ## Inline Process
 
@@ -71,8 +154,15 @@ Always read the `rules/playwright-rules/` skill before writing or reviewing any 
 3. **Code review** — Static audit against playwright-rules: locator strategy, AAA pattern, Labels.ts usage, DB patterns, no forbidden patterns. Output: APPROVED or NEEDS_FIX.
 4. **Execute tests** — Run with `--reporter=line` → parse results → if failures, trigger self-healing (max 3 attempts).
 5. **Self-heal failures** — Impact analysis first → visual-first debugging (screenshot before code changes) → triage (environment = skip, code = heal) → fix by error type. Never delete functions or change architecture.
+   - **ถ้า fail → route ไป `debugging/debug-mantra/` ทันที** ไม่ต้อง retry เอง
 6. **Record results** — Write to `.aidlc/` audit trail. Log every heal attempt (symptom → root cause → fix → outcome).
 7. **Verify** — No `waitForTimeout()`, `getByTestId` used, AAA pattern, POM fresh per test, DB seed has teardown, tests pass locally.
+8. **Upload to Azure** — หลังจาก tests ผ่านทั้งหมดแล้ว upload ขึ้น Azure DevOps (upload-ts workflow)
+9. **Cleanup screenshots** — หลัง upload Azure เสร็จแล้ว **ต้องให้คนยืนยันก่อนเสมอ:**
+
+   > "✅ Tests ผ่านและ upload Azure แล้ว — ยืนยันลบ screenshot ทั้งหมดใน `.playwright/output/` ด้วยมั้ย? (yes/no)"
+
+   ลบได้ก็ต่อเมื่อได้รับ **"yes"** เท่านั้น ถ้า upload ยังไม่เสร็จ → ห้ามลบโดยเด็ดขาด
 
 ## ⚠️ Gotchas
 

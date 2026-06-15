@@ -2,7 +2,7 @@
 
 Compare what's required vs what's available, then prioritize what's missing.
 
-Adapted from: `thinking/analysis-skills/references/gap.md`
+Adapted from: `ai-dlc/core/analysis-skills/references/gap.md`
 
 ## When to use
 

@@ -30,8 +30,14 @@ Always read the `ai-dlc/rules/test-scenario-rules/` skill before designing or ex
 Execute ALL steps in order. Do NOT skip any step.
 
 ```
-Step 1: Reuse Analysis    → references/reuse-analysis.md
+Step 1: Reuse Analysis       → references/reuse-analysis.md
          ↓ (scan testScenarioIndex.json, find reusable patterns)
+Step 1.5: Property Definition  (Property-based testing)
+         ↓ From AC, identify invariants — rules that must hold for any input
+         ↓ Format: "for any [input] → [property] must hold"
+         ↓ Example: "for any valid amount → total = sum(items) must always hold"
+         ↓ Output: property list in Quick Review Summary (Properties section)
+         ↓ Skip if: pure UI flow test with no business logic / calculation
 Step 2: Design — Batch 1  → references/ts-design.md
          ↓ (Success cases only → write to file → show summary → wait for approval)
 Step 3: Design — Batch 2  → references/ts-design.md
@@ -81,6 +87,7 @@ When user says "ข้าม", "skip", "ไม่ทำ", "ข้ามไป au
 | Trigger | Load |
 |---------|------|
 | Starting new scenario design (always first) | `references/reuse-analysis.md` |
+| After reuse analysis — identify invariants from AC | Property Definition (inline, no reference file needed) |
 | Designing scenarios (batches 1-3) | `references/ts-design.md` |
 | After design approved — generate test data | `references/data-gen.md` |
 | After data approved — export to CSV | `references/csv-validator.md` |
@@ -141,6 +148,10 @@ Every scenario file MUST have a Quick Review Summary section at the top, before 
 **Coverage by domain:**
 - Domain A: N (description)
 - Domain B: N (description)
+
+**Properties (invariants — from Property-based testing step):**
+- for any [input] → [property] must hold
+- (if no business logic → state "N/A — UI flow only")
 ```
 
 **Column population timeline:**

@@ -28,7 +28,7 @@ improvement_count: 0
 - Requirements are already clear and specific
 - User provides a detailed spec/PBI/AC
 - User says "เขียนเลย" with enough context
-- Mid-implementation (use `debugging/debug-mantra/` or `thinking/doubt-driven/` instead)
+- Mid-implementation (use `core/debugging/` or `core/doubt-driven/` instead)
 
 ---
 

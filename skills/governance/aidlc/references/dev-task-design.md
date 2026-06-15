@@ -82,8 +82,6 @@ Infrastructure tasks ต้องมาก่อนเสมอ เพราะ 
 - Every component from logical design MUST have a corresponding task
 - Include tasks to run test scripts after each component
 - Skip categories that don't apply (e.g., no Server Logic for frontend-only)
-- **Assigned To:** Read `agent-memory/user-profile.md` § QA Work Context → `Dev Email`. If placeholder → ask user → save back to user-profile.md
-- **Effort per task:** Estimate in hours (0.5h / 1h / 2h). Total effort = sum of all tasks. Record in Summary section.
 
 ## Task Rollback Protocol
 
@@ -117,8 +115,6 @@ Status: In Progress | Completed
 
 ## Context
 (see shared-task-progress-guide.md for required fields)
-- **Dev Assigned To:** {email from user-profile.md}
-- **Total Effort:** {Xh}
 
 ## Artifacts
 - User Stories: {path}
@@ -130,30 +126,29 @@ Status: In Progress | Completed
 - Total tasks: {N}
 - Completed: {N}
 - Remaining: {N}
-- Total effort: {Xh}
 
-## Data Storage — Effort: {Xh}
-- [ ] Storage setup — {desc} (0.5h)
-- [ ] Seed data / fixtures (0.5h)
-- [ ] Environment config (.env) (0.5h)
+## Data Storage
+- [ ] Storage setup — {SQL migration / Spreadsheet structure / LocalStorage schema}
+- [ ] Seed data / fixtures
+- [ ] Environment config (.env)
 
-## Server Logic — {User Story / Endpoint} — Effort: {Xh}
-- [ ] Data models / DTOs (1h)
-- [ ] Service layer — {REST API / Serverless Function / GAS endpoint} (2h)
-- [ ] Business logic (2h)
-- [ ] ✅ Run test scripts (verify GREEN) (0.5h)
+## Server Logic — {User Story / Endpoint}
+- [ ] Data models / DTOs
+- [ ] Service layer — {REST API / Serverless Function / GAS endpoint}
+- [ ] Business logic
+- [ ] ✅ Run test scripts (verify GREEN)
 
-## Client Application — {User Story / Screen} — Effort: {Xh}
-- [ ] Component — {ComponentName} (1h)
-- [ ] Page — {PageName} (2h)
-- [ ] API/Service integration (1h)
-- [ ] State management (1h)
-- [ ] ✅ Run test scripts (verify GREEN) (0.5h)
+## Client Application — {User Story / Screen}
+- [ ] Component — {ComponentName}
+- [ ] Page — {PageName}
+- [ ] API/Service integration
+- [ ] State management
+- [ ] ✅ Run test scripts (verify GREEN)
 
-## Integration — Effort: {Xh}
-- [ ] End-to-end wiring (1h)
-- [ ] ✅ Run all test scripts (verify GREEN) (0.5h)
-- [ ] Code review (1h)
+## Integration
+- [ ] End-to-end wiring
+- [ ] ✅ Run all test scripts (verify GREEN)
+- [ ] Code review
 ```
 
 ## Output

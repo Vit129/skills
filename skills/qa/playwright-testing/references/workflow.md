@@ -192,18 +192,27 @@ Analyze failures and auto-fix code.
 
 **Visual-First Debugging (before changing code):**
 
-Use `playwright-cli` to inspect the live app before modifying any code:
+⚠️ ก่อนใช้งาน playwright-cli ทุกครั้ง → ตรวจสอบ prerequisite ใน SKILL.md (Step 1-2) ก่อน
+
+Use `playwright-cli` to inspect the live app before modifying any code. **บังคับ screenshot ทุก action:**
 
 ```bash
-# เปิด browser และ snapshot ดู elements จริง
+# 1. เปิด browser
 playwright-cli -s=debug open http://localhost:5173
+playwright-cli -s=debug screenshot --filename=step-01-initial.png
 playwright-cli -s=debug snapshot
 
-# screenshot ดูหน้าตา
-playwright-cli -s=debug screenshot --filename=debug.png
+# 2. navigate ไป URL ที่ fail
+playwright-cli -s=debug goto http://localhost:5173/target-page
+playwright-cli -s=debug screenshot --filename=step-02-target-page.png
+playwright-cli -s=debug snapshot
 
-# ดู element เฉพาะจุด
-playwright-cli -s=debug screenshot e5
+# 3. interact กับ element (ถ้ามี)
+playwright-cli -s=debug click e15
+playwright-cli -s=debug screenshot --filename=step-03-after-click.png
+
+# 4. ดู element เฉพาะจุดที่ fail
+playwright-cli -s=debug screenshot e5 --filename=step-04-element-focus.png
 ```
 
 Checklist:
