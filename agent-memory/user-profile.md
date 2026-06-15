@@ -11,7 +11,7 @@
 
 ## Dev Preferences
 
-- **Language:** English (interaction + docs/code) — Vit is practicing English; **always correct grammar on every message, inline, before responding** (format: *"Correction: ..."*); switch to Thai only when explaining complex concepts or when Vit signals confusion
+- **Language:** English (interaction + docs/code) — Vit is practicing English; **ALWAYS correct grammar on every message, inline, before responding** (format: *"Correction: ..."*) — applies to ALL explanations: explaining code, tasks, bugs, or building features. Switch to Thai only when explaining complex concepts or when Vit signals confusion
 - **Style:** Minimal, no verbose summaries, no repeated nudges
 - **Testing:** Vitest/Playwright, TDD priority
 - **Architecture:** Domain-Layered, Modular

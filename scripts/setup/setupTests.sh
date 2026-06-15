@@ -409,7 +409,10 @@ cat > tests/web-testing/.playwright/cli.config.json << 'PWCLI_EOF'
 PWCLI_EOF
 echo "✅ .playwright/cli.config.json created"
 
-# Setup Mobile Testing
+# Setup Mobile Testing (optional)
+read -p "📱 Install Mobile testing (Robot Framework + Appium)? [y/N] " setup_mobile
+setup_mobile="${setup_mobile:-n}"
+if [[ "$setup_mobile" =~ ^[Yy]$ ]]; then
 echo "📦 Setting up Mobile testing..."
 cd tests/mobile-testing
 
@@ -553,6 +556,9 @@ else
 fi
 
 cd ../..
+else
+  echo "⏭️  Skipped Mobile testing setup."
+fi
 
 # Run verification tests
 echo ""

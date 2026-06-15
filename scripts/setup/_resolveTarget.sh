@@ -39,11 +39,11 @@ else
         TARGET_DIR="${FOUND_PATHS[0]#./}"
         echo "✅ Found: $TARGET_DIR"
     else
-        echo "⚠️  พบหลายตำแหน่ง (เรียงจาก root → ลึก):"
+        echo "⚠️  Multiple matches found (shallow → deep):"
         for i in "${!FOUND_PATHS[@]}"; do
             echo "  [$((i+1))] ${FOUND_PATHS[$i]#./}"
         done
-        read -p "เลือกตำแหน่ง (1-${#FOUND_PATHS[@]}): " choice
+        read -p "Select location (1-${#FOUND_PATHS[@]}): " choice
         if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le ${#FOUND_PATHS[@]} ]; then
             TARGET_DIR="${FOUND_PATHS[$((choice-1))]#./}"
             echo "✅ Selected: $TARGET_DIR"
