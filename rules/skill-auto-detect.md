@@ -10,25 +10,25 @@ When the user's message matches ANY keyword below — invoke the matching skill 
 | Keyword signals | Auto-invoke skill |
 |-----------------|-------------------|
 | brainstorm, คิดก่อน, party mode, explore idea, 3 amigos, คุยก่อน | `brainstorming` |
-| interview me, ถามทีละข้อ, grill me, underspecified, ยังไม่มี code | `thinking/interview-me/` |
-| interview with docs, ถามกับ code, ตรวจสอบกับ codebase, align language | `thinking/interview-doc/` |
-| doubt, adversarial review, second opinion, scrutinize, verify decision | `thinking/doubt-driven/` |
-| analyze, gap analysis, requirements, reverse-eng | `thinking/analysis-skills/` |
-| verify docs, cite source, official docs, check API version | `thinking/source-driven/` |
+| interview me, ถามทีละข้อ, grill me, underspecified, ยังไม่มี code | `interview-me` |
+| interview with docs, ถามกับ code, ตรวจสอบกับ codebase, align language | `interview-doc` |
+| doubt, adversarial review, second opinion, scrutinize, verify decision | `doubt-driven` |
+| analyze, gap analysis, requirements, reverse-eng | `analysis-skills` |
+| verify docs, cite source, official docs, check API version | `source-driven` |
 
 **dev/ — Implementation & Architecture**
 | Keyword signals | Auto-invoke skill |
 |-----------------|-------------------|
-| TypeScript, JavaScript, Node.js, Express, NestJS, REST API, GraphQL | `dev/backend-dev/` |
+| TypeScript, JavaScript, Node.js, Express, NestJS, REST API, GraphQL | `backend-dev` |
 | React, Next.js, Tailwind, Vite, Vue, component, hook, state management | `dev/frontend-dev/` |
 | Flutter, Dart, mobile app, Android, iOS (non-SwiftUI) | `dev/frontend-dev/` |
 | macOS, SwiftUI, NSHostingView, AppKit, drag-drop | `dev/macos-swiftui/` |
-| Docker, GitHub Actions, CI/CD, pipeline, deploy, infrastructure | `dev/devops-pipeline/` |
+| Docker, GitHub Actions, CI/CD, pipeline, deploy, infrastructure | `devops-pipeline` |
 | OWASP, XSS, injection, auth hardening, secure coding | `dev/security-hardening/` |
-| DDD, bounded context, event storming, system architecture | `dev/dev-architect/` |
+| DDD, bounded context, event storming, system architecture | `architect` |
 | ship, launch, rollback, feature flag, staged rollout | `dev/shipping-launch/` |
-| simplify, refactor, reduce complexity | `dev/code-simplification/` |
-| deprecate, migrate, sunset, strangler fig | `dev/deprecation-migration/` |
+| simplify, refactor, reduce complexity | `code-simplification` |
+| deprecate, migrate, sunset, strangler fig | `deprecation-migration` |
 | ADR, architecture decision, changelog, API docs | `dev/documentation-adrs/` |
 
 **qa/ — Testing**
