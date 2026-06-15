@@ -59,12 +59,12 @@ When the user's message matches ANY keyword below — invoke the matching skill 
 |-----------------|-------------------|
 | postman migration to playwright | `postman` |
 | PBI, azure devops, sprint report, upload test scenario, ADO | `azure-devops-bridge` |
-| UI to text, screenshot to description | `tooling/ui-to-text/` |
+| UI to text, screenshot to description | `ui-to-text` |
 
 **ux-ui/ — Design**
 | Keyword signals | Auto-invoke skill |
 |-----------------|-------------------|
-| UI design, figma, design system, polish UI, anti-AI-slop, improve colors, fix typography | `ux-ui/ui-designer/` |
+| UI design, figma, design system, polish UI, anti-AI-slop, improve colors, fix typography | `ui-designer` |
 
 **Personal skills**
 | Keyword signals | Auto-invoke skill |
