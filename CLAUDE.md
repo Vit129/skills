@@ -21,12 +21,12 @@ Cross-session memory (loaded every session):
 
 - `rules/project-rules.md` — AIDLC enforcement, phase gates, language rules
 - `rules/workflow.md` — working style, response format (Done/Next/Why), do/don't list, citation format
+- `rules/skill-auto-detect.md` — skill keyword→invocation routing table (MANDATORY: invoke Skill() when keyword matches, before responding)
 
 ## Rules — On-demand (read when triggered)
 
 - `rules/agent-core.md` — Read when: complex multi-file implementation, security review, architecture decision, or planning phase
 - `rules/skill-map.md` — Read when: routing to a skill, user invokes `/skill-name`, or skill selection is unclear
-- `rules/skill-auto-detect.md` — Read when: routing to a skill, keyword/intent match needed, or skill selection is unclear (full keyword→skill lookup tables, split out of `project-rules.md` to keep auto-loaded context lean)
 - `rules/skills-sync-protocol.md` — Read when: creating, updating, or syncing skills across agents
 - `rules/coding-guidelines.md` — Read when: writing/editing code, citing sources/lessons/skills, or composing routing/skill-review prompts (split out of `workflow.md` to keep auto-loaded core lean)
 - `output-styles/communication-style.md` — Read when: adjusting tone or formatting style
