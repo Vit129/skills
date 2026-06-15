@@ -20,16 +20,16 @@ When the user's message matches ANY keyword below — invoke the matching skill 
 | Keyword signals | Auto-invoke skill |
 |-----------------|-------------------|
 | TypeScript, JavaScript, Node.js, Express, NestJS, REST API, GraphQL | `backend-dev` |
-| React, Next.js, Tailwind, Vite, Vue, component, hook, state management | `dev/frontend-dev/` |
-| Flutter, Dart, mobile app, Android, iOS (non-SwiftUI) | `dev/frontend-dev/` |
-| macOS, SwiftUI, NSHostingView, AppKit, drag-drop | `dev/macos-swiftui/` |
+| React, Next.js, Tailwind, Vite, Vue, component, hook, state management | `frontend-dev` |
+| Flutter, Dart, mobile app, Android, iOS (non-SwiftUI) | `frontend-dev` |
+| macOS, SwiftUI, NSHostingView, AppKit, drag-drop | `macos-swiftui` |
 | Docker, GitHub Actions, CI/CD, pipeline, deploy, infrastructure | `devops-pipeline` |
-| OWASP, XSS, injection, auth hardening, secure coding | `dev/security-hardening/` |
+| OWASP, XSS, injection, auth hardening, secure coding | `security-hardening` |
 | DDD, bounded context, event storming, system architecture | `architect` |
-| ship, launch, rollback, feature flag, staged rollout | `dev/shipping-launch/` |
+| ship, launch, rollback, feature flag, staged rollout | `shipping-launch` |
 | simplify, refactor, reduce complexity | `code-simplification` |
 | deprecate, migrate, sunset, strangler fig | `deprecation-migration` |
-| ADR, architecture decision, changelog, API docs | `dev/documentation-adrs/` |
+| ADR, architecture decision, changelog, API docs | `documentation-adrs` |
 
 **qa/ — Testing**
 | Keyword signals | Auto-invoke skill |
