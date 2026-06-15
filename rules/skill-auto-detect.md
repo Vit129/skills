@@ -9,62 +9,62 @@ When the user's message matches ANY keyword below — invoke the matching skill 
 **thinking/ — Ideation & Analysis**
 | Keyword signals | Auto-invoke skill |
 |-----------------|-------------------|
-| brainstorm, คิดก่อน, party mode, explore idea, 3 amigos, คุยก่อน | `thinking/brainstorming/` |
-| interview me, ถามทีละข้อ, grill me, underspecified, ยังไม่มี code | `thinking/interview-me/` |
-| interview with docs, ถามกับ code, ตรวจสอบกับ codebase, align language | `thinking/interview-doc/` |
-| doubt, adversarial review, second opinion, scrutinize, verify decision | `thinking/doubt-driven/` |
-| analyze, gap analysis, requirements, reverse-eng | `thinking/analysis-skills/` |
-| verify docs, cite source, official docs, check API version | `thinking/source-driven/` |
+| brainstorm, คิดก่อน, party mode, explore idea, 3 amigos, คุยก่อน | `brainstorming` |
+| interview me, ถามทีละข้อ, grill me, underspecified, ยังไม่มี code | `interview-me` |
+| interview with docs, ถามกับ code, ตรวจสอบกับ codebase, align language | `interview-doc` |
+| doubt, adversarial review, second opinion, scrutinize, verify decision | `doubt-driven` |
+| analyze, gap analysis, requirements, reverse-eng | `analysis-skills` |
+| verify docs, cite source, official docs, check API version | `source-driven` |
 
 **dev/ — Implementation & Architecture**
 | Keyword signals | Auto-invoke skill |
 |-----------------|-------------------|
-| TypeScript, JavaScript, Node.js, Express, NestJS, REST API, GraphQL | `dev/backend-dev/` |
-| React, Next.js, Tailwind, Vite, Vue, component, hook, state management | `dev/frontend-dev/` |
-| Flutter, Dart, mobile app, Android, iOS (non-SwiftUI) | `dev/frontend-dev/` |
-| macOS, SwiftUI, NSHostingView, AppKit, drag-drop | `dev/macos-swiftui/` |
-| Docker, GitHub Actions, CI/CD, pipeline, deploy, infrastructure | `dev/devops-pipeline/` |
-| OWASP, XSS, injection, auth hardening, secure coding | `dev/security-hardening/` |
-| DDD, bounded context, event storming, system architecture | `dev/dev-architect/` |
-| ship, launch, rollback, feature flag, staged rollout | `dev/shipping-launch/` |
-| simplify, refactor, reduce complexity | `dev/code-simplification/` |
-| deprecate, migrate, sunset, strangler fig | `dev/deprecation-migration/` |
-| ADR, architecture decision, changelog, API docs | `dev/documentation-adrs/` |
+| TypeScript, JavaScript, Node.js, Express, NestJS, REST API, GraphQL | `backend-dev` |
+| React, Next.js, Tailwind, Vite, Vue, component, hook, state management | `frontend-dev` |
+| Flutter, Dart, mobile app, Android, iOS (non-SwiftUI) | `frontend-dev` |
+| macOS, SwiftUI, NSHostingView, AppKit, drag-drop | `macos-swiftui` |
+| Docker, GitHub Actions, CI/CD, pipeline, deploy, infrastructure | `devops-pipeline` |
+| OWASP, XSS, injection, auth hardening, secure coding | `security-hardening` |
+| DDD, bounded context, event storming, system architecture | `architect` |
+| ship, launch, rollback, feature flag, staged rollout | `shipping-launch` |
+| simplify, refactor, reduce complexity | `code-simplification` |
+| deprecate, migrate, sunset, strangler fig | `deprecation-migration` |
+| ADR, architecture decision, changelog, API docs | `documentation-adrs` |
 
 **qa/ — Testing**
 | Keyword signals | Auto-invoke skill |
 |-----------------|-------------------|
-| Playwright, Vitest, Jest, E2E, unit test, write test, fix test | `qa/playwright-testing/` |
-| QA architecture, test framework design | `qa/qa-architect/` |
-| test scenario, test case design | `qa/test-scenario/` |
-| Robot Framework, RF mobile test | `qa/robotframework-testing/` |
-| k6, load test, performance, Core Web Vitals, LCP, INP | `qa/performance-testing/` |
-| verify, quality gate, pre-commit check, verification loop | `qa/verification-loop/` |
+| Playwright, Vitest, Jest, E2E, unit test, write test, fix test | `playwright-testing` |
+| QA architecture, test framework design | `qa-architect` |
+| test scenario, test case design | `test-scenario` |
+| Robot Framework, RF mobile test | `robotframework-testing` |
+| k6, load test, performance, Core Web Vitals, LCP, INP | `performance-testing` |
+| verify, quality gate, pre-commit check, verification loop | `verification-loop` |
 
 **debugging/ — Bug Lifecycle**
 | Keyword signals | Auto-invoke skill |
 |-----------------|-------------------|
-| debug, fix failing test, triage error, root cause, reproduce | `debugging/debug-mantra/` |
-| find bugs, hunt mismatches, scan for bugs, bug lifecycle | `debugging/find-mismatch/` |
-| post-mortem, RCA, root cause record, document fix | `debugging/post-mortem/` |
+| debug, fix failing test, triage error, root cause, reproduce | `debug-mantra` |
+| find bugs, hunt mismatches, scan for bugs, bug lifecycle | `find-mismatch` |
+| post-mortem, RCA, root cause record, document fix | `post-mortem` |
 
 **review/ — Code Review**
 | Keyword signals | Auto-invoke skill |
 |-----------------|-------------------|
-| review code, pre-merge, security audit, find bugs | `review/review-personas/` |
-| management talk, exec summary, status update, less technical | `review/management-talk/` |
+| review code, pre-merge, security audit, find bugs | `review-personas` |
+| management talk, exec summary, status update, less technical | `management-talk` |
 
 **tooling/ — Integrations**
 | Keyword signals | Auto-invoke skill |
 |-----------------|-------------------|
-| postman migration to playwright | `tooling/postman-to-playwright/` |
-| PBI, azure devops, sprint report, upload test scenario, ADO | `tooling/azure-devops-bridge/` |
-| UI to text, screenshot to description | `tooling/ui-to-text/` |
+| postman migration to playwright | `postman` |
+| PBI, azure devops, sprint report, upload test scenario, ADO | `azure-devops-bridge` |
+| UI to text, screenshot to description | `ui-to-text` |
 
 **ux-ui/ — Design**
 | Keyword signals | Auto-invoke skill |
 |-----------------|-------------------|
-| UI design, figma, design system, polish UI, anti-AI-slop, improve colors, fix typography | `ux-ui/ui-designer/` |
+| UI design, figma, design system, polish UI, anti-AI-slop, improve colors, fix typography | `ui-designer` |
 
 **Personal skills**
 | Keyword signals | Auto-invoke skill |
