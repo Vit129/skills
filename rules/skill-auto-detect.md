@@ -34,31 +34,31 @@ When the user's message matches ANY keyword below — invoke the matching skill 
 **qa/ — Testing**
 | Keyword signals | Auto-invoke skill |
 |-----------------|-------------------|
-| Playwright, Vitest, Jest, E2E, unit test, write test, fix test | `qa/playwright-testing/` |
-| QA architecture, test framework design | `qa/qa-architect/` |
-| test scenario, test case design | `qa/test-scenario/` |
-| Robot Framework, RF mobile test | `qa/robotframework-testing/` |
-| k6, load test, performance, Core Web Vitals, LCP, INP | `qa/performance-testing/` |
-| verify, quality gate, pre-commit check, verification loop | `qa/verification-loop/` |
+| Playwright, Vitest, Jest, E2E, unit test, write test, fix test | `playwright-testing` |
+| QA architecture, test framework design | `qa-architect` |
+| test scenario, test case design | `test-scenario` |
+| Robot Framework, RF mobile test | `robotframework-testing` |
+| k6, load test, performance, Core Web Vitals, LCP, INP | `performance-testing` |
+| verify, quality gate, pre-commit check, verification loop | `verification-loop` |
 
 **debugging/ — Bug Lifecycle**
 | Keyword signals | Auto-invoke skill |
 |-----------------|-------------------|
-| debug, fix failing test, triage error, root cause, reproduce | `debugging/debug-mantra/` |
-| find bugs, hunt mismatches, scan for bugs, bug lifecycle | `debugging/find-mismatch/` |
-| post-mortem, RCA, root cause record, document fix | `debugging/post-mortem/` |
+| debug, fix failing test, triage error, root cause, reproduce | `debug-mantra` |
+| find bugs, hunt mismatches, scan for bugs, bug lifecycle | `find-mismatch` |
+| post-mortem, RCA, root cause record, document fix | `post-mortem` |
 
 **review/ — Code Review**
 | Keyword signals | Auto-invoke skill |
 |-----------------|-------------------|
-| review code, pre-merge, security audit, find bugs | `review/review-personas/` |
-| management talk, exec summary, status update, less technical | `review/management-talk/` |
+| review code, pre-merge, security audit, find bugs | `review-personas` |
+| management talk, exec summary, status update, less technical | `management-talk` |
 
 **tooling/ — Integrations**
 | Keyword signals | Auto-invoke skill |
 |-----------------|-------------------|
-| postman migration to playwright | `tooling/postman-to-playwright/` |
-| PBI, azure devops, sprint report, upload test scenario, ADO | `tooling/azure-devops-bridge/` |
+| postman migration to playwright | `postman` |
+| PBI, azure devops, sprint report, upload test scenario, ADO | `azure-devops-bridge` |
 | UI to text, screenshot to description | `tooling/ui-to-text/` |
 
 **ux-ui/ — Design**
