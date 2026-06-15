@@ -61,27 +61,6 @@ For any code output:
 
 ---
 
-## Periodic Self-Review
-
-After completing any task that took more than 3 tool calls, append:
-
-```
-Review:
-- What worked well:
-- What could be improved:
-- Suggested next upgrade (with estimated effort):
-```
-
----
-
-## Context Window Health
-
-Trigger `/compact` when:
-- Conversation exceeds 50 messages, OR
-- Response quality or consistency noticeably degrades
-
----
-
 ## Skill Invocation Rule
 
 **Before calling the Skill tool, always output a declaration line in the conversation:**
@@ -94,28 +73,6 @@ This makes it visible to the user that a skill is actually being invoked, not ju
 
 Example: before `Skill(skill="ha-dev")` → write `[Skill: ha-dev]` in text first.
 
----
-
-## Skill Self-Improvement Loop
-
-Skills improve through three layers working together:
-
-**Layer 1 — Capture (automatic)**
-- Every Skill tool invocation → `PostToolUse` hook → appends `DATE|skill-name` to `~/.claude/agent-memory/skill-usage.log`
-- Every session end → `Stop` hook → appends session boundary marker
-- No model call involved — deterministic shell logging only (CASE-005)
-
-**Layer 2 — Review (weekly, run `/skill-review`)**
-- Reads `skill-usage.log` → counts uses per skill
-- Diffs against `skill-log.md` → finds skills with ≥3 uses and no open proposal
-- Writes `proposed` entries to `skill-log.md`
-- Auto-drafts `~/.claude/skills/drafts/{name}/SKILL.md` for crystallized patterns (Applied ≥ 3)
-
-**Layer 3 — Approve (user-triggered)**
-- User says: `"approve skill draft {name}"` → Claude merges draft into live skill
-- Rejected drafts: user says `"reject skill draft {name}"` → Claude removes draft, updates status
-
-**Rule:** Never modify a live skill file from a proposal alone — drafts require explicit approval.
 ---
 
 ## Do

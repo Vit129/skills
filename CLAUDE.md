@@ -19,9 +19,9 @@ Cross-session memory (loaded every session):
 
 ## Rules — Auto (every session)
 
-- `rules/project-rules.md` — AIDLC enforcement, phase gates, language rules
-- `rules/workflow.md` — working style, response format (Done/Next/Why), do/don't list, citation format
-- `rules/skill-auto-detect.md` — skill keyword→invocation routing table (MANDATORY: invoke Skill() when keyword matches, before responding)
+- @rules/project-rules.md — AIDLC enforcement, phase gates, language rules
+- @rules/workflow.md — working style, response format (Done/Next/Why), do/don't list, citation format
+- @rules/skill-auto-detect.md — skill keyword→invocation routing table (MANDATORY: invoke Skill() when keyword matches, before responding)
 
 ## Rules — On-demand (read when triggered)
 
