@@ -22,6 +22,11 @@ Write a new CASE when ANY of these are true — don't wait for 2+ recurrences:
 - A correct decision was non-obvious and could easily go wrong next time
 - An infrastructure component (hook, script, path) was verified working or broken
 
+## Language Learning
+- English patterns log: `knowledge/english-patterns.md` — update inline when correction recurs 2+ times
+- Japanese patterns log: `knowledge/japanese-patterns.md` — update inline as errors/progress appear
+- Both files are cross-project (global `~/.claude/agent-memory/`) — available in every session
+
 ## Conventions
 - Agent routing: read→Gemini, plan→Claude, code→Codex
 - Memory files: UPPERCASE throughout
