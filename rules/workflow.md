@@ -99,6 +99,25 @@ Example: before `Skill(skill="ha-dev")` → write `[Skill: ha-dev]` in text firs
 
 ---
 
+## Session Bookkeeping
+
+Update `agent-memory/CONTEXT.md` at these moments — don't batch, do it inline:
+
+| Moment | What to write |
+|--------|---------------|
+| Task starts | Set `Now → Task:` to the feature/bug being worked on |
+| Blocker hit | Add to `Open Questions:` — one line per unresolved question (auth needed, unclear requirement, external dependency) |
+| Blocker resolved | Remove the question from `Open Questions:` |
+| Task ends / session closes | Reset `Now → Task: None active — ready for next session`; clear resolved questions; add session note if anything non-obvious happened |
+
+**Open Questions rules:**
+- Write it the moment uncertainty appears — not at the end of the session
+- One line per question: `- [blocked/open/watching] What X should Y do when Z?`
+- If a question stays open for 2+ sessions, escalate to the user or make a documented assumption
+- "none" is correct when there genuinely are no unresolved questions — it should not be the default placeholder
+
+---
+
 ## Context & Style
 
 - **Language:** Thai for user interaction, English for generated files and code

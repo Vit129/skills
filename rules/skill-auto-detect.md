@@ -74,3 +74,42 @@ When the user's message matches ANY keyword below — invoke the matching skill 
 | accounting, tax, VAT, WHT, Thai GAAP, TFRS | `thai-accountant/` |
 
 **Do NOT auto-invoke for:** pure "what is X?" questions with no task intent.
+
+---
+
+## Conflict Resolution
+
+When a message matches keywords from multiple skills, apply these tiebreaker rules in order:
+
+**Rule 1 — Primary verb wins over context noun.**
+The action keyword determines the skill; the subject is context.
+- "debug a Playwright test" → `debug-mantra` (verb: debug), not `playwright-testing`
+- "fix failing Playwright test" → `playwright-testing` (fix failing test is Playwright's domain)
+- "review code for security" → `review-personas` (verb: review), not `security-hardening`
+- "build Docker CI/CD" → `devops-pipeline` (artifact is infra), not `backend-dev`
+
+**Rule 2 — Category priority when Rule 1 doesn't resolve.**
+Higher priority wins:
+
+| Priority | Category |
+|----------|----------|
+| 1 (highest) | debugging/ — bug lifecycle, root cause |
+| 2 | qa/ — test execution, test fix |
+| 3 | dev/ — implementation, architecture |
+| 4 | thinking/ — analysis, ideation |
+| 5 | review/ — code review |
+| 6 | tooling/ — integrations |
+| 7 (lowest) | personal — finance, fitness, tax |
+
+**Rule 3 — Explicit conflict table** for recurring ambiguous pairs:
+
+| Trigger | Preferred skill | Reason |
+|---------|----------------|--------|
+| "debug failing Playwright test" | `debug-mantra` | Diagnosing > executing |
+| "write and fix Playwright test" | `playwright-testing` | Full cycle, no unknown bug |
+| "review Playwright test quality" | `review-personas` | Review > test |
+| "migrate Playwright tests to Robot Framework" | `robotframework-testing` | Target framework wins |
+| "analyze codebase for gaps" | `analysis-skills` | No code output intent |
+| "analyze then implement" | AIDLC first | Has build intent → AIDLC gate |
+| "ADR for Docker infra" | `documentation-adrs` | Documentation artifact is primary |
+| "deprecate and migrate REST API" | `deprecation-migration` | Lifecycle > API type |
