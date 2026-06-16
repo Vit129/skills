@@ -21,8 +21,10 @@
 
 ## Side Projects
 
-- **Investment:** Runs a Terry/Nora/Cleo multi-agent research pipeline on US equities — paper portfolio ($5K) validates conviction before routing to Thai RMF/PVD mutual funds. See: `/Users/supavit.cho/Git/My Investment Port/`
-- **Home Assistant:** Builds HVAC automations (AC scheduling, pre-cooling, arrival triggers, power outage handling) for his home. See: `/Users/supavit.cho/Git/Home Assistant/`
+- **Investment:** Runs a Terry/Nora/Cleo multi-agent research pipeline on US equities — paper portfolio ($5K) validates conviction before routing to Thai RMF/PVD mutual funds. See: `/Users/supavit.cho/Git/Personal/My Investment Port`
+- **Home Assistant:** Builds HVAC automations (AC scheduling, pre-cooling, arrival triggers, power outage handling) for his home. See: `/Users/supavit.cho/Git/Personal/HomeAssistant`
+- **Harness Terminal:** macOS terminal app (Swift/Metal) — personal project; active development, latest release v3.2.0. See: `/Users/supavit.cho/Git/Personal/harness-terminal`
+- **Language Learning:** English grammar/fluency + Japanese reading/writing — practice sessions via claude.ai custom instructions. See: `/Users/supavit.cho/Git/Personal/Language-Learning`
 
 ## Thinking Style
 
