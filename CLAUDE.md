@@ -12,7 +12,11 @@ Source of truth:
 
 Cross-session memory (loaded every session):
 
-- @agent-memory/memory.md
+- @agent-memory/CONTEXT.md
+- @agent-memory/index.md
+
+On-demand:
+- @agent-memory/MEMORY.md — past decisions + lessons
 - @agent-memory/user-profile.md
 
 ---
@@ -39,7 +43,7 @@ Skills are invoked via the `Skill` tool — not auto-loaded. Trigger by keyword 
 - `finance/` — investment research, portfolio analysis, stock screening
 - `thai-accountant/` — Thai tax, TFRS, accounting
 - `fitness/` — workout, nutrition, body composition
-- Shared Codex/Gemini skill root: `~/.agents/skills/`
+- Codex skill root: `~/.codex/skills/` · Agy (Antigravity CLI) global skill root: `~/.gemini/antigravity-cli/skills/`
 - `meta-skills/agent-memory/` — memory bootstrap, session flow, knowledge pipeline
 - See `rules/skill-map.md` for full routing table
 
@@ -117,7 +121,7 @@ Run `/dream` when Auto Memory feels cluttered or after 5+ sessions. Auto Dream t
 Generated agent configs:
 
 - `scripts/sync-agent-instructions.sh` writes `~/.codex/AGENTS.md` and `~/.gemini/GEMINI.md`
-- `scripts/sync-all.sh --only skills` merges `skills/` to `~/.agents/skills/` for Codex + Gemini
+- `scripts/sync-all.sh --only skills` merges `skills/` to `~/.codex/skills/` and `~/.gemini/antigravity-cli/skills/`
 - `~/.kiro/scripts/sync-skills-to-claude.sh` syncs `~/.kiro/skills/` → `~/.claude/skills/`
 
 Update `rules/` first, then resync generated configs.
