@@ -18,7 +18,7 @@
 | `/simplify` | `dev/code-simplification/` | Reduce complexity, preserve behavior |
 | `/ship` | `dev/shipping-launch/` | Pre-launch checklist, staged rollout, monitoring |
 | `/resume` | Scan `.aidlc/` → find last phase → continue | Pick up where you left off |
-| `/skill-review` | `agent-memory/skill-usage.log` + `agent-memory/skill-log.md` | Read usage counts → propose improvements → auto-draft for crystallized skills |
+| `/skill-review` | `agent-memory/skill-usage.log` + `agent-memory/SKILL-LOG.md` | Read usage counts → propose improvements → auto-draft for crystallized skills |
 
 > Commands are shortcuts, NOT bypasses — prerequisites still apply.
 

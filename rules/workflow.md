@@ -85,7 +85,7 @@ Example: before `Skill(skill="ha-dev")` → write `[Skill: ha-dev]` in text firs
 - **Self-score output to 9/10** — list and apply improvements before delivering
 - **Use `/compact`** when context exceeds 80% or response quality degrades
 - **Load the relevant skill** from `rules/skill-map.md` before starting domain work
-- **Update `agent-memory/memory.md`** after every meaningful decision or task change
+- **Update `agent-memory/CONTEXT.md` (current task) or `agent-memory/MEMORY.md` (decisions)** after every meaningful decision or task change
 - **Run `/skill-review`** weekly or after 5+ skill-heavy sessions — never skip the loop
 
 ## Don't
