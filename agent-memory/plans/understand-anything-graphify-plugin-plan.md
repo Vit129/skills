@@ -139,7 +139,7 @@ Acceptance:
 
 Candidate repo:
 
-- `/Users/supavit.cho/Git/My Investment Port`
+- `/Users/supavit.cho/Git/Personal/My-Investment-Port`
 
 Experiment flow:
 

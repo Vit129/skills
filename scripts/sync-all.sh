@@ -6,7 +6,7 @@
 #
 # Source of truth: ~/.claude/
 # Targets: ~/.codex/  ~/.gemini/
-# Shared skills target for Codex + Gemini: ~/.agents/skills/
+# Skills targets: ~/.codex/skills/ and ~/.gemini/antigravity-cli/skills/
 #
 # Usage:
 #   bash ~/.claude/scripts/sync-all.sh              # sync everything
@@ -165,7 +165,7 @@ if [ "$LIST_MODE" -eq 1 ]; then
   echo ""
   printf "  %-14s %-30s %s\n" "Step" "Source" "Targets"
   printf "  %-14s %-30s %s\n" "────────────" "──────────────────────────" "──────────────────────────────"
-  printf "  %-14s %-30s %s\n" "skills"       "~/.claude/skills/"         "~/.agents/skills/ (shared Codex + Gemini)"
+  printf "  %-14s %-30s %s\n" "skills"       "~/.claude/skills/"         "~/.codex/skills/  ~/.gemini/antigravity-cli/skills/"
   printf "  %-14s %-30s %s\n" "rules"        "~/.claude/rules/"          "~/.codex/rules/   ~/.gemini/rules/"
   printf "  %-14s %-30s %s\n" "commands"     "~/.claude/commands/"       "~/.codex/commands/ ~/.gemini/commands/"
   printf "  %-14s %-30s %s\n" "agents"       "~/.claude/.claude/agents/" "~/.codex/agents/  ~/.gemini/agents/"
@@ -185,8 +185,9 @@ echo ""
 
 # ── 1. Skills ────────────────────────────────────────────────────────────────
 if should_run "skills"; then
-  echo -e "  ${BLUE}[1/5] Skills${NC}  ~/.claude/skills/ → ~/.agents/skills/ (shared Codex + Gemini)"
-  merge_skills_dir "agents/skills" "~/.claude/skills" "~/.agents/skills"
+  echo -e "  ${BLUE}[1/5] Skills${NC}  ~/.claude/skills/ → ~/.codex/skills/ + ~/.gemini/antigravity-cli/skills/"
+  merge_skills_dir "codex/skills" "~/.claude/skills" "~/.codex/skills"
+  merge_skills_dir "agy/skills"   "~/.claude/skills" "~/.gemini/antigravity-cli/skills"
   echo ""
 fi
 
