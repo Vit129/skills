@@ -14,9 +14,10 @@ After each turn/task, the agent evaluates what to save using this rubric — not
 | Item | Source | Decision |
 |------|--------|----------|
 | Problem resolution | Current session context | → Draft in `drafts/` if criteria met |
-| Skill performance | Tool outputs + results | → Flag or clear in `memory.md` |
-| Knowledge gap | Missing pattern that would have helped | → Propose in `skill-log.md` |
-| Memory staleness | Task_Ledger entries | → Mark stale or remove |
+| Skill performance | Tool outputs + results | → Flag in `CONTEXT.md` or clear |
+| Knowledge gap | Missing pattern that would have helped | → Propose in `SKILL-LOG.md` |
+| Memory staleness | CONTEXT.md task entries | → Mark stale or remove |
+| Confirmed decision | Choices made this session | → Append to `MEMORY.md` Decisions |
 
 ## Save/Discard Rubric (for drafts)
 
@@ -24,11 +25,11 @@ Score each draft on 3 criteria (yes/no):
 
 | # | Criterion | Question |
 |---|-----------|----------|
-| 1 | **Novel** | Is this a new pattern not already in playbook or knowledge? |
+| 1 | **Novel** | Is this a new pattern not already in PLAYBOOK.md or knowledge? |
 | 2 | **Recurrent** | Could this problem happen again (not a one-off typo)? |
 | 3 | **Non-trivial** | Did it take >1 attempt to solve, or would it waste >5 min next time? |
 
-**Gate: 2/3 = save to playbook. 1/3 or 0/3 = discard.**
+**Gate: 2/3 = save to PLAYBOOK.md. 1/3 or 0/3 = discard.**
 
 ## Skill Flag Rubric
 
@@ -36,9 +37,10 @@ After each write operation, evaluate the skill that produced the output:
 
 | Signal | Action |
 |--------|--------|
-| Output has errors requiring rework | Add/update Skill_Flag (failure description) |
-| Output is correct, skill was flagged | Increment success counter |
-| Success counter reaches 3 | Clear the flag |
+| Output has errors requiring rework | Add/update flag in `CONTEXT.md` (failure description) |
+| Output is correct, skill was flagged | Increment success counter in `CONTEXT.md` |
+| Success counter reaches 3 | Clear the flag from `CONTEXT.md` |
+| Recurring flag (3+ sessions) | Promote to `MEMORY.md` as a lesson |
 
 ## Skill Improvement Rubric
 
@@ -46,8 +48,8 @@ After each task, evaluate if a skill could be improved:
 
 | Signal | Score | Action |
 |--------|-------|--------|
-| Skill was loaded but missing a pattern that would have helped | High | Propose addition in `skill-log.md` |
-| Skill has outdated info that caused confusion | High | Propose update in `skill-log.md` |
+| Skill was loaded but missing a pattern that would have helped | High | Propose addition in `SKILL-LOG.md` |
+| Skill has outdated info that caused confusion | High | Propose update in `SKILL-LOG.md` |
 | Skill worked perfectly | — | No action |
 | Minor style preference | Low | Skip — not worth a proposal |
 
@@ -55,15 +57,17 @@ After each task, evaluate if a skill could be improved:
 
 ## Memory Consolidation Rubric
 
-At session end, check `memory.md`:
+At session end, evaluate `CONTEXT.md`:
 
 | Check | Action |
 |-------|--------|
-| Byte count > 2,500 | Remove oldest stale Task_Ledger entry |
-| Task_Ledger entry not updated in 3+ sessions | Mark as stale |
-| All 5 Task_Ledger slots full + new task needed | Prompt user to archive one |
-| Recent_Lessons > 5 entries | Trim to 5 (keep most recent) |
-| Decisions_In_Force superseded | Remove old decision |
+| Byte count > 2,500 | Remove oldest stale task entry |
+| Task entry not updated in 3+ sessions | Mark as stale |
+| All 5 task slots full + new task needed | Prompt user to archive one |
+| Open Question unresolved for 2+ sessions | Escalate to user or document assumption |
+| Confirmed decision or lesson | Append to `MEMORY.md` (not CONTEXT.md) |
+
+**Rule:** `CONTEXT.md` is session-scoped — reset at session end. `MEMORY.md` is permanent — append only.
 
 ## Review Fork Constraints
 
@@ -81,3 +85,5 @@ At session end, check `memory.md`:
 - ❌ Proposing skill changes without evidence — cite the failure
 - ❌ Flagging skills for style preferences — only flag for functional failures
 - ❌ Reviewing other agents' outputs — only review your own session
+- ❌ Writing decisions into `CONTEXT.md` — decisions go into `MEMORY.md`
+- ❌ Overwriting `MEMORY.md` — it is append-only; only add new entries
