@@ -47,6 +47,14 @@ Skills are invoked via the `Skill` tool — not auto-loaded. Trigger by keyword 
 - `meta-skills/agent-memory/` — memory bootstrap, session flow, knowledge pipeline
 - See `rules/skill-map.md` for full routing table
 
+## Infrastructure — Headroom Proxy (always-on)
+
+All Claude Code and Codex traffic routes through Headroom proxy (`localhost:8787`) for token compression (47-92% savings). Kiro and Agy (Antigravity CLI) bypass it (gRPC backends, no HTTP override).
+
+- Knowledge: `agent-memory/knowledge/headroom-proxy.md`
+- Health: `curl http://127.0.0.1:8787/health`
+- Stats: `curl http://127.0.0.1:8787/stats`
+
 ---
 
 ## Agent Routing (Plugin-based)
@@ -77,6 +85,15 @@ Use Graphify as the **first navigation layer** before broad file reading:
 graphify query "..."
 graphify explain "X"
 graphify path "A" "B"
+```
+
+### Auto-summary (always-on per project)
+
+Graphified projects (`harness-terminal`, `Home-Assistant`, `My-Investment-Port`) auto-load `@graphify-out/GRAPH_SUMMARY.md` at session start via their own CLAUDE.md — no manual trigger needed. The summary contains god nodes, community hubs top 25, freshness check, and surprising connections (~70 lines).
+
+After any `graphify update .`, always regenerate the summary:
+```bash
+graphify update . && ~/.claude/scripts/generate-graph-summary.sh .
 ```
 
 ---
