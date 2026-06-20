@@ -63,15 +63,17 @@ For any code output:
 
 ## Skill Invocation Rule
 
-**Before calling the Skill tool, always output a declaration line in the conversation:**
+When a skill trigger is detected, follow this sequence — every step is mandatory:
 
-```
-[Skill: {skill-name}]
-```
+1. **Announce** — output `[Skill: {skill-name}]` before any tool call
+2. **Read SKILL.md directly** — use Read tool on the absolute path:
+   `~/.claude/skills/{path}/SKILL.md` (or nearest available root per skill-map.md)
+3. **Output key content** — show the mantra/workflow from that file explicitly in the response
+4. **Invoke Skill() tool** — supplementary only; never rely on it alone
 
-This makes it visible to the user that a skill is actually being invoked, not just mentioned.
+**Why:** Skill() tool loads content silently into context with no visible output. Agy and Codex always read SKILL.md directly via file tool — that's what makes skill content visible and verifiable. Claude must do the same.
 
-Example: before `Skill(skill="ha-dev")` → write `[Skill: ha-dev]` in text first.
+**Fallback (Skill tool unavailable):** Read SKILL.md directly, state the fallback explicitly as `[Skill: {name}] (Fallback: reading SKILL.md directly)`
 
 ---
 

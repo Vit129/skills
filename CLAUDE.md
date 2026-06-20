@@ -49,11 +49,18 @@ Skills are invoked via the `Skill` tool — not auto-loaded. Trigger by keyword 
 
 ### Mandatory Skill Invocation Contract
 
-At the start of every user turn, check `rules/skill-auto-detect.md` before answering. If the request matches any trigger there, invoke the matching `Skill()` immediately and announce the skill in one short line. Do not wait for the user to type `/skill-name`.
+At the start of every user turn, check `rules/skill-auto-detect.md` before answering. If the request matches any trigger there:
+
+1. Announce `[Skill: {name}]`
+2. **Read the SKILL.md file directly** using Read tool — `~/.claude/skills/{path}/SKILL.md`
+3. Output the key mantra/workflow from that file explicitly (visible to user)
+4. Then invoke `Skill()` tool if available (supplementary)
+
+Do not wait for the user to type `/skill-name`. Never rely on `Skill()` tool alone — it is silent and produces no visible output. Reading the file directly (like Agy and Codex do) is the primary mechanism.
 
 When a matching task is implementation-oriented, route the actual work to Codex on the configured `gpt-5.4-mini` runtime in `~/.codex/config.toml`.
 
-Project-local skill rules in a repo's `CLAUDE.md` or `./rules/skill-routing.md` override the global table when they are more specific. If the `Skill` tool is unavailable in the current runtime, read the matching `SKILL.md` from the nearest available root and state that fallback explicitly.
+Project-local skill rules in a repo's `CLAUDE.md` or `./rules/skill-routing.md` override the global table when they are more specific. If the `Skill` tool is unavailable, state `[Skill: {name}] (Fallback: reading SKILL.md directly)` and proceed with Read tool.
 
 ## Infrastructure — Headroom Proxy (always-on)
 
