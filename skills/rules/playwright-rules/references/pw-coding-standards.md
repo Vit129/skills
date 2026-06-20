@@ -58,6 +58,11 @@ Agents must verify priority and create automation according to this order (refer
    - **File Naming:** lowerCamelCase (starts with lowercase, no hyphens) e.g., `shopeePaymentData.ts`.
 3. **🚫 No Inline Logic:** Do not write logic to find elements or call APIs directly in `.spec.ts` files. **Must always go through POM/Helper.**
 4. **🚫 No Hard Wait:** Never use `waitForTimeout()`. Use Smart Wait or Web-First Assertions instead.
+5. **🎯 Selector Priority (Locator Strategy):**
+   - **1st:** `getByTestId('x')` — scope/container
+   - **2nd:** `getByRole('button', { name: L.key })` — buttons, links, headings (Labels.ts)
+   - **3rd:** `getByPlaceholder(L.key)` or `getByPlaceholder(/th|en/i)` — input fields without visible label (use Labels.ts, support regex for TH/EN)
+   - **Last resort:** `locator('css')` — only when no semantic locator is possible
 5. **🏷️ Mandatory Tags:** Every Test file and Test Case must have 2 levels of Tags (`@Important`, `@Scenario`).
 6. **📁 Shared Fixtures Location:** For cross-layer data (API + UI), use `tests/shared-fixtures/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/`.
 7. **🌐 English Naming:** `test.describe()` and `test()` names must be in clear, easy-to-understand English.
@@ -98,3 +103,185 @@ For in-depth practical implementation (Technical Details), follow the Domain Rul
 
 - 🌐 **UI Standards:** `@ai-agent/rules/playwright/webUi.md`
 - 🔌 **API Standards:** `@ai-agent/rules/playwright/api.md`
+
+---
+
+## PART 6: Test Structure Patterns (by Design Technique)
+
+> These patterns define HOW to structure test code when implementing scenarios designed with specific techniques.
+> EP and BVA need no special pattern — use standard AAA with inline values.
+
+### 1. Base-Choice (BC) Pattern
+
+**When:** Scenario set has 1 base E2E + N variations (1 param changed per variation).
+
+**Structure:**
+
+```typescript
+test.describe('@Critical @CreateOrder Base-Choice Coverage', () => {
+  const baseData = { amount: 100, paymentMethod: 'cash', deliveryType: 'standard' };
+
+  test('create order with all default values [Base]', async ({ api }) => {
+    const res = await api.createOrder(baseData);
+    expect(res.status).toBe(201);
+  });
+
+  const variations = [
+    { name: 'credit card payment', override: { paymentMethod: 'credit' } },
+    { name: 'express delivery', override: { deliveryType: 'express' } },
+    { name: 'zero amount (boundary)', override: { amount: 0 }, expectFail: true },
+  ];
+
+  for (const v of variations) {
+    test(`create order with ${v.name} [Variation]`, async ({ api }) => {
+      const data = { ...baseData, ...v.override };
+      const res = await api.createOrder(data);
+      if (v.expectFail) {
+        expect(res.status).toBe(400);
+      } else {
+        expect(res.status).toBe(201);
+      }
+    });
+  }
+});
+```
+
+**Rules:**
+- Base test is always first and explicitly named `[Base]`
+- Variations use spread override pattern: `{ ...baseData, ...v.override }`
+- Use `for...of` loop, NOT `test.describe.each` (better readability in reports)
+
+### 2. Multiple-Choice (MC) Pattern — Data-Driven from Fixture
+
+**When:** Pairwise/combinatorial matrix generated externally (PICT tool).
+
+**Structure:**
+
+```typescript
+import combos from '../fixtures/order/pairwiseCombinations.json';
+
+test.describe('@High @CreateOrder Pairwise Coverage', () => {
+  for (const combo of combos) {
+    test(`create order: ${combo.label} [Combo]`, async ({ api }) => {
+      const res = await api.createOrder(combo.data);
+      expect(res.status).toBe(combo.expectedStatus);
+    });
+  }
+});
+```
+
+**Rules:**
+- Combination matrix generated OUTSIDE test code (PICT output → committed JSON file)
+- JSON fixture location: `fixtures/[system-kebab]/[feature]Combinations.json`
+- Each combo object must have: `label`, `data`, `expectedStatus`
+- NEVER generate combinations inside test code
+
+### 3. State Transition (ST) Pattern
+
+**When:** Feature has explicit states with transitions.
+
+**Structure:**
+
+```typescript
+test.describe('@Critical @OrderLifecycle State Transitions', () => {
+  test('transition: pending → confirmed [State]', async ({ api, orderHelper }) => {
+    // Arrange — use API helper to reach starting state
+    const order = await orderHelper.setupInState('pending');
+
+    // Act — trigger transition
+    const res = await api.confirmOrder(order.id);
+
+    // Assert — verify new state AND side effects
+    expect(res.status).toBe(200);
+    expect(res.body.state).toBe('confirmed');
+    expect(res.body.confirmedAt).toBeTruthy();
+  });
+
+  test('invalid transition: cancelled → confirmed [State]', async ({ api, orderHelper }) => {
+    const order = await orderHelper.setupInState('cancelled');
+    const res = await api.confirmOrder(order.id);
+    expect(res.status).toBe(422);
+    expect(res.body.error).toContain('invalid transition');
+  });
+});
+```
+
+**Rules:**
+- NEVER navigate through UI to reach a state — use `setupInState(targetState)` API helper
+- `setupInState` helper lives in `helpers/[feature]Helper.ts`
+- Each test asserts BOTH: new state value + side effects (timestamps, notifications, etc.)
+- Invalid transition tests assert rejection (422/400) with clear error message
+
+### 4. Transition Tree / W-method Pattern
+
+**When:** Complex state machine requiring systematic full-path coverage.
+
+**Structure:**
+
+```typescript
+import paths from '../fixtures/payment/transitionTreePaths.json';
+
+test.describe('@Critical @PaymentFSM W-method Coverage', () => {
+  for (const path of paths) {
+    test(`path: ${path.label} [W-method]`, async ({ api, paymentHelper }) => {
+      let current = await paymentHelper.setupInState(path.steps[0].fromState);
+
+      for (const step of path.steps) {
+        const res = await paymentHelper.triggerEvent(current.id, step.event);
+        expect(res.body.state).toBe(step.toState);
+        current = res.body;
+      }
+
+      // Final state verification
+      expect(current.state).toBe(path.finalState);
+      for (const check of path.verify) {
+        expect(current[check.field]).toBe(check.expected);
+      }
+    });
+  }
+});
+```
+
+**Rules:**
+- Paths stored as committed JSON fixture (generated from FSM diagram)
+- Fixture location: `fixtures/[system-kebab]/transitionTreePaths.json`
+- Each path object: `{ label, steps: [{ fromState, event, toState }], finalState, verify: [{ field, expected }] }`
+- State model diagram MUST exist in `.aidlc/planning/` BEFORE writing path fixtures
+- Use generic walker loop — don't hardcode state sequences in test code
+
+### 5. Helper Requirements for State-Based Tests
+
+Every stateful feature requires a helper class:
+
+```typescript
+// helpers/orderHelper.ts
+export class OrderHelper {
+  constructor(private api: ApiClient) {}
+
+  async setupInState(targetState: string): Promise<Order> {
+    // Use API shortcuts to reach target state directly
+    // e.g., pending → create; confirmed → create + confirm; shipped → create + confirm + ship
+  }
+
+  async triggerEvent(orderId: string, event: string): Promise<ApiResponse> {
+    // Map event names to API calls
+  }
+}
+```
+
+**Rules:**
+- One helper per stateful feature
+- `setupInState` uses fastest API path (no UI)
+- `triggerEvent` maps event name → API call (used by W-method walker)
+- Helper registered as Playwright fixture for DI
+
+### 6. Security Testing Patterns
+
+> **Full rules in dedicated skill:** `rules/security/SKILL.md`
+> Covers: unauthorized access, permission matrix, IDOR, injection, rate limit, file upload, mobile.
+> Load when Pre-flight Q5 = Yes or feature has auth/permission/user input.
+
+**Quick reference:**
+- Tag: `@Security` on every security test
+- Fixtures: `fixtures/security/` (permissionMatrix, injectionPayloads, expiredTokens)
+- Pipeline: `continueOnError: false` — security failures BLOCK pipeline

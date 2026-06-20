@@ -1,46 +1,31 @@
 #!/bin/bash
-# mcpSetup.sh — Setup ~/.kiro/settings/mcp.json with standard MCP servers
-# Usage: bash mcpSetup.sh [--force] [--markitdown] [--chrome-devtools] [--appium]
+# mcpSetup.sh — Setup ~/.kiro/settings/mcp.json with chrome-devtools + azure-devops MCP
+# Usage: bash mcpSetup.sh [--force]
 #
-# Core (always installed):
-#   • playwright-cli (npm global) — token-efficient browser CLI for agents
-#   • playwright MCP server
-#   • azure-devops MCP server (disabled by default)
-#   • figma (power)
-#
-# Optional (pass flag to install):
-#   --markitdown      Install markitdown-mcp (convert files to Markdown)
-#   --chrome-devtools Install chrome-devtools-mcp (browser debugging & perf)
-#   --appium          Install appium-mcp (mobile automation — Android/iOS)
+# Installs:
+#   • playwright-cli (npm global) — token-efficient browser CLI for coding agents
+#   • chrome-devtools MCP (performance, Lighthouse, network inspection)
+#   • azure-devops MCP (work items, pipelines)
+#   • figma power (design integration)
 #
 # Safe by default: skips mcp.json write if file already exists unless --force is passed.
 
 set -euo pipefail
 
 FORCE=0
-OPT_MARKITDOWN=0
-OPT_CHROME_DEVTOOLS=0
-OPT_APPIUM=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --force) FORCE=1; shift ;;
-    --markitdown) OPT_MARKITDOWN=1; shift ;;
-    --chrome-devtools) OPT_CHROME_DEVTOOLS=1; shift ;;
-    --appium) OPT_APPIUM=1; shift ;;
     -h|--help)
-      echo "Usage: bash mcpSetup.sh [--force] [--markitdown] [--chrome-devtools] [--appium]"
-      echo ""
-      echo "  --force           overwrite existing mcp.json"
-      echo "  --markitdown      install markitdown-mcp (file → Markdown converter)"
-      echo "  --chrome-devtools install chrome-devtools-mcp (browser debugging)"
-      echo "  --appium          install appium-mcp (mobile automation)"
+      echo "Usage: bash mcpSetup.sh [--force]"
+      echo "  --force  overwrite existing mcp.json"
       exit 0 ;;
     *) echo "Unknown option: $1"; exit 1 ;;
   esac
 done
 
-# ── Core: Install Playwright CLI ──────────────────────────────
+# ── Install Playwright CLI ────────────────────────────────────
 if command -v playwright-cli &>/dev/null; then
   echo "  ⏭️  playwright-cli already installed"
 else
@@ -49,34 +34,28 @@ else
   echo "  ✅ playwright-cli installed"
 fi
 
-# ── Optional: Install markitdown-mcp ─────────────────────────
-if [ "$OPT_MARKITDOWN" -eq 1 ]; then
+# Install playwright-cli skills (creates ~/.claude/skills/playwright-cli/)
+echo "🔧 Installing playwright-cli skills ..."
+playwright-cli install --skills
+echo "  ✅ playwright-cli skills installed"
+
+# ── Ask: markitdown (Excel, PDF, DOCX → Markdown) ─────────────
+OPT_MARKITDOWN=0
+echo ""
+read -rp "📄 Need to read PDF/Excel/Word/Images (screenshots, specs)? Install markitdown-mcp? [y/N] " answer
+if [[ "$answer" =~ ^[Yy]$ ]]; then
+  OPT_MARKITDOWN=1
   if command -v uv &>/dev/null; then
     if uv tool list 2>/dev/null | grep -q "markitdown-mcp"; then
-      echo "  ⏭️  markitdown-mcp already installed (uv tool)"
+      echo "  ⏭️  markitdown-mcp already installed"
     else
-      echo "🔧 Installing markitdown-mcp via uv tool install ..."
+      echo "🔧 Installing markitdown-mcp via uv ..."
       uv tool install markitdown-mcp
       echo "  ✅ markitdown-mcp installed"
     fi
   else
-    echo "  ⚠️  uv not found — skipping markitdown-mcp install"
-    echo "     Install uv: https://docs.astral.sh/uv/getting-started/installation/"
+    echo "  ⚠️  uv not found — install it first: https://docs.astral.sh/uv/"
     echo "     Then run: uv tool install markitdown-mcp"
-  fi
-fi
-
-# ── Optional: Verify chrome-devtools-mcp ──────────────────────
-if [ "$OPT_CHROME_DEVTOOLS" -eq 1 ]; then
-  echo "  ✅ chrome-devtools-mcp will be added to mcp.json (runs via npx)"
-fi
-
-# ── Optional: Verify appium-mcp ──────────────────────────────
-if [ "$OPT_APPIUM" -eq 1 ]; then
-  echo "  ✅ appium-mcp will be added to mcp.json (runs via npx)"
-  if [ -z "${ANDROID_HOME:-}" ]; then
-    echo "  ⚠️  ANDROID_HOME not set — appium-mcp needs it for Android testing"
-    echo "     Set it in your shell profile: export ANDROID_HOME=~/Library/Android/sdk"
   fi
 fi
 
@@ -92,22 +71,21 @@ if [ -f "$MCP_FILE" ] && [ "$FORCE" -ne 1 ]; then
 else
   echo "🔧 Writing MCP config to $MCP_FILE ..."
 
-  # Build JSON with jq-like heredoc approach
-  # Start with core servers, add optional ones based on flags
-  MARKITDOWN_BLOCK=""
+  # Build markitdown block if selected
+  MARKITDOWN_JSON=""
   if [ "$OPT_MARKITDOWN" -eq 1 ]; then
-    MARKITDOWN_BLOCK='
+    MARKITDOWN_JSON=',
     "markitdown": {
       "command": "markitdown-mcp",
       "args": [],
       "disabled": false,
       "autoApprove": []
-    },'
+    }'
   fi
 
-  CHROME_DEVTOOLS_BLOCK=""
-  if [ "$OPT_CHROME_DEVTOOLS" -eq 1 ]; then
-    CHROME_DEVTOOLS_BLOCK='
+  cat > "$MCP_FILE" << EOF
+{
+  "mcpServers": {
     "chrome-devtools": {
       "command": "npx",
       "args": ["-y", "chrome-devtools-mcp@latest"],
@@ -117,35 +95,9 @@ else
         "performance_analyze_insight",
         "navigate_page",
         "take_screenshot",
+        "take_snapshot",
         "list_console_messages"
       ]
-    },'
-  fi
-
-  APPIUM_BLOCK=""
-  if [ "$OPT_APPIUM" -eq 1 ]; then
-    APPIUM_BLOCK='
-    "appium-mcp": {
-      "command": "npx",
-      "args": ["-y", "appium-mcp@latest"],
-      "env": {
-        "ANDROID_HOME": "'"${ANDROID_HOME:-\$HOME/Library/Android/sdk}"'",
-        "NO_UI": "true"
-      },
-      "disabled": true,
-      "autoApprove": []
-    },'
-  fi
-
-  cat > "$MCP_FILE" << EOF
-{
-  "mcpServers": {
-    ${MARKITDOWN_BLOCK}${CHROME_DEVTOOLS_BLOCK}${APPIUM_BLOCK}
-    "playwright": {
-      "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest"],
-      "disabled": false,
-      "autoApprove": []
     },
     "azure-devops": {
       "command": "npx",
@@ -157,7 +109,7 @@ else
         "core_list_project_teams"
       ],
       "disabled": true
-    }
+    }${MARKITDOWN_JSON}
   },
   "powers": {
     "mcpServers": {
@@ -178,21 +130,10 @@ echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "✅ MCP setup complete: $MCP_FILE"
 echo ""
-echo "  Core (always):"
-echo "  • playwright-cli  (npm global)                — token-efficient browser CLI for agents"
-echo "  • playwright      (npx @playwright/mcp)       — browser automation (accessibility)"
-echo "  • azure-devops    (disabled by default)       — Azure DevOps work items"
-echo "  • figma           (power — mcp.figma.com)     — Figma design integration"
-echo ""
-echo "  Optional (installed this run):"
-[ "$OPT_MARKITDOWN" -eq 1 ] && echo "  • markitdown      (markitdown-mcp)             — convert files to Markdown"
-[ "$OPT_CHROME_DEVTOOLS" -eq 1 ] && echo "  • chrome-devtools (npx chrome-devtools-mcp)   — browser debugging & perf"
-[ "$OPT_APPIUM" -eq 1 ] && echo "  • appium-mcp      (npx appium-mcp, disabled)   — mobile automation (Android/iOS)"
-echo ""
-echo "  To add optional servers later:"
-echo "    bash mcpSetup.sh --force --markitdown"
-echo "    bash mcpSetup.sh --force --chrome-devtools"
-echo "    bash mcpSetup.sh --force --appium"
+echo "  • playwright-cli    (npm global)              — token-efficient browser CLI"
+echo "  • chrome-devtools   (npx chrome-devtools-mcp) — Lighthouse, performance, network"
+echo "  • azure-devops      (disabled by default)     — Azure DevOps work items MCP"
+echo "  • figma             (power — mcp.figma.com)   — Figma design integration"
 echo ""
 echo "Next: Restart Kiro or reconnect MCP servers from the Kiro feature panel."
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

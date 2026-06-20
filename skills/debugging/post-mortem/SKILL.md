@@ -227,7 +227,7 @@ agent-memory (knowledge/bug/) — lesson persisted for future
 
 **After post-mortem is posted:**
 - If bug came from `find-mismatch` scan → mark finding as CLOSED in Lifecycle Tracker
-- If bug came from Azure DevOps → `tooling/azure-devops-bridge/` updates Bug state + adds comment
+- If bug came from Azure DevOps → `project management integration (implement fetch/update work items)` updates Bug state + adds comment
 
 ### Improvement Tracking
 

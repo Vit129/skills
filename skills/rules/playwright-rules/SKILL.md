@@ -21,7 +21,7 @@ The authoritative coding standards for all Playwright automation.
 
 ## Key Mandates
 1. No `waitForTimeout()` — use smart waits
-2. Selector priority: `getByTestId` (scope) + `getByRole({ name: L.keyName })` (target) — hybrid pattern
+2. Selector priority: `getByTestId` (scope) + `getByRole({ name: L.keyName })` (target) + `getByPlaceholder(L.key)` (inputs without label) — hybrid pattern
 3. AAA Pattern: Arrange-Act-Assert in every test
 4. Hybrid Testing: API setup over UI navigation
 5. No inline logic: all interactions through Page Objects or Helpers

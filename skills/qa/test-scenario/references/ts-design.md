@@ -118,7 +118,7 @@ Generate detailed test scenarios and steps using AI reasoning, adhering to 2026 
 
 > **Why separate files per platform:**
 > - `md2csv.sh` exports one CSV per file — mixed `Test_type` in one file causes Azure DevOps import issues
-> - Upload script (`uploadTsToAdo.ts`) processes one platform CSV at a time
+> - Upload script (`upload-test-cases.ts`) processes one platform CSV at a time
 > - Phase 2.4 automation lives in separate folders (`api-testing/` vs `web-testing/`) — matching TS files keeps traceability clean
 
 > **Paired design rule (Section 7 of ts-standards.md):** Design API + UI scenarios as pairs so user can choose which to keep — but store them in **separate files**, not combined.

@@ -155,7 +155,7 @@ Every scenario file MUST have a Quick Review Summary section at the top, before 
 ```
 
 **Column population timeline:**
-- `Azure ID`: populated after `uploadTsToAdo.ts` runs (Phase 2.2 upload gate) — initially "—"
+- `Azure ID`: populated after `upload-test-cases.ts` runs (Phase 2.2 upload gate) — initially "—"
 - `Spec File`: populated after Phase 2.4 writes each spec file — initially "—"
 - Both columns start as "—" and get filled as workflow progresses
 

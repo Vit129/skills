@@ -6,17 +6,19 @@ Rules for writing high-quality Test Scenarios (Title, Pre-conditions, Steps, Exp
 
 - **Success Cases (Happy Path):** Normal system behavior. Starts with `[Success]`.
 - **Failure Cases (Negative Scenarios):** Error handling logic. Starts with `[Alternative]`.
+- **Security Cases:** Auth bypass, permission violations, injection, token abuse. Starts with `[Security]`.
 - **Boundary Scenarios:** Testing data limits (Min/Max).
 - **Edge Scenarios:** Special situations (Null, Empty, Special Chars).
 
 Combine similar Boundary/Edge/Failure cases where appropriate.
+**Security cases are ALWAYS separate** — never combine with functional cases.
 
 ## 2. Title Writing
 
 **Format:** `[TestType][Prefix] + Verb + Object + Context`
 
 **TestType:** `[UI]`, `[Mobile]`, `[Tablet]`, `[API]`
-**Prefix:** `[Success]`, `[Alternative]`
+**Prefix:** `[Success]`, `[Alternative]`, `[Security]`
 
 **Recommended Verbs:**
 - UI: แสดง, เปิด, กรอก, เลือก, ใช้งาน, เข้าสู่ระบบ
@@ -125,7 +127,9 @@ Separate scenarios into two items:
 **⚠️ Paired = separate files, NOT same file:**
 - Design API + UI scenarios as pairs → present both to user → user decides which platform(s) to keep
 - Store in **separate files per platform**: `testScenarioPbi{ID}-api.md` and `testScenarioPbi{ID}-web-ui.md`
+- **Security scenarios ALWAYS in separate file**: `testScenarioPbi{ID}-security.md` (covers all platforms)
 - Never mix `Test_type: API` and `Test_type: Web UI` in the same MD file — causes CSV import issues in Azure DevOps
+- Never mix `[Security]` scenarios with functional `[Success]`/`[Alternative]` — different review cycle, different pipeline
 
 ### 7.2 Language Policy
 
@@ -203,3 +207,149 @@ Separate scenarios into two items:
 - Critical + High → Must be automated (API + UI)
 - Medium → API mandatory, UI optional
 - Low → API only
+
+## 11. Test Design Techniques
+
+### When to Apply Each Technique
+
+| Requirement Type | Technique | Coverage Goal |
+|---|---|---|
+| Single input field with constraints (min/max/length) | EP + BVA | All partitions + boundaries |
+| Multi-parameter form/API with 1 happy path | Base-Choice (BC) | 1 base E2E + 1 variation per param |
+| Multi-parameter with interactions between params | Multiple-Choice (MC) | Pairwise coverage (use PICT tool) |
+| Feature with explicit states (e.g. order lifecycle) | State Transition (ST) | ST-1 minimum, ST-2 for critical |
+| Complex state machine (payment, auth) | W-method / Transition Tree | Full path coverage from FSM |
+
+### 11.1 Equivalence Partitioning (EP)
+
+**Rule:** For every input field → identify valid and invalid partitions → write minimum 1 scenario per partition.
+
+**Enforcement:** If a field accepts values → scenario set MUST cover:
+- At least 1 valid partition value
+- At least 1 invalid partition value (if applicable)
+
+**Title convention:** Include partition context in title
+- ✅ `[API][Alternative] จัดการข้อผิดพลาดเมื่อส่ง amount เป็นค่าลบ`
+- ✅ `[UI][Alternative] แสดง error เมื่อกรอก email ผิด format`
+
+### 11.2 Boundary Value Analysis (BVA)
+
+**Rule:** If a field has a numeric/length constraint → boundary tests are **MANDATORY**.
+
+**Enforcement:** For each constraint (min, max, minLength, maxLength):
+- Test AT boundary (min, max)
+- Test OFF-by-one (min-1, max+1)
+
+**When to skip:** Field has no defined boundary (free text, no limit).
+
+**Title convention:**
+- ✅ `[API][Alternative] จัดการข้อผิดพลาดเมื่อ amount = 0 (ต่ำกว่า minimum)`
+- ✅ `[UI][Success] แสดงผลสำเร็จเมื่อกรอกชื่อ 100 ตัวอักษร (max boundary)`
+
+### 11.3 Base-Choice Coverage (BC)
+
+**Rule:** For multi-parameter features → design scenarios as:
+1. **1 Base test (Happy E2E):** All parameters at their "most typical" valid value → chain into 1 complete flow
+2. **N Variation tests:** Change exactly 1 parameter from base → observe impact
+
+**Enforcement:**
+- Base test MUST be the first scenario in the set, titled with `[Base]` tag
+- Each variation changes exactly ONE parameter from base
+- Total scenarios = 1 + (number of variable parameters)
+
+**Title convention:**
+- ✅ `[API][Success][Base] สร้าง order สำเร็จด้วยค่า default ทั้งหมด`
+- ✅ `[API][Success][Variation] สร้าง order สำเร็จเมื่อเปลี่ยน paymentMethod เป็น credit card`
+- ✅ `[UI][Alternative][Variation] แสดง error เมื่อเปลี่ยน quantity เป็น 0`
+
+**Why this is efficient:** Covers all test conditions with minimum scenarios. Maps perfectly to 1 E2E test + parameterized variations.
+
+### 11.4 Multiple-Choice Coverage (MC)
+
+**Rule:** Use ONLY when parameters have known interactions (parameter A affects behavior of parameter B).
+
+**Enforcement:**
+- Generate combination matrix using PICT or AllPairs tool (OUTSIDE the scenario design)
+- Each row in matrix = 1 test scenario
+- Title includes `[Combo]` tag
+
+**When to use:** 4+ parameters with suspected interactions.
+**When NOT to use:** Independent parameters → use Base-Choice instead (cheaper).
+
+**Title convention:**
+- ✅ `[API][Success][Combo] สร้าง order: paymentMethod=credit + deliveryType=express + coupon=applied`
+
+### 11.5 State Transition (ST)
+
+**Coverage levels:**
+
+| Level | What it covers | When to use |
+|---|---|---|
+| ST-0 | All states exist | Always (implicit in any state test) |
+| ST-1 | Every valid single transition | Default minimum for stateful features |
+| ST-2 | Every valid pair of transitions | Critical state machines (order, payment) |
+| ST-3+ | N-switch coverage | Only when explicitly required |
+| Invalid transitions | Events that should be rejected in a given state | Always for Critical priority |
+
+**Enforcement:**
+- If AC mentions state changes → draw state model FIRST (in planning docs)
+- Minimum coverage = ST-1 (all valid transitions) + invalid transitions for Critical
+- Each transition path = 1 test scenario
+
+**Title convention:**
+- ✅ `[API][Success][State] เปลี่ยนสถานะ order จาก pending → confirmed`
+- ✅ `[API][Alternative][State] ปฏิเสธการเปลี่ยนสถานะจาก cancelled → confirmed (invalid transition)`
+
+**State model requirement:** Before writing ST scenarios, a state diagram must exist in `.aidlc/planning/` showing:
+- All states (nodes)
+- All valid transitions (edges) with trigger events
+- Invalid transitions to test
+
+### 11.6 Chow W-method / Transition Tree
+
+**Rule:** Use ONLY for complex critical state machines where ST-2 is insufficient.
+
+**When to apply:**
+- Payment processing flows
+- Authentication/session lifecycle
+- Multi-step approval workflows with 5+ states
+
+**Enforcement:**
+- Requires a formal FSM diagram with: states, alphabet (events), transition function, initial state
+- Generate transition tree via BFS from initial state
+- Each leaf-to-root path = 1 test scenario
+- Title includes `[W-method]` tag
+
+**Title convention:**
+- ✅ `[API][Success][W-method] Verify path: initial → pending → processing → completed`
+
+**When NOT to use:** Simple 3-4 state flows → use ST-1/ST-2 instead (cheaper).
+
+### 11.7 Technique Selection Decision Tree
+
+```
+Is the feature stateful (has explicit states)?
+├── YES → How many states?
+│   ├── ≤ 4 states → ST-1 + invalid transitions
+│   ├── 5-8 states + Critical priority → ST-2
+│   └── 8+ states + Critical → W-method / Transition Tree
+└── NO → How many input parameters?
+    ├── 1 parameter → EP + BVA
+    ├── 2-3 parameters → Base-Choice (BC)
+    └── 4+ parameters with interactions → Multiple-Choice (MC)
+
+Does the feature involve auth, permissions, or user input?
+└── YES → ALWAYS add [Security] scenarios (in addition to above)
+```
+
+### 11.8 Security Testing
+
+> **Full rules in dedicated skill:** `rules/security/SKILL.md`
+> Load when Pre-flight Q5 = Yes (security concern) or feature has auth/permission/user input.
+
+**Quick summary:**
+- `[Security]` prefix — separate file: `testScenarioPbi{ID}-security.md`
+- OWASP-based test conditions (auth bypass, IDOR, injection, XSS, rate limit)
+- Permission matrix pattern for multi-role features
+- Priority: Critical or High only
+- Tag: `@Security` in automation

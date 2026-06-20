@@ -9,6 +9,7 @@ description: >
   "test scenario", "test case", "create test", "write test",
   "automate", "automation", "QA", "testing",
   "QA only", "Dev only", "QA scenario only", "QA automation", "QA scenario automation",
+  "dev ส่งแล้ว", "dev delivered", "verify against real", "switch to real", "เล่นจริง",
   or needs governance for the AI Development Lifecycle.
   ALL coding, development, and QA work MUST go through this skill first.
   Supports 3 modes: Full (default), QA Only, Dev Only.
@@ -198,10 +199,10 @@ For skill routing guide → see AGENTS.md Skill Map (workspace root)
 
 | Priority | Path | When to use |
 |----------|------|-------------|
-| 1. Per-project | `{cwd}/agent-memory/knowledge/` | Working within a specific project workspace — walk up from cwd until found |
-| 2. Global fallback | `{project_root}/skills/knowledge/` | No per-project knowledge found — cross-project shared patterns |
+| 1. Per-project (LOCAL) | `{cwd}/agent-memory/knowledge/` | **ALWAYS check first** — project-specific patterns, real lessons from this codebase |
+| 2. Global fallback | `{project_root}/skills/knowledge/` | Only if per-project knowledge NOT found — generic cross-project templates |
 
-**Rule:** Always check per-project first. Fall back to global only if `agent-memory/knowledge/` does not exist in the project tree.
+**Rule:** `agent-memory/knowledge/` ALWAYS wins over `skills/knowledge/`. Per-project knowledge is learned from real execution — it's more accurate than generic templates. When both exist, merge (per-project overrides where conflicting).
 
 ---
 
@@ -263,9 +264,11 @@ Every phase MUST execute steps 1-9 in this order:
 
 | Step | Action | Skip Condition |
 |------|--------|----------------|
-| 0 | **Load skill:** Read `tooling/azure-devops-bridge/SKILL.md` | Never skip |
+| 0 | **Load skill:** Fetch work item details from your project management tool (create a script or use MCP if available) | Never skip |
 | 1 | Fetch PBI details via MCP → extract Title, Description, Acceptance Criteria | Never skip |
+| 1b | **Context analysis:** Read `thinking/analysis-skills/SKILL.md` → load `references/context.md` → extract goals, scope, constraints, conflicts from PBI data | Never skip |
 | 2 | **Codebase exists?** YES → Read `thinking/interview-doc/SKILL.md` → align terms, cross-ref code, update CONTEXT.md. NO → Read `thinking/interview-me/SKILL.md` → extract requirements via Q&A | Never skip |
+| 2b | **Codebase exists?** YES → Read `thinking/analysis-skills/SKILL.md` → load `references/reverse-eng.md` → scan architecture to understand system shape | Skip if no codebase yet |
 | 3 | **Read `meta-skills/graph-report/SKILL.md`** → scan codebase structure, identify affected modules | Skip if no codebase yet |
 | 4 | Confirm output paths with user: `.aidlc/` folder, QA test files root, Dev source root | Never skip |
 | 5 | Write DECISIONS.md → scope, constraints, approach | Never skip |
@@ -276,7 +279,7 @@ Every phase MUST execute steps 1-9 in this order:
 | Mode | Phase Order |
 |------|-------------|
 | QA Scenario Only | Lite Inception → 2.1 → 2.2 → DONE |
-| QA Automation (TDD) | Lite Inception → 2.1 → 2.2 → 2.3 → 2.4 → (2.5 optional) → DONE |
+| QA Automation (TDD) | Lite Inception → 2.1 → 2.2 → 2.3 → 2.4 → [dev delivers] → 2.4b → DONE |
 | Full (TDD) | 0 → 1.1-1.8 → 2.1 → 2.2 → 2.3 → 2.4 → (2.5 optional) → 2.5 → 2.6 → 3.1 → 3.2 → 3.3 |
 | Full (SDLC) | 0 → 1.1-1.8 → 2.5 → 3.1 → 2.1 → 2.2 → 2.3 → 2.4 → (2.5 optional) → 3.2 → 3.3 |
 | Dev Only | Lite Inception → 2.5 → 3.1 → 3.2 → 3.3 → DONE |
@@ -285,9 +288,11 @@ Every phase MUST execute steps 1-9 in this order:
 
 | Step | Action | Skip Condition |
 |------|--------|----------------|
-| 0 | **Load skill:** Read `tooling/azure-devops-bridge/SKILL.md` | Never skip |
-| 1 | Re-read PBI Acceptance Criteria from Azure (always fresh, never from memory) | Never skip |
-| 2 | Read `thinking/interview-doc/SKILL.md` → validate domain terms against CONTEXT.md | Skip if CONTEXT.md already complete |
+| 0 | Read cached work item data from Lite Inception output (re-fetch via MCP/script if stale) | Never skip |
+| 1 | Extract Acceptance Criteria from cached PBI (always verify it's the latest — if stale, re-fetch via MCP `wit_get_work_item`) | Never skip |
+| 1b | **Discovery:** Read `thinking/analysis-skills/SKILL.md` → load `references/discovery-domain.md` → scan existing tests, assets, patterns → classify reuse/extend/create | Never skip |
+| 1c | **Gap analysis:** Read `thinking/analysis-skills/SKILL.md` → load `references/gap.md` → compare AC (required) vs discovered assets (actual) → identify what's missing | Never skip |
+| 2 | Validate domain terms against CONTEXT.md (output from Lite Inception interview-doc — no re-load needed) | Skip if CONTEXT.md already complete |
 | 3 | Read `thinking/brainstorming/SKILL.md` → run lightweight 3-Amigos check on AC gaps | Skip if feature is trivial |
 | 4 | Write `qa-task-progress.md` → list planned scenarios + assigned QA | Never skip |
 
@@ -297,11 +302,12 @@ Every phase MUST execute steps 1-9 in this order:
 |------|--------|----------------|
 | pre | **Bootstrap check:** `[ -d agent-memory ] \|\| bash ~/.kiro/scripts/setup/setupMemory.sh .` — creates `agent-memory/` + `user-profile.md` if missing | Skip if `agent-memory/` already exists |
 | 0 | **Load skill:** Read `qa/test-scenario/SKILL.md` + `rules/test-scenario-rules/SKILL.md` | Never skip |
+| 0a | **Load security rules (if Q5=Yes):** Read `rules/security/SKILL.md` — includes internal adversarial review (doubt-driven) + OWASP verification (source-driven) + codebase auth scan | Skip if Pre-flight Q5 = No |
 | 0b | **Load UI context:** Read `tooling/ui-to-text/SKILL.md` → check `agent-memory/knowledge/biz/` for existing UI KB. If not found → use Figma MCP or screenshot to build KB first. If no Figma KB and no screenshot available → Read `ux-ui/ui-designer/SKILL.md` to generate mockup description first. **Applies to ALL platforms (API + Web UI)** — API tests also need UI flow understanding for end-to-end context | Never skip |
 | 1 | Resolve PBI Assigned To + QA Assigned To → **check `user-profile.md` → `## QA Work Context` first** — if QA Email found, skip asking. If not found → ask user | Never skip |
 | 2 | Read `test-scenario-rules/references/ts-standards.md` | Never skip |
 | 3 | Read `test-scenario-rules/references/csv-export.md` | Never skip |
-| 4 | Run reuse analysis (`test-scenario/references/reuse-analysis.md`) | Never skip |
+| 4 | Run reuse analysis (`test-scenario/references/reuse-analysis.md`) → reference discovery output from Phase 2.1 (reuse/extend/create classification + reusability score) | Never skip |
 | 5 | Design batch 1 (Success) → pause for approval | Never skip |
 | 6 | Design batch 2 (Alternative) → pause for approval | Never skip |
 | 7 | Design batch 3 (Edge) → pause for approval | Never skip |
@@ -310,6 +316,32 @@ Every phase MUST execute steps 1-9 in this order:
 | 10 | Export CSV + validate (`csv-validator.md`) | Never skip |
 | 11 | Upload Gate — ask user about Azure upload → if yes, fill Azure ID column | Never skip (ask is mandatory, upload is optional) |
 | 12 | PO Sign-off Gate | Never skip |
+
+### Automation Pre-Flight Questions (MANDATORY — ask once before Phase 2.3)
+
+> Ask as a single batch when entering automation phases (2.3+2.4).
+> Skip entirely for QA Scenario Only mode (no automation).
+> Answers stored in `qa-task-progress.md` § Automation Context — reused across 2.3 and 2.4.
+
+```
+Automation Pre-Flight (ถามครั้งเดียว ก่อนเริ่ม Phase 2.3):
+
+1. Platform? → API / Web UI / API + Web UI / Mobile
+2. Test Data Strategy?
+   A) Mock only — backend ยังไม่มี ใช้ mock ทั้งหมด
+   B) Real only — backend พร้อมแล้ว ไม่ต้อง mock
+   C) Auto-fallback (default) — health check → ถ้า UP ใช้ real, ถ้า DOWN fallback to mock
+3. Backend ready? → Yes (ยิง real ได้เลย) / No (mock ก่อน switch ทีหลัง)
+4. DB verify needed? → Yes (ต้อง seed + verify + cleanup) / No (mock/fixture only)
+5. Security concern? → Yes (มี auth/permission/user input) / No
+   → If Yes: [Security] scenarios MANDATORY in Phase 2.2 + @Security tests in Phase 2.4
+```
+
+**Rules:**
+- If user answers "Auto-fallback" (default) → generate both mock handlers AND real test paths
+- If user answers "Mock only" → skip health check, always use mock
+- If user answers "Real only" → no mock files generated, tests fail if backend down
+- Answers feed into Phase 2.3 (architecture: mock layer yes/no, DB strategy yes/no) AND Phase 2.4 (code: which pattern to use)
 
 ### Phase 2.3 Internal Steps (QA Architecture)
 
@@ -326,16 +358,37 @@ Every phase MUST execute steps 1-9 in this order:
 | Step | Action | Skip Condition |
 |------|--------|----------------|
 | 0 | **Load skill:** Read `qa/playwright-testing/SKILL.md` + `rules/playwright-rules/SKILL.md` + `debugging/debug-mantra/SKILL.md` (or RF equivalents for mobile). **debug-mantra is ALWAYS loaded regardless of platform (API/Web/Mobile)** | Never skip |
+| 0a | **Load security rules (if Q5=Yes):** Read `rules/security/SKILL.md` | Skip if Pre-flight Q5 = No |
 | 1 | Read `implementation-plan.md` | Never skip |
 | 2 | Read coding rules (playwright-rules or robotframework-rules) | Never skip |
-| 3 | Check `knowledge/lessons/` for prior patterns | Never skip |
+| 3 | Check `agent-memory/knowledge/qa/` (per-project, priority 1) THEN `skills/knowledge/` (global fallback) for prior patterns | Never skip |
 | 4 | Write test scripts (RED — should fail if TDD) | Never skip |
 | 5 | Run tests to confirm state (FAIL for TDD, PASS for SDLC) | Never skip |
 | 5b | **Self-heal loop (max 3x):** If tests fail → Read `qa/verification-loop/SKILL.md` → fix → re-run | Skip if tests pass on first run |
 | 5c | **If still failing after 3x:** Read `debugging/debug-mantra/SKILL.md` → root-cause analysis before continuing | Skip if tests pass |
 | 6 | **Update Quick Review Summary** → fill `Spec File` column in testScenario-*.md for each spec written | Never skip |
-| 7 | **Upload Test Result Gate** — ask user: "Upload test result to Azure?" → if yes, trigger `tooling/upload-test-result/SKILL.md` | Never skip (ask is mandatory, upload is optional) |
+| 7 | **Upload Test Result Gate** — ask user: "Upload test result to Azure?" → if yes, upload test results to your project management tool (create a script that updates test case cards with actual results) | Never skip (ask is mandatory, upload is optional) |
 | 8 | **Git Push + Pipeline Gate** — ask user: "Git commit + push + trigger pipeline?" → if yes: `git add . && git commit -m "test: {feature} - all tests pass" && git push` | Never skip (ask is mandatory, push is optional) |
+| 9 | **Knowledge capture:** Write `agent-memory/knowledge/qa/{feature}-lessons.md` — summarize: patterns learned, reusable helpers created, gotchas found, locator strategies used, data patterns discovered. This becomes the per-project knowledge base for future features. | Never skip |
+
+### Phase 2.4b Internal Steps (Verification Against Real — 3-Round Pipeline)
+
+> Trigger: Dev delivers → user says "dev ส่งแล้ว" / "verify" / "switch to real"
+> Skip condition: Pre-flight answer was "Real only" AND Phase 2.4 already ran against real
+> Full reference: `references/phases/construction/verification-against-real.md`
+
+| Step | Action | Skip Condition |
+|------|--------|----------------|
+| 0 | **Load reference:** Read `references/phases/construction/verification-against-real.md` | Never skip |
+| 1 | **Round 1 — Exploratory Play:** Open app via `playwright-cli open <url>` → follow test scenarios → record actual steps to `agent-memory/knowledge/qa/{feature}-actual-flow.md` | Never skip |
+| 2 | **Update test scenarios:** Compare actual flow vs Phase 2.2 design → fix discrepancies in `testScenarioPbi{ID}-*.md` | Skip if no discrepancies |
+| 3 | **Round 2 — Capture & Spec:** Play again → capture network (`playwright-cli requests/request/response-body`) + elements (`playwright-cli snapshot/generate-locator`) → write `agent-memory/knowledge/qa/{feature}-api-element-spec.md` | Never skip |
+| 4 | **Update automation:** Use spec artifacts to update .spec.ts, fixtures, locators, page objects, helpers | Never skip |
+| 5 | **Round 3 — Final Run:** `npm run {api/ui}:{env}:{feature}:cliMode` → all tests must pass against real | Never skip |
+| 5b | **Triage failures:** Test bug → fix + re-run (max 3x). App bug → file Bug in Azure via MCP `wit_create_work_item` | Skip if all pass |
+| 6 | **Upload result:** Upload test results to your project management tool (create a script that updates test case cards with actual results) → update Azure TS cards with actual results | Never skip (ask is mandatory) |
+| 7 | **Git commit:** `test: {feature} — verified against real ({env})` | Never skip |
+| 8 | **Knowledge capture:** Consolidate `{feature}-actual-flow.md` + `{feature}-api-element-spec.md` → write final `agent-memory/knowledge/qa/{feature}-lessons.md` (patterns, gotchas, reusable helpers, locator strategies, API schemas discovered) | Never skip |
 
 ### Phase 2.5 Internal Steps (Performance Testing — Optional)
 
@@ -346,10 +399,10 @@ Every phase MUST execute steps 1-9 in this order:
 |------|--------|----------------|
 | 0 | **Load skill:** Read `qa/performance-testing/SKILL.md` | Never skip |
 | 1 | Ask user: "Do you want performance testing? (Frontend / Backend / Both / Skip)" | Never skip (ask is mandatory) |
-| 2 | If Frontend: run Chrome DevTools MCP trace → Core Web Vitals + resource waterfall | User chose Backend only or Skip |
+| 2 | If Frontend: run Playwright test with `@Performance` tag → tracing + response.timing() + Performance API → collect LCP, CLS, TTFB, API latencies | User chose Backend only or Skip |
 | 3 | If Backend: profile API endpoints (per-endpoint p95 + E2E flow) | User chose Frontend only or Skip |
 | 4 | Compare against thresholds (p95 < 500ms, LCP < 2.5s) | Never skip if step 2 or 3 ran |
-| 5 | Generate performance report (Quick Review format) | Never skip if step 2 or 3 ran |
+| 5 | Generate performance report: `test-results/performance/performance-report.md` + `.html` (self-contained embedded HTML) | Never skip if step 2 or 3 ran |
 | 6 | If thresholds fail → flag for optimization before release | Never skip |
 
 ### Phase 2.5-Dev Internal Steps (Dev Task Design) — Full/Dev Only
@@ -373,7 +426,7 @@ Every phase MUST execute steps 1-9 in this order:
 | 0 | **Load skill:** Read `dev/backend-dev/SKILL.md` or `dev/frontend-dev/SKILL.md` + `dev/security-hardening/SKILL.md` (if auth-related) | Never skip |
 | 1 | Read task from `dev-task-progress.md` | Never skip |
 | 2 | Read coding rules for target stack | Never skip |
-| 3 | Check `knowledge/lessons/` for prior patterns | Never skip |
+| 3 | Check `agent-memory/knowledge/qa/` (per-project, priority 1) THEN `skills/knowledge/` (global fallback) for prior patterns | Never skip |
 | 4 | Implement code (follow TDD if applicable — make tests pass) | Never skip |
 | 5 | Run tests + lint | Never skip |
 | 6 | Commit with task reference | Never skip |
@@ -397,7 +450,7 @@ Every phase MUST execute steps 1-9 in this order:
 
 | Step | Action | Skip Condition |
 |------|--------|----------------|
-| 0 | **Load skill:** Read `dev/shipping-launch/SKILL.md` + `tooling/azure-devops-bridge/SKILL.md` | Never skip |
+| 0 | **Load skill:** Read `dev/shipping-launch/SKILL.md` + `a script to fetch work items from your project management tool` | Never skip |
 | 1 | Create PR (git push + PR via CLI) | Never skip |
 | 2 | Link PR to PBI (`wit_link_work_item_to_pull_request`) | Never skip |
 | 3 | Update PBI state → "Testing" or "Developing" | Never skip |
