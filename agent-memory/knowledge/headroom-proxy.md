@@ -1,26 +1,36 @@
-# Headroom Proxy — Token Compression for AI Agents
+# Headroom — Context Compression for AI Agents
 
-## Status: ACTIVE (installed 2026-06-18)
+**GitHub:** https://github.com/chopratejas/headroom  
+**Status:** ACTIVE — v0.26.0 installed 2026-06-18, running as LaunchAgent
 
-Headroom v0.26.0 runs as a LaunchAgent on port 8787, compressing all AI agent traffic automatically.
+## What it does
+
+Compresses everything an AI agent reads (tool outputs, logs, RAG chunks, files, conversation history) before it reaches the LLM — same answers, 60–95% fewer tokens.
+
+Also trims what the model **writes back** via Output Shaper (`HEADROOM_OUTPUT_SHAPER=1`).
 
 ## Architecture
 
 ```
-Agent (Claude Code / Codex) → localhost:8787 → Headroom compress → upstream API
+Claude Code / Codex
+  → localhost:8787 (Headroom proxy)
+    → CacheAligner → ContentRouter → CCR
+         ├─ SmartCrusher   (JSON)
+         ├─ CodeCompressor (AST: Python, JS, Go, Rust, Java, C++)
+         └─ Kompress-base  (text — local HuggingFace model)
+  → upstream API (Anthropic / OpenAI)
 ```
 
 - LaunchAgent: `~/Library/LaunchAgents/com.headroom.proxy.plist`
 - Binary: `/Library/Frameworks/Python.framework/Versions/3.13/bin/headroom`
-- Log: `/tmp/headroom-proxy.log`
-- Error log: `/tmp/headroom-proxy.err`
-- Output shaper: ON (`HEADROOM_OUTPUT_SHAPER=1`)
+- Log: `/tmp/headroom-proxy.log` · Error: `/tmp/headroom-proxy.err`
 
 ## Shell Config (~/.zshrc)
 
 ```bash
 export ANTHROPIC_BASE_URL=http://127.0.0.1:8787
 export OPENAI_BASE_URL=http://127.0.0.1:8787/v1
+export HEADROOM_OUTPUT_SHAPER=1
 ```
 
 ## Routing Table
@@ -34,39 +44,81 @@ export OPENAI_BASE_URL=http://127.0.0.1:8787/v1
 
 ## Agent Compatibility
 
-| Agent | Works via proxy | Method |
-|-------|----------------|--------|
+| Agent | Works | Method |
+|-------|-------|--------|
 | Claude Code | ✅ | `ANTHROPIC_BASE_URL` env var |
-| Codex CLI | ✅ | `OPENAI_BASE_URL` env var |
+| Codex CLI | ✅ | `OPENAI_BASE_URL` env var, shares memory with Claude |
+| Cursor | ✅ | `headroom wrap cursor` (prints config once) |
 | Aider | ✅ | `headroom wrap aider` |
-| Cursor | ✅ | Config paste (prints instructions) |
-| Kiro CLI | ❌ | Uses AWS Bedrock (gRPC, no HTTP override) |
-| Agy (Antigravity CLI) | ❌ | Uses `cloudcode-pa.googleapis.com` via gRPC (hardcoded, no env override) |
+| Copilot CLI | ✅ | `headroom wrap copilot` |
+| Kiro CLI | ❌ | AWS Bedrock/gRPC — no HTTP override |
+| Agy (Antigravity CLI) | ❌ | `cloudcode-pa.googleapis.com` gRPC hardcoded |
 
-## Commands
+## Core Commands
 
 ```bash
-# Check health
+# Health & stats
 curl http://127.0.0.1:8787/health
-
-# View compression stats
 curl http://127.0.0.1:8787/stats
-
-# View stats history
 curl http://127.0.0.1:8787/stats-history
 
-# Restart
+# Output token savings estimate
+headroom output-savings
+
+# Restart proxy
 launchctl unload ~/Library/LaunchAgents/com.headroom.proxy.plist
 launchctl load ~/Library/LaunchAgents/com.headroom.proxy.plist
 
-# Tail logs
+# Update
+headroom update           # auto-detects pip/pipx/uv and upgrades
+headroom update --check   # check without upgrading
+
+# Logs
 tail -f /tmp/headroom-proxy.log
 ```
 
+## headroom learn (auto-improve CLAUDE.md)
+
+Mines past failed sessions and writes corrections/lessons directly into `CLAUDE.md` / `AGENTS.md`:
+
+```bash
+headroom learn                     # dry run — preview what it found
+headroom learn --apply             # writes corrections to CLAUDE.md / AGENTS.md
+
+headroom learn --verbosity         # learn preferred terseness (dry run)
+headroom learn --verbosity --apply # save; proxy uses it immediately
+```
+
+Run periodically — especially after debugging sessions or repeated tool failures.
+
+## Cross-Agent Memory
+
+Shared context store across Claude Code, Codex, Gemini — with auto-dedup:
+
+```bash
+headroom wrap claude --memory      # enable shared memory
+headroom wrap codex --memory       # Codex shares same store as Claude
+```
+
+## MCP Server
+
+```bash
+headroom mcp install               # install as MCP server for any MCP client
+```
+
+Tools: `headroom_compress`, `headroom_retrieve`, `headroom_stats`
+
+CCR (reversible compression): originals cached locally; LLM calls `headroom_retrieve` if it needs full context back.
+
 ## Savings (benchmarked)
 
-- Code search: 92% reduction
-- SRE debugging: 92% reduction
-- GitHub triage: 73% reduction
-- Codebase exploration: 47% reduction
-- Effective Claude Code usage increase: ~34% before hitting rate limits
+| Workload | Before | After | Savings |
+|----------|-------:|------:|--------:|
+| Code search (100 results) | 17,765 | 1,408 | **92%** |
+| SRE debugging | 65,694 | 5,118 | **92%** |
+| GitHub issue triage | 54,174 | 14,761 | **73%** |
+| Codebase exploration | 78,502 | 41,254 | **47%** |
+
+Accuracy preserved: GSM8K ±0.000, TruthfulQA +0.030, SQuAD v2 97% at 19% compression, BFCL 97% at 32% compression.
+
+Effective Claude Code usage increase: ~34% before hitting rate limits.
