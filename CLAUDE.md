@@ -43,9 +43,17 @@ Skills are invoked via the `Skill` tool — not auto-loaded. Trigger by keyword 
 - `finance/` — investment research, portfolio analysis, stock screening
 - `thai-accountant/` — Thai tax, TFRS, accounting
 - `fitness/` — workout, nutrition, body composition
-- Codex skill root: `~/.codex/skills/` · Agy (Antigravity CLI) global skill root: `~/.gemini/antigravity-cli/skills/`
+- Shared skill root: `~/.agents/skills/` · Codex mirror: `~/.codex/skills/` · Agy (Antigravity CLI) mirror: `~/.gemini/antigravity-cli/skills/`
 - `meta-skills/agent-memory/` — memory bootstrap, session flow, knowledge pipeline
 - See `rules/skill-map.md` for full routing table
+
+### Mandatory Skill Invocation Contract
+
+At the start of every user turn, check `rules/skill-auto-detect.md` before answering. If the request matches any trigger there, invoke the matching `Skill()` immediately and announce the skill in one short line. Do not wait for the user to type `/skill-name`.
+
+When a matching task is implementation-oriented, route the actual work to Codex on the configured `gpt-5.4-mini` runtime in `~/.codex/config.toml`.
+
+Project-local skill rules in a repo's `CLAUDE.md` or `./rules/skill-routing.md` override the global table when they are more specific. If the `Skill` tool is unavailable in the current runtime, read the matching `SKILL.md` from the nearest available root and state that fallback explicitly.
 
 ## Infrastructure — Headroom Proxy (always-on)
 
@@ -138,7 +146,7 @@ Run `/dream` when Auto Memory feels cluttered or after 5+ sessions. Auto Dream t
 Generated agent configs:
 
 - `scripts/sync-agent-instructions.sh` writes `~/.codex/AGENTS.md` and `~/.gemini/GEMINI.md`
-- `scripts/sync-all.sh --only skills` merges `skills/` to `~/.codex/skills/` and `~/.gemini/antigravity-cli/skills/`
+- `scripts/sync-all.sh --only skills` merges `skills/` to `~/.agents/skills/`, `~/.codex/skills/`, and `~/.gemini/antigravity-cli/skills/`
 - `~/.kiro/scripts/sync-skills-to-claude.sh` syncs `~/.kiro/skills/` → `~/.claude/skills/`
 
 Update `rules/` first, then resync generated configs.

@@ -4,7 +4,7 @@ description: >
   Bridge between Azure DevOps and AIDLC workflow.
   Triggers: "PBI #xxx", "Bug #xxx", "upload TS", "close PBI",
   "sync Azure", "sprint report", "PBI xxx", "bug workflow"
-  This skill uses MCP azure-devops tools directly — no scripts needed.
+  Uses scripts for fetch-pbi and upload-ts (token-efficient), MCP tools for other operations.
 version: 1.0.0
 last_improved: 2026-05-31
 improvement_count: 0
@@ -12,7 +12,7 @@ improvement_count: 0
 
 # Azure DevOps Bridge
 
-> Connects Azure DevOps ↔ AIDLC workflow via MCP tools.
+> Connects Azure DevOps ↔ AIDLC workflow via scripts (fetch-pbi, upload-ts) and MCP tools (bug, close, sprint).
 > No hook needed — agent detects PBI/Bug ID from user message and acts automatically.
 
 ---
@@ -41,21 +41,30 @@ When a user message matches any of these patterns → activate this skill:
 
 **When:** User specifies a PBI ID or Azure URL containing a work item ID
 
+**⚡ Uses Script (not MCP) — saves token cost**
+
+```bash
+npx ts-node --project ~/.kiro/scripts/azure-devops/tsconfig.json \
+  ~/.kiro/scripts/azure-devops/pull-pbi/pullPbi.ts
+```
+
+**Script:** `~/.kiro/scripts/azure-devops/pull-pbi/pullPbi.ts`
+
 **Steps:**
 
 ```
-1. MCP: get_work_item(id, expand="relations")
-   → Fetch Title, Description, AcceptanceCriteria, State, Relations
+1. Run pullPbi.ts script (interactive — asks PBI ID)
+   → Output: pull-pbi/pbi-{ID}.json + terminal summary
+   → Contains: Title, Description, AcceptanceCriteria, State, Priority,
+     IterationPath, AreaPath, AssignedTo, Tags, Effort, URL
 
-2. Extract:
-   - system = AreaPath.split('\\')[0] or project name
+2. Read output JSON → Extract:
+   - system = areaPath.split('\\')[0] or project name
    - feature = PBI Title (kebab-case)
-   - children = filter relations → Bug, Task, Test Scenario
 
 3. Format PBI data as AIDLC input:
-   - Description → Goal + Persona + Requirements
-   - AcceptanceCriteria → AC list (Given/When/Then)
-   - Children summary → existing work
+   - description → Goal + Persona + Requirements
+   - acceptanceCriteria → AC list (Given/When/Then)
 
 4. Route to AIDLC:
    - If .aidlc/[system]/[feature]/ already exists → /resume
@@ -63,12 +72,14 @@ When a user message matches any of these patterns → activate this skill:
 
 5. Store PBI metadata in .aidlc/[system]/[feature]/planning/decisions/pbi-source.md:
    - PBI ID, URL, Title, State, Priority
-   - Linked Bugs, Tasks, Test Scenarios
 ```
 
-**MCP Tools Used:**
-- `wit_get_work_item` (expand=relations)
-- `wit_get_work_items_batch_by_ids` (for children details)
+**Config:** ครั้งแรกจะถาม Org/Project/Team/PBI ID → save ไว้ที่ `last-config.json`
+ครั้งถัดไปถามแค่ PBI ID
+
+**Auth:** ใช้ `AZURE_DEVOPS_PAT` จาก `~/.kiro/scripts/azure-devops/.env` หรือ `az login`
+
+**Output file:** `~/.kiro/scripts/azure-devops/pull-pbi/pbi-{ID}.json`
 
 ---
 
@@ -84,7 +95,7 @@ npx ts-node --project ai-agent/scripts/azure-devops/tsconfig.json \
   --csv <path-to-test-scenarios-api.csv> \
   --pbi-id <PBI_ID> \
   --ado-project "<project>" \
-  --company Your Company
+  --company AXONS
 ```
 
 **Script:** `ai-agent/scripts/azure-devops/upload-ts/uploadTsToAdo.ts`
@@ -92,12 +103,12 @@ npx ts-node --project ai-agent/scripts/azure-devops/tsconfig.json \
 **Steps:**
 
 ```
-1. Parse CSV → extract Test Case rows
+1. Parse CSV → extract AXONS Test Scenario v2 rows
    (Title 2, Pre_conditions, Test steps, Expected result,
     Priority level, Test_type, Automation status, Effort)
 
 2. For each TS:
-   a. POST /wit/workitems/$Test Case (all fields)
+   a. POST /wit/workitems/$AXONS Test Scenario v2 (all fields)
    b. PATCH /wit/workitems/{TS_ID} → add Hierarchy-Reverse link to PBI
 
 3. Output: <csv-dir>/ts-azure-ids.md

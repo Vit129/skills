@@ -5,8 +5,8 @@
 #           sync-agents.sh, sync-agent-instructions.sh
 #
 # Source of truth: ~/.claude/
-# Targets: ~/.codex/  ~/.gemini/
-# Skills targets: ~/.codex/skills/ and ~/.gemini/antigravity-cli/skills/
+# Targets: ~/.codex/  ~/.gemini/  ~/.agents/
+# Skills targets: ~/.agents/skills/, ~/.codex/skills/, and ~/.gemini/antigravity-cli/skills/
 #
 # Usage:
 #   bash ~/.claude/scripts/sync-all.sh              # sync everything
@@ -135,20 +135,32 @@ generate_instruction_file() {
   local agent_lower
   agent_lower="$(echo "$agent_name" | tr '[:upper:]' '[:lower:]')"
 
-  local content
-  content="$(cat "$claude_file")"
-  content="${content//Claude Agent Workspace/${agent_name} Agent Workspace}"
-  content="${content//CLAUDE.md/${entry_file}}"
-  content="${content//rules\//$HOME/.${agent_lower}/rules/}"
-  content="${content//\`output-styles\//\`$HOME/.claude/output-styles/}"
-  content="${content//@agent-memory\//@$HOME/.claude/agent-memory/}"
-  if [ "$agent_name" = "CODEX" ]; then
-    content="${content//@$HOME/.claude/agent-memory/user-profile.md/@$HOME/.codex/agent-memory/user-profile.md}"
-  fi
-  content="${content//GRAPH_REPORT.md/$HOME/.claude/GRAPH_REPORT.md}"
-  content="${content//\`scripts\//\`$HOME/.claude/scripts/}"
+  python3 - "$claude_file" "$dst" "$agent_name" "$entry_file" "$agent_lower" "$HOME" <<'PY'
+from pathlib import Path
+import sys
 
-  printf '%s\n' "$content" > "$dst"
+src, dst, agent_name, entry_file, agent_lower, home = sys.argv[1:]
+agent_home = f"{home}/.{agent_lower}"
+claude_home = f"{home}/.claude"
+
+content = Path(src).read_text()
+replacements = [
+    ("Claude Agent Workspace", f"{agent_name} Agent Workspace"),
+    ("CLAUDE.md", entry_file),
+    ("`rules/`", f"`{agent_home}/rules/`"),
+    ("`rules/", f"`{agent_home}/rules/"),
+    ("@rules/", f"@{agent_home}/rules/"),
+    ("`output-styles/", f"`{claude_home}/output-styles/"),
+    ("@agent-memory/", f"@{claude_home}/agent-memory/"),
+    ("`scripts/", f"`{claude_home}/scripts/"),
+    ("GRAPH_REPORT.md", f"{claude_home}/GRAPH_REPORT.md"),
+]
+
+for old, new in replacements:
+    content = content.replace(old, new)
+
+Path(dst).write_text(content + "\n")
+PY
   echo -e "    ${GREEN}✅ Generated $dst${NC}"
 }
 
@@ -165,7 +177,7 @@ if [ "$LIST_MODE" -eq 1 ]; then
   echo ""
   printf "  %-14s %-30s %s\n" "Step" "Source" "Targets"
   printf "  %-14s %-30s %s\n" "────────────" "──────────────────────────" "──────────────────────────────"
-  printf "  %-14s %-30s %s\n" "skills"       "~/.claude/skills/"         "~/.codex/skills/  ~/.gemini/antigravity-cli/skills/"
+  printf "  %-14s %-30s %s\n" "skills"       "~/.claude/skills/"         "~/.agents/skills/ ~/.codex/skills/ ~/.gemini/antigravity-cli/skills/"
   printf "  %-14s %-30s %s\n" "rules"        "~/.claude/rules/"          "~/.codex/rules/   ~/.gemini/rules/"
   printf "  %-14s %-30s %s\n" "commands"     "~/.claude/commands/"       "~/.codex/commands/ ~/.gemini/commands/"
   printf "  %-14s %-30s %s\n" "agents"       "~/.claude/.claude/agents/" "~/.codex/agents/  ~/.gemini/agents/"
@@ -185,7 +197,8 @@ echo ""
 
 # ── 1. Skills ────────────────────────────────────────────────────────────────
 if should_run "skills"; then
-  echo -e "  ${BLUE}[1/5] Skills${NC}  ~/.claude/skills/ → ~/.codex/skills/ + ~/.gemini/antigravity-cli/skills/"
+  echo -e "  ${BLUE}[1/5] Skills${NC}  ~/.claude/skills/ → ~/.agents/skills/ + ~/.codex/skills/ + ~/.gemini/antigravity-cli/skills/"
+  merge_skills_dir "agents/skills" "~/.claude/skills" "~/.agents/skills"
   merge_skills_dir "codex/skills" "~/.claude/skills" "~/.codex/skills"
   merge_skills_dir "agy/skills"   "~/.claude/skills" "~/.gemini/antigravity-cli/skills"
   echo ""

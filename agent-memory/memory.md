@@ -15,6 +15,8 @@
 - CASE-005: hooks askAgent not reliable → use workflow Step 10
 - CASE-006: `skill-usage.log` contains `---END---|{project}` noise entries from harness job system — benign; filter `/skill-review` parsing by validating line format `YYYY-MM-DD|skill-name` before counting
 - CASE-007: `PostToolUse:Skill` hook verified working (2026-06-16) — hook in `settings.json` correctly captures `DATE|skill` entries; updated to guard against `unknown` writes
+- CASE-008: skill trigger = file path/domain, not user wording — if user asks "why X broken" and diagnosis leads to editing HA YAML, invoke `ha-dev` at the moment of deciding to edit, not at the moment user says "fix/apply". Wording-based detection misses diagnostic→edit flows.
+- CASE-009: skill auto-detect scope = ANY intent word — "why", "what", "fix", "find", "explain", any verb qualifies. The routing table is a starting point, not an exhaustive list. Prefer over-invoking to under-invoking. [2026-06-20]
 
 ## Lesson Capture Gate (lowered)
 Write a new CASE when ANY of these are true — don't wait for 2+ recurrences:

@@ -31,12 +31,15 @@ When the user types `/graphify`, `$graphify`, asks to map a project, create a kn
 
 ```
 graphify-out/
-├── graph.json       — queryable graph data
-├── graph.html       — interactive visualization
-└── GRAPH_REPORT.md  — broad architecture and relationship report
+├── graph.json         — queryable graph data
+├── graph.html         — interactive visualization
+├── GRAPH_REPORT.md    — full architecture and relationship report (~4000 lines)
+└── GRAPH_SUMMARY.md   — capped 70-line digest for CLAUDE.md auto-load (generated)
 ```
 
 Keep these committed so new sessions can query the existing map without rebuilding.
+
+`GRAPH_SUMMARY.md` is auto-loaded at session start via `@graphify-out/GRAPH_SUMMARY.md` in each project's CLAUDE.md — contains god nodes, community hubs top 25, graph freshness, and surprising connections.
 
 ---
 
@@ -62,8 +65,9 @@ Use `GRAPH_REPORT.md` only for broad architecture review when `query`, `explain`
 # Build or rebuild the graph
 graphify extract .
 
-# Update after rule/skill/script/memory changes (AST-only, no LLM cost)
-graphify update .
+# Update after code/rule/skill/memory changes (AST-only, no LLM cost)
+# ALWAYS follow with summary regen so GRAPH_SUMMARY.md stays current:
+graphify update . && ~/.claude/scripts/generate-graph-summary.sh .
 
 # Rerun clustering/report without full extraction
 graphify cluster-only .
