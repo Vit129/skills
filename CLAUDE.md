@@ -70,6 +70,16 @@ All Claude Code and Codex traffic routes through Headroom proxy (`localhost:8787
 - Health: `curl http://127.0.0.1:8787/health`
 - Stats: `curl http://127.0.0.1:8787/stats`
 
+## Infrastructure — Ponytail (lazy senior dev mode)
+
+Ponytail is a Claude Code plugin that enforces minimal, efficient code — "lazy means efficient, not careless."
+
+- Plugin: `~/.claude/plugins/marketplaces/ponytail/`
+- Activate: say "ponytail", "be lazy", "simplest solution", or `/ponytail lite|full|ultra`
+- Deactivate: "stop ponytail" / "normal mode"
+- Default mode: `full` — overridable via `~/.config/ponytail/config.json` or `PONYTAIL_DEFAULT_MODE` env var
+- Modes: `lite` (minimal hints), `full` (default — full lazy rules), `ultra` (aggressively minimal), `review` (audit for over-engineering)
+
 ---
 
 ## Agent Routing (Plugin-based)
