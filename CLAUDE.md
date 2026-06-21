@@ -14,9 +14,7 @@ Cross-session memory (loaded every session):
 
 - @agent-memory/CONTEXT.md
 - @agent-memory/INDEX.md
-
-On-demand:
-- @agent-memory/MEMORY.md — past decisions + lessons
+- @agent-memory/MEMORY.md
 - @agent-memory/USER-PROFILE.md
 
 ---
@@ -28,7 +26,7 @@ Before responding to ANY task — including continuations — run this sequence:
 1. **`agent-memory/CONTEXT.md`** — active task, current branch, open questions
 2. **`agent-memory/INDEX.md`** — catalog of plans + knowledge files
 3. **`graphify-out/GRAPH_SUMMARY.md`** — codebase orientation (if task involves code navigation)
-4. **On-demand:** `agent-memory/MEMORY.md`, `agent-memory/knowledge/INDEX.md`, active plan in `agent-memory/plans/`, `agent-memory/PLAYBOOK.md`
+4. **On-demand:** `agent-memory/knowledge/INDEX.md`, active plan in `agent-memory/plans/`, `agent-memory/PLAYBOOK.md`
 
 **Continuation rule:** Messages like "ทำต่อ", "ต่อเลย", "continue", "implement ต่อ" — read CONTEXT.md first, derive the active task type, then invoke the matching skill for that domain. Never let a continuation verb skip skill detection or context loading.
 
