@@ -32,12 +32,10 @@ improvement_count: 0
 
 ## ⛔ Mode Lock
 
-ALLOWED_MODES: [QA Only]
-BLOCKED_MODES: [Full, Dev Only]
+ALLOWED_MODES: [Full, QA Only, Dev Only]
+BLOCKED_MODES: []
 
-If user selects Full or Dev Only → STOP immediately and respond:
-"This mode is temporarily disabled — only QA Only is available."
-Do NOT proceed with any blocked mode regardless of user insistence.
+All modes are active.
 
 ---
 
