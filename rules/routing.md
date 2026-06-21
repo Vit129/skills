@@ -3,16 +3,18 @@
 ## Trigger Signals (route to AIDLC if ANY match)
 
 implement, build, create, develop, write code, add feature, refactor, migrate,
-test, QA, automate, test scenario, playwright, fix bug, debug, reproduce,
+test, QA, automate, test scenario, playwright,
 deploy, pipeline, CI/CD, release, API design, database schema, architecture,
-or any `<verb> + software artifact` pattern.
+or any `<verb> + new software artifact` pattern.
 
 ## Route Instruction
 
 When triggered → read `~/.claude/skills/governance/aidlc/SKILL.md` before producing output. Follow it exactly.
 
-## Exceptions (skip AIDLC)
+## Skip AIDLC (direct action)
 
+- **Fix bug / debug / crash** → `debugging/debug-mantra` skill directly (no AIDLC)
+- **Single-file fixes, typos, config changes, version bumps** → just do it with memory protocol
 - Pure research / analysis / brainstorming (no code output)
 - Finance, fitness, domain-only knowledge tasks
 - Config, settings, memory management, agent setup
@@ -22,6 +24,7 @@ When triggered → read `~/.claude/skills/governance/aidlc/SKILL.md` before prod
 
 | Keyword | Action |
 |---------|--------|
+| fix bug / debug / crash / investigate | `debugging/debug-mantra` skill → fix → commit |
 | explain / how does | Read code → explain with citations |
 | compare | Analyze → structured tradeoff table |
 | review | Read code → structured feedback |
@@ -33,6 +36,6 @@ When triggered → read `~/.claude/skills/governance/aidlc/SKILL.md` before prod
 
 ## Continuation Detection
 
-"ทำต่อ", "continue", "resume" → read `agent-memory/CONTEXT.md` → derive active task domain → route to matching skill (not a fresh start).
+"ทำต่อ", "continue", "resume" → read `agent-memory/CONTEXT.md` → derive active task domain → route to matching skill.
 
-If `.aidlc/` exists → scan for first missing phase → resume THERE.
+If `.aidlc/` exists for the feature → scan for first missing phase → resume THERE.
