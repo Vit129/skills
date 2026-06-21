@@ -6,6 +6,12 @@ When the user's message matches ANY keyword below — invoke the matching skill 
 
 **Priority order:** AIDLC fires first → then skill auto-detect runs inside that flow (or standalone for non-SDLC tasks).
 
+**Continuation detection (MANDATORY):** When the message is a continuation verb — "continue", "ทำต่อ", "ต่อเลย", "ต่อ", "resume", "implement ต่อ", "ทำต่อเลย", "เสร็จยัง", "ต่อได้เลย" — do NOT skip skill detection. Instead:
+1. Read `agent-memory/CONTEXT.md` (project) to find the active task type
+2. Derive the underlying work domain (e.g., active task = "Swift NSView overlay" → domain = AppKit/macOS)
+3. Invoke the matching skill for that domain — same as if the user had described the task directly
+Never let a continuation verb bypass skill invocation.
+
 **thinking/ — Ideation & Analysis**
 | Keyword signals | Auto-invoke skill |
 |-----------------|-------------------|

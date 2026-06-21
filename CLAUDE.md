@@ -13,11 +13,24 @@ Source of truth:
 Cross-session memory (loaded every session):
 
 - @agent-memory/CONTEXT.md
-- @agent-memory/index.md
+- @agent-memory/INDEX.md
 
 On-demand:
 - @agent-memory/MEMORY.md — past decisions + lessons
-- @agent-memory/user-profile.md
+- @agent-memory/USER-PROFILE.md
+
+---
+
+## Session Start Protocol (MANDATORY — every session, every project)
+
+Before responding to ANY task — including continuations — run this sequence:
+
+1. **`agent-memory/CONTEXT.md`** — active task, current branch, open questions
+2. **`agent-memory/INDEX.md`** — catalog of plans + knowledge files
+3. **`graphify-out/GRAPH_SUMMARY.md`** — codebase orientation (if task involves code navigation)
+4. **On-demand:** `agent-memory/MEMORY.md`, `agent-memory/knowledge/INDEX.md`, active plan in `agent-memory/plans/`, `agent-memory/PLAYBOOK.md`
+
+**Continuation rule:** Messages like "ทำต่อ", "ต่อเลย", "continue", "implement ต่อ" — read CONTEXT.md first, derive the active task type, then invoke the matching skill for that domain. Never let a continuation verb skip skill detection or context loading.
 
 ---
 
@@ -132,13 +145,31 @@ Two complementary memory layers — use both:
 | Auto Memory | `~/.claude/projects/.../memory/` | Session knowledge: build commands, debugging patterns | Claude (automatic) |
 | agent-memory/ | `~/.claude/agent-memory/` | Structured state: Task_Ledger, Decisions, Playbook | Claude via hooks |
 
+### Agent Memory Lifecycle (MANDATORY)
+
+**Task start:**
+1. Read `agent-memory/CONTEXT.md` → current task, active plan
+2. Read `agent-memory/MEMORY.md` → active decisions + lessons
+3. If task matches known pattern → read `agent-memory/PLAYBOOK.md`
+
+**During task:**
+- Update `CONTEXT.md` with progress, blockers, key files touched
+- New decision made → append to `MEMORY.md` (date-prefixed)
+- Hit+solved a reusable pattern → add CASE-xxx to `PLAYBOOK.md`
+
+**Task end:**
+1. Clear/rewrite `CONTEXT.md` (next task state or empty)
+2. Append final decisions/lessons to `MEMORY.md`
+3. If MEMORY.md > 100 lines → archive oldest entries to `COMPLETED-TASKS-ARCHIVE.md`
+4. Update `INDEX.md` if new plans/knowledge files were created
+
 ### Promote Rule
 
-When Auto Memory contains a pattern that recurred 2+ times or prevented a mistake → promote it:
+When a pattern recurred 2+ times or prevented a mistake → promote it:
 
-- Reusable fix/pattern → `agent-memory/playbook.md` (new CASE-xxx row)
+- Reusable fix/pattern → `agent-memory/PLAYBOOK.md` (new CASE-xxx row)
 - Domain knowledge → `agent-memory/knowledge/{domain}.md`
-- Skill improvement → `agent-memory/skill-log.md`
+- Skill improvement → `agent-memory/SKILL-LOG.md`
 
 ### Skill Self-Improvement Loop
 
