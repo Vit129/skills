@@ -45,6 +45,15 @@ Every task response ends with:
 At task start, read `.ai/memory-protocol.md` in the project root and follow it.
 If missing: read `agent-memory/CONTEXT.md` + `MEMORY.md`. On task end, update both.
 
+### Memory Update (MANDATORY — last action before Done)
+
+When task is complete, before writing the final response:
+1. Rewrite `agent-memory/CONTEXT.md` — set status to `idle` or next task state
+2. Append decision/lesson to `agent-memory/MEMORY.md` (date-prefixed, 1–2 lines)
+3. If pattern reusable → add CASE-xxx to `agent-memory/PLAYBOOK.md`
+
+Never mark ✅ Done without completing these steps first.
+
 ## Test-Before-Deliver
 
 No task is complete until: build passes + relevant tests pass. If tests cannot run, state why.
