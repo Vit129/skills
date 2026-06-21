@@ -13,11 +13,9 @@ Source of truth:
 Cross-session memory (loaded every session):
 
 - @agent-memory/CONTEXT.md
-- @agent-memory/index.md
-
-On-demand:
-- @agent-memory/MEMORY.md — past decisions + lessons
-- @agent-memory/user-profile.md
+- @agent-memory/INDEX.md
+- @agent-memory/MEMORY.md
+- @agent-memory/USER-PROFILE.md
 
 ---
 
