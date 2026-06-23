@@ -1,5 +1,7 @@
 # Claude Agent Workspace — ~/.claude
 
+@plugins/marketplaces/ponytail/AGENTS.md
+
 ## What loads automatically
 
 ```
