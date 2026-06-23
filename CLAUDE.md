@@ -1,198 +1,83 @@
-# Claude Agent Workspace
+# Claude Agent Workspace — ~/.claude
 
-`CLAUDE.md` is the entry point and index.
+## What loads automatically
 
-Source of truth:
+```
+~/.claude/
+  rules/core.md          — DO/DON'T, response format, trust priority
+  rules/routing.md       — skill/agent routing, AIDLC gates, continuation detection
+  rules/coding.md        — coding principles, citation format, commit style
+  agent-memory/
+    CONTEXT.md           — active task, branch, status (auto-loaded)
+    INDEX.md             — catalog of plans + knowledge (auto-loaded)
+    USER-PROFILE.md      — user identity, preferences (auto-loaded)
+  skills/                — 84 skills, invoked on-demand via Skill() or /skill-name
+```
 
-- `rules/` for behavior, routing, response format, and skill map
-- `output-styles/communication-style.md` for tone
-- `agent-memory/` for cross-session memory
-- `GRAPHIFY_USAGE.md` for Graphify routing and install paths
-- `GRAPH_REPORT.md` for structural navigation when present
-
-Cross-session memory (loaded every session):
-
+Cross-session memory (auto-loaded):
 - @agent-memory/CONTEXT.md
 - @agent-memory/INDEX.md
-- @agent-memory/MEMORY.md
 - @agent-memory/USER-PROFILE.md
 
----
+On-demand (grep, never read full):
+- `agent-memory/MEMORY.md` — past decisions + lessons
+- `agent-memory/knowledge/` — domain reference docs
+- `agent-memory/PLAYBOOK.md` — index to `knowledge/cases/`
 
-## Session Start Protocol (MANDATORY — every session, every project)
-
-Before responding to ANY task — including continuations — run this sequence:
-
-1. **`agent-memory/CONTEXT.md`** — active task, current branch, open questions
-2. **`agent-memory/INDEX.md`** — catalog of plans + knowledge files
-3. **`graphify-out/GRAPH_SUMMARY.md`** — codebase orientation (if task involves code navigation)
-4. **On-demand:** `agent-memory/knowledge/INDEX.md`, active plan in `agent-memory/plans/`, `agent-memory/PLAYBOOK.md`
-
-**Continuation rule:** Messages like "ทำต่อ", "ต่อเลย", "continue", "implement ต่อ" — read CONTEXT.md first, derive the active task type, then invoke the matching skill for that domain. Never let a continuation verb skip skill detection or context loading.
+Grep command: `grep -rn "<keyword>" agent-memory/MEMORY.md agent-memory/knowledge/`
 
 ---
 
-## Rules — Auto (every session)
+## Session Start
 
-- @rules/project-rules.md — AIDLC enforcement, phase gates, language rules
-- @rules/workflow.md — working style, response format (Done/Next/Why), do/don't list, citation format
-- @rules/skill-auto-detect.md — skill keyword→invocation routing table (MANDATORY: invoke Skill() when keyword matches, before responding)
+1. `CONTEXT.md` — active task, branch
+2. `INDEX.md` — plans + knowledge catalog
+3. `graphify-out/GRAPH_SUMMARY.md` — if task involves code navigation
+4. Bug/pattern → grep on-demand (see above)
 
-## Rules — On-demand (read when triggered)
-
-- `rules/agent-core.md` — Read when: complex multi-file implementation, security review, architecture decision, or planning phase
-- `rules/skill-map.md` — Read when: routing to a skill, user invokes `/skill-name`, or skill selection is unclear
-- `rules/skills-sync-protocol.md` — Read when: creating, updating, or syncing skills across agents
-- `rules/coding-guidelines.md` — Read when: writing/editing code, citing sources/lessons/skills, or composing routing/skill-review prompts (split out of `workflow.md` to keep auto-loaded core lean)
-- `output-styles/communication-style.md` — Read when: adjusting tone or formatting style
-
-## Skills — On-demand (load via Skill tool when triggered)
-
-Skills are invoked via the `Skill` tool — not auto-loaded. Trigger by keyword or `/skill-name`:
-
-- `dev/frontend-dev/` — React, TypeScript, Tailwind, Flutter, Android, iOS
-- `finance/` — investment research, portfolio analysis, stock screening
-- `thai-accountant/` — Thai tax, TFRS, accounting
-- `fitness/` — workout, nutrition, body composition
-- Shared skill root: `~/.agents/skills/` · Codex mirror: `~/.codex/skills/` · Agy (Antigravity CLI) mirror: `~/.gemini/antigravity-cli/skills/`
-- `meta-skills/agent-memory/` — memory bootstrap, session flow, knowledge pipeline
-- See `rules/skill-map.md` for full routing table
-
-### Mandatory Skill Invocation Contract
-
-At the start of every user turn, check `rules/skill-auto-detect.md` before answering. If the request matches any trigger there:
-
-1. Announce `[Skill: {name}]`
-2. **Read the SKILL.md file directly** using Read tool — `~/.claude/skills/{path}/SKILL.md`
-3. Output the key mantra/workflow from that file explicitly (visible to user)
-4. Then invoke `Skill()` tool if available (supplementary)
-
-Do not wait for the user to type `/skill-name`. Never rely on `Skill()` tool alone — it is silent and produces no visible output. Reading the file directly (like Agy and Codex do) is the primary mechanism.
-
-When a matching task is implementation-oriented, route the actual work to Codex on the configured `gpt-5.4-mini` runtime in `~/.codex/config.toml`.
-
-Project-local skill rules in a repo's `CLAUDE.md` or `./rules/skill-routing.md` override the global table when they are more specific. If the `Skill` tool is unavailable, state `[Skill: {name}] (Fallback: reading SKILL.md directly)` and proceed with Read tool.
-
-## Infrastructure — Headroom Proxy (always-on)
-
-All Claude Code and Codex traffic routes through Headroom proxy (`localhost:8787`) for token compression (47-92% savings). Kiro and Agy (Antigravity CLI) bypass it (gRPC backends, no HTTP override).
-
-- Knowledge: `agent-memory/knowledge/headroom-proxy.md`
-- Health: `curl http://127.0.0.1:8787/health`
-- Stats: `curl http://127.0.0.1:8787/stats`
-
-## Infrastructure — Ponytail (lazy senior dev mode)
-
-Ponytail is a Claude Code plugin that enforces minimal, efficient code — "lazy means efficient, not careless."
-
-- Plugin: `~/.claude/plugins/marketplaces/ponytail/`
-- Activate: say "ponytail", "be lazy", "simplest solution", or `/ponytail lite|full|ultra`
-- Deactivate: "stop ponytail" / "normal mode"
-- Default mode: `full` — overridable via `~/.config/ponytail/config.json` or `PONYTAIL_DEFAULT_MODE` env var
-- Modes: `lite` (minimal hints), `full` (default — full lazy rules), `ultra` (aggressively minimal), `review` (audit for over-engineering)
+Continuation ("ทำต่อ", "continue") → read CONTEXT.md → derive task type → invoke matching skill.
 
 ---
 
-## Agent Routing (Plugin-based)
+## Agent Routing
 
-| Task | Agent | Trigger |
-|------|-------|---------|
-| Read / explore project structure | Gemini 3 Flash + Graphify | อ่านโค้ด, หาไฟล์, ดู structure |
-| Planning / architecture | Claude (main) | วางแผน, ออกแบบ, เลือก approach |
-| Coding / implementation | Codex | เขียนโค้ด, แก้ bug, refactor |
+| Task | Agent |
+|------|-------|
+| Read / explore structure | Gemini 3 Flash + Graphify |
+| Plan / architecture | Claude (main) |
+| Code / implement / fix | Codex (`gpt-5.4-mini`) |
 
-Rules:
+Browser: **Harness MCP first** (`harnessBrowserOpen` → `harnessBrowser*`). Fall back only when Harness lacks the capability.
 
-- อ่าน project structure → spawn Gemini 3 Flash + Graphify ก่อน แล้วนำผลลัพธ์มาวางแผน
-- วางแผนใน Claude แล้ว delegate implementation ให้ Codex
-- Claude เป็น orchestrator — ไม่เขียนโค้ดเองถ้า Codex ทำได้
+Skills: invoke via `Skill()` tool or `/skill-name`. Check `rules/routing.md` for keyword→skill table.
+
+---
+
+## Infrastructure
+
+- **Headroom Proxy** (`localhost:8787`) — token compression 47–92%. Always-on for Claude Code + Codex.
+- **Ponytail** (`~/.claude/plugins/marketplaces/ponytail/`) — lazy senior dev mode. Activate: "ponytail" / `/ponytail`. Default: `full`.
 
 ---
 
 ## Graphify
 
-Routing SSOT: `GRAPHIFY_USAGE.md`
-
-When the user types `/graphify`, invoke the Skill tool with `skill: "graphify"` before doing anything else.
-
-Use Graphify as the **first navigation layer** before broad file reading:
-
 ```bash
-graphify query "..."
-graphify explain "X"
-graphify path "A" "B"
+graphify query "..."   # focused question
+graphify explain "X"   # concept/symbol
+graphify path "A" "B"  # dependency path
 ```
 
-### Auto-summary (always-on per project)
-
-Graphified projects (`harness-terminal`, `Home-Assistant`, `My-Investment-Port`) auto-load `@graphify-out/GRAPH_SUMMARY.md` at session start via their own CLAUDE.md — no manual trigger needed. The summary contains god nodes, community hubs top 25, freshness check, and surprising connections (~70 lines).
-
-After any `graphify update .`, always regenerate the summary:
-```bash
-graphify update . && ~/.claude/scripts/generate-graph-summary.sh .
-```
+Graphified projects auto-load `@graphify-out/GRAPH_SUMMARY.md` via their own CLAUDE.md.
+After update: `graphify update . && ~/.claude/scripts/generate-graph-summary.sh .`
 
 ---
 
-## Auto Memory + Dream Protocol
+## Memory Lifecycle
 
-Two complementary memory layers — use both:
+**Task start:** CONTEXT.md → grep knowledge on-demand
+**During:** Update CONTEXT.md; append decisions to MEMORY.md
+**Task end:** Rewrite CONTEXT.md; append to MEMORY.md; update INDEX.md if new files
 
-| Layer | Location | Purpose | Who writes |
-|-------|----------|---------|------------|
-| Auto Memory | `~/.claude/projects/.../memory/` | Session knowledge: build commands, debugging patterns | Claude (automatic) |
-| agent-memory/ | `~/.claude/agent-memory/` | Structured state: Task_Ledger, Decisions, Playbook | Claude via hooks |
+Promote patterns: fix/pattern → `knowledge/cases/` + PLAYBOOK.md index; domain → `knowledge/{domain}.md`
 
-### Agent Memory Lifecycle (MANDATORY)
-
-**Task start:**
-1. Read `agent-memory/CONTEXT.md` → current task, active plan
-2. Read `agent-memory/MEMORY.md` → active decisions + lessons
-3. If task matches known pattern → read `agent-memory/PLAYBOOK.md`
-
-**During task:**
-- Update `CONTEXT.md` with progress, blockers, key files touched
-- New decision made → append to `MEMORY.md` (date-prefixed)
-- Hit+solved a reusable pattern → add CASE-xxx to `PLAYBOOK.md`
-
-**Task end:**
-1. Clear/rewrite `CONTEXT.md` (next task state or empty)
-2. Append final decisions/lessons to `MEMORY.md`
-3. If MEMORY.md > 100 lines → archive oldest entries to `COMPLETED-TASKS-ARCHIVE.md`
-4. Update `INDEX.md` if new plans/knowledge files were created
-
-### Promote Rule
-
-When a pattern recurred 2+ times or prevented a mistake → promote it:
-
-- Reusable fix/pattern → `agent-memory/PLAYBOOK.md` (new CASE-xxx row)
-- Domain knowledge → `agent-memory/knowledge/{domain}.md`
-- Skill improvement → `agent-memory/SKILL-LOG.md`
-
-### Skill Self-Improvement Loop
-
-Skills improve automatically through three layers:
-
-| Layer | Mechanism | Who acts |
-|-------|-----------|----------|
-| Capture | `PostToolUse:Skill` hook → appends `DATE\|skill` to `agent-memory/skill-usage.log` | Automatic (shell only, no model call) |
-| Review | `/skill-review` reads log, diffs `skill-log.md`, writes proposals, auto-drafts at ≥3 uses | Claude (model-driven) |
-| Approve | User says `"approve skill draft {name}"` → Claude merges `skills/drafts/{name}/SKILL.md` | User-gated |
-
-Run `/skill-review` weekly or after 5+ skill-heavy sessions.
-
-### Dream
-
-Run `/dream` when Auto Memory feels cluttered or after 5+ sessions. Auto Dream triggers every 24h after 5+ sessions.
-
----
-
-## Sync
-
-Generated agent configs:
-
-- `scripts/sync-agent-instructions.sh` writes `~/.codex/AGENTS.md` and `~/.gemini/GEMINI.md`
-- `scripts/sync-all.sh --only skills` merges `skills/` to `~/.agents/skills/`, `~/.codex/skills/`, and `~/.gemini/antigravity-cli/skills/`
-- `~/.kiro/scripts/sync-skills-to-claude.sh` syncs `~/.kiro/skills/` → `~/.claude/skills/`
-
-Update `rules/` first, then resync generated configs.
