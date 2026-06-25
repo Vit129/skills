@@ -25,11 +25,8 @@ bash scripts/sync-agent-instructions.sh # Regenerate GEMINI.md and AGENTS.md
 bash scripts/sync-all.sh --only skills  # Merge skills/ to ~/.agents/skills for Codex + Gemini
 ```
 
-For syncing from `~/.kiro/skills/` (redesigned) → `~/.claude/skills/`:
 
 ```bash
-bash ~/.kiro/scripts/sync-skills-to-claude.sh --dry-run  # preview
-bash ~/.kiro/scripts/sync-skills-to-claude.sh             # apply
 ```
 
 ### 2. 📚 Universal Skill Library
@@ -155,8 +152,6 @@ bash scripts/sync-agent-instructions.sh  # Regenerate GEMINI.md and AGENTS.md
 # Sync ~/.claude/skills/ → shared Codex + Gemini runtime
 bash scripts/sync-all.sh --only skills
 
-# Sync ~/.kiro/skills/ (redesigned) → ~/.claude/skills/
-bash ~/.kiro/scripts/sync-skills-to-claude.sh
 ```
 
 Append `--dry-run` to any script to preview changes before applying.

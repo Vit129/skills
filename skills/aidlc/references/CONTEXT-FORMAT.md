@@ -47,7 +47,7 @@ If a project has multiple bounded contexts, use `CONTEXT-MAP.md` at root pointin
 - **Relationships section** only for non-obvious connections.
 - **Flagged Ambiguities** records resolved naming conflicts — prevents regression.
 - **Create lazily** — only when the first term is resolved. Don't create an empty file.
-- **Update inline** — when a term is resolved during interview/brainstorming/inception, update immediately. Don't batch.
+- **Update inline** — when a term is resolved during interview (me/doc/amigos mode)/inception, update immediately. Don't batch.
 
 ## Example
 
@@ -84,8 +84,8 @@ Manages the lifecycle of video courses from authoring through delivery.
 | Trigger | Action |
 |---------|--------|
 | AIDLC Phase 1 (domain-design step) | Generate initial CONTEXT.md from domain model |
-| During `interview-me` | Update inline when term is resolved (pre-inception, no code) |
-| During `interview-doc` | Update inline when term is resolved (has codebase, cross-ref code) |
-| During brainstorming | Update inline when term is sharpened |
+| During `interview` (me mode) | Update inline when term is resolved (pre-inception, no code) |
+| During `interview` (doc mode) | Update inline when term is resolved (has codebase, cross-ref code) |
+| During `interview` (amigos mode) | Update inline when term is sharpened |
 | Term conflict discovered in code review | Add to Flagged Ambiguities |
 | New bounded context added | Create per-context CONTEXT.md |

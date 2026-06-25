@@ -319,8 +319,8 @@ Uses existing `core/analysis-skills/` — no new skills needed.
 2. **Requirements Extraction** → `core/analysis-skills` (requirements.md) — write user stories + BDD AC
 3. **Domain Discovery** → `core/analysis-skills` (discovery-domain.md) — check knowledge base for reuse
 4. **Interview** (MANDATORY — pick based on context):
-   - **If codebase exists** → `thinking/interview-doc/SKILL.md` — cross-ref PBI + Figma + codebase → ask user about gaps + sharpen domain language
-   - **If no codebase (new project)** → `thinking/interview-me/SKILL.md` — one-question-at-a-time until 95% confidence
+   - **If codebase exists** → `interview (doc mode)` — cross-ref PBI + Figma + codebase → ask user about gaps + sharpen domain language
+   - **If no codebase (new project)** → `interview (me mode)` — one-question-at-a-time until 95% confidence
    - **Rule:** Never skip. At minimum 3 questions must be asked before proceeding.
 5. **Gap Analysis** → `core/analysis-skills` (gap.md) — identify missing logic
 6. **Figma Analysis** (if link provided) → `ux-ui/ui-designer` (figma.md) — extract UI structure
@@ -805,7 +805,7 @@ Brownfield start from 1.1, Greenfield start from 1.2
   → Output: `testid-map.md` — maps component/element → testId → owner (QA uses, Dev implements)
   → Skip for API-only features (no UI)
 - **1.8** Brainstorming (3 Amigos) → PO/Dev/QA subagents review Phase 1 artifacts, identify gaps and tensions
-  → Use `core/brainstorming` skill — dispatches subagents per role with Phase 1 artifacts as input
+  → Use `interview (amigos mode)` skill — dispatches subagents per role with Phase 1 artifacts as input
   → Pre-step: run `core/analysis-skills` (gap.md) to feed known gaps to all subagents (scope: all Phase 1 artifacts — broader than Phase 1.2 which only covers requirements)
   → **[Kiro]** `invokeSubAgent(name="general-task-execution")` × 3 in parallel — one per role (PO, Dev, QA); pass all Phase 1 artifacts + gap.md output as contextFiles; collect all 3 outputs before writing `brainstorming-summary.md`
   → Output: `brainstorming-summary.md` — tensions, open questions, refined scope
@@ -815,7 +815,7 @@ Brownfield start from 1.1, Greenfield start from 1.2
 
 - **2.1** QA Task Design → Task breakdown for QA automation
   → Use `aidlc` reference (qa-task-design.md)
-  → Optional companion: `core/doubt-driven` (for architecture decisions in QA planning)
+  → Optional companion: `interview (doubt mode)` (for architecture decisions in QA planning)
   → **[Kiro]** `invokeSubAgent(name="context-gatherer")` — invoke ONCE at start; scan `ai-dlc/knowledge/automation/` + existing test root for reusable patterns before designing tasks
 - **2.2** Test Case Design → BDD test scenarios
   → Use `test-scenario` skill + `test-scenario-rules` skill
@@ -896,7 +896,7 @@ Brownfield start from 1.1, Greenfield start from 1.2
 
 - **3.1** Implementation → TDD: GREEN (code to pass tests)
   → Use `frontend-dev` skill and/or `backend-dev` skill
-  → Optional companions: `core/source-driven` (when implementing framework-specific code — verify docs before coding), `core/doubt-driven` (for non-trivial implementation decisions)
+  → Optional companions: `interview (source mode)` (when implementing framework-specific code — verify docs before coding), `interview (doubt mode)` (for non-trivial implementation decisions)
   → **[Kiro]** `invokeSubAgent(name="general-task-execution")` — MANDATORY when 3+ independent tasks exist; dispatch per task batch (group tasks with no shared file dependency); pass `dev-task-progress.md`, `logical-design.md`, and relevant source files as contextFiles
 - **3.2** Automated Testing → TDD: REFACTOR + validation
   → Use `playwright-testing` skill or `robotframework-testing` skill
@@ -962,7 +962,7 @@ For detailed patterns → Use `core/architect` skill (architecture-patterns.md)
 - `"start AI-DLC from logical design"` — Begin from phase 1.6
 - `"start AI-DLC from UI/UX design"` — Begin from phase 1.5
 - `"start AI-DLC from testid map"` — Begin from phase 1.7
-- `"start AI-DLC from brainstorming"` — Begin from phase 1.8 (3 Amigos review)
+- `"start AI-DLC from 3 amigos"` — Begin from phase 1.8 (3 Amigos review)
 - `"start AI-DLC from QA task design"` — Begin from phase 2.1
 - `"start AI-DLC from test case design"` — Begin from phase 2.2
 - `"start AI-DLC from QA architecture"` — Begin from phase 2.3

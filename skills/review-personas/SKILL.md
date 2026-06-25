@@ -266,9 +266,9 @@ Every finding must progress through this lifecycle. A bug is not "fixed" until a
 
 - **Phase 2 (Plan):** Run bug-hunter on existing code before designing new features
 - **Phase 3 (Execute):** Use code-reviewer after implementing each task, bug-hunter for boundary-heavy changes
-- **Pre-commit:** Use as part of doubt-driven development (doubt step can invoke a persona)
+- **Pre-commit:** Use as part of adversarial review — interview (doubt mode) can invoke a persona
 - **Pre-merge:** Fan-out all four for comprehensive gate
-- **With brainstorming:** QA lens in brainstorming covers test-engineer perspective at design time
+- **With 3 amigos:** QA lens in interview (amigos mode) covers test-engineer perspective at design time
 - **With debugging:** Bug-hunter findings feed into `debug-mantra` for reproduction + fix
 
 ---
