@@ -14,9 +14,11 @@ When triggered → read `~/.claude/skills/aidlc/SKILL.md` before producing outpu
 ## Skip AIDLC (direct action)
 
 - **Fix bug / debug / crash** → `debug-mantra` skill directly (no AIDLC)
+- **Hunt bugs / audit / systematic scan** → `find-mismatch` skill (no AIDLC)
 - **Single-file fixes, typos, config changes, version bumps** → just do it with memory protocol
 - Pure research / analysis / brainstorming (no code output)
-- Finance, fitness, domain-only knowledge tasks
+- Finance / stocks → `stock-deep-analysis`, `stock-peer-comparison`, `portfolio`, `idea-generation`, `earnings-preview`, `tradingagents-orchestrator`
+- Domain-only knowledge tasks (fitness, language, accounting) → matching skill by description
 - Config, settings, memory management, agent setup
 - `postman-to-playwright` (full bypass)
 
@@ -25,9 +27,10 @@ When triggered → read `~/.claude/skills/aidlc/SKILL.md` before producing outpu
 | Keyword | Action |
 |---------|--------|
 | fix bug / debug / crash / investigate | `debug-mantra` skill → fix → commit |
+| hunt bugs / audit / find mismatch / scan | `find-mismatch` skill → DETECT→FIX lifecycle |
 | explain / how does | Read code → explain with citations |
 | compare | Analyze → structured tradeoff table |
-| review | Read code → structured feedback |
+| review / code review / critique | `review-personas` skill → structured feedback |
 | summarize | Condense → bullet summary |
 | search / find | Use grep/code/glob → report |
 | document | Generate docs matching project style |

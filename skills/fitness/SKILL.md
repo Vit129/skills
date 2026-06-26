@@ -1,5 +1,6 @@
 ---
-name: fitness-coach
+name: fitness
+version: 1.0.0
 description: >
   Comprehensive fitness coaching: workout planning, nutrition, body composition analysis (English + Thai).
   

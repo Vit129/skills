@@ -1,8 +1,5 @@
 # User Profile
 
-<!-- Stable preferences — update only when user explicitly changes them. -->
-<!-- Loaded at session start alongside memory.md. -->
-
 ## Identity
 
 - **Name:** Vit
@@ -21,28 +18,21 @@
 
 ## Side Projects
 
-- **Investment:** Runs a Terry/Nora/Cleo multi-agent research pipeline on US equities — paper portfolio ($5K) validates conviction before routing to Thai RMF/PVD mutual funds. See: `/Users/supavit.cho/Git/Personal/My-Investment-Port`
-- **Home Assistant:** Builds HVAC automations (AC scheduling, pre-cooling, arrival triggers, power outage handling) for his home. See: `/Users/supavit.cho/Git/Personal/Home-Assistant`
-- **Harness Terminal:** macOS terminal app (Swift/Metal) — personal project; active development, latest release v3.2.0. See: `/Users/supavit.cho/Git/Personal/harness-terminal`
-- **Language Learning:** English grammar/fluency + Japanese reading/writing — practice sessions via claude.ai custom instructions. See: `/Users/supavit.cho/Git/Personal/Language-Learning`
+- **Investment:** Terry/Nora/Cleo multi-agent pipeline on US equities → Thai RMF/PVD (`My-Investment-Port`)
+- **Home Assistant:** HVAC automations — AC scheduling, pre-cooling, arrival triggers (`Home-Assistant`)
+- **Harness Terminal:** macOS terminal app (Swift/Metal), active development (`harness-terminal`)
+- **Language Learning:** English fluency + Japanese reading/writing (`Language-Learning`)
 
 ## Thinking Style
 
-- Encodes *how to think*, not just what to do — frameworks have phase sequencing, decision trees, escalation conditions, and reusability formulas
-- Deep Abstraction instinct: strips domain names and matches on `Input → Process → Output` flow — catches cross-domain reuse others miss
+- Encodes *how to think*, not just what to do — frameworks have phase sequencing, decision trees, escalation conditions
+- Deep Abstraction instinct: strips domain names, matches on `Input → Process → Output` — catches cross-domain reuse
 - Designs against AI verbosity by default: silent execution phases, file-first output, no chat dumps
 - QA origin gave him phase gates + anti-pattern discipline that most AI Infrastructure engineers lack
-- Skills in `~/.claude/skills/thinking/analysis-skills/` are cognitive engineering artifacts — not prompts
 
 ## Work Context
 
-- **Primary QA stack:** Azure DevOps (ADO) — uploads test scenarios from CSV, queries sprint reports, triggers pipelines via TypeScript scripts under `.kiro/scripts/azure-devops/`
-- **AI infrastructure:** Builds AI-DLC and agent skill systems across `.claude/` and `.kiro/`; skills sync from `.kiro/skills/` → `.claude/skills/` via `sync-skills-to-claude.sh`
-- **Postman → Playwright:** Active migration work; dedicated skill + setup script exists
-- **Agent orchestration:** Claude = architect/orchestrator; Codex = implementation; Gemini = fast read/explore; Kiro Autopilot = repo-level AI coding
-
-## QA Work Context
-
-- **QA Email:** <!-- PLACEHOLDER — agent will ask on first use -->
-- **Dev Email:** <!-- PLACEHOLDER — agent will ask on first use -->
-- **Project Management Tool:** Azure DevOps / Jira (detect per project)
+- **Primary QA stack:** Azure DevOps (ADO) — CSV test upload, sprint reports, TypeScript scripts under `.kiro/scripts/azure-devops/`
+- **AI infrastructure:** AIDLC + agent skill systems across `.claude/` and `.kiro/`; skills sync via `sync-skills-to-claude.sh`
+- **Postman → Playwright:** Active migration; dedicated skill + setup script exists
+- **Agent orchestration:** Claude = architect/orchestrator; Codex = implementation; Gemini = fast read/explore; Kiro Autopilot = repo-level coding

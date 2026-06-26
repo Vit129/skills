@@ -1,5 +1,5 @@
 ---
-name: postman
+name: postman-to-playwright
 description: >
   Activate when user says "convert Postman to Playwright", "migrate Postman",
   "analyze Postman collection/environment", "generate Playwright from Postman",

@@ -1,0 +1,54 @@
+[
+  {
+    "skill": "debug-mantra",
+    "keywords": ["crash", "bug", "debug", "exception", "stack trace", "use-after-free", "broken", "not working"]
+  },
+  {
+    "skill": "find-mismatch",
+    "keywords": ["audit", "hunt bugs", "find mismatch", "memory leak", "systematic scan", "scan for"]
+  },
+  {
+    "skill": "post-mortem",
+    "keywords": ["post-mortem", "postmortem", "rca", "root cause analysis", "incident report"]
+  },
+  {
+    "skill": "portfolio",
+    "keywords": ["portfolio", "holdings", "allocation", "rebalance", "rmf", "pvd"]
+  },
+  {
+    "skill": "stock-deep-analysis",
+    "keywords": ["stock analysis", "deep analysis", "dcf", "fundamental analysis", "valuation model"]
+  },
+  {
+    "skill": "stock-peer-comparison",
+    "keywords": ["peer comparison", "compare stocks", "sector comparison", "comparable companies"]
+  },
+  {
+    "skill": "tradingagents-orchestrator",
+    "keywords": ["tradingagents", "terry", "nora", "cleo", "multi-agent research", "paper portfolio"]
+  },
+  {
+    "skill": "idea-generation",
+    "keywords": ["investment ideas", "stock ideas", "stock screener", "new position"]
+  },
+  {
+    "skill": "earnings-preview",
+    "keywords": ["earnings preview", "earnings call", "quarterly results", "q1 results", "q2 results", "q3 results", "q4 results"]
+  },
+  {
+    "skill": "english-practice",
+    "keywords": ["english practice", "writing practice", "grammar exercise", "ielts", "toefl"]
+  },
+  {
+    "skill": "japanese-practice",
+    "keywords": ["japanese practice", "kanji", "hiragana", "katakana", "jlpt", "n5", "n4", "n3", "n2", "n1", "japanese grammar"]
+  },
+  {
+    "skill": "review-personas",
+    "keywords": ["pre-merge gate", "ship check", "code review", "security audit", "test coverage review"]
+  },
+  {
+    "skill": "aidlc",
+    "keywords": ["aidlc", "ai-dlc", "implement feature", "build feature"]
+  }
+]

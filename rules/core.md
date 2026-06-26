@@ -42,17 +42,13 @@ Every task response ends with:
 
 ## Memory Protocol
 
-At task start, read `.ai/memory-protocol.md` in the project root and follow it.
-If missing: read `agent-memory/CONTEXT.md` + `MEMORY.md`. On task end, update both.
+Canonical lifecycle (start/during/end + pattern promotion) lives in `~/.claude/CLAUDE.md` → **Memory Lifecycle**. This section only adds the per-project override and the Done-gate enforcement.
 
-### Memory Update (MANDATORY — last action before Done)
+At task start, if `.ai/memory-protocol.md` exists in the project root, follow it instead.
 
-When task is complete, before writing the final response:
-1. Rewrite `agent-memory/CONTEXT.md` — set status to `idle` or next task state
-2. Append decision/lesson to `agent-memory/MEMORY.md` (date-prefixed, 1–2 lines)
-3. If pattern reusable → add CASE-xxx to `agent-memory/PLAYBOOK.md`
+### Done-gate (MANDATORY — last action before Done)
 
-Never mark ✅ Done without completing these steps first.
+Never mark ✅ Done before completing the CLAUDE.md task-end steps (rewrite `CONTEXT.md`, append to `MEMORY.md`, promote reusable patterns to `PLAYBOOK.md`/`knowledge/`).
 
 ## Test-Before-Deliver
 

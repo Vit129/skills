@@ -1,5 +1,6 @@
 ---
 name: idea-generation
+version: 1.0.0
 description: >
   Systematic stock screening and investment idea sourcing — quantitative screens (value/growth/quality/short/special situation)
   + thematic sweep to surface long and short ideas. Use when looking for new tickers to research,

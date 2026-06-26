@@ -1,5 +1,6 @@
 ---
-name: portfolio-etf-analysis
+name: portfolio
+version: 1.0.0
 description: >
   Portfolio review, ETF analysis, and optimization — analyze holdings allocation,
   concentration risk, sector exposure, correlation, rebalancing recommendations,

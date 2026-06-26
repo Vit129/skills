@@ -1,5 +1,6 @@
 ---
 name: tradingagents-orchestrator
+version: 1.0.0
 description: >
   Trading research orchestration (our format) inspired by TradingAgents:
   Analyst Team → Research Debate → Trader → Risk → Portfolio Manager.

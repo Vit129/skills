@@ -1,5 +1,6 @@
 ---
 name: stock-deep-analysis
+version: 1.0.0
 description: >
   Deep dive US stock in 20 dimensions: Business, Financials, Competitive Advantage, Risks, Management, Valuation,
   Performance, Insider Trading, Comparable Companies, Earnings, and an Action Plan.

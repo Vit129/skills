@@ -1,5 +1,6 @@
 ---
 name: thai-accountant
+version: 1.0.0
 description: >
   Senior/Manager level Thai accounting and finance — covers all domains for Thai businesses.
   Accounting, financial analysis, tax, compliance, planning, and digital tax systems.

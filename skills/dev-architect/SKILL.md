@@ -1,5 +1,5 @@
 ---
-name: architect
+name: dev-architect
 description: >
   This skill should be used when the user asks to "design the architecture",
   "define bounded contexts", "model the domain", "model domain",

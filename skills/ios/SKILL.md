@@ -1,5 +1,5 @@
 ---
-name: ios-swiftui-swift
+name: ios
 description: >
   Use this reference when building, reviewing, or refactoring native iOS code
   with Swift, SwiftUI, SwiftData, Observation, async/await, Combine, XCTest,

@@ -1,5 +1,6 @@
 ---
 name: earnings-preview
+version: 1.0.0
 description: >
   Pre-earnings analysis — build a one-page setup before a company reports.
   Covers consensus estimates, key metrics to watch (sector-specific), bull/base/bear scenarios

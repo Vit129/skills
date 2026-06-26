@@ -1,5 +1,5 @@
 ---
-name: android-kotlin-compose
+name: android
 description: >
   Use this reference when building, reviewing, or refactoring Android native
   code with Kotlin, Jetpack Compose, ViewModel, StateFlow, Navigation Compose,

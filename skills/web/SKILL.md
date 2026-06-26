@@ -1,5 +1,5 @@
 ---
-name: react-web
+name: web
 description: >
   Use this reference when building, reviewing, or refactoring React, TypeScript,
   client components, hooks, state, forms, Suspense, or modern web UI code.

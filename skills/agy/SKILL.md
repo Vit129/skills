@@ -1,5 +1,6 @@
 ---
 name: agy
+version: 1.0.0
 description: Antigravity (agy) CLI companion - delegate substantial coding/debugging tasks to agy via the shared runtime. Activates on explicit /agy or intent like "ask agy", "have agy try this", "second opinion from agy"
 ---
 

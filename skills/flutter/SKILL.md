@@ -1,5 +1,5 @@
 ---
-name: flutter-dart
+name: flutter
 description: >
   Use this reference when building, reviewing, or refactoring Flutter code with
   Dart, widgets, state management, navigation, networking, accessibility,

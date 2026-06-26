@@ -1,5 +1,6 @@
 ---
 name: stock-peer-comparison
+version: 1.0.0
 description: >
   Rigorous peer-comparison report — 2–5 US stock tickers side-by-side in polished HTML.
   Revenue/Net Income/EPS trends (5Q), valuation (P/E), dividend snapshot, guidance summary.
