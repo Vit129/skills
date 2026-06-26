@@ -86,11 +86,6 @@ Sets `.memory-pending` flag if `CONTEXT.md` is not idle → next session shows m
 
 ## Agent Routing
 
-| Agent | Role |
-|-------|------|
-| Claude Code | Architect, orchestrator, planner |
-| Codex (`gpt-5.4-mini`) | Implementation |
-| Gemini Flash | Fast read/explore (Graphify) |
-| Kiro Autopilot | Repo-level coding |
+Claude Code handles all phases — architect, plan, implement, review.
 
 Browser: Harness MCP first (`harnessBrowserOpen`). Fall back only when Harness lacks the capability.
