@@ -1,7 +1,7 @@
 [
   {
     "skill": "debug-mantra",
-    "keywords": ["crash", "bug", "debug", "exception", "stack trace", "use-after-free", "broken", "not working"]
+    "keywords": ["crash", "bug", "debug", "exception", "stack trace", "use-after-free", "broken", "not working", "fix bug", "debug this"]
   },
   {
     "skill": "find-mismatch",
