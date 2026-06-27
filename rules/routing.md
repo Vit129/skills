@@ -21,6 +21,7 @@ When triggered → read `~/.claude/skills/aidlc/SKILL.md` before producing outpu
 - Domain-only knowledge tasks (fitness, language, accounting) → matching skill by description
 - Config, settings, memory management, agent setup
 - `postman-to-playwright` (full bypass)
+- **XCTest / swift test / unit test / write test / add test / test model / test logic** → `xctest-macos` skill directly (no AIDLC)
 
 ## Non-AIDLC Quick Skills
 

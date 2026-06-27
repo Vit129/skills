@@ -27,6 +27,7 @@ OutlineGroup, NavigationSplitView, @Observable, Transferable, macOS UI component
 | .onDrag, .dropDestination, Transferable, UTType | `references/drag-drop.md` |
 | NSHostingView, NSViewRepresentable, bridging | `references/appkit-swiftui.md` |
 | Async FileManager, directory scan, lazy children | `references/filesystem.md` |
+| XCTest for @Observable / @MainActor models | `xctest-macos` skill |
 
 ---
 
