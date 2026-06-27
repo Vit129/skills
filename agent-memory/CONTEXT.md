@@ -1,8 +1,8 @@
 # Context — ~/.claude (Global)
 
 ## Now
-- **Task:** skills system upgrade — 3-tier ladder + disable-model-invocation + global hook
-- **Status:** done
+- **Task:** idle
+- **Status:** idle
 
 ## Completed (2026-06-26)
 

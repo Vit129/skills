@@ -42,9 +42,7 @@ Every task response ends with:
 
 ## Memory Protocol
 
-Canonical lifecycle (start/during/end + pattern promotion) lives in `~/.claude/CLAUDE.md` → **Memory Lifecycle**. This section only adds the per-project override and the Done-gate enforcement.
-
-At task start, if `.ai/memory-protocol.md` exists in the project root, follow it instead.
+Canonical lifecycle (start/during/end + pattern promotion) lives in `~/.claude/CLAUDE.md` → **Memory Lifecycle**. This section only adds the Done-gate enforcement.
 
 ### Done-gate (MANDATORY — last action before Done)
 
