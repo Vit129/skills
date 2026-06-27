@@ -34,8 +34,7 @@ User says "draft order" → in this codebase that's "Cart"
 ```
 
 ## Step 5 — Update Docs Inline (never batch)
-- CONTEXT.md: add/update term immediately when resolved
-- ADR: load `documentation-adrs` skill when decision is: hard-to-reverse **AND** surprising **AND** real trade-off
+Follow `references/domain-modeling.md` for all CONTEXT.md and ADR rules (glossary only, ADR criteria, file structure).
 
 ## Summary Format
 ```markdown

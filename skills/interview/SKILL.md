@@ -6,8 +6,9 @@ description: >
   "brainstorm", "3 amigos", "คุยก่อนแบ่งงาน", "ช่วยคิด", "stress-test",
   "doubt-driven", "adversarial review", "challenge this plan",
   "source-driven", "verify against docs", "cite sources", "check framework version".
-version: 1.0.0
-last_improved: 2026-06-25
+  For post-hoc glossary extraction use /ubiquitous-language instead.
+version: 1.1.0
+last_improved: 2026-06-27
 ---
 
 # Interview — Router
@@ -21,3 +22,6 @@ last_improved: 2026-06-25
 | After Phase 1 artifacts exist, before Phase 2, complex feature | `references/amigos.md` |
 | High-stakes decision, non-trivial logic, before commit/deploy | `references/doubt.md` |
 | Framework/library specific implementation, API version matters | `references/source.md` |
+
+> **Note:** `doc.md` uses `references/domain-modeling.md` for CONTEXT.md and ADR rules.
+> Other skills that need to update domain docs should read `domain-modeling.md` directly.
