@@ -98,7 +98,6 @@ All AIDLC artifacts live in `agent-memory/` — consistent across every project:
 | Progress | `CONTEXT.md` Now section |
 | Phase history | `CONTEXT.md` Completed section |
 
-
 ---
 
 ## Agent Routing
