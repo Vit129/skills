@@ -3,17 +3,22 @@
 # Shows: git branch | model (effort) | ctx% rem% | 5h% rem% timer | 7d% rem% reset
 export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 
-input=$(cat)
+input=$(cat 2>/dev/null) || input=""
 
-eval "$(echo "$input" | jq -r '
-def parse_date:
-  if type == "number" then
-    (if . > 10000000000 then . / 1000 | floor else . | floor end)
-  elif type == "string" then
-    (try (sub("\\.[0-9]+Z$"; "Z") | fromdateiso8601) catch null)
-  else null end;
-. as $root |
-"model_short=\(($root.model.display_name // "") | @sh)
+# Pre-initialize — prevents unbound-variable errors if eval fails or input is empty
+model_short="" effort="" cwd="" ctx="" ctx_rem=""
+five_pct="" five_reset="" week_pct="" week_reset=""
+
+if [ -n "$input" ]; then
+  _vars=$(echo "$input" | jq -r '
+    def parse_date:
+      if type == "number" then
+        (if . > 10000000000 then . / 1000 | floor else . | floor end)
+      elif type == "string" then
+        (try (sub("\\.[0-9]+Z$"; "Z") | fromdateiso8601) catch null)
+      else null end;
+    . as $root |
+    "model_short=\(($root.model.display_name // "") | @sh)
 effort=\(($root.effort.level // "") | @sh)
 cwd=\(($root.cwd // $root.workspace.current_dir // "") | @sh)
 ctx=\(($root.context_window.used_percentage // "") | if type == "number" then round else "" end | @sh)
@@ -22,11 +27,12 @@ five_pct=\(($root.rate_limits.five_hour.used_percentage // "") | if type == "num
 five_reset=\((($root.rate_limits.five_hour.resets_at // null) | parse_date // "") | @sh)
 week_pct=\(($root.rate_limits.seven_day.used_percentage // "") | if type == "number" then round else "" end | @sh)
 week_reset=\((($root.rate_limits.seven_day.resets_at // null) | parse_date // "") | @sh)"
-')"
+  ' 2>/dev/null) && eval "$_vars" 2>/dev/null || true
+fi
 
 # --- Git branch ---
 branch=""
-[ -n "$cwd" ] && branch=$(git -C "$cwd" --no-optional-locks branch --show-current 2>/dev/null)
+[ -n "$cwd" ] && branch=$(git -C "$cwd" --no-optional-locks branch --show-current 2>/dev/null) || true
 
 # --- Build output ---
 parts=()
@@ -104,3 +110,4 @@ for part in "${parts[@]}"; do
 done
 
 printf '%b\n' "$result"
+exit 0
