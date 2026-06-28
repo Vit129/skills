@@ -154,23 +154,10 @@ For each logic item, ask 3 questions:
   - If file doesn't exist → note as "domain identified but no rules file yet" — do NOT hallucinate IDs
 - If no business rules found → continue to Phase 6
 
-### Phase 6: Reusability Score & Knowledge Buffer
+### Phase 6: Reusability Score
 
-**Reusability Score:**
-- Formula: (confirmed reuse + extend items from Phase 3 + confirmed BL_XXX/UA_XXX from Phase 4) / total required × 100
-- Only count items read from actual file content — never estimate
-- 🟢 >80% | 🟡 60-80% | 🔴 <60%
+Promote patterns used in ≥2 features to `agent-memory/knowledge/{domain}/`.
 
-**Impact Assessment:**
-- Design Impact: what can be reused in test scenarios
-- Data Impact: what test data patterns can be adapted
-- Implementation Impact: what new logic needs to be recorded
-- Formulate "Lego Assembly" Strategy: combine best logic from multiple domains
-
-**Knowledge Buffer Capture:**
-- Identify new patterns NOT in templates and NOT in codebase
-- "Reusable 2+ features" = abstract concern appears in ≥2 distinct sub-features or is cross-cutting (auth, error handling, file ops)
-- Determine strategy: Reuse / Adapt / Create
 
 ### Phase 7: Write to File (MANDATORY — DO NOT SKIP)
 
@@ -218,10 +205,6 @@ For each logic item, ask 3 questions:
 1. [sub-feature] → [domain expert / existing asset]
 2. [sub-feature] → [domain expert / existing asset]
 
-### Knowledge Buffer
-- [N] new patterns captured
-- Strategy: [Reuse / Adapt / Create]
-```
 
 ## Classification Decision Tree
 

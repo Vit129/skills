@@ -1,6 +1,0 @@
-{
-  "plansPath": "agent-memory/plans",
-  "contextFile": "agent-memory/CONTEXT.md",
-  "memoryFile": "agent-memory/MEMORY.md",
-  "knowledgePath": "agent-memory/knowledge"
-}

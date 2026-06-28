@@ -114,7 +114,6 @@ User can override: "request quick" or "request deep"
 - **Task Progress Guide** — (Read `references/shared-task-progress-guide.md`)
 - **Dev Task Design** — (Read `references/dev-task-design.md`)
 - **QA Task Design** — (Read `references/qa-task-design.md`)
-- **Knowledge Buffer** — Capture and reuse patterns across features. (Read `references/knowledge-buffer.md`)
 
 ## Phase Instructions & Routing
 
@@ -229,7 +228,6 @@ Every phase MUST execute steps 1-9 in this order:
 | 6 | EXECUTE — write output files | Never skip |
 | 7 | Update `audit.md` with phase entry | Never skip |
 | 8 | Update `PROGRESS.md` with current counts | Never skip |
-| 9 | Capture knowledge to Knowledge Buffer | No new pattern learned |
 | 10 | Update GRAPH_REPORT.md | No new files created |
 | 11 | Update agent-memory (Task_Ledger + Playbook) | No real artifact produced |
 

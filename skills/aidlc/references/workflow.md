@@ -4,8 +4,6 @@
 
 All AIDLC artifacts live in `agent-memory/` — no `.aidlc/` folder, no exceptions.
 
-Default paths (override via `<project>/.claude/aidlc.json` if needed):
-
 | AIDLC artifact | Location |
 |---|---|
 | Feature folder | `agent-memory/plans/[feature]/` |
@@ -24,15 +22,6 @@ Default paths (override via `<project>/.claude/aidlc.json` if needed):
 - Step 7 (AUDIT): update `CONTEXT.md` Completed section with phase entry
 - Step 8 (PROGRESS): update `CONTEXT.md` Now section with current feature + phase
 
-Optional path override (`<project>/.claude/aidlc.json`):
-```json
-{
-  "plansPath": "agent-memory/plans",
-  "contextFile": "agent-memory/CONTEXT.md",
-  "memoryFile": "agent-memory/MEMORY.md",
-  "knowledgePath": "agent-memory/knowledge"
-}
-```
 
 ---
 
@@ -769,7 +758,7 @@ For output depth examples per level → Read `references/complexity-examples.md`
    - `Skills Used` — list every skill and reference file read during this phase
    - `Notes` — one-line summary of what was produced
 8. **PROGRESS** → Update `agent-memory/CONTEXT.md` Now section with current counts
-9. **KNOWLEDGE** → Capture reusable patterns to `audit.md` Knowledge Buffer section (Read `references/knowledge-buffer.md`)
+9. **KNOWLEDGE** → Promote reusable patterns (≥2 features) to `agent-memory/knowledge/{domain}/`
 10. **GRAPH_REPORT** → Update `{project-root}/GRAPH_REPORT.md` when:
     - First working feature completed (Phase 2.4 done) → create initial graph
     - Feature completed (all tests PASS + PR merged) → update affected sections

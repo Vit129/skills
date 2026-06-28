@@ -132,26 +132,10 @@ For each {logic_item}, ask 3 questions:
   - Workflow logic
 - If no rules found → continue to Phase 6
 
-### Phase 6: Reusability Score & Knowledge Buffer
+### Phase 6: Reusability Score
 
-**Reusability Score:**
+Promote patterns used in ≥2 features to `agent-memory/knowledge/{domain}/`.
 
-- Formula: (confirmed reuse + extend items from Phase 3 + confirmed reusable logic from Phase 4) / total required × 100
-- Only count items confirmed from actual content — never estimate
-- 🟢 >80% | 🟡 60-80% | 🔴 <60%
-
-**Impact Assessment:**
-
-- Design Impact: what can be reused
-- Data Impact: what patterns can be adapted
-- Implementation Impact: what new logic needs to be created
-- Formulate "Lego Assembly" Strategy: combine best parts from multiple {domains}
-
-**Knowledge Buffer Capture:**
-
-- Identify new patterns NOT in existing {assets}
-- "Reusable 2+ features" = abstract concern appears in ≥2 distinct sub-features or is cross-cutting
-- Determine strategy: Reuse / Adapt / Create
 
 ## Output Pattern
 
@@ -193,10 +177,6 @@ Write complete Discovery & Domain Analysis output to the appropriate location fo
 1. {sub-feature} → {source}
 2. {sub-feature} → {source}
 
-### Knowledge Buffer
-- [N] new patterns captured
-- Strategy: Reuse / Adapt / Create
-```
 
 ## Classification Decision Tree
 

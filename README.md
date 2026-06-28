@@ -14,8 +14,6 @@ Personal skill + memory system for Claude Code. One place to define how every se
     core.md              — trust priority, response format, do/don't
     routing.md           — AIDLC gates, skill routing table
     coding.md            — coding principles (loaded on-demand before code tasks)
-  .claude/
-    aidlc.json           — AIDLC path overrides (optional)
   agent-memory/
     USER-PROFILE.md      — identity, preferences (always-on)
     CONTEXT.md           — active task state (on-demand)
@@ -99,9 +97,7 @@ All AIDLC artifacts live in `agent-memory/` — consistent across every project:
 | Outputs | `agent-memory/plans/[feature]/outputs/` |
 | Progress | `CONTEXT.md` Now section |
 | Phase history | `CONTEXT.md` Completed section |
-| Knowledge buffer | `agent-memory/knowledge/` |
 
-Path overrides available via `.claude/aidlc.json` if needed.
 
 ---
 
