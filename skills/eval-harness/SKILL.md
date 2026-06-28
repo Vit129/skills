@@ -17,7 +17,7 @@ Measure skill consistency and reliability before trusting it in production workf
 ## AIDLC Gate
 
 ⚠️ If this skill is triggered as part of a coding/QA task:
-- AIDLC governance MUST be active (`.aidlc/` folder exists with DECISIONS + PLAN)
+- AIDLC governance MUST be active (`agent-memory/plans/[feature]/` must exist with DECISIONS + PLAN)
 - If not → STOP and route to `governance/aidlc/` first
 - Exception: pure investigation/analysis (no code changes) can proceed without AIDLC
 
@@ -144,7 +144,7 @@ Score: 3/4 (75%)
 ## Rules
 
 - Never eval during active implementation (context waste)
-- Store eval reports in `.aidlc/[system]/[feature]/evals/` if project-specific
+- Store eval reports in `agent-memory/plans/[feature]/evals/` if project-specific
 - Store skill-level evals in `ai-dlc/knowledge/lessons/` for reuse
 - Flag skills with pass@3 < 67% in `agent-memory/memory.md`
 
@@ -167,7 +167,7 @@ Score: 3/4 (75%)
 - 🚩 Skill flagged in `memory.md` but no eval report exists → Measurement skipped; run pass@3 eval before attempting fixes.
 - 🚩 Eval report shows pass@3 = 100% on a skill known to be problematic → Eval task was too easy or grading too lenient; use realistic prompts that exercise edge cases.
 - 🚩 Agent ran eval during active implementation (mid-Phase 3) → Context waste; eval should run before or after implementation, not during.
-- 🚩 Eval results stored only in chat, not persisted to file → Results will be lost; write to `.aidlc/evals/` or `knowledge/lessons/`.
+- 🚩 Eval results stored only in chat, not persisted to file → Results will be lost; write to `agent-memory/plans/[feature]/evals/` or `knowledge/lessons/`.
 - 🚩 Skill with pass@3 < 67% not flagged in `agent-memory/memory.md` → Escalation rule violated; flag underperforming skills for rework.
 
 ---
@@ -198,7 +198,7 @@ Before declaring an eval complete, confirm:
 | Skill outputs to evaluate | Test subject | The actual outputs being measured |
 | Scoring criteria (pass/fail definition) | Grading rubric | Consistent evaluation across runs |
 | `agent-memory/memory.md` | Skill health flags | Identify which skills need eval |
-| `.aidlc/[system]/[feature]/evals/` | Output location | Store eval reports persistently |
+| `agent-memory/plans/[feature]/evals/` | Output location | Store eval reports persistently |
 | `knowledge/lessons/` | Lessons learnt | Check before execute |
 
 ## Human-in-the-Loop Points

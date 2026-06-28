@@ -1,5 +1,41 @@
 # AI-DLC Development Workflow Rules
 
+## Artifact Locations (read FIRST — before any file operation)
+
+All AIDLC artifacts live in `agent-memory/` — no `.aidlc/` folder, no exceptions.
+
+Default paths (override via `<project>/.claude/aidlc.json` if needed):
+
+| AIDLC artifact | Location |
+|---|---|
+| Feature folder | `agent-memory/plans/[feature]/` |
+| Resolved decisions | `agent-memory/MEMORY.md` Decisions section |
+| Execution plan | `agent-memory/plans/[feature]/plan.md` |
+| Progress tracking | `agent-memory/CONTEXT.md` Now section |
+| Phase history | `agent-memory/CONTEXT.md` Completed section |
+| Dev tasks | `agent-memory/plans/[feature]/dev-tasks.md` |
+| QA tasks | `agent-memory/plans/[feature]/qa-tasks.md` |
+| Outputs | `agent-memory/plans/[feature]/outputs/` |
+| Knowledge buffer | `agent-memory/knowledge/` |
+
+**Behavior:**
+- Step 1 (DECISIONS): dialog as normal → append resolved decisions to `MEMORY.md` Decisions section
+- Step 3 (PLAN): write to `agent-memory/plans/[feature]/plan.md`
+- Step 7 (AUDIT): update `CONTEXT.md` Completed section with phase entry
+- Step 8 (PROGRESS): update `CONTEXT.md` Now section with current feature + phase
+
+Optional path override (`<project>/.claude/aidlc.json`):
+```json
+{
+  "plansPath": "agent-memory/plans",
+  "contextFile": "agent-memory/CONTEXT.md",
+  "memoryFile": "agent-memory/MEMORY.md",
+  "knowledgePath": "agent-memory/knowledge"
+}
+```
+
+---
+
 ## Essential Rules
 
 - **DECISIONS → PLAN → EXECUTE** (Always create decisions first)
@@ -300,7 +336,7 @@ tests/
 
 ### Hard Rules (ALL modes)
 
-- **`.aidlc/` folder is MANDATORY** — every mode creates `.aidlc/[system]/[feature]/` with planning/ + outputs/
+- **`agent-memory/plans/[feature]/` is MANDATORY** — create with outputs/ before first write
 - **DECISIONS → PLAN → EXECUTE** — every mode follows this process for each active phase
 - **qa-task-design is MANDATORY** for QA modes — do not skip to test case design without qa-task-progress.md
 - **dev-task-design is MANDATORY** for Dev mode — do not skip to implementation without dev-task-progress.md
@@ -361,7 +397,7 @@ For QA Only / Dev Only, the routing table changes:
 
 **QA Scenario Only routing:**
 
-| .aidlc/ has | Missing | Go to | ✅ Done when |
+| Has | Missing | Go to | ✅ Done when |
 |---|---|---|---|
 | Nothing | mini-spec or external specs | Lite Inception (or ask for specs) | mini-spec.md exists OR external specs provided |
 | mini-spec.md (or external specs) | qa-task-design | Phase 2.1 QA Task Design | `qa-task-progress.md` exists |
@@ -370,7 +406,7 @@ For QA Only / Dev Only, the routing table changes:
 
 **QA Automation routing:**
 
-| .aidlc/ has | Missing | Go to | ✅ Done when |
+| Has | Missing | Go to | ✅ Done when |
 |---|---|---|---|
 | Nothing | mini-spec or external specs | Lite Inception (or ask for specs) | mini-spec.md exists OR external specs provided |
 | mini-spec.md (or external specs) | qa-task-design | Phase 2.1 QA Task Design | `qa-task-progress.md` exists |
@@ -381,7 +417,7 @@ For QA Only / Dev Only, the routing table changes:
 
 **Dev Only routing:**
 
-| .aidlc/ has | Missing | Go to | ✅ Done when |
+| Has | Missing | Go to | ✅ Done when |
 |---|---|---|---|
 | Nothing | mini-spec or external specs | Lite Inception (or ask for specs) | mini-spec.md exists OR external specs provided |
 | mini-spec.md (or external specs) | dev-task-design | Phase 2.5 Dev Task Design | `dev-task-progress.md` exists |
@@ -413,11 +449,11 @@ For QA Only / Dev Only, the routing table changes:
 
 ALL work goes through AIDLC. AI determines the correct phase by checking what exists:
 
-1. Scan `.aidlc/[system]/[feature]/` — what files exist?
+1. Scan `agent-memory/plans/[feature]/` — what files exist?
 2. Find the first phase that has no output yet → start there
 3. If user specifies a phase (e.g., "start from logical design") → verify prerequisites exist first
 
-| .aidlc/ has | Missing | Go to | ✅ Done when |
+| Has | Missing | Go to | ✅ Done when |
 |---|---|---|---|
 | Nothing | Everything | Phase 0 (Project Detection) → Phase 1.1 or 1.2 | project context detected |
 | reverse-engineering/ | requirements | Phase 1.2 Requirements | `user-stories.md` exists |
@@ -444,7 +480,7 @@ AI MUST NOT skip mandatory prerequisites. **This is a hard gate — NEVER bypass
 
 ### Output File Prerequisites (ENFORCE BEFORE EVERY WRITE)
 
-Before writing ANY output file, check that the prerequisite file exists in `.aidlc/[system]/[feature]/`:
+Before writing ANY output file, check that the prerequisite file exists in `agent-memory/plans/[feature]/`:
 
 | File being written | Required prerequisite | Location |
 |---|---|---|
@@ -536,7 +572,7 @@ When writing test scripts before UI exists (TDD RED phase):
 ## File Structure
 
 ```text
-.aidlc/
+agent-memory/plans/
 ├── [SYSTEM_KEBAB]/
 │   ├── PROGRESS.md                                ← system-level index (all iterations in this system)
 │   ├── [SYSTEM_FEATURE_KEBAB]/
@@ -561,7 +597,7 @@ When writing test scripts before UI exists (TDD RED phase):
 │   │           └── implementation-plan.md
 ```
 
-Example: `.aidlc/ecommerce/PROGRESS.md` tracks all ecommerce iterations (payment, refund, etc.)
+Example: `agent-memory/CONTEXT.md` Now section tracks active feature (payment, refund, etc.)
 
 ## Naming Conventions
 
@@ -569,11 +605,11 @@ Example: `.aidlc/ecommerce/PROGRESS.md` tracks all ecommerce iterations (payment
 - Feature folders: `[SYSTEM_FEATURE_KEBAB]/` (e.g., `payment/`, `patient-triage/`, `user-auth/`)
 - Decision/Plan Files: `{phase-number}-{phase-name}.md` (e.g., `01-requirements-gathering.md`)
 - Context Files: Add `-{context-name}` for microservices (e.g., `03-domain-design-catalog.md`)
-- MUST match test output paths: `.aidlc/ecommerce/payment/` ↔ `{test-root}/web-testing/ecommerce/payment/`
+- MUST match test output paths: `agent-memory/plans/payment/` ↔ `{test-root}/web-testing/ecommerce/payment/`
 
 ## Master Index (per system)
 
-ALWAYS maintain `.aidlc/[SYSTEM_KEBAB]/PROGRESS.md`:
+ALWAYS update `agent-memory/CONTEXT.md` Now section:
 
 ```markdown
 # AIDLC Progress — {System Name}
@@ -674,7 +710,7 @@ Feature Complete:
 When requirements contain multiple features (e.g., a PBI with 5 sub-features):
 
 - Related features that share domain logic → group under 1 system, separate feature folders
-- Each feature gets its own `.aidlc/[system]/[feature]/` folder
+- Each feature gets its own `agent-memory/plans/[feature]/` folder
 - Track all in the same `PROGRESS.md`
 - Execution order: user decides priority, AI suggests based on dependency analysis
 
@@ -732,7 +768,7 @@ For output depth examples per level → Read `references/complexity-examples.md`
 
    - `Skills Used` — list every skill and reference file read during this phase
    - `Notes` — one-line summary of what was produced
-8. **PROGRESS** → Update `.aidlc/[SYSTEM_KEBAB]/PROGRESS.md` with current counts
+8. **PROGRESS** → Update `agent-memory/CONTEXT.md` Now section with current counts
 9. **KNOWLEDGE** → Capture reusable patterns to `audit.md` Knowledge Buffer section (Read `references/knowledge-buffer.md`)
 10. **GRAPH_REPORT** → Update `{project-root}/GRAPH_REPORT.md` when:
     - First working feature completed (Phase 2.4 done) → create initial graph
@@ -1029,11 +1065,11 @@ If 🔴 Large detected:
 
 Before starting any AIDLC workflow, detect project structure AND assign iteration:
 
-> **[Kiro]** `invokeSubAgent(name="context-gatherer")` — invoke ALWAYS at Phase 0 before writing any `.aidlc/` file; pass workspace root as context; use output to populate items 1-4 below
+> **[Kiro]** `invokeSubAgent(name="context-gatherer")` — invoke ALWAYS at Phase 0 before writing first artifact; pass workspace root as context; use output to populate items 1-4 below
 
 **Step A — Iteration Assignment (MANDATORY):**
-1. Determine system name (from user request or existing `.aidlc/` folders)
-2. Read `.aidlc/[system]/PROGRESS.md` → find highest Iter number → assign next #
+1. Determine feature name (from user request or existing `agent-memory/plans/` folders)
+2. Read `agent-memory/CONTEXT.md` Now section → find active feature → assign next #
 3. If PROGRESS.md doesn't exist → this is iteration #1, create PROGRESS.md
 4. Ask user: Sprint? (or detect from ADO config / user message)
 5. Create feature folder + `audit.md` with Iteration Info header
@@ -1054,7 +1090,7 @@ Before starting any AIDLC workflow, detect project structure AND assign iteratio
 
 | File Type | Ask Before Writing |
 |-----------|-------------------|
-| `.aidlc/` artifacts | "Which folder should `.aidlc/` live in?" |
+| artifact paths | "Which folder for QA tests / Dev source?" |
 | QA test files (`tests/`, `tests-api/`, `tests-web/`) | "Which folder is the QA test root?" |
 | Dev source files (`src/`, `mock-server/`) | "Which folder is the Dev source root?" |
 
@@ -1092,7 +1128,7 @@ Store detected values in the feature's progress files (Context section).
 > This section is a summary only — full tool mapping, examples, and format templates are in that file.
 
 **Key rules (summary):**
-- ALL artifacts → `.aidlc/[system]/[feature]/` — never write to `.kiro/specs/`
+- ALL artifacts → `agent-memory/plans/[feature]/` — never write to `.kiro/specs/`
 - Use `userInput` tool for ALL decisions/approvals — never plain chat text
 - Use `invokeSubAgent` for Phase 3.1 when 3+ independent tasks exist
 - ONE question per `userInput` call — never combine

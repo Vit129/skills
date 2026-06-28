@@ -140,7 +140,7 @@ sequenceDiagram
     Note over User,AI: Standard Pattern — Every Phase
 
     AI->>AI: 1. Load phase instructions
-    AI->>AI: 2. Scan .aidlc/ for existing outputs
+    AI->>AI: 2. Scan agent-memory/plans/ for existing outputs
     AI->>User: 3. Create Decision File (options + recommendations)
     Note over User: Decision fields left blank
 
@@ -170,7 +170,7 @@ sequenceDiagram
 sequenceDiagram
     participant User as User
     participant AI as AI
-    participant Files as .aidlc/ Files
+    participant Files as agent-memory/plans/ Files
 
     User->>AI: "ทำต่อ" / "resume"
     AI->>Files: Read PROGRESS.md

@@ -13,7 +13,7 @@
 
 - If high-level requirements.md exists: Read, analyze, and transform into detailed business requirements with user stories, business rules, and success criteria
 - **MANDATORY**: Use the user stories template at `references/templates/outputs/user-stories-template.md` to ensure consistent story format
-- Generate detailed requirements document in iteration's outputs folder (`.aidlc/iterations/iteration-{N}-{feature}/outputs/inception/user-stories.md`)
+- Generate detailed requirements document in iteration's outputs folder (`agent-memory/plans/[feature]/outputs/inception/user-stories.md`)
 - Get user approval on detailed requirements before proceeding to domain decomposition
 - If requirements.md missing: Request user to provide requirements or create the file first
 

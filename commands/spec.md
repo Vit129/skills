@@ -5,10 +5,10 @@ Route to `ai-dlc/core/aidlc/` Phase 0→1 (Inception).
 ## Instructions
 
 1. Read `ai-dlc/core/aidlc/SKILL.md`
-2. Scan `.aidlc/[system]/[feature]/` — if Phase 0-1 outputs already exist, tell user and ask if they want to redo or skip to `/plan`
-3. If no existing outputs → start Phase 0 (Lite Inception or Full Inception based on mode)
-4. Create DECISIONS file + inception artifacts
-5. Output goes to `.aidlc/[system]/[feature]/`
+2. Scan `agent-memory/plans/[feature]/` for existing Phase 0-1 outputs and `CONTEXT.md` Now section
+3. If outputs exist → tell user and ask: redo or skip to `/plan`
+4. If no existing outputs → start Phase 0 (Lite Inception or Full Inception based on mode)
+5. Create DECISIONS + inception artifacts in `agent-memory/plans/[feature]/`
 
 ## Mode Detection
 
@@ -22,5 +22,5 @@ None — this is the starting point.
 
 ## Done When
 
-- DECISIONS file exists in `.aidlc/[system]/[feature]/`
-- Inception artifacts complete (requirements, scope, constraints)
+- DECISIONS resolved (appended to `agent-memory/MEMORY.md` Decisions section)
+- Inception artifacts complete in `agent-memory/plans/[feature]/outputs/`

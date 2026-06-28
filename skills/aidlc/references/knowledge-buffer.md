@@ -4,38 +4,27 @@ Capture reusable patterns, business rules, and lessons learned across features f
 
 ## Storage Boundary Rules (MANDATORY)
 
-Prevents AI from confusing `.aidlc/` (working dir) with `agent-memory/` (long-term store):
-
 | Store in | Content | Examples |
 |----------|---------|---------|
-| **`.aidlc/[system]/[feature]/`** | Working directory — plans and technical evidence for that specific project | decisions, plans, outputs, audit.md, task progress |
-| **`.aidlc/[system]/PROGRESS.md`** | Task status for that system (short-term, project-scoped) | feature status, task counts |
-| **`agent-memory/knowledge/{domain}/`** | Long-term patterns, lessons, decisions reusable across features | arch decisions, QA patterns, biz rules |
-| **`agent-memory/memory.md`** | Hot state — active task context, open threads (project-scoped) | current task, decisions in flight |
-| **`GRAPH_REPORT.md`** | Codebase knowledge graph — god nodes, deps, file index | updated after each feature completes |
+| **`agent-memory/plans/[feature]/`** | Working artifacts — plan, task tracking, outputs | plan.md, dev-tasks.md, qa-tasks.md, outputs/ |
+| **`agent-memory/CONTEXT.md`** | Active task + phase history | Now section, Completed section |
+| **`agent-memory/MEMORY.md`** | Resolved decisions + lessons | Decisions section |
+| **`agent-memory/knowledge/{domain}/`** | Long-term patterns (≥2 features) | arch decisions, QA patterns |
+| **`GRAPH_REPORT.md`** | Codebase knowledge graph | updated after feature completes |
 
 **Rules:**
 
-- `.aidlc/` = **temporary** — used during that project, can be archived after PR merge
-- `agent-memory/` = **permanent** — information worth remembering across features and sessions
-- No duplication: if data is already in `.aidlc/`, do NOT copy it to `agent-memory/`
-- Move to `agent-memory/knowledge/` only: patterns reusable in ≥2 features, decisions affecting long-term architecture
-- `GRAPH_REPORT.md` lives at project root — update when new files are created or feature completes
+- Working artifacts = **temporary** — scoped to that feature, archive after PR merge
+- `knowledge/` = **permanent** — patterns reusable in ≥2 features only
+- No duplication between working artifacts and knowledge/
+- `GRAPH_REPORT.md` lives at project root
 
 **Correct:**
 
 ```text
-.aidlc/ordering/cash-payment/audit.md              ← technical evidence (temporary)
-agent-memory/knowledge/qa/web-ordering-patterns.md ← reusable QA patterns (permanent)
-GRAPH_REPORT.md                                    ← codebase graph (project root)
-```
-
-**Wrong:**
-
-```text
-❌ copying entire PROGRESS.md into agent-memory/memory.md
-❌ storing the same architecture decision in both .aidlc/ and agent-memory/knowledge/
-❌ writing patterns to agent-memory/ before they've been used in ≥2 features
+agent-memory/plans/cash-payment/outputs/logical-design.md  ← working artifact (temporary)
+agent-memory/knowledge/qa/web-ordering-patterns.md         ← reusable pattern (permanent)
+GRAPH_REPORT.md                                            ← codebase graph (project root)
 ```
 
 ---
@@ -50,7 +39,7 @@ GRAPH_REPORT.md                                    ← codebase graph (project r
 
 ### Capture (after each phase)
 
-At the end of each phase, AI silently extracts and appends to `audit.md`:
+At the end of each phase, AI silently extracts and appends to `agent-memory/CONTEXT.md` Completed section:
 
 **Phase 1.2 (Requirements Gathering):**
 
@@ -85,7 +74,7 @@ At the end of each phase, AI silently extracts and appends to `audit.md`:
 
 ### Storage Format
 
-Append to `.aidlc/[system]/[feature]/audit.md`:
+Append to `agent-memory/CONTEXT.md` Completed section:
 
 ```markdown
 ## Knowledge Buffer
@@ -109,7 +98,7 @@ Append to `.aidlc/[system]/[feature]/audit.md`:
 
 At Phase 1.2 of a new feature, AI SHOULD:
 
-1. Scan `.aidlc/[system]/*/audit.md` for Knowledge Buffer sections in sibling features
+1. Scan `agent-memory/CONTEXT.md` Completed section + `agent-memory/plans/*/` for Knowledge Buffer sections
 2. Scan `agent-memory/knowledge/{domain}/` for cross-feature patterns
 3. Extract patterns relevant to the new feature
 4. Apply "Lego Assembly" — combine best parts from multiple features

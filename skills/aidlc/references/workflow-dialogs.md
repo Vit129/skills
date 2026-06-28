@@ -6,22 +6,21 @@ How AIDLC interacts with users and stores artifacts — applies to ALL AI agents
 
 ## Core Rules
 
-1. **ALL artifacts → `.aidlc/`** — all modes write everything to `.aidlc/[system]/[feature]/`
+1. **ALL artifacts → `agent-memory/`** — see `workflow.md` § Artifact Locations
 2. **Dialog message format** — ALL AIDLC interactions use structured dialog, not plain chat
 3. **Agent-agnostic** — applies to Kiro, Claude Code, Gemini, and any other AI agent
 4. **⛔ ONE question per message** — Present options as numbered list. STOP and WAIT before asking next.
 
-## Artifact Path (Single Target)
+## Artifact Path
 
 ```text
-ALL modes → .aidlc/[system]/[feature]/
-             ├── planning/decisions/
-             ├── planning/plans/
-             ├── outputs/inception/
-             ├── outputs/construction/
-             ├── dev-task-progress.md
-             ├── qa-task-progress.md
-             └── audit.md
+agent-memory/plans/[feature]/
+├── plan.md
+├── dev-tasks.md
+├── qa-tasks.md
+└── outputs/
+agent-memory/CONTEXT.md     ← progress + phase history
+agent-memory/MEMORY.md      ← resolved decisions
 ```
 
 AIDLC does NOT write to `.kiro/specs/` or any other location.
@@ -80,7 +79,7 @@ Use `invokeSubAgent` at these specific AIDLC phases. Each sub-agent has a define
 
 | Phase | Sub-Agent | `name` param | When to invoke | What to pass in `contextFiles` |
 |-------|-----------|-------------|----------------|-------------------------------|
-| **Phase 0** (Project Detection) | context-gatherer | `"context-gatherer"` | ALWAYS — before writing any `.aidlc/` file | workspace root path |
+| **Phase 0** (Project Detection) | context-gatherer | `"context-gatherer"` | ALWAYS — before writing any artifact | workspace root path |
 | **Phase 1.1** (Reverse Engineering) | context-gatherer | `"context-gatherer"` | Brownfield only — scan existing codebase | source folder(s) |
 | **Phase 1.2** (Requirements) | requirement-detailer | `"requirement-detailer"` | When detailing each user story / PBI | PBI text or user-stories draft |
 | **Phase 1.8** (Brainstorming 3 Amigos) | general-task-execution | `"general-task-execution"` | Dispatch PO / Dev / QA roles in parallel | all Phase 1 artifacts + gap.md output |
@@ -135,7 +134,7 @@ invokeSubAgent(
   prompt: "Implement task 3.1.2: Create flight search mock handler...",
   explanation: "Dispatching independent task to subagent",
   contextFiles: [
-    { path: ".aidlc/japan-travel/pbi-001/outputs/construction/logical-design.md" }
+    { path: "agent-memory/plans/pbi-001/outputs/construction/logical-design.md" }
   ]
 )
 ```

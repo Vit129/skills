@@ -80,9 +80,9 @@ Conflicts: [none / list with resolution]
 ## Phase 4: Write to File (MANDATORY — DO NOT SKIP)
 
 Write the full analysis output to the appropriate file:
-- If inside AIDLC workflow → write to audit trail: `### Step-Back Analysis` and `### Context Analysis` sections in `audit.md`
+- If inside AIDLC workflow → append to `agent-memory/CONTEXT.md` Completed section
 - If implementation plan exists → append to `implementationPlan[FEATURE].md` Appendix
-- If neither exists → write to `.aidlc/[system]/[feature]/outputs/inception/context-analysis.md`
+- If neither exists → write to `agent-memory/plans/[feature]/outputs/inception/context-analysis.md`
 
 **OUTPUT TO USER (chat summary only):**
 ```

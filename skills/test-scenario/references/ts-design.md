@@ -25,7 +25,7 @@ Generate detailed test scenarios and steps using AI reasoning, adhering to 2026 
    - Follow Step 1: Check for Visual Context — if PBI has Figma links → try to access (2 attempts max)
    - If no Figma link → ask user to upload screenshot or type "ไม่มีรูปภาพ"
    - Follow Step 2+3: Extract screens, components, interactions, Visual-to-Business Rules mapping
-   - Output: figma analysis saved to `.aidlc/[system]/[feature]/outputs/inception/figma-analysis.md`
+   - Output: figma analysis saved to `agent-memory/plans/[feature]/outputs/inception/figma-analysis.md`
    - **Run once** — reuse the same output for API, Web UI, and Mobile batches (do NOT re-run per platform)
    - API batch uses: User Flow, business rules, endpoint names, field names, workflow
    - Web UI / Mobile batch uses: UI components, button names, modal behavior, states, interactions

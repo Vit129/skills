@@ -105,7 +105,8 @@ Infrastructure tasks ต้องมาก่อนเสมอ เพราะ 
 
 ## Progress Checklist Template
 
-Create at `.aidlc/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/dev-task-progress.md`:
+Create at:
+`agent-memory/plans/[FEATURE]/dev-tasks.md`
 
 ```markdown
 # Dev Task Progress — {Feature Name}
@@ -153,8 +154,9 @@ Status: In Progress | Completed
 
 ## Output
 
-File naming: `dev-task-progress.md`
-Location: `.aidlc/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/dev-task-progress.md`
+File: `agent-memory/plans/[FEATURE]/dev-tasks.md`
+Location:
+`agent-memory/plans/[FEATURE]/dev-tasks.md`
 
 ## Phase Transition Validation
 

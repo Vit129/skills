@@ -8,7 +8,7 @@ Scan an existing codebase to understand its architecture before starting new wor
 - Documenting an undocumented system
 
 ## How it works
-0. **Check existing context** — if `.aidlc/[system]/[feature]/outputs/inception/reverse-engineering/` exists, compare with current codebase. Only update sections that changed. Don't rewrite everything.
+0. **Check existing context** — check `agent-memory/plans/[feature]/outputs/inception/reverse-engineering/`. If exists, compare with current codebase — only update changed sections.
 1. **Detect project type** — look for existing code files. No code = greenfield, skip this
 2. **Identify tech stack** — scan package.json, requirements.txt, pom.xml, go.mod, etc.
 3. **Analyze architecture** — directory structure, entry points, config files → monolith / microservices / serverless

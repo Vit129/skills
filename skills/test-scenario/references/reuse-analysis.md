@@ -10,7 +10,7 @@ Identify reusable test scenarios and patterns across features before designing n
 ## Process
 
 ### Part 1: Test Pattern Matching
-1. Scan existing test scenario files in `.aidlc/` for the current system
+1. Scan `agent-memory/plans/[feature]/` for existing test scenario files
 2. Abstract Intent: extract core intent (e.g., "Create X", "Validate Y status")
 3. Fuzzy Search: compare intent vs existing features
 4. Deep Comparison — compare by LOGIC, not by entity name:
@@ -33,7 +33,7 @@ Identify reusable test scenarios and patterns across features before designing n
 3. New Logic: what is unique to this feature that must be newly written?
 
 ## Rules
-- Always scan existing test scenario files in `.aidlc/` before designing
+- Always scan `agent-memory/plans/[feature]/` for existing test scenario files before designing
 - Never ignore matches because "Feature Name" doesn't match exactly
 - Compare Logic not Labels
 - Explicitly state what needs to change (Gap)

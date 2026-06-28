@@ -24,7 +24,8 @@ improvement_count: 0
 
 ## Gate
 
-- `.aidlc/` must exist with DECISIONS + PLAN before any coding phase
+- AIDLC artifacts (DECISIONS + PLAN) must exist before any coding phase
+- Artifacts live in `agent-memory/plans/[feature]/` — read `references/workflow.md` § Artifact Locations for the full mapping
 - Exception: pure investigation/analysis (no code changes)
 
 ## Mode Detection (auto — do NOT ask)

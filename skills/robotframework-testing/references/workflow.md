@@ -96,7 +96,7 @@ Run tests and capture results.
 
 Every heal attempt (success or fail) MUST be logged.
 
-**Location:** `.aidlc/[system]/[feature]/audit.md` under `## Reflexion Log` section.
+**Location:** `agent-memory/CONTEXT.md` Completed section → `## Reflexion Log` section
 
 **Format:**
 ```
@@ -112,7 +112,7 @@ Every heal attempt (success or fail) MUST be logged.
 
 After test execution, append results to audit trail.
 
-**Location:** `.aidlc/[system]/[feature]/audit.md` under `### Test Results` section.
+**Location:** `agent-memory/CONTEXT.md` Completed section → `### Test Results` section
 
 **Format:**
 ```

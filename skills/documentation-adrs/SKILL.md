@@ -11,7 +11,7 @@ improvement_count: 0
 ## AIDLC Gate
 
 ⚠️ If this skill is triggered as part of a coding/QA task:
-- AIDLC governance MUST be active (`.aidlc/` folder exists with DECISIONS + PLAN)
+- AIDLC governance MUST be active (`agent-memory/plans/[feature]/` must exist with DECISIONS + PLAN)
 - If not → STOP and route to `governance/aidlc/` first
 - Exception: pure investigation/analysis (no code changes) can proceed without AIDLC
 
@@ -79,7 +79,7 @@ What did we decide? Be specific.
 - **Immutable once accepted** — if decision changes, create new ADR that supersedes
 - **Short** — if it's more than 1 page, you're over-explaining
 - **Numbered sequentially** — ADR-001, ADR-002, etc.
-- **Store in repo** — `docs/adr/` or `.aidlc/[system]/[feature]/decisions/`
+- **Store in repo** — `docs/adr/` or `agent-memory/MEMORY.md` Decisions section
 
 ### When to Write an ADR
 
@@ -96,13 +96,13 @@ Don't write an ADR for:
 
 ## Relation to AIDLC DECISIONS File
 
-AIDLC's `.aidlc/[system]/[feature]/DECISIONS.md` serves a similar purpose but is **feature-scoped**. ADRs are **system-wide**.
+AIDLC DECISIONS (`agent-memory/MEMORY.md` Decisions section) serves a similar purpose but is **feature-scoped**. ADRs are **system-wide**.
 
 | | AIDLC DECISIONS | ADR |
 |---|---|---|
 | Scope | Single feature | System/architecture |
 | Lifetime | Feature development | Permanent record |
-| Location | `.aidlc/[system]/[feature]/` | `docs/adr/` |
+| Location | `agent-memory/plans/[feature]/` | `docs/adr/` |
 | When | During AIDLC Phase 0-1 | Any time an arch decision is made |
 
 **Use both:** DECISIONS for feature-level choices during AIDLC, ADRs for cross-cutting architectural decisions that outlive the feature.
@@ -233,7 +233,7 @@ curl -X POST /api/users -d '{"email":"a@b.com","name":"Test"}'
 | Existing ADRs (`docs/adr/`) | Decision history | Avoid contradicting previous decisions |
 | Architecture decisions (current discussion) | Live context | Capture the decision being made |
 | Team conventions (naming, format) | Standards | Match existing ADR style |
-| `.aidlc/` DECISIONS files | Feature-scope decisions | Distinguish feature vs system-wide scope |
+| `agent-memory/MEMORY.md` Decisions section | Feature-scope decisions | Distinguish feature vs system-wide scope |
 | `knowledge/lessons/` | Lessons learnt | Check before execute |
 
 ## Human-in-the-Loop Points

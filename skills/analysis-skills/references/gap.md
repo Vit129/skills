@@ -57,9 +57,9 @@ Total estimated effort: [N] hours
 ## Step 6: Write to File (MANDATORY — DO NOT SKIP)
 
 Write the full gap analysis output to the appropriate file:
-- If inside AIDLC workflow → write to audit trail: `### Gap Analysis` section in `audit.md`
+- If inside AIDLC workflow → append to `agent-memory/CONTEXT.md` Completed section
 - If implementation plan exists → append to `implementationPlan[FEATURE].md` Appendix
-- If neither exists → write to `.aidlc/[system]/[feature]/outputs/inception/gap-analysis.md`
+- If neither exists → write to `agent-memory/plans/[feature]/outputs/inception/gap-analysis.md`
 
 **OUTPUT TO USER (chat summary only):**
 ```

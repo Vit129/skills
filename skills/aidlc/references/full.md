@@ -23,7 +23,7 @@ Not specified → default TDD.
 3. Load `analysis-skills` → context.md → goals, scope, constraints
 4. Codebase exists → load `analysis-skills` → reverse-eng.md → scan architecture
 5. Load `graph-report` → identify affected modules
-6. Confirm output paths (`.aidlc/`, QA root, Dev root)
+6. Confirm output paths (`agent-memory/plans/[feature]/`, QA test root, Dev source root)
 7. Write DECISIONS.md + PLAN.md
 → Full steps + dialog format: `references/workflow.md` § Phase 0
 
@@ -64,7 +64,7 @@ _TDD: QA runs before Dev implementation. SDLC: QA runs after Dev._
 - **Phase skip** — enforce gate: previous phase output must exist before advancing
 - **Bulk artifact dump** — each phase ends with Progress Breadcrumb + "continue?" — never write all at once
 - **Brainstorming misplaced** — runs AFTER Phase 1 artifacts, BEFORE Phase 2. Check `brainstorming-summary.md` for medium+
-- **Output path not confirmed** — Phase 0 MUST confirm `.aidlc/`, QA root, Dev root before first write
+- **Output path not confirmed** — Phase 0 MUST confirm `agent-memory/plans/[feature]/`, QA root, Dev root before first write
 - **Dialog skipped on short commands** — "PBI-002" is NOT permission to skip dialog. Always: detect → check state → announce → wait approval
 
 ## Red Flags

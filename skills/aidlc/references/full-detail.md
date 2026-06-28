@@ -4,7 +4,7 @@
 ## AIDLC Gate
 
 ⚠️ If this skill is triggered as part of a coding/QA task:
-- AIDLC governance MUST be active (`.aidlc/` folder exists with DECISIONS + PLAN)
+- AIDLC governance MUST be active (`agent-memory/plans/[feature]/` must exist with DECISIONS + PLAN)
 - If not → STOP and route to `governance/aidlc/` first
 - Exception: pure investigation/analysis (no code changes) can proceed without AIDLC
 
@@ -69,7 +69,7 @@ Which platform? (can select more than 1)
 
 **Detection:**
 - **Kiro IDE:** reads Vibe/Spec mode from IDE context (user selects in UI, never types it)
-- **Other AI agents:** detect from context (`.aidlc/` exists → Spec resume, complexity → Vibe/Spec) or ask user
+- **Other AI agents:** detect from context (check `agent-memory/CONTEXT.md` Now section → active feature means resume, else new) or ask user
 
 **Global rule:** ALL AIDLC interactions use **dialog message format** (structured step-by-step) — not plain chat. Applies to every mode, every AI agent.
 
@@ -84,7 +84,7 @@ For detection logic, approach comparison, phase matrices, Vibe flow, escalation 
 → crystallizes → then break down tasks (Phase 2)
 
 **Input:** Phase 1 artifacts (user-stories.md, domain-design.md, logical-design.md)
-**Output:** `.aidlc/[system]/[feature]/outputs/inception/brainstorming-summary.md`
+**Output:** `agent-memory/plans/[feature]/outputs/inception/brainstorming-summary.md`
 
 **Pre-step:** Run `core/analysis-skills` (gap.md) on Phase 1 outputs → feed gaps to all subagents
 
@@ -162,13 +162,13 @@ For skill routing guide → see AGENTS.md Skill Map (workspace root)
 - **Task marked done without commit** — agent reports completion but hasn't committed. Fix: commit hash is the only proof of completion — no hash = not done.
 - **Dialog skipped on short commands** — user gives a brief command like "PBI-002" or "continue feature X" and agent auto-executes everything without dialog. Fix: ANY AIDLC trigger — regardless of how short the user's message is — MUST still follow the full dialog flow (Phase Announcement → Decision Dialog → wait for approval → execute). Short commands are NOT permission to skip dialog. The agent must:
   1. Detect the feature/PBI
-  2. Check `.aidlc/` for existing state (resume vs new)
+  2. Check `agent-memory/CONTEXT.md` Now section for existing state (resume vs new)
   3. If new: run Brainstorming first
   4. Present Phase Announcement with structured options
   5. Wait for user approval before writing any artifact
 - **Bulk artifact dump** — agent writes all inception docs (user-stories, domain-decomposition, domain-design, logical-design) in one shot without pausing between phases. Fix: each phase MUST end with a Progress Breadcrumb and "→ ready to continue?" before starting the next phase. User must explicitly approve or say "continue" / "approve all remaining".
 - **Brainstorming skipped or misplaced** — agent runs brainstorming before Phase 1 (no artifacts to analyze) or skips it entirely for medium+ features. Fix: brainstorming is Phase 1.8 — runs AFTER Inception produces artifacts, BEFORE Phase 2 Task Design. Check `brainstorming-summary.md` exists before entering Phase 2 for medium+ features.
-- **Output path not confirmed** — agent writes QA test files or Dev source files to wrong project folder (e.g., `Automation/` instead of `ai-dlc-skill-testing/`) because workspace has multiple sibling project folders. Fix: Phase 0 MUST ask user to confirm output root for `.aidlc/`, QA test files, and Dev source files before writing the first file of each type. Use `userInput` tool. Store confirmed paths in `qa-task-progress.md` and `dev-task-progress.md` Context section so subagents inherit correct paths. Skip only if user already specified folder explicitly in their message.
+- **Output path not confirmed** — agent writes files to wrong folder. Fix: Phase 0 MUST confirm output root for `agent-memory/plans/[feature]/`, QA test files, and Dev source files before writing the first file of each type. Use `userInput` tool. Store confirmed paths in `qa-task-progress.md` and `dev-task-progress.md` Context section so subagents inherit correct paths. Skip only if user already specified folder explicitly in their message.
 
 ## Knowledge Root Convention
 
@@ -203,7 +203,7 @@ For skill routing guide → see AGENTS.md Skill Map (workspace root)
 - 🚩 Agent auto-executing without dialog → must present options and wait for approval
 - 🚩 All inception docs written in one shot without pauses → bulk dump, not phased execution
 - 🚩 Task marked done without commit hash → not done
-- 🚩 `.aidlc/` folder doesn't exist but agent is writing implementation → governance bypassed
+- 🚩 `agent-memory/plans/[feature]/` doesn't exist but agent is writing implementation → governance bypassed
 
 
 ---
@@ -247,7 +247,7 @@ Every phase MUST execute steps 1-9 in this order:
 | 2 | **Codebase exists?** YES → Read `thinking/interview-doc/SKILL.md` → align terms, cross-ref code, update CONTEXT.md. NO → Read `thinking/interview-me/SKILL.md` → extract requirements via Q&A | Never skip |
 | 2b | **Codebase exists?** YES → Read `thinking/analysis-skills/SKILL.md` → load `references/reverse-eng.md` → scan architecture to understand system shape | Skip if no codebase yet |
 | 3 | **Read `meta-skills/graph-report/SKILL.md`** → scan codebase structure, identify affected modules | Skip if no codebase yet |
-| 4 | Confirm output paths with user: `.aidlc/` folder, QA test files root, Dev source root | Never skip |
+| 4 | Confirm output paths with user: `agent-memory/plans/[feature]/`, QA test files root, Dev source root | Never skip |
 | 5 | Write DECISIONS.md → scope, constraints, approach | Never skip |
 | 6 | Write PLAN.md → phase sequence for chosen mode | Never skip |
 
@@ -445,7 +445,7 @@ The `session-save.json` hook checks at end of session:
 
 Before advancing to the next phase, confirm:
 
-- [ ] DECISIONS file exists in `.aidlc/[system]/[feature]/planning/decisions/`
+- [ ] DECISIONS file exists in `agent-memory/plans/[feature]/planning/decisions/`
 - [ ] Mode (Full/QA/Dev) explicitly selected and recorded
 - [ ] Development Approach (TDD/SDLC) confirmed before Phase 2
 - [ ] Phase gate check passed (previous phase output exists)
@@ -459,7 +459,7 @@ Before advancing to the next phase, confirm:
 | Dependency | Type | Purpose |
 |-----------|------|---------|
 | `references/workflow.md` | Workflow reference | Phase routing, dialog format, mode selection rules |
-| `.aidlc/` folder | Artifact store | Resume state, phase outputs, decisions, plans |
+| `agent-memory/plans/` | Artifact store | Feature plans, outputs, decisions, tasks |
 | `knowledge/` (per-project or global) | Lessons learnt | Check before execute |
 | MCP `azure-devops` tools | Integration | Sync work items, update boards, link commits |
 | `references/templates/` | Templates | Planning, output, and framework templates |

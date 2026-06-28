@@ -63,7 +63,7 @@
 - **Create logical design plan file** for the selected bounded context
 - **Execute logical design** for the selected bounded context
 - **File naming**: `logical-design-{context-name}.md`
-- **Location**: `.aidlc/iterations/iteration-{N}-{feature}/outputs/construction/{context-name}/logical-design.md`
+- **Location**: `agent-memory/plans/[feature]/outputs/construction/{context-name}/logical-design.md`
 
 **Context Completion**:
 After completing one context, continue with the next bounded context (repeat logical design):
@@ -71,7 +71,7 @@ After completing one context, continue with the next bounded context (repeat log
 ### Monolith Architecture
 - **Create single logical design file** covering all bounded contexts
 - **File naming**: `logical-design.md`
-- **Location**: `.aidlc/iterations/iteration-{N}-{feature}/outputs/construction/logical-design.md`
+- **Location**: `agent-memory/plans/[feature]/outputs/construction/logical-design.md`
 - **Structure**: Organize by bounded context sections within the single file
 
 ## Mandatory Sections in Logical Design Document

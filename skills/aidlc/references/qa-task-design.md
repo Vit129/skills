@@ -186,7 +186,8 @@ Sequence: Infrastructure → Shared Services → Page Objects → Test Scripts �
 
 ## Progress Checklist Template
 
-Create at `.aidlc/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/qa-task-progress.md`:
+Create at:
+`agent-memory/plans/[FEATURE]/qa-tasks.md`
 
 ```markdown
 # QA Task Progress — {Feature Name}
@@ -247,8 +248,9 @@ Status: In Progress | Completed
 
 ## Output
 
-File naming: `qa-task-progress.md`
-Location: `.aidlc/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/qa-task-progress.md`
+File: `agent-memory/plans/[FEATURE]/qa-tasks.md`
+Location:
+`agent-memory/plans/[FEATURE]/qa-tasks.md`
 
 ## Phase Transition Validation
 

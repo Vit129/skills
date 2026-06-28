@@ -18,7 +18,7 @@ improvement_count: 1
 ## AIDLC Gate
 
 ⚠️ If this skill is triggered as part of a coding/QA task:
-- AIDLC governance MUST be active (`.aidlc/` folder exists with DECISIONS + PLAN)
+- AIDLC governance MUST be active (`agent-memory/plans/[feature]/` must exist with DECISIONS + PLAN)
 - If not → STOP and route to `governance/aidlc/` first
 - Exception: pure investigation/analysis (no code changes) can proceed without AIDLC
 

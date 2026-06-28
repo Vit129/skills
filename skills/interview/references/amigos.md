@@ -35,5 +35,5 @@ Output: Testability | Key Scenarios (happy/alt/edge) | Risk Areas | AC Draft | O
 ```
 
 ## Output
-`.aidlc/[system]/[feature]/outputs/inception/brainstorming-summary.md`
+`agent-memory/plans/[feature]/outputs/inception/brainstorming-summary.md`
 Synthesize tensions across 3 roles → refine → proceed to Phase 2.

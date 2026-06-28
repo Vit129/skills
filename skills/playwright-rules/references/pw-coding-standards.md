@@ -246,7 +246,7 @@ test.describe('@Critical @PaymentFSM W-method Coverage', () => {
 - Paths stored as committed JSON fixture (generated from FSM diagram)
 - Fixture location: `fixtures/[system-kebab]/transitionTreePaths.json`
 - Each path object: `{ label, steps: [{ fromState, event, toState }], finalState, verify: [{ field, expected }] }`
-- State model diagram MUST exist in `.aidlc/planning/` BEFORE writing path fixtures
+- State model diagram MUST exist in `agent-memory/plans/[feature]/outputs/inception/planning/` BEFORE writing path fixtures
 - Use generic walker loop — don't hardcode state sequences in test code
 
 ### 5. Helper Requirements for State-Based Tests

@@ -11,7 +11,7 @@ Smart test data collection and generation with hierarchical reading.
 
 ### Step 1: Analyze & Collect Data
 - Extract fields needed, validation rules, domain patterns from PBI
-- Scan existing test scenario files in `.aidlc/` for existing patterns:
+- Scan existing test scenario files in `agent-memory/plans/` for existing patterns:
   - Exact match: same system/feature folder
   - Fuzzy match: similar features (>50% keyword overlap)
   - Domain fallback: use domain patterns if no match

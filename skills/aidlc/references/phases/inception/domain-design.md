@@ -51,7 +51,7 @@
 - **Create domain design plan file** for the selected context
 - **Execute domain design** for the selected context
 - **File naming**: `domain-design-{context-name}.md`
-- **Location**: `.aidlc/iterations/iteration-{N}-{feature}/outputs/construction/{context-name}/domain-design.md`
+- **Location**: `agent-memory/plans/[feature]/outputs/construction/{context-name}/domain-design.md`
 
 **Step 3: Context Completion**
 After completing one context, Continue with next bounded context (repeat from Step 1)
@@ -59,7 +59,7 @@ After completing one context, Continue with next bounded context (repeat from St
 ### Monolith Architecture
 - **Create single domain design file** covering all bounded contexts
 - **File naming**: `domain-design.md`
-- **Location**: `.aidlc/iterations/iteration-{N}-{feature}/outputs/construction/domain-design.md`
+- **Location**: `agent-memory/plans/[feature]/outputs/construction/domain-design.md`
 - **Structure**: Organize by bounded context sections within the single file
 
 ## Context Selection Guidance

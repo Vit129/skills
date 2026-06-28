@@ -4,7 +4,8 @@ Shared rules for tracking dev and QA task progress. Both `dev-task-design.md` an
 
 ## Progress File Location
 
-Create at `.aidlc/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/dev-task-progress.md` or `qa-task-progress.md`
+Artifact location:
+`agent-memory/plans/[FEATURE]/dev-tasks.md` or `qa-tasks.md`
 
 ## Required Sections
 
@@ -64,11 +65,11 @@ Update counts after every `[x]` change.
 
 - **1 feature = 1 progress file** — reuse within the same feature (update `[x]` in place)
 - **Rerun same feature** — archive existing file as `{name}.v{N}.md` before creating new one
-- **Master index** — after every status change, update `.aidlc/[SYSTEM_KEBAB]/PROGRESS.md`
+- **Master index** — after every status change, update progress tracker per mode (see below)
 
 ## Master Index
 
-ALWAYS maintain `.aidlc/[SYSTEM_KEBAB]/PROGRESS.md`:
+ALWAYS update `agent-memory/CONTEXT.md` Now section:
 
 ```markdown
 # AIDLC Progress — {System Name}
@@ -88,7 +89,7 @@ Update when:
 
 When user says "ทำต่อ", "resume", or "continue":
 
-1. Read `.aidlc/[SYSTEM_KEBAB]/PROGRESS.md` — find the 🔄 In Progress feature
+1. Read `agent-memory/CONTEXT.md` Now section → find the 🔄 In Progress feature
 2. Read that feature's progress file (dev or QA)
 3. **Verify artifacts from completed phases still exist:**
    - Check each path listed in the `## Artifacts` section

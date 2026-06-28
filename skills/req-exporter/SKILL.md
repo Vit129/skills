@@ -27,8 +27,8 @@ Export AIDLC requirements, decisions, and specifications into shareable formats.
 
 The skill reads from these locations in priority order:
 
-1. `.aidlc/[system]/[feature]/DECISIONS.md` — requirements & decisions
-2. `.aidlc/[system]/[feature]/phase-*/` — phase outputs (inception, task design)
+1. `agent-memory/MEMORY.md` Decisions section — requirements & decisions
+2. Artifact root `phase-*/` phase outputs — phase outputs (inception, task design)
 3. User-specified file path — any markdown/text file with requirements
 4. Chat context — requirements provided inline by user
 
@@ -38,7 +38,7 @@ The skill reads from these locations in priority order:
 
 ```text
 Agent reads:
-  1. Scan .aidlc/ for existing requirement files
+  1. Scan `agent-memory/plans/` for existing requirement files
   2. If not found → ask user for source file or inline content
   3. Parse requirements into structured data
 ```
@@ -112,16 +112,15 @@ Acceptance Criteria:
 
 ### Step 4: Save Output
 
-Default output location: `.aidlc/[system]/[feature]/exports/`
+Output: `agent-memory/plans/[feature]/exports/`
 
 ```text
-.aidlc/
-  booking-system/
-    user-auth/
-      exports/
-        requirements-2026-05-10.csv
-        requirements-2026-05-10.md
-        requirements-2026-05-10.pdf
+agent-memory/plans/[feature]/
+  [feature]/
+    exports/
+      requirements-2026-05-10.csv
+      requirements-2026-05-10.md
+      requirements-2026-05-10.pdf
 ```
 
 ## Hard Rules
@@ -172,7 +171,7 @@ Before declaring export complete, confirm:
 - [ ] Output format matches user request (CSV/Text/MD/PDF)
 - [ ] CSV is RFC 4180 compliant (proper quoting, escaping)
 - [ ] Generation metadata included (date, source, count)
-- [ ] Output saved to `.aidlc/[system]/[feature]/exports/`
+- [ ] Output saved to `agent-memory/plans/[feature]/exports/`
 - [ ] Source files NOT modified (read-only operation)
 
 ---
@@ -181,7 +180,7 @@ Before declaring export complete, confirm:
 
 | Dependency | Type | Purpose |
 |-----------|------|---------|
-| `.aidlc/` requirements (DECISIONS.md, phase outputs) | Input source | Requirements to export |
+| `agent-memory/MEMORY.md` + `agent-memory/plans/[feature]/outputs/` | Input source | Requirements to export |
 | Output format tools (`md-to-pdf`, `pandoc`) | CLI tools | PDF generation (optional) |
 | RFC 4180 CSV standard | Format spec | Ensure valid CSV output |
 | `knowledge/lessons/` | Lessons learnt | Check before execute |

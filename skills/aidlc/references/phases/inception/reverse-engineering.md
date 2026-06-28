@@ -12,14 +12,14 @@
 
 **Missing Prerequisites Handling:**
 - This is the starting phase - no prerequisites required
-- **If .aidlc/context/ files exist**: Load existing analysis and compare with current codebase
+- **If agent-memory/knowledge/ files exist**: Load existing analysis and compare with current codebase
 - **If changes detected**: Update existing files with new findings, preserve valid existing content
 - **If no changes**: Skip re-analysis, load existing context files
 
 ## Execution Process
 
 ### 0. Check Existing Analysis
-- **Scan for existing files**: Check `.aidlc/context/product.md`, `tech.md`, `structure.md`
+- **Scan for existing files**: Check `agent-memory/knowledge/product.md`, `tech.md`, `structure.md`
 - **If files exist**:
   - Load existing analysis into context
   - Compare with current codebase state
@@ -75,7 +75,7 @@
 ## Deliverables
 
 ### Output Files Only
-**Location**: `.aidlc/context/`
+**Location**: `agent-memory/knowledge/`
 
 **Update Strategy**:
 - **If files exist**: Load existing content, compare with current scan, update only changed sections

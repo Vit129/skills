@@ -300,7 +300,7 @@ Separate scenarios into two items:
 - ✅ `[API][Success][State] เปลี่ยนสถานะ order จาก pending → confirmed`
 - ✅ `[API][Alternative][State] ปฏิเสธการเปลี่ยนสถานะจาก cancelled → confirmed (invalid transition)`
 
-**State model requirement:** Before writing ST scenarios, a state diagram must exist in `.aidlc/planning/` showing:
+**State model requirement:** Before writing ST scenarios, a state diagram must exist in `agent-memory/plans/[feature]/outputs/inception/planning/` showing:
 - All states (nodes)
 - All valid transitions (edges) with trigger events
 - Invalid transitions to test

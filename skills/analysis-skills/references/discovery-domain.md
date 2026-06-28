@@ -177,7 +177,7 @@ For each logic item, ask 3 questions:
 - Write complete Discovery & Domain Analysis output to the appropriate file:
   - If workflow = test_scenario → `testScenarioPbi{pbi_id}.md` Appendix A
   - If workflow = api_automation | webui_automation → `implementation[SYSTEM_FEATURE_CAMEL].md` Appendix A
-  - If no implementation plan exists → write to `.aidlc/[system]/[feature]/outputs/inception/domain-gap-analysis.md`
+  - If no implementation plan exists → write to `agent-memory/plans/[feature]/outputs/inception/domain-gap-analysis.md`
 - OUTPUT TO USER: "✅ Discovery & Domain Analysis recorded to file" (ONLY this message, NOT the analysis itself)
 
 ## Output Format (written to file, not chat)

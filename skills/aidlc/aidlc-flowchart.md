@@ -100,7 +100,7 @@ flowchart LR
 
 ```mermaid
 flowchart TD
-    Start([User says: ทำ PBI / build / test]) --> Scan[Scan .aidlc/system/feature/]
+    Start([User says: ทำ PBI / build / test]) --> Scan[Scan agent-memory/plans/[feature]/]
     Scan --> HasNothing{Has nothing?}
     HasNothing -->|Yes| P0[Phase 0 → 1.2]
     HasNothing -->|No| HasUS{Has user-stories.md?}
@@ -182,7 +182,7 @@ flowchart LR
 
 ```mermaid
 flowchart TD
-    Root[.aidlc/] --> System[system-kebab/]
+    Root[agent-memory/plans/] --> Feature[feature/]
     System --> Progress[PROGRESS.md<br/>Master Index]
     System --> Feature[feature-kebab/]
     Feature --> Audit[audit.md]
@@ -374,7 +374,7 @@ flowchart LR
     Review([/review]) --> ReviewP[review-personas<br/>code + security + test]
     Simplify([/simplify]) --> CodeSimp[code-simplification<br/>Chesterton's Fence]
     Ship([/ship]) --> ShipL[shipping-launch<br/>Pre-launch + rollout]
-    Resume([/resume]) --> Scan[Scan .aidlc/<br/>→ find last phase<br/>→ continue]
+    Resume([/resume]) --> Scan[Scan agent-memory/CONTEXT.md<br/>→ find last phase<br/>→ continue]
 
     style Spec fill:#d97706,color:#fff,stroke:#b45309
     style Plan fill:#d97706,color:#fff,stroke:#b45309

@@ -14,12 +14,15 @@ Personal skill + memory system for Claude Code. One place to define how every se
     core.md              — trust priority, response format, do/don't
     routing.md           — AIDLC gates, skill routing table
     coding.md            — coding principles (loaded on-demand before code tasks)
+  .claude/
+    aidlc.json           — AIDLC path overrides (optional)
   agent-memory/
     USER-PROFILE.md      — identity, preferences (always-on)
     CONTEXT.md           — active task state (on-demand)
     MEMORY.md            — past decisions + lessons (grep, never read full)
     skill-usage.log      — PostToolUse hook auto-log (DATE|skill-name)
     knowledge/           — promoted domain patterns
+    plans/               — AIDLC feature artifacts ([feature]/plan.md, tasks, outputs)
   hooks/
     skill-trigger.py     — UserPromptSubmit: keyword → Skill() injection
     skill-keywords.json  — keyword → skill mapping (finance, language, cross-domain)
@@ -81,6 +84,24 @@ Sets `.memory-pending` flag if `CONTEXT.md` is not idle → next session shows m
 | During | Update `CONTEXT.md` inline as state changes |
 | Task end | Rewrite `CONTEXT.md` (status→idle); append decisions to `MEMORY.md` |
 | Pattern promotion | Fix/pattern → `knowledge/cases/`; domain → `knowledge/{domain}.md` |
+
+---
+
+## AIDLC Artifacts
+
+All AIDLC artifacts live in `agent-memory/` — consistent across every project:
+
+| AIDLC artifact | Location |
+|---|---|
+| Decisions | `MEMORY.md` Decisions section |
+| Plan | `agent-memory/plans/[feature]/plan.md` |
+| Dev/QA tasks | `agent-memory/plans/[feature]/dev-tasks.md` / `qa-tasks.md` |
+| Outputs | `agent-memory/plans/[feature]/outputs/` |
+| Progress | `CONTEXT.md` Now section |
+| Phase history | `CONTEXT.md` Completed section |
+| Knowledge buffer | `agent-memory/knowledge/` |
+
+Path overrides available via `.claude/aidlc.json` if needed.
 
 ---
 

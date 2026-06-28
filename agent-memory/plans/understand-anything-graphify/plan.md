@@ -141,28 +141,6 @@ Candidate repo:
 
 - `/Users/supavit.cho/Git/Personal/My-Investment-Port`
 
-Experiment flow:
-
-```bash
-graphify query "what are the main architecture communities?"
-graphify explain "agent-memory"
-```
-
-Then run:
-
-```text
-/understand
-/understand-dashboard
-/understand-onboard
-```
-
-Record:
-
-- Whether Understand-Anything can reuse enough existing structure to be useful.
-- Runtime cost/time.
-- Generated files.
-- Whether generated files should be ignored or tracked.
-
 ### Phase 4: Optional Automation
 
 Only automate after Phase 3 proves useful.
@@ -173,64 +151,10 @@ Possible helper:
 /graphify-understand <question-or-path>
 ```
 
-Behavior:
-
-1. Run Graphify query/path/explain first.
-2. If the user asks for visual/onboarding/chat, invoke Understand-Anything next.
-3. Summarize both outputs with clear labels.
-
 Do not build this helper until the manual flow is proven.
-
-## File Policy
-
-Default generated-output policy:
-
-- Keep Graphify outputs under the existing repo-specific policy.
-- Treat `.understand-anything/` as generated output until reviewed.
-- Never stage graph output churn automatically.
-- If both systems generate large JSON/HTML files, stage only the files explicitly requested.
-
-Suggested ignore review per project:
-
-```gitignore
-.understand-anything/intermediate/
-.understand-anything/diff-overlay.json
-```
-
-Do not add `.understand-anything/knowledge-graph.json` to `.gitignore` globally until deciding whether the team wants to share the dashboard graph.
-
-## Risks
-
-- Duplicate graph outputs can create noisy diffs.
-- Understand-Anything may encourage bypassing the existing Graphify-first routing.
-- Claude native plugin install may add new marketplace state outside repo-local files.
-- LLM-backed analysis can be slower or require credentials depending on command behavior.
-- Skill-name collisions are possible if future Graphify or Understand-Anything skills use generic names.
-
-## Rollback
-
-Codex-side uninstall:
-
-```bash
-~/.understand-anything/repo/install.sh --uninstall codex
-```
-
-Claude-side rollback, if installed:
-
-```bash
-claude plugin uninstall understand-anything
-claude plugin marketplace remove Understand-Anything
-```
-
-If generated project artifacts are created during experiments, remove only the explicit generated paths from that repo after checking `git status`.
 
 ## Open Questions
 
 - Should Claude native plugin be installed globally, or should Codex-only skills be enough for now?
 - Should `.understand-anything/knowledge-graph.json` be committed in selected repos?
-- Should Graphify outputs be linked from the Understand-Anything dashboard docs, or should the bridge stay procedural?
 - Does Understand-Anything add enough value for `kb/terry` compared with existing Graphify + NotebookLM workflow?
-
-## Recommended Next Action
-
-Finish Claude plugin install and then run a controlled experiment in one repo without committing generated artifacts. Keep Graphify as the first command in the workflow and use Understand-Anything only when the user wants a dashboard, guided tour, onboarding, or interactive explanation.

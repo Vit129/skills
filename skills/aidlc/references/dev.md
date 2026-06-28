@@ -17,7 +17,7 @@ Not specified → default TDD.
 1. Fetch PBI: `npx ts-node ~/.kiro/scripts/azure-devops/pull-pbi/pullPbi.ts`
 2. Load `analysis-skills` → context.md → goals, scope, constraints
 3. Codebase exists? YES → load `interview` (doc mode) + `analysis-skills` → reverse-eng.md
-4. Confirm output paths (`.aidlc/`, Dev source root)
+4. Confirm `agent-memory/plans/[feature]/` + Dev source root
 5. Write DECISIONS.md + PLAN.md
 → Full steps: `references/workflow.md` § Lite Inception
 

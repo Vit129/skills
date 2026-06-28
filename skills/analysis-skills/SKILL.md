@@ -28,5 +28,5 @@ Read the situation, then load exactly ONE reference:
 | "What are the goals?" / extract conflicts / big picture first | `references/context.md` |
 
 → Check per-project `agent-memory/knowledge/` first — fall back to `skills/knowledge/` only if not found
-→ Write output to `.aidlc/` — never chat-only dump
+→ Write output to `agent-memory/plans/[feature]/` — never chat-only dump
 → Ground every finding in actual files/lines — no assumptions

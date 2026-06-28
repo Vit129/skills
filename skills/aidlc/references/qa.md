@@ -26,7 +26,7 @@ C) QA Scenario + Auto → Lite Inception → 2.1 → 2.2 → [approve] → 2.3 �
 
 ### Lite Inception
 1. Fetch PBI: `npx ts-node ~/.kiro/scripts/azure-devops/pull-pbi/pullPbi.ts`
-2. Confirm output paths (`.aidlc/`, QA test root)
+2. Confirm `agent-memory/plans/[feature]/` + QA test root
 3. Write DECISIONS.md + PLAN.md
 
 ### Phase 2.1 — QA Task Design

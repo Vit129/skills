@@ -1,7 +1,7 @@
 # Logical Design Template
 
 ## Instructions
-Copy this template to `.aidlc/iterations/iteration-{N}-{feature}/construction/logical_design.md` and fill in all sections. Focus on technical design decisions, not implementation details.
+Copy this template to `agent-memory/plans/[feature]/construction/logical_design.md` and fill in all sections. Focus on technical design decisions, not implementation details.
 
 ---
 
