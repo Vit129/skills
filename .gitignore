@@ -30,6 +30,7 @@
 !graphify-out/manifest.json
 !commands/**
 !commands/
+!statusline-command.sh
 
 # Personal sync scripts (contain company-specific replace patterns — do not commit)
 scripts/sync-skills-to-claude.sh
