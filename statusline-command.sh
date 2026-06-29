@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
-# Claude Code statusLine — matches Gemini/Codex format
-# Shows: git branch | model (effort) | ctx% rem% | 5h% rem% timer | 7d% rem% reset
+# Claude Code statusLine — cwd | model | ctx% (used/total) rem | 7d% rem reset
 export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 
 input=$(cat 2>/dev/null) || input=""
 
-# Pre-initialize — prevents unbound-variable errors if eval fails or input is empty
-model_short="" effort="" cwd="" ctx="" ctx_rem=""
-five_pct="" five_reset="" week_pct="" week_reset=""
+model_short="" cwd="" ctx="" ctx_rem="" ctx_used="" ctx_total=""
+week_pct="" week_reset=""
 
 if [ -n "$input" ]; then
   _vars=$(echo "$input" | jq -r '
@@ -18,91 +16,81 @@ if [ -n "$input" ]; then
         (try (sub("\\.[0-9]+Z$"; "Z") | fromdateiso8601) catch null)
       else null end;
     . as $root |
-    "model_short=\(($root.model.display_name // "") | @sh)
-effort=\(($root.effort.level // "") | @sh)
+    "model_short=\((($root.model.display_name // "") | if startswith("Claude ") then sub("Claude "; "") elif startswith("Gemini ") then sub("Gemini "; "") else . end) | @sh)
 cwd=\(($root.cwd // $root.workspace.current_dir // "") | @sh)
 ctx=\(($root.context_window.used_percentage // "") | if type == "number" then round else "" end | @sh)
 ctx_rem=\(($root.context_window.remaining_percentage // "") | if type == "number" then round else "" end | @sh)
-five_pct=\(($root.rate_limits.five_hour.used_percentage // "") | if type == "number" then round else "" end | @sh)
-five_reset=\((($root.rate_limits.five_hour.resets_at // null) | parse_date // "") | @sh)
+ctx_used=\(($root.context_window.used_tokens // $root.context_window.used // 0) | @sh)
+ctx_total=\(($root.context_window.total_tokens // $root.context_window.total // $root.context_window.max_tokens // 0) | @sh)
 week_pct=\(($root.rate_limits.seven_day.used_percentage // "") | if type == "number" then round else "" end | @sh)
 week_reset=\((($root.rate_limits.seven_day.resets_at // null) | parse_date // "") | @sh)"
   ' 2>/dev/null) && eval "$_vars" 2>/dev/null || true
 fi
 
-# --- Git branch ---
-branch=""
-[ -n "$cwd" ] && branch=$(git -C "$cwd" --no-optional-locks branch --show-current 2>/dev/null) || true
+# --- CWD (~ abbreviated, max 2 trailing components if deep) ---
+cwd_display=""
+if [ -n "$cwd" ]; then
+  if [[ "$cwd" == "$HOME" ]]; then
+    cwd_display="~"
+  elif [[ "$cwd" == "$HOME"/* ]]; then
+    cwd_display="~${cwd#$HOME}"
+  else
+    cwd_display="$cwd"
+  fi
+  depth=$(echo "$cwd_display" | tr -cd '/' | wc -c | tr -d ' ')
+  if [ "$depth" -gt 3 ]; then
+    cwd_display="…/$(basename "$(dirname "$cwd_display")")/$(basename "$cwd_display")"
+  fi
+fi
 
 # --- Build output ---
 parts=()
 
-# Git branch (cyan)
-[ -n "$branch" ] && parts+=("$(printf '\033[0;36m %s\033[0m' "$branch")")
+# CWD (white/bold)
+[ -n "$cwd_display" ] && parts+=("$(printf '\033[1;37m%s\033[0m' "$cwd_display")")
 
-# Model + effort (yellow)
-if [ -n "$model_short" ]; then
-  label="$model_short"
-  [ -n "$effort" ] && label="$label ($effort)"
-  parts+=("$(printf '\033[0;33m%s\033[0m' "$label")")
-fi
+# Model (yellow)
+[ -n "$model_short" ] && parts+=("$(printf '\033[0;33m%s\033[0m' "$model_short")")
 
-# Context usage + remaining
+# Context: percentage + (used/total) + remaining
 if [ -n "$ctx" ]; then
   ctx_rem_int="${ctx_rem:-$(( 100 - ctx ))}"
-  if [ "$ctx" -gt 75 ]; then c='\033[0;31m'
-  elif [ "$ctx" -gt 45 ]; then c='\033[0;33m'
+  if [ "$ctx" -ge 80 ]; then c='\033[0;31m'
+  elif [ "$ctx" -ge 50 ]; then c='\033[0;33m'
   else c='\033[0;32m'; fi
-  parts+=("$(printf "${c}ctx:%d%% rem:%d%%\033[0m" "$ctx" "$ctx_rem_int")")
-else
-  parts+=("$(printf '\033[0;90mctx:--%% rem:--%%\033[0m')")
-fi
 
-# 5h usage + reset countdown
-if [ -n "$five_pct" ]; then
-  timer=""
-  if [ -n "$five_reset" ]; then
-    now=$(date +%s)
-    secs=$(( five_reset - now ))
-    if [ "$secs" -gt 0 ]; then
-      mins=$(( secs / 60 ))
-      if [ "$mins" -ge 60 ]; then
-        timer=" $(printf '%dh%02dm' $(( mins / 60 )) $(( mins % 60 )))"
-      else
-        timer=" ${mins}m"
-      fi
-    else
-      timer=" reset"
-    fi
+  tok_info=""
+  if [ -n "$ctx_used" ] && [ "$ctx_used" -gt 0 ] && [ -n "$ctx_total" ] && [ "$ctx_total" -gt 0 ]; then
+    used_k=$(awk "BEGIN {printf \"%.0fk\", $ctx_used/1000}")
+    total_k=$(awk "BEGIN {printf \"%.0fk\", $ctx_total/1000}")
+    rem_k=$(awk "BEGIN {printf \"%.0fk\", ($ctx_total - $ctx_used)/1000}")
+    tok_info=" (${used_k}/${total_k}) rem:${rem_k}"
   fi
-  if [ "$five_pct" -gt 75 ]; then c='\033[0;31m'
-  elif [ "$five_pct" -gt 45 ]; then c='\033[0;33m'
-  else c='\033[0;32m'; fi
-  parts+=("$(printf "${c}5h:%d%% rem:%d%%%s\033[0m" "$five_pct" "$(( 100 - five_pct ))" "$timer")")
+
+  parts+=("$(printf "${c}ctx:%d%%%s\033[0m" "$ctx" "$tok_info")")
 else
-  parts+=("$(printf '\033[0;90m5h:--%% rem:--%% --\033[0m')")
+  parts+=("$(printf '\033[0;90mctx:--%%\033[0m')")
 fi
 
-# 7d usage + reset day
+# 7d usage + weekly reset date
 if [ -n "$week_pct" ]; then
-  wtimer=""
+  wreset=""
   if [ -n "$week_reset" ]; then
     now=$(date +%s)
     if [ "$week_reset" -gt "$now" ]; then
-      wtimer=" $(date -r "$week_reset" '+%a %-I %p' 2>/dev/null || date -d "@$week_reset" '+%a %-I %p' 2>/dev/null)"
+      wreset=" $(date -r "$week_reset" '+%a %-I%p' 2>/dev/null || date -d "@$week_reset" '+%a %-I%p' 2>/dev/null)"
     else
-      wtimer=" reset"
+      wreset=" reset"
     fi
   fi
-  if [ "$week_pct" -gt 75 ]; then c='\033[0;31m'
-  elif [ "$week_pct" -gt 45 ]; then c='\033[0;33m'
+  if [ "$week_pct" -ge 80 ]; then c='\033[0;31m'
+  elif [ "$week_pct" -ge 50 ]; then c='\033[0;33m'
   else c='\033[0;32m'; fi
-  parts+=("$(printf "${c}7d:%d%% rem:%d%%%s\033[0m" "$week_pct" "$(( 100 - week_pct ))" "$wtimer")")
+  parts+=("$(printf "${c}7d:%d%% rem:%d%%%s\033[0m" "$week_pct" "$(( 100 - week_pct ))" "$wreset")")
 else
-  parts+=("$(printf '\033[0;90m7d:--%% rem:--%% --\033[0m')")
+  parts+=("$(printf '\033[0;90m7d:--%% rem:--%%\033[0m')")
 fi
 
-# Join with separator
 sep=" $(printf '\033[0;90m|\033[0m') "
 result=""
 for part in "${parts[@]}"; do
