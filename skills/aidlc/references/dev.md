@@ -1,6 +1,17 @@
 # AIDLC — Dev Mode
 
-## Pre-Flight
+## Direct Entry (default)
+
+If user intent is specific — jump directly to implementation, no pre-flight:
+
+| User says | Jump to |
+|-----------|---------|
+| "implement X" / "add X to Y" / "fix X" with clear scope | Phase 3.1 — Implementation |
+| "break down tasks for X" | Phase 2.5-Dev — Dev Task Design |
+| "integrate / review / PR" | Phase 3.2 |
+| "full feature X" / "start dev" / scope unclear | Pre-Flight below |
+
+## Pre-Flight (full scope only)
 
 **Q1 — Approach:**
 ```
@@ -9,11 +20,11 @@ B) SDLC — implement first → test later
 ```
 Not specified → default TDD.
 
-## Phase Flow
+## Phase Flow (full scope)
 
 `Lite Inception → 2.5-Dev → 3.1 → 3.2 → 3.3 → DONE`
 
-### Lite Inception
+### Lite Inception _(full scope only — skip when using Direct Entry)_
 1. Fetch PBI: `npx ts-node ~/.kiro/scripts/azure-devops/pull-pbi/pullPbi.ts`
 2. Load `analysis-skills` → context.md → goals, scope, constraints
 3. Codebase exists? YES → load `interview` (doc mode) + `analysis-skills` → reverse-eng.md
@@ -52,6 +63,6 @@ Not specified → default TDD.
 
 - Knowledge root: `agent-memory/knowledge/` first → `skills/knowledge/` fallback
 - Dialog format: structured step-by-step — never plain chat dump
-- After each phase: Progress Breadcrumb → wait "continue?" before advancing
+- "wait continue?" only applies to full scope flow — Direct Entry runs to completion without pausing
 - Commit hash = only proof of completion — no hash = not done
 - Security concern (auth/permission/user input): load `security-hardening` in 3.1
