@@ -1,6 +1,6 @@
 # /test — Prove it works
 
-Route to `ai-dlc/qa/playwright-testing/` + `ai-dlc/core/debugging/`.
+Route to `~/.claude/skills/playwright-testing/` + `~/.claude/skills/debug-mantra/`.
 
 ## Instructions
 
@@ -8,13 +8,13 @@ Route to `ai-dlc/qa/playwright-testing/` + `ai-dlc/core/debugging/`.
    - If user specifies a file/feature → test that
    - If in AIDLC context → test current task from progress file
 2. Write tests following:
-   - Load `ai-dlc/rules/playwright-rules/` (or `robotframework-rules/` for mobile)
+   - Load `~/.claude/skills/playwright-rules/` (or `~/.claude/skills/robotframework-rules/` for mobile)
    - AAA pattern (Arrange-Act-Assert)
    - `getByTestId` > `getByRole` for locators
    - No `waitForTimeout()`
 3. Run tests:
    - `npx playwright test --grep "test name"`
-   - If tests fail → switch to `core/debugging/` triage
+   - If tests fail → switch to `~/.claude/skills/debug-mantra/` triage
 4. If debugging:
    - Stop-the-line → Reproduce → Localize → Fix → Guard
    - Write regression test before fixing

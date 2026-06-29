@@ -1,10 +1,10 @@
 # /spec — Define what to build
 
-Route to `ai-dlc/core/aidlc/` Phase 0→1 (Inception).
+Route to `~/.claude/skills/aidlc/` Phase 0→1 (Inception).
 
 ## Instructions
 
-1. Read `ai-dlc/core/aidlc/SKILL.md`
+1. Read `~/.claude/skills/aidlc/SKILL.md`
 2. Scan `agent-memory/plans/[feature]/` for existing Phase 0-1 outputs and `CONTEXT.md` Now section
 3. If outputs exist → tell user and ask: redo or skip to `/plan`
 4. If no existing outputs → start Phase 0 (Lite Inception or Full Inception based on mode)

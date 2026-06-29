@@ -1,10 +1,10 @@
 # /simplify — Reduce complexity
 
-Route to `ai-dlc/dev/code-simplification/`.
+Route to `~/.claude/skills/code-simplification/`.
 
 ## Instructions
 
-1. Read `ai-dlc/dev/code-simplification/SKILL.md`
+1. Read `~/.claude/skills/code-simplification/SKILL.md`
 2. Determine scope:
    - If user specifies file/function → simplify that
    - If user says "this file" → simplify active file

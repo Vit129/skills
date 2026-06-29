@@ -1,10 +1,10 @@
 # /ship — Deploy with confidence
 
-Route to `ai-dlc/dev/shipping-launch/`.
+Route to `~/.claude/skills/shipping-launch/`.
 
 ## Instructions
 
-1. Read `ai-dlc/dev/shipping-launch/SKILL.md`
+1. Read `~/.claude/skills/shipping-launch/SKILL.md`
 2. Run pre-launch checklist:
    - Code Quality: tests pass, build succeeds, lint clean, reviewed
    - Security: no secrets, audit clean, auth in place, headers configured
@@ -17,7 +17,7 @@ Route to `ai-dlc/dev/shipping-launch/`.
    - Staged rollout plan (canary → gradual → full)
    - Rollback strategy documented
    - Monitoring configured
-5. Optionally fan-out `/review` (all 3 personas) as final gate
+5. Optionally fan-out `/review` (all 4 personas) as final gate
 
 ## Prerequisites
 

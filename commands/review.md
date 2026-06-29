@@ -1,27 +1,29 @@
 # /review — Pre-merge quality gate
 
-Route to `ai-dlc/core/review-personas/`.
+Route to `~/.claude/skills/review-personas/`.
 
 ## Instructions
 
-1. Read `ai-dlc/core/review-personas/SKILL.md`
+1. Read `~/.claude/skills/review-personas/SKILL.md`
 2. Determine scope:
    - If user specifies files → review those
    - If in AIDLC context → review all changes from current feature
-   - If user says "full review" or "ship check" → fan-out all 3 personas
+   - If user says "full review" or "ship check" → fan-out all 4 personas
 3. Default: run **code-reviewer** (5-axis review)
 4. If user asks for specific perspective:
    - "security" → security-auditor persona
    - "test coverage" → test-engineer persona
-   - "all" / "ship check" → fan-out all 3
+   - "hidden bugs" → bug-hunter persona
+   - "all" / "ship check" → fan-out all 4
 5. Output: structured review report with severity labels
 
-## Fan-Out (all 3 personas)
+## Fan-Out (all 4 personas)
 
 ```
 code-reviewer    → Correctness, Readability, Architecture, Security, Performance
 security-auditor → OWASP, auth, input validation, secrets, infrastructure
 test-engineer    → Coverage gaps, missing scenarios, test quality
+bug-hunter       → Hidden bugs, edge cases, mismatches, silent failures
 ```
 
 ## Prerequisites

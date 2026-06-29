@@ -1,10 +1,10 @@
 # /build — Implement incrementally
 
-Route to `ai-dlc/core/aidlc/` Phase 3 (Execute).
+Route to `~/.claude/skills/aidlc/` Phase 3 (Execute).
 
 ## Instructions
 
-1. Read `ai-dlc/core/aidlc/SKILL.md`
+1. Read `~/.claude/skills/aidlc/SKILL.md`
 2. Scan `agent-memory/plans/[feature]/dev-tasks.md` or `qa-tasks.md` for task breakdown
 3. If Phase 2 missing → STOP, tell user: "Run `/plan` first — task breakdown is required before building."
 4. If Phase 2 exists → find first incomplete task in progress file
