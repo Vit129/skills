@@ -5,7 +5,7 @@ export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 input=$(cat 2>/dev/null) || input=""
 
 model_short="" cwd="" ctx="" ctx_rem="" ctx_used="" ctx_total=""
-week_pct="" week_reset=""
+five_pct="" five_reset="" week_pct="" week_reset=""
 
 if [ -n "$input" ]; then
   _vars=$(echo "$input" | jq -r '
@@ -22,6 +22,8 @@ ctx=\(($root.context_window.used_percentage // "") | if type == "number" then ro
 ctx_rem=\(($root.context_window.remaining_percentage // "") | if type == "number" then round else "" end | @sh)
 ctx_used=\(($root.context_window.used_tokens // $root.context_window.used // 0) | @sh)
 ctx_total=\(($root.context_window.total_tokens // $root.context_window.total // $root.context_window.max_tokens // 0) | @sh)
+five_pct=\(($root.rate_limits.five_hour.used_percentage // "") | if type == "number" then round else "" end | @sh)
+five_reset=\((($root.rate_limits.five_hour.resets_at // null) | parse_date // "") | @sh)
 week_pct=\(($root.rate_limits.seven_day.used_percentage // "") | if type == "number" then round else "" end | @sh)
 week_reset=\((($root.rate_limits.seven_day.resets_at // null) | parse_date // "") | @sh)"
   ' 2>/dev/null) && eval "$_vars" 2>/dev/null || true
@@ -70,6 +72,16 @@ if [ -n "$ctx" ]; then
   parts+=("$(printf "${c}ctx:%d%%%s\033[0m" "$ctx" "$tok_info")")
 else
   parts+=("$(printf '\033[0;90mctx:--%%\033[0m')")
+fi
+
+# 5h usage + remaining
+if [ -n "$five_pct" ]; then
+  if [ "$five_pct" -ge 80 ]; then c='\033[0;31m'
+  elif [ "$five_pct" -ge 50 ]; then c='\033[0;33m'
+  else c='\033[0;32m'; fi
+  parts+=("$(printf "${c}5h:%d%% rem:%d%%\033[0m" "$five_pct" "$(( 100 - five_pct ))")")
+else
+  parts+=("$(printf '\033[0;90m5h:--%% rem:--%%\033[0m')")
 fi
 
 # 7d usage + weekly reset date
