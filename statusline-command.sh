@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Claude Code statusLine — cwd | model | ctx% (used/total) rem | 7d% rem reset
+# Claude Code statusLine — atomic theme colors | cwd | git | model | ctx% | 5h | 7d | time
 export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 
 input=$(cat 2>/dev/null) || input=""
@@ -45,14 +45,54 @@ if [ -n "$cwd" ]; then
   fi
 fi
 
+# --- Git branch (fast — name only, no fetch) ---
+git_branch=""
+if [ -n "$cwd" ]; then
+  git_branch=$(git --no-optional-locks -C "$cwd" branch --show-current 2>/dev/null)
+fi
+
+# --- Git status (starship symbols: + staged, ! modified, ? untracked, ⇡ ahead, ⇣ behind) ---
+git_status_str=""
+if [ -n "$cwd" ] && [ -n "$git_branch" ]; then
+  _gs=$(git --no-optional-locks -C "$cwd" status --porcelain 2>/dev/null)
+  _staged=0; _modified=0; _untracked=0
+  while IFS= read -r _line; do
+    [[ -z "$_line" ]] && continue
+    _x="${_line:0:1}"; _y="${_line:1:1}"
+    if [[ "$_x" == "?" && "$_y" == "?" ]]; then _untracked=$((_untracked+1)); continue; fi
+    [[ "$_x" != " " ]] && _staged=$((_staged+1))
+    [[ "$_y" == "M" || "$_y" == "D" ]] && _modified=$((_modified+1))
+  done <<< "$_gs"
+  _ab=$(git --no-optional-locks -C "$cwd" rev-list --left-right --count '@{upstream}...HEAD' 2>/dev/null)
+  _ahead=0; _behind=0
+  if [ -n "$_ab" ]; then
+    _behind=$(echo "$_ab" | awk '{print $1}')
+    _ahead=$(echo "$_ab" | awk '{print $2}')
+  fi
+  s=""
+  [ "$_staged" -gt 0 ] && s="${s}+"
+  [ "$_modified" -gt 0 ] && s="${s}!"
+  [ "$_untracked" -gt 0 ] && s="${s}?"
+  [ "$_ahead" -gt 0 ] && s="${s}⇡"
+  [ "$_behind" -gt 0 ] && s="${s}⇣"
+  git_status_str="$s"
+fi
+
 # --- Build output ---
 parts=()
 
-# CWD (white/bold)
-[ -n "$cwd_display" ] && parts+=("$(printf '\033[1;37m%s\033[0m' "$cwd_display")")
+# CWD (atomic orange)
+[ -n "$cwd_display" ] && parts+=("$(printf '\033[38;5;208m%s\033[0m' "$cwd_display")")
 
-# Model (yellow)
-[ -n "$model_short" ] && parts+=("$(printf '\033[0;33m%s\033[0m' "$model_short")")
+# Git branch (atomic green) + status (bold red, starship-style)
+if [ -n "$git_branch" ]; then
+  _b="$(printf '\033[38;5;79m%s\033[0m' "$git_branch")"
+  [ -n "$git_status_str" ] && _b="${_b}$(printf ' \033[0;31m[%s]\033[0m' "$git_status_str")"
+  parts+=("$_b")
+fi
+
+# Model (atomic yellow)
+[ -n "$model_short" ] && parts+=("$(printf '\033[38;5;220m%s\033[0m' "$model_short")")
 
 # Context: percentage + (used/total) + remaining
 if [ -n "$ctx" ]; then
@@ -74,12 +114,21 @@ else
   parts+=("$(printf '\033[0;90mctx:--%%\033[0m')")
 fi
 
-# 5h usage + remaining
+# 5h usage + reset time
 if [ -n "$five_pct" ]; then
+  freset=""
+  if [ -n "$five_reset" ]; then
+    now=$(date +%s)
+    if [ "$five_reset" -gt "$now" ]; then
+      freset=" $(date -r "$five_reset" '+%a %-I%p' 2>/dev/null || date -d "@$five_reset" '+%a %-I%p' 2>/dev/null)"
+    else
+      freset=" reset"
+    fi
+  fi
   if [ "$five_pct" -ge 80 ]; then c='\033[0;31m'
   elif [ "$five_pct" -ge 50 ]; then c='\033[0;33m'
   else c='\033[0;32m'; fi
-  parts+=("$(printf "${c}5h:%d%% rem:%d%%\033[0m" "$five_pct" "$(( 100 - five_pct ))")")
+  parts+=("$(printf "${c}5h:%d%% rem:%d%%%s\033[0m" "$five_pct" "$(( 100 - five_pct ))" "$freset")")
 else
   parts+=("$(printf '\033[0;90m5h:--%% rem:--%%\033[0m')")
 fi
@@ -102,6 +151,9 @@ if [ -n "$week_pct" ]; then
 else
   parts+=("$(printf '\033[0;90m7d:--%% rem:--%%\033[0m')")
 fi
+
+# Time (atomic blue, HH:MM)
+parts+=("$(printf '\033[38;5;75m%s\033[0m' "$(date '+%H:%M')")")
 
 sep=" $(printf '\033[0;90m|\033[0m') "
 result=""

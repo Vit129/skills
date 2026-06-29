@@ -1,32 +1,20 @@
 # AIDLC — QA Mode
 
-## Direct Entry (default)
+## Pre-Flight (full scope)
 
-If user intent is specific — jump directly to the matching phase, no pre-flight:
-
-| User says | Jump to |
-|-----------|---------|
-| "write playwright tests for X" / "automate X" | Phase 2.4 — Test Scripts |
-| "design test cases for X" / "test scenarios" | Phase 2.2 — Test Case Design |
-| "QA architecture" / "test structure" | Phase 2.3 — QA Architecture |
-| "verify against real" / "dev ส่งแล้ว" | Phase 2.4b |
-| "full QA for X" / "start QA" / scope unclear | Pre-Flight below |
-
-## Pre-Flight (full scope only)
-
-**Q1 — Sub-Mode:**
+**Sub-Mode:**
 ```
 A) QA Scenario Only   → Lite Inception → 2.1 → 2.2
-B) QA Automation      → Lite Inception → 2.1 → 2.2 → 2.3 → 2.4 → 2.4b
-C) QA Scenario + Auto → Lite Inception → 2.1 → 2.2 → [approve] → 2.3 → 2.4 → 2.4b
+B) QA Automation      → Lite Inception → 2.1 → 2.2 → 2.3 → 2.4
+C) QA Scenario + Auto → Lite Inception → 2.1 → 2.2 → 2.3 → 2.4
 ```
 
-**Q2 — Platform (if B or C):**
+**Platform (if B or C):**
 ```
 1. API   2. Web UI   3. API + Web UI   4. Mobile
 ```
 
-**Q3 — Automation Pre-Flight (ask once before 2.3):**
+**Automation Pre-Flight (ask once before 2.3):**
 ```
 1. Test Data: Mock only / Real only / Auto-fallback (default)
 2. Backend ready? Yes / No
@@ -36,7 +24,7 @@ C) QA Scenario + Auto → Lite Inception → 2.1 → 2.2 → [approve] → 2.3 �
 
 ## Phase Flow
 
-### Lite Inception _(full scope only — skip when using Direct Entry)_
+### Lite Inception _(full scope only)_
 1. Fetch PBI: `npx ts-node ~/.kiro/scripts/azure-devops/pull-pbi/pullPbi.ts`
 2. Confirm `agent-memory/plans/[feature]/` + QA test root
 3. Write DECISIONS.md + PLAN.md
@@ -71,7 +59,4 @@ Trigger: "dev ส่งแล้ว" / "verify" / "switch to real"
 ## Rules
 
 - Knowledge root: `agent-memory/knowledge/qa/` first → `skills/knowledge/` fallback
-- Dialog format: structured step-by-step — never plain chat dump
-- "wait continue?" only applies to full scope flow — Direct Entry runs to completion without pausing
-- Mandatory per-phase steps apply to full scope only; Direct Entry skips inter-phase gates
 - Sub-mode B/C security concern (Q3=Yes): load `security` skill in 2.2 + 2.4

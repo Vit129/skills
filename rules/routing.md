@@ -2,9 +2,9 @@
 
 ## Principle
 
-Pick the skill that best fits the task. Call it directly. No mandatory gate.
+Pick the skill that best fits the task. Call it directly.
 
-AIDLC is one skill among many — use it when it actually helps, not by default.
+**When intent or scope is unclear → always call `interview` first.**
 
 ## Skill Map
 
@@ -13,15 +13,15 @@ AIDLC is one skill among many — use it when it actually helps, not by default.
 | fix bug / debug / crash / investigate | `debug-mantra` |
 | hunt bugs / audit / find mismatch / scan | `find-mismatch` |
 | write test / add test / xctest / swift test / unit test | `xctest-macos` |
-| robot framework / robotframework / rf test | `robotframework-testing` + `robotframework-rules` |
+| playwright / web ui test / api test | `qa-architect` → `playwright-rules` + `playwright-testing` |
+| robot framework / rf / mobile test | `qa-architect` → `robotframework-rules` + `robotframework-testing` |
 | postman → playwright | `postman-to-playwright` |
 | review / code review / critique | `review-personas` |
-| new system / new domain / multi-session feature / architecture / requirements unclear | `interview` → จด CONTEXT.md → `aidlc` |
+| new feature / architecture / unclear scope / requirements unclear | `interview` → จด CONTEXT.md → `dev-architect` → `aidlc` |
 | macos / swiftui / appkit / metal / swift | `macos-swiftui` |
 | finance / stocks / portfolio / earnings | matching finance skill |
-| explain / how does / summarize / search / brainstorm / diagnose | direct — no skill needed |
-| small addition to existing code (≤ 4 files, pattern exists) | direct — read → implement → build/test |
-| everything else | judgment call — pick closest skill or go direct |
+| explain / summarize / search / brainstorm / diagnose | direct — no skill needed |
+| everything else | `interview` → then pick closest skill |
 
 ## Continuation
 
