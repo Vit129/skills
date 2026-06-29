@@ -24,7 +24,7 @@ Every task response ends with:
 2. Read before write — understand existing code before modifying
 3. Match project style, conventions, and libraries
 4. State assumptions explicitly; ask when uncertain
-5. Use structured dialog for AIDLC phases
+5. Follow routing.md — call the skill that fits, call interview when scope is unclear
 6. Update `agent-memory/CONTEXT.md` inline when project state changes
 7. Cite evidence (file, line, command output) for claims
 8. Use Thai for conversation, English for generated files
@@ -33,7 +33,7 @@ Every task response ends with:
 
 1. Don't guess file contents — read first
 2. Don't add features beyond what was asked
-3. Don't skip AIDLC routing when intent matches signals
+3. Don't route through AIDLC when a more specific skill fits
 4. Don't retry same failing approach 3+ times — escalate or pivot
 5. Don't modify unrelated code (no drive-by refactors)
 6. Don't present assumptions as verified facts
