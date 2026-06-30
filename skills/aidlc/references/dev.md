@@ -16,7 +16,6 @@ Auto-select TDD unless user says "SDLC", "prototype", or "code first".
 2. Load `analysis-skills` → context.md → goals, scope, constraints
 3. Codebase exists? YES → load `interview` (doc mode) + `analysis-skills` → reverse-eng.md
 4. Confirm `agent-memory/plans/[feature]/` + Dev source root
-5. Write DECISIONS.md + PLAN.md
 → Full steps: `references/workflow.md` § Lite Inception
 
 ### Phase 2.5 — Dev Task Design

@@ -4,7 +4,7 @@
 ## AIDLC Gate
 
 ⚠️ If this skill is triggered as part of a coding/QA task:
-- AIDLC governance MUST be active (`agent-memory/plans/[feature]/` must exist with DECISIONS + PLAN)
+- AIDLC must be active (`agent-memory/plans/[feature]/` must exist)
 - If not → STOP and route to `governance/aidlc/` first
 - Exception: pure investigation/analysis (no code changes) can proceed without AIDLC
 
@@ -106,7 +106,7 @@ User can override: "request quick" or "request deep"
 ## Rules & Guides
 
 - **Vibe Mode** — Inline in workflow.md (Mode Selection + Escalation sections)
-- **Workflow Rules** — DECISIONS→PLAN→EXECUTE, phases, naming, quick commands, decision dialog, Kiro tool mapping — ALL in one file. (Read `references/workflow.md`)
+- **Workflow Rules** — phases, naming, quick commands — (Read `references/workflow.md`)
 - **All other guides** — Included in `references/workflow.md` sections
 
 ## Task Design
@@ -139,7 +139,6 @@ Generated as a side-effect of Phase 1 (domain-design step). Updated inline durin
 
 ## Templates
 
-- Planning: `references/templates/planning/`
 - Outputs: `references/templates/outputs/`
 - Frameworks: `references/templates/frameworks/`
 
@@ -155,8 +154,7 @@ For skill routing guide → see AGENTS.md Skill Map (workspace root)
 ## ⚠️ Gotchas
 
 - **Phase skip** — agent jumps from Domain Design directly to implementation without Logical Design. Fix: enforce phase gate — check that the previous phase output file exists before proceeding.
-- **Decision file not created** — agent starts planning without creating a DECISIONS file first. Fix: DECISIONS file is mandatory before any PLAN or EXECUTE step.
-- **Resume without reading context** — on resume, agent starts from scratch instead of reading the existing decision/plan files. Fix: always read `planning/decisions/` and `planning/plans/` before any action on resume.
+- **Resume without reading context** — on resume, agent starts from scratch instead of reading existing artifacts. Fix: always read `agent-memory/plans/[feature]/` before any action on resume.
 - **Multiple agents on same task** — two agents (e.g., Gemini + Claude) edit the same file simultaneously, causing conflicts. Fix: one agent owns one task start-to-finish.
 - **Task marked done without commit** — agent reports completion but hasn't committed. Fix: commit hash is the only proof of completion — no hash = not done.
 - **Dialog skipped on short commands** — user gives a brief command like "PBI-002" or "continue feature X" and agent auto-executes everything without dialog. Fix: ANY AIDLC trigger — regardless of how short the user's message is — MUST still follow the full dialog flow (Phase Announcement → Decision Dialog → wait for approval → execute). Short commands are NOT permission to skip dialog. The agent must:
@@ -186,9 +184,9 @@ For skill routing guide → see AGENTS.md Skill Map (workspace root)
 
 | Excuse to Skip | Counter-Argument |
 |---|---|
-| "Just write code, no need to plan" | Code without plan = rework. DECISIONS file takes 5 minutes, saves 5 hours. |
-| "Feature is small, doesn't need AIDLC" | "Small" is subjective. Even 1-endpoint features need DECISIONS + PLAN. The overhead is minimal. |
-| "Already have spec, can skip Phase 1" | Spec ≠ DECISIONS file. Phase 1 formalizes scope, constraints, and approach. Don't skip. |
+| "Just write code, no need to plan" | Code without plan = rework. Task breakdown takes 5 minutes, saves 5 hours. |
+| "Feature is small, doesn't need AIDLC" | "Small" is subjective. Even 1-endpoint features need a task breakdown. The overhead is minimal. |
+| "Already have spec, can skip Phase 1" | Phase 1 formalizes scope, constraints, and approach. Don't skip. |
 | "Resume, just continue" | Resume MUST read existing artifacts first. Starting fresh wastes previous work. |
 | "User said 'do it' = skip dialog" | Short commands are NOT permission to skip. Dialog flow is mandatory regardless of message length. |
 | "Brainstorming not needed, feature is small" | Check the scale table. If medium+, brainstorming catches gaps that save rework in Phase 3. |
@@ -197,12 +195,11 @@ For skill routing guide → see AGENTS.md Skill Map (workspace root)
 
 ## Red Flags
 
-- 🚩 Writing code without a DECISIONS file → STOP, create DECISIONS first
 - 🚩 Phase 2 started without Phase 1 output → prerequisites missing
-- 🚩 Agent auto-executing without dialog → must present options and wait for approval
+- 🚩 Agent auto-executing without approval → must present options and wait for approval
 - 🚩 All inception docs written in one shot without pauses → bulk dump, not phased execution
 - 🚩 Task marked done without commit hash → not done
-- 🚩 `agent-memory/plans/[feature]/` doesn't exist but agent is writing implementation → governance bypassed
+- 🚩 `agent-memory/plans/[feature]/` doesn't exist but agent is writing implementation → AIDLC not initialized
 
 
 ---
@@ -220,16 +217,13 @@ Every phase MUST execute steps 1-9 in this order:
 
 | Step | Action | Skip Condition |
 |------|--------|----------------|
-| 1 | Create DECISIONS file (`planning/decisions/{NN}-{phase-name}.md`) | Never skip |
-| 2 | Wait for user to resolve decisions | Never skip |
-| 3 | Create PLAN file (`planning/plans/{NN}-{phase-name}.md`) | Never skip |
-| 4 | Show PREVIEW (draft output summary) to user | Never skip |
-| 5 | Wait for user APPROVAL | Never skip |
-| 6 | EXECUTE — write output files | Never skip |
-| 7 | Update `audit.md` with phase entry | Never skip |
-| 8 | Update `PROGRESS.md` with current counts | Never skip |
-| 10 | Update GRAPH_REPORT.md | No new files created |
-| 11 | Update agent-memory (Task_Ledger + Playbook) | No real artifact produced |
+| 1 | Show PREVIEW (draft output summary) to user | Never skip |
+| 2 | Wait for user APPROVAL | Never skip |
+| 3 | EXECUTE — write output files | Never skip |
+| 4 | Update `audit.md` with phase entry | Never skip |
+| 5 | Update `PROGRESS.md` with current counts | Never skip |
+| 6 | Update GRAPH_REPORT.md | No new files created |
+| 7 | Update agent-memory (Task_Ledger + Playbook) | No real artifact produced |
 
 ### Lite Inception Internal Steps (QA Only / QA Automation / Dev Only)
 
@@ -246,8 +240,6 @@ Every phase MUST execute steps 1-9 in this order:
 | 2b | **Codebase exists?** YES → Read `thinking/analysis-skills/SKILL.md` → load `references/reverse-eng.md` → scan architecture to understand system shape | Skip if no codebase yet |
 | 3 | **Read `meta-skills/graph-report/SKILL.md`** → scan codebase structure, identify affected modules | Skip if no codebase yet |
 | 4 | Confirm output paths with user: `agent-memory/plans/[feature]/`, QA test files root, Dev source root | Never skip |
-| 5 | Write DECISIONS.md → scope, constraints, approach | Never skip |
-| 6 | Write PLAN.md → phase sequence for chosen mode | Never skip |
 
 ### Phase Routing (must follow mode matrix)
 
@@ -445,11 +437,9 @@ The `session-save.json` hook checks at end of session:
 
 Before advancing to the next phase, confirm:
 
-- [ ] DECISIONS file exists in `agent-memory/plans/[feature]/planning/decisions/`
 - [ ] Mode (Full/QA/Dev) explicitly selected and recorded
 - [ ] Development Approach (TDD/SDLC) confirmed before Phase 2
 - [ ] Phase gate check passed (previous phase output exists)
-- [ ] Dialog format used for all interactions (not plain chat)
 - [ ] Commit hash recorded for completed implementation tasks
 
 ---
@@ -474,7 +464,7 @@ Before advancing to the next phase, confirm:
 | Brainstorming synthesis | Open field | After 3 Amigos output (Phase 1.8) |
 | Task design review | Checkbox | Before Phase 3 execution begins |
 
-**Rule:** At decision points, always present 2-3 options with tradeoffs — never a single answer.
+**Rule:** Always present 2-3 options with tradeoffs when approach is unclear — never a single answer.
 
 ## Self-Learning
 

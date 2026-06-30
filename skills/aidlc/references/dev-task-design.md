@@ -92,7 +92,7 @@ Infrastructure tasks ต้องมาก่อนเสมอ เพราะ 
 | Task fail (test ไม่ผ่าน) | Mark task ❌, note root cause, fix before proceeding |
 | Dependent task พัง (task B พังเพราะ task A) | Re-sequence: fix task A ก่อน, re-run task B |
 | Architecture assumption ผิด | Escalate to architect → re-design → re-plan affected tasks |
-| Multiple tasks พังพร้อมกัน | Stop, assess scope, create new decision file |
+| Multiple tasks พังพร้อมกัน | Stop, assess scope, create new task breakdown |
 
 **Rollback steps:**
 1. Mark failed task as ❌ ใน dev-task-progress.md

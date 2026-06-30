@@ -21,8 +21,7 @@ All AIDLC artifacts live in `agent-memory/` — no `.aidlc/` folder, no exceptio
 ## Essential Rules
 
 - **Read before write** — read architecture, existing patterns, and affected files before touching anything
-- **DECISIONS → PLAN → EXECUTE** — follow this flow when scope is unclear or multi-session; skip when scope is obvious
-- **Artifacts** — create DECISIONS + PLAN when genuinely needed for alignment; skip when scope fits in conversation
+- **PREVIEW → APPROVE → EXECUTE** — show what you'll do, get approval, then act
 - **Approval** — ask only when the tradeoff is the user's to own (scope priority, UI preference, external constraint); don't ask for obvious calls
 - **Apply DDD / BDD / TDD** — when tests or architecture are part of the ask; skip otherwise
 - **Update plans incrementally** (every 3-5 tasks, multi-session features only)
@@ -142,15 +141,12 @@ Test paths must mirror: `agent-memory/plans/payment/` ↔ `{test-root}/web-testi
 
 ## Standard Process (every phase)
 
-1. **DECISIONS** — create `planning/decisions/{NN}-{phase}.md` with options
-2. **USER RESOLVES** — user fills decisions
-3. **PLAN** — create `planning/plans/{NN}-{phase}.md` from resolved decisions
-4. **PREVIEW** — show summary (titles, counts) before asking approval
-5. **USER APPROVES** — explicit approval before execute
-6. **EXECUTE** — write output; verify file exists with required sections before moving on
-7. **AUDIT** — append to `audit.md`: `| Phase | Status | Date | Skills Used | Notes |`
-8. **PROGRESS** — update `agent-memory/CONTEXT.md` Now section
-9. **KNOWLEDGE** — promote reusable patterns (≥2 features) to `agent-memory/knowledge/{domain}/`
+1. **PREVIEW** — show summary (titles, counts, approach) before asking approval
+2. **USER APPROVES** — explicit approval before execute
+3. **EXECUTE** — write output; verify file exists with required sections before moving on
+4. **AUDIT** — append to `audit.md`: `| Phase | Status | Date | Skills Used | Notes |`
+5. **PROGRESS** — update `agent-memory/CONTEXT.md` Now section
+6. **KNOWLEDGE** — promote reusable patterns (≥2 features) to `agent-memory/knowledge/{domain}/`
 
 ---
 

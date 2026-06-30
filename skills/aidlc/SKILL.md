@@ -3,7 +3,7 @@ name: aidlc
 description: >
   Governance layer for the AI Development Lifecycle.
   Called after interview + dev-architect when building a new feature, system, or architecture.
-  Also handles: resume AI-DLC, create decision file, plan execution, break down tasks,
+  Also handles: resume AI-DLC, break down tasks,
   QA only, Dev only, verify against real, dev ส่งแล้ว, เล่นจริง.
 version: 3.0.0
 last_improved: 2026-06-29

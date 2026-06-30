@@ -44,10 +44,10 @@
   2. **{Context 2}** - {Brief description}
   3. **{Context 3}** - {Brief description}
 - **Wait for user selection** - User responds with context name or number
-- **No formal decision file needed** - This is a simple workflow choice
+- **Simple workflow choice — no file needed** - This is a simple workflow choice
 
 **Step 2: Domain Design for Selected Context**
-- **Create domain design decision file** for the selected context only
+- **Note the architecture choice in `audit.md`** for the selected context only
 - **Create domain design plan file** for the selected context
 - **Execute domain design** for the selected context
 - **File naming**: `domain-design-{context-name}.md`

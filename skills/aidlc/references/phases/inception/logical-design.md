@@ -56,10 +56,10 @@
 - **If starting fresh**: Ask the user directly which bounded context to design
 - **Present options** with recommended priority if multiple contexts are available
 - **Wait for user selection** - User responds with context name or number
-- **No formal decision file needed** - This is a simple workflow choice
+- **Simple workflow choice — no file needed** - This is a simple workflow choice
 
 **File Generation**:
-- **Create logical design decision file** for the selected bounded context only
+- **Note the design choice in `audit.md`** for the selected bounded context only
 - **Create logical design plan file** for the selected bounded context
 - **Execute logical design** for the selected bounded context
 - **File naming**: `logical-design-{context-name}.md`

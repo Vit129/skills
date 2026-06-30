@@ -367,7 +367,7 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-    Spec([/spec]) --> P01[Phase 0→1<br/>Inception + DECISIONS]
+    Spec([/spec]) --> P01[Phase 0→1<br/>Inception]
     Plan([/plan]) --> P2[Phase 2<br/>Task Design]
     Build([/build]) --> P3[Phase 3<br/>Implement]
     Test([/test]) --> QATest[playwright-testing<br/>+ debugging]

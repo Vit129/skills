@@ -45,7 +45,6 @@
    - Link ticket to current sprint/iteration if applicable
 
 3. **Implementation Phase**
-   - **MANDATORY**: Use the implementation plan template at `references/templates/planning/implementation-plan-template.md` for systematic implementation
    - **MANDATORY**: Map all MVP user stories to implementation tasks
    - Apply local-first development approach
    - Implement MVP scope first, then plan future features

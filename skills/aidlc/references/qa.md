@@ -27,7 +27,6 @@ C) QA Scenario + Auto → Lite Inception → 2.1 → 2.2 → 2.3 → 2.4
 ### Lite Inception _(full scope only)_
 1. Fetch PBI: `npx ts-node ~/.kiro/scripts/azure-devops/pull-pbi/pullPbi.ts`
 2. Confirm `agent-memory/plans/[feature]/` + QA test root
-3. Write DECISIONS.md + PLAN.md
 
 ### Phase 2.1 — QA Task Design
 1. Read cached `pbi-{ID}.json`

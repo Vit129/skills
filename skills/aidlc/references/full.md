@@ -24,14 +24,13 @@ Not specified → default TDD.
 4. Codebase exists → load `analysis-skills` → reverse-eng.md → scan architecture
 5. Load `graph-report` → identify affected modules
 6. Confirm output paths (`agent-memory/plans/[feature]/`, QA test root, Dev source root)
-7. Write DECISIONS.md + PLAN.md
-→ Full steps + dialog format: `references/workflow.md` § Phase 0
+→ Full steps: `references/workflow.md` § Phase 0
 
 ## Phase 1.1-1.7 — Domain & Logical Design
 
 → Read `references/workflow.md` § Phase 1 for full steps
 Key outputs: `user-stories.md`, `domain-design.md`, `logical-design.md`
-Each phase: DECISIONS → PLAN → PREVIEW → APPROVAL → EXECUTE → Progress Breadcrumb
+Each phase: PREVIEW → APPROVAL → EXECUTE → Progress Breadcrumb
 
 ## Phase 1.8 — Brainstorming (3 Amigos)
 
@@ -69,7 +68,6 @@ _TDD: QA runs before Dev implementation. SDLC: QA runs after Dev._
 
 ## Red Flags
 
-- Writing code without DECISIONS file → STOP
 - Phase 2 started without Phase 1 output → prerequisites missing
-- Agent auto-executing without dialog → present options, wait approval
+- Agent auto-executing without approval → present options, wait approval
 - Commit hash missing → task not done
