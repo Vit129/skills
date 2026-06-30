@@ -16,8 +16,8 @@
 
 If `graphify-out/` exists in the project root, run **before the first Edit/Write**:
 
-```bash
-graphify query "<symbol or concept being modified>"
+```
+mcp__graphify__query_graph  # with query: "<symbol or concept being modified>"
 ```
 
 Use the output to understand the impact surface before touching anything. Skip for trivial changes (typos, config values, docs).

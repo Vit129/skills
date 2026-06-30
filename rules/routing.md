@@ -36,7 +36,7 @@ Pick the skill that best fits the task. Call it directly.
 | create hook / new hook / hook builder | `hook-creator` |
 | create skill / new skill / skill template | `skill-creator` |
 | verify this / self-verify / verification loop | `verification-loop` |
-| graph report / knowledge graph / project graph | `graph-report` |
+| graph report / knowledge graph / project graph | `mcp__graphify__query_graph` |
 | ui design / wireframe / mockup / design component | `ui-designer` |
 | domain model / ubiquitous language / ddd / bounded context / glossary | `ubiquitous-language` |
 | stakeholder update / write for management / exec summary / slack message / standup | `management-talk` |

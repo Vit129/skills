@@ -37,10 +37,10 @@ bash ~/.claude/scripts/session-end.sh [project-dir] [keep_days=30]
 
 ## Graphify
 
-```bash
-graphify query "..."   # focused question
-graphify explain "X"   # concept/symbol
-graphify path "A" "B"  # dependency path
+```
+mcp__graphify__query_graph   # focused question
+mcp__graphify__get_node      # concept/symbol
+mcp__graphify__shortest_path # dependency path A → B
 ```
 
 Graphified projects auto-load `@graphify-out/GRAPH_SUMMARY.md` via their own CLAUDE.md.
