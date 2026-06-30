@@ -12,13 +12,23 @@
 - No "flexibility" that wasn't requested. If 200 lines could be 50, rewrite.
 - Ask: "Would a senior engineer say this is overcomplicated?"
 
-## 3. Surgical Changes
+## 3. Graph Before Edit
+
+If `graphify-out/` exists in the project root, run **before the first Edit/Write**:
+
+```bash
+graphify query "<symbol or concept being modified>"
+```
+
+Use the output to understand the impact surface before touching anything. Skip for trivial changes (typos, config values, docs).
+
+## 4. Surgical Changes
 
 - Touch only what the task requires. Don't improve adjacent code uninvited.
 - Match existing style even if you'd do it differently.
 - Remove only orphans YOUR changes created — not pre-existing dead code.
 
-## 4. Goal-Driven Execution
+## 5. Goal-Driven Execution
 
 - Transform tasks into verifiable goals with explicit success criteria.
 - State a brief numbered plan for multi-step work. Loop until verified.
