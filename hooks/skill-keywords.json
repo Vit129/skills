@@ -122,5 +122,21 @@
   {
     "skill": "agent-memory",
     "keywords": ["bootstrap memory", "setup agent memory", "reset memory", "memory template"]
+  },
+  {
+    "skill": "ai-techniques",
+    "keywords": ["chain of thought", "lats", "algorithm of thought", "step by step analysis", "compare approaches", "explore multiple paths", "backtrack and try"]
+  },
+  {
+    "skill": "analysis-concept",
+    "keywords": ["analysis pattern", "thinking framework", "domain-agnostic analysis", "reusable analysis"]
+  },
+  {
+    "skill": "fitness",
+    "keywords": ["workout plan", "exercise plan", "nutrition plan", "meal plan", "macro", "calorie deficit", "muscle gain", "weight loss plan"]
+  },
+  {
+    "skill": "thai-accountant",
+    "keywords": ["ภาษี", "บัญชี", "vat", "thai tax", "withholding tax", "ภงด", "ภพ", "thai accounting"]
   }
 ]

@@ -44,6 +44,10 @@ Pick the skill that best fits the task. Call it directly.
 | export requirements / user story export / req to csv | `req-exporter` |
 | industry rules / compliance / healthcare design / finance design / ecommerce rules | `industry-rules` |
 | analyze codebase / gap analysis / extract requirements / วิเคราะห์ | `analysis-skills` |
+| analysis pattern / thinking framework / reusable analysis concept | `analysis-concept` |
+| step by step analysis / chain of thought / lats / compare approaches / big picture thinking | `ai-techniques` |
+| workout / exercise plan / nutrition / diet / meal plan / macro | `fitness` |
+| ภาษี / vat / บัญชี / thai tax / thai accounting / withholding tax | `thai-accountant` |
 | bootstrap memory / setup agent memory / reset memory | `agent-memory` |
 | ask agy / second opinion from agy / have agy try | `agy` |
 | management talk / เขียนสำหรับ management / rewrite for vp | `management-talk` |
