@@ -2,8 +2,8 @@
 
 > **Trigger:** Dev delivers backend/frontend → user says "dev delivered", "verify", "switch to real"
 > **Prerequisite:** Phase 2.4 complete (test scripts exist, pass with mock or stub)
-> **Tool:** `playwright-cli` (browser CLI for exploratory + capture)
-> **Output:** Updated .spec.ts files verified against real system + test results uploaded to Azure
+> **Platform:** Playwright (Web/API) or Robot Framework (Mobile/RF)
+> **Output:** Updated test files verified against real system + test results uploaded to Azure
 
 ---
 
@@ -22,11 +22,23 @@ Round 3: Final Run
 
 ---
 
+## Platform Detection
+
+At Phase 2.4b entry, check `qa-task-progress.md` § Automation Context for platform set in Phase 2.3:
+
+| Platform | Tool for Round 1–2 | Run command (Round 3) |
+|----------|-------------------|-----------------------|
+| Web UI (Playwright) | `playwright-cli` | `npm run ui:{env}:{feature}:cliMode` |
+| API (Playwright) | `playwright-cli` | `npm run api:{env}:{feature}:cliMode` |
+| Mobile / RF | Appium + appium-mcp + proxy | `robot --variable ENV:{env} --include {feature} tests/` |
+
+---
+
 ## Round 1: Exploratory Play (Record Actual Flow)
 
 **Goal:** Follow test scenarios designed in Phase 2.2 on real system → record all actual steps
 
-### Steps
+### Playwright (Web/API)
 
 1. **Open browser via playwright-cli**
    ```bash
@@ -35,11 +47,7 @@ Round 3: Final Run
 
 2. **Follow test scenarios one by one** — Follow MD/CSV designed in Phase 2.2
 
-3. **Record actual steps** — Every click, fill, navigate, wait — record to knowledge file:
-   ```bash
-   # Create knowledge file for this feature
-   # Path: agent-memory/knowledge/qa/{feature}-actual-flow.md
-   ```
+3. **Record actual steps** — Every click, fill, navigate, wait
 
 4. **Note discrepancies** — If actual flow differs from designed test scenario:
    - Step order differs
@@ -47,29 +55,50 @@ Round 3: Final Run
    - New step not in design (e.g., confirmation modal, loading state)
    - API endpoint differs from expected
 
+### Robot Framework / Mobile
+
+1. **Launch app via Appium or device**
+   ```bash
+   # Start Appium server
+   appium --port 4723
+
+   # Or use appium-mcp to connect directly
+   ```
+
+2. **Follow test scenarios one by one** — Follow MD/CSV designed in Phase 2.2
+
+3. **Record actual steps** — Every tap, swipe, input, wait, screen transition
+
+4. **Note discrepancies** — Same as Playwright but mobile-specific:
+   - Element IDs differ from design
+   - Screen transition differs
+   - API call order differs
+
+### Output (both platforms)
+
 5. **Save knowledge file:**
    ```markdown
    # {Feature} — Actual Flow (Round 1)
 
    **Date:** {date}
    **Environment:** {SIT/UAT/DEV}
-   **URL:** {base-url}
+   **URL/App:** {base-url or app-id}
+   **Platform:** {Playwright Web / Playwright API / Robot Framework Mobile}
 
    ## Flow: {scenario-title}
 
    | Step | Action | Target/Element | Data | Note |
    |------|--------|----------------|------|------|
-   | 1 | goto | /login | — | — |
-   | 2 | fill | placeholder="ระบุอีเมล" | user@test.com | — |
-   | 3 | click | role=button, name="เข้าสู่ระบบ" | — | — |
+   | 1 | goto/launch | /login or app | — | — |
+   | 2 | fill/input | placeholder="ระบุอีเมล" | user@test.com | — |
+   | 3 | click/tap | role=button, name="เข้าสู่ระบบ" | — | — |
    | ... | ... | ... | ... | ... |
 
    ## Discrepancies vs Design
    - [ ] {what's different from Phase 2.2 scenario}
    ```
 
-### Output
-- `agent-memory/knowledge/qa/{feature}-actual-flow.md`
+- **Output:** `agent-memory/knowledge/qa/{feature}-actual-flow.md`
 
 ### After Round 1
 - **Update test scenarios** (Phase 2.2 MD file) if discrepancies found
@@ -82,7 +111,7 @@ Round 3: Final Run
 
 **Goal:** Play again from updated test scenario → capture all technical details → write spec artifacts
 
-### Steps
+### Playwright (Web/API)
 
 1. **Open browser + enable network capture**
    ```bash
@@ -107,12 +136,44 @@ Round 3: Final Run
    playwright-cli generate-locator <target>  # get exact locator for element
    ```
 
+### Robot Framework / Mobile
+
+1. **Launch app + start network proxy**
+   ```bash
+   # Option A: Charles Proxy (GUI) — enable SSL proxying for app domain
+   # Option B: mitmproxy
+   mitmproxy --port 8888 --set ssl_insecure=true
+
+   # Configure device/emulator to route through proxy
+   ```
+
+2. **Play through each scenario again** — Use updated scenario from Round 1
+
+3. **Capture network requests** via proxy log or appium-mcp:
+   ```bash
+   # mitmproxy: export flows to HAR
+   mitmdump -w flows.mitm --save-stream-file flows.har
+
+   # Charles: File > Export Session > JSON
+   # Then parse for endpoints, request bodies, response bodies
+   ```
+
+4. **Capture element locators** via appium-mcp:
+   ```
+   appium-mcp: get_page_source  → XML dump of current screen
+   appium-mcp: find_element(strategy, value) → verify locator works
+   # Or use Appium Inspector GUI to inspect elements
+   ```
+
+### Output (both platforms)
+
 5. **Write spec artifact file:**
    ```markdown
    # {Feature} — API & Element Spec (Round 2)
 
    **Date:** {date}
    **Environment:** {SIT/UAT/DEV}
+   **Platform:** {Playwright Web / Playwright API / Robot Framework Mobile}
 
    ## API Endpoints Captured
 
@@ -132,22 +193,21 @@ Round 3: Final Run
      "createdAt": "2026-06-20T10:00:00Z"
    }
    ```
-   **Response (400 — validation error):**
-   ```json
-   {
-     "error": "INVALID_QUANTITY",
-     "message": "Quantity must be > 0"
-   }
-   ```
 
-   ## Frontend Elements
+   ## Frontend / Mobile Elements
 
+   ### Playwright
    | Element | Locator | Page |
    |---------|---------|------|
    | Email input | `getByPlaceholder('ระบุอีเมล')` | Login |
    | Submit button | `getByRole('button', { name: 'เข้าสู่ระบบ' })` | Login |
-   | Order table | `getByTestId('order-list')` | Dashboard |
-   | ... | ... | ... |
+
+   ### Robot Framework / Mobile
+   | Element | Locator Strategy | Value | Screen |
+   |---------|-----------------|-------|--------|
+   | Email input | id | com.app:id/email_input | Login |
+   | Submit button | accessibility id | login_button | Login |
+   | Order list | xpath | //android.widget.RecyclerView | Dashboard |
 
    ## State Transitions Observed
 
@@ -155,23 +215,24 @@ Round 3: Final Run
    |-----------|-------|----------|---------|
    | — | create order | pending | POST /orders |
    | pending | confirm | confirmed | PATCH /orders/:id/confirm |
-   | ... | ... | ... | ... |
    ```
 
-6. **Save to:**
-   - `agent-memory/knowledge/qa/{feature}-api-element-spec.md`
-
-### Output
-- `agent-memory/knowledge/qa/{feature}-api-element-spec.md`
+- **Output:** `agent-memory/knowledge/qa/{feature}-api-element-spec.md`
 
 ### After Round 2
-- **Update .spec.ts files** — Use spec artifacts to update:
-  - Fixtures: Add real request/response data
-  - Locators: Update to match captured elements
-  - Assertions: Add real response schema + values
-  - Mock data: Update mock responses to match actual (for CI without backend)
-  - Page Objects: Update locators to match captured elements
-  - Helpers: Update API calls to match real endpoints + payloads
+
+**Playwright:** Update `.spec.ts` files:
+- Fixtures: Add real request/response data
+- Locators: Update to match captured elements
+- Assertions: Add real response schema + values
+- Page Objects: Update locators
+- Helpers: Update API calls to match real endpoints + payloads
+
+**Robot Framework:** Update `.robot` / resource files:
+- Locators: Update to captured element IDs/xpaths
+- Variables: Update test data to match real payloads
+- Resource files: Update keywords to match real API endpoints
+- Custom keywords: Adjust for actual screen flow
 
 ---
 
@@ -182,22 +243,29 @@ Round 3: Final Run
 ### Part A: Local Final Run
 
 1. **Run full test suite against real backend:**
-   ```bash
-   # API tests
-   npm run api:{env}:{feature}:cliMode
 
-   # Web UI tests
+   **Playwright:**
+   ```bash
+   npm run api:{env}:{feature}:cliMode
    npm run ui:{env}:{feature}:cliMode
 
    # Or specific file
    npx playwright test {spec-file} --reporter=list
    ```
 
+   **Robot Framework:**
+   ```bash
+   robot --variable ENV:{env} --include {feature} tests/
+
+   # Or specific suite
+   robot --variable ENV:{env} tests/{feature}/
+   ```
+
 2. **Triage failures (if any):**
 
    | Failure Type | Action |
    |---|---|
-   | Test bug (wrong locator/assertion) | Fix .spec.ts → re-run |
+   | Test bug (wrong locator/assertion/keyword) | Fix test file → re-run |
    | App bug (backend returns wrong data) | File Bug in Azure → notify dev |
    | Environment issue (timeout, network) | Retry → if persistent → file infra bug |
    | Flaky (pass on retry) | Add retry annotation + investigate root cause |
@@ -215,27 +283,26 @@ Round 3: Final Run
 
 4. **All pass → Upload result to Azure DevOps:**
    ```
-   Trigger: a script to upload test results to your project management tool
+   Trigger: tooling/upload-test-result/SKILL.md
    → Auto-detect: PASS/FAIL, environment, date, branch, commit
    → Ask user: FE Version, BE Version (one question at a time)
    → Resolve TS IDs from Quick Review Summary table
-   → Compile result (screenshot for UI / req+res for API)
+   → Compile result (screenshot for UI / req+res for API / video for Mobile)
    → Confirm with user → update Azure via MCP wit_update_work_item
    ```
 
    **MCP calls:**
-   - `wit_update_work_item(tsId, [Custom.ActualTestResult = <HTML>, Custom.TestResult = "Passed"])`
+   - `wit_update_work_item(tsId, [Custom.Actualtestresult = <HTML>, Custom.Testresult = "Passed"])`
 
 ### Part C: CI/CD Pipeline Setup (Azure Pipelines)
 
 5. **Create pipeline YAML for automated CI runs:**
 
-   **Template:** `~/.kiro/skills/templates/pipeline-templates/linux-pipeline-template.md`
-   **Pool:** `linux-agent-pool` (Linux self-hosted)
+   **Template:** `~/.kiro/skills/templates/pipeline-templates/linuxAzureTemplate.md`
+   **Pool:** `qa-automation` (Linux self-hosted)
 
-   **Steps:**
    ```
-   a. Read linux-pipeline-template.md → fill placeholders:
+   a. Read linuxAzureTemplate.md → fill placeholders:
       - [TYPE] = SIT/UAT
       - [SystemFeaturePascal] = feature PascalCase
       - [system-feature-kebab] = feature kebab-case
@@ -271,7 +338,7 @@ Round 3: Final Run
 7. **Final verification checklist:**
    - [ ] All test scenarios PASS against real system (local)
    - [ ] Spec artifacts saved to knowledge (Round 1 + Round 2)
-   - [ ] .spec.ts files updated with real data
+   - [ ] Test files updated with real data (`.spec.ts` or `.robot`)
    - [ ] Test results uploaded to Azure DevOps (per TS card)
    - [ ] Pipeline YAML created and registered
    - [ ] Pipeline first run PASS (if triggered)
@@ -280,7 +347,9 @@ Round 3: Final Run
 
 ---
 
-## playwright-cli Quick Reference
+## Quick Reference
+
+### playwright-cli
 
 | Command | Purpose | Used in |
 |---------|---------|---------|
@@ -299,11 +368,24 @@ Round 3: Final Run
 | `console` | List console messages | Debugging |
 | `tracing-start` / `tracing-stop` | Record trace | Performance capture |
 
+### Robot Framework / Appium
+
+| Tool | Command/Action | Purpose | Used in |
+|------|---------------|---------|---------|
+| Appium | `appium --port 4723` | Start Appium server | Round 1, 2 |
+| appium-mcp | `get_page_source` | XML dump of current screen | Round 2 |
+| appium-mcp | `find_element(strategy, value)` | Verify locator | Round 2 |
+| Appium Inspector | GUI element inspection | Capture locators | Round 2 |
+| mitmproxy | `mitmproxy --port 8888` | Capture network | Round 2 |
+| Charles | GUI proxy | Capture network | Round 2 |
+| robot CLI | `robot --variable ENV:{env} tests/` | Run test suite | Round 3 |
+| robot CLI | `robot --include {tag} tests/` | Run by tag | Round 3 |
+
 ---
 
 ## Integration with AIDLC
 
-### Phase Routing (updated)
+### Phase Routing
 
 ```
 QA Automation:
@@ -317,7 +399,7 @@ QA Scenario + Automation:
 
 | User says | Action |
 |-----------|--------|
-| "dev delivered" | → Enter Phase 2.4b |
+| "dev delivered" / "dev ส่งแล้ว" | → Enter Phase 2.4b |
 | "verify", "switch to real" | → Enter Phase 2.4b |
 | "exploratory", "round 1" | → Phase 2.4b Round 1 only |
 | "capture", "round 2" | → Phase 2.4b Round 2 only |
@@ -332,10 +414,12 @@ QA Scenario + Automation:
 
 ### Files Updated
 
-| File | What changes | Updated in |
-|------|-------------|-----------|
-| `testScenarioPbi{ID}-*.md` | Steps/expected results adjusted to match reality | After Round 1 |
-| `*.spec.ts` | Locators, fixtures, assertions from real data | After Round 2 |
-| `*Data.ts` / `*Labels.ts` | Real test data + label strings | After Round 2 |
-| `*Page.ts` / `*Helper.ts` | Updated locators + API endpoints | After Round 2 |
-| Azure DevOps TS cards | Actual result + pass/fail status | Round 3 |
+| File | What changes | Platform | Updated in |
+|------|-------------|----------|-----------|
+| `testScenarioPbi{ID}-*.md` | Steps/expected results adjusted to match reality | Both | After Round 1 |
+| `*.spec.ts` | Locators, fixtures, assertions from real data | Playwright | After Round 2 |
+| `*Data.ts` / `*Labels.ts` | Real test data + label strings | Playwright | After Round 2 |
+| `*Page.ts` / `*Helper.ts` | Updated locators + API endpoints | Playwright | After Round 2 |
+| `*.robot` / `*_keywords.robot` | Updated locators + keywords + variables | RF | After Round 2 |
+| `*_variables.robot` / `*_data.robot` | Real test data + API payloads | RF | After Round 2 |
+| Azure DevOps TS cards | Actual result + pass/fail status | Both | Round 3 |
