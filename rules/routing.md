@@ -20,6 +20,33 @@ Pick the skill that best fits the task. Call it directly.
 | new feature / architecture / unclear scope / requirements unclear | `interview` → write CONTEXT.md → `dev-architect` → `aidlc` |
 | macos / swiftui / appkit / metal / swift | `macos-swiftui` |
 | finance / stocks / portfolio / earnings | matching finance skill |
+| android / kotlin / jetpack compose | `android` |
+| ios / uikit / swift ui kit / xcode (non-mac) | `ios` |
+| flutter / dart | `flutter` |
+| react / vue / next.js / frontend / html / css / browser dom | `frontend-dev` → `web` |
+| api server / express / fastapi / go service / backend | `backend-dev` |
+| security / vulnerability / owasp / cve / pentest | `security` |
+| ci/cd / github actions / docker / kubernetes / deploy pipeline | `devops-pipeline` |
+| simplify code / reduce complexity / too complex | `code-simplification` |
+| migrate library / upgrade dependency / deprecate / replace package | `deprecation-migration` |
+| adr / architecture decision record / decision log | `documentation-adrs` |
+| llm eval / eval harness / benchmark / skill eval | `eval-harness` |
+| load test / performance test / k6 / jmeter / stress test | `performance-testing` |
+| test scenario / test case design / scenario list | `test-scenario` → `test-scenario-rules` |
+| create hook / new hook / hook builder | `hook-creator` |
+| create skill / new skill / skill template | `skill-creator` |
+| verify this / self-verify / verification loop | `verification-loop` |
+| graph report / knowledge graph / project graph | `graph-report` |
+| ui design / wireframe / mockup / design component | `ui-designer` |
+| domain model / ubiquitous language / ddd / bounded context / glossary | `ubiquitous-language` |
+| stakeholder update / write for management / exec summary / slack message / standup | `management-talk` |
+| launch checklist / ship to prod / pre-release / staged rollout | `shipping-launch` |
+| export requirements / user story export / req to csv | `req-exporter` |
+| industry rules / compliance / healthcare design / finance design / ecommerce rules | `industry-rules` |
+| analyze codebase / gap analysis / extract requirements / วิเคราะห์ | `analysis-skills` |
+| bootstrap memory / setup agent memory / reset memory | `agent-memory` |
+| ask agy / second opinion from agy / have agy try | `agy` |
+| management talk / เขียนสำหรับ management / rewrite for vp | `management-talk` |
 | explain / summarize / search / brainstorm / diagnose | direct — no skill needed |
 | everything else | `interview` → then pick closest skill |
 

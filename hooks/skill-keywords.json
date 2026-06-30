@@ -50,5 +50,77 @@
   {
     "skill": "aidlc",
     "keywords": ["aidlc", "ai-dlc", "implement feature", "build feature"]
+  },
+  {
+    "skill": "macos-swiftui",
+    "keywords": ["swiftui", "appkit", "nsview", "nshostingview", "metal shader", "swift package"]
+  },
+  {
+    "skill": "xctest-macos",
+    "keywords": ["xctest", "xctestcase", "swift unit test", "swift test target"]
+  },
+  {
+    "skill": "qa-architect",
+    "keywords": ["qa strategy", "test architecture", "testing approach", "test plan", "test design"]
+  },
+  {
+    "skill": "playwright-testing",
+    "keywords": ["playwright", "e2e test", "browser test", "ui test playwright"]
+  },
+  {
+    "skill": "robotframework-testing",
+    "keywords": ["robot framework", "rf test", "robot test", ".robot file"]
+  },
+  {
+    "skill": "postman-to-playwright",
+    "keywords": ["postman", "import postman", "convert postman", "from postman collection"]
+  },
+  {
+    "skill": "hook-creator",
+    "keywords": ["create hook", "new hook", "add hook", "hook builder", "write a hook"]
+  },
+  {
+    "skill": "skill-creator",
+    "keywords": ["create skill", "new skill", "add skill", "skill template", "write a skill"]
+  },
+  {
+    "skill": "verification-loop",
+    "keywords": ["verification loop", "verify loop", "self-verify", "verify this works"]
+  },
+  {
+    "skill": "eval-harness",
+    "keywords": ["eval harness", "pass@k", "skill eval", "llm eval", "benchmark skill"]
+  },
+  {
+    "skill": "android",
+    "keywords": ["android", "kotlin", "jetpack compose", "android studio"]
+  },
+  {
+    "skill": "ios",
+    "keywords": ["ios", "uikit", "xcode project", "objective-c", "swift ios"]
+  },
+  {
+    "skill": "flutter",
+    "keywords": ["flutter", "dart", "flutter widget", "pub.dev"]
+  },
+  {
+    "skill": "security",
+    "keywords": ["owasp", "cve", "pentest", "sql injection", "xss", "csrf", "vulnerability scan"]
+  },
+  {
+    "skill": "devops-pipeline",
+    "keywords": ["dockerfile", "github actions", "kubernetes", "k8s", "ci/cd pipeline", "helm chart"]
+  },
+  {
+    "skill": "shipping-launch",
+    "keywords": ["launch checklist", "pre-release", "staged rollout", "feature flag rollout", "ship to prod"]
+  },
+  {
+    "skill": "management-talk",
+    "keywords": ["exec summary", "stakeholder update", "vp update", "slack for manager", "rewrite for non-technical", "standup message"]
+  },
+  {
+    "skill": "agent-memory",
+    "keywords": ["bootstrap memory", "setup agent memory", "reset memory", "memory template"]
   }
 ]
