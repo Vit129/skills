@@ -17,7 +17,7 @@ stale_commit() {
   [[ -z "$stored" || -z "$current" || "$stored" != "$current"* ]]
 }
 
-find "$HOME/Git/Personal" "$HOME/.claude" \
+find "$HOME/git/personal" "$HOME/.claude" \
   -maxdepth 4 -name "graphify-out" -type d \
   ! -path "*/skills-backup*" \
   ! -path "*/.claude/skills/*" \
