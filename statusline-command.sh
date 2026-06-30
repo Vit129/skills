@@ -1,165 +1,177 @@
 #!/usr/bin/env bash
-# Claude Code statusLine — atomic theme colors | cwd | git | model | ctx% | 5h | 7d | time
+# Claude Code statusLine — mirrors ~/.config/starship.toml layout
+# Segment order: directory | on  branch [git_status] | model (effort) | ctx% | 5h% | 7d%
+# starship mapping:
+#   [directory]  style="bold cyan"  truncation_length=3  truncate_to_repo=true
+#   [git_branch] symbol=" "  format="on [$symbol$branch](bold text) "
+#   [git_status] style="bold red"  symbols: = ⇡ ⇣ ⇕ ? ! + » ✘
 export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 
-input=$(cat 2>/dev/null) || input=""
+input=$(cat)
 
-model_short="" cwd="" ctx="" ctx_rem="" ctx_used="" ctx_total=""
-five_pct="" five_reset="" week_pct="" week_reset=""
-
-if [ -n "$input" ]; then
-  _vars=$(echo "$input" | jq -r '
-    def parse_date:
-      if type == "number" then
-        (if . > 10000000000 then . / 1000 | floor else . | floor end)
-      elif type == "string" then
-        (try (sub("\\.[0-9]+Z$"; "Z") | fromdateiso8601) catch null)
-      else null end;
-    . as $root |
-    "model_short=\((($root.model.display_name // "") | if startswith("Claude ") then sub("Claude "; "") elif startswith("Gemini ") then sub("Gemini "; "") else . end) | @sh)
+eval "$(echo "$input" | jq -r '
+def parse_date:
+  if type == "number" then
+    (if . > 10000000000 then . / 1000 | floor else . | floor end)
+  elif type == "string" then
+    (try (sub("\\.[0-9]+Z$"; "Z") | fromdateiso8601) catch null)
+  else null end;
+. as $root |
+"model_short=\(($root.model.display_name // "") | @sh)
+effort=\(($root.effort.level // "") | @sh)
 cwd=\(($root.cwd // $root.workspace.current_dir // "") | @sh)
 ctx=\(($root.context_window.used_percentage // "") | if type == "number" then round else "" end | @sh)
 ctx_rem=\(($root.context_window.remaining_percentage // "") | if type == "number" then round else "" end | @sh)
-ctx_used=\(($root.context_window.total_input_tokens // 0) | @sh)
-ctx_total=\(($root.context_window.context_window_size // 0) | @sh)
 five_pct=\(($root.rate_limits.five_hour.used_percentage // "") | if type == "number" then round else "" end | @sh)
 five_reset=\((($root.rate_limits.five_hour.resets_at // null) | parse_date // "") | @sh)
 week_pct=\(($root.rate_limits.seven_day.used_percentage // "") | if type == "number" then round else "" end | @sh)
 week_reset=\((($root.rate_limits.seven_day.resets_at // null) | parse_date // "") | @sh)"
-  ' 2>/dev/null) && eval "$_vars" 2>/dev/null || true
-fi
+')"
 
-# --- CWD (~ abbreviated, max 2 trailing components if deep) ---
-cwd_display=""
+# --- [directory] bold cyan, repo-relative when in git, truncate to last 3 components ---
+dir_display=""
 if [ -n "$cwd" ]; then
-  if [[ "$cwd" == "$HOME" ]]; then
-    cwd_display="~"
-  elif [[ "$cwd" == "$HOME"/* ]]; then
-    cwd_display="~${cwd#$HOME}"
+  git_root=$(git -C "$cwd" --no-optional-locks rev-parse --show-toplevel 2>/dev/null)
+  if [ -n "$git_root" ]; then
+    display_path="$(basename "$git_root")${cwd#$git_root}"
   else
-    cwd_display="$cwd"
+    display_path="${cwd/#$HOME/~}"
   fi
-  depth=$(echo "$cwd_display" | tr -cd '/' | wc -c | tr -d ' ')
-  if [ "$depth" -gt 3 ]; then
-    cwd_display="…/$(basename "$(dirname "$cwd_display")")/$(basename "$cwd_display")"
+  IFS='/' read -ra _parts <<< "$display_path"
+  _n="${#_parts[@]}"
+  if [ "$_n" -gt 3 ]; then
+    display_path="…/${_parts[$((_n-3))]}/${_parts[$((_n-2))]}/${_parts[$((_n-1))]}"
   fi
+  dir_display="$(printf '\033[1;36m%s\033[0m' "$display_path")"
 fi
 
-# --- Git branch (fast — name only, no fetch) ---
-git_branch=""
+# --- [git_branch] "on  branch" in bold (format="on [$symbol$branch](bold text) ") ---
+branch=""
+branch_display=""
 if [ -n "$cwd" ]; then
-  git_branch=$(git --no-optional-locks -C "$cwd" branch --show-current 2>/dev/null)
+  branch=$(git -C "$cwd" --no-optional-locks branch --show-current 2>/dev/null)
+  [ -n "$branch" ] && branch_display="$(printf 'on \033[1m %s\033[0m' "$branch")"
 fi
 
-# --- Git status (starship symbols: + staged, ! modified, ? untracked, ⇡ ahead, ⇣ behind) ---
-git_status_str=""
-if [ -n "$cwd" ] && [ -n "$git_branch" ]; then
-  _gs=$(git --no-optional-locks -C "$cwd" status --porcelain 2>/dev/null)
-  _staged=0; _modified=0; _untracked=0
+# --- [git_status] bold red symbols matching starship config ---
+# order: conflicted= staged+ renamed» deleted✘ modified! untracked? ahead⇡/behind⇣/diverged⇕
+git_status_display=""
+if [ -n "$branch" ]; then
+  _porcelain=$(git -C "$cwd" --no-optional-locks status --porcelain=v1 2>/dev/null)
+  _ab=$(git -C "$cwd" --no-optional-locks rev-list --count --left-right "@{upstream}...HEAD" 2>/dev/null)
+
+  _conflict=0 _staged=0 _renamed=0 _deleted=0 _modified=0 _untracked=0
   while IFS= read -r _line; do
-    [[ -z "$_line" ]] && continue
+    [ -z "$_line" ] && continue
     _x="${_line:0:1}"; _y="${_line:1:1}"
-    if [[ "$_x" == "?" && "$_y" == "?" ]]; then _untracked=$((_untracked+1)); continue; fi
-    [[ "$_x" != " " ]] && _staged=$((_staged+1))
-    [[ "$_y" == "M" || "$_y" == "D" ]] && _modified=$((_modified+1))
-  done <<< "$_gs"
-  _ab=$(git --no-optional-locks -C "$cwd" rev-list --left-right --count '@{upstream}...HEAD' 2>/dev/null)
+    [[ "$_x$_y" == "??" ]] && _untracked=1 && continue
+    [[ "$_x$_y" =~ ^(DD|AU|UD|UA|DU|AA|UU)$ ]] && _conflict=1 && continue
+    [[ "$_x" =~ [MADRCT] ]] && _staged=1
+    [[ "$_x" == "R" ]] && _renamed=1
+    [[ "$_y" == "M" ]] && _modified=1
+    [[ "$_y" == "D" && "$_x" != "D" ]] && _deleted=1
+  done <<< "$_porcelain"
+
   _ahead=0; _behind=0
   if [ -n "$_ab" ]; then
-    _behind=$(echo "$_ab" | awk '{print $1}')
-    _ahead=$(echo "$_ab" | awk '{print $2}')
+    _behind=$(awk '{print $1}' <<< "$_ab")
+    _ahead=$(awk '{print $2}' <<< "$_ab")
   fi
-  s=""
-  [ "$_staged" -gt 0 ] && s="${s}+"
-  [ "$_modified" -gt 0 ] && s="${s}!"
-  [ "$_untracked" -gt 0 ] && s="${s}?"
-  [ "$_ahead" -gt 0 ] && s="${s}⇡"
-  [ "$_behind" -gt 0 ] && s="${s}⇣"
-  git_status_str="$s"
+
+  _sym=""
+  [ "$_conflict"  -eq 1 ] && _sym="${_sym}="
+  [ "$_staged"    -eq 1 ] && _sym="${_sym}+"
+  [ "$_renamed"   -eq 1 ] && _sym="${_sym}»"
+  [ "$_deleted"   -eq 1 ] && _sym="${_sym}✘"
+  [ "$_modified"  -eq 1 ] && _sym="${_sym}!"
+  [ "$_untracked" -eq 1 ] && _sym="${_sym}?"
+  if   [ "$_ahead" -gt 0 ] && [ "$_behind" -gt 0 ]; then _sym="${_sym}⇕"
+  elif [ "$_ahead" -gt 0 ];  then _sym="${_sym}⇡"
+  elif [ "$_behind" -gt 0 ]; then _sym="${_sym}⇣"
+  fi
+
+  [ -n "$_sym" ] && git_status_display="$(printf '\033[1;31m[%s]\033[0m' "$_sym")"
 fi
 
 # --- Build output ---
 parts=()
+sep=" $(printf '\033[0;90m|\033[0m') "
 
-# CWD (atomic orange)
-[ -n "$cwd_display" ] && parts+=("$(printf '\033[38;5;208m%s\033[0m' "$cwd_display")")
+# 1. Directory (bold cyan) — starship [directory]
+[ -n "$dir_display" ] && parts+=("$dir_display")
 
-# Git branch (atomic green) + status (bold red, starship-style)
-if [ -n "$git_branch" ]; then
-  _b="$(printf '\033[38;5;79m%s\033[0m' "$git_branch")"
-  [ -n "$git_status_str" ] && _b="${_b}$(printf ' \033[0;31m[%s]\033[0m' "$git_status_str")"
-  parts+=("$_b")
+# 2. Branch + status inline — starship [git_branch][git_status]
+_git_part=""
+[ -n "$branch_display" ]     && _git_part="$branch_display"
+[ -n "$git_status_display" ] && _git_part="${_git_part} ${git_status_display}"
+[ -n "$_git_part" ]          && parts+=("$_git_part")
+
+# 3. Model + effort — Claude-specific (yellow)
+if [ -n "$model_short" ]; then
+  label="$model_short"
+  [ -n "$effort" ] && label="$label ($effort)"
+  parts+=("$(printf '\033[0;33m%s\033[0m' "$label")")
 fi
 
-# Model (atomic yellow)
-[ -n "$model_short" ] && parts+=("$(printf '\033[38;5;220m%s\033[0m' "$model_short")")
-
-# Context: percentage + (used/total) + remaining
+# 4. Context usage — Claude-specific (green/yellow/red by threshold)
 if [ -n "$ctx" ]; then
   ctx_rem_int="${ctx_rem:-$(( 100 - ctx ))}"
-  if [ "$ctx" -ge 80 ]; then c='\033[0;31m'
-  elif [ "$ctx" -ge 50 ]; then c='\033[0;33m'
+  if   [ "$ctx" -gt 75 ]; then c='\033[0;31m'
+  elif [ "$ctx" -gt 45 ]; then c='\033[0;33m'
   else c='\033[0;32m'; fi
-
-  tok_info=""
-  if [ -n "$ctx_used" ] && [ "$ctx_used" -gt 0 ] && [ -n "$ctx_total" ] && [ "$ctx_total" -gt 0 ]; then
-    used_k=$(awk "BEGIN {printf \"%.0fk\", $ctx_used/1000}")
-    total_k=$(awk "BEGIN {printf \"%.0fk\", $ctx_total/1000}")
-    rem_k=$(awk "BEGIN {printf \"%.0fk\", ($ctx_total - $ctx_used)/1000}")
-    tok_info=" (${used_k}/${total_k}) rem:${rem_k}"
-  fi
-
-  parts+=("$(printf "${c}ctx:%d%%%s\033[0m" "$ctx" "$tok_info")")
+  parts+=("$(printf "${c}ctx:%d%% rem:%d%%\033[0m" "$ctx" "$ctx_rem_int")")
 else
-  parts+=("$(printf '\033[0;90mctx:--%%\033[0m')")
+  parts+=("$(printf '\033[0;90mctx:--%% rem:--%%\033[0m')")
 fi
 
-# 5h usage + reset time
+# 5. 5h rate limit + countdown — Claude-specific
 if [ -n "$five_pct" ]; then
-  freset=""
+  timer=""
   if [ -n "$five_reset" ]; then
     now=$(date +%s)
-    if [ "$five_reset" -gt "$now" ]; then
-      freset=" $(date -r "$five_reset" '+%a %-I%p' 2>/dev/null || date -d "@$five_reset" '+%a %-I%p' 2>/dev/null)"
+    secs=$(( five_reset - now ))
+    if [ "$secs" -gt 0 ]; then
+      mins=$(( secs / 60 ))
+      if [ "$mins" -ge 60 ]; then
+        timer=" $(printf '%dh%02dm' $(( mins / 60 )) $(( mins % 60 )))"
+      else
+        timer=" ${mins}m"
+      fi
     else
-      freset=" reset"
+      timer=" reset"
     fi
   fi
-  if [ "$five_pct" -ge 80 ]; then c='\033[0;31m'
-  elif [ "$five_pct" -ge 50 ]; then c='\033[0;33m'
+  if   [ "$five_pct" -gt 75 ]; then c='\033[0;31m'
+  elif [ "$five_pct" -gt 45 ]; then c='\033[0;33m'
   else c='\033[0;32m'; fi
-  parts+=("$(printf "${c}5h:%d%% rem:%d%%%s\033[0m" "$five_pct" "$(( 100 - five_pct ))" "$freset")")
+  parts+=("$(printf "${c}5h:%d%% rem:%d%%%s\033[0m" "$five_pct" "$(( 100 - five_pct ))" "$timer")")
 else
-  parts+=("$(printf '\033[0;90m5h:--%% rem:--%%\033[0m')")
+  parts+=("$(printf '\033[0;90m5h:--%% rem:--%% --\033[0m')")
 fi
 
-# 7d usage + weekly reset date
+# 6. 7d rate limit + reset day — Claude-specific
 if [ -n "$week_pct" ]; then
-  wreset=""
+  wtimer=""
   if [ -n "$week_reset" ]; then
     now=$(date +%s)
     if [ "$week_reset" -gt "$now" ]; then
-      wreset=" $(date -r "$week_reset" '+%a %-I%p' 2>/dev/null || date -d "@$week_reset" '+%a %-I%p' 2>/dev/null)"
+      wtimer=" $(date -r "$week_reset" '+%a %-I %p' 2>/dev/null || date -d "@$week_reset" '+%a %-I %p' 2>/dev/null)"
     else
-      wreset=" reset"
+      wtimer=" reset"
     fi
   fi
-  if [ "$week_pct" -ge 80 ]; then c='\033[0;31m'
-  elif [ "$week_pct" -ge 50 ]; then c='\033[0;33m'
+  if   [ "$week_pct" -gt 75 ]; then c='\033[0;31m'
+  elif [ "$week_pct" -gt 45 ]; then c='\033[0;33m'
   else c='\033[0;32m'; fi
-  parts+=("$(printf "${c}7d:%d%% rem:%d%%%s\033[0m" "$week_pct" "$(( 100 - week_pct ))" "$wreset")")
+  parts+=("$(printf "${c}7d:%d%% rem:%d%%%s\033[0m" "$week_pct" "$(( 100 - week_pct ))" "$wtimer")")
 else
-  parts+=("$(printf '\033[0;90m7d:--%% rem:--%%\033[0m')")
+  parts+=("$(printf '\033[0;90m7d:--%% rem:--%% --\033[0m')")
 fi
 
-# Time (atomic blue, HH:MM)
-parts+=("$(printf '\033[38;5;75m%s\033[0m' "$(date '+%H:%M')")")
-
-sep=" $(printf '\033[0;90m|\033[0m') "
+# Join with separator
 result=""
 for part in "${parts[@]}"; do
   [ -z "$result" ] && result="$part" || result="${result}${sep}${part}"
 done
 
 printf '%b\n' "$result"
-exit 0

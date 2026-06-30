@@ -351,15 +351,16 @@ Automation Pre-Flight (ถามครั้งเดียว ก่อนเ�
 > Trigger: Dev delivers → user says "dev ส่งแล้ว" / "verify" / "switch to real"
 > Skip condition: Pre-flight answer was "Real only" AND Phase 2.4 already ran against real
 > Full reference: `references/phases/construction/verification-against-real.md`
+> Platform: Playwright (Web/API) or Robot Framework (Mobile/RF)
 
 | Step | Action | Skip Condition |
 |------|--------|----------------|
 | 0 | **Load reference:** Read `references/phases/construction/verification-against-real.md` | Never skip |
-| 1 | **Round 1 — Exploratory Play:** Open app via `playwright-cli open <url>` → follow test scenarios → record actual steps to `agent-memory/knowledge/qa/{feature}-actual-flow.md` | Never skip |
+| 1 | **Round 1 — Exploratory Play (platform-specific):**<br>**Playwright:** `playwright-cli open <url>` → follow test scenarios manually → record actual steps<br>**RF/Mobile:** Launch app via Appium/device → manually follow test scenarios → record actual steps<br>→ write `agent-memory/knowledge/qa/{feature}-actual-flow.md` | Never skip |
 | 2 | **Update test scenarios:** Compare actual flow vs Phase 2.2 design → fix discrepancies in `testScenarioPbi{ID}-*.md` | Skip if no discrepancies |
-| 3 | **Round 2 — Capture & Spec:** Play again → capture network (`playwright-cli requests/request/response-body`) + elements (`playwright-cli snapshot/generate-locator`) → write `agent-memory/knowledge/qa/{feature}-api-element-spec.md` | Never skip |
-| 4 | **Update automation:** Use spec artifacts to update .spec.ts, fixtures, locators, page objects, helpers | Never skip |
-| 5 | **Round 3 — Final Run:** `npm run {api/ui}:{env}:{feature}:cliMode` → all tests must pass against real | Never skip |
+| 3 | **Round 2 — Capture & Spec (platform-specific):**<br>**Playwright:** `playwright-cli requests/request/response-body` + `playwright-cli snapshot/generate-locator`<br>**RF/Mobile:** Capture network via Appium logs or proxy (Charles/mitmproxy) + `Get WebElements` / `appium-mcp` locator inspection<br>→ write `agent-memory/knowledge/qa/{feature}-api-element-spec.md` | Never skip |
+| 4 | **Update automation (platform-specific):**<br>**Playwright:** Update `.spec.ts`, fixtures, locators, page objects, helpers<br>**RF:** Update `.robot` files, resource files, locators, custom keywords | Never skip |
+| 5 | **Round 3 — Final Run (platform-specific):**<br>**Playwright:** `npm run {api/ui}:{env}:{feature}:cliMode` → all tests must pass against real<br>**RF:** `robot --variable ENV:{env} --include {feature} tests/` → all tests must pass against real | Never skip |
 | 5b | **Triage failures:** Test bug → fix + re-run (max 3x). App bug → file Bug in Azure via MCP `wit_create_work_item` | Skip if all pass |
 | 6 | **Upload result:** Upload test results to your project management tool (create a script that updates test case cards with actual results) → update Azure TS cards with actual results | Never skip (ask is mandatory) |
 | 7 | **Git commit:** `test: {feature} — verified against real ({env})` | Never skip |
