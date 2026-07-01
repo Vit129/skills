@@ -1,6 +1,7 @@
 # Memory — ~/.claude (Global)
 
 ## Decisions
+- [2026-07-01] mobilewright (iOS/Android native mobile testing, Playwright-style API) evaluated as RF+AppiumLibrary alternative — not wrapped in a skill (it's a plain CLI like playwright-cli, not skill-worthy). Install plan kept at `agent-memory/plans/mobilewright-install/plan.md`, not currently installed.
 - [2026-06-16] Agent memory v2: CONTEXT.md + MEMORY.md replaces memory.md
 - [2026-06-16] Skill conflict resolution added to `rules/skill-auto-detect.md` — priority: debugging > qa > dev > thinking > review > tooling > personal
 - [2026-05-23] Hermes re-adopted — GitHub Copilot gpt-4o-mini (free); GRAPHIFY_USAGE.md standardized

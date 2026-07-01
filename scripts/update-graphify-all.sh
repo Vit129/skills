@@ -6,8 +6,6 @@ set -euo pipefail
 FORCE=0
 [[ "${1:-}" == "--force" ]] && FORCE=1
 
-SUMMARY_SCRIPT="$(dirname "$0")/generate-graph-summary.sh"
-
 stale_commit() {
   local report="$1"
   local proj_dir="$2"
@@ -32,7 +30,6 @@ find "$HOME/git/personal" "$HOME/.claude" \
   if [[ "$FORCE" -eq 1 ]] || [[ ! -f "$report" ]] || stale_commit "$report" "$proj"; then
     echo "→ $(basename "$proj") (updating)"
     graphify update "$proj" 2>&1 | tail -1 || true
-    "$SUMMARY_SCRIPT" "$proj"
   else
     echo "  $(basename "$proj") (clean)"
   fi

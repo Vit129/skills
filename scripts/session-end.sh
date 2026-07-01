@@ -33,7 +33,6 @@ if [[ -d "$GOUT" ]] && git -C "$PROJ" rev-parse --git-dir &>/dev/null; then
   echo "▸ Graphify — $(basename "$PROJ")"
   if [[ -z "$STORED" || "$STORED" != "$CURRENT"* ]]; then
     graphify update "$PROJ" 2>&1 | tail -1 || true
-    "$SCRIPT_DIR/generate-graph-summary.sh" "$PROJ"
   else
     echo "  graph up-to-date (${CURRENT})"
   fi

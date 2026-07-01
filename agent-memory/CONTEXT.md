@@ -3,6 +3,7 @@
 ## Now
 - **Task:** idle
 - **Status:** idle
+- **Deferred plan:** mobilewright install (iOS/Android native testing, Playwright-style) — `agent-memory/plans/mobilewright-install/plan.md`. Installed+verified once via `mobilewright doctor`, then uninstalled (no active task). Known npm issue: pin `mobilewright@0.0.46`, `0.0.47` 404s on unpublished `@mobilewright/inspector`.
 
 ## Completed (2026-06-26)
 

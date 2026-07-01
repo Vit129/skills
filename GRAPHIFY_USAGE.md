@@ -66,8 +66,8 @@ Use `GRAPH_REPORT.md` only for broad architecture review when `query`, `explain`
 graphify extract .
 
 # Update after code/rule/skill/memory changes (AST-only, no LLM cost)
-# ALWAYS follow with summary regen so GRAPH_SUMMARY.md stays current:
-graphify update . && ~/.claude/scripts/generate-graph-summary.sh .
+# GRAPH_SUMMARY.md is regenerated natively as part of this:
+graphify update .
 
 # Rerun clustering/report without full extraction
 graphify cluster-only .
