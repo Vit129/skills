@@ -22,6 +22,16 @@ Personal skill + memory system for Claude Code.
   plugins/ponytail/      — lazy senior dev mode (always-on)
 ```
 
+## Setup on a New Machine
+
+`settings.json` is gitignored (machine-local permissions/MCP/env) so it doesn't clone with the repo. After cloning, add to `settings.json` → `skillOverrides`:
+
+```json
+"handoff": "name-only"
+```
+
+This keeps `Skill(handoff)` on-demand only (see `skills/handoff/SKILL.md`) — without it the skill can still be invoked by name, it just also becomes eligible for auto-trigger by description match.
+
 ## Memory Lifecycle
 
 | Phase | Action |
