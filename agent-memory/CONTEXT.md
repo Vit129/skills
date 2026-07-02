@@ -5,6 +5,18 @@
 - **Status:** idle
 - **Deferred plan:** mobilewright install (iOS/Android native testing, Playwright-style) — `agent-memory/plans/mobilewright-install/plan.md`. Installed+verified once via `mobilewright doctor`, then uninstalled (no active task). Known npm issue: pin `mobilewright@0.0.46`, `0.0.47` 404s on unpublished `@mobilewright/inspector`.
 
+## Handoff
+<!-- Filled by Skill(handoff) when work continues in a different agent or session. Summarize, don't dump transcript — reference plans/diffs/ADRs by path instead of duplicating them. Redact secrets. Clear once picked up. -->
+- **From:** (none)
+- **To:** (none — open)
+- **Suggested skills:** (none)
+- **Note:**
+
+## Claims
+<!-- Who's actively working on what right now, so parallel agents/sessions don't duplicate work. -->
+<!-- Add a line before starting a sub-task; delete your line when done (this file is rewritten each session anyway). Advisory only, not a hard lock. -->
+- (none)
+
 ## Completed (2026-06-26)
 
 ### Step 1 — Global skill-trigger hook

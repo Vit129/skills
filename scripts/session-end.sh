@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # End-of-session: scaffold CONTEXT/MEMORY update checklist + prune + graphify.
-# Usage: session-end.sh [project-dir] [keep_days=30]
+# Usage: session-end.sh [project-dir] [keep_days=7]
 set -euo pipefail
 
 PROJ="${1:-$PWD}"
-KEEP_DAYS="${2:-30}"
+KEEP_DAYS="${2:-7}"
 SCRIPT_DIR="$(dirname "$0")"
 MEM_DIR="$PROJ/agent-memory"
 
@@ -16,6 +16,8 @@ echo "▸ Memory update checklist (AI task — do before running this script)"
 echo "  [ ] Rewrite agent-memory/CONTEXT.md  → current task state + last session block"
 echo "  [ ] Append to agent-memory/MEMORY.md → new decisions (date-prefixed)"
 echo "  [ ] Update agent-memory/INDEX.md     → if new plans/ or knowledge/ files added"
+echo "  [ ] If work continues elsewhere      → Skill(handoff) to fill CONTEXT.md ## Handoff"
+echo "  [ ] Release any claims you made      → delete your line in CONTEXT.md ## Claims"
 echo ""
 
 # ── 2. Prune all agent-memory dirs ────────────────────────────────────────

@@ -49,6 +49,7 @@ Pick the skill that best fits the task. Call it directly.
 | workout / exercise plan / nutrition / diet / meal plan / macro | `fitness` |
 | ภาษี / vat / บัญชี / thai tax / thai accounting / withholding tax | `thai-accountant` |
 | bootstrap memory / setup agent memory / reset memory | `agent-memory` |
+| handoff / hand off / ส่งต่องาน / pass to codex/gemini/kiro / switch agent | `handoff` |
 | ask agy / second opinion from agy / have agy try | `agy` |
 | management talk / เขียนสำหรับ management / rewrite for vp | `management-talk` |
 | explain / summarize / search / brainstorm / diagnose | direct — no skill needed |

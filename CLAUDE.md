@@ -20,7 +20,7 @@ bash ~/.claude/scripts/session-start.sh [project-dir]
 ## Session End
 
 ```bash
-bash ~/.claude/scripts/session-end.sh [project-dir] [keep_days=30]
+bash ~/.claude/scripts/session-end.sh [project-dir] [keep_days=7]
 # 1. Rewrite CONTEXT.md + append MEMORY.md + update INDEX.md
 # 2. Prune stale agent-memory (all projects)
 # 3. Update graphify + GRAPH_SUMMARY (current project, if git HEAD changed)
@@ -57,6 +57,12 @@ Graphified projects auto-load `@graphify-out/GRAPH_SUMMARY.md` via their own CLA
 
 Promote patterns: fix/pattern → `knowledge/cases/` + PLAYBOOK.md index; domain → `knowledge/{domain}.md`
 
+**Cross-agent/session handoff** (Codex, Gemini, Kiro, or a different Claude session on the same project) — all in CONTEXT.md, no separate file:
+- Sequential → `Skill(handoff)` fills CONTEXT.md's `## Handoff` (From/To/Suggested skills/Note) at session end; next `session-start.sh` prints it.
+- Parallel → add a line to CONTEXT.md's `## Claims` before starting a sub-task, delete it when done; `session-start.sh` prints unreleased claims. Details: `skills/agent-memory/SKILL.md` → Multi-Agent / Multi-Session Handoff.
+
+**Retention:** stale CONTEXT.md/MEMORY.md entries prune after 7 days (was 30) — archived to `COMPLETED-TASKS-ARCHIVE.md`, never deleted outright.
+
 ---
 
 ## Maintenance Scripts
@@ -65,10 +71,10 @@ Promote patterns: fix/pattern → `knowledge/cases/` + PLAYBOOK.md index; domain
 ~/.claude/scripts/session-start.sh [project-dir]
 # Load context: print CONTEXT + MEMORY decisions + PLAYBOOK; auto-archive if MEMORY > 100 lines
 
-~/.claude/scripts/session-end.sh [project-dir] [keep_days=30]
+~/.claude/scripts/session-end.sh [project-dir] [keep_days=7]
 # End-of-session: prune stale agent-memory (all projects) + update graphify (current project)
 
-~/.claude/scripts/prune-all-agent-memory.sh [keep_days=30]
+~/.claude/scripts/prune-all-agent-memory.sh [keep_days=7]
 # Prune MEMORY.md dated entries + CONTEXT.md old session blocks across all projects
 
 ~/.claude/scripts/update-graphify-all.sh [--force]

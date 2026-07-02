@@ -24,7 +24,7 @@ if [[ -f "$MEMORY" ]]; then
 fi
 
 # ── 2. Prune stale blocks in CONTEXT.md ───────────────────────────────────
-python3 "$(dirname "$0")/prune-agent-memory.py" "$MEM_DIR" 30 >/dev/null
+python3 "$(dirname "$0")/prune-agent-memory.py" "$MEM_DIR" 7 >/dev/null
 
 sep() { printf '%.0s─' {1..56}; echo; }
 
@@ -39,6 +39,26 @@ if [[ -f "$MEM_DIR/CONTEXT.md" ]]; then
   [[ -n "$last" ]] && echo "(last: ${last#'### '})"
   echo "(full: cat agent-memory/CONTEXT.md)"
   sep
+fi
+
+# ── 3b. CONTEXT: ## Handoff — only if not (none) ──────────────────────────
+if [[ -f "$MEM_DIR/CONTEXT.md" ]]; then
+  handoff=$(awk '/^## Handoff/{p=1; next} p && /^#{1,3} /{exit} p && /^<!--/{next} p && /^- /{print}' "$MEM_DIR/CONTEXT.md")
+  if [[ -n "$handoff" ]] && ! grep -q '\*\*From:\*\* (none)' <<< "$handoff"; then
+    echo "## Handoff — work continuing across agent/session"
+    echo "$handoff"
+    sep
+  fi
+fi
+
+# ── 3c. CONTEXT: ## Claims — only if not (none) ───────────────────────────
+if [[ -f "$MEM_DIR/CONTEXT.md" ]]; then
+  claims=$(awk '/^## Claims/{p=1; next} p && /^#{1,3} /{exit} p && /^<!--/{next} p && /^- /{print}' "$MEM_DIR/CONTEXT.md")
+  if [[ -n "$claims" ]] && ! grep -q '^- (none)' <<< "$claims"; then
+    echo "## Claims — check before starting overlapping work"
+    echo "$claims"
+    sep
+  fi
 fi
 
 # ── 4. agent-memory/MEMORY.md: Active Decisions — newest 7 ───────────────

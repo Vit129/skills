@@ -23,7 +23,7 @@ Bootstrap, manage, and reference the agent memory system.
 
 ```text
 agent-memory/
-├── CONTEXT.md         ← Hot state — current task, open questions, key files, session notes
+├── CONTEXT.md         ← Hot state — current task, handoff, claims, open questions, key files, session notes
 ├── MEMORY.md          ← Persistent decisions + lessons (append-only)
 ├── PLAYBOOK.md        ← Problem resolution cases (scored)
 ├── SKILL-LOG.md       ← Skill improvement proposals (append-only)
@@ -78,7 +78,7 @@ The script is idempotent (safe to run multiple times) and creates all required f
 
 ## Knowledge Capture
 
-- `CONTEXT.md` is the hot state: current task, open questions, key files, session notes. Rewritten each session.
+- `CONTEXT.md` is the hot state: current task, handoff, claims, open questions, key files, session notes. Rewritten each session.
 - `MEMORY.md` is append-only: decisions, lessons (CASE-xxx), conventions. Never overwrite — only append.
 - `PLAYBOOK.md` stores repeatable problem cases with scores. It is the staging area for durable lessons.
 - `SKILL-LOG.md` stores skill improvement proposals only. It is not a knowledge archive.
@@ -104,6 +104,15 @@ The script is idempotent (safe to run multiple times) and creates all required f
 - `PLAYBOOK.md` answers: "What fix worked before?"
 - `SKILL-LOG.md` answers: "What should the skill system learn or change?"
 - `knowledge/` answers: "What should be kept as durable reference knowledge?"
+
+## Multi-Agent / Multi-Session Handoff
+
+Same project, different AI tool (Codex, Gemini, Kiro) or a different Claude Code session — everything lives in `CONTEXT.md`, no separate file, since it's rewritten every session anyway:
+
+- **Sequential** (one finishes, another continues later): run `Skill(handoff)` — fills `CONTEXT.md`'s `## Handoff` section (`From` / `To` / `Suggested skills` / `Note`), summarizing rather than dumping transcript, referencing artifacts instead of duplicating them, and redacting secrets. Name-only skill (frontmatter `disable-model-invocation: true`, mirrored in `settings.json` → `skillOverrides`) — invoke explicitly, it won't fire on every session end. `session-start.sh` prints the block automatically next session if non-empty.
+- **Parallel** (agents working at the same time): add a line to `CONTEXT.md`'s `## Claims` section before starting a sub-task; delete your line when done. `session-start.sh` prints unreleased claims so the next agent sees what's already in flight before picking overlapping work.
+
+`## Claims` is advisory, not a hard lock — since `CONTEXT.md` is rewritten wholesale (not appended) at session end, two agents writing at the exact same instant can still clobber each other. Acceptable tradeoff for a single operator orchestrating multiple tools; if true concurrent writes ever become a real problem, the upgrade path is back to a dedicated append-only file.
 
 ## Hooks (6 total)
 
