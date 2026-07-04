@@ -46,3 +46,8 @@
    - Once PR is created, update work item status to "Code Review"
    - Notify reviewers and stakeholders
    - Address review feedback and update PR as needed
+
+3. **Fill Final Report & Receipts in `audit.md`**
+   - Diff stats: `git diff --stat` against the feature's baseline commit
+   - Verification result: latest `verification-loop` report
+   - PR link: the URL from step 1
