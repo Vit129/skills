@@ -35,6 +35,13 @@ Use the output to understand the impact surface before touching anything. Skip f
 - State a brief numbered plan for multi-step work. Loop until verified.
 - Weak criteria ("make it work") → ask for clarification before proceeding.
 
+## 6. Visual Output: .md vs HTML/Artifact
+
+- **Test scene/structure docs, specs, scaffolding** → always `.md`/text. Never a checked-in `.html` file — markup overhead costs tokens on every future AI read with no readability gain (see § 2).
+- **UI prototype/demo that a human needs to actually see** (layout, interaction, "does this look right?") → use the **Artifact tool**, not a workspace `.html` file. Rendering it beats describing it in chat text — chat descriptions are lossy and still cost tokens, plus the inevitable "not quite like that" rework loop.
+- **Actual test scripts** (Playwright/Vitest/etc.) → stay as code (`.ts`/`.js`). They execute, they aren't viewed — HTML adds nothing.
+- Treat demo/Artifact HTML as throwaway scratch. Once the human approves it, port the agreed UI into the real framework component — don't ship the demo file as production code.
+
 ## Citation Format
 
 `[source:path/or/command] — brief note`
