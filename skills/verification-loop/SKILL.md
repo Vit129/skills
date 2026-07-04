@@ -2,16 +2,16 @@
 name: verification-loop
 description: >
   Use after implementing any task, before marking a task done, before creating a commit,
-  or when /review is invoked. Runs build, lint, test, coverage, and security checks
-  in mandatory order before sign-off.
-version: 2.0.0
-last_improved: 2026-06-30
-improvement_count: 1
+  or when /review is invoked. Runs diff-size, build, lint, test, coverage, and security
+  checks in mandatory order before sign-off.
+version: 2.1.0
+last_improved: 2026-07-04
+improvement_count: 2
 ---
 
 # Verification Loop
 
-Run before every commit. Mandatory order: Build → Lint → Test → Coverage → Security.
+Run before every commit. Mandatory order: Diff Size → Build → Lint → Test → Coverage → Security.
 
 ---
 
@@ -27,6 +27,7 @@ Run before every commit. Mandatory order: Build → Lint → Test → Coverage �
 
 | Metric | Target |
 |--------|--------|
+| Diff Size | Matches task scope — flag if files/lines changed are far outside what the task should touch |
 | Build | Zero errors |
 | Lint | Zero warnings (new code) |
 | Tests | 100% pass rate |
@@ -42,6 +43,7 @@ Run before every commit. Mandatory order: Build → Lint → Test → Coverage �
 
 | Check | Status | Notes |
 |-------|--------|-------|
+| Diff Size | ✅ Pass | `git diff --stat`: 3 files, 42 lines — matches task scope |
 | Build | ✅ Pass | tsc --noEmit clean |
 | Lint | ✅ Pass | 0 warnings |
 | Tests | ✅ Pass | 12/12 passed |
@@ -55,6 +57,7 @@ Run before every commit. Mandatory order: Build → Lint → Test → Coverage �
 
 ## Rules
 
+- **Check diff size first** — run `git diff --stat` before Build; if files/lines changed are far beyond the task's scope, stop and confirm before running the rest of the loop
 - **Never skip build check** — even for "small" changes
 - **Run tests locally** before pushing
 - **One commit per task** — verification must pass per-task, not per-batch
