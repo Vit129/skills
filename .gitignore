@@ -39,8 +39,7 @@ scripts/sync-skills-to-claude.sh
 skills/fitness/personal/
 
 # Re-ignore noise inside tracked folders
-skills/**/.DS_Store
-skills/.DS_Store
+**/.DS_Store
 skills/**/_internal/
 skills/.claude/
 skills/**/.claude/
