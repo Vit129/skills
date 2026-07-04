@@ -19,6 +19,7 @@ find "$HOME/git/personal" "$HOME/.claude" \
   -maxdepth 4 -name "graphify-out" -type d \
   ! -path "*/skills-backup*" \
   ! -path "*/.claude/skills/*" \
+  ! -path "*/9arm-skills*" \
   2>/dev/null | sort | while read -r gout; do
 
   proj="$(dirname "$gout")"
@@ -29,7 +30,15 @@ find "$HOME/git/personal" "$HOME/.claude" \
 
   if [[ "$FORCE" -eq 1 ]] || [[ ! -f "$report" ]] || stale_commit "$report" "$proj"; then
     echo "→ $(basename "$proj") (updating)"
-    graphify update "$proj" 2>&1 | tail -1 || true
+    if [[ -f "$proj/scripts/graphify-refresh.sh" ]]; then
+      echo "  running custom refresh script (scripts/graphify-refresh.sh)..."
+      bash "$proj/scripts/graphify-refresh.sh" || true
+    elif [[ -f "$proj/Scripts/graphify-refresh.sh" ]]; then
+      echo "  running custom refresh script (Scripts/graphify-refresh.sh)..."
+      bash "$proj/Scripts/graphify-refresh.sh" || true
+    else
+      graphify update "$proj" 2>&1 | tail -1 || true
+    fi
   else
     echo "  $(basename "$proj") (clean)"
   fi

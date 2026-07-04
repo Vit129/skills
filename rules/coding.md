@@ -11,6 +11,7 @@
 - Minimum code that solves the problem. No speculative features or abstractions.
 - No "flexibility" that wasn't requested. If 200 lines could be 50, rewrite.
 - Ask: "Would a senior engineer say this is overcomplicated?"
+- ห้ามเขียน/สร้าง หรือเปิดดู/อ่านไฟล์ HTML ที่เป็นรายงานหรือมีข้อมูลขนาดใหญ่ฝังอยู่ (เช่น graph.html ของ graphify หรือ test/coverage report) ใน workspace เป็นอันขาด เนื่องจากทำให้สิ้นเปลือง token และ context window มหาศาลในการประมวลผลของ AI (สำหรับ graphify ให้ใช้คำสั่ง query/path/explain หรือใช้ไฟล์ markdown/text แทน และสำหรับเอกสาร/รายงานอื่นๆ ให้สร้างและเขียนเป็น Markdown หรือ Text เสมอ)
 
 ## 3. Graph Before Edit
 

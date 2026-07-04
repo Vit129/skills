@@ -17,6 +17,17 @@
 <!-- Add a line before starting a sub-task; delete your line when done (this file is rewritten each session anyway). Advisory only, not a hard lock. -->
 - (none)
 
+## Completed (2026-07-02)
+
+### Cross-agent/multi-session handoff
+- Added `## Handoff` + `## Claims` sections to `CONTEXT.md` (template + this file) — single-file design, no separate CLAIMS.md or temp-file, since CONTEXT.md is already rewritten every session per existing lifecycle rule
+- Created `skills/handoff/SKILL.md` (name-only, `skillOverrides.handoff` in `settings.json` — not tracked by git, see README "Setup on a New Machine") — summarizes, redacts secrets, references artifacts instead of duplicating, suggests next skill
+- `session-start.sh`/`session-end.sh` updated to print/checklist the new sections
+
+### Retention fix
+- `prune-agent-memory.py` was silently **deleting** (not archiving) MEMORY.md entries past cutoff despite MEMORY.md being documented "append-only, never overwrite" — fixed: pruned content now archives to `COMPLETED-TASKS-ARCHIVE.md` before removal
+- Default retention shortened 30 → 7 days (session-start.sh, session-end.sh, prune-all-agent-memory.sh) to match actual session cadence
+
 ## Completed (2026-06-26)
 
 ### Step 1 — Global skill-trigger hook

@@ -34,7 +34,15 @@ if [[ -d "$GOUT" ]] && git -C "$PROJ" rev-parse --git-dir &>/dev/null; then
   echo ""
   echo "▸ Graphify — $(basename "$PROJ")"
   if [[ -z "$STORED" || "$STORED" != "$CURRENT"* ]]; then
-    graphify update "$PROJ" 2>&1 | tail -1 || true
+    if [[ -f "$PROJ/scripts/graphify-refresh.sh" ]]; then
+      echo "  running custom refresh script (scripts/graphify-refresh.sh)..."
+      bash "$PROJ/scripts/graphify-refresh.sh" || true
+    elif [[ -f "$PROJ/Scripts/graphify-refresh.sh" ]]; then
+      echo "  running custom refresh script (Scripts/graphify-refresh.sh)..."
+      bash "$PROJ/Scripts/graphify-refresh.sh" || true
+    else
+      graphify update "$PROJ" 2>&1 | tail -1 || true
+    fi
   else
     echo "  graph up-to-date (${CURRENT})"
   fi
