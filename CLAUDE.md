@@ -30,7 +30,6 @@ bash ~/.claude/scripts/session-end.sh [project-dir] [keep_days=7]
 
 ## Infrastructure
 
-- **Headroom Proxy** (`localhost:8787`) — token compression 47–92%. Always-on via `.zshrc` env vars. Use `mcp__headroom__headroom_compress` for large tool outputs.
 - **Ponytail** — lazy senior dev mode, always-on (`full` mode). Loaded via `@plugins/marketplaces/ponytail/AGENTS.md`.
 
 ---

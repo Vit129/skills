@@ -1,7 +1,7 @@
 # Headroom — Context Compression for AI Agents
 
 **GitHub:** https://github.com/chopratejas/headroom  
-**Status:** ACTIVE — v0.26.0 installed 2026-06-18, running as LaunchAgent
+**Status:** ARCHIVED — fully uninstalled 2026-07-08 (plugin, launchd agents, .zshrc env vars, marketplace clone all removed). Kept for historical reference only.
 
 ## What it does
 
