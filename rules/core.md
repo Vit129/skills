@@ -56,3 +56,11 @@ No task is complete until: build passes + relevant tests pass. If tests cannot r
 
 - New branch before coding unless instructed otherwise
 - Never push directly to `main`/`master` without permission
+
+### VCS Remote by Path
+
+- `~/.kiro/**`, `~/Git/Company/**` → Azure DevOps only. Never `gh`/GitHub CLI.
+  Check `git remote -v` first (expect `ssh.dev.azure.com`).
+  PR: `az repos pr create --repository <repo> --source-branch <branch> --target-branch main`
+  az not authenticated → push branch, tell user to open PR manually.
+- Everywhere else (personal projects) → GitHub as normal (`gh pr create` etc).
