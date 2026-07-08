@@ -1,5 +1,17 @@
 [
   {
+    "skill": "playwright-rules",
+    "keywords": ["playwright rules", "playwright convention", "playwright standard"]
+  },
+  {
+    "skill": "robotframework-rules",
+    "keywords": ["robot framework rules", "rf convention", "rf standard"]
+  },
+  {
+    "skill": "test-scenario-rules",
+    "keywords": ["test scenario rules", "scenario format", "test case standard"]
+  },
+  {
     "skill": "debug-mantra",
     "keywords": ["crash", "bug", "debug", "exception", "stack trace", "use-after-free", "broken", "not working", "fix bug", "debug this"]
   },
@@ -138,5 +150,65 @@
   {
     "skill": "thai-accountant",
     "keywords": ["ภาษี", "บัญชี", "vat", "thai tax", "withholding tax", "ภงด", "ภพ", "thai accounting"]
+  },
+  {
+    "skill": "interview",
+    "keywords": ["unclear scope", "requirements unclear", "not sure what to build"]
+  },
+  {
+    "skill": "frontend-dev",
+    "keywords": ["react component", "react hook", "vue.js", "next.js", "nextjs", "jsx", "tsx", "browser dom", "frontend ui"]
+  },
+  {
+    "skill": "backend-dev",
+    "keywords": ["express server", "fastapi", "go service", "backend api", "rest api server"]
+  },
+  {
+    "skill": "code-simplification",
+    "keywords": ["simplify code", "reduce complexity", "too complex", "overcomplicated"]
+  },
+  {
+    "skill": "deprecation-migration",
+    "keywords": ["migrate library", "upgrade dependency", "deprecate package", "replace package"]
+  },
+  {
+    "skill": "documentation-adrs",
+    "keywords": ["adr", "architecture decision record", "decision log"]
+  },
+  {
+    "skill": "performance-testing",
+    "keywords": ["load test", "performance test", "jmeter", "stress test", "k6"]
+  },
+  {
+    "skill": "test-scenario",
+    "keywords": ["test scenario", "test case design", "scenario list"]
+  },
+  {
+    "skill": "ui-designer",
+    "keywords": ["ui design", "wireframe", "mockup", "design component"]
+  },
+  {
+    "skill": "ubiquitous-language",
+    "keywords": ["ubiquitous language", "bounded context", "domain model", "domain glossary", "ddd"]
+  },
+  {
+    "skill": "req-exporter",
+    "keywords": ["export requirements", "user story export", "req to csv"]
+  },
+  {
+    "skill": "industry-rules",
+    "keywords": ["industry rules", "compliance design", "healthcare design", "ecommerce rules"]
+  },
+  {
+    "skill": "analysis-skills",
+    "keywords": ["analyze codebase", "gap analysis", "extract requirements", "วิเคราะห์"]
+  },
+  {
+    "skill": "handoff",
+    "keywords": ["handoff", "hand off", "ส่งต่องาน", "pass to codex", "pass to gemini", "pass to kiro", "switch agent"]
+  },
+  {
+    "skill": "agy",
+    "keywords": ["ask agy", "second opinion from agy", "have agy try"]
   }
 ]
