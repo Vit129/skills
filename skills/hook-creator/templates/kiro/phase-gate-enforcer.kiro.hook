@@ -1,0 +1,13 @@
+{
+  "name": "Phase Gate Enforcer",
+  "version": "1.0.0",
+  "description": "Blocks file writes outside .aidlc/ if DECISIONS or PLAN files are missing. Enforces DECISIONS → PLAN → EXECUTE sequence mechanically.",
+  "when": {
+    "type": "preToolUse",
+    "toolTypes": ["write"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "BEFORE writing this file, perform this gate check:\n\n1. Is the file inside .aidlc/, agent-memory/, .kiro/, or steering/? → ALLOW (governance/config files)\n2. Does .aidlc/ folder exist in the workspace? If NO → STOP. Create .aidlc/[system]/[feature]/planning/decisions/ first.\n3. Does at least one DECISIONS file exist in .aidlc/*/planning/decisions/*.md? If NO → STOP. Create DECISIONS file first.\n4. Does at least one PLAN file exist in .aidlc/*/planning/plans/*.md? If NO → STOP. Create PLAN file first.\n5. For QA output files (test scenarios, implementation-plan, spec files):\n   - Test scenario CSV/MD requires qa-task-progress.md to exist (Phase 2.1 done)\n   - implementation-plan.md requires test scenarios to exist (Phase 2.2 done)\n   - *.spec.ts files require implementation-plan.md to exist (Phase 2.3 done)\n\nIf ANY gate fails → DO NOT write the file. Instead, tell the user which prerequisite is missing and which phase to complete first.\n\nIf ALL gates pass → proceed with the write."
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Session Load — Eval Check",
+  "version": "1.0.0",
+  "description": "On first prompt of session, check if weekly skill eval is due. If due, run pass@3 eval on flagged/pending skills.",
+  "when": {
+    "type": "promptSubmit"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "SILENTLY run this eval schedule check (do NOT mention to user unless eval is due):\n\n1. Run: `~/.kiro/scripts/eval-scheduler.sh`\n2. If output starts with 'NOT_DUE' → do nothing, proceed with user's request normally.\n3. If output starts with 'EVAL_DUE' → AFTER responding to user's current request, inform them:\n   '📊 Weekly skill eval is due. Skills to evaluate: [list from script output]. Run now or defer?'\n\n## If User Approves Eval\n\nFor each skill listed:\n1. Read the SKILL.md\n2. Pick a representative task that exercises the skill's core workflow\n3. Run the task 3 times (pass@3) — grade each:\n   - Does output follow SKILL.md format? (structure)\n   - Is output complete? (completeness)\n   - Would user approve without edits? (quality)\n4. Score: X/3 passes\n5. Write eval report to `~/.kiro/agent-memory/evals/{skill-name}-{date}.md`\n6. Update `~/.kiro/agent-memory/eval-state.md` with today's date\n7. If score < 2/3 → flag in memory.md Skill_Flags\n8. If score = 3/3 AND skill was previously flagged → remove flag\n\n## Eval Report Format\n\n```markdown\n## Eval: {skill-name}\nDate: YYYY-MM-DD | Score: X/3 | Verdict: healthy/needs-tuning/broken\n\n| Run | Pass? | Issue |\n|-----|-------|-------|\n| 1 | ✅/❌ | ... |\n| 2 | ✅/❌ | ... |\n| 3 | ✅/❌ | ... |\n\nAction: [none / update SKILL.md section X / rework needed]\n```"
+  }
+}
