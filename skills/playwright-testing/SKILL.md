@@ -17,8 +17,8 @@ improvement_count: 1
 ## AIDLC Gate
 
 ⚠️ If skill triggered as part of a coding/QA task:
-- AIDLC governance MUST be active (`agent-memory/plans/[feature]/` must exist with DECISIONS + PLAN)
-- If not → STOP, route `governance/aidlc/` first
+- AIDLC governance MUST be active (`agent-memory/plans/[feature]/plan.md` must exist)
+- If not → STOP, route `aidlc` first
 - Exception: pure investigation/analysis (no code changes) can proceed without AIDLC
 
 ## Required Context
