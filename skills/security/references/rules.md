@@ -1,21 +1,133 @@
-# Security — QA (Test Scenario Design + Automation)
+# Security — Dev + QA Rules
+
+> One source of truth — how to BUILD secure + how to TEST it's secure.
+
+## Part 1: Dev — Secure Coding
+
+> How to WRITE secure code. Used during `/build`.
+
+### Three-Tier Boundary System
+
+**Always Do (No Exceptions):**
+- Validate all external input at system boundary
+- Parameterize all database queries — never concatenate user input into SQL
+- Encode output to prevent XSS (use framework auto-escaping)
+- Use HTTPS for all external communication
+- Hash passwords with bcrypt/scrypt/argon2 (salt rounds ≥ 12)
+- Set security headers (CSP, HSTS, X-Frame-Options, X-Content-Type-Options)
+- Use httpOnly, secure, sameSite cookies for sessions
+- Run `npm audit` before every release
+
+**Ask First (Requires Human Approval):**
+- Adding new authentication flows
+- Storing new categories of sensitive data (PII, payment)
+- Adding external service integrations
+- Changing CORS configuration
+- Adding file upload handlers / Modifying rate limiting / Granting elevated permissions
+
+**Never Do:**
+- Commit secrets to version control
+- Log sensitive data (passwords, tokens, full card numbers)
+- Trust client-side validation as security boundary
+- Use `eval()` or `innerHTML` with user data / Store auth tokens in localStorage
+- Expose stack traces to users
+
+### OWASP Top 10 — Implementation Patterns
+
+```typescript
+// Injection: Parameterized query
+const user = await db.query('SELECT * FROM users WHERE id = $1', [userId]);
+
+// Broken Auth: bcrypt + session config
+const hashedPassword = await hash(plaintext, 12);
+cookie: { httpOnly: true, secure: true, sameSite: 'lax', maxAge: 86400000 }
+
+// XSS: framework auto-escaping (React)
+return <div>{userInput}</div>;
+// If MUST render HTML: DOMPurify.sanitize(userInput)
+
+// Broken Access Control: ownership check
+if (task.ownerId !== req.user.id) return res.status(403).json({ error: 'FORBIDDEN' });
+
+// Security Misconfiguration
+app.use(helmet());
+app.use(cors({ origin: process.env.ALLOWED_ORIGINS?.split(','), credentials: true }));
+```
+
+### Input Validation
+```typescript
+import { z } from 'zod';
+const CreateTaskSchema = z.object({
+  title: z.string().min(1).max(200).trim(),
+  priority: z.enum(['low', 'medium', 'high']).default('medium'),
+});
+const result = CreateTaskSchema.safeParse(req.body);
+if (!result.success) return res.status(422).json({ error: result.error.flatten() });
+```
+
+### Rate Limiting
+```typescript
+import rateLimit from 'express-rate-limit';
+app.use('/api/', rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
+app.use('/api/auth/', rateLimit({ windowMs: 15 * 60 * 1000, max: 10 }));
+```
+
+### Secrets Management
+```
+.env.example  → Committed (template with placeholders)
+.env          → NOT committed (real secrets)
+.gitignore must include: .env, .env.local, *.pem, *.key
+```
+
+### Dev Review Checklist
+
+```markdown
+### Authentication
+- [ ] Passwords hashed (bcrypt, salt ≥ 12)
+- [ ] Sessions httpOnly, secure, sameSite
+- [ ] Login has rate limiting / Reset tokens expire + single-use
+
+### Authorization
+- [ ] Every endpoint checks permissions
+- [ ] Users can only access own resources (no IDOR)
+- [ ] Admin actions require admin role
+
+### Input
+- [ ] All input validated at boundary
+- [ ] SQL queries parameterized / HTML output encoded
+
+### Data
+- [ ] No secrets in code/VCS
+- [ ] Sensitive fields excluded from API responses
+- [ ] PII encrypted at rest (if applicable)
+
+### Infrastructure
+- [ ] Security headers configured (helmet)
+- [ ] CORS restricted to known origins
+- [ ] `npm audit` — no critical/high vulnerabilities
+- [ ] Error messages don't expose internals
+```
+
+---
+
+## Part 2: QA — Test Scenario Design + Automation
 
 > How to DESIGN and IMPLEMENT security test scenarios.
 
-## Internal Analysis (auto-run when loaded during test scenario design)
+### Internal Analysis (auto-run when loaded during test scenario design)
 
 1. **Codebase auth scan** — scan auth/permission implementation via CONTEXT.md. Identify: middleware, roles defined, endpoints protected.
 2. **Adversarial review** (interview — doubt mode) — "How can auth be bypassed?", "What if attacker sends X?"
 3. **OWASP verification** (interview — source mode) — cross-check OWASP Top 10 table below. Each applicable item → 1 `[Security]` scenario.
 
-## [Security] Category Rules
+### [Security] Category Rules
 
 - Prefix: `[Security]` — NEVER use `[Alternative]`
 - **Separate file:** `testScenarioPbi{ID}-security.md`
 - **Priority:** Critical (auth bypass, injection) or High (permission, rate limit)
 - **Tag:** `@Security` in automation
 
-## Title Convention
+### Title Convention
 
 ```
 [{Platform}][Security] {verb} {what} {condition}
@@ -24,7 +136,7 @@ Examples:
 - `[API][Security] ปฏิเสธ access เมื่อไม่มี token`
 - `[UI][Security] ป้องกัน XSS เมื่อกรอก script tag ในช่อง name`
 
-## OWASP-Based Test Conditions
+### OWASP-Based Test Conditions
 
 | OWASP Category | Test Condition | Dev Must Implement | QA Must Test |
 |---|---|---|---|
@@ -38,7 +150,7 @@ Examples:
 | File Upload | Malicious file types | file type validation | 400 on .exe/.php |
 | Sensitive Data Exposure | PII in response | field filtering | password/token not in response |
 
-## Permission Matrix
+### Permission Matrix
 
 ```markdown
 | Role | Create | Read Own | Read All | Update | Delete | Expected |
@@ -50,7 +162,7 @@ Examples:
 ```
 Each ❌ = 1 `[Security]` scenario. Each "own only" = 1 IDOR scenario.
 
-## Minimum Scenarios
+### Minimum Scenarios
 
 | Feature type | Minimum [Security] scenarios |
 |---|---|
@@ -63,7 +175,7 @@ Each ❌ = 1 `[Security]` scenario. Each "own only" = 1 IDOR scenario.
 
 ---
 
-## Automation Patterns (Playwright)
+### Automation Patterns (Playwright)
 
 ```typescript
 // Unauthorized Access
@@ -120,7 +232,7 @@ test('reject executable [Security]', async ({ request }) => {
 });
 ```
 
-## Mobile Patterns (Robot Framework)
+### Mobile Patterns (Robot Framework)
 
 ```robot
 [Security] Reject Access When Session Expired
@@ -137,7 +249,7 @@ test('reject executable [Security]', async ({ request }) => {
     Page Should Not Contain    Order #123
 ```
 
-## Fixture Structure + Pipeline
+### Fixture Structure + Pipeline
 
 ```
 fixtures/security/
@@ -153,7 +265,7 @@ fixtures/security/
   continueOnError: false  # BLOCKS pipeline on failure
 ```
 
-## QA Verification
+### QA Verification
 
 - [ ] `[Security]` scenarios in separate file
 - [ ] Priority = Critical or High
@@ -161,3 +273,16 @@ fixtures/security/
 - [ ] OWASP checklist reviewed
 - [ ] `@Security` tag on all tests
 - [ ] Pipeline blocks on security failure (`continueOnError: false`)
+
+---
+
+## Anti-Rationalization (Dev + QA)
+
+| Excuse | Rebuttal |
+|--------|----------|
+| "This is an internal tool" | Internal tools get compromised. Attackers target the weakest link. |
+| "We'll add security later" | Retrofitting is 10x harder. Add it now. |
+| "No one would exploit this" | Automated scanners find it. Obscurity ≠ security. |
+| "The framework handles it" | Frameworks provide tools, not guarantees. Use them correctly. |
+| "It's just a prototype" | Prototypes become production. Build the habit from day one. |
+| "Feature has no auth" | Still has user input → injection is possible. Check the matrix. |
