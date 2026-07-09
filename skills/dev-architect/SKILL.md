@@ -33,6 +33,8 @@ Design systems from requirements to implementation-ready blueprints.
 
 ## Inline Process
 
+> **Escape hatch:** If requirements are unclear at any step below, stop and call `Skill(interview)` before proceeding — don't guess and design on top of an assumption.
+
 1. **Identify the design phase** — Match to ONE phase: Strategic Design (bounded contexts), Architecture Patterns (monolith vs microservices), Tactical Design (entities/aggregates/events), Logical Design (API contracts/DB schemas), or TDD (Red→Green→Refactor). Execute phases in order — don't skip ahead.
 2. **Strategic Design** — Group user stories by business function → identify domain boundaries → assess complexity → choose architecture pattern with documented tradeoffs → define bounded contexts.
 3. **Architecture Pattern** — If microservices: define integration patterns per context pair, specify failure handling. If monolith: define module boundaries.

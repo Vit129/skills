@@ -33,6 +33,8 @@ Design test automation frameworks and test data infrastructure.
 
 ## Inline Process
 
+> **Escape hatch:** If requirements are unclear at any step below, stop and call `Skill(interview)` before proceeding — don't guess and design on top of an assumption.
+
 1. **Identify the platform** — Determine: API, Web UI, or Mobile. Load exactly ONE corresponding reference. If not stated, ask.
 2. **Read existing test scenarios** — Load `testScenarioPbi{ID}-{platform}.md` → extract: endpoints called, DB tables verified, request fields, response fields, test data used per TS.
 3. **Analyze requirements** — Count endpoints/screens, group by domain, check DB integration needs, determine complexity.
