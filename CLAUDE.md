@@ -1,18 +1,16 @@
 # Claude Agent Workspace — ~/.claude
 
 @plugins/marketplaces/ponytail/AGENTS.md
-@agent-memory/USER-PROFILE.md
 
 ## Session Start
 
 ```bash
 bash ~/.claude/scripts/session-start.sh [project-dir]
-# Prints CONTEXT.md + active MEMORY decisions + PLAYBOOK tail
-# Auto-archives MEMORY.md if > 100 lines
+# Prints .claude/memory index (feedback + user prefs)
 ```
 
 - New task → read `rules/coding.md` before writing code
-- Continuation ("ทำต่อ", "continue") → read `CONTEXT.md` → derive task type → invoke matching skill
+- Continuation ("ทำต่อ", "continue") → read the feature's `agent-memory/plans/[FEATURE]/dev-task-progress.md` or `qa-task-progress.md` → resume at first unchecked task
 - Search/plan → read `INDEX.md` on-demand
 
 ---
@@ -20,10 +18,9 @@ bash ~/.claude/scripts/session-start.sh [project-dir]
 ## Session End
 
 ```bash
-bash ~/.claude/scripts/session-end.sh [project-dir] [keep_days=7]
-# 1. Rewrite CONTEXT.md + append MEMORY.md + update INDEX.md
-# 2. Prune stale agent-memory (all projects)
-# 3. Update graphify + GRAPH_SUMMARY (current project, if git HEAD changed)
+bash ~/.claude/scripts/session-end.sh [project-dir]
+# 1. Update INDEX.md if new plans/knowledge files added
+# 2. Update graphify + GRAPH_SUMMARY (current project, if git HEAD changed)
 ```
 
 ---
@@ -50,17 +47,7 @@ Graphified projects auto-load `@graphify-out/GRAPH_SUMMARY.md` via their own CLA
 
 ## Memory Lifecycle
 
-**Task start:** `session-start.sh` → read CONTEXT + MEMORY → grep knowledge on-demand
-**During:** Update CONTEXT.md inline; append decisions to MEMORY.md (date-prefixed)
-**Task end:** Rewrite CONTEXT.md; append MEMORY.md; update INDEX.md if new files → `session-end.sh`
-
-Promote patterns: fix/pattern → `knowledge/cases/` + PLAYBOOK.md index; domain → `knowledge/{domain}.md`
-
-**Cross-agent/session handoff** (Codex, Gemini, Kiro, or a different Claude session on the same project) — all in CONTEXT.md, no separate file:
-- Sequential → `Skill(handoff)` fills CONTEXT.md's `## Handoff` (From/To/Suggested skills/Note) at session end; next `session-start.sh` prints it.
-- Parallel → add a line to CONTEXT.md's `## Claims` before starting a sub-task, delete it when done; `session-start.sh` prints unreleased claims. Details: `skills/agent-memory/SKILL.md` → Multi-Agent / Multi-Session Handoff.
-
-**Retention:** stale CONTEXT.md/MEMORY.md entries prune after 7 days (was 30) — archived to `COMPLETED-TASKS-ARCHIVE.md`, never deleted outright.
+Task progress lives in `agent-memory/plans/[FEATURE]/dev-task-progress.md` / `qa-task-progress.md` (per-feature, checkbox-tracked). Durable lessons: `knowledge/cases/` + `PLAYBOOK.md` index; domain patterns → `knowledge/{domain}.md`.
 
 ---
 
@@ -68,13 +55,10 @@ Promote patterns: fix/pattern → `knowledge/cases/` + PLAYBOOK.md index; domain
 
 ```bash
 ~/.claude/scripts/session-start.sh [project-dir]
-# Load context: print CONTEXT + MEMORY decisions + PLAYBOOK; auto-archive if MEMORY > 100 lines
+# Print .claude/memory index (feedback + user prefs)
 
-~/.claude/scripts/session-end.sh [project-dir] [keep_days=7]
-# End-of-session: prune stale agent-memory (all projects) + update graphify (current project)
-
-~/.claude/scripts/prune-all-agent-memory.sh [keep_days=7]
-# Prune MEMORY.md dated entries + CONTEXT.md old session blocks across all projects
+~/.claude/scripts/session-end.sh [project-dir]
+# End-of-session: update graphify (current project)
 
 ~/.claude/scripts/update-graphify-all.sh [--force]
 # Update graphify + GRAPH_SUMMARY for all projects where git HEAD changed since last build

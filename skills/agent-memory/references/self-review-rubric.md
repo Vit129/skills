@@ -14,10 +14,8 @@ After each turn/task, the agent evaluates what to save using this rubric — not
 | Item | Source | Decision |
 |------|--------|----------|
 | Problem resolution | Current session context | → Draft in `drafts/` if criteria met |
-| Skill performance | Tool outputs + results | → Flag in `CONTEXT.md` or clear |
+| Skill performance | Tool outputs + results | → Flag in `SKILL-LOG.md` or clear |
 | Knowledge gap | Missing pattern that would have helped | → Propose in `SKILL-LOG.md` |
-| Memory staleness | CONTEXT.md task entries | → Mark stale or remove |
-| Confirmed decision | Choices made this session | → Append to `MEMORY.md` Decisions |
 
 ## Save/Discard Rubric (for drafts)
 
@@ -37,10 +35,9 @@ After each write operation, evaluate the skill that produced the output:
 
 | Signal | Action |
 |--------|--------|
-| Output has errors requiring rework | Add/update flag in `CONTEXT.md` (failure description) |
-| Output is correct, skill was flagged | Increment success counter in `CONTEXT.md` |
-| Success counter reaches 3 | Clear the flag from `CONTEXT.md` |
-| Recurring flag (3+ sessions) | Promote to `MEMORY.md` as a lesson |
+| Output has errors requiring rework | Add/update flag in `SKILL-LOG.md` (failure description) |
+| Output is correct, skill was flagged | Increment success counter in `SKILL-LOG.md` |
+| Success counter reaches 3 | Clear the flag from `SKILL-LOG.md` |
 
 ## Skill Improvement Rubric
 
@@ -54,20 +51,6 @@ After each task, evaluate if a skill could be improved:
 | Minor style preference | Low | Skip — not worth a proposal |
 
 **Proposal threshold:** Only propose if the improvement would save 5+ minutes on next occurrence.
-
-## Memory Consolidation Rubric
-
-At session end, evaluate `CONTEXT.md`:
-
-| Check | Action |
-|-------|--------|
-| Byte count > 2,500 | Remove oldest stale task entry |
-| Task entry not updated in 3+ sessions | Mark as stale |
-| All 5 task slots full + new task needed | Prompt user to archive one |
-| Open Question unresolved for 2+ sessions | Escalate to user or document assumption |
-| Confirmed decision or lesson | Append to `MEMORY.md` (not CONTEXT.md) |
-
-**Rule:** `CONTEXT.md` is session-scoped — reset at session end. `MEMORY.md` is permanent — append only.
 
 ## Review Fork Constraints
 
@@ -85,5 +68,4 @@ At session end, evaluate `CONTEXT.md`:
 - ❌ Proposing skill changes without evidence — cite the failure
 - ❌ Flagging skills for style preferences — only flag for functional failures
 - ❌ Reviewing other agents' outputs — only review your own session
-- ❌ Writing decisions into `CONTEXT.md` — decisions go into `MEMORY.md`
-- ❌ Overwriting `MEMORY.md` — it is append-only; only add new entries
+- ❌ Overwriting `PLAYBOOK.md` entries — append-only; only add new entries

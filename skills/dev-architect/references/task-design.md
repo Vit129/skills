@@ -1,46 +1,32 @@
-# QA Task Design
+# Task Design
 
-Break test scenarios and architecture into small, sequential QA automation tasks.
+Break a completed design into small, sequential, manageable tasks — Dev or QA. Sections marked **Dev** or **QA** apply to that domain only; unmarked sections apply to both.
 
 For progress tracking rules, file behavior, master index, and resume protocol → Read `shared-task-progress-guide.md`
 
 ## Entry Point Requirements
 
-### QA Scenario Only mode (Phase 2.1 → 2.2)
-Can start this phase if:
-- [ ] Lite Inception complete (mini-spec.md exists) OR external specs provided
-- [ ] Coding rules reviewed (rules/test-scenario-rules)
+Can start once (all mandatory, no exceptions):
+- [ ] `interview` has run (Step 0 scope-check or full gather) — never skipped
+- [ ] Design is complete — **Dev:** `dev-architect` Logical Design step done · **QA:** `qa-architect` design approved
+- [ ] **Dev:** Test scripts, if any, have at least a skeleton created (TDD: RED)
+- [ ] **QA:** Platform selected (single: API / Web UI / Android / iOS — or combined) + coding rules reviewed (`playwright-rules`/`robotframework-rules` for the selected platform(s), `test-scenario-rules` for scenario-only work)
 
-### QA Automation mode (Phase 2.1 → 2.2 → 2.3 → 2.4)
-Can start this phase if:
-- [ ] Lite Inception complete (mini-spec.md exists) OR external specs provided
-- [ ] Platform selected (single: API / Web UI / Android / iOS — or combined: API+Web UI / API+Web UI+Mobile / API+Mobile)
-- [ ] Coding rules reviewed (rules/playwright-rules and/or rules/robotframework-rules — load ALL relevant rules for combined platforms)
+> **Note:** This skill plans the work (task breakdown). Implementation/automation happens AFTER this via `/build`. The progress file produced here defines the iteration path for that work.
 
-### Full mode (Phase 2.1 — after Phase 1.8 Brainstorming)
-Can start this phase if:
-- [ ] Phase 1 Inception complete (user-stories.md + domain-design.md + logical-design.md exist)
-- [ ] Brainstorming complete (brainstorming-summary.md exists) OR feature is Small
-- [ ] Coding rules reviewed
+## Required Context
 
-> **Note:** This skill plans the QA work (task breakdown). Test scenarios, QA architecture, and test scripts are created AFTER this phase — not before. The qa-task-progress.md produced here defines the iteration path for subsequent phases (2.2, 2.3, 2.4).
-
-## Required Context from Previous Phases
-
-- From Inception/Lite Inception: user stories, acceptance criteria, domain context
-- From Brainstorming (if applicable): refined scope, QA-specific concerns
-- From Platform Selection: determines which coding rules and architecture patterns to use
+- **Dev:** From Logical Design: API specs/service contracts, data storage schema, client app components. From test scenarios/scripts, if available.
+- **QA:** From `/spec` (interview): user stories, acceptance criteria, domain context. From platform selection: which coding rules and architecture patterns apply.
 
 ## Critical Success Criteria
 
-- ✅ Every test scenario has a corresponding script task
 - ✅ Tasks are atomic (completable in 1-2 hours)
-- ✅ Infrastructure and shared services come FIRST, then scripts
-- ✅ Includes "Run All Tests" verification task per component
-- ✅ Includes Final Review task (code review + full test suite)
 - ✅ Lessons Learnt reviewed before task creation
+- **Dev:** All logical design components have corresponding tasks · dependencies clearly identified · sequencing logical (Data Storage → Server Logic → Client Application) · "Run Test Scripts" task after each component
+- **QA:** Every test scenario has a corresponding script task · Infrastructure and shared services come FIRST, then scripts · "Run All Tests" verification task per component · Final Review task (code review + full test suite)
 
-## Platform Routing (MANDATORY — read before creating tasks)
+## Platform Routing (QA only, MANDATORY — read before creating tasks)
 
 Based on the test platform, MUST read the corresponding skill first:
 
@@ -57,18 +43,20 @@ Also read coding rules:
 
 ## When to use
 
-- After Lite Inception or Phase 1 Inception is complete
-- As the FIRST QA phase — plans what QA work needs to be done
-- Before test case design (Phase 2.2), QA architecture (Phase 2.3), and test scripts (Phase 2.4)
-- Need to plan QA work in manageable chunks with clear iteration path
+- After requirements and design are clear (Dev: logical design + test script skeleton if any; QA: architecture + platform selected)
+- As the first Dev/QA step after design — plans what work needs to be done
+- Before `/build` (Dev) or before test case design/test scripts (QA)
 
 ## Process
 
-1. Read test scenarios, QA architecture, and data storage strategy
-2. Read Lessons Learnt: Check `{knowledge_root}/lessons/` for technical patterns, past mistakes, and UI behaviors
-3. **Classify test data sensitivity** (before creating fixture tasks):
+1. **Dev:** Read logical design, test scenarios, test scripts. **QA:** Read test scenarios, QA architecture, data storage strategy.
+2. Read Lessons Learnt: check `{knowledge_root}/lessons/` for technical patterns, past mistakes[, and UI behaviors — QA].
+3. **QA only:** Classify test data sensitivity (below) and define Mock Strategy (below) before creating fixture/mock tasks.
+4. For each user story / test scenario, decompose into the task categories below.
+5. Sequence by dependency order.
+6. Estimate complexity per task.
 
-### Sensitive Data Classification (MANDATORY)
+### Sensitive Data Classification (QA only, MANDATORY)
 
 Before writing fixture data, classify every data field:
 
@@ -107,9 +95,7 @@ Output in task progress file:
 | customerCode | '000XXXX' | fixture.ts | non-sensitive: business data |
 ```
 
-4. **Define Mock Strategy** (before creating mock/interceptor tasks):
-
-### Mock Strategy (MANDATORY for external dependencies)
+### Mock Strategy (QA only, MANDATORY for external dependencies)
 
 ก่อนสร้าง mock/interceptor tasks ต้องระบุ behavior สำหรับแต่ละ dependency:
 
@@ -156,12 +142,32 @@ Output in task progress file:
 | Auth token | real token จาก login flow | เสมอ — ห้าม mock auth token |
 | API key | process.env | เสมอ — ห้าม hardcode |
 
-5. Sequence by dependency order
-6. Estimate complexity per task
-
 ## Task Categories
 
-Adapt to platform:
+**Dev** — adapt to project type, use only categories that apply:
+
+| Category | Traditional (REST + SQL) | Serverless | Spreadsheet-backed | Frontend-only |
+|----------|------------------------|------------|-------------------|---------------|
+| Infrastructure | DB schema migrations, message broker config, outbox table | NoSQL collections, function config | Spreadsheet tab structure | LocalStorage schema |
+| Data Storage | DTOs, Repository | NoSQL collections | GAS doGet/doPost | N/A (skip) |
+| Server Logic | Service, Controller | Function triggers, handlers | GAS doGet/doPost | N/A (skip) |
+| Client Application | Components, Pages, State, API integration | Same | Same + LocalStorage sync | Components, Pages, State |
+| Integration | E2E wiring, run test scripts | Same | Same | Same |
+
+Sequence: **Infrastructure → Data Storage → Server Logic → Client Application → Integration**
+
+Infrastructure tasks ต้องมาก่อนเสมอ เพราะ Server Logic depend on it:
+
+```markdown
+## Infrastructure
+- [ ] DB schema migration — {table names}
+- [ ] Message broker config — {Kafka topic / RabbitMQ queue} (ถ้ามี async events)
+- [ ] Outbox table — {event types} (ถ้าใช้ Outbox Pattern)
+- [ ] Environment config (.env) — {new env vars}
+- [ ] External service credentials — {API keys, endpoints}
+```
+
+**QA** — adapt to platform:
 
 | Category | Playwright (API) | Playwright (Web UI) | Robot Framework (Mobile) |
 |----------|-----------------|--------------------|-----------------------|
@@ -171,23 +177,83 @@ Adapt to platform:
 | Test Scripts | feature.spec.ts (per scenario) | Same | feature.robot (per scenario) |
 | Pipeline | package.json scripts, pipeline YAML | Same | robot commands, pipeline YAML |
 
-Sequence: Infrastructure → Shared Services → Page Objects → Test Scripts → Pipeline
+Sequence: **Infrastructure → Shared Services → Page Objects → Test Scripts → Pipeline**
 
 ## Rules
 
 - Tasks MUST be completable in 1-2 hours
-- Every test scenario MUST have a corresponding script task
-- Infrastructure and shared services FIRST, then scripts
-- Group related scenarios into the same spec file where logical
-- Include review task after each major component
-- MUST create an executable test script (run file) and verify until all scenarios pass
-- Architectural Integrity: Files MUST follow `[system]/[feature]` structure
-- Pre-emptive Healing: Use patterns from lessons learnt to write robust code from the first attempt
+- **Dev:** Every component from logical design MUST have a corresponding task. Include tasks to run test scripts after each component. Skip categories that don't apply (e.g., no Server Logic for frontend-only).
+- **QA:** Every test scenario MUST have a corresponding script task. Infrastructure and shared services FIRST, then scripts. Group related scenarios into the same spec file where logical. Include review task after each major component. MUST create an executable test script (run file) and verify until all scenarios pass. Architectural Integrity: files MUST follow `[system]/[feature]` structure. Pre-emptive Healing: use patterns from lessons learnt to write robust code from the first attempt.
+
+## Task Rollback Protocol
+
+เมื่อ task ที่ทำเสร็จแล้วทำให้ test fail หรือ dependent tasks พัง (Dev tasks and QA test-script tasks alike):
+
+| สถานการณ์ | Action |
+|----------|--------|
+| Task fail (test ไม่ผ่าน) | Mark task ❌, note root cause, fix before proceeding |
+| Dependent task พัง (task B พังเพราะ task A) | Re-sequence: fix task A ก่อน, re-run task B |
+| Architecture assumption ผิด | Escalate to architect → re-design → re-plan affected tasks |
+| Multiple tasks พังพร้อมกัน | Stop, assess scope, create new task breakdown |
+
+**Rollback steps:**
+1. Mark failed task as ❌ ใน progress file (`dev-task-progress.md` / `qa-task-progress.md`)
+2. Note root cause: `Root cause: [อธิบาย]`
+3. ถ้า fix ง่าย → fix in-place, re-run test, mark ✅
+4. ถ้า fix กระทบ tasks อื่น → list affected tasks, re-sequence
+5. ถ้า fix กระทบ architecture → escalate ก่อน fix
+
+> ⚠️ ห้าม mark task ✅ ถ้า test ยังไม่ผ่าน — completion = test GREEN
 
 ## Progress Checklist Template
 
-Create at:
-`agent-memory/plans/[FEATURE]/qa-tasks.md`
+**Dev** → create at `agent-memory/plans/[FEATURE]/dev-task-progress.md`:
+
+```markdown
+# Dev Task Progress — {Feature Name}
+
+Last updated: {YYYY-MM-DD HH:mm}
+Status: In Progress | Completed
+
+## Context
+(see shared-task-progress-guide.md for required fields)
+
+## Artifacts
+- User Stories: {path}
+- Logical Design: {path}
+- Test Scripts: {path}
+- Implementation Plan: {path}
+
+## Summary
+- Total tasks: {N}
+- Completed: {N}
+- Remaining: {N}
+
+## Data Storage
+- [ ] Storage setup — {SQL migration / Spreadsheet structure / LocalStorage schema}
+- [ ] Seed data / fixtures
+- [ ] Environment config (.env)
+
+## Server Logic — {User Story / Endpoint}
+- [ ] Data models / DTOs
+- [ ] Service layer — {REST API / Serverless Function / GAS endpoint}
+- [ ] Business logic
+- [ ] ✅ Run test scripts (verify GREEN)
+
+## Client Application — {User Story / Screen}
+- [ ] Component — {ComponentName}
+- [ ] Page — {PageName}
+- [ ] API/Service integration
+- [ ] State management
+- [ ] ✅ Run test scripts (verify GREEN)
+
+## Integration
+- [ ] End-to-end wiring
+- [ ] ✅ Run all test scripts (verify GREEN)
+- [ ] Code review
+```
+
+**QA** → create at `agent-memory/plans/[FEATURE]/qa-task-progress.md`:
 
 ```markdown
 # QA Task Progress — {Feature Name}
@@ -248,23 +314,22 @@ Status: In Progress | Completed
 
 ## Output
 
-File: `agent-memory/plans/[FEATURE]/qa-tasks.md`
-Location:
-`agent-memory/plans/[FEATURE]/qa-tasks.md`
+- **Dev:** `agent-memory/plans/[FEATURE]/dev-task-progress.md`
+- **QA:** `agent-memory/plans/[FEATURE]/qa-task-progress.md`
 
-## Phase Transition Validation
+## Before Marking Complete
 
-Before proceeding to next phase, validate:
-- [ ] Every test scenario has a corresponding script task
+Validate:
 - [ ] All tasks have complexity estimates
-- [ ] Infrastructure tasks come before script tasks
-- [ ] Final Review task is included
 - [ ] Progress file created with Context + Artifacts filled in
 - [ ] PROGRESS.md updated with new row
+- **Dev:** All logical design components have corresponding tasks · dependencies sequenced correctly · test script tasks included after each component
+- **QA:** Every test scenario has a corresponding script task · infrastructure tasks come before script tasks · Final Review task is included
 
-## Next Phase
+## Next Step
 
-When all QA tasks complete → return to `workflow.md` routing table to determine next phase.
+- **Dev:** All tasks broken down → continue with `/build`.
+- **QA:** All QA tasks complete → continue with `/build` (or hand off if dev-side work remains).
 
 ## Score-Aware Lesson Reading (Step 2 — updated)
 

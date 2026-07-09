@@ -1,5 +1,9 @@
 [
   {
+    "skill": "scrutinize",
+    "keywords": ["scrutinize", "sanity-check", "second opinion", "outsider review", "does this need to exist"]
+  },
+  {
     "skill": "playwright-rules",
     "keywords": ["playwright rules", "playwright convention", "playwright standard"]
   },
@@ -40,10 +44,6 @@
     "keywords": ["tradingagents", "terry", "nora", "cleo", "multi-agent research", "paper portfolio"]
   },
   {
-    "skill": "idea-generation",
-    "keywords": ["investment ideas", "stock ideas", "stock screener", "new position"]
-  },
-  {
     "skill": "earnings-preview",
     "keywords": ["earnings preview", "earnings call", "quarterly results", "q1 results", "q2 results", "q3 results", "q4 results"]
   },
@@ -58,10 +58,6 @@
   {
     "skill": "review-personas",
     "keywords": ["pre-merge gate", "ship check", "code review", "security audit", "test coverage review"]
-  },
-  {
-    "skill": "aidlc",
-    "keywords": ["aidlc", "ai-dlc", "implement feature", "build feature"]
   },
   {
     "skill": "macos-swiftui",
@@ -100,10 +96,6 @@
     "keywords": ["verification loop", "verify loop", "self-verify", "verify this works"]
   },
   {
-    "skill": "eval-harness",
-    "keywords": ["eval harness", "pass@k", "skill eval", "llm eval", "benchmark skill"]
-  },
-  {
     "skill": "android",
     "keywords": ["android", "kotlin", "jetpack compose", "android studio"]
   },
@@ -140,10 +132,6 @@
     "keywords": ["chain of thought", "lats", "algorithm of thought", "step by step analysis", "compare approaches", "explore multiple paths", "backtrack and try"]
   },
   {
-    "skill": "analysis-concept",
-    "keywords": ["analysis pattern", "thinking framework", "domain-agnostic analysis", "reusable analysis"]
-  },
-  {
     "skill": "fitness",
     "keywords": ["workout plan", "exercise plan", "nutrition plan", "meal plan", "macro", "calorie deficit", "muscle gain", "weight loss plan"]
   },
@@ -153,7 +141,7 @@
   },
   {
     "skill": "interview",
-    "keywords": ["unclear scope", "requirements unclear", "not sure what to build"]
+    "keywords": ["unclear scope", "requirements unclear", "not sure what to build", "new feature", "implement feature", "build feature"]
   },
   {
     "skill": "frontend-dev",
@@ -166,14 +154,6 @@
   {
     "skill": "code-simplification",
     "keywords": ["simplify code", "reduce complexity", "too complex", "overcomplicated"]
-  },
-  {
-    "skill": "deprecation-migration",
-    "keywords": ["migrate library", "upgrade dependency", "deprecate package", "replace package"]
-  },
-  {
-    "skill": "documentation-adrs",
-    "keywords": ["adr", "architecture decision record", "decision log"]
   },
   {
     "skill": "performance-testing",
@@ -190,10 +170,6 @@
   {
     "skill": "ubiquitous-language",
     "keywords": ["ubiquitous language", "bounded context", "domain model", "domain glossary", "ddd"]
-  },
-  {
-    "skill": "req-exporter",
-    "keywords": ["export requirements", "user story export", "req to csv"]
   },
   {
     "skill": "industry-rules",

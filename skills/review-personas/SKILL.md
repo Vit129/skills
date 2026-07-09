@@ -40,10 +40,10 @@ Pre-merge review
     merge findings → go/no-go decision
 ```
 
-## Integration with AIDLC
+## Integration with the Dev Flow
 
-- **Phase 2 (Plan):** run bug-hunter on existing code before designing new features
-- **Phase 3 (Execute):** code-reviewer after each task, bug-hunter for boundary-heavy changes
+- **During `/plan` (dev-architect):** run bug-hunter on existing code before designing new features
+- **During `/build`:** code-reviewer after each task, bug-hunter for boundary-heavy changes
 - **Pre-commit:** adversarial review — interview (doubt mode) can invoke a persona
 - **Pre-merge:** fan-out all four for comprehensive gate
 - **With 3 amigos:** QA lens in interview (amigos mode) covers test-engineer perspective at design time
@@ -74,3 +74,18 @@ Pre-merge review
 - [ ] Output follows the persona's template format
 - [ ] "What's Done Well" section included (not just negatives)
 - [ ] Pre-merge gate: all 4 personas ran and findings merged
+
+## Human-in-the-Loop Points
+
+| Step | Approval | When |
+|------|----------|------|
+| After review report | Acknowledge findings | After a persona produces findings |
+| Before posting verdict (APPROVE/REQUEST CHANGES) | Confirm decision | Before finalizing |
+| Fan-out scope | Which personas to run | When pre-merge gate requested |
+
+## Self-Learning
+
+After the user approves the output:
+1. Save the approved pattern to `knowledge/lessons/review/{pattern}.md`
+2. If rejected — note what went wrong before the next review
+3. If a pattern proves effective across 3+ reviews — promote to `knowledge/{domain}.md`

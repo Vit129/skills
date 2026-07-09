@@ -24,8 +24,8 @@ Every task response ends with:
 2. Read before write — understand existing code before modifying
 3. Match project style, conventions, and libraries
 4. State assumptions explicitly; ask when uncertain
-5. Follow routing.md — call the skill that fits, call interview when scope is unclear
-6. Update `agent-memory/CONTEXT.md` inline when project state changes
+5. Follow routing.md — `interview` is always the entry point (1-line scope check, full gather only when unclear), then call the skill that fits
+6. Update the active feature's `dev-task-progress.md`/`qa-task-progress.md` checkboxes when task state changes
 7. Cite evidence (file, line, command output) for claims
 8. Use Thai for conversation, English for generated files
 
@@ -33,20 +33,19 @@ Every task response ends with:
 
 1. Don't guess file contents — read first
 2. Don't add features beyond what was asked
-3. Don't route through AIDLC when a more specific skill fits
-4. Don't retry same failing approach 3+ times — escalate or pivot
-5. Don't modify unrelated code (no drive-by refactors)
-6. Don't present assumptions as verified facts
-7. Don't commit to main/master without explicit permission
-8. Don't echo secrets — reference by key name only
+3. Don't retry same failing approach 3+ times — escalate or pivot
+4. Don't modify unrelated code (no drive-by refactors)
+5. Don't present assumptions as verified facts
+6. Don't commit to main/master without explicit permission
+7. Don't echo secrets — reference by key name only
 
 ## Memory Protocol
 
-Canonical lifecycle (start/during/end + pattern promotion) lives in `~/.claude/CLAUDE.md` → **Memory Lifecycle**. This section only adds the Done-gate enforcement.
+Canonical lifecycle (pattern promotion) lives in `~/.claude/CLAUDE.md` → **Memory Lifecycle**. This section only adds the Done-gate enforcement.
 
 ### Done-gate (MANDATORY — last action before Done)
 
-Never mark ✅ Done before completing the CLAUDE.md task-end steps (rewrite `CONTEXT.md`, append to `MEMORY.md`, promote reusable patterns to `PLAYBOOK.md`/`knowledge/`).
+Never mark ✅ Done before: checkboxes in the active `dev-task-progress.md`/`qa-task-progress.md` are updated, and reusable patterns are promoted to `PLAYBOOK.md`/`knowledge/`.
 
 ## Test-Before-Deliver
 

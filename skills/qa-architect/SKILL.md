@@ -14,13 +14,6 @@ improvement_count: 1
 
 # QA Architect
 
-## AIDLC Gate
-
-⚠️ If this skill is triggered as part of a coding/QA task:
-- AIDLC governance MUST be active (`agent-memory/plans/[feature]/plan.md` must exist)
-- If not → STOP and route to `aidlc` first
-- Exception: pure investigation/analysis (no code changes) can proceed without AIDLC
-
 
 Design test automation frameworks and test data infrastructure.
 
@@ -40,8 +33,9 @@ Design test automation frameworks and test data infrastructure.
 
 ## Inline Process
 
+0. **Entry (mandatory)** — `Skill(interview)` must have already run (its Step 0 scope-check or full gather). If it hasn't, stop and call it first — don't design on top of an unconfirmed scope. Then: run `mcp__graphify__query_graph` on the feature/module under test if `graphify-out/` exists in the project root — know the existing structure before proposing page objects/service layers.
 1. **Identify the platform** — Determine: API, Web UI, or Mobile. Load exactly ONE corresponding reference. If not stated, ask.
-2. **Read test scenarios from Phase 2.2** — Load `testScenarioPbi{ID}-{platform}.md` → extract: endpoints called, DB tables verified, request fields, response fields, test data used per TS.
+2. **Read existing test scenarios** — Load `testScenarioPbi{ID}-{platform}.md` → extract: endpoints called, DB tables verified, request fields, response fields, test data used per TS.
 3. **Analyze requirements** — Count endpoints/screens, group by domain, check DB integration needs, determine complexity.
 4. **Generate architecture** — API: Multi-Service pattern (Helper → DbService + AuthService + ApiService + Workflows). Web UI: Layout-based POM (header/sidebar/content). Mobile: Screen-based POM (navigation flows, gestures).
 5. **Map TS → Service methods** — For each TS: which ApiService method, which DbService verify method, which test data set (TD_XXX).
@@ -49,6 +43,10 @@ Design test automation frameworks and test data infrastructure.
 7. **Design test data infrastructure** — Map TD_XXX from test scenarios → fixture file fields. Define seed/verify/cleanup per TS. Define .env sensitive fields.
 8. **Validate design** — Page objects contain only interactions (no assertions), environment switching defined, no forbidden patterns.
 9. **Get approval** — Present architecture summary to user. Wait for explicit approval before coding.
+
+## Next Step
+
+Architecture approved → continue with `../../dev-architect/references/task-design.md` (QA section) to break the design into implementation tasks, then implement.
 
 ## 📋 Quick Review Summary (MANDATORY — add to every architecture file)
 
@@ -145,7 +143,7 @@ Every architecture file MUST have a Quick Review (TL;DR) section at the top.
 
 > These steps MUST execute in the same order every time this skill runs.
 > Output may vary, but the workflow is fixed.
-> If any step is skipped without a documented skip condition, the session-save hook will flag this skill.
+> If any step is skipped, document the skip condition explicitly.
 
 ## Verification
 
@@ -189,10 +187,3 @@ After user approves the output:
 2. **Record failures:** If output was rejected → note what went wrong for next time
 3. **Progressive update:** If a new pattern proved effective → append to relevant knowledge index
 4. **Confidence tracking:** `confidence: 1.0` (user-approved) vs `confidence: 0.7` (auto-generated)
-
-### Improvement Tracking
-
-- **Hook:** `session-save.json` appends to `agent-memory/skill-log.md` after every session using this skill
-- **Hook:** `skill-improve.json` logs when user corrects this skill's output (silent)
-- **Promotion:** 3x same issue in skill-log → auto-apply fix to this SKILL.md + bump version
-- **Eval:** `eval-check.json` runs pass@3 weekly if this skill is flagged in `memory.md`

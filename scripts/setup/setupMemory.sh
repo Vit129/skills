@@ -61,7 +61,7 @@ if [ -d "$AGENT_MEM" ] && [ "$FORCE" -eq 0 ]; then
 else
   mkdir -p "$AGENT_MEM"
 
-  for file in CONTEXT.md MEMORY.md PLAYBOOK.md SKILL-LOG.md index.md EVAL-STATE.md; do
+  for file in PLAYBOOK.md SKILL-LOG.md index.md EVAL-STATE.md; do
     if [ ! -f "$AGENT_MEM/$file" ] || [ "$FORCE" -eq 1 ]; then
       cp "$TEMPLATES_DIR/$file" "$AGENT_MEM/$file"
       echo "  ✅ agent-memory/$file"
@@ -70,33 +70,13 @@ else
     fi
   done
 
-  # USER-PROFILE.md — scaffold empty if not present
-  if [ ! -f "$AGENT_MEM/USER-PROFILE.md" ] || [ "$FORCE" -eq 1 ]; then
-    cat > "$AGENT_MEM/USER-PROFILE.md" << 'EOF'
-# User Profile
-
-<!-- Stable preferences — update only when user explicitly changes them. -->
-<!-- Loaded at session start alongside CONTEXT.md. -->
-
-- **Language:** Thai (interaction), English (docs/code/files)
-- **IDE:** Kiro (Autopilot), Claude Code, Gemini CLI
-- **Commits:** Conventional Commits
-EOF
-    echo "  ✅ agent-memory/USER-PROFILE.md"
-  else
-    echo "  skip  agent-memory/USER-PROFILE.md (exists)"
-  fi
-
   mkdir -p "$AGENT_MEM/plans" "$AGENT_MEM/knowledge" "$AGENT_MEM/evals"
   echo "  ✅ agent-memory/ ready (plans/ knowledge/ evals/ drafts/ created on demand)"
 fi
 
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "✅ agent-memory setup complete (v2)"
-echo "  agent-memory/CONTEXT.md         ← hot state (2.5KB max, rewritten each session)"
-echo "  agent-memory/MEMORY.md          ← decisions + lessons (append-only)"
-echo "  agent-memory/USER-PROFILE.md    ← user preferences (stable)"
+echo "✅ agent-memory setup complete"
 echo "  agent-memory/PLAYBOOK.md        ← problem resolution cases"
 echo "  agent-memory/SKILL-LOG.md       ← skill improvement log"
 echo "  agent-memory/index.md           ← catalog of knowledge/ and plans/"

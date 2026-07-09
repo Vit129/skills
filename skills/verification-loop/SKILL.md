@@ -85,3 +85,22 @@ Run before every commit. Mandatory order: Diff Size → Build → Lint → Test 
 - 🚩 Build passes but tests weren't run
 - 🚩 Fixing the same test for the 3rd time → escalate, don't loop
 - 🚩 Step marked "N/A" without explaining why
+
+---
+
+## Verification
+
+Before marking a task done and committing:
+- [ ] Diff size matches task scope
+- [ ] Build: zero errors
+- [ ] Lint: zero warnings on new code
+- [ ] Tests: 100% pass rate on affected specs
+- [ ] Coverage: new code has corresponding test cases
+- [ ] Security: no secrets, inputs validated (if applicable)
+- [ ] One commit per task with a descriptive message
+
+## Self-Learning
+
+After the verification report is approved:
+1. If output was rejected — note what went wrong before the next run
+2. If a new failure pattern proves effective to catch → append to `references/steps.md`

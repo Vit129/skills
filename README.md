@@ -14,7 +14,7 @@ Personal skill + memory system for Claude Code.
     CONTEXT.md           — active task state
     MEMORY.md            — decisions + lessons (grep only)
     knowledge/           — promoted patterns (≥2 features)
-    plans/               — AIDLC artifacts ([feature]/plan.md, tasks, outputs)
+    plans/               — feature planning artifacts ([feature]/CONTEXT.md, tasks, outputs)
   hooks/                 — UserPromptSubmit, PostToolUse, Stop
   skills/{name}/
     SKILL.md             — trigger, format, routing (~60-90 lines)
@@ -41,15 +41,14 @@ This keeps `Skill(handoff)` on-demand only (see `skills/handoff/SKILL.md`) — w
 | Task end | Rewrite `CONTEXT.md` → idle; append decisions to `MEMORY.md` |
 | Promote | Pattern used ≥2 features → `knowledge/{domain}.md` |
 
-## AIDLC Artifacts
+## Feature Planning Artifacts
 
 All artifacts live in `agent-memory/` — same standard for every project:
 
 | Artifact | Location |
 |---|---|
 | Decisions | `MEMORY.md` Decisions section |
-| Plan | `plans/[feature]/plan.md` |
-| Dev/QA tasks | `plans/[feature]/dev-tasks.md` / `qa-tasks.md` |
+| Dev/QA tasks | `plans/[feature]/dev-task-progress.md` / `qa-task-progress.md` |
 | Outputs | `plans/[feature]/outputs/` |
 | Progress | `CONTEXT.md` Now section |
-| Phase history | `CONTEXT.md` Completed section |
+| History | `CONTEXT.md` Completed section |

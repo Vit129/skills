@@ -20,6 +20,7 @@ No scope → scan entire project. With scope → scan specified files/directorie
 
 ## Workflow
 
+0. **Prioritize with the graph, if available** — if `graphify-out/` exists in the project root, run `mcp__graphify__query_graph` (god-nodes, blast radius) to focus the scan on the highest-impact modules first, especially when scope is the whole project.
 1. **SCAN** — walk the 7 categories in order → `references/detection-checklist.md`
 2. **LIFECYCLE** — every finding enters DETECT→CLASSIFY→REPRODUCE→FIX→GUARD→CLOSED → `references/lifecycle-output.md`
 3. **REPORT** — prioritized list, output format in `references/lifecycle-output.md`
@@ -44,12 +45,23 @@ No scope → scan entire project. With scope → scan specified files/directorie
 6. **One fix per finding** — own fix + test, no bundling
 7. **Guard mandatory** — fix without regression test = not done (test fails without fix, passes with it)
 
-## Integration with AIDLC
+## Integration with the Dev Flow
 
-- **Phase 2 (Plan):** run on existing code before designing — find landmines early
-- **Phase 3 (Execute):** run after each task — catch mismatches from new code
+- **During `/plan` (dev-architect):** run on existing code before designing — find landmines early
+- **During `/build`:** run after each task — catch mismatches from new code
 - **Pre-merge gate:** Persona 4 (Bug Hunter) in `review-personas` fan-out
 - **With debugging:** finding → feed into `debug-mantra` for reproduction + fix
+
+## Anti-Patterns
+
+| Anti-Pattern | Why It's Wrong |
+|---|---|
+| Report style issues as bugs | Wastes time, dilutes real findings |
+| Skip reproduction step | "I think it's a bug" ≠ "I proved it's a bug" |
+| Fix without guard | Bug will return. Guaranteed. |
+| Close as CANNOT_REPRO after 1 attempt | Try 3 times with different approaches first |
+| Bundle multiple fixes in one commit | Makes rollback impossible, hides which fix solved what |
+| Ignore P3 findings forever | They accumulate into P1 problems |
 
 ## Verification
 
@@ -59,3 +71,10 @@ No scope → scan entire project. With scope → scan specified files/directorie
 - [ ] Severity assigned honestly (not inflated)
 - [ ] Each fix has a corresponding regression test
 - [ ] Lifecycle tracker updated (no orphan findings)
+
+## Self-Learning
+
+After findings are confirmed and fixed:
+1. Save the confirmed bug class + detection method to `knowledge/lessons/{platform}/{mismatch-type}.md`
+2. If a finding was rejected — note why, to improve future scan accuracy
+3. If 3+ findings share the same category — promote to `knowledge/lessons/{category}-pattern.md`

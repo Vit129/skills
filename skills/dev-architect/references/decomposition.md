@@ -87,9 +87,9 @@ Integration Patterns:
   Event: [EventName] | Failure: [outbox | DLQ | retry]
 ```
 
-## Design-Domain Alignment Check (MANDATORY เมื่อมี Phase 1.6)
+## Design-Domain Alignment Check (MANDATORY เมื่อมี UX/UI design)
 
-เมื่อ UX/UI design เสร็จแล้ว ก่อนไป Phase 1.4 Domain Design ต้องตรวจว่า screens map กับ bounded contexts ถูกต้อง:
+เมื่อ UX/UI design เสร็จแล้ว ก่อนไป Tactical Design (`references/domain-design.md`) ต้องตรวจว่า screens map กับ bounded contexts ถูกต้อง:
 
 ```text
 Design-Domain Alignment:
@@ -105,4 +105,4 @@ Design-Domain Alignment:
 - ทุก screen ต้องมี bounded context รองรับ
 - ถ้า screen ข้าม 2+ contexts → ตรวจว่า context map ถูกต้อง
 - ถ้า context ไม่มี screen → อาจเป็น backend-only context (OK) หรือ missing screen (ถาม UX/UI)
-- Mismatch → resolve ก่อน proceed to Phase 1.4
+- Mismatch → resolve ก่อน proceed to Tactical Design

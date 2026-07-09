@@ -1,11 +1,11 @@
 # Task Progress Guide
 
-Shared rules for tracking dev and QA task progress. Both `dev-task-design.md` and `qa-task-design.md` reference this file.
+Shared rules for tracking dev and QA task progress. `task-design.md` (Dev and QA sections) references this file.
 
 ## Progress File Location
 
 Artifact location:
-`agent-memory/plans/[FEATURE]/dev-tasks.md` or `qa-tasks.md`
+`agent-memory/plans/[FEATURE]/dev-task-progress.md` or `qa-task-progress.md`
 
 ## Required Sections
 
@@ -17,7 +17,7 @@ Every progress file MUST have these sections:
 ## Context
 - System: {SYSTEM_KEBAB}
 - Feature: {SYSTEM_FEATURE_KEBAB}
-- Workflow: {AIDLC Full | AIDLC Inception Only | QA Automation}
+- Workflow: {Dev | QA | Dev+QA}
 - Platform: {API | Web UI | Android | iOS | API+Web UI | API+Web UI+Mobile | API+Mobile}  ← QA only
 - Complexity: {Lightweight | Standard | Full}
 - Test Root: {detected test root path}
@@ -69,10 +69,10 @@ Update counts after every `[x]` change.
 
 ## Master Index
 
-ALWAYS update `agent-memory/CONTEXT.md` Now section:
+ALWAYS update `PROGRESS.md` (project root):
 
 ```markdown
-# AIDLC Progress — {System Name}
+# Feature Progress — {System Name}
 
 | # | Feature | Dev | QA | Status | Date |
 |---|---------|-----|-----|--------|------|
@@ -89,7 +89,7 @@ Update when:
 
 When user says "ทำต่อ", "resume", or "continue":
 
-1. Read `agent-memory/CONTEXT.md` Now section → find the 🔄 In Progress feature
+1. Read `PROGRESS.md` → find the 🔄 In Progress feature
 2. Read that feature's progress file (dev or QA)
 3. **Verify artifacts from completed phases still exist:**
    - Check each path listed in the `## Artifacts` section
@@ -116,17 +116,15 @@ When user says "ทำต่อ", "resume", or "continue":
 
 **Update progress files in real-time — never batch at the end.**
 
-After EVERY completed task or phase step:
+After EVERY completed task:
 1. Mark `[x]` on the completed task in `qa-task-progress.md` or `dev-task-progress.md`
 2. Update `Summary` counts (Completed +1, Remaining -1)
 3. Update `Last updated` timestamp
 4. Update `PROGRESS.md` — QA or Dev count (e.g. `6/14` → `7/14`)
-5. Update `audit.md` Phase History — if a phase just completed, mark ✅ + date
 
 **Trigger points (must update after each):**
 - Each `[x]` checkbox completed
-- Each Phase completed (2.1 → 2.2 → 2.3 → 2.4)
-- Each batch approved (Batch 1, 2, 3 in Phase 2.2)
+- Each batch approved
 - Each file created (spec file, helper, fixture)
 - Upload gate completed (TS uploaded to Azure)
 
@@ -148,7 +146,7 @@ When every checkbox is `[x]`:
 1. Update Status to `Completed`
 2. Run full test suite one final time — record pass/fail counts
 3. Update PROGRESS.md (mark ✅ + date)
-4. Proceed to next AIDLC phase (defined in dev-task-design.md or qa-task-design.md)
+4. Proceed to next stage (defined in `task-design.md`'s Next Step section)
 5. Report to user:
 
 ```text

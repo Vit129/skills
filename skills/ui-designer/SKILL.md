@@ -19,13 +19,6 @@ improvement_count: 1
 
 Design and implement distinctive, production-grade interfaces — from aesthetic direction to pixel-perfect code that doesn't look like "AI slop."
 
-## AIDLC Gate
-
-⚠️ If this skill is triggered as part of a coding/QA task:
-- AIDLC governance MUST be active (`agent-memory/plans/[feature]/plan.md` must exist)
-- If not → STOP and route to `aidlc` first
-- Exception: pure investigation/analysis (no code changes) can proceed without AIDLC
-
 ## Core Capabilities
 
 | Capability | Count | Use Case |

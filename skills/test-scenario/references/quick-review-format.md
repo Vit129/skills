@@ -12,7 +12,7 @@ Every scenario file MUST have this section at the top, before the first batch.
 
 ## 📋 Quick Review Summary
 
-| # | Azure ID | Scenario | Spec File | Priority | Effort | Domain |
+| # | Tracker ID | Scenario | Spec File | Priority | Effort | Domain |
 |---|----------|----------|-----------|----------|--------|--------|
 | TS-001 | — | [title] | — | Critical | 2h | [domain] |
 ...
@@ -30,8 +30,8 @@ Every scenario file MUST have this section at the top, before the first batch.
 
 ## Column Timeline
 
-- `Azure ID`: populated when `upload-test-cases.ts` runs (Phase 2.2 upload gate) — start as "—"
-- `Spec File`: populated when Phase 2.4 writes spec file — start as "—"
+- `Tracker ID`: populated when the upload-to-tracker script runs (e.g. `uploadTestScenarioToJira.ts` / PBI equivalent — write your own for your tracker) — start as "—"
+- `Spec File`: populated when the test script is written — start as "—"
 
 ## Divider (MANDATORY between Quick Review and Full Detail)
 
@@ -44,6 +44,6 @@ Every scenario file MUST have this section at the top, before the first batch.
 ## Format Rules
 
 - Quick Review = plain markdown (readable without preview)
-- Full Detail = HTML format (`<ul><li>`, `<div><ol>`) for Azure DevOps import
+- Full Detail = HTML format (`<ul><li>`, `<div><ol>`) — required if your tracker's import expects rich-text test steps (e.g. Azure DevOps, Jira); plain markdown is fine for CSV-only trackers
 - Do NOT convert HTML in Full Detail to plain markdown — breaks `md2csv.sh`
 - Add `💡 TIP: กด Cmd+Shift+V` comment so reviewers know how to read HTML section

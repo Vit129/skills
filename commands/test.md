@@ -6,7 +6,7 @@ Route to `~/.claude/skills/playwright-testing/` + `~/.claude/skills/debug-mantra
 
 1. Determine what to test:
    - If user specifies a file/feature → test that
-   - If in AIDLC context → test current task from progress file
+   - If a task progress file exists (`dev-task-progress.md`/`qa-task-progress.md`) → test current task from it
 2. Write tests following:
    - Load `~/.claude/skills/playwright-rules/` (or `~/.claude/skills/robotframework-rules/` for mobile)
    - AAA pattern (Arrange-Act-Assert)

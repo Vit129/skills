@@ -24,7 +24,7 @@ Use this protocol when creating, updating, renaming, or syncing skills across Cl
 
 ```
 skills/
-├── governance/          # AIDLC process control
+├── governance/          # process control (unused — no active skill)
 ├── thinking/            # Ideation & analysis
 ├── dev/                 # Implementation & architecture
 ├── qa/                  # Quality & testing

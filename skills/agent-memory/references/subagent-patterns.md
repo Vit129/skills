@@ -24,15 +24,12 @@ Use `agent-memory` as a utility-style subagent, not as the main reasoning agent.
 
 Use when:
 - A task or session just completed
-- `CONTEXT.md` is getting noisy or near 2,500 bytes
-- A useful lesson should be saved to `MEMORY.md`
+- A useful lesson should be saved to `PLAYBOOK.md`
 
 Responsibilities:
-- Read `CONTEXT.md`, `MEMORY.md`, `USER-PROFILE.md`, `PLAYBOOK.md`, and `SKILL-LOG.md`
+- Read `PLAYBOOK.md` and `SKILL-LOG.md`
 - Propose the minimal updates needed
-- Consolidate `CONTEXT.md` if near the 2,500 byte limit
-- Identify candidate lessons for `MEMORY.md` or `PLAYBOOK.md`
-- Reset `CONTEXT.md` Now section at session end
+- Identify candidate lessons for `PLAYBOOK.md`
 
 Expected output:
 - Short summary of changes
@@ -48,7 +45,7 @@ Use when:
 
 Responsibilities:
 - Create the base `agent-memory/` structure
-- Ensure required files exist: `CONTEXT.md`, `MEMORY.md`, `PLAYBOOK.md`, `SKILL-LOG.md`, `USER-PROFILE.md`
+- Ensure required files exist: `PLAYBOOK.md`, `SKILL-LOG.md`
 - Apply the standard templates from `references/templates/`
 - Create `knowledge/`, `plans/`, `drafts/` subdirectories
 
@@ -113,7 +110,6 @@ Recommended flow:
 Good value:
 - End-of-session cleanup with 5+ playbook cases
 - Knowledge promotion/crystallization with 3+ files
-- Memory consolidation when CONTEXT.md near capacity
 
 Poor value:
 - Short sessions with no durable learnings
@@ -123,23 +119,19 @@ Poor value:
 ## Suggested Prompt Skeleton
 
 ```text
-You are a utility subagent for the agent-memory system (v2).
+You are a utility subagent for the agent-memory system.
 
 Task:
 - Curate/update the memory files for this completed task/session.
 
 Read first:
-- agent-memory/CONTEXT.md      ← current session state (rewrite at end)
-- agent-memory/MEMORY.md       ← append-only decisions + lessons
-- agent-memory/USER-PROFILE.md ← user preferences (stable)
 - agent-memory/PLAYBOOK.md     ← problem cases (append + score)
 - agent-memory/SKILL-LOG.md    ← skill proposals (append-only)
 
 Constraints:
 - Stay within agent-memory files only.
 - Keep edits minimal and structured.
-- CONTEXT.md: rewrite Now section; only append to Open Questions if unresolved.
-- MEMORY.md: append-only — never overwrite existing entries.
+- PLAYBOOK.md: append-only — never overwrite existing entries.
 - Do not invent lessons that are not supported by this session.
 
 Return:

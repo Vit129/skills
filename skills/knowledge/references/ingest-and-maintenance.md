@@ -156,14 +156,14 @@ User says: "lint KB", "check KB health", "scan stale", "KB ครบมั้ย
 
 ---
 
-## Integration with AIDLC
+## Integration with the QA Flow
 
-| Phase | KB Role |
+| Stage | KB Role |
 |-------|---------|
-| **Phase 2.1 (QA Task Design)** | Agent reads `biz/{feature}.md` → knows page structure → plans tasks accurately |
-| **Phase 2.2 (Test Scenario)** | Agent reads `biz/{feature}.md` → writes entry points + clickable elements into scenarios |
-| **Phase 2.4 (Test Scripts)** | Agent reads `biz/{feature}.md` + `qa/{feature}-patterns.md` → writes locators correctly first try |
-| **Phase 2.2 Step 1 (Reuse)** | Agent reads `qa/` patterns → avoids duplicate scenarios |
+| **QA Task Design** | Agent reads `biz/{feature}.md` → knows page structure → plans tasks accurately |
+| **Test Scenario Writing** | Agent reads `biz/{feature}.md` → writes entry points + clickable elements into scenarios |
+| **Test Script Writing** | Agent reads `biz/{feature}.md` + `qa/{feature}-patterns.md` → writes locators correctly first try |
+| **Scenario Reuse Check** | Agent reads `qa/` patterns → avoids duplicate scenarios |
 
 ---
 

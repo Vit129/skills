@@ -70,10 +70,10 @@ npx playwright test --reporter=list,html
 | Step 4 (Coverage) | Write missing tests before proceeding |
 | Step 5 (Security) | Apply `security` skill |
 
-## AIDLC Integration
+## Dev Flow Integration
 
 ```text
-Phase 3: Implementation
+/build
   │
   ├── Task N: Write code
   │     │
@@ -83,5 +83,5 @@ Phase 3: Implementation
   │     ├── All pass → commit + mark done
   │     └── Any fail → fix → re-run loop
   │
-  └── All tasks done → Phase 3 complete
+  └── All tasks done → /build complete
 ```

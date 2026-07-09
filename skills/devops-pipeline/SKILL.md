@@ -18,13 +18,6 @@ improvement_count: 0
 
 # DevOps Pipeline
 
-## AIDLC Gate
-
-⚠️ If this skill is triggered as part of a coding/QA task:
-- AIDLC governance MUST be active (`agent-memory/plans/[feature]/plan.md` must exist)
-- If not → STOP and route to `aidlc` first
-- Exception: pure investigation/analysis (no code changes) can proceed without AIDLC
-
 
 Create CI/CD pipelines and manage pull requests across Azure DevOps, GitHub Actions, and GitLab CI.
 
@@ -91,7 +84,7 @@ Ask which platform if not stated, then follow the appropriate reference:
 
 > These steps MUST execute in the same order every time this skill runs.
 > Output may vary, but the workflow is fixed.
-> If any step is skipped without a documented skip condition, the session-save hook will flag this skill.
+> If any step is skipped, document the skip condition explicitly.
 
 ## Verification
 
@@ -135,10 +128,3 @@ After user approves the output:
 2. **Record failures:** If output was rejected → note what went wrong for next time
 3. **Progressive update:** If a new pattern proved effective → append to relevant knowledge index
 4. **Confidence tracking:** `confidence: 1.0` (user-approved) vs `confidence: 0.7` (auto-generated)
-
-### Improvement Tracking
-
-- **Hook:** `session-save.json` appends to `agent-memory/skill-log.md` after every session using this skill
-- **Hook:** `skill-improve.json` logs when user corrects this skill's output (silent)
-- **Promotion:** 3x same issue in skill-log → auto-apply fix to this SKILL.md + bump version
-- **Eval:** `eval-check.json` runs pass@3 weekly if this skill is flagged in `memory.md`
