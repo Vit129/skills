@@ -46,7 +46,7 @@ Design test automation frameworks and test data infrastructure.
 
 ## Next Step
 
-Architecture approved → continue with `qa-task-design` (`qa-architect/references/qa-task-design.md`) to break the design into implementation tasks, then implement.
+Architecture approved → continue with `../../dev-architect/references/task-design.md` (QA section) to break the design into implementation tasks, then implement.
 
 ## 📋 Quick Review Summary (MANDATORY — add to every architecture file)
 

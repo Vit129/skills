@@ -1,6 +1,6 @@
 # Task Progress Guide
 
-Shared rules for tracking dev and QA task progress. Both `dev-task-design.md` and `qa-task-design.md` reference this file.
+Shared rules for tracking dev and QA task progress. `task-design.md` (Dev and QA sections) references this file.
 
 ## Progress File Location
 
@@ -146,7 +146,7 @@ When every checkbox is `[x]`:
 1. Update Status to `Completed`
 2. Run full test suite one final time — record pass/fail counts
 3. Update PROGRESS.md (mark ✅ + date)
-4. Proceed to next stage (defined in dev-task-design.md or qa-task-design.md)
+4. Proceed to next stage (defined in `task-design.md`'s Next Step section)
 5. Report to user:
 
 ```text

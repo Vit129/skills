@@ -44,7 +44,7 @@ Design systems from requirements to implementation-ready blueprints.
 
 ## Next Step
 
-Design complete → continue with `dev-task-design` (`dev-architect/references/dev-task-design.md`) to break the design into implementation tasks, then implement.
+Design complete → continue with `references/task-design.md` (Dev section) to break the design into implementation tasks, then implement.
 
 ---
 
