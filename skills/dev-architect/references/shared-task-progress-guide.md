@@ -116,17 +116,15 @@ When user says "ทำต่อ", "resume", or "continue":
 
 **Update progress files in real-time — never batch at the end.**
 
-After EVERY completed task or phase step:
-1. Mark `[x]` on the completed task in `qa-task-progress.md` or `dev-task-progress.md`
+After EVERY completed task:
+1. Mark `[x]` on the completed task in `qa-tasks.md` or `dev-tasks.md`
 2. Update `Summary` counts (Completed +1, Remaining -1)
 3. Update `Last updated` timestamp
 4. Update `PROGRESS.md` — QA or Dev count (e.g. `6/14` → `7/14`)
-5. Update `audit.md` Phase History — if a phase just completed, mark ✅ + date
 
 **Trigger points (must update after each):**
 - Each `[x]` checkbox completed
-- Each Phase completed (2.1 → 2.2 → 2.3 → 2.4)
-- Each batch approved (Batch 1, 2, 3 in Phase 2.2)
+- Each batch approved
 - Each file created (spec file, helper, fixture)
 - Upload gate completed (TS uploaded to Azure)
 

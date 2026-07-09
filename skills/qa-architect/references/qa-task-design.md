@@ -6,30 +6,17 @@ For progress tracking rules, file behavior, master index, and resume protocol �
 
 ## Entry Point Requirements
 
-### QA Scenario Only mode (Phase 2.1 → 2.2)
-Can start this phase if:
-- [ ] Lite Inception complete (mini-spec.md exists) OR external specs provided
-- [ ] Coding rules reviewed (rules/test-scenario-rules)
-
-### QA Automation mode (Phase 2.1 → 2.2 → 2.3 → 2.4)
-Can start this phase if:
-- [ ] Lite Inception complete (mini-spec.md exists) OR external specs provided
+Can start once:
+- [ ] Requirements are clear — run `/spec` (interview) first if not
 - [ ] Platform selected (single: API / Web UI / Android / iOS — or combined: API+Web UI / API+Web UI+Mobile / API+Mobile)
-- [ ] Coding rules reviewed (rules/playwright-rules and/or rules/robotframework-rules — load ALL relevant rules for combined platforms)
+- [ ] Coding rules reviewed (`playwright-rules` and/or `robotframework-rules` — load ALL relevant rules for combined platforms; `test-scenario-rules` for scenario-only work)
 
-### Full mode (Phase 2.1 — after Phase 1.8 Brainstorming)
-Can start this phase if:
-- [ ] Phase 1 Inception complete (user-stories.md + domain-design.md + logical-design.md exist)
-- [ ] Brainstorming complete (brainstorming-summary.md exists) OR feature is Small
-- [ ] Coding rules reviewed
+> **Note:** This skill plans the QA work (task breakdown). Test scenarios, QA architecture, and test scripts are created AFTER this — not before. The qa-tasks.md produced here defines the iteration path for the QA work that follows.
 
-> **Note:** This skill plans the QA work (task breakdown). Test scenarios, QA architecture, and test scripts are created AFTER this phase — not before. The qa-task-progress.md produced here defines the iteration path for subsequent phases (2.2, 2.3, 2.4).
+## Required Context
 
-## Required Context from Previous Phases
-
-- From Inception/Lite Inception: user stories, acceptance criteria, domain context
-- From Brainstorming (if applicable): refined scope, QA-specific concerns
-- From Platform Selection: determines which coding rules and architecture patterns to use
+- From `/spec` (interview): user stories, acceptance criteria, domain context
+- From platform selection: determines which coding rules and architecture patterns to use
 
 ## Critical Success Criteria
 
@@ -57,9 +44,9 @@ Also read coding rules:
 
 ## When to use
 
-- After Lite Inception or Phase 1 Inception is complete
-- As the FIRST QA phase — plans what QA work needs to be done
-- Before test case design (Phase 2.2), QA architecture (Phase 2.3), and test scripts (Phase 2.4)
+- After requirements are clear
+- As the first QA step — plans what QA work needs to be done
+- Before test case design, QA architecture, and test scripts
 - Need to plan QA work in manageable chunks with clear iteration path
 
 ## Process
@@ -252,9 +239,9 @@ File: `agent-memory/plans/[FEATURE]/qa-tasks.md`
 Location:
 `agent-memory/plans/[FEATURE]/qa-tasks.md`
 
-## Phase Transition Validation
+## Before Marking Complete
 
-Before proceeding to next phase, validate:
+Validate:
 - [ ] Every test scenario has a corresponding script task
 - [ ] All tasks have complexity estimates
 - [ ] Infrastructure tasks come before script tasks
@@ -262,9 +249,9 @@ Before proceeding to next phase, validate:
 - [ ] Progress file created with Context + Artifacts filled in
 - [ ] PROGRESS.md updated with new row
 
-## Next Phase
+## Next Step
 
-When all QA tasks complete → return to `workflow.md` routing table to determine next phase.
+When all QA tasks complete → continue with `/build` (or hand off if dev-side work remains).
 
 ## Score-Aware Lesson Reading (Step 2 — updated)
 

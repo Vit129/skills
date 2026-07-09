@@ -6,24 +6,18 @@ For progress tracking rules, file behavior, master index, and resume protocol �
 
 ## Entry Point Requirements
 
-### Dev Only mode (Phase 2.5 — after Lite Inception)
-Can start this phase if:
-- [ ] Lite Inception complete (mini-spec.md exists) OR external specs provided
-- [ ] Logical design exists (logical-design.md) OR will be created as part of Lite Inception
+Can start once:
+- [ ] Requirements are clear — run `/spec` (interview) first if not
+- [ ] Logical design exists (via `dev-architect`'s Logical Design step) or is being produced alongside this
+- [ ] Test scripts, if any, have at least a skeleton created (TDD: RED)
 
-### Full mode (Phase 2.5 — parallel with Phase 2.4)
-Can start this phase if:
-- [ ] `logical-design.md` exists and is validated
-- [ ] Phase 2.4 (Test Script Design) has at least test file skeleton created
-- [ ] Technical specifications are complete
+> **Note:** This skill plans the Dev work (task breakdown). Implementation happens AFTER this via `/build`. The dev-tasks.md produced here defines the iteration path for that work.
 
-> **Note:** This skill plans the Dev work (task breakdown). Implementation happens AFTER this phase at Phase 3.1. The dev-task-progress.md produced here defines the iteration path for construction phases (3.1, 3.2, 3.3).
-
-## Required Context from Previous Phases
+## Required Context
 
 - From Logical Design: API specs / service contracts, data storage schema, client application components
-- From Test Case Design (if available): scenarios to be supported
-- From Test Script Design (if available): automation scripts to be built first (TDD: RED)
+- From test scenarios (if available): scenarios to be supported
+- From test scripts (if available): automation scripts to be built first (TDD: RED)
 
 ## Critical Success Criteria
 
@@ -36,9 +30,9 @@ Can start this phase if:
 
 ## When to use
 
-- After Lite Inception or Phase 1 Inception + Phase 2.4 (test script skeleton) is complete
-- As the FIRST Dev phase — plans what Dev work needs to be done
-- Before implementation (Phase 3.1)
+- After requirements and logical design are clear (test script skeleton, if any, complete)
+- As the first Dev step — plans what Dev work needs to be done
+- Before `/build`
 - Need to plan Dev work in manageable chunks with clear iteration path
 
 ## Process
@@ -158,9 +152,9 @@ File: `agent-memory/plans/[FEATURE]/dev-tasks.md`
 Location:
 `agent-memory/plans/[FEATURE]/dev-tasks.md`
 
-## Phase Transition Validation
+## Before Marking Complete
 
-Before proceeding to next phase, validate:
+Validate:
 - [ ] All logical design components have corresponding tasks
 - [ ] All tasks have complexity estimates
 - [ ] Dependencies are sequenced correctly
@@ -168,11 +162,9 @@ Before proceeding to next phase, validate:
 - [ ] Progress file created with Context + Artifacts filled in
 - [ ] PROGRESS.md updated with new row
 
-## Next Phase
+## Next Step
 
-When all tasks complete:
-- If DevOps Sync is next → go to `references/phases/inception/azure-devops-sync.md`
-- If Construction is next → go to `references/phases/construction/implementation.md`
+When all tasks are broken down → continue with `/build`.
 
 ## Score-Aware Lesson Reading (Step 2 — updated)
 

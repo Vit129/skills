@@ -19,9 +19,9 @@ last_improved: 2026-06-27
 |-----------|------|
 | No codebase, vague/underspecified idea → extract via Q&A | `references/me.md` |
 | Has codebase, align language, stress-test plan against code | `references/doc.md` |
-| After Phase 1 artifacts exist, before Phase 2, complex feature | `references/amigos.md` |
+| After requirements captured (CONTEXT.md), before `/plan`, complex feature | `references/amigos.md` |
 | High-stakes decision, non-trivial logic, before commit/deploy | `references/doubt.md` |
 | Framework/library specific implementation, API version matters | `references/source.md` |
 
-> **Note:** `doc.md` uses `references/domain-modeling.md` for CONTEXT.md and ADR rules.
+> **Note:** `doc.md` uses `references/domain-modeling.md` for CONTEXT.md and decision-recording rules.
 > Other skills that need to update domain docs should read `domain-modeling.md` directly.

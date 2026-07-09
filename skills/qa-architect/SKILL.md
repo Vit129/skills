@@ -34,7 +34,7 @@ Design test automation frameworks and test data infrastructure.
 ## Inline Process
 
 1. **Identify the platform** — Determine: API, Web UI, or Mobile. Load exactly ONE corresponding reference. If not stated, ask.
-2. **Read test scenarios from Phase 2.2** — Load `testScenarioPbi{ID}-{platform}.md` → extract: endpoints called, DB tables verified, request fields, response fields, test data used per TS.
+2. **Read existing test scenarios** — Load `testScenarioPbi{ID}-{platform}.md` → extract: endpoints called, DB tables verified, request fields, response fields, test data used per TS.
 3. **Analyze requirements** — Count endpoints/screens, group by domain, check DB integration needs, determine complexity.
 4. **Generate architecture** — API: Multi-Service pattern (Helper → DbService + AuthService + ApiService + Workflows). Web UI: Layout-based POM (header/sidebar/content). Mobile: Screen-based POM (navigation flows, gestures).
 5. **Map TS → Service methods** — For each TS: which ApiService method, which DbService verify method, which test data set (TD_XXX).
