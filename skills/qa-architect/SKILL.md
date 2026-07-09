@@ -44,6 +44,14 @@ Design test automation frameworks and test data infrastructure.
 8. **Validate design** — Page objects contain only interactions (no assertions), environment switching defined, no forbidden patterns.
 9. **Get approval** — Present architecture summary to user. Wait for explicit approval before coding.
 
+## Output
+
+Save the architecture file under the project's `tests/` tree, by platform — never `agent-memory/`:
+- API → `tests/api-testing/tests-api/[system]/[feature]/`
+- Web UI → `tests/web-testing/tests-web/[system]/[feature]/`
+- Mobile → `tests/mobile-testing/tests-mobile/[platform]/[system]/[feature]/`
+- Combined platforms → one file per platform test root, plus shared fixtures under `tests/shared-fixtures/[system]/[feature]/`
+
 ## Next Step
 
 Architecture approved → continue with `../../dev-architect/references/task-design.md` (QA section) to break the design into implementation tasks, then implement.

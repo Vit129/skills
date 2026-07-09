@@ -19,6 +19,19 @@ Can start once (all mandatory, no exceptions):
 - **Dev:** From Logical Design: API specs/service contracts, data storage schema, client app components. From test scenarios/scripts, if available.
 - **QA:** From `/spec` (interview): user stories, acceptance criteria, domain context. From platform selection: which coding rules and architecture patterns apply.
 
+## Artifact Output Locations (resolves the `{path}` fields below)
+
+- **Dev — everything lives under `agent-memory/plans/[FEATURE]/`:**
+  - User Stories, Logical Design, Implementation Plan, Data Storage Strategy → `agent-memory/plans/[FEATURE]/{name}.md`
+  - Test Scripts (TDD skeletons) → `agent-memory/plans/[FEATURE]/test-scripts/`
+- **QA — under the project's `tests/` tree (per `scripts/setup/setupTests.sh`), not `agent-memory/`:**
+  - Test Scenarios → `tests/test-scenario/[system]/[feature]/`
+  - Architecture / Data Storage Strategy — by platform:
+    - API → `tests/api-testing/tests-api/[system]/[feature]/`
+    - Web UI → `tests/web-testing/tests-web/[system]/[feature]/`
+    - Mobile (Android/iOS) → `tests/mobile-testing/tests-mobile/[platform]/[system]/[feature]/`
+    - Combined platforms → list each test root separately, plus `tests/shared-fixtures/[system]/[feature]/` for shared fixtures
+
 ## Critical Success Criteria
 
 - ✅ Tasks are atomic (completable in 1-2 hours)

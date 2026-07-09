@@ -42,6 +42,10 @@ Design systems from requirements to implementation-ready blueprints.
 6. **TDD cycle** — Write a failing test (Red) → implement minimum code to pass (Green) → refactor while keeping tests green.
 7. **Verify** — Bounded contexts defined, pattern chosen with tradeoffs, entities/aggregates specified, logical artifacts produced, only ONE reference loaded per step.
 
+## Output
+
+Save every design artifact (Strategic/Tactical/Logical Design docs) to `agent-memory/plans/[FEATURE]/{name}.md`.
+
 ## Next Step
 
 Design complete → continue with `references/task-design.md` (Dev section) to break the design into implementation tasks, then implement.

@@ -35,7 +35,9 @@ Every progress file MUST have these sections:
 
 ### Artifacts (MANDATORY)
 
-List all input/output file paths so resume doesn't require searching:
+List all input/output file paths so resume doesn't require searching. Path convention (see `task-design.md` → Artifact Output Locations for the full breakdown):
+- **Dev** artifacts → `agent-memory/plans/[FEATURE]/{name}.md`
+- **QA** artifacts → `tests/{api-testing,web-testing,mobile-testing,test-scenario}/[system]/[feature]/` (never `agent-memory/`)
 
 ```markdown
 ## Artifacts
