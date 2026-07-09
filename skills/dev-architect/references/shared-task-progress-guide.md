@@ -41,13 +41,11 @@ List all input/output file paths so resume doesn't require searching. Path conve
 
 ```markdown
 ## Artifacts
-- User Stories: {path}
-- Logical Design: {path}
-- Test Scenarios: {path}
-- Architecture: {path}
-- Implementation Plan: {path}
-- Data Storage Strategy: {path}
-- Coding Rules: {skill name}
+- Design: {path}          ← Dev only (agent-memory/plans/[FEATURE]/design.md)
+- Test Scenarios: {path}  ← QA only
+- Architecture: {path}    ← QA only
+- Data Storage Strategy: {path}  ← QA only (test data seed/verify/cleanup, not Dev's DB schema — that's inside Design)
+- Coding Rules: {skill name}     ← QA only
 ```
 
 Include only artifacts relevant to the task type (dev or QA). Leave empty fields as `N/A`.

@@ -44,7 +44,7 @@ Design systems from requirements to implementation-ready blueprints.
 
 ## Output
 
-Save every design artifact (Strategic/Tactical/Logical Design docs) to `agent-memory/plans/[FEATURE]/{name}.md`.
+One file: `agent-memory/plans/[FEATURE]/design.md`, with 3 sections in process order — `## Strategic Design`, `## Tactical Design`, `## Logical Design`. All three phases happen in one sitting within this skill; no demonstrated reason to split them into separate files (no separate audience, no separate revisit cadence).
 
 ## Next Step
 
