@@ -28,7 +28,7 @@ agent-memory/
 ├── EVAL-STATE.md      ← Last eval date tracker (updated by eval-check hook)
 ├── index.md           ← Catalog of knowledge/ and plans/
 ├── skill-usage.log    ← Auto-captured skill usage (hook-written, do not edit)
-├── plans/             ← Implementation plans (per-feature dev-tasks.md / qa-tasks.md)
+├── plans/             ← Implementation plans (per-feature dev-task-progress.md / qa-task-progress.md)
 ├── evals/             ← Eval results (skill stocktake, pass@3 reports)
 ├── drafts/            ← Temporary resolution drafts (ephemeral)
 └── knowledge/         ← Promoted cases + crystallized patterns

@@ -48,7 +48,7 @@ All artifacts live in `agent-memory/` — same standard for every project:
 | Artifact | Location |
 |---|---|
 | Decisions | `MEMORY.md` Decisions section |
-| Dev/QA tasks | `plans/[feature]/dev-tasks.md` / `qa-tasks.md` |
+| Dev/QA tasks | `plans/[feature]/dev-task-progress.md` / `qa-task-progress.md` |
 | Outputs | `plans/[feature]/outputs/` |
 | Progress | `CONTEXT.md` Now section |
 | History | `CONTEXT.md` Completed section |

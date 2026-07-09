@@ -13,6 +13,14 @@ last_improved: 2026-06-27
 
 # Interview — Router
 
+Entry point for every task, no exceptions — including typo fixes, explains, and single clear bugs. Proportionate, not ceremonial: most tasks pass through in one line.
+
+## Step 0 — Scope Check (always runs first, silent)
+
+Is scope already unambiguous from the request + visible context (typo fix, single clear bug, direct question, explain/summarize/search/diagnose)?
+- **YES** → state the 1-line scope read, skip Mode Detection, hand off directly to the fitting skill/action. No questions asked.
+- **NO** → proceed to Mode Detection below for full elicitation.
+
 ## Mode Detection (auto — do NOT ask)
 
 | Situation | Load |

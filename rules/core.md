@@ -24,8 +24,8 @@ Every task response ends with:
 2. Read before write — understand existing code before modifying
 3. Match project style, conventions, and libraries
 4. State assumptions explicitly; ask when uncertain
-5. Follow routing.md — call the skill that fits, call interview when scope is unclear
-6. Update the active feature's `dev-tasks.md`/`qa-tasks.md` checkboxes when task state changes
+5. Follow routing.md — `interview` is always the entry point (1-line scope check, full gather only when unclear), then call the skill that fits
+6. Update the active feature's `dev-task-progress.md`/`qa-task-progress.md` checkboxes when task state changes
 7. Cite evidence (file, line, command output) for claims
 8. Use Thai for conversation, English for generated files
 
@@ -45,7 +45,7 @@ Canonical lifecycle (pattern promotion) lives in `~/.claude/CLAUDE.md` → **Mem
 
 ### Done-gate (MANDATORY — last action before Done)
 
-Never mark ✅ Done before: checkboxes in the active `dev-tasks.md`/`qa-tasks.md` are updated, and reusable patterns are promoted to `PLAYBOOK.md`/`knowledge/`.
+Never mark ✅ Done before: checkboxes in the active `dev-task-progress.md`/`qa-task-progress.md` are updated, and reusable patterns are promoted to `PLAYBOOK.md`/`knowledge/`.
 
 ## Test-Before-Deliver
 

@@ -10,7 +10,7 @@ bash ~/.claude/scripts/session-start.sh [project-dir]
 ```
 
 - New task → read `rules/coding.md` before writing code
-- Continuation ("ทำต่อ", "continue") → read the feature's `agent-memory/plans/[FEATURE]/dev-tasks.md` or `qa-tasks.md` → resume at first unchecked task
+- Continuation ("ทำต่อ", "continue") → read the feature's `agent-memory/plans/[FEATURE]/dev-task-progress.md` or `qa-task-progress.md` → resume at first unchecked task
 - Search/plan → read `INDEX.md` on-demand
 
 ---
@@ -47,7 +47,7 @@ Graphified projects auto-load `@graphify-out/GRAPH_SUMMARY.md` via their own CLA
 
 ## Memory Lifecycle
 
-Task progress lives in `agent-memory/plans/[FEATURE]/dev-tasks.md` / `qa-tasks.md` (per-feature, checkbox-tracked). Durable lessons: `knowledge/cases/` + `PLAYBOOK.md` index; domain patterns → `knowledge/{domain}.md`.
+Task progress lives in `agent-memory/plans/[FEATURE]/dev-task-progress.md` / `qa-task-progress.md` (per-feature, checkbox-tracked). Durable lessons: `knowledge/cases/` + `PLAYBOOK.md` index; domain patterns → `knowledge/{domain}.md`.
 
 ---
 

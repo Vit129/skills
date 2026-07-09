@@ -18,7 +18,7 @@ PROGRESS.md has an active (🔄) feature?
 ├── NO → "No feature work in progress. Use /spec to start."
 └── YES → read feature name → check agent-memory/plans/[feature]/
     ├── No requirements doc → "Requirements incomplete. Continuing /spec..."
-    ├── No dev-tasks.md or qa-tasks.md → "Task design needed. Continuing /plan..."
+    ├── No dev-task-progress.md or qa-task-progress.md → "Task design needed. Continuing /plan..."
     ├── Tasks incomplete → "Tasks in progress. Continuing /build..."
     └── All complete → "Feature complete! Ready for /review or /ship."
 ```

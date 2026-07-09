@@ -5,7 +5,7 @@ Shared rules for tracking dev and QA task progress. Both `dev-task-design.md` an
 ## Progress File Location
 
 Artifact location:
-`agent-memory/plans/[FEATURE]/dev-tasks.md` or `qa-tasks.md`
+`agent-memory/plans/[FEATURE]/dev-task-progress.md` or `qa-task-progress.md`
 
 ## Required Sections
 
@@ -117,7 +117,7 @@ When user says "ทำต่อ", "resume", or "continue":
 **Update progress files in real-time — never batch at the end.**
 
 After EVERY completed task:
-1. Mark `[x]` on the completed task in `qa-tasks.md` or `dev-tasks.md`
+1. Mark `[x]` on the completed task in `qa-task-progress.md` or `dev-task-progress.md`
 2. Update `Summary` counts (Completed +1, Remaining -1)
 3. Update `Last updated` timestamp
 4. Update `PROGRESS.md` — QA or Dev count (e.g. `6/14` → `7/14`)

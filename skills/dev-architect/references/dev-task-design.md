@@ -6,12 +6,12 @@ For progress tracking rules, file behavior, master index, and resume protocol �
 
 ## Entry Point Requirements
 
-Can start once:
-- [ ] Requirements are clear — run `/spec` (interview) first if not
-- [ ] Logical design exists (via `dev-architect`'s Logical Design step) or is being produced alongside this
+Can start once (both mandatory, no exceptions):
+- [ ] `interview` has run (Step 0 scope-check or full gather) — never skipped
+- [ ] `dev-architect` design is complete (Logical Design step done)
 - [ ] Test scripts, if any, have at least a skeleton created (TDD: RED)
 
-> **Note:** This skill plans the Dev work (task breakdown). Implementation happens AFTER this via `/build`. The dev-tasks.md produced here defines the iteration path for that work.
+> **Note:** This skill plans the Dev work (task breakdown). Implementation happens AFTER this via `/build`. The dev-task-progress.md produced here defines the iteration path for that work.
 
 ## Required Context
 
@@ -100,7 +100,7 @@ Infrastructure tasks ต้องมาก่อนเสมอ เพราะ 
 ## Progress Checklist Template
 
 Create at:
-`agent-memory/plans/[FEATURE]/dev-tasks.md`
+`agent-memory/plans/[FEATURE]/dev-task-progress.md`
 
 ```markdown
 # Dev Task Progress — {Feature Name}
@@ -148,9 +148,9 @@ Status: In Progress | Completed
 
 ## Output
 
-File: `agent-memory/plans/[FEATURE]/dev-tasks.md`
+File: `agent-memory/plans/[FEATURE]/dev-task-progress.md`
 Location:
-`agent-memory/plans/[FEATURE]/dev-tasks.md`
+`agent-memory/plans/[FEATURE]/dev-task-progress.md`
 
 ## Before Marking Complete
 

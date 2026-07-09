@@ -33,9 +33,7 @@ Design test automation frameworks and test data infrastructure.
 
 ## Inline Process
 
-> **Escape hatch:** If requirements are unclear at any step below, stop and call `Skill(interview)` before proceeding — don't guess and design on top of an assumption.
-> **Before designing architecture:** if `graphify-out/` exists in the project root, run `mcp__graphify__query_graph` on the feature/module under test — know the existing structure before proposing page objects/service layers.
-
+0. **Entry (mandatory)** — `Skill(interview)` must have already run (its Step 0 scope-check or full gather). If it hasn't, stop and call it first — don't design on top of an unconfirmed scope. Then: run `mcp__graphify__query_graph` on the feature/module under test if `graphify-out/` exists in the project root — know the existing structure before proposing page objects/service layers.
 1. **Identify the platform** — Determine: API, Web UI, or Mobile. Load exactly ONE corresponding reference. If not stated, ask.
 2. **Read existing test scenarios** — Load `testScenarioPbi{ID}-{platform}.md` → extract: endpoints called, DB tables verified, request fields, response fields, test data used per TS.
 3. **Analyze requirements** — Count endpoints/screens, group by domain, check DB integration needs, determine complexity.
@@ -45,6 +43,10 @@ Design test automation frameworks and test data infrastructure.
 7. **Design test data infrastructure** — Map TD_XXX from test scenarios → fixture file fields. Define seed/verify/cleanup per TS. Define .env sensitive fields.
 8. **Validate design** — Page objects contain only interactions (no assertions), environment switching defined, no forbidden patterns.
 9. **Get approval** — Present architecture summary to user. Wait for explicit approval before coding.
+
+## Next Step
+
+Architecture approved → continue with `qa-task-design` (`qa-architect/references/qa-task-design.md`) to break the design into implementation tasks, then implement.
 
 ## 📋 Quick Review Summary (MANDATORY — add to every architecture file)
 

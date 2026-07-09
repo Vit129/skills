@@ -6,12 +6,13 @@ For progress tracking rules, file behavior, master index, and resume protocol �
 
 ## Entry Point Requirements
 
-Can start once:
-- [ ] Requirements are clear — run `/spec` (interview) first if not
+Can start once (all mandatory, no exceptions):
+- [ ] `interview` has run (Step 0 scope-check or full gather) — never skipped
+- [ ] `qa-architect` design is approved
 - [ ] Platform selected (single: API / Web UI / Android / iOS — or combined: API+Web UI / API+Web UI+Mobile / API+Mobile)
 - [ ] Coding rules reviewed (`playwright-rules` and/or `robotframework-rules` — load ALL relevant rules for combined platforms; `test-scenario-rules` for scenario-only work)
 
-> **Note:** This skill plans the QA work (task breakdown). Test scenarios, QA architecture, and test scripts are created AFTER this — not before. The qa-tasks.md produced here defines the iteration path for the QA work that follows.
+> **Note:** This skill plans the QA work (task breakdown). Test scenarios, QA architecture, and test scripts are created AFTER this — not before. The qa-task-progress.md produced here defines the iteration path for the QA work that follows.
 
 ## Required Context
 
@@ -174,7 +175,7 @@ Sequence: Infrastructure → Shared Services → Page Objects → Test Scripts �
 ## Progress Checklist Template
 
 Create at:
-`agent-memory/plans/[FEATURE]/qa-tasks.md`
+`agent-memory/plans/[FEATURE]/qa-task-progress.md`
 
 ```markdown
 # QA Task Progress — {Feature Name}
@@ -235,9 +236,9 @@ Status: In Progress | Completed
 
 ## Output
 
-File: `agent-memory/plans/[FEATURE]/qa-tasks.md`
+File: `agent-memory/plans/[FEATURE]/qa-task-progress.md`
 Location:
-`agent-memory/plans/[FEATURE]/qa-tasks.md`
+`agent-memory/plans/[FEATURE]/qa-task-progress.md`
 
 ## Before Marking Complete
 

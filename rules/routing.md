@@ -2,9 +2,7 @@
 
 ## Principle
 
-Pick the skill that best fits the task. Call it directly.
-
-**When intent or scope is unclear → always call `interview` first.**
+`interview` is the entry point for every task, no exceptions — it does a silent 1-line scope check first (Step 0) and only opens full elicitation when scope is genuinely unclear. After Step 0 clears, pick the skill that best fits and call it directly.
 
 ## Skill Map
 
@@ -18,7 +16,7 @@ Pick the skill that best fits the task. Call it directly.
 | postman → playwright | `postman-to-playwright` |
 | review / code review / critique | `review-personas` |
 | scrutinize / sanity-check / second opinion on plan or PR / is this necessary | `scrutinize` |
-| new feature / architecture / unclear scope / requirements unclear | `interview` → write CONTEXT.md → `dev-architect` (design + TDD implement) |
+| new feature / architecture / unclear scope / requirements unclear | `interview` (full gather) → write CONTEXT.md → `dev-architect` (design + graphify) → `dev-task-design` → implement |
 | macos / swiftui / appkit / metal / swift | `macos-swiftui` |
 | finance / stocks / portfolio / earnings | matching finance skill |
 | android / kotlin / jetpack compose | `android` |
@@ -48,9 +46,9 @@ Pick the skill that best fits the task. Call it directly.
 | handoff / hand off / ส่งต่องาน / pass to codex/gemini/kiro / switch agent | `handoff` |
 | ask agy / second opinion from agy / have agy try | `agy` |
 | management talk / เขียนสำหรับ management / rewrite for vp | `management-talk` |
-| explain / summarize / search / brainstorm / diagnose | direct — no skill needed |
+| explain / summarize / search / brainstorm / diagnose | `interview` Step 0 clears in 1 line → direct, no further skill |
 | everything else | `interview` → then pick closest skill |
 
 ## Continuation
 
-"ทำต่อ" / "continue" / "resume" → read the active feature's `agent-memory/plans/[FEATURE]/dev-tasks.md` or `qa-tasks.md` → resume at the first unchecked task.
+"ทำต่อ" / "continue" / "resume" → read the active feature's `agent-memory/plans/[FEATURE]/dev-task-progress.md` or `qa-task-progress.md` → resume at the first unchecked task.
