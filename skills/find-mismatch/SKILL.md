@@ -20,6 +20,7 @@ No scope → scan entire project. With scope → scan specified files/directorie
 
 ## Workflow
 
+0. **Prioritize with the graph, if available** — if `graphify-out/` exists in the project root, run `mcp__graphify__query_graph` (god-nodes, blast radius) to focus the scan on the highest-impact modules first, especially when scope is the whole project.
 1. **SCAN** — walk the 7 categories in order → `references/detection-checklist.md`
 2. **LIFECYCLE** — every finding enters DETECT→CLASSIFY→REPRODUCE→FIX→GUARD→CLOSED → `references/lifecycle-output.md`
 3. **REPORT** — prioritized list, output format in `references/lifecycle-output.md`

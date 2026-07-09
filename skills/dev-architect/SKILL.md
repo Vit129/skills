@@ -34,6 +34,7 @@ Design systems from requirements to implementation-ready blueprints.
 ## Inline Process
 
 > **Escape hatch:** If requirements are unclear at any step below, stop and call `Skill(interview)` before proceeding — don't guess and design on top of an assumption.
+> **Before editing existing code:** if `graphify-out/` exists in the project root, run `mcp__graphify__query_graph` on the symbol/module being touched — know the blast radius before Strategic/Tactical Design, not after.
 
 1. **Identify the design phase** — Match to ONE phase: Strategic Design (bounded contexts), Architecture Patterns (monolith vs microservices), Tactical Design (entities/aggregates/events), Logical Design (API contracts/DB schemas), or TDD (Red→Green→Refactor). Execute phases in order — don't skip ahead.
 2. **Strategic Design** — Group user stories by business function → identify domain boundaries → assess complexity → choose architecture pattern with documented tradeoffs → define bounded contexts.

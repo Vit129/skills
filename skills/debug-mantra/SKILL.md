@@ -37,6 +37,7 @@ Target: a fast (1–5 s), deterministic pass/fail signal. Pin time, seed the RNG
 
 Once reproducible, find *where* the code breaks and *what stops it from breaking*. The differential narrows the search. Try in this order — escalate only when the prior tactic fails.
 
+0. **Query the graph first, if available.** If `graphify-out/` exists in the project root, run `mcp__graphify__query_graph` on the failing symbol/module before manual tracing — know callers, blast radius, and god-nodes before you go hunting line by line.
 1. **Attach a debugger.** If the env supports it, attach and step to the failure site. One breakpoint beats ten logs. Do this **before** turning any knobs.
 2. **Source trace + knob enumeration.** If no debugger (or it can't reach the bug), trace the code path end-to-end and list every knob that can influence the outcome:
    - config flags, env vars, feature toggles

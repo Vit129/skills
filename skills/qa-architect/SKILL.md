@@ -34,6 +34,7 @@ Design test automation frameworks and test data infrastructure.
 ## Inline Process
 
 > **Escape hatch:** If requirements are unclear at any step below, stop and call `Skill(interview)` before proceeding — don't guess and design on top of an assumption.
+> **Before designing architecture:** if `graphify-out/` exists in the project root, run `mcp__graphify__query_graph` on the feature/module under test — know the existing structure before proposing page objects/service layers.
 
 1. **Identify the platform** — Determine: API, Web UI, or Mobile. Load exactly ONE corresponding reference. If not stated, ask.
 2. **Read existing test scenarios** — Load `testScenarioPbi{ID}-{platform}.md` → extract: endpoints called, DB tables verified, request fields, response fields, test data used per TS.
