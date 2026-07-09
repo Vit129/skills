@@ -54,13 +54,13 @@ Write an ADR when the decision is:
 
 Don't write an ADR for: obvious choices, easily reversible decisions, implementation details.
 
-## Relation to AIDLC DECISIONS File
+## Relation to the Feature Decisions Log
 
-| | AIDLC DECISIONS | ADR |
+| | Feature Decisions (MEMORY.md) | ADR |
 |---|---|---|
 | Scope | Single feature | System/architecture |
 | Lifetime | Feature development | Permanent record |
 | Location | `agent-memory/plans/[feature]/` | `docs/adr/` |
-| When | During AIDLC Phase 0-1 | Any time an arch decision is made |
+| When | During `/spec` (interview) | Any time an arch decision is made |
 
-Use both: DECISIONS for feature-level choices, ADRs for cross-cutting architectural decisions that outlive the feature.
+Use both: the feature decisions log for feature-level choices, ADRs for cross-cutting architectural decisions that outlive the feature.

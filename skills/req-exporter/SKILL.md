@@ -12,7 +12,7 @@ improvement_count: 1
 
 # Req Exporter
 
-Export AIDLC requirements, decisions, and specifications into shareable formats.
+Export feature requirements, decisions, and specifications into shareable formats.
 
 ---
 

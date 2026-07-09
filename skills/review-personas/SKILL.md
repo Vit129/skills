@@ -40,10 +40,10 @@ Pre-merge review
     merge findings → go/no-go decision
 ```
 
-## Integration with AIDLC
+## Integration with the Dev Flow
 
-- **Phase 2 (Plan):** run bug-hunter on existing code before designing new features
-- **Phase 3 (Execute):** code-reviewer after each task, bug-hunter for boundary-heavy changes
+- **During `/plan` (dev-architect):** run bug-hunter on existing code before designing new features
+- **During `/build`:** code-reviewer after each task, bug-hunter for boundary-heavy changes
 - **Pre-commit:** adversarial review — interview (doubt mode) can invoke a persona
 - **Pre-merge:** fan-out all four for comprehensive gate
 - **With 3 amigos:** QA lens in interview (amigos mode) covers test-engineer perspective at design time

@@ -38,10 +38,10 @@ Format as CSV, Text, MD, or PDF (see formats.md).
 ### Step 4: Save
 Output path: `agent-memory/plans/[feature]/exports/requirements-{date}.{ext}`
 
-## AIDLC Integration
+## Dev Flow Integration
 
 ```
-Phase 1 (Inception) → DECISIONS.md created
+/spec (interview) → CONTEXT.md created
                           │
                           ▼
               req-exporter → CSV/MD/PDF/Text

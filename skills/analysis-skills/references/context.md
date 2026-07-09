@@ -80,7 +80,7 @@ Conflicts: [none / list with resolution]
 ## Phase 4: Write to File (MANDATORY — DO NOT SKIP)
 
 Write the full analysis output to the appropriate file:
-- If inside AIDLC workflow → append to `agent-memory/CONTEXT.md` Completed section
+- If actively tracking a feature (`agent-memory/plans/[feature]/CONTEXT.md` exists) → append to its Completed section
 - If implementation plan exists → append to `implementationPlan[FEATURE].md` Appendix
 - If neither exists → write to `agent-memory/plans/[feature]/outputs/inception/context-analysis.md`
 

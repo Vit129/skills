@@ -44,5 +44,5 @@ Follow `references/domain-modeling.md` for all CONTEXT.md and ADR rules (glossar
 **Conflicts resolved:** [conflict → resolution]
 **ADRs created:** ADR-XXX: [title]
 **Open questions:** [unresolved]
-→ Ready for AIDLC Phase 0 / Phase 1
+→ Ready for `/plan` (dev-architect)
 ```

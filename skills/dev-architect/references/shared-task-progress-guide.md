@@ -17,7 +17,7 @@ Every progress file MUST have these sections:
 ## Context
 - System: {SYSTEM_KEBAB}
 - Feature: {SYSTEM_FEATURE_KEBAB}
-- Workflow: {AIDLC Full | AIDLC Inception Only | QA Automation}
+- Workflow: {Dev | QA | Dev+QA}
 - Platform: {API | Web UI | Android | iOS | API+Web UI | API+Web UI+Mobile | API+Mobile}  ← QA only
 - Complexity: {Lightweight | Standard | Full}
 - Test Root: {detected test root path}
@@ -72,7 +72,7 @@ Update counts after every `[x]` change.
 ALWAYS update `agent-memory/CONTEXT.md` Now section:
 
 ```markdown
-# AIDLC Progress — {System Name}
+# Feature Progress — {System Name}
 
 | # | Feature | Dev | QA | Status | Date |
 |---|---------|-----|-----|--------|------|
@@ -148,7 +148,7 @@ When every checkbox is `[x]`:
 1. Update Status to `Completed`
 2. Run full test suite one final time — record pass/fail counts
 3. Update PROGRESS.md (mark ✅ + date)
-4. Proceed to next AIDLC phase (defined in dev-task-design.md or qa-task-design.md)
+4. Proceed to next stage (defined in dev-task-design.md or qa-task-design.md)
 5. Report to user:
 
 ```text

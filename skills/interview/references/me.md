@@ -39,7 +39,7 @@ Confidence: [old]% → [new]% | Resolved: [...] | Remaining: [...]
 **Key decisions:** [list]
 **Scope:** In: [...] | Out: [...]
 **Unconfirmed assumptions:** [flagged]
-**Confidence: 95%+** → Ready for /spec or AIDLC Phase 0
+**Confidence: 95%+** → Ready for `/plan` (dev-architect)
 ```
 
 ## Question Order

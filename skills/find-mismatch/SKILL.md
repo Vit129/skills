@@ -44,10 +44,10 @@ No scope → scan entire project. With scope → scan specified files/directorie
 6. **One fix per finding** — own fix + test, no bundling
 7. **Guard mandatory** — fix without regression test = not done (test fails without fix, passes with it)
 
-## Integration with AIDLC
+## Integration with the Dev Flow
 
-- **Phase 2 (Plan):** run on existing code before designing — find landmines early
-- **Phase 3 (Execute):** run after each task — catch mismatches from new code
+- **During `/plan` (dev-architect):** run on existing code before designing — find landmines early
+- **During `/build`:** run after each task — catch mismatches from new code
 - **Pre-merge gate:** Persona 4 (Bug Hunter) in `review-personas` fan-out
 - **With debugging:** finding → feed into `debug-mantra` for reproduction + fix
 

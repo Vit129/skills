@@ -32,8 +32,8 @@
 | pass@3 = 33% | Skill needs rework — flag in memory.md |
 | pass@3 = 0% | Skill is broken — escalate |
 
-## AIDLC Integration
+## Dev Flow Integration
 
-- **Phase 2 (Task Design):** Eval existing skills before assigning tasks
-- **Phase 3 (Implementation):** Run checkpoint eval after each task
-- **Post-Phase 3:** Run consistency eval on the full feature
+- **During `/plan` (task design):** Eval existing skills before assigning tasks
+- **During `/build`:** Run checkpoint eval after each task
+- **After `/build`:** Run consistency eval on the full feature
