@@ -23,6 +23,7 @@ Canonical engineering record of a bug fix. Written after debugging, for other en
 
 - Bug not fixed yet, fix not validated — a post-mortem on a hypothesis is misleading
 - Customer-visible outage / incident — those need a separate incident report; flag and confirm before producing one
+- Trivial fix (typo, obvious one-liner) — the PR description is the record, don't manufacture ceremony
 
 ---
 
@@ -69,3 +70,50 @@ Canonical engineering record of a bug fix. Written after debugging, for other en
 - Writing "we believe" or "appears to be" instead of stating the known mechanism
 - Inventing action items to look thorough
 - Implying broader validation coverage than actually performed
+
+---
+
+## Human-in-the-Loop Points
+
+| Step | Approval | When |
+|------|----------|------|
+| After confirming 4 required inputs | Checkbox | User confirms repro/root cause/fix/validation all exist |
+| After draft produced | Review accuracy | Root cause + fix sections especially |
+| Before posting anywhere | Explicit "go ahead" | Show the exact payload first |
+| After offering management-talk handoff | Yes/no | Don't hand off automatically |
+
+## Verification
+
+After the post-mortem is drafted:
+- [ ] All 4 required inputs confirmed (repro, root cause, fix, validation)
+- [ ] Summary is one paragraph — reader can stop there
+- [ ] Root cause walks the full cause chain with code identifiers
+- [ ] Fix explains WHY it addresses root cause, not just what changed
+- [ ] Validation states coverage honestly
+- [ ] Action items have owners + tracking artifacts
+- [ ] No hedging language ("we believe", "appears to")
+
+## Self-Learning
+
+After the post-mortem is approved:
+1. Save the root cause category + "why it slipped through" to `knowledge/lessons/{platform}/{bug-class}.md`
+2. Add an entry to `agent-memory/MEMORY.md` with the fix pattern
+3. If "why it slipped through" was a CI gap — flag it for follow-up
+
+## Bug Life Cycle Integration
+
+This skill is the **CLOSED** state — the final documentation step. Requires all prior states complete:
+
+```text
+find-mismatch (DETECT+CLASSIFY) — bug found and confirmed
+      ↓
+debug-mantra (REPRODUCE+FIX) — root cause identified, fix validated
+      ↓
+playwright-testing/robotframework-testing (GUARD) — regression test written and passing
+      ↓
+post-mortem ← YOU ARE HERE (CLOSED) — document everything
+      ↓
+knowledge/ — lesson persisted for future
+```
+
+After posting: if the bug came from a `find-mismatch` scan → mark the finding CLOSED in its Lifecycle Tracker. If it came from an issue tracker, update its state via whatever script/API you use for that tracker — this skill doesn't hardcode one.
