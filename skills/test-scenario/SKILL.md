@@ -15,6 +15,13 @@ improvement_count: 2
 
 Always read `test-scenario-rules` before designing or exporting.
 
+## Requirements Source (before Step 1)
+
+Where the requirements come from is project-specific — this skill doesn't hardcode a tracker:
+- Already have them via `/spec` (interview) → use `agent-memory/plans/[feature]/CONTEXT.md` directly
+- Tracked in Jira/Azure DevOps/Linear/etc. → pull with a script you write for that tracker's API, or paste the issue text manually
+- Neither → run `/spec` first to extract them
+
 ## Full Workflow (MANDATORY for new PBI/feature — execute ALL steps in order)
 
 ```

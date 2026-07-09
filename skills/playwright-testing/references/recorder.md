@@ -2,6 +2,17 @@
 
 Transform Playwright Codegen recordings (test-*.spec.ts) into proper Page Object Model code.
 
+## Record First
+
+```bash
+npx playwright codegen <url> --target=playwright-test --output=test-recorded.spec.ts
+```
+
+- Opens a browser + inspector — every click/fill/navigate gets recorded as raw Playwright code
+- `--save-storage=auth.json` to also capture a logged-in session (reuse via `storageState`)
+- Save output under a scratch path (e.g. `tests/recordings/`) — it's a transform *input*, never a final spec file
+- No GUI browser available (CI/headless env) → skip codegen, write the spec by hand using the Locator priority + Pattern Transformations below as the target shape
+
 ## When to use
 - Have a Playwright recording that needs to be converted to POM
 - Need to extract locators, actions, and flows from recorded tests
