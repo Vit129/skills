@@ -15,13 +15,6 @@ improvement_count: 1
 
 # Robot Framework Testing
 
-## AIDLC Gate
-
-⚠️ If this skill is triggered as part of a coding/QA task:
-- AIDLC governance MUST be active (`agent-memory/plans/[feature]/plan.md` must exist)
-- If not → STOP and route to `aidlc` first
-- Exception: pure investigation/analysis (no code changes) can proceed without AIDLC
-
 
 Full automation cycle for Robot Framework + Appium: write → review → run → heal.
 

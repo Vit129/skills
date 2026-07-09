@@ -17,14 +17,6 @@ improvement_count: 0
 
 Build and maintain backend services and APIs.
 
-## AIDLC Gate
-
-⚠️ If this skill is triggered as part of a coding/QA task:
-
-- AIDLC governance MUST be active (`agent-memory/plans/[feature]/plan.md` must exist)
-- If not → STOP and route to `aidlc` first
-- Exception: pure investigation/analysis (no code changes) can proceed without AIDLC
-
 ## When to Load Each Reference
 
 | User says | Load |

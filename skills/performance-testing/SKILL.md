@@ -14,13 +14,6 @@ improvement_count: 1
 
 # Performance Testing
 
-## AIDLC Gate
-
-⚠️ If this skill is triggered as part of a coding/QA task:
-- AIDLC governance MUST be active (`agent-memory/plans/[feature]/plan.md` must exist)
-- If not → STOP and route to `aidlc` first
-- Exception: pure investigation/analysis (no code changes) can proceed without AIDLC
-
 
 Load and performance testing with K6 — script, run, analyze, integrate into CI/CD.
 

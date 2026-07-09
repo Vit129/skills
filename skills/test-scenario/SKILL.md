@@ -13,13 +13,6 @@ improvement_count: 2
 
 # Test Scenario
 
-## AIDLC Gate
-
-⚠️ If triggered as part of a coding/QA task:
-- AIDLC governance MUST be active (`agent-memory/plans/[feature]/plan.md` must exist)
-- If not → STOP, route `aidlc` first
-- Exception: pure investigation/analysis can proceed without AIDLC
-
 Always read `test-scenario-rules` before designing or exporting.
 
 ## Full Workflow (MANDATORY for new PBI/feature — execute ALL steps in order)

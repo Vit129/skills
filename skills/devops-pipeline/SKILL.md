@@ -18,13 +18,6 @@ improvement_count: 0
 
 # DevOps Pipeline
 
-## AIDLC Gate
-
-⚠️ If this skill is triggered as part of a coding/QA task:
-- AIDLC governance MUST be active (`agent-memory/plans/[feature]/plan.md` must exist)
-- If not → STOP and route to `aidlc` first
-- Exception: pure investigation/analysis (no code changes) can proceed without AIDLC
-
 
 Create CI/CD pipelines and manage pull requests across Azure DevOps, GitHub Actions, and GitLab CI.
 

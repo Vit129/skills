@@ -14,13 +14,6 @@ improvement_count: 1
 
 # Playwright Testing
 
-## AIDLC Gate
-
-⚠️ If skill triggered as part of a coding/QA task:
-- AIDLC governance MUST be active (`agent-memory/plans/[feature]/plan.md` must exist)
-- If not → STOP, route `aidlc` first
-- Exception: pure investigation/analysis (no code changes) can proceed without AIDLC
-
 ## Required Context
 
 | Dependency | Purpose |
