@@ -11,10 +11,10 @@ Personal skill + memory system for Claude Code.
   rules/                 — core, routing, coding (loaded on-demand)
   agent-memory/
     USER-PROFILE.md      — identity + preferences (always-on)
-    GLOSSARY.md           — active task state
+    LANGUAGE.md           — active task state
     MEMORY.md            — decisions + lessons (grep only)
     knowledge/           — promoted patterns (≥2 features)
-    plans/               — feature planning artifacts ([feature]/GLOSSARY.md, tasks, outputs)
+    plans/               — feature planning artifacts ([feature]/LANGUAGE.md, tasks, outputs)
   hooks/                 — UserPromptSubmit, PostToolUse, Stop
   skills/{name}/
     SKILL.md             — trigger, format, routing (~60-90 lines)
@@ -36,9 +36,9 @@ This keeps `Skill(handoff)` on-demand only (see `skills/handoff/SKILL.md`) — w
 
 | Phase | Action |
 |-------|--------|
-| Task start | Read `GLOSSARY.md`; grep `knowledge/` for patterns |
-| During | Update `GLOSSARY.md` inline |
-| Task end | Rewrite `GLOSSARY.md` → idle; append decisions to `MEMORY.md` |
+| Task start | Read `LANGUAGE.md`; grep `knowledge/` for patterns |
+| During | Update `LANGUAGE.md` inline |
+| Task end | Rewrite `LANGUAGE.md` → idle; append decisions to `MEMORY.md` |
 | Promote | Pattern used ≥2 features → `knowledge/{domain}.md` |
 
 ## Feature Planning Artifacts
@@ -50,5 +50,5 @@ All artifacts live in `agent-memory/` — same standard for every project:
 | Decisions | `MEMORY.md` Decisions section |
 | Dev/QA tasks | `plans/[feature]/dev-task-progress.md` / `qa-task-progress.md` |
 | Outputs | `plans/[feature]/outputs/` |
-| Progress | `GLOSSARY.md` Now section |
-| History | `GLOSSARY.md` Completed section |
+| Progress | `LANGUAGE.md` Now section |
+| History | `LANGUAGE.md` Completed section |

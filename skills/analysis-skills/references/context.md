@@ -80,7 +80,7 @@ Conflicts: [none / list with resolution]
 ## Phase 4: Write to File (MANDATORY — DO NOT SKIP)
 
 Write the full analysis output to the appropriate file:
-- If actively tracking a feature (`agent-memory/plans/[feature]/GLOSSARY.md` exists) → append to its Completed section
+- If actively tracking a feature (`agent-memory/plans/[feature]/LANGUAGE.md` exists) → append to its Completed section
 - If implementation plan exists → append to `implementationPlan[FEATURE].md` Appendix
 - If neither exists → write to `agent-memory/plans/[feature]/outputs/inception/context-analysis.md`
 
