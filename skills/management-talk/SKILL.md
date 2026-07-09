@@ -59,3 +59,31 @@ If the channel is unclear after trigger: ask one short question — *"JIRA, Slac
 - Inventing facts not in the source
 - Stripping JIRA keys or PR numbers
 - Posting to Slack or email without handing draft to user first
+
+---
+
+## Human-in-the-Loop Points
+
+| Step | Approval | When |
+|------|----------|------|
+| Channel confirmation | Pick channel | If unclear — ask "JIRA, Slack, standup, or email?" |
+| After draft produced | Review tone + accuracy | Before using |
+| Before posting to JIRA | Show exact payload | User says "post it" or edits |
+| After 3rd revision | Clarify what's wrong | Don't keep tweaking blindly |
+
+## Verification
+
+- [ ] Channel confirmed before drafting
+- [ ] No code identifiers remain (function names, file paths, SHAs)
+- [ ] Product/framework names preserved (JIRA keys, PR numbers, workload names)
+- [ ] Mechanism translated to plain-English cause-and-effect
+- [ ] No hedging language unless genuinely uncertain
+- [ ] Length appropriate for channel (Slack <80 words, standup 1-3 lines)
+- [ ] Sign-off obtained before posting to JIRA
+
+## Self-Learning
+
+After the user approves and uses the draft:
+1. Save the approved draft + channel type to `knowledge/lessons/communication/{channel}-example.md`
+2. If the user rewrites significantly — note what framing was wrong
+3. If the same source type keeps needing the same reframe — create a shortcut template
