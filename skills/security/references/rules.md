@@ -116,7 +116,7 @@ app.use('/api/auth/', rateLimit({ windowMs: 15 * 60 * 1000, max: 10 }));
 
 ### Internal Analysis (auto-run when loaded during test scenario design)
 
-1. **Codebase auth scan** — scan auth/permission implementation via CONTEXT.md. Identify: middleware, roles defined, endpoints protected.
+1. **Codebase auth scan** — scan auth/permission implementation. Identify: middleware, roles defined, endpoints protected.
 2. **Adversarial review** (interview — doubt mode) — "How can auth be bypassed?", "What if attacker sends X?"
 3. **OWASP verification** (interview — source mode) — cross-check OWASP Top 10 table below. Each applicable item → 1 `[Security]` scenario.
 

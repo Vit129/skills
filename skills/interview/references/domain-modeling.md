@@ -68,4 +68,4 @@ Only when ALL three are true:
 2. **Surprising without context** — future reader will wonder "why this way?"
 3. **Real trade-off** — genuine alternatives existed, one was chosen for specific reasons
 
-If any of the three is missing, skip it. Otherwise append to `agent-memory/MEMORY.md` Decisions section.
+If any of the three is missing, skip it. Otherwise record it as an ADR (`documentation-adrs`).

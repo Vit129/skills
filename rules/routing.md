@@ -53,4 +53,4 @@ Pick the skill that best fits the task. Call it directly.
 
 ## Continuation
 
-"ทำต่อ" / "continue" / "resume" → read `agent-memory/CONTEXT.md` → resume at the active phase/skill.
+"ทำต่อ" / "continue" / "resume" → read the active feature's `agent-memory/plans/[FEATURE]/dev-tasks.md` or `qa-tasks.md` → resume at the first unchecked task.

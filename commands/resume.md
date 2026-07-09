@@ -4,7 +4,7 @@ Find last completed stage → continue from next stage.
 
 ## Instructions
 
-1. Read `agent-memory/CONTEXT.md` Now section — find active feature + stage
+1. Read `PROGRESS.md` (project root) — find the 🔄 In Progress feature + stage
 2. If multiple features found → ask user which one to resume
 3. For the selected feature, check outputs in `agent-memory/plans/[feature]/`
 4. Find the FIRST incomplete stage → start there
@@ -14,10 +14,10 @@ Find last completed stage → continue from next stage.
 ## Decision Tree
 
 ```
-CONTEXT.md Now section has active feature?
+PROGRESS.md has an active (🔄) feature?
 ├── NO → "No feature work in progress. Use /spec to start."
 └── YES → read feature name → check agent-memory/plans/[feature]/
-    ├── No CONTEXT.md → "Requirements incomplete. Continuing /spec..."
+    ├── No requirements doc → "Requirements incomplete. Continuing /spec..."
     ├── No dev-tasks.md or qa-tasks.md → "Task design needed. Continuing /plan..."
     ├── Tasks incomplete → "Tasks in progress. Continuing /build..."
     └── All complete → "Feature complete! Ready for /review or /ship."

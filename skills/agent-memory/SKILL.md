@@ -23,24 +23,17 @@ Bootstrap, manage, and reference the agent memory system.
 
 ```text
 agent-memory/
-├── CONTEXT.md         ← Hot state — current task, handoff, claims, open questions, key files, session notes
-├── MEMORY.md          ← Persistent decisions + lessons (append-only)
 ├── PLAYBOOK.md        ← Problem resolution cases (scored)
 ├── SKILL-LOG.md       ← Skill improvement proposals (append-only)
-├── USER-PROFILE.md    ← User preferences (stable, loaded at session start)
 ├── EVAL-STATE.md      ← Last eval date tracker (updated by eval-check hook)
 ├── index.md           ← Catalog of knowledge/ and plans/
 ├── skill-usage.log    ← Auto-captured skill usage (hook-written, do not edit)
-├── plans/             ← Implementation plans
+├── plans/             ← Implementation plans (per-feature dev-tasks.md / qa-tasks.md)
 ├── evals/             ← Eval results (skill stocktake, pass@3 reports)
 ├── drafts/            ← Temporary resolution drafts (ephemeral)
 └── knowledge/         ← Promoted cases + crystallized patterns
     └── archive-playbook.md  ← Zero-score/retired cases
 ```
-
-> **v2 change:** `memory.md` (single hot-state file) is replaced by two files:
-> - `CONTEXT.md` — session-scoped hot state (rewritten each session)
-> - `MEMORY.md` — append-only persistent decisions and lessons
 
 All files are **UPPERCASE** (except `skill-usage.log` which is hook-written).
 
@@ -62,24 +55,21 @@ The script is idempotent (safe to run multiple times) and creates all required f
 |-----------|------|
 | "bootstrap memory", "setup memory", "initialize", "reset" | Run `bash ~/.kiro/scripts/setup/setupMemory.sh .` then read `references/templates/` |
 | "session flow", "how does memory work", "save/discard gate" | `references/session-flow.md` |
-| "draft format", "playbook format", "memory format", "context format" | `references/templates/` — show the relevant template |
+| "draft format", "playbook format" | `references/templates/` — show the relevant template |
 | "subagent", "memory curator", "knowledge curation", "delegate memory" | `references/subagent-patterns.md` |
 | "skill evolve", "self-improve", "skill proposal", "apply proposal" | `references/session-flow.md` → Skill Self-Evolution section |
 | "review rubric", "self-review", "what to save", "grading criteria" | `references/self-review-rubric.md` |
 
 ## Quick Reference
 
-- **Session start**: Hook reads `CONTEXT.md` + `MEMORY.md` + `USER-PROFILE.md` → searches `PLAYBOOK.md`
-- **Mid-session**: Hook checkpoints `CONTEXT.md` (Now/Open Questions) after each task
+- **Session start**: Hook searches `PLAYBOOK.md`
 - **Problem resolved**: Create draft in `drafts/` immediately
 - **Skill evolve**: Hook checks if skill can be improved after each task → proposes in `SKILL-LOG.md`
 - **Session end**: Knowledge-curate hook promotes/crystallizes/archives → Session-save hook evaluates drafts + scores
-- **Skill underperformed**: Flag goes into `CONTEXT.md` (session-scoped) or `MEMORY.md` (if recurring)
+- **Skill underperformed**: Flag goes into `SKILL-LOG.md`
 
 ## Knowledge Capture
 
-- `CONTEXT.md` is the hot state: current task, handoff, claims, open questions, key files, session notes. Rewritten each session.
-- `MEMORY.md` is append-only: decisions, lessons (CASE-xxx), conventions. Never overwrite — only append.
 - `PLAYBOOK.md` stores repeatable problem cases with scores. It is the staging area for durable lessons.
 - `SKILL-LOG.md` stores skill improvement proposals only. It is not a knowledge archive.
 - `knowledge/biz/` stores business rules and domain logic that should be reused.
@@ -99,38 +89,21 @@ The script is idempotent (safe to run multiple times) and creates all required f
 
 ### File Roles
 
-- `CONTEXT.md` answers: "What is happening right now?"
-- `MEMORY.md` answers: "What decisions and lessons persist across sessions?"
 - `PLAYBOOK.md` answers: "What fix worked before?"
 - `SKILL-LOG.md` answers: "What should the skill system learn or change?"
 - `knowledge/` answers: "What should be kept as durable reference knowledge?"
 
-## Multi-Agent / Multi-Session Handoff
-
-Same project, different AI tool (Codex, Gemini, Kiro) or a different Claude Code session — everything lives in `CONTEXT.md`, no separate file, since it's rewritten every session anyway:
-
-- **Sequential** (one finishes, another continues later): run `Skill(handoff)` — fills `CONTEXT.md`'s `## Handoff` section (`From` / `To` / `Suggested skills` / `Note`), summarizing rather than dumping transcript, referencing artifacts instead of duplicating them, and redacting secrets. Name-only skill (frontmatter `disable-model-invocation: true`, mirrored in `settings.json` → `skillOverrides`) — invoke explicitly, it won't fire on every session end. `session-start.sh` prints the block automatically next session if non-empty.
-- **Parallel** (agents working at the same time): add a line to `CONTEXT.md`'s `## Claims` section before starting a sub-task; delete your line when done. `session-start.sh` prints unreleased claims so the next agent sees what's already in flight before picking overlapping work.
-
-`## Claims` is advisory, not a hard lock — since `CONTEXT.md` is rewritten wholesale (not appended) at session end, two agents writing at the exact same instant can still clobber each other. Acceptable tradeoff for a single operator orchestrating multiple tools; if true concurrent writes ever become a real problem, the upgrade path is back to a dedicated append-only file.
-
-## Hooks (6 total)
+## Hooks (4 total)
 
 | Hook | Event | Files Touched |
 |------|-------|---------------|
-| session-load v3.1 | promptSubmit | reads: CONTEXT.md, MEMORY.md, USER-PROFILE.md, PLAYBOOK.md |
-| checkpoint v1.0 | postTaskExecution | writes: CONTEXT.md, drafts/ |
-| skill-check v1.0 | postToolUse (write) | writes: CONTEXT.md (session flags) |
+| session-load v3.1 | promptSubmit | reads: PLAYBOOK.md |
 | skill-evolve v1.0 | postTaskExecution | writes: SKILL-LOG.md |
 | knowledge-curate v1.0 | agentStop | writes: PLAYBOOK.md, knowledge/; deletes: drafts/ |
-| session-save v4.0 | agentStop | writes: CONTEXT.md, MEMORY.md, PLAYBOOK.md, SKILL-LOG.md |
+| session-save v4.0 | agentStop | writes: PLAYBOOK.md, SKILL-LOG.md |
 
 ## Rules
 
-- `CONTEXT.md` max 2,500 bytes — rewritten each session; consolidate when exceeded
-- `MEMORY.md` is append-only — never overwrite or delete entries, only append
-- `USER-PROFILE.md` — stable preferences, update only when user explicitly changes them
-- Task entry in CONTEXT.md max 5 active — stale after 3 sessions without update
 - PLAYBOOK.md fields max 120 chars — overflow to `knowledge/`
 - PLAYBOOK.md scoring: Applied++ when fix used, Prevented++ when trigger recognized
 - PLAYBOOK.md auto-promote: Applied >= 3 → `knowledge/{case-id}.md`
@@ -175,7 +148,7 @@ Cross-session recall — find relevant context from past sessions without re-rea
 
 ```bash
 # Search across knowledge + playbook for relevant patterns
-grep_search "auth timeout" in knowledge/ + PLAYBOOK.md + MEMORY.md
+grep_search "auth timeout" in knowledge/ + PLAYBOOK.md
 
 # Search by domain
 grep_search in knowledge/qa/ for test patterns
@@ -184,11 +157,9 @@ grep_search in knowledge/bug/ for past root causes
 
 ### Search Priority Order
 
-1. `CONTEXT.md` — current session context (always loaded)
-2. `MEMORY.md` — persistent decisions + lessons (search by CASE-xxx or keyword)
-3. `PLAYBOOK.md` — scored cases (search by trigger keyword)
-4. `knowledge/{domain}/` — promoted patterns (search by domain + keyword)
-5. `drafts/` — recent unscored resolutions (ephemeral)
+1. `PLAYBOOK.md` — scored cases (search by trigger keyword)
+2. `knowledge/{domain}/` — promoted patterns (search by domain + keyword)
+3. `drafts/` — recent unscored resolutions (ephemeral)
 
 ### When to Search
 
@@ -198,32 +169,8 @@ grep_search in knowledge/bug/ for past root causes
 | Bug looks familiar | `knowledge/bug/` + `PLAYBOOK.md` (filter by trigger) |
 | Need architecture context | `knowledge/arch/` |
 | Need business rules | `knowledge/biz/` |
-| Recurring decisions | `MEMORY.md` (Decisions section) |
-| Skill keeps failing | `CONTEXT.md` flags + `SKILL-LOG.md` |
-
----
-
-## User Modeling (inspired by Hermes Honcho)
-
-Build a deepening model of the user across sessions via `USER-PROFILE.md`.
-
-### What to Track
-
-| Category | Examples | Update frequency |
-|----------|---------|-----------------|
-| **Preferences** | Language (TH/EN), verbosity, approval style | When user explicitly states |
-| **Work patterns** | Preferred frameworks, naming conventions, commit style | Inferred after 3+ consistent observations |
-| **Domain expertise** | Strong in QA, learning backend, expert in Playwright | Inferred from task complexity + questions asked |
-| **Communication style** | Prefers bullet points, dislikes long explanations | Inferred after 5+ interactions |
-| **Active projects** | CPI QA, VitProjects, your-project | Updated each session |
-
-### Modeling Rules
-
-- NEVER assume — only record after 3+ consistent observations
-- Mark inferred entries with `(inferred, confidence: 0.7)` until confirmed
-- User can override any inference: "ไม่ใช่แบบนั้น" → remove immediately
-- Update `USER-PROFILE.md` max once per session (not every turn)
-- Separate facts from preferences: facts are verifiable, preferences are stated
+| Recurring decisions | `PLAYBOOK.md` (scored cases) |
+| Skill keeps failing | `SKILL-LOG.md` |
 
 ---
 
@@ -233,24 +180,19 @@ When context grows too large mid-session, compress without losing critical infor
 
 ### When to Compress
 
-- `CONTEXT.md` exceeds 2,500 bytes
-- Active task list has 5+ entries (consolidate old ones)
 - `PLAYBOOK.md` has 20+ entries (archive zero-score)
 - Session has 50+ turns without resolution
 
 ### Compression Strategy
 
-1. **CONTEXT.md:** Keep only current task + open questions + key files. Archive stale tasks to `MEMORY.md` as a lesson.
-2. **PLAYBOOK.md:** Archive entries with Applied=0, Prevented=0, older than 30 days
-3. **MEMORY.md:** Never compress — this is the permanent append-only store
-4. **Knowledge:** Never compress — this is the permanent store
+1. **PLAYBOOK.md:** Archive entries with Applied=0, Prevented=0, older than 30 days
+2. **Knowledge:** Never compress — this is the permanent store
 
 ### Compression Rules
 
-- NEVER delete information that hasn't been promoted to `knowledge/` or `MEMORY.md`
+- NEVER delete information that hasn't been promoted to `knowledge/`
 - ALWAYS archive before deleting (move to `archive-playbook.md`)
 - Summarize, don't truncate — preserve the "why" even when removing detail
-- After compression, verify `CONTEXT.md` is under 2,500 bytes
 
 ---
 
@@ -259,7 +201,7 @@ When context grows too large mid-session, compress without losing critical infor
 | Dependency | Type | Purpose |
 |-----------|------|---------|
 | `agent-memory/` folder | File system | All memory files live here |
-| Hooks (6 total) | Event-driven | Automate load/save/checkpoint/evolve |
+| Hooks (4 total) | Event-driven | Automate load/evolve/curate/save |
 | `grep_search` tool | Agent tool | Session search across knowledge |
 | `knowledge/` folder | Reference data | Promoted patterns and lessons |
 | Git history | Shell tool | Track when memory was last updated |
@@ -272,7 +214,6 @@ When context grows too large mid-session, compress without losing critical infor
 | After skill-evolve proposes improvement | Single select | User picks: apply / defer / reject |
 | After auto-promote (Applied >= 3) | Checkbox | User confirms promotion to knowledge/ |
 | After compression | Open field | User reviews what was archived |
-| After user-profile inference | Checkbox | User confirms or corrects inferred preference |
 
 **Rule:** Never auto-delete or auto-archive without at least logging what was removed.
 
@@ -290,14 +231,10 @@ The agent-memory system IS the self-learning mechanism for all other skills. It 
 
 After memory operations:
 
-- [ ] `CONTEXT.md` is under 2,500 bytes and reflects current session state
-- [ ] `MEMORY.md` only has new entries appended (no overwriting)
-- [ ] Active task list has max 5 entries in CONTEXT.md
 - [ ] No secrets/credentials stored in any memory file
 - [ ] `PLAYBOOK.md` entries have proper scoring fields
 - [ ] Knowledge files have tags in `knowledge/` if using index
 - [ ] Drafts are ephemeral (deleted after gate evaluation)
-- [ ] `USER-PROFILE.md` inferences marked with confidence level
 
 ---
 
@@ -311,7 +248,7 @@ After memory operations:
 | Check | Source | Flag if |
 |-------|--------|---------|
 | **Unused skills** | `SKILL-LOG.md` — last used date | Not used in 30+ days |
-| **Underperforming skills** | `CONTEXT.md` flags | Flagged 3+ times without fix |
+| **Underperforming skills** | `SKILL-LOG.md` flags | Flagged 3+ times without fix |
 | **Outdated skills** | SKILL.md `last_improved` field | Not improved in 60+ days + has flags |
 | **Duplicate coverage** | AGENTS.md Skill Map keywords | 2+ skills with overlapping keywords |
 | **Missing Step 0** | AIDLC Internal Steps | Phase exists but no "Load skill" step |

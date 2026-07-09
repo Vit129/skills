@@ -246,7 +246,7 @@ Checklist:
 
 After test execution, append results to audit trail:
 
-**Location:** `agent-memory/CONTEXT.md` Completed section → `### Test Results` section
+**Location:** `audit.md` → `### Test Results` section
 
 **Format:**
 ```
@@ -276,7 +276,7 @@ Every heal attempt (success or fail) MUST be logged to the implementation plan o
 - 📊 Impact: Isolated / Shared / Cross-layer
 ```
 
-**Location:** Append to `agent-memory/CONTEXT.md` Completed section → `## Reflexion Log` section
+**Location:** Append to `audit.md` → `## Reflexion Log` section
 
 **Purpose:** Prevent repeating the same failed fix. Successful heals become reusable patterns for future features.
 
@@ -315,5 +315,5 @@ When max attempts are reached and tests still fail, or the bug is a logic issue 
 [What QA thinks the root cause might be — optional but very helpful for Dev]
 ```
 
-**Location:** สร้างใน `agent-memory/CONTEXT.md` Completed section → `## Bug Reports` section
+**Location:** สร้างใน `audit.md` → `## Bug Reports` section
 **Notify:** Dev ที่รับผิดชอบ feature นั้น

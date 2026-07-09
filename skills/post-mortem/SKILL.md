@@ -97,7 +97,7 @@ After the post-mortem is drafted:
 
 After the post-mortem is approved:
 1. Save the root cause category + "why it slipped through" to `knowledge/lessons/{platform}/{bug-class}.md`
-2. Add an entry to `agent-memory/MEMORY.md` with the fix pattern
+2. Add an entry to `agent-memory/PLAYBOOK.md` with the fix pattern
 3. If "why it slipped through" was a CI gap — flag it for follow-up
 
 ## Bug Life Cycle Integration

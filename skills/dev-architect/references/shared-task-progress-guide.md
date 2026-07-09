@@ -69,7 +69,7 @@ Update counts after every `[x]` change.
 
 ## Master Index
 
-ALWAYS update `agent-memory/CONTEXT.md` Now section:
+ALWAYS update `PROGRESS.md` (project root):
 
 ```markdown
 # Feature Progress — {System Name}
@@ -89,7 +89,7 @@ Update when:
 
 When user says "ทำต่อ", "resume", or "continue":
 
-1. Read `agent-memory/CONTEXT.md` Now section → find the 🔄 In Progress feature
+1. Read `PROGRESS.md` → find the 🔄 In Progress feature
 2. Read that feature's progress file (dev or QA)
 3. **Verify artifacts from completed phases still exist:**
    - Check each path listed in the `## Artifacts` section

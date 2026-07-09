@@ -96,7 +96,7 @@ Run tests and capture results.
 
 Every heal attempt (success or fail) MUST be logged.
 
-**Location:** `agent-memory/CONTEXT.md` Completed section → `## Reflexion Log` section
+**Location:** `audit.md` → `## Reflexion Log` section
 
 **Format:**
 ```
@@ -112,7 +112,7 @@ Every heal attempt (success or fail) MUST be logged.
 
 After test execution, append results to audit trail.
 
-**Location:** `agent-memory/CONTEXT.md` Completed section → `### Test Results` section
+**Location:** `audit.md` → `### Test Results` section
 
 **Format:**
 ```

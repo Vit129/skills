@@ -25,7 +25,7 @@ Every task response ends with:
 3. Match project style, conventions, and libraries
 4. State assumptions explicitly; ask when uncertain
 5. Follow routing.md — call the skill that fits, call interview when scope is unclear
-6. Update `agent-memory/CONTEXT.md` inline when project state changes
+6. Update the active feature's `dev-tasks.md`/`qa-tasks.md` checkboxes when task state changes
 7. Cite evidence (file, line, command output) for claims
 8. Use Thai for conversation, English for generated files
 
@@ -41,11 +41,11 @@ Every task response ends with:
 
 ## Memory Protocol
 
-Canonical lifecycle (start/during/end + pattern promotion) lives in `~/.claude/CLAUDE.md` → **Memory Lifecycle**. This section only adds the Done-gate enforcement.
+Canonical lifecycle (pattern promotion) lives in `~/.claude/CLAUDE.md` → **Memory Lifecycle**. This section only adds the Done-gate enforcement.
 
 ### Done-gate (MANDATORY — last action before Done)
 
-Never mark ✅ Done before completing the CLAUDE.md task-end steps (rewrite `CONTEXT.md`, append to `MEMORY.md`, promote reusable patterns to `PLAYBOOK.md`/`knowledge/`).
+Never mark ✅ Done before: checkboxes in the active `dev-tasks.md`/`qa-tasks.md` are updated, and reusable patterns are promoted to `PLAYBOOK.md`/`knowledge/`.
 
 ## Test-Before-Deliver
 
