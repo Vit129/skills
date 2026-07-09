@@ -40,7 +40,6 @@ Pick the skill that best fits the task. Call it directly.
 | launch checklist / ship to prod / pre-release / staged rollout | `shipping-launch` |
 | industry rules / compliance / healthcare design / finance design / ecommerce rules | `industry-rules` |
 | analyze codebase / gap analysis / extract requirements / วิเคราะห์ | `analysis-skills` |
-| analysis pattern / thinking framework / reusable analysis concept | `analysis-concept` |
 | step by step analysis / chain of thought / lats / compare approaches / big picture thinking | `ai-techniques` |
 | workout / exercise plan / nutrition / diet / meal plan / macro | `fitness` |
 | ภาษี / vat / บัญชี / thai tax / thai accounting / withholding tax | `thai-accountant` |
