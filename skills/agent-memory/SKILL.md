@@ -408,7 +408,7 @@ User approves → move to skills/{category}/{name}/SKILL.md
 - Never auto-evolve without 3+ high-confidence entries from same domain
 - Always create as draft first — never auto-promote to final skills
 - Include source entries as evidence in the draft SKILL.md
-- User must explicitly approve evolve (via session-save nudge or direct command)
+- User must explicitly approve evolve (at session end or via direct command)
 
 ### Integration with existing pipeline
 
@@ -418,7 +418,7 @@ User approves → move to skills/{category}/{name}/SKILL.md
 | knowledge/ promotion (Applied >= 3) | + confidence >= 0.8 requirement |
 | SKILL-LOG.md proposals | + auto-evolve proposals from clustered entries |
 | Save/Discard Gate (2/3 criteria) | + initial confidence = 0.5 (uncertain until validated) |
-| session-save hook | + confidence decay: -0.05 if not validated in 30 days |
+| Session end (`session-end.sh`) | + confidence decay: -0.05 if not validated in 30 days |
 
 ### Commands
 
@@ -428,10 +428,3 @@ User approves → move to skills/{category}/{name}/SKILL.md
 | "evolve skills" | Cluster high-confidence patterns → propose drafts |
 | "validate playbook" | Re-check all entries against current codebase |
 | "decay check" | Flag entries not validated in 30+ days |
-
-### Improvement Tracking
-
-- **Hook:** `session-save.json` appends to `agent-memory/SKILL-LOG.md` after every session using this skill
-- **Hook:** `skill-improve.json` logs when user corrects this skill's output (silent)
-- **Promotion:** 3x same issue in SKILL-LOG.md → auto-apply fix to this SKILL.md + bump version
-- **Eval:** `eval-check.json` runs pass@3 weekly if this skill is flagged in `CONTEXT.md`

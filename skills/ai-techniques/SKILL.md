@@ -29,10 +29,3 @@ Reasoning techniques that improve decision quality across any project.
 
 > **Note:** Step-Back Prompting is embedded in `ai-dlc/core/analysis-skills/references/context.md` (Phase 1).
 > Resources Discovery is embedded in `ai-dlc/core/analysis-skills/references/discovery-domain.md` (Phases 1-3).
-
-### Improvement Tracking
-
-- **Hook:** `session-save.json` appends to `agent-memory/skill-log.md` after every session using this skill
-- **Hook:** `skill-improve.json` logs when user corrects this skill's output (silent)
-- **Promotion:** 3x same issue in skill-log → auto-apply fix to this SKILL.md + bump version
-- **Eval:** `eval-check.json` runs pass@3 weekly if this skill is flagged in `memory.md`
