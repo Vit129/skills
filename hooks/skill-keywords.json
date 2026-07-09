@@ -1,5 +1,9 @@
 [
   {
+    "skill": "scrutinize",
+    "keywords": ["scrutinize", "sanity-check", "second opinion", "outsider review", "does this need to exist"]
+  },
+  {
     "skill": "playwright-rules",
     "keywords": ["playwright rules", "playwright convention", "playwright standard"]
   },
