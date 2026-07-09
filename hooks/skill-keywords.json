@@ -40,10 +40,6 @@
     "keywords": ["tradingagents", "terry", "nora", "cleo", "multi-agent research", "paper portfolio"]
   },
   {
-    "skill": "idea-generation",
-    "keywords": ["investment ideas", "stock ideas", "stock screener", "new position"]
-  },
-  {
     "skill": "earnings-preview",
     "keywords": ["earnings preview", "earnings call", "quarterly results", "q1 results", "q2 results", "q3 results", "q4 results"]
   },
@@ -94,10 +90,6 @@
   {
     "skill": "verification-loop",
     "keywords": ["verification loop", "verify loop", "self-verify", "verify this works"]
-  },
-  {
-    "skill": "eval-harness",
-    "keywords": ["eval harness", "pass@k", "skill eval", "llm eval", "benchmark skill"]
   },
   {
     "skill": "android",
@@ -164,14 +156,6 @@
     "keywords": ["simplify code", "reduce complexity", "too complex", "overcomplicated"]
   },
   {
-    "skill": "deprecation-migration",
-    "keywords": ["migrate library", "upgrade dependency", "deprecate package", "replace package"]
-  },
-  {
-    "skill": "documentation-adrs",
-    "keywords": ["adr", "architecture decision record", "decision log"]
-  },
-  {
     "skill": "performance-testing",
     "keywords": ["load test", "performance test", "jmeter", "stress test", "k6"]
   },
@@ -186,10 +170,6 @@
   {
     "skill": "ubiquitous-language",
     "keywords": ["ubiquitous language", "bounded context", "domain model", "domain glossary", "ddd"]
-  },
-  {
-    "skill": "req-exporter",
-    "keywords": ["export requirements", "user story export", "req to csv"]
   },
   {
     "skill": "industry-rules",

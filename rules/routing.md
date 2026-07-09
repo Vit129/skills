@@ -28,9 +28,6 @@ Pick the skill that best fits the task. Call it directly.
 | security / vulnerability / owasp / cve / pentest | `security` |
 | ci/cd / github actions / docker / kubernetes / deploy pipeline | `devops-pipeline` |
 | simplify code / reduce complexity / too complex | `code-simplification` |
-| migrate library / upgrade dependency / deprecate / replace package | `deprecation-migration` |
-| adr / architecture decision record / decision log | `documentation-adrs` |
-| llm eval / eval harness / benchmark / skill eval | `eval-harness` |
 | load test / performance test / k6 / jmeter / stress test | `performance-testing` |
 | test scenario / test case design / scenario list | `test-scenario` → `test-scenario-rules` |
 | create hook / new hook / hook builder | `hook-creator` |
@@ -41,7 +38,6 @@ Pick the skill that best fits the task. Call it directly.
 | domain model / ubiquitous language / ddd / bounded context / glossary | `ubiquitous-language` |
 | stakeholder update / write for management / exec summary / slack message / standup | `management-talk` |
 | launch checklist / ship to prod / pre-release / staged rollout | `shipping-launch` |
-| export requirements / user story export / req to csv | `req-exporter` |
 | industry rules / compliance / healthcare design / finance design / ecommerce rules | `industry-rules` |
 | analyze codebase / gap analysis / extract requirements / วิเคราะห์ | `analysis-skills` |
 | analysis pattern / thinking framework / reusable analysis concept | `analysis-concept` |

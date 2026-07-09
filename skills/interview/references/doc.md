@@ -42,7 +42,7 @@ Follow `references/domain-modeling.md` for all CONTEXT.md and ADR rules (glossar
 **Plan:** [1-2 sentences]
 **CONTEXT.md updates:** Added/Updated/Flagged [terms]
 **Conflicts resolved:** [conflict → resolution]
-**ADRs created:** ADR-XXX: [title]
+**Decisions recorded:** [title → MEMORY.md]
 **Open questions:** [unresolved]
 → Ready for `/plan` (dev-architect)
 ```

@@ -62,10 +62,10 @@ CONTEXT.md format:
 - An **Invoice** belongs to exactly one **Customer**
 ```
 
-### ADR — offer sparingly
+### Record the decision — offer sparingly
 Only when ALL three are true:
 1. **Hard to reverse** — cost of changing later is meaningful
 2. **Surprising without context** — future reader will wonder "why this way?"
 3. **Real trade-off** — genuine alternatives existed, one was chosen for specific reasons
 
-If any of the three is missing, skip the ADR. Load `documentation-adrs` skill to create one.
+If any of the three is missing, skip it. Otherwise append to `agent-memory/MEMORY.md` Decisions section.
