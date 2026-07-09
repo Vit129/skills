@@ -52,6 +52,17 @@ No scope → scan entire project. With scope → scan specified files/directorie
 - **Pre-merge gate:** Persona 4 (Bug Hunter) in `review-personas` fan-out
 - **With debugging:** finding → feed into `debug-mantra` for reproduction + fix
 
+## Anti-Patterns
+
+| Anti-Pattern | Why It's Wrong |
+|---|---|
+| Report style issues as bugs | Wastes time, dilutes real findings |
+| Skip reproduction step | "I think it's a bug" ≠ "I proved it's a bug" |
+| Fix without guard | Bug will return. Guaranteed. |
+| Close as CANNOT_REPRO after 1 attempt | Try 3 times with different approaches first |
+| Bundle multiple fixes in one commit | Makes rollback impossible, hides which fix solved what |
+| Ignore P3 findings forever | They accumulate into P1 problems |
+
 ## Verification
 
 - [ ] Every finding cites specific `file:line`
@@ -60,3 +71,10 @@ No scope → scan entire project. With scope → scan specified files/directorie
 - [ ] Severity assigned honestly (not inflated)
 - [ ] Each fix has a corresponding regression test
 - [ ] Lifecycle tracker updated (no orphan findings)
+
+## Self-Learning
+
+After findings are confirmed and fixed:
+1. Save the confirmed bug class + detection method to `knowledge/lessons/{platform}/{mismatch-type}.md`
+2. If a finding was rejected — note why, to improve future scan accuracy
+3. If 3+ findings share the same category — promote to `knowledge/lessons/{category}-pattern.md`

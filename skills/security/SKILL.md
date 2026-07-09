@@ -33,3 +33,14 @@ improvement_count: 2
 | Feature has user input → backend | Both | Any |
 | Feature handles sensitive data (PII, financial) | Both | Any |
 | "secure coding", "security hardening" | Dev | `/build` |
+
+## Anti-Rationalization
+
+| Excuse | Rebuttal |
+|--------|----------|
+| "This is an internal tool" | Internal tools get compromised. Attackers target the weakest link. |
+| "We'll add security later" | Retrofitting is 10x harder. Add it now. |
+| "No one would exploit this" | Automated scanners find it. Obscurity ≠ security. |
+| "The framework handles it" | Frameworks provide tools, not guarantees. Use them correctly. |
+| "It's just a prototype" | Prototypes become production. Build the habit from day one. |
+| "Feature has no auth" | Still has user input → injection is possible. Check the matrix. |

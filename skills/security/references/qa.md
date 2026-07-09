@@ -2,7 +2,7 @@
 
 > How to DESIGN and IMPLEMENT security test scenarios.
 
-## Internal Analysis (auto-run when loaded in Phase 2.2)
+## Internal Analysis (auto-run when loaded during test scenario design)
 
 1. **Codebase auth scan** — scan auth/permission implementation via CONTEXT.md. Identify: middleware, roles defined, endpoints protected.
 2. **Adversarial review** (interview — doubt mode) — "How can auth be bypassed?", "What if attacker sends X?"

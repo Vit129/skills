@@ -1,6 +1,6 @@
 # Security — Dev (Secure Coding)
 
-> How to WRITE secure code. Used during Phase 3.1 (Implementation).
+> How to WRITE secure code. Used during `/build`.
 
 ## Three-Tier Boundary System
 
