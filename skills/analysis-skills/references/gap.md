@@ -57,7 +57,7 @@ Total estimated effort: [N] hours
 ## Step 6: Write to File (MANDATORY — DO NOT SKIP)
 
 Write the full gap analysis output to the appropriate file:
-- If actively tracking a feature (`agent-memory/plans/[feature]/CONTEXT.md` exists) → append to its Completed section
+- If actively tracking a feature (`agent-memory/plans/[feature]/LANGUAGE.md` exists) → append to its Completed section
 - If implementation plan exists → append to `implementationPlan[FEATURE].md` Appendix
 - If neither exists → write to `agent-memory/plans/[feature]/outputs/inception/gap-analysis.md`
 
