@@ -4,13 +4,13 @@ Route to `dev-architect` skill (design phases + task breakdown).
 
 ## Instructions
 
-1. Read `agent-memory/plans/[feature]/CONTEXT.md` — if missing, STOP: run `/spec` first
+1. Read `agent-memory/plans/[feature]/GLOSSARY.md` — if missing, STOP: run `/spec` first
 2. Invoke `Skill(dev-architect)` — work through Strategic → Tactical → Logical Design
 3. For task checklists spanning multiple sessions, load `dev-architect/references/task-design.md` (Dev or QA section)
 
 ## Prerequisites
 
-- `agent-memory/plans/[feature]/CONTEXT.md` must exist (from `/spec`)
+- `agent-memory/plans/[feature]/GLOSSARY.md` must exist (from `/spec`)
 
 ## Done When
 

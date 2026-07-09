@@ -30,7 +30,7 @@ Q: [คำถาม]
 Confidence: [old]% → [new]% | Resolved: [...] | Remaining: [...]
 ```
 
-**Step 4 — Update CONTEXT.md inline** when domain term is resolved.
+**Step 4 — Update GLOSSARY.md inline** when domain term is resolved.
 
 **Step 5 — Summarize at 95%:**
 ```markdown

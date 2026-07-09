@@ -16,7 +16,7 @@
 | postman → playwright | `postman-to-playwright` |
 | review / code review / critique | `review-personas` |
 | scrutinize / sanity-check / second opinion on plan or PR / is this necessary | `scrutinize` |
-| new feature / architecture / unclear scope / requirements unclear | `interview` (full gather) → write CONTEXT.md → `dev-architect` (design + graphify) → `task-design` (Dev section) → implement |
+| new feature / architecture / unclear scope / requirements unclear | `interview` (full gather) → write GLOSSARY.md → `dev-architect` (design + graphify) → `task-design` (Dev section) → implement |
 | macos / swiftui / appkit / metal / swift | `macos-swiftui` |
 | finance / stocks / portfolio / earnings | matching finance skill |
 | android / kotlin / jetpack compose | `android` |

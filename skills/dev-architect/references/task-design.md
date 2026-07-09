@@ -17,7 +17,7 @@ Can start once (all mandatory, no exceptions):
 ## Required Context
 
 - **Dev:** From `design.md`'s Logical Design section: API specs/service contracts, data storage schema, client app components. From test scenarios/scripts, if available.
-- **QA:** From `/spec` (interview): user stories, acceptance criteria, domain context — captured in `CONTEXT.md`, not a separate file. From platform selection: which coding rules and architecture patterns apply.
+- **QA:** From `/spec` (interview): user stories, acceptance criteria, domain context — captured in `GLOSSARY.md`, not a separate file. From platform selection: which coding rules and architecture patterns apply.
 
 ## Artifact Output Locations (resolves the `{path}` fields below)
 
