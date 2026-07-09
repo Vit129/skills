@@ -2,7 +2,7 @@
 
 Break test scenarios and architecture into small, sequential QA automation tasks.
 
-For progress tracking rules, file behavior, master index, and resume protocol → Read `shared-task-progress-guide.md`
+For progress tracking rules, file behavior, master index, and resume protocol → Read `../../dev-architect/references/shared-task-progress-guide.md`
 
 ## Entry Point Requirements
 
@@ -196,7 +196,7 @@ Last updated: {YYYY-MM-DD HH:mm}
 Status: In Progress | Completed
 
 ## Context
-(see shared-task-progress-guide.md for required fields)
+(see ../../dev-architect/references/shared-task-progress-guide.md for required fields)
 
 ## Artifacts
 - Test Scenarios: {path}

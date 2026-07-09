@@ -1,20 +1,12 @@
 # /spec — Define what to build
 
-Route to `~/.claude/skills/aidlc/` Phase 0→1 (Inception).
+Route to `interview` skill to extract requirements before any design/implementation.
 
 ## Instructions
 
-1. Read `~/.claude/skills/aidlc/SKILL.md`
-2. Scan `agent-memory/plans/[feature]/` for existing Phase 0-1 outputs and `CONTEXT.md` Now section
-3. If outputs exist → tell user and ask: redo or skip to `/plan`
-4. If no existing outputs → start Phase 0 (Lite Inception or Full Inception based on mode)
-5. Create DECISIONS + inception artifacts in `agent-memory/plans/[feature]/`
-
-## Mode Detection
-
-- If user said "QA only" or "QA scenario" → Lite Inception (QA mode)
-- If user said "Dev only" → Lite Inception (Dev mode)
-- Otherwise → Full Inception (Phase 0→1)
+1. Invoke `Skill(interview)` — mode auto-detects (vague idea vs codebase-aligned)
+2. Once scope is clear, write findings to `agent-memory/plans/[feature]/CONTEXT.md`
+3. Hand off to `/plan` for architecture + task design
 
 ## Prerequisites
 
@@ -22,5 +14,5 @@ None — this is the starting point.
 
 ## Done When
 
-- DECISIONS resolved (appended to `agent-memory/MEMORY.md` Decisions section)
-- Inception artifacts complete in `agent-memory/plans/[feature]/outputs/`
+- Requirements captured in `agent-memory/plans/[feature]/CONTEXT.md`
+- User confirms scope is correct

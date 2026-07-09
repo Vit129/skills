@@ -33,12 +33,11 @@ Every task response ends with:
 
 1. Don't guess file contents — read first
 2. Don't add features beyond what was asked
-3. Don't route through AIDLC when a more specific skill fits
-4. Don't retry same failing approach 3+ times — escalate or pivot
-5. Don't modify unrelated code (no drive-by refactors)
-6. Don't present assumptions as verified facts
-7. Don't commit to main/master without explicit permission
-8. Don't echo secrets — reference by key name only
+3. Don't retry same failing approach 3+ times — escalate or pivot
+4. Don't modify unrelated code (no drive-by refactors)
+5. Don't present assumptions as verified facts
+6. Don't commit to main/master without explicit permission
+7. Don't echo secrets — reference by key name only
 
 ## Memory Protocol
 

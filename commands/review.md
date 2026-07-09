@@ -7,7 +7,7 @@ Route to `~/.claude/skills/review-personas/`.
 1. Read `~/.claude/skills/review-personas/SKILL.md`
 2. Determine scope:
    - If user specifies files → review those
-   - If in AIDLC context → review all changes from current feature
+   - If a feature is in progress (`agent-memory/plans/[feature]/`) → review all changes from that feature
    - If user says "full review" or "ship check" → fan-out all 4 personas
 3. Default: run **code-reviewer** (5-axis review)
 4. If user asks for specific perspective:

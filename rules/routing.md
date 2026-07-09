@@ -17,7 +17,7 @@ Pick the skill that best fits the task. Call it directly.
 | robot framework / rf / mobile test | `qa-architect` → `robotframework-rules` + `robotframework-testing` |
 | postman → playwright | `postman-to-playwright` |
 | review / code review / critique | `review-personas` |
-| new feature / architecture / unclear scope / requirements unclear | `interview` → write CONTEXT.md → `dev-architect` → `aidlc` |
+| new feature / architecture / unclear scope / requirements unclear | `interview` → write CONTEXT.md → `dev-architect` (design + TDD implement) |
 | macos / swiftui / appkit / metal / swift | `macos-swiftui` |
 | finance / stocks / portfolio / earnings | matching finance skill |
 | android / kotlin / jetpack compose | `android` |

@@ -1,26 +1,23 @@
 # /build — Implement incrementally
 
-Route to `~/.claude/skills/aidlc/` Phase 3 (Execute).
+Continue implementing via TDD (Red → Green → Refactor). No phase gate — proceed as soon as design/scope is clear.
 
 ## Instructions
 
-1. Read `~/.claude/skills/aidlc/SKILL.md`
-2. Scan `agent-memory/plans/[feature]/dev-tasks.md` or `qa-tasks.md` for task breakdown
-3. If Phase 2 missing → STOP, tell user: "Run `/plan` first — task breakdown is required before building."
-4. If Phase 2 exists → find first incomplete task in progress file
-5. Implement one task at a time:
+1. If `agent-memory/plans/[feature]/dev-tasks.md` or `qa-tasks.md` exists, find first incomplete task; otherwise implement directly from the agreed design/scope
+2. Implement one task/slice at a time:
    - Load relevant rules (`playwright-rules/`, `robotframework-rules/`, etc.)
    - Check `agent-memory/knowledge/` for existing patterns
-   - Write code → run tests → commit
-6. Update task progress after each task
+   - Write failing test → implement → refactor → run tests → commit
+3. Update task progress file after each task, if one exists
 
 ## Prerequisites
 
-- Phase 2 task breakdown must exist in `agent-memory/plans/[feature]/`
+- Scope agreed with user (via `/spec` or conversation)
 - Rules loaded before generating code
 
 ## Done When
 
-- All tasks marked complete
-- Tests pass for each task
-- Commit hash recorded per task
+- Tasks (or agreed scope) complete
+- Tests pass
+- Commit hash recorded

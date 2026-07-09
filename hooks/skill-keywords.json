@@ -60,10 +60,6 @@
     "keywords": ["pre-merge gate", "ship check", "code review", "security audit", "test coverage review"]
   },
   {
-    "skill": "aidlc",
-    "keywords": ["aidlc", "ai-dlc", "implement feature", "build feature"]
-  },
-  {
     "skill": "macos-swiftui",
     "keywords": ["swiftui", "appkit", "nsview", "nshostingview", "metal shader", "swift package"]
   },
@@ -153,7 +149,7 @@
   },
   {
     "skill": "interview",
-    "keywords": ["unclear scope", "requirements unclear", "not sure what to build"]
+    "keywords": ["unclear scope", "requirements unclear", "not sure what to build", "new feature", "implement feature", "build feature"]
   },
   {
     "skill": "frontend-dev",
