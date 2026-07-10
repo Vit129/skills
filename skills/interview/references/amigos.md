@@ -3,8 +3,8 @@
 Collaborative review through PO, Dev, QA perspectives — runs after requirements are captured, before `/plan`, for complex features.
 
 ## Input
-`agent-memory/plans/[feature]/CONTEXT.md` (from `/spec`)
-Pre-step: run `analysis-skills` (gap.md) on CONTEXT.md → feed gaps to all 3 roles.
+`agent-memory/plans/[feature]/LANGUAGE.md` (from `/spec`)
+Pre-step: run `analysis-skills` (gap.md) on LANGUAGE.md → feed gaps to all 3 roles.
 
 ## Scale (auto-detect)
 | Size | Signals | Mode |
@@ -36,4 +36,4 @@ Output: Testability | Key Scenarios (happy/alt/edge) | Risk Areas | AC Draft | O
 
 ## Output
 `agent-memory/plans/[feature]/outputs/brainstorming-summary.md`
-Synthesize tensions across 3 roles → refine CONTEXT.md → proceed to `/plan`.
+Synthesize tensions across 3 roles → refine LANGUAGE.md → proceed to `/plan`.

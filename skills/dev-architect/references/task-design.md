@@ -8,7 +8,7 @@ For progress tracking rules, file behavior, master index, and resume protocol �
 
 Can start once (all mandatory, no exceptions):
 - [ ] `interview` has run (Step 0 scope-check or full gather) — never skipped
-- [ ] Design is complete — **Dev:** `dev-architect` Logical Design step done · **QA:** `qa-architect` design approved
+- [ ] Design is complete — **Dev:** `dev-architect`'s `design.md` has its Logical Design section filled in · **QA:** `qa-architect` design approved
 - [ ] **Dev:** Test scripts, if any, have at least a skeleton created (TDD: RED)
 - [ ] **QA:** Platform selected (single: API / Web UI / Android / iOS — or combined) + coding rules reviewed (`playwright-rules`/`robotframework-rules` for the selected platform(s), `test-scenario-rules` for scenario-only work)
 
@@ -16,8 +16,22 @@ Can start once (all mandatory, no exceptions):
 
 ## Required Context
 
-- **Dev:** From Logical Design: API specs/service contracts, data storage schema, client app components. From test scenarios/scripts, if available.
-- **QA:** From `/spec` (interview): user stories, acceptance criteria, domain context. From platform selection: which coding rules and architecture patterns apply.
+- **Dev:** From `design.md`'s Logical Design section: API specs/service contracts, data storage schema, client app components. From test scenarios/scripts, if available.
+- **QA:** From `/spec` (interview): user stories, acceptance criteria, domain context — captured in `LANGUAGE.md`, not a separate file. From platform selection: which coding rules and architecture patterns apply.
+
+## Artifact Output Locations (resolves the `{path}` fields below)
+
+- **Dev — everything lives under `agent-memory/plans/[FEATURE]/`:**
+  - `design.md` (Strategic + Tactical + Logical Design, one file — see `dev-architect` Output)
+  - Test Scripts (TDD skeletons) → `agent-memory/plans/[FEATURE]/test-scripts/`
+  - `dev-task-progress.md` IS the implementation plan — no separate "Implementation Plan" file
+- **QA — under the project's `tests/` tree (per `scripts/setup/setupTests.sh`), not `agent-memory/`:**
+  - Test Scenarios → `tests/test-scenario/[system]/[feature]/`
+  - Architecture / Data Storage Strategy — by platform:
+    - API → `tests/api-testing/tests-api/[system]/[feature]/`
+    - Web UI → `tests/web-testing/tests-web/[system]/[feature]/`
+    - Mobile (Android/iOS) → `tests/mobile-testing/tests-mobile/[platform]/[system]/[feature]/`
+    - Combined platforms → list each test root separately, plus `tests/shared-fixtures/[system]/[feature]/` for shared fixtures
 
 ## Critical Success Criteria
 
@@ -219,10 +233,8 @@ Status: In Progress | Completed
 (see shared-task-progress-guide.md for required fields)
 
 ## Artifacts
-- User Stories: {path}
-- Logical Design: {path}
+- Design: {path}  (agent-memory/plans/[FEATURE]/design.md)
 - Test Scripts: {path}
-- Implementation Plan: {path}
 
 ## Summary
 - Total tasks: {N}
