@@ -45,3 +45,4 @@ skills/.claude/
 skills/**/.claude/
 .claude/worktrees/
 .claude/settings.local.json
+agent-memory/skill-usage.log
