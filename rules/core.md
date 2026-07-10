@@ -63,3 +63,10 @@ No task is complete until: build passes + relevant tests pass. If tests cannot r
   PR: `az repos pr create --repository <repo> --source-branch <branch> --target-branch main`
   az not authenticated → push branch, tell user to open PR manually.
 - Everywhere else (personal projects) → GitHub as normal (`gh pr create` etc).
+
+### Git Identity by Path
+
+Enforced via `~/.gitconfig` (`[user]` = Vit129 default + `includeIf "gitdir:..."` for the two exceptions, `~/.gitconfig-work` holds the override) — not agent-enforced, git resolves it automatically per repo.
+
+- `~/.kiro/**`, `~/Git/Company/**` → `Supavit Cho <supavit.cho@axonstech.com>` (work identity)
+- Everywhere else (personal projects) → `Vit129 <vitosk129@gmail.com>`
