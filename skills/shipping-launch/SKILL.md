@@ -32,7 +32,6 @@ Ship with confidence. Every launch should be reversible, observable, and increme
 | "Monitoring is overhead" | Without monitoring, you discover problems from user complaints. |
 | "We'll add monitoring later" | Add before launch. Can't debug what you can't see. |
 | "Rolling back is admitting failure" | Rolling back is responsible engineering. Shipping broken is the failure. |
-| "It's Friday, let's ship" | Never deploy on Friday afternoon. Monday gives you a full team to respond. |
 
 ---
 

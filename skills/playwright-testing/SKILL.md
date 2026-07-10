@@ -49,9 +49,8 @@ npx --no-install playwright-cli --version
 
 ## Key Rules
 
-- Load `playwright-rules` before writing code — non-negotiable
-- Never use `waitForTimeout()` — use `waitForSelector` or `expect().toBeVisible()`
-- Use `getByRole`, `getByLabel`, `getByTestId` — never CSS selectors
+Selector/wait/`waitForTimeout` rules live in `playwright-rules` (loaded via Required Context above) — not restated here. Workflow-specific rules only:
+
 - Self-heal exhausted (per `workflow.md` § 3-4 attempt policy) → route `debug-mantra`, don't keep retrying yourself
 - Heal: review assertions before committing — never silently weaken
 - Screenshot baselines: generate on CI (Linux), not locally (macOS font diff)
@@ -59,7 +58,6 @@ npx --no-install playwright-cli --version
 
 ## Gotchas
 
-- **`waitForTimeout()` creep** — easy to add as a quick fix for flaky tests. Replace with `waitForSelector`, `waitForResponse`, or `expect(locator).toBeVisible()`.
 - **Selector breaks after UI refactor** — hardcoded CSS/text selectors break silently. Use `getByTestId` as primary; add `data-testid` to components during dev.
 - **Healing loop overwrites correct assertions** — auto-heal can change `toEqual` to `toContain` just to pass. Always review healed assertions before committing.
 - **Page Object state leak between tests** — shared PO instances carry state across tests. Instantiate fresh PO in each test's Arrange block.

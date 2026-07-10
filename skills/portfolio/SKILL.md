@@ -87,178 +87,30 @@ Use the sections relevant to the detected mode.
 
 ## Output Format — Portfolio Sections (1–8)
 
-```text
-⚠️ Disclaimer: The information provided is for informational purposes only and is NOT financial advice.
+Wrap the report with the disclaimer (see Safety & Disclaimer) at start and end, and a header block (`PORTFOLIO & ETF ANALYSIS REPORT`, `Data as of: [YYYY-MM-DD]`). Sections, in order:
 
-════════════════════════════════════════
-PORTFOLIO & ETF ANALYSIS REPORT
-Data as of: [YYYY-MM-DD]
-════════════════════════════════════════
-
-1) Portfolio Snapshot
-
-| Ticker | Type | Sector | Weight % | Value | Beta | Div Yield |
-|--------|------|--------|----------|-------|------|-----------|
-| ...    | Stock/ETF |   |          |       |      |           |
-
-Total Value: $[X]
-Number of Holdings: [X]
-Weighted Avg Beta: [X]
-
-2) Sector Allocation
-
-- Technology: [X]%
-- Healthcare: [X]%
-- ...
-
-Benchmark context (if using S&P 500 as reference):
-- Technology: ~29% | Healthcare: ~13% | Financials: ~13% | ...
-
-Over/Under vs benchmark (deviations >5%):
-- ...
-
-3) Concentration Risk
-
-Top 5 holdings = [X]% of portfolio
-Largest single holding = [X]% ([TICKER])
-
-Checks:
-- Single stock >20%: [Yes/No]
-- Single sector >40%: [Yes/No]
-- Top 5 >60%: [Yes/No]
-- Geographic concentration: [US-only / mixed / global]
-
-4) Risk Profile
-
-Portfolio Beta: [X] (S&P 500 ~ 1.0)
-- >1.2: higher volatility than market
-- 0.8–1.2: market-like volatility
-- <0.8: more defensive
-
-Estimated max drawdown (historical / proxy): [-X]%
-Estimated dividend income (annual): $[X] ([X]% yield)
-
-5) Correlation (Qualitative)
-
-High-correlation pairs (reduce diversification):
-- [A] + [B]: ~[X]% correlated — [reason]
-
-Low/negative correlation exposures (diversification benefit):
-- [C] + [D]: ~[X]% correlated — [reason]
-
-Overall diversification score: [Good / Moderate / Poor]
-Why: [brief]
-
-6) Performance Context
-
-Major holdings context (from web search):
-- [TICKER]: [1Y return]% | vs S&P 500: [+/-X]%
-
-Portfolio estimated 1Y return (weighted): [X]%
-S&P 500 1Y return: [X]%
-Alpha (outperformance): [+/-X]%
-
-7) Rebalancing Recommendations
-
-Current vs Target (example):
-| Sector | Current | Target | Action |
-|--------|---------|--------|--------|
-| Tech   | [X]%    | [X]%   | Trim/Add/Hold |
-| ...    |         |        |              |
-
-Specific actions:
-1. [Trim/Add TICKER — reason + suggested new weight]
-2. ...
-
-8) Portfolio Health Summary
-
-- Diversification adequate: [Yes/No]
-- Risk matches stated goal: [Yes/No]
-- Sector balance reasonable: [Yes/No]
-- No single stock dominates: [Yes/No]
-- Income generation matches goal (if relevant): [Yes/No]
-
-Overall assessment: [Strong / Needs Attention / Requires Rebalancing]
-Next review: [quarterly / after earnings season / after major market move]
-```
+1. **Portfolio Snapshot** — table of Ticker/Type/Sector/Weight %/Value/Beta/Div Yield; plus Total Value, # Holdings, Weighted Avg Beta.
+2. **Sector Allocation** — % by sector; benchmark context (S&P 500 weights) and deviations >5%.
+3. **Concentration Risk** — top 5 holdings %, largest single holding %; checks for single stock >20%, single sector >40%, top 5 >60%, geographic concentration.
+4. **Risk Profile** — portfolio beta vs S&P 500 (~1.0), reading it (>1.2 higher vol / 0.8–1.2 market-like / <0.8 defensive); estimated max drawdown; estimated annual dividend income.
+5. **Correlation (Qualitative)** — high-correlation pairs (reduce diversification) and low/negative-correlation exposures (diversification benefit); overall diversification score (Good/Moderate/Poor) + why.
+6. **Performance Context** — major holdings' 1Y return vs S&P 500; portfolio weighted 1Y return, S&P 500 1Y return, alpha.
+7. **Rebalancing Recommendations** — current vs target sector table with Trim/Add/Hold actions; specific per-ticker actions with reasons.
+8. **Portfolio Health Summary** — Yes/No checks (diversification adequate, risk matches goal, sector balance reasonable, no single stock dominates, income matches goal); overall assessment (Strong/Needs Attention/Requires Rebalancing); next review timing.
 
 ---
 
 ## Output Format — ETF Sections (9–15)
 
-Include these when ETF tickers are present in the input.
+Include these when ETF tickers are present in the input. Close with the disclaimer.
 
-```text
-9) ETF Snapshot
-
-| Metric | [ETF A] | [ETF B] |
-|--------|---------|---------|
-| Full Name | | |
-| Index Tracked | | |
-| AUM | $[X]B | $[X]B |
-| Expense Ratio | [X]% | [X]% |
-| Dividend Yield | [X]% | [X]% |
-| # Holdings | [X] | [X] |
-| Inception Date | | |
-
-10) ETF Performance vs Benchmark
-
-| Period | [ETF A] | [ETF B] | Benchmark |
-|--------|---------|---------|-----------|
-| 1Y | [X]% | [X]% | [X]% |
-| 3Y CAGR | [X]% | [X]% | [X]% |
-| 5Y CAGR | [X]% | [X]% | [X]% |
-| Max Drawdown | [-X]% | [-X]% | |
-
-Tracking Error: [X]% (lower is better; closer index tracking)
-
-11) ETF Top Holdings & Sector Allocation
-
-[ETF A] — Top 10 Holdings
-1. [Stock]: [X]%
-2. ...
-
-Sector Allocation
-| Sector | [ETF A] | [ETF B] |
-|--------|---------|---------|
-| Technology | [X]% | [X]% |
-| ... | | |
-
-12) Holdings Overlap (if 2+ ETFs)
-
-Overlap: [X]% of holdings overlap
-- High overlap (>60%): limited diversification benefit by holding both
-- Low overlap (<30%): potentially complementary exposures
-
-13) Cost Analysis
-
-Annual cost for $10,000 invested:
-- [ETF A]: $[X]/year ([X]% × $10,000)
-- [ETF B]: $[X]/year
-
-14) ETF vs Individual Stocks (Fit)
-
-Use ETFs when:
-- You want diversification immediately
-- You do not want to research single stocks deeply
-- You prefer low-cost passive exposure
-- You want sector exposure without stock-picking risk
-
-Use individual stocks when:
-- You have a specific company thesis and accept concentration risk
-- You want a focused bet (not diluted exposure)
-- The ETF holds positions you do not want
-
-15) ETF Summary & Recommendation
-
-Best for: [investor profile / goal]
-Verdict: [ETF A vs ETF B — which fits which goal]
-Key watch-outs: [1–3 risks/caveats]
-
-════════════════════════════════════════
-⚠️ Disclaimer: The information provided is for informational purposes only and is NOT financial advice.
-════════════════════════════════════════
-```
+9. **ETF Snapshot** — table per ETF: Full Name, Index Tracked, AUM, Expense Ratio, Dividend Yield, # Holdings, Inception Date.
+10. **ETF Performance vs Benchmark** — 1Y/3Y CAGR/5Y CAGR/Max Drawdown per ETF vs benchmark; tracking error (lower = closer index tracking).
+11. **ETF Top Holdings & Sector Allocation** — top 10 holdings per ETF; sector allocation table per ETF.
+12. **Holdings Overlap** (if 2+ ETFs) — overlap %; >60% = limited added diversification, <30% = complementary.
+13. **Cost Analysis** — annual cost per ETF for a $10,000 investment (expense ratio × amount).
+14. **ETF vs Individual Stocks (Fit)** — when to prefer ETFs (immediate diversification, no single-stock research, low-cost passive, sector exposure without stock-picking) vs individual stocks (specific company thesis, focused bet, avoiding unwanted ETF positions).
+15. **ETF Summary & Recommendation** — best-fit investor profile, verdict (which ETF fits which goal), 1–3 key watch-outs.
 
 ---
 

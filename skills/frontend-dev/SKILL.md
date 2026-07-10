@@ -77,6 +77,7 @@ Use `ui-designer` first if design tokens, visual language, or component specs ha
 - **Gemini introduces bugs on logic-heavy edits** — Gemini tends to fix one bug and introduce another (e.g., `null` vs `[]` conditional logic). Fix: use Claude Sonnet for any task graded 🟡 Medium or above. Never hand off Gemini output to Claude without flagging the cost.
 - **Component missing `data-testid`** — new components built without testability attributes break Playwright tests silently. Fix: always add `data-testid` during component creation, not as an afterthought.
 - **State not reset between renders** — shared state (context, store) leaks between component renders in tests. Fix: wrap each test in a fresh provider/store instance.
+- **Only success state handled** — components without loading/empty/error handling crash or show blank screens in production. Fix: all 4 UI states (Loading, Success, Empty, Error) are part of the component contract, not polish for later.
 - **LLM-Friendly comments omitted** — agent writes code without intent comments, making future AI edits error-prone. Fix: every non-trivial function needs a comment block with what + why + who calls it.
 
 ## LLM-Friendly Code Comments
@@ -105,21 +106,15 @@ Write comments that AI agents can understand — not just humans:
 
 | Excuse to Skip | Counter-Argument |
 |---|---|
-| "I'll add data-testid later when QA needs it" | Missing testability attributes break Playwright tests silently — QA discovers the gap only after writing tests that can't find elements. Add `data-testid` during component creation, always. |
 | "I don't need to load the reference file — I know React/Next.js well enough" | References contain project-specific conventions (React 19 hooks like useActionState, Next.js 15 App Router patterns). Using outdated patterns from training data introduces inconsistencies. |
-| "UI states (loading, empty, error) can be added in a follow-up PR" | Components without state handling crash or show blank screens in production. Loading/empty/error states are part of the component contract, not polish. Ship them together. |
-| "I'll skip LLM-friendly comments — the code is self-documenting" | Future AI edits on uncommented code produce bugs because the agent can't infer intent, dependencies, or side effects. Comments with what+why+who-calls prevent regression. |
 | "I'll use the same state management approach for all components" | Server Components, Client Components, and shared state have different patterns in Next.js 15. Using client-side state where server state suffices bloats the bundle and breaks streaming. |
 
 ---
 
 ## Red Flags
 
-- 🚩 New component has no `data-testid` attributes → Testability standard violated; add identifiers before merging.
 - 🚩 Test file creates components without wrapping in fresh provider/store → Shared state leaks between tests causing flaky failures; isolate each test's state.
 - 🚩 Agent used Gemini for a logic-heavy edit without flagging the risk → Gemini introduces subtle bugs on medium+ complexity; escalate to Claude Sonnet for logic-heavy work.
-- 🚩 Component handles only the success state → Missing loading/empty/error states; load `ui-states-standards.md` and implement all 4 states.
-- 🚩 Functions lack JSDoc/TSDoc with params + return + throws → LLM-friendly comment standard not followed; add documentation for non-trivial functions.
 
 ---
 
@@ -134,9 +129,6 @@ Write comments that AI agents can understand — not just humans:
 
 Before declaring frontend implementation complete, confirm:
 
-- [ ] `data-testid` on all interactive elements
-- [ ] All 4 UI states handled (Loading, Success, Empty, Error)
-- [ ] LLM-friendly comments on non-trivial functions
 - [ ] Correct reference loaded for stack (React/Next.js/Flutter/Kotlin/Swift)
 - [ ] No shared state leaking between component instances
 - [ ] Build passes: `npm run build` / `flutter build` / `xcodebuild`

@@ -13,7 +13,7 @@ improvement_count: 2
 
 # Test Scenario
 
-Always read `test-scenario-rules` before designing or exporting.
+Always read `references/ts-standards.md` (design guidelines) + `references/csv-export.md` (23-column CSV format) before designing or exporting — these are the authoritative rules, not optional background reading.
 
 ## Requirements Source (before Step 1)
 
@@ -58,6 +58,8 @@ If user says "ข้าม", "skip", "ข้ามไป automation", or skips a
 | Trigger | Load |
 |---------|------|
 | Starting new scenario design (always first) | `references/reuse-analysis.md` |
+| Design standards (title format, priority levels, categories, paired design, language policy) | `references/ts-standards.md` |
+| CSV export rules (23-column format, validation checklist, data handling) | `references/csv-export.md` |
 | Designing scenarios (batches 1-3) | `references/ts-design.md` |
 | After design approved — generate test data | `references/data-gen.md` |
 | After data approved — export CSV | `references/csv-validator.md` |
@@ -115,7 +117,7 @@ Before declaring test scenario design complete:
 
 | Dependency | Purpose |
 |-----------|---------|
-| `test-scenario-rules` | CSV columns, HTML format, naming conventions |
+| `references/ts-standards.md` + `references/csv-export.md` | CSV columns, HTML format, naming conventions |
 | Requirements / acceptance criteria | Source material for scenario design |
 | `testScenarioIndex.json` | Reuse index — scan for existing patterns |
 | `knowledge/lessons/` | Check before designing |

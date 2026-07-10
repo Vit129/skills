@@ -90,34 +90,13 @@ def test_total_invariant(amount):
 
 ---
 
-## Anti-Rationalization Table
-
-| Excuse to Skip | Counter-Argument |
-|---|---|
-| "I'll write the RF test code without loading robotframework-rules first" | The rules skill defines naming conventions, locator strategy, AAA pattern, and YAML fixture format. Without it, your code will fail code review on structural issues, not logic. |
-| "I'll skip the code review step — the test passes so it's fine" | Passing tests can still have brittle locators, missing AAA structure, or hardcoded data. The rf-code-review checklist catches maintainability issues that passing tests don't reveal. |
-| "I'll use XPath locators since they're more flexible" | RF rules mandate accessibility-based locators (id, name, accessibility_id). XPath breaks on any UI restructure and makes tests unmaintainable. |
-| "I'll hardcode test data in the test file — it's just one value" | YAML fixtures are required for ALL test data. Hardcoded values create hidden dependencies and make tests impossible to run in different environments. |
-| "RF 7 features like TRY/EXCEPT aren't needed — I'll use Run Keyword And Ignore Error" | RF 7.x syntax (TRY/EXCEPT, WHILE, VAR) is cleaner and more maintainable. Using deprecated patterns when modern alternatives exist creates technical debt. |
-
----
-
 ## Red Flags
 
 - 🚩 Test keywords don't follow identical naming convention across Android/iOS → RF rules not loaded; read `robotframework-rules` before writing any code.
-- 🚩 Test file has no YAML fixture imports → Test data is hardcoded somewhere; extract all data to YAML fixtures.
-- 🚩 `workflow.md` not loaded but agent is writing + running + fixing tests → The full cycle (write → review → run → heal) requires the workflow reference; load it.
 - 🚩 Agent fixed a failing test by adding `Sleep` or arbitrary timeout → Masking the real failure; find the actual root cause instead of adding waits.
 - 🚩 Browser Library features used without loading `browser-library.md` reference → Web RF tests need the Browser Library reference for correct auto-wait and network mocking patterns.
 
 ---
-
-
-## Consistency Contract
-
-> These steps MUST execute in the same order every time this skill runs.
-> Output may vary, but the workflow is fixed.
-> If any step is skipped, document the skip condition explicitly.
 
 ## Verification
 
@@ -134,16 +113,6 @@ Before declaring RF test implementation complete, confirm:
 
 ---
 
-## Required Context
-
-| Dependency | Type | Purpose |
-|-----------|------|---------|
-| `robotframework-rules` | Coding standards | Naming, locators, AAA pattern, YAML fixtures |
-| Appium config (capabilities, device farm) | Infrastructure | Target platform and device configuration |
-| `references/*.md` (one per task) | Workflow reference | Write, review, execute, heal, Browser Library |
-| YAML fixture files | Test data | All test data externalized to YAML |
-| `knowledge/lessons/` | Lessons learnt | Check before execute |
-
 ## Human-in-the-Loop Points
 
 | Step | Approval Type | When |
@@ -153,12 +122,3 @@ Before declaring RF test implementation complete, confirm:
 | After code review | Single select (APPROVED / NEEDS_FIX) | Before marking test implementation done |
 
 **Rule:** At decision points, always present 2-3 options with tradeoffs — never a single answer.
-
-## Self-Learning
-
-After user approves the output:
-
-1. **Record good example:** Save approved output to `knowledge/lessons/qa-mobile/{pattern}.md`
-2. **Record failures:** If output was rejected → note what went wrong for next time
-3. **Progressive update:** If a new pattern proved effective → append to relevant knowledge index
-4. **Confidence tracking:** `confidence: 1.0` (user-approved) vs `confidence: 0.7` (auto-generated)

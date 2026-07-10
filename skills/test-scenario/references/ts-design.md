@@ -18,7 +18,7 @@ Generate detailed test scenarios and steps using AI reasoning, adhering to 2026 
 - Technical terms can be used in Thai script (e.g., คลิกปุ่ม, เลือก Dropdown)
 
 ## Process
-1. Load `test-scenario-rules/references/ts-standards.md` for design standards
+1. Load `references/ts-standards.md` for design standards
 2. Check `## QA Config` section below for `qaEmail` — if empty, ask user via `userInput` then save it here
 3. **Figma Analysis (MANDATORY — run ONCE before Batch 1, applies to ALL platforms):**
    - Load `ux-ui/ui-designer/references/figma.md`

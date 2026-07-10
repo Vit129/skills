@@ -1,29 +1,16 @@
 # Pre-Launch Checklist
 
-## Code Quality
-- [ ] All tests pass (unit, integration, e2e)
-- [ ] Build succeeds with no warnings
-- [ ] Lint and type checking pass
-- [ ] Code reviewed and approved
-- [ ] No TODO comments that should be resolved
-- [ ] No debug statements in production code
-- [ ] Error handling covers expected failure modes
+Items a competent AI already handles unprompted (tests/build/lint pass, no secrets,
+no debug leftovers, input validation, N+1 queries, `npm audit`) are omitted —
+this covers only what needs an explicit human/ops decision or number.
 
 ## Security
-- [ ] No secrets in code or VCS
-- [ ] `npm audit` — no critical/high vulnerabilities
-- [ ] Input validation on all user-facing endpoints
-- [ ] Auth/authz checks in place
 - [ ] Security headers configured
 - [ ] Rate limiting on auth endpoints
-- [ ] CORS restricted to specific origins
 
 ## Performance
-- [ ] No N+1 queries in critical paths
-- [ ] Database queries have appropriate indexes
-- [ ] Caching configured for static assets
 - [ ] Bundle size within budget (if frontend)
-- [ ] API response time < 200ms (p95)
+- [ ] API response time target defined and met (e.g. p95 < 200ms)
 
 ## Infrastructure
 - [ ] Environment variables set in production

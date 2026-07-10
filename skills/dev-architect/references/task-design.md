@@ -10,7 +10,7 @@ Can start once (all mandatory, no exceptions):
 - [ ] `interview` has run (Step 0 scope-check or full gather) — never skipped
 - [ ] Design is complete — **Dev:** `dev-architect`'s `design.md` has its Logical Design section filled in · **QA:** `qa-architect` design approved
 - [ ] **Dev:** Test scripts, if any, have at least a skeleton created (TDD: RED)
-- [ ] **QA:** Platform selected (single: API / Web UI / Android / iOS — or combined) + coding rules reviewed (`playwright-rules`/`robotframework-rules` for the selected platform(s), `test-scenario-rules` for scenario-only work)
+- [ ] **QA:** Platform selected (single: API / Web UI / Android / iOS — or combined) + coding rules reviewed (`playwright-rules`/`robotframework-rules` for the selected platform(s), `test-scenario`'s `references/ts-standards.md`+`references/csv-export.md` for scenario-only work)
 
 > **Note:** This skill plans the work (task breakdown). Implementation/automation happens AFTER this via `/build`. The progress file produced here defines the iteration path for that work.
 

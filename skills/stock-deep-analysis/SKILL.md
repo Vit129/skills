@@ -92,150 +92,28 @@ Use the output template below and do not skip sections. If a data point cannot b
 
 ## Output Format — 20 Sections (Template)
 
-```text
-⚠️ Disclaimer: The information provided is for informational purposes only and is NOT financial advice.
+Open with the disclaimer, a header block (`STOCK DEEP ANALYSIS — [TICKER] | [Company Name]`, `Data as of: [YYYY-MM-DD]`), then all 20 sections below, then close with the disclaimer again. Do not skip sections; use `N/A` where data is missing.
 
-════════════════════════════════════════════════════
-STOCK DEEP ANALYSIS — [TICKER] | [Company Name]
-Data as of: [YYYY-MM-DD]
-════════════════════════════════════════════════════
-
-1) Business Overview
-- What does the company sell? How does it make money?
-- Core products/services:
-- Segment revenue breakdown (if available):
-- Primary growth driver:
-
-2) Customer Base
-- Customer types (B2B/B2C/Gov):
-- Customer concentration risk:
-- Switching costs:
-- Why customers stay vs competitors:
-
-3) Revenue Model & Revenue Quality
-- Recurring vs one-off:
-- Predictability:
-- Growth drivers (volume vs price vs mix):
-- Any red flags (one-time boosts, channel stuffing, etc.):
-
-4) Latest Financial Snapshot
-Revenue:              $[X]B | [X]% YoY
-Net Income:           $[X]B | [X]% YoY
-Gross Margin:         [X]%
-Operating Margin:     [X]%
-Free Cash Flow (FCF): $[X]B | FCF Margin: [X]%
-Cash:                 $[X]B
-Debt:                 $[X]B
-Net Cash/(Debt):      $[X]B
-
-Source: [filing / quarter] ([date])
-Interpretation: [2–4 sentences]
-
-5) Basic Health Check
-- Revenue growth quality: [Good/Caution/Poor] — why
-- Profitability trend: [Good/Caution/Poor] — why
-- FCF conversion: [Good/Caution/Poor] — why
-- Balance sheet risk: [Low/Medium/High] — why
-- Capital intensity: [Low/Medium/High] — why
-
-6) Competitive Advantage (Moat)
-
-Moat Rating Table:
-| Moat Type | Rating | Evidence |
-|-----------|--------|---------|
-| Network effects | Strong / Moderate / Weak / None | [what drives it] |
-| Switching costs | Strong / Moderate / Weak / None | [integration depth, contracts] |
-| Scale economies | Strong / Moderate / Weak / None | [unit cost advantage] |
-| Intangible assets | Strong / Moderate / Weak / None | [brand, data, patents, licenses] |
-
-- Overall moat verdict: Wide / Narrow / None
-- Durable advantages (hard to replicate): [list with evidence]
-- Structural vulnerabilities (hard to fix): [list]
-- Key competitors: [names + brief positioning]
-- Competitive position summary: [2–3 lines]
-
-7) Optionality & Future Growth
-- Growth opportunities (near/mid/long):
-- Upside not priced in (if any):
-- Reality check (what must go right):
-
-8) Key Risks
-- Major risk #1 (impact + probability):
-- Major risk #2:
-- Risk often missed by beginners:
-
-9) Management & Narrative
-- CEO/CFO background:
-- Execution track record:
-- Earnings call themes (recent):
-- Narrative vs numbers: aligned? why/why not
-- Capital allocation: buybacks/dividends/R&D/M&A — assessment
-
-10) Summary for Beginners
-- 1-sentence elevator pitch:
-- Top 3 strengths:
-- Top 3 risks:
-- Who this is (not) for:
-
-11) Simple Scoring (1–10)
-- Business quality:
-- Financial quality:
-- Moat strength:
-- Management:
-- Valuation:
-- Overall:
-
-12) Final Verdict (Pre-Risk)
-- Provisional stance: Buy / Hold / Avoid (or No-Trade)
-- Core thesis:
-- What would change the thesis:
-
-13) Latest News & Potential Impact (last ~7–30 days)
-- Top headlines (5–7):
-- Sentiment summary:
-- Impact on thesis:
-
-14) Investment Signal & Action Plan
-- If Buy: entry logic + time horizon
-- If Hold: what to watch
-- If Avoid: conditions to revisit
-
-15) Valuation Analysis
-- Trailing P/E / Forward P/E / P/S / EV/EBITDA (as available)
-- Peer/sector comparison:
-- Growth vs multiple (sanity check):
-- If available: DCF / fair value references (cite)
-
-16) Historical Performance vs Market
-- 1Y / 3Y / 5Y returns vs S&P 500:
-- Volatility/beta:
-- Drawdown behavior:
-
-17) Insider Trading / Ownership / Short Interest (if available)
-- Insider buys/sells (3–6 months):
-- Insider ownership (if available):
-- Short interest % / days to cover (if available):
-- Options sentiment (optional):
-
-18) Comparable Companies
-- 3–6 closest peers:
-- How [TICKER] compares on growth/margins/valuation:
-
-19) Earnings Surprise History (if available)
-- Last ~8 quarters: beat/miss pattern
-- Guidance accuracy:
-- Any seasonality / one-offs:
-
-20) Final Checklist & Next Steps
-- Checklist (facts verified?):
-- Key documents to read next:
-- Next review date:
-- Orchestration option: for multi-role debate + risk gate, use `SKILL.md` (TradingAgents Orchestrator)
-
-════════════════════════════════════════════════════
-⚠️ Disclaimer: The information provided is for informational purposes only and is NOT financial advice.
-════════════════════════════════════════════════════
-```
+1. **Business Overview** — what it sells / how it makes money, core products, segment revenue breakdown, primary growth driver.
+2. **Customer Base** — customer types (B2B/B2C/Gov), concentration risk, switching costs, why customers stay vs competitors.
+3. **Revenue Model & Revenue Quality** — recurring vs one-off, predictability, growth drivers (volume/price/mix), red flags (one-time boosts, channel stuffing).
+4. **Latest Financial Snapshot** — Revenue, Net Income, Gross/Operating Margin, FCF + FCF Margin, Cash, Debt, Net Cash/(Debt), each with YoY %; cite source (filing/quarter/date) + 2–4 sentence interpretation.
+5. **Basic Health Check** — Good/Caution/Poor rating (+ why) for revenue growth quality, profitability trend, FCF conversion; Low/Medium/High (+ why) for balance sheet risk, capital intensity.
+6. **Competitive Advantage (Moat)** — Moat Rating Table (Network effects / Switching costs / Scale economies / Intangible assets, each Strong/Moderate/Weak/None + evidence); overall verdict (Wide/Narrow/None); durable advantages, structural vulnerabilities, key competitors, 2–3 line summary.
+7. **Optionality & Future Growth** — near/mid/long growth opportunities, upside not priced in, reality check (what must go right).
+8. **Key Risks** — top 2 major risks (impact + probability) plus a risk often missed by beginners.
+9. **Management & Narrative** — CEO/CFO background, execution track record, recent earnings-call themes, narrative-vs-numbers alignment, capital allocation assessment (buybacks/dividends/R&D/M&A).
+10. **Summary for Beginners** — 1-sentence elevator pitch, top 3 strengths, top 3 risks, who this is (not) for.
+11. **Simple Scoring (1–10)** — business quality, financial quality, moat strength, management, valuation, overall.
+12. **Final Verdict (Pre-Risk)** — provisional stance (Buy/Hold/Avoid/No-Trade), core thesis, what would change it.
+13. **Latest News & Potential Impact** (last ~7–30 days) — 5–7 headlines, sentiment summary, impact on thesis.
+14. **Investment Signal & Action Plan** — Buy: entry logic + horizon; Hold: what to watch; Avoid: conditions to revisit.
+15. **Valuation Analysis** — trailing/forward P/E, P/S, EV/EBITDA (as available); peer/sector comparison; growth-vs-multiple sanity check; DCF/fair value references if available (cite).
+16. **Historical Performance vs Market** — 1Y/3Y/5Y returns vs S&P 500, volatility/beta, drawdown behavior.
+17. **Insider Trading / Ownership / Short Interest** (if available) — insider buys/sells (3–6 mo), insider ownership, short interest % / days to cover, options sentiment (optional).
+18. **Comparable Companies** — 3–6 closest peers; how the ticker compares on growth/margins/valuation.
+19. **Earnings Surprise History** (if available) — last ~8 quarters beat/miss pattern, guidance accuracy, seasonality/one-offs.
+20. **Final Checklist & Next Steps** — facts-verified checklist, key documents to read next, next review date; orchestration option for multi-role debate + risk gate → `SKILL.md` (TradingAgents Orchestrator).
 
 ---
 

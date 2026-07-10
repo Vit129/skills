@@ -94,42 +94,6 @@ Write comments that AI agents can understand — not just humans:
 
 ---
 
-## Anti-Rationalization Table
-
-| Excuse to Skip | Counter-Argument |
-| --- | --- |
-| "I'll add input validation later — let me get the endpoint working first" | Every endpoint must validate input BEFORE processing. "Working" without validation means working for happy path only — any malformed input causes crashes or security holes. |
-| "Auth middleware isn't needed for this route — it's internal" | Internal routes get exposed through misconfiguration, API gateways, or future refactoring. Apply auth middleware by default; explicitly mark routes as public only when intentional. |
-| "I'll write the query inside the loop — it's only a few items" | N+1 queries are the #1 backend performance killer. Even "a few items" becomes hundreds in production. Always use batch queries (WHERE IN, JOIN) from the start. |
-| "I'll put the API key in the code for now and move it to env vars before deploy" | Secrets committed to git persist in history forever. Use environment variables from the first line of code — there is no "temporary" for secrets in source control. |
-| "The schema change is small — I don't need a migration file" | Every schema change without a migration is a deployment landmine. Other developers and CI/CD pipelines depend on migrations to sync database state. No exceptions. |
-
----
-
-## Red Flags
-
-- 🚩 New endpoint added without corresponding Zod/Pydantic validation schema → Input validation skipped; add validation layer before the handler logic.
-- 🚩 Route file has no auth middleware import or explicit `@public` annotation → Auth was forgotten, not intentionally skipped; verify and add middleware.
-- 🚩 Database query appears inside a `.map()`, `.forEach()`, or `for` loop → N+1 query pattern; refactor to batch query outside the loop.
-- 🚩 Code comments say only "// validate input" without explaining what/why/who-calls → LLM-friendly comment standard not followed; expand to include context for future AI edits.
-- 🚩 Model file changed but no new migration file in the migrations folder → Schema change will break other environments; create the migration immediately.
-
----
-
-## Verification
-
-Before declaring backend implementation complete, confirm:
-
-- [ ] Input validation present on all new endpoints (Zod/Pydantic/FluentValidation)
-- [ ] Auth middleware applied (or explicitly marked `@public`)
-- [ ] No N+1 queries (no DB calls inside loops)
-- [ ] No secrets in source code (all in env vars)
-- [ ] Migration file created for any schema change
-- [ ] LLM-friendly comments on non-trivial functions (what + why + who calls)
-- [ ] Build passes: `npm run build` / `dotnet build` / `python -m py_compile`
-
----
-
 ## Required Context
 
 | Dependency | Type | Purpose |

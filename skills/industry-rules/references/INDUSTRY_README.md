@@ -1,6 +1,6 @@
-# Industry Rules (161 Total)
+# Industry Rules (81 Total)
 
-This directory contains 161 specialized design rules organized by 8 industry sectors.
+This directory contains 81 specialized design rules organized by 4 industry sectors.
 
 ## Sectors
 
@@ -10,10 +10,6 @@ This directory contains 161 specialized design rules organized by 8 industry sec
 | **Finance** | Trust, security, data clarity, regulatory compliance | Banking, investing, insurance, accounting |
 | **Healthcare** | Accessibility, empathy, data privacy, patient-centric | Medical records, telemedicine, fitness, mental health |
 | **E-commerce** | Conversion, trust, browsability, checkout simplicity | Retail, marketplaces, subscription, services |
-| **Services** | Booking, scheduling, customer experience, professionalism | Salons, restaurants, consulting, agencies |
-| **Creative** | Aesthetics, personality, experimentation, brand identity | Design studios, portfolios, galleries, content creators |
-| **Lifestyle** | Aspiration, community, personalization, emotional connection | Wellness, fashion, travel, entertainment |
-| **Emerging Tech** | Innovation, future-forward, explainability, early-adopter comfort | AI/ML, blockchain, AR/VR, Web3 |
 
 ## Rule Structure
 
@@ -46,12 +42,8 @@ Each industry includes:
 - `finance.md` - 21 rules
 - `healthcare.md` - 20 rules
 - `ecommerce.md` - 20 rules
-- `services.md` - 20 rules
-- `creative.md` - 20 rules
-- `lifestyle.md` - 20 rules
-- `emerging-tech.md` - 20 rules
 
-**Total: 161 rules**
+**Total: 81 rules**
 
 ## Usage
 
@@ -76,4 +68,4 @@ Validate: Current design against known pitfalls
 ---
 
 *Rules Database Last Updated: 2026-04-16*
-*Total Rules: 161 across 8 sectors*
+*Total Rules: 81 across 4 sectors*

@@ -49,23 +49,6 @@ Pre-merge review
 - **With 3 amigos:** QA lens in interview (amigos mode) covers test-engineer perspective at design time
 - **With debugging:** bug-hunter findings feed into `debug-mantra` for reproduction + fix
 
-## Anti-Rationalization
-
-| Excuse to Skip | Counter-Argument |
-|---|---|
-| "The change is too small to review" | Small changes cause big outages. A 1-line auth bypass is Critical. Review everything. |
-| "I wrote it, I know it's correct" | Self-review has 50% miss rate. Fresh eyes catch what familiarity hides. |
-| "We're in a hurry, skip security" | Security debt compounds. 5-minute audit now prevents a 5-day incident. |
-| "Tests pass, so it's fine" | Tests verify behavior, not quality. They don't catch N+1, missing error handling, architectural drift. |
-| "It's just a refactor" | Refactors are the #1 source of subtle regressions. Review MORE carefully. |
-
-## Red Flags
-
-- 🚩 Review took < 2 minutes for 100+ lines → too shallow, re-review
-- 🚩 Zero Critical/Important findings on a large change → look harder
-- 🚩 "LGTM" without specific observations → rubber-stamp, not a review
-- 🚩 Skipping a persona because "it's not relevant" → all four catch different things
-
 ## Verification
 
 - [ ] At least one persona ran

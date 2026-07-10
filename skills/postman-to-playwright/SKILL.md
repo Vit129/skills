@@ -295,10 +295,6 @@ stateStore['orderId'] = responseJson.id
 
 ---
 
-## ⚠️ Gotchas
-
-- **Progress tracking:** At migration start, AI creates `progress.md` from `references/progress-template.md` in the target project's `tests-api/<collection>/` folder. Update status (⬜→✅/❌) after each step completes. Link to `agent-memory/palace/state.md` Open Threads for cross-session continuity.
-
 ---
 
 ## Step 4: Run Tests → Fix Failures
@@ -341,8 +337,9 @@ npx cross-env ENV=sit npx playwright test --config=playwright.config.ts tests-ap
 
 ---
 
-## ⚠️ More Gotchas
+## ⚠️ Gotchas
 
+- **Progress tracking:** At migration start, AI creates `progress.md` from `references/progress-template.md` in the target project's `tests-api/<collection>/` folder. Update status (⬜→✅/❌) after each step completes. Link to `agent-memory/palace/state.md` Open Threads for cross-session continuity.
 - **Postman exports lack Current Values** — only "Initial Values" are exported. Secrets and runtime-set values will be empty. Always check with user.
 - **`pm.environment.set()` chains** — requests that set variables used by later requests need `stateStore` + `test.describe.serial`, not `process.env`.
 - **Auth inheritance missed** — Postman folder-level auth is invisible in request JSON. AI must check `resolveAuth` chain in collection.md.
@@ -350,21 +347,16 @@ npx cross-env ENV=sit npx playwright test --config=playwright.config.ts tests-ap
 - **Script hangs on interactive select** — if multiple folders exist in `tests-api/`, script prompts for selection. Use `--folder` flag to skip.
 - **Spaces in file paths** — wrap paths in quotes: `--collection "path with spaces/file.json"`
 
-
 ---
 
 ## Verification
 
-Before declaring migration step complete, confirm:
+Before declaring a migration step complete, confirm:
 
 - [ ] `playwright-rules/` loaded before writing any Playwright code
-- [ ] Files generated in correct order: fixtures → schemas → helpers → spec
-- [ ] All `{{var}}` replaced with `process.env['VAR']` template literals
-- [ ] Auth header present on all requests
-- [ ] `stateStore` used for runtime-set values (not `process.env`)
-- [ ] AJV schema validation present for response assertions
-- [ ] Data completeness check done (missing values asked from user)
-- [ ] Tests pass after generation (Step 4 complete)
+- [ ] Files generated in order: fixtures → schemas → helpers → spec
+- [ ] `{{var}}` → `process.env['VAR']`; auth header present; `stateStore` (not `process.env`) used for runtime-set values; AJV schema validation present
+- [ ] Data completeness check done (missing values asked from user); tests pass (Step 4 complete)
 
 ---
 
@@ -382,9 +374,9 @@ Before declaring migration step complete, confirm:
 
 | Step | Approval Type | When |
 |------|--------------|------|
-| After migration plan (Step 2.5 structure) | Checkbox (approve folder structure) | Before generating any code |
-| After first converted file | Open field (review quality) | After first folder's spec file generated |
-| Data completeness gaps | Open field (provide missing values) | When missing secrets/tokens detected |
+| Migration plan (Step 2.5) | Checkbox — approve folder structure | Before generating any code |
+| First converted file | Open field — review quality | After first folder's spec file generated |
+| Data completeness gaps | Open field — provide missing values | When missing secrets/tokens detected |
 
 **Rule:** At decision points, always present 2-3 options with tradeoffs — never a single answer.
 

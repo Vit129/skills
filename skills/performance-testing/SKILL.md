@@ -51,9 +51,6 @@ Load and performance testing with K6 — script, run, analyze, integrate into CI
 
 | Excuse to Skip | Counter-Argument |
 |---|---|
-| "I'll write the k6 script without defining thresholds — we'll add them later" | Thresholds ARE the test. A k6 script without thresholds is just a load generator with no pass/fail criteria. Without them, CI integration is impossible and results are meaningless. |
-| "I'll skip CI integration — we can run k6 locally" | Local runs are for development. Performance gates in CI prevent regressions from reaching production. Without CI integration, performance testing is a one-time activity, not continuous. |
-| "The p95 looks fine so I won't analyze p99 or error rate" | p95 hides the worst 5% of user experiences. p99 + error rate under load reveal the actual breaking point. Reporting only p95 gives false confidence. |
 | "I'll just test the main endpoint — the others are simple" | Bottlenecks hide in unexpected places (auth token refresh, file uploads, search queries). Test all endpoints that users hit in a realistic scenario, not just the "main" one. |
 | "I'll use a fixed number of virtual users instead of ramping scenarios" | Fixed VU count doesn't simulate real traffic patterns (ramp-up, sustained, spike). Without scenarios, you can't identify at what load the system degrades. |
 
@@ -61,11 +58,8 @@ Load and performance testing with K6 — script, run, analyze, integrate into CI
 
 ## Red Flags
 
-- 🚩 k6 script has no `thresholds` block → Script will never fail in CI; add p95, p99, and error_rate thresholds before integrating.
-- 🚩 Test runs only once locally with no CI pipeline config → Performance testing is not automated; load `ci-integration.md` and set up the pipeline.
 - 🚩 Results reported without comparing against baseline → Numbers without context are meaningless; always compare against previous run or SLA targets.
 - 🚩 Load test uses hardcoded auth tokens → Tokens expire; use k6's `setup()` function to authenticate dynamically before test execution.
-- 🚩 Analysis section missing but agent declared "performance testing done" → Running the test is half the job; load `analysis.md` and interpret p95/p99/error rate/throughput.
 
 ---
 

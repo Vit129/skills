@@ -20,10 +20,7 @@ Create, improve, and validate agent skills using the 5-Part Framework.
 
 | Task | Load |
 |------|------|
-| Skill directory structure + progressive disclosure (3 levels) | `references/anatomy.md` |
-| The 5-Part Framework (what every skill must have) | `references/framework.md` |
-| Creating a new skill step-by-step | `references/process.md` |
-| Fix a skill that isn't working | `references/iteration.md` |
+| Creating, validating, or fixing a skill — frontmatter rules, 5-Part Framework, HitL taxonomy, line budget | `references/framework.md` |
 
 ---
 

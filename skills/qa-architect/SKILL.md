@@ -124,35 +124,6 @@ Every architecture file MUST have a Quick Review (TL;DR) section at the top.
 
 ---
 
-## Anti-Rationalization Table
-
-| Excuse to Skip | Counter-Argument |
-|---|---|
-| "I'll design the test framework without picking a specific platform reference" | API, Web UI, and Mobile have fundamentally different architectures (service clients vs page objects vs screen objects). A generic framework fits none of them well. |
-| "Test DB strategy isn't needed — we'll just use the app's database directly" | Without seed/verify/cleanup protocols, tests pollute each other's data, create flaky failures, and can't run in parallel. Test DB strategy is infrastructure, not optional. |
-| "I'll use the same page object pattern for web and mobile" | Web uses layout-based POM (header, sidebar, content areas). Mobile uses screen-based POM (navigation flows, gestures). Forcing one pattern on both creates awkward abstractions. |
-| "The API test framework just needs HTTP calls — no architecture needed" | Multi-service API testing needs service client abstraction, auth token management, response validation schemas, and environment switching. Raw HTTP calls don't scale past 10 tests. |
-| "I'll figure out the cleanup strategy later when tests start conflicting" | By the time tests conflict, you have hundreds of tests with implicit data dependencies. Designing cleanup upfront (truncate, transaction rollback, or fixture isolation) is 10x cheaper. |
-
----
-
-## Red Flags
-
-- 🚩 Test framework has no environment switching mechanism → Tests are hardcoded to one environment; add environment config before writing more tests.
-- 🚩 Page objects contain assertions → Page objects should only encapsulate interactions; assertions belong in test files. Mixing them makes page objects non-reusable.
-- 🚩 No seed data strategy defined but integration tests exist → Tests depend on pre-existing data that may not exist; define explicit seed steps per test suite.
-- 🚩 Multiple platform references loaded simultaneously → Each platform (API/Web/Mobile) has its own architecture; load only the one matching the current task.
-- 🚩 Test DB strategy says "share production database" → Production data is unpredictable and tests will be flaky; always use isolated test databases with controlled seed data.
-
----
-
-
-## Consistency Contract
-
-> These steps MUST execute in the same order every time this skill runs.
-> Output may vary, but the workflow is fixed.
-> If any step is skipped, document the skip condition explicitly.
-
 ## Verification
 
 Before declaring test architecture design complete, confirm:
@@ -164,19 +135,6 @@ Before declaring test architecture design complete, confirm:
 - [ ] Auth token management pattern specified
 - [ ] Folder structure documented with naming conventions
 
-
----
-
-## Required Context
-
-| Dependency | Type | Purpose |
-|-----------|------|---------|
-| Test framework options (Playwright, RF, k6) | Tool landscape | Inform architecture decisions |
-| Existing test patterns in project | Source code | Match conventions, avoid duplication |
-| Project structure (folder layout, naming) | Codebase | Design consistent folder hierarchy |
-| `references/*.md` (one per platform) | Architecture blueprint | API, Web UI, or Mobile patterns |
-| `knowledge/lessons/` | Lessons learnt | Check before execute |
-
 ## Human-in-the-Loop Points
 
 | Step | Approval Type | When |
@@ -186,12 +144,3 @@ Before declaring test architecture design complete, confirm:
 | After DB strategy design | Open field | Before implementing seed/verify/cleanup |
 
 **Rule:** At decision points, always present 2-3 options with tradeoffs — never a single answer.
-
-## Self-Learning
-
-After user approves the output:
-
-1. **Record good example:** Save approved output to `knowledge/lessons/qa-architecture/{pattern}.md`
-2. **Record failures:** If output was rejected → note what went wrong for next time
-3. **Progressive update:** If a new pattern proved effective → append to relevant knowledge index
-4. **Confidence tracking:** `confidence: 1.0` (user-approved) vs `confidence: 0.7` (auto-generated)

@@ -28,51 +28,6 @@ Exercise physiology and nutrition guidance utilizing a Mixture of Experts (MoE) 
 
 ---
 
-## Core Function Menu
-
-Display these options when user triggers the skill:
-
-1. **Personalized Training Plan** — Custom workout design based on goals & experience
-2. **Nutrition Calculation** — Protein targets, meal planning, macronutrient tracking
-3. **Movement Modification** — Exercise form correction, pain management, structural adaptation
-4. **Body Composition Analysis** — BIA review, progress tracking, 28-day trend assessment
-5. **Strength Prediction** — Load recommendations, progression protocols, 1RM estimation
-6. **Injury Prevention** — Biomechanical assessment, limitation management
-7. **Recovery Protocol** — Rest day nutrition, sleep optimization, mobility work
-
----
-
-## Information Collection Protocol
-
-**When creating a training plan, systematically gather:**
-
-### 1. Basic Metrics
-* Gender, height (cm), weight (kg), age
-* Body fat percentage (or visual estimation)
-* Current fitness level (beginner / intermediate / advanced)
-
-### 2. Fitness Objectives
-* Primary goal: muscle gain, fat loss, body sculpting, strength, endurance, mobility
-* Timeline: 4 weeks, 8 weeks, 12 weeks, 6 months
-* Secondary goals (if any)
-
-### 3. Experience Level
-* Years of consistent training
-* Equipment access (home / gym / both)
-* Prior injuries or structural limitations
-
-### 4. Schedule Details
-* Available training days per week (3-6)
-* Session duration per workout (30-90 min)
-* Preferred training time (morning / afternoon / evening)
-
-### 5. Training Environment & Constraints
-* Gym equipment available (barbell, dumbbell, machines, cables)
-* Structural limitations (injuries, pain points, mobility restrictions)
-* Dietary restrictions or preferences
-
----
-
 ## Conversation Flow by User Intent
 
 ### Personal Context First

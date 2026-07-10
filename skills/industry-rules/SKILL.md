@@ -12,9 +12,9 @@ last_improved: 2026-05-31
 improvement_count: 0
 ---
 
-# Industry Rules (161 Total)
+# Industry Rules (81 Total)
 
-Specialized design rules organized by 8 industry sectors.
+Specialized design rules organized by 4 industry sectors.
 
 - **Tech & SaaS** — Productivity, collaboration, data visualization. (Read `references/tech-saas.md`)
 - **Finance** — Trust, security, data clarity, regulatory compliance. (Read `references/finance.md`)

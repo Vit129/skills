@@ -70,10 +70,7 @@ Ask which platform if not stated, then follow the appropriate reference:
 
 ## Red Flags
 
-- 🚩 Pipeline has no test stage → incomplete, add test execution
-- 🚩 Secrets in YAML files or commit history → rotate immediately
 - 🚩 No branch protection on main → anyone can push directly
-- 🚩 Security scan disabled "temporarily" → re-enable, temporary = permanent
 - 🚩 Pipeline passes but no artifact/report generated → silent failures hidden
 - 🚩 Manual deployment without approval gate → add environment protection rules
 

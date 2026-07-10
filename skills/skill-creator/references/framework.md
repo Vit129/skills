@@ -1,8 +1,6 @@
-# The 5-Part Framework
+# Skill Framework
 
-Every skill MUST have these 5 parts.
-
-## Part 1: Name + Trigger (Frontmatter)
+## Frontmatter + Trigger Phrases
 
 ```yaml
 ---
@@ -13,55 +11,32 @@ description: >
 ---
 ```
 
-**Rules:**
-- Use third-person: `"This skill should be used when..."`
+- Third-person: `"This skill should be used when..."`
 - Include specific trigger phrases users would actually type (EN + TH)
 - Be concrete: `"create a pipeline"` — not `"helps with pipelines"`
 - Lean slightly "pushy" — agents tend to under-trigger
-- Cover edge cases: phrases where skill should trigger even if user doesn't name it
+- Cover edge cases where the skill should trigger even if user doesn't name it
 
-## Part 2: Objective
+## The 5-Part Checklist
 
-1-2 lines immediately after the heading. What this skill produces.
+Every skill MUST have:
+1. **Name + Trigger** — frontmatter (see above)
+2. **Objective** — 1-2 lines: what this skill produces
+3. **Context** — Load Right Reference table; inline if short, `references/` file if long/specialized
+4. **Process** — numbered steps, each answering: what it produces, where the user approves (HitL), what info is needed, the deliverable
+5. **Rules + Verification** — predict what will go wrong; `NEVER`/`ALWAYS`/edge-case rules
 
-## Part 3: Context (Load Right Reference)
+## Human-in-the-Loop (HitL) Taxonomy
 
-| Task | Load |
-|------|------|
-| specific task A | `references/file-a.md` |
-| specific task B | `references/file-b.md` |
+At every HitL point, present multiple options (2-5), never a single answer:
+- **checkbox** — approve items
+- **single select** — pick one
+- **open field** — free input
 
-**Rules:**
-- If short context → inline in SKILL.md
-- If specialized/long → separate `references/` file
+## Line Budget
 
-## Part 4: Process
-
-Step-by-step instructions. For EACH step, answer 4 questions:
-1. **What does this step produce?**
-2. **Where does the user approve/choose?** (HitL)
-3. **What extra info is needed?**
-4. **What's the deliverable?**
-
-At every HitL point → always present multiple options (2-5), never a single answer.
-Types of HitL: `checkbox` (approve items), `single select` (pick one), `open field` (free input)
-
-## Part 5: Rules + Verification
-
-Predict what will go wrong and write rules to prevent it.
-
-```markdown
-## Rules
-
-- NEVER [common mistake the agent makes]
-- ALWAYS [thing the agent tends to skip]
-- If [edge case] → [what to do instead]
-```
-
-**Bonus sections:**
-- **Gotchas** — known pitfalls specific to this domain
-- **Anti-Rationalization Table** — excuses + counter-arguments
-- **Red Flags** — early warning signs
+- SKILL.md: target ~50 lines, hard cap 500 lines (push detail to `references/`)
+- Move detail out once SKILL.md gets cluttered — keep only core routing
 
 ## Validation Checklist
 

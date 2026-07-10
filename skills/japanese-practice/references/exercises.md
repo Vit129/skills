@@ -20,7 +20,7 @@ Example:
 - **I correct and explain the structure**
 
 ## 4. Conversation Scenarios (Role-Play)
-See `references/scenarios.md` for full list.
+See `references/scenarios.md` for the scenario list.
 
 ## 5. Reading Comprehension (Kanji Focus)
 I provide a short story or article with ふりがな. You:
@@ -37,31 +37,16 @@ I show kanji, you:
 ## 7. Particle Practice (Grammar Deep-Dive)
 Focus on one particle (は、を、に、で、など). I'll give you 5-10 sentences where you fill in the missing particle or explain why it's used.
 
-## 8. Common Mistake Patterns (Your Errors)
-After 3+ sessions, I track your recurring mistakes:
-- Wrong particles (に vs で)
-- Tense confusion (～た vs ～ている)
-- Kanji misreadings
-Then we do targeted drills to fix them.
-
 ---
 
-## Homework Assignments
+## Homework
 
-### Level 1
-- [ ] Write 3 sentences about your day (past tense)
-- [ ] Describe your job using 5+ different particles
-- [ ] Read a kids' story (ふりがな provided) and summarize it
-- [ ] Write an email in Japanese (casual)
+Pick tasks matching your current level (see `references/progression.md` for level definitions and the kanji/mistake tracker):
 
-### Level 2
-- [ ] Write a diary entry (100+ words, mixed tenses)
-- [ ] Translate a tech blog post into Japanese
-- [ ] Have a 10-minute conversation scenario
-- [ ] Learn and use 5 new kanji in sentences
-
-### Level 3
-- [ ] Write a professional email (敬語)
-- [ ] Explain a technical concept in Japanese (500+ words)
-- [ ] Do a mock job interview (日本語)
-- [ ] Translate a complex document (technical or legal)
+- Write 3+ sentences about your day; mix tenses as your level allows
+- Describe your job/routine using 5+ different particles
+- Read a story with ふりがな and summarize it
+- Write an email in Japanese (casual → 敬語 as you progress)
+- Have a 10-minute conversation scenario
+- Translate a tech blog post or document into Japanese
+- Explain a technical concept in Japanese (length scales with level)
