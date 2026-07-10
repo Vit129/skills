@@ -46,3 +46,4 @@ skills/**/.claude/
 .claude/worktrees/
 .claude/settings.local.json
 agent-memory/skill-usage.log
+hooks/__pycache__/
