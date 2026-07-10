@@ -30,6 +30,16 @@ When the Skill Map entry is a chain (`A → B → C → implement`), execute the
 2. Otherwise, don't force-fit into the nearest-sounding global skill (e.g. a Rust CLI is not `backend-dev` just because it's server-adjacent). Fall through to `everything else → interview → pick closest skill`, and let `dev-architect`/general `coding.md` rules (match existing repo conventions) carry the implementation — no skill claim beats reading the actual code.
 3. If the same uncovered stack recurs 3+ times across projects (this repo's own memory-promotion threshold, see `agent-memory`'s Self-Learning sections), that's a signal to write a real skill (`skill-creator`) instead of continuing to re-derive conventions from scratch each time. One known case already at 2/3: **Google Apps Script** (`.gs`, `doGet`/`doPost`/`SpreadsheetApp`) backs both `My-Investment-Port/syncLocalStorageToGoogleSheets.gs` and `Fitness-Tracker/fitness-backend.gs` — no skill yet, watch for a 3rd occurrence.
 
+## Browser Automation Tool Priority
+
+When a task needs live browser automation (navigate, click, screenshot, read network/console, inspect DOM) — check tools in this order, don't default straight to `claude-in-chrome`/`chrome-devtools` out of habit:
+
+1. **`mcp__kouen__*` first.** Kouen (`kouen-terminal`) is the user's own terminal multiplexer app — when it's running, browser panes live inside it alongside their other active sessions, which is the more integrated environment. Call `kouenList` (cheap, no side effects, no permission needed) to confirm Kouen is actually running before trying to use it — don't assume.
+   - If `kouenBrowserOpen`/`Navigate`/`Interact`/`Evaluate`/`Close` error with "disabled... allow it in `mcp-policy.json` or set `KOUEN_MCP_ALLOW_CONTROL=1`" — that's Kouen's own security gate (`allowControl` in `~/Library/Application Support/Kouen/mcp-policy.json`), off by default on purpose. Don't silently work around it or nag every turn — ask the user once per session whether to enable it, and only edit that policy file with their explicit go-ahead (it's a security-relevant change, same bar as any other access-control edit).
+   - Editing the policy file may not take effect immediately — Kouen may not hot-reload it, requiring an app restart. Never restart Kouen yourself if `kouenList` shows other active panes/sessions — that kills whatever's running in them. Tell the user it needs a restart and let them pick the timing.
+2. **`mcp__claude-in-chrome__*` next** if Kouen isn't running or the user's regular Chrome (with their real login/session state) is specifically needed.
+3. **`mcp__chrome-devtools__*` last** — spins up a separate, disconnected browser instance. Fine for throwaway one-off checks, but prefer 1 or 2 when the user might want to see/interact with the session themselves.
+
 ## Tracker Sync (optional — tracker-agnostic, portable across Jira/Azure DevOps/Linear/etc.)
 
 `~/.claude/` is shared across every project regardless of which issue tracker that workspace uses — never hardcode one tracker's API/script path here. The pipeline has 4 generic sync points; whether any of them exist as a real script depends entirely on the current workspace:
