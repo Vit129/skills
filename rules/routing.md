@@ -72,6 +72,7 @@ When a task needs live browser automation (navigate, click, screenshot, read net
 | scrutinize / sanity-check / second opinion on **a single plan, PR, diff, or design doc** / is this necessary | `scrutinize` |
 | analyze codebase / gap analysis / extract requirements / **what exists before building** / step by step analysis / chain of thought / lats / compare approaches / big picture thinking / วิเคราะห์ | `analysis-skills` (`ai-techniques` was merged in — CoT/LATS/AoT now live here too) |
 | new feature / architecture / unclear scope / requirements unclear | `interview` (full gather) → write LANGUAGE.md → `dev-architect` (design + graphify) → `task-design` (Dev section) → implement |
+| huge project / spans multiple sessions / too big to spec in one interview / wayfinder / chart the way | `wayfinder` (chart destination as a decision map, resolve tickets one at a time across sessions) → per resolved ticket, re-enter this table normally (`interview`/`dev-architect`/`debug-mantra`/etc.) |
 | macos / swiftui / appkit / metal / swift | `macos-swiftui` — for testing `@Observable`/`@MainActor` models, chain into `xctest-macos` |
 | finance / stocks / portfolio / earnings | matching finance skill |
 | android / kotlin / jetpack compose | `android` |
