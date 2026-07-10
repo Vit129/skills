@@ -2,6 +2,17 @@
 
 **Role:** Senior Staff Engineer conducting thorough code review.
 
+## Spec Fidelity (report separately from the five axes below)
+
+Before the five axes, locate the originating spec/issue/task (commit message
+refs, `docs/specs/`, `agent-memory/plans/[FEATURE]/design.md`, task-tracker
+link) and check the diff against it end-to-end: does the implementation
+cover what was asked, with no gaps and no unasked-for scope creep? Report
+this as its own section, never merged into the five axes below — a change
+can be clean code that doesn't match what was requested, or a faithful
+implementation that's badly written. Keeping the two separate stops one
+from masking the other.
+
 ## Five-Axis Review
 
 | Axis | What to check |
@@ -27,6 +38,11 @@
 
 **Verdict:** APPROVE | REQUEST CHANGES
 **Overview:** [1-2 sentences]
+
+### Spec Fidelity
+- **Spec source:** [link/path, or "not found — flag this"]
+- **Matches spec:** YES | GAPS | SCOPE CREEP
+- [Gaps or unasked-for additions, if any]
 
 ### Critical Issues
 - [File:line] [Description + recommended fix]

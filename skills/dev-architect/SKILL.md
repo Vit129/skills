@@ -6,9 +6,9 @@ description: >
   "create API contracts", "do logical design",
   "use TDD", or needs DDD Strategic & Tactical Design, Logical Design,
   or Test-Driven Development guidance.
-version: 1.0.0
-last_improved: 2026-05-31
-improvement_count: 0
+version: 1.1.0
+last_improved: 2026-07-10
+improvement_count: 1
 ---
 
 # Architect
