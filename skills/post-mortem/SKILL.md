@@ -4,6 +4,7 @@ description: Write canonical engineering record for a fixed bug — root cause, 
 version: 2.0.0
 last_improved: 2026-06-30
 improvement_count: 1
+credit: Based on 9arm-skills (https://github.com/thananon/9arm-skills) — engineering/post-mortem
 ---
 
 # Post-mortem
