@@ -46,9 +46,22 @@ List all input/output file paths so resume doesn't require searching. Path conve
 - Architecture: {path}    ← QA only
 - Data Storage Strategy: {path}  ← QA only (test data seed/verify/cleanup, not Dev's DB schema — that's inside Design)
 - Coding Rules: {skill name}     ← QA only
+- Published: {tracker link, or N/A}  ← Dev only, optional — if design.md/task list was also published to an issue tracker per `rules/routing.md`'s Tracker Sync section, link it here so resume doesn't require re-searching the tracker
 ```
 
 Include only artifacts relevant to the task type (dev or QA). Leave empty fields as `N/A`.
+
+## Task Granularity — Vertical Slices
+
+Size and order tasks as vertical slices, not horizontal layers:
+
+- **Complete path, narrow scope.** Each task should cut through every layer it touches (schema, API, UI, tests) for one thin piece of behavior — not "do all the schema work" then "do all the API work" as separate tasks. A task that can't be demoed end-to-end on its own is too horizontal.
+- **Blocking, not just ordering.** When a task genuinely can't start before another finishes, say so explicitly next to the task (e.g. `[ ] Task 4 — blocked by Task 2`). Tasks with no blocker can be picked up in any order, including in parallel by different sessions/agents.
+- **Large blast-radius refactors** (schema migrations, renames touching many callers) use expand–contract sequencing as their own slice: add the new form → migrate call sites in batches → remove the old form. Don't collapse this into one giant task.
+
+## Task Reference
+
+Refer to tasks by their title in conversation and commits, not by list position or number alone — "Task 4" drifts as items are added/reordered; "Add refund-eligibility check" doesn't.
 
 ### Summary (MANDATORY)
 
@@ -130,6 +143,14 @@ After EVERY completed task:
 
 **Why:** Stale progress files cause resume failures — agent reads old state and re-does completed work.
 
+## After Each Task (Dev)
+
+Don't wait for the whole category — for Dev tasks, at pre-agreed seams:
+
+1. Run typecheck
+2. Run the specific test file(s) for that task
+3. Fail → fix before moving to the next task, don't stack failures
+
 ## After Each Category Completes
 
 When all tasks in a category are `[x]`:
@@ -145,9 +166,10 @@ When every checkbox is `[x]`:
 
 1. Update Status to `Completed`
 2. Run full test suite one final time — record pass/fail counts
-3. Update PROGRESS.md (mark ✅ + date)
-4. Proceed to next stage (defined in `task-design.md`'s Next Step section)
-5. Report to user:
+3. **Dev only — code-review gate:** run `review-personas`' code-reviewer persona (fan-out to security-auditor/test-engineer/bug-hunter too, if the change warrants it) against the full diff before committing. Don't commit with Critical/Important findings unresolved.
+4. Update PROGRESS.md (mark ✅ + date)
+5. Proceed to next stage (defined in `task-design.md`'s Next Step section)
+6. Report to user:
 
 ```text
 ✅ {Task Type} — Complete

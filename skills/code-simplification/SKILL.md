@@ -1,9 +1,9 @@
 ---
 name: code-simplification
 description: Simplifies code for clarity without changing behavior. Use when code works but is harder to read, maintain, or extend than it should be. Chesterton's Fence, Rule of 500, incremental refactoring.
-version: 2.0.0
-last_improved: 2026-06-30
-improvement_count: 1
+version: 2.1.0
+last_improved: 2026-07-10
+improvement_count: 2
 ---
 
 # Code Simplification
@@ -33,6 +33,7 @@ Reduce complexity while preserving exact behavior. Goal: code easier to read, un
 |------|------|
 | Preserve behavior, Chesterton's Fence, clarity, conventions, scope | `references/principles.md` |
 | Step-by-step process + opportunity identification tables | `references/process.md` |
+| Module/design-level complexity (shallow modules, unclear boundaries), or a repo-wide scan for deepening opportunities | `references/deep-modules.md` |
 
 ---
 

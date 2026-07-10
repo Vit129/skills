@@ -32,6 +32,19 @@ DETECT → CLASSIFY → REPRODUCE → FIX → GUARD → CLOSED
 - **Duplicate?** → link to existing finding, close as `DUPLICATE`
 - **Won't fix?** → requires explicit justification + tech debt ticket
 
+## Classify Tags (assign at CLASSIFY, carry through the tracker)
+
+Tag every surviving finding with both:
+
+| Tag | Values | Meaning |
+|-----|--------|---------|
+| **Category** | `bug` \| `enhancement` | Is this broken, or a new capability being requested? |
+| **Readiness** | `ready-for-agent` \| `needs-human` | Fully specified + reproducible → agent can take it straight to REPRODUCE. Ambiguous root cause, missing context, or a design call → route to the user first, don't guess. |
+
+A confirmed reproduction (or a confirmed diff-matches-claim, for review findings)
+makes a much stronger brief for whoever picks the ticket up next — assign
+`ready-for-agent` only once repro is actually confirmed, not just suspected.
+
 ---
 
 ## Output Format
@@ -62,9 +75,9 @@ DETECT → CLASSIFY → REPRODUCE → FIX → GUARD → CLOSED
 | Language-specific | [n] | [Px] |
 
 ## Lifecycle Tracker
-| # | Title | Severity | State | Next Action |
-|---|-------|----------|-------|-------------|
-| 1 | ... | P0 | REPRODUCE | Write failing test |
+| # | Title | Severity | Category | Readiness | State | Next Action |
+|---|-------|----------|----------|-----------|-------|-------------|
+| 1 | ... | P0 | bug | ready-for-agent | REPRODUCE | Write failing test |
 ```
 
 ## Human-in-the-Loop Points

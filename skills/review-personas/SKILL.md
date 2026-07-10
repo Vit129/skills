@@ -2,9 +2,9 @@
 name: review-personas
 description: Four specialist review personas (code-reviewer, test-engineer, security-auditor, bug-hunter) for targeted pre-merge review. Use when reviewing code, analyzing test coverage, auditing security, or hunting hidden bugs.
 credit: Inspired by 9arm-skills (https://github.com/thananon/9arm-skills) — engineering/scrutinize
-version: 1.1.0
-last_improved: 2026-06-25
-improvement_count: 1
+version: 1.2.0
+last_improved: 2026-07-10
+improvement_count: 2
 ---
 
 # Review Personas
