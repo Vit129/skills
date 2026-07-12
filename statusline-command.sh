@@ -94,23 +94,22 @@ if [ -n "$branch" ]; then
 fi
 
 # --- Build output ---
-parts=()
 sep=" $(printf '\033[0;90m|\033[0m') "
 
 # 1. Directory (bold cyan) — starship [directory]
-[ -n "$dir_display" ] && parts+=("$dir_display")
+dir_part="$dir_display"
 
 # 2. Branch + status inline — starship [git_branch][git_status]
-_git_part=""
-[ -n "$branch_display" ]     && _git_part="$branch_display"
-[ -n "$git_status_display" ] && _git_part="${_git_part} ${git_status_display}"
-[ -n "$_git_part" ]          && parts+=("$_git_part")
+git_part=""
+[ -n "$branch_display" ]     && git_part="$branch_display"
+[ -n "$git_status_display" ] && git_part="${git_part} ${git_status_display}"
 
 # 3. Model + effort — Claude-specific (yellow)
+model_part=""
 if [ -n "$model_short" ]; then
   label="$model_short"
   [ -n "$effort" ] && label="$label ($effort)"
-  parts+=("$(printf '\033[0;33m%s\033[0m' "$label")")
+  model_part="$(printf '\033[0;33m%s\033[0m' "$label")"
 fi
 
 # 4. Context usage — Claude-specific (green/yellow/red by threshold)
@@ -119,9 +118,9 @@ if [ -n "$ctx" ]; then
   if   [ "$ctx" -gt 75 ]; then c='\033[0;31m'
   elif [ "$ctx" -gt 45 ]; then c='\033[0;33m'
   else c='\033[0;32m'; fi
-  parts+=("$(printf "${c}ctx:%d%% rem:%d%%\033[0m" "$ctx" "$ctx_rem_int")")
+  ctx_part="$(printf "${c}ctx:%d%% rem:%d%%\033[0m" "$ctx" "$ctx_rem_int")"
 else
-  parts+=("$(printf '\033[0;90mctx:--%% rem:--%%\033[0m')")
+  ctx_part="$(printf '\033[0;90mctx:--%% rem:--%%\033[0m')"
 fi
 
 # 5. 5h rate limit + countdown — Claude-specific
@@ -144,9 +143,9 @@ if [ -n "$five_pct" ]; then
   if   [ "$five_pct" -gt 75 ]; then c='\033[0;31m'
   elif [ "$five_pct" -gt 45 ]; then c='\033[0;33m'
   else c='\033[0;32m'; fi
-  parts+=("$(printf "${c}5h:%d%% rem:%d%%%s\033[0m" "$five_pct" "$(( 100 - five_pct ))" "$timer")")
+  five_part="$(printf "${c}5h:%d%% rem:%d%%%s\033[0m" "$five_pct" "$(( 100 - five_pct ))" "$timer")"
 else
-  parts+=("$(printf '\033[0;90m5h:--%% rem:--%% --\033[0m')")
+  five_part="$(printf '\033[0;90m5h:--%% rem:--%% --\033[0m')"
 fi
 
 # 6. 7d rate limit + reset day — Claude-specific
@@ -163,15 +162,28 @@ if [ -n "$week_pct" ]; then
   if   [ "$week_pct" -gt 75 ]; then c='\033[0;31m'
   elif [ "$week_pct" -gt 45 ]; then c='\033[0;33m'
   else c='\033[0;32m'; fi
-  parts+=("$(printf "${c}7d:%d%% rem:%d%%%s\033[0m" "$week_pct" "$(( 100 - week_pct ))" "$wtimer")")
+  week_part="$(printf "${c}7d:%d%% rem:%d%%%s\033[0m" "$week_pct" "$(( 100 - week_pct ))" "$wtimer")"
 else
-  parts+=("$(printf '\033[0;90m7d:--%% rem:--%% --\033[0m')")
+  week_part="$(printf '\033[0;90m7d:--%% rem:--%% --\033[0m')"
 fi
 
-# Join with separator
-result=""
-for part in "${parts[@]}"; do
-  [ -z "$result" ] && result="$part" || result="${result}${sep}${part}"
-done
+# Join helper — skips empty segments, joins the rest with sep
+join_parts() {
+  local out=""
+  for p in "$@"; do
+    [ -z "$p" ] && continue
+    [ -z "$out" ] && out="$p" || out="${out}${sep}${p}"
+  done
+  printf '%s' "$out"
+}
 
-printf '%b\n' "$result"
+# Narrow pane (split v/h) -> wrap onto 2 lines: dir+git | model+ctx+5h+7d.
+# Claude Code sets $COLUMNS to the pane width (v2.1.153+); 0/unset means unknown, stay single-line.
+if [ -n "$COLUMNS" ] && [ "$COLUMNS" -gt 0 ] && [ "$COLUMNS" -lt 100 ]; then
+  line1=$(join_parts "$dir_part" "$git_part")
+  line2=$(join_parts "$model_part" "$ctx_part" "$five_part" "$week_part")
+  printf '%b\n%b\n' "$line1" "$line2"
+else
+  result=$(join_parts "$dir_part" "$git_part" "$model_part" "$ctx_part" "$five_part" "$week_part")
+  printf '%b\n' "$result"
+fi
