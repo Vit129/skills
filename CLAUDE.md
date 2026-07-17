@@ -66,3 +66,5 @@ Task progress lives in `agent-memory/plans/[FEATURE]/dev-task-progress.md` / `qa
 ~/.claude/scripts/sync-all.sh
 # Sync skills/rules/commands from ~/.claude/ → Codex + Gemini
 ```
+
+@RTK.md

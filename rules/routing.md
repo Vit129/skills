@@ -57,6 +57,22 @@ When a task needs live browser automation (navigate, click, screenshot, read net
 3. If no script exists for this workspace's tracker, don't invent an API call — ask the user, or write a small script for that tracker's API if asked to.
 4. Ask before running any write stage (Upload Scenarios/Result, Create Bug) — don't assume every ticket/project wants every scenario/result mirrored automatically.
 
+## Kouen Task Sync (Kouen's own Task Dashboard → a real project plan)
+
+Kouen (the terminal app itself) has its own lightweight Task Dashboard — a lower-friction global scratchpad than any tracker, but its data model (`KouenTask`: `id`/`sessionID`/`title`/`done` only, via `kouenTaskList`/`Get`/`Create`/`Update`/`Delete`) is not scoped to a project at all: the store is one file (`~/Library/Application Support/Kouen/tasks.json`) shared across every repo on the Mac, and it has zero relationship to `agent-memory/plans/` — creating a Kouen Task never creates or touches a plan file. Treat it as a raw seed to graduate into a real plan, not a plan itself.
+
+**Real constraint, confirmed from source (`TaskSummary`/`SurfaceRegistry.taskSummary`, P40 2026-07-13):** there is no project/cwd field on a Task. The only way to guess which project one belongs to is cross-referencing its `sessionID` against `kouenList`'s live sessions (which do carry `cwd`) — and that only works while the owning session is still open. Once the session is closed (the common case — a task typically outlives the session that created it), there is no data-driven way to know the project; the title text is the only clue, and it's not reliable enough to act on alone.
+
+Because of that constraint, **always confirm the project with the user before doing anything** — even a live-session cwd match is a guess worth stating out loud, not silently trusting. Never skip the confirm because "this one looks obvious."
+
+**Flow (only on request — "check my kouen tasks", "sync kouen tasks", not run automatically every session start; the MCP round trip plus the confirm-per-task cost isn't worth paying on every session in every project):**
+1. `kouenTaskList` (filter `done:false` — a checked task is already resolved, nothing to graduate).
+2. For each open task, try the live-session cwd cross-reference above for a candidate project guess (may well come up empty).
+3. Present the task's full detail (title, id, createdAt, candidate project guess if any) and ask the user to confirm/name the actual project — do not assume, even with a guess in hand.
+4. If it's the current project: hand off to the standard chain this file already governs — `interview` (full gather, this task's title is rarely enough spec on its own) → `dev-architect` → `task-design` → implement. If it's a different project, say so and stop; don't cross-context into a repo that isn't open.
+5. Only after the resulting plan actually exists (`agent-memory/plans/[FEATURE]/design.md` + `dev-task-progress.md` created and confirmed with the user) — call `kouenTaskDelete` on the original Kouen Task. It's graduated; leaving it around is stale, duplicate tracking.
+6. Never auto-delete a Task before its plan is confirmed to exist — same "ask before any write stage" discipline as Tracker Sync above.
+
 ## Skill Map
 
 | Task signal | Skill |
@@ -97,6 +113,7 @@ When a task needs live browser automation (navigate, click, screenshot, read net
 | workout / exercise plan / nutrition / diet / meal plan / macro | `fitness` |
 | ภาษี / vat / บัญชี / thai tax / thai accounting / withholding tax | `thai-accountant` |
 | bootstrap memory / setup agent memory / reset memory | `agent-memory` |
+| kouen task / sync kouen task / check kouen tasks / task dashboard | see Kouen Task Sync section above |
 | handoff / hand off / ส่งต่องาน / pass to codex/gemini/kiro / switch agent | `handoff` |
 | ask agy / second opinion from agy / have agy try | `agy` |
 | management talk / เขียนสำหรับ management / rewrite for vp | `management-talk` |
