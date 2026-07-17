@@ -1,5 +1,7 @@
 # Coding Principles
 
+`[source:github.com/multica-ai/andrej-karpathy-skills/blob/main/CLAUDE.md]` — §1-5 wording synced to this upstream template.
+
 Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
 
 **Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
