@@ -17,6 +17,20 @@ Worth having when a project: works with AI coding agents often, has multiple pag
 - `ui-designer` — Phase 0 reads `DESIGN.md` if present as the existing design system (skip regenerating tokens); Context Gathering reads `PRODUCT.md` for target audience/use cases instead of asking when already documented.
 - Any skill starting new-feature or UI work on a project root containing these files should read them first, the same way `graphify-out/GRAPH_SUMMARY.md` is read for code impact.
 
+## Staying in sync
+
+`hooks/design-doc-sync.py` is a PostToolUse (`Edit|Write`) hook: when a known design-token file (colors/theme/typography/tailwind-config/style.css/`KouenDesign.swift`/etc.) is edited in a project that has a `DESIGN.md`, it reminds the agent to update `DESIGN.md` in the same turn. It's a reminder, not a block — the agent still decides whether the edit actually changed anything DESIGN.md-relevant. Requires a `PostToolUse` entry for `python3 ~/.claude/hooks/design-doc-sync.py` (matcher `Edit|Write`) in `~/.claude/settings.json` — not auto-registered by this PR since that file is local/gitignored, add it manually once:
+
+```json
+{
+  "matcher": "Edit|Write",
+  "hooks": [
+    { "type": "command", "command": "python3 /Users/supavit.cho/.claude/hooks/design-doc-sync.py", "statusMessage": "checking design-doc sync" }
+  ]
+}
+```
+Append as one more entry inside the existing `hooks.PostToolUse` array.
+
 ## Authoring
 
 Write from real repo facts (README, package.json/deps, existing color/font/component code, docs) — don't invent vision or tokens not evidenced in the repo. If a section would be pure invention, say so plainly and keep it thin rather than padding.
