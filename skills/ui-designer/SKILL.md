@@ -71,6 +71,7 @@ Before designing, check if a design system already exists:
 
 | Found | Action |
 | ----- | ------ |
+| `DESIGN.md` exists at project root (see `rules/product-design.md`) | Read it first — it's the canonical design language. Align to it, don't regenerate tokens or drift from it. |
 | Figma URL exists | Analyze → extract tokens, components → extend, don't rebuild |
 | Design tokens file exists (CSS vars, Tailwind config) | Import existing → align, don't override |
 | Component library exists (MUI, Ant Design, shadcn/ui) | Document existing → extend with custom tokens |
@@ -85,7 +86,7 @@ You MUST have confirmed design context before any design work:
 - **Use cases**: What jobs are they trying to get done?
 - **Brand personality/tone**: How should the interface feel?
 
-You cannot infer this by reading the codebase. Code tells you what was built, not who it's for.
+You cannot infer this by reading the codebase. Code tells you what was built, not who it's for. If `PRODUCT.md` exists at project root, read it for target audience/use cases instead of asking — only ask for what it doesn't cover (e.g. brand tone if `PRODUCT.md` doesn't state it).
 
 ## The AI Slop Test
 
