@@ -16,6 +16,7 @@ When the Skill Map entry is a chain (`A → B → C → implement`), execute the
   - Skip `test-scenario` only if a `testScenarioPbi{ID}-{platform}.md` already exists for this feature (check before invoking) — `qa-architect` reads that file as its mandatory input either way; don't regenerate scenarios that already exist, but don't skip straight to `qa-architect` on a brand-new feature with no scenario file either.
 - Applies to the bug lifecycle chain too — `debug-mantra → regression test → post-mortem → agent-memory` runs through to lesson-capture, not just "fix landed." Don't stop at a validated fix; write the regression test and offer the post-mortem in the same pass.
   - Exception within this one chain: `debug-mantra`'s own **Human-in-the-Loop Points** (repro confirmed, hypothesis picked, fix approved, fix validated) are real gates by design — hypothesis selection needs human judgment, a proposed fix needs sign-off before landing. Don't collapse those into "run to completion" either; they're not the same as the between-skill "should I continue" anti-pattern this section targets.
+  - "Runs through to lesson-capture" is proportionate per `post-mortem`'s own When-NOT-to-Use, not unconditional — a trivial fix closes at the regression test/PR description, no post-mortem manufactured for it.
 
 ## Cross-Project Stack Detection
 

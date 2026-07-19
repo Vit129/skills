@@ -4,9 +4,9 @@
 # Usage: ./eval-scheduler.sh [--force]
 # Returns exit 0 + skill list if eval due, exit 1 if not due.
 
-EVAL_STATE="$HOME/.kiro/agent-memory/eval-state.md"
-SKILL_LOG="$HOME/.kiro/agent-memory/skill-log.md"
-MEMORY="$HOME/.kiro/agent-memory/memory.md"
+EVAL_STATE="$HOME/.claude/agent-memory/EVAL-STATE.md"
+SKILL_LOG="$HOME/.claude/agent-memory/SKILL-LOG.md"
+MEMORY="$HOME/.claude/agent-memory/index.md"
 EVAL_INTERVAL_DAYS=7
 
 # Create eval-state if missing
@@ -48,4 +48,4 @@ done | sort -u
 
 echo ""
 echo "### Run: pass@3 eval on each skill above"
-echo "### Report to: ~/.kiro/agent-memory/evals/"
+echo "### Report to: ~/.claude/agent-memory/evals/"
