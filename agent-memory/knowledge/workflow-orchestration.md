@@ -50,6 +50,31 @@ collision rate — a direct, measured trade-off, not a guess. If the round
 must be larger for wall-clock reasons, expect and accept a collision tax
 proportional to batch size; don't rely on the rules alone to prevent it.
 
+## Hypothesis panel (judge-panel diversity) — tested against debug-mantra, rejected
+
+Different pattern from the flock above — this is judge-panel *diversity*
+(N agents attempt the same problem independently, compare), not few-rules
+*emergence*. Considered for `debug-mantra`'s root-cause step: instead of one
+linear hypothesis, spawn several agents to each propose a hypothesis
+independently, in case the true cause isn't obvious.
+
+**Tested before touching the skill file** (per the same evidence-first bar
+as everything else in this doc): a synthetic bug (async rate-limiter TOCTOU
+race, `this.count++` placed after an `await` that should gate it — a
+plausible stand-in for "root cause not obvious") was diagnosed by (a) one
+baseline agent and (b) a 3-agent panel, both blind to the known fix.
+
+Result: baseline identified the exact correct mechanism and fix on the
+first attempt (36k tokens). All 3 panel members independently converged on
+the *identical* diagnosis — unanimous, zero diversity — costing ~148k
+tokens (~4x) for no improvement in correctness or breadth. **Rejected**:
+`debug-mantra`'s single-hypothesis step is not changed. A well-posed bug
+with a locatable mechanism doesn't need a panel; nothing in this workspace's
+actual debug history (`agent-memory/playbook.md`) shows single-hypothesis
+root-causing ever failing, so there was no evidence bar for the panel to
+clear in the first place. Re-test only if a real (not synthetic) bug is
+found where single-hypothesis genuinely produced a wrong root cause.
+
 ## Reference
 
 Full 13-repo flock-review experiment (findings, collision log, token cost:
