@@ -13,6 +13,7 @@
 | [claude-plugin-manual-install.md](knowledge/claude-plugin-manual-install.md) | tooling | claude-code, plugin, install, bash | 2026-06-18 | active |
 | [headroom-proxy.md](knowledge/headroom-proxy.md) | tooling | headroom, proxy, compression, tokens | 2026-06-18 | archived |
 | [ponytail.md](knowledge/ponytail.md) | tooling | ponytail, lazy-dev, coding-style, plugin | 2026-06-20 | testing |
+| [workflow-orchestration.md](knowledge/workflow-orchestration.md) | tooling | workflow, multi-agent, adaptive-engineering, flock-pattern | 2026-07-19 | active |
 
 ## Plans
 
