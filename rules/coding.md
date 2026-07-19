@@ -107,3 +107,11 @@ Skip this check for a normal fixed-dimension Workflow where the dimensions are a
 
 Types: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`
 Subject answers "why" — the diff shows "what".
+
+## Changelog / Release Automation
+
+**`git-cliff`** (`brew install git-cliff`) is the standard tool for `CHANGELOG.md` generation and GitHub Release notes on any personal project that publishes tagged releases — parses the Commit Style types above via `cliff.toml`'s `commit_parsers` (feat→Added, fix→Fixed, refactor/perf→Changed, docs→Documentation; test/chore/build/ci/style skipped). Established in `kouen-terminal` and `My-Investment-Port`; also wired into `agy-plugin-cc`, `agy-plugin-codex`, `Fitness-Tracker`, `graphify`, `Hanashi`, `Home-Assistant`, `QA-Automation-Coding-Course`, `Accountant-Learning` (2026-07-19). Skip it for repos with no GitHub Releases (skill/config/notes-only repos) or for a fork whose release pipeline is upstream's to own (e.g. `CodexBar` — got `cliff.toml` for local changelog generation only, no release script, since `Scripts/release.sh` already delegates to upstream's own signed/notarized `mac-release` tool — check for an existing release script before adding one).
+
+A typical per-project `scripts/release.sh` bumps the version (file convention varies: `package.json`/`pyproject.toml`/`Info.plist`/git-tag-only), runs `git-cliff --tag vX.Y.Z --output CHANGELOG.md`, tags, pushes, then `gh release create --notes "$NOTES"`.
+
+**Never swallow `gh release create`/`gh release edit` errors with `2>/dev/null`** — this exact bug shipped 20 empty-body releases on `kouen-terminal` over several weeks before anyone noticed, because the fallback (`|| echo "skipped"`) never showed *why*. Capture stderr separately and print it on failure instead. Also guard `$NOTES` length before passing it to `gh release create` — GitHub's release-body cap is 125000 chars, and an empty/wrong previous-tag range (e.g. from a `mapfile`-on-bash-3.2 bug) silently dumps full project history past that limit and 422s every time.
