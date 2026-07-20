@@ -1,6 +1,6 @@
 # /test — Prove it works
 
-Route to `~/.claude/skills/playwright-testing/` + `~/.claude/skills/debug-mantra/`.
+Route to `~/.claude/skills/playwright-testing/` + `~/.claude/skills/debug-mantra-workflow/`.
 
 ## Instructions
 
@@ -14,7 +14,7 @@ Route to `~/.claude/skills/playwright-testing/` + `~/.claude/skills/debug-mantra
    - No `waitForTimeout()`
 3. Run tests:
    - `npx playwright test --grep "test name"`
-   - If tests fail → switch to `~/.claude/skills/debug-mantra/` triage
+   - If tests fail → switch to `~/.claude/skills/debug-mantra-workflow/` triage
 4. If debugging:
    - Stop-the-line → Reproduce → Localize → Fix → Guard
    - Write regression test before fixing

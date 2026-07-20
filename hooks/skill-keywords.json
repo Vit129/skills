@@ -1,6 +1,6 @@
 [
   {
-    "skill": "scrutinize",
+    "skill": "9arm-skills:scrutinize",
     "keywords": ["scrutinize", "sanity-check", "second opinion", "outsider review", "does this need to exist"]
   },
   {
@@ -16,7 +16,7 @@
     "keywords": ["test scenario rules", "scenario format", "test case standard"]
   },
   {
-    "skill": "debug-mantra",
+    "skill": "debug-mantra-workflow",
     "keywords": ["crash", "bug", "debug", "exception", "stack trace", "use-after-free", "broken", "not working", "fix bug", "debug this"]
   },
   {
@@ -24,7 +24,7 @@
     "keywords": ["audit", "hunt bugs", "find mismatch", "memory leak", "systematic scan", "scan for"]
   },
   {
-    "skill": "post-mortem",
+    "skill": "post-mortem-workflow",
     "keywords": ["post-mortem", "postmortem", "rca", "root cause analysis", "incident report"]
   },
   {
@@ -120,7 +120,7 @@
     "keywords": ["launch checklist", "pre-release", "staged rollout", "feature flag rollout", "ship to prod"]
   },
   {
-    "skill": "management-talk",
+    "skill": "management-talk-workflow",
     "keywords": ["exec summary", "stakeholder update", "vp update", "slack for manager", "rewrite for non-technical", "standup message"]
   },
   {

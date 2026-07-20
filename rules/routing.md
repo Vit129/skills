@@ -15,8 +15,8 @@ When the Skill Map entry is a chain (`A → B → C → implement`), execute the
 - Applies equally to Dev and QA chains — `test-scenario → qa-architect → playwright-rules/robotframework-rules + playwright-testing/robotframework-testing → task-design (QA section) → build/run scripts` runs end-to-end the same as the Dev chain does. Finishing test scenarios/architecture is a handoff into the next stage, not a stop.
   - Skip `test-scenario` only if a `testScenarioPbi{ID}-{platform}.md` already exists for this feature (check before invoking) — `qa-architect` reads that file as its mandatory input either way; don't regenerate scenarios that already exist, but don't skip straight to `qa-architect` on a brand-new feature with no scenario file either.
 - Applies to the bug lifecycle chain too — `debug-mantra → regression test → post-mortem → agent-memory` runs through to lesson-capture, not just "fix landed." Don't stop at a validated fix; write the regression test and offer the post-mortem in the same pass.
-  - Exception within this one chain: `debug-mantra`'s own **Human-in-the-Loop Points** (repro confirmed, hypothesis picked, fix approved, fix validated) are real gates by design — hypothesis selection needs human judgment, a proposed fix needs sign-off before landing. Don't collapse those into "run to completion" either; they're not the same as the between-skill "should I continue" anti-pattern this section targets.
-  - "Runs through to lesson-capture" is proportionate per `post-mortem`'s own When-NOT-to-Use, not unconditional — a trivial fix closes at the regression test/PR description, no post-mortem manufactured for it.
+  - Exception within this one chain: `debug-mantra-workflow`'s own **Human-in-the-Loop Points** (repro confirmed, hypothesis picked, fix approved, fix validated) are real gates by design — hypothesis selection needs human judgment, a proposed fix needs sign-off before landing. Don't collapse those into "run to completion" either; they're not the same as the between-skill "should I continue" anti-pattern this section targets.
+  - "Runs through to lesson-capture" is proportionate per `9arm-skills:post-mortem`'s own When-NOT-to-Use, not unconditional — a trivial fix closes at the regression test/PR description, no post-mortem manufactured for it.
 
 ## Cross-Project Stack Detection
 
@@ -54,7 +54,7 @@ When a task needs live browser automation (navigate, click, screenshot, read net
 | Pull Requirements | Before `test-scenario`, if requirements live in a tracker ticket not yet pulled | Fetch ticket → local requirements doc (`test-scenario`'s own Requirements Source step already says: "pull with a script you write for that tracker's API, or paste manually") |
 | Upload Scenarios | After `test-scenario`'s CSV/export + sign-off, before `qa-architect` | Push approved scenarios to the tracker as child items, capture the tracker-ID↔TS-ID mapping for automation to reference later |
 | Upload Result | After a test script runs (Pass/Fail/Blocked) | Write the result back onto the tracker item |
-| Create Bug | On confirmed test failure, mid `debug-mantra`/`find-mismatch` | File a bug linked to the parent ticket + failed TS + related tasks |
+| Create Bug | On confirmed test failure, mid `debug-mantra-workflow`/`find-mismatch` | File a bug linked to the parent ticket + failed TS + related tasks |
 
 **Resolving the concrete implementation for the current workspace:**
 1. Check this workspace's own rules/CLAUDE.md for a tracker integration path (e.g. a `scripts/<tracker>/` dir) before assuming one doesn't exist.
@@ -82,18 +82,18 @@ Because of that constraint, **always confirm the project with the user before do
 
 | Task signal | Skill |
 |-------------|-------|
-| fix bug / debug / crash / investigate | `debug-mantra` (REPRODUCE→FIX) → `playwright-testing`/`robotframework-testing` (regression test, GUARD) → `post-mortem` (CLOSED) → `agent-memory` (playbook/lessons) — optional: Create Bug stage on confirmed failure, see Tracker Sync |
-| hunt bugs / audit / find mismatch / scan **the whole codebase**, systematic bug detection | `find-mismatch` — on confirmed finding, chain into the `debug-mantra` row above |
+| fix bug / debug / crash / investigate | `debug-mantra-workflow` (REPRODUCE→FIX, wraps `9arm-skills:debug-mantra`) → `playwright-testing`/`robotframework-testing` (regression test, GUARD) → `post-mortem-workflow` (CLOSED, wraps `9arm-skills:post-mortem`) → `agent-memory` (playbook/lessons) — optional: Create Bug stage on confirmed failure, see Tracker Sync |
+| hunt bugs / audit / find mismatch / scan **the whole codebase**, systematic bug detection | `find-mismatch` — on confirmed finding, chain into the `debug-mantra-workflow` row above |
 | xctest / swift test / write test or unit test **in a Swift/macOS project** | `xctest-macos` |
 | write test / add test / unit test in a non-Swift project (JS/TS, Python, etc.) | no dedicated skill — check the project's existing test framework (e.g. `tests/vitest/*.test.js` → Vitest) and match its convention directly; don't default to `xctest-macos` just because "unit test" is generic |
 | playwright / web ui test / api test | `test-scenario` (scenarios are qa-architect's mandatory input) → `qa-architect` → `playwright-rules` + `playwright-testing` → `task-design` (QA section) → build/run scripts — optional tracker sync at each stage, see Tracker Sync |
 | robot framework / rf / mobile test | `test-scenario` (scenarios are qa-architect's mandatory input) → `qa-architect` → `robotframework-rules` + `robotframework-testing` → `task-design` (QA section) → build/run scripts — optional tracker sync at each stage, see Tracker Sync |
 | postman → playwright | `postman-to-playwright` — reads `playwright-rules` + `playwright-testing` before writing/reviewing generated code (required deps, not just triggers) |
-| review / code review / critique | `review-personas` — findings hand off downstream: bugs → `debug-mantra`, design issues surfaced during `/plan` → `dev-architect`, unresolved pre-commit ambiguity → `interview` (doubt mode) |
-| scrutinize / sanity-check / second opinion on **a single plan, PR, diff, or design doc** / is this necessary | `scrutinize` |
+| review / code review / critique | `review-personas` — findings hand off downstream: bugs → `debug-mantra-workflow`, design issues surfaced during `/plan` → `dev-architect`, unresolved pre-commit ambiguity → `interview` (doubt mode) |
+| scrutinize / sanity-check / second opinion on **a single plan, PR, diff, or design doc** / is this necessary | `9arm-skills:scrutinize` |
 | analyze codebase / gap analysis / extract requirements / **what exists before building** / step by step analysis / chain of thought / lats / compare approaches / big picture thinking / วิเคราะห์ | `analysis-skills` (`ai-techniques` was merged in — CoT/LATS/AoT now live here too) |
 | new feature / architecture / unclear scope / requirements unclear | `interview` (full gather) → write LANGUAGE.md → `dev-architect` (design + graphify) → `task-design` (Dev section) → implement |
-| huge project / spans multiple sessions / too big to spec in one interview / wayfinder / chart the way | `wayfinder` (chart destination as a decision map, resolve tickets one at a time across sessions) → per resolved ticket, re-enter this table normally (`interview`/`dev-architect`/`debug-mantra`/etc.) |
+| huge project / spans multiple sessions / too big to spec in one interview / wayfinder / chart the way | `wayfinder` (chart destination as a decision map, resolve tickets one at a time across sessions) → per resolved ticket, re-enter this table normally (`interview`/`dev-architect`/`debug-mantra-workflow`/etc.) |
 | macos / swiftui / appkit / metal / swift | `macos-swiftui` — for testing `@Observable`/`@MainActor` models, chain into `xctest-macos` |
 | finance / stocks / portfolio / earnings | matching finance skill |
 | android / kotlin / jetpack compose | `android` |
@@ -112,7 +112,7 @@ Because of that constraint, **always confirm the project with the user before do
 | graph report / knowledge graph / project graph | `mcp__graphify__query_graph` |
 | ui design / wireframe / mockup / design component | `ui-designer` |
 | domain model / ubiquitous language / ddd / bounded context / glossary | `ubiquitous-language` |
-| stakeholder update / write for management / exec summary / slack message / standup | `management-talk` |
+| stakeholder update / write for management / exec summary / slack message / standup | `management-talk-workflow` |
 | launch checklist / ship to prod / pre-release / staged rollout | `shipping-launch` |
 | industry rules / compliance / healthcare design / finance design / ecommerce rules | `industry-rules` |
 | workout / exercise plan / nutrition / diet / meal plan / macro | `fitness` |
@@ -121,7 +121,7 @@ Because of that constraint, **always confirm the project with the user before do
 | kouen task / sync kouen task / check kouen tasks / task dashboard | see Kouen Task Sync section above |
 | handoff / hand off / ส่งต่องาน / pass to codex/gemini/kiro / switch agent | `handoff` |
 | ask agy / second opinion from agy / have agy try | `agy` |
-| management talk / เขียนสำหรับ management / rewrite for vp | `management-talk` |
+| management talk / เขียนสำหรับ management / rewrite for vp | `management-talk-workflow` |
 | explain / summarize / search / brainstorm / diagnose | `interview` Step 0 clears in 1 line → direct, no further skill |
 | everything else | `interview` → then pick closest skill |
 
