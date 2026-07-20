@@ -136,6 +136,7 @@ if [ -n "$five_pct" ]; then
       else
         timer=" ${mins}m"
       fi
+      timer="${timer} $(date -r "$five_reset" '+%a %-I:%M %p' 2>/dev/null || date -d "@$five_reset" '+%a %-I:%M %p' 2>/dev/null)"
     else
       timer=" reset"
     fi
