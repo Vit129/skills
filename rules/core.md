@@ -70,3 +70,11 @@ Enforced via `~/.gitconfig` (`[user]` = Vit129 default + `includeIf "gitdir:..."
 
 - `~/.kiro/**`, `~/Git/Company/**` → `Supavit Cho <supavit.cho@axonstech.com>` (work identity)
 - Everywhere else (personal projects) → `Vit129 <vitosk129@gmail.com>`
+
+### Skill/Workflow Precedence by Path
+
+`~/.claude/skills/` and `~/.claude/rules/` (this file, `routing.md`, etc.) load globally regardless of cwd — but `~/.kiro/**` and `~/Git/Company/**` have their own local skill/steering set (`~/.kiro/skills/`, `~/.kiro/steering/`) built for a company team workflow: AIDLC governance gate, Azure DevOps tracker integration, TH/EN bilingual `Labels.ts`, stricter QA-only Mode Lock, hand-off-to-human heal policy. These two sets were deliberately diverged (see [[kiro-claude-skill-porting]] memory) — company process on one side, solo personal process on the other. Silently applying the wrong side's workflow inside the other's project is the failure mode this section exists to prevent.
+
+- **Working inside `~/.kiro/**` or `~/Git/Company/**`:** that project's own `steering/`/`AGENTS.md`/local `SKILL.md` content is authoritative for QA/dev workflow. Route through its AIDLC gate, its Azure DevOps scripts, its heal policy — don't fall back to the personal `~/.claude` skill variant just because it's also loaded and sounds similar (e.g. don't apply personal's solo "1 attempt → debug-mantra-workflow" heal hand-off in a company repo that expects "hand off to the human QA/Dev").
+- **Everywhere else (personal projects):** the global `~/.claude` skill set applies normally, per `routing.md`'s Skill Map.
+- If a task's project path doesn't cleanly match either (e.g. a personal project nested inside a company workspace, or vice versa) — ask before assuming which workflow governs, rather than blending both.
