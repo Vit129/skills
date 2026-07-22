@@ -706,7 +706,7 @@ test('[TC-002] user cannot access admin panel', async ({ page }) => {
 
 ## PART 5: Locator Strategy
 
-> **See details at:** `ai-agent/rules/playwright/playwrightCodingStandards.md`
+> **See details at:** `playwright-rules/references/pw-coding-standards.md`
 
 ### Priority Order (Stability First)
 
@@ -718,6 +718,8 @@ test('[TC-002] user cannot access admin panel', async ({ page }) => {
 | 🏅 #4 | `getByPlaceholder` | Input with placeholder | ⭐⭐⭐ |
 | 🏅 #5 | `getByText` | Non-interactive text | ⭐⭐⭐ |
 | 🚫 #6 | CSS/XPath | Avoid unless absolutely necessary | ⭐ |
+
+> **Naming new `data-testid` values?** Don't invent ad-hoc — follow the convention in `references/data-testid-mapping.md`.
 
 ### 🌐 Labels File Pattern (Bi-language TH/EN)
 

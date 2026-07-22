@@ -4,14 +4,19 @@ Transform Playwright Codegen recordings (test-*.spec.ts) into proper Page Object
 
 ## Record First
 
+Codegen always needs a real (headed) browser — run it on your own machine, not in an agent's headless environment.
+
 ```bash
-npx playwright codegen <url> --target=playwright-test --output=test-recorded.spec.ts
+npx playwright codegen <url> \
+  --target playwright-test \
+  --output tests/recordings/test-recording.spec.ts \
+  --save-har=tests/recordings/[feature].har
 ```
 
-- Opens a browser + inspector — every click/fill/navigate gets recorded as raw Playwright code
+- Opens a browser + inspector — every click/fill/navigate gets recorded as raw Playwright code, and network traffic is captured into the same HAR in one pass (don't split into two separate recording runs — one combined pass catches API + UI together and avoids re-driving the same flow twice)
+- Don't filter with `--save-har-glob` — capture every request first; the agent filters down to the relevant API calls later when converting to POM
 - `--save-storage=auth.json` to also capture a logged-in session (reuse via `storageState`)
-- Save output under a scratch path (e.g. `tests/recordings/`) — it's a transform *input*, never a final spec file
-- Also need network traffic captured as HAR (for offline/CI mocking)? Keep it a separate pass — see `references/har-mocking.md` (`playwright open --save-har=`), don't combine with the recording above; mixing action-recording and full network capture in one run makes both noisy
+- Save output under a scratch path (`tests/recordings/`) — it's a transform *input*, never a final spec file; delete the raw files after conversion, before committing
 - No GUI browser available (CI/headless env) → skip codegen, write the spec by hand using the Locator priority + Pattern Transformations below as the target shape
 
 ## When to use

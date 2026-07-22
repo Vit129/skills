@@ -174,7 +174,7 @@ Run tests and capture results.
 1. Verify test file exists and Playwright is installed
 2. Run with `--reporter=line` (minimal output for AI context)
 3. Parse JSON report — total, passed, failed, error messages
-4. If failures → trigger healer (max 3 attempts, extend to 5 if >80% pass)
+4. If failures → trigger healer (**1 attempt only** — no retry loop). Still failing → stop, route to `debug-mantra-workflow` with the diagnosis.
 5. Record lessons to Reflexion Log — only technical patterns, ignore env issues
 6. Cleanup recordings: if all tests pass and webui_automation, offer to delete test-*.spec.ts recorder files
 
@@ -237,7 +237,8 @@ Checklist:
 | Flaky | Use fixed seed, mock external APIs |
 
 **Rules:**
-- Max 3 attempts per test (extend to 5 if >80% pass)
+- **1 attempt per test — no retry loop.** If the single fix attempt fails, stop immediately.
+- On failed attempt: write root cause + suggested fix to Reflexion Log, then invoke `debug-mantra-workflow` — apply a fix only after it validates a root cause, still gated by the existing "review healed assertions before committing" HITL step.
 - Never delete functions or change architecture
 - MUST run impact analysis before fixing shared code
 - Log every fix attempt (healed or failed) to Reflexion Log
@@ -282,7 +283,7 @@ Every heal attempt (success or fail) MUST be logged to the implementation plan o
 
 ## Bug Report Template (When QA cannot self-heal)
 
-When max attempts are reached and tests still fail, or the bug is a logic issue that needs to be fixed by Dev:
+When the single self-heal attempt fails, or the bug is a logic issue that needs deeper root-causing:
 
 ```markdown
 ## 🐛 Bug Report — [TS-XXX] [Test Name]

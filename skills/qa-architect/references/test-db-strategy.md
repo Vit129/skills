@@ -2,7 +2,11 @@
 
 Design DB seed/verify/cleanup strategy for test automation. Two phases: Phase 1 (user interaction) and Phase 2 (autonomous design).
 
-## Phase 1: Requirements Discovery (ask user once)
+## Phase 0: Reuse Check (before Phase 1)
+
+Check `knowledge/arch/{feature}-db-schema.md` first — if this feature already went through DB strategy design before, read the schema/service methods straight from there and skip Phase 1 entirely.
+
+## Phase 1: Requirements Discovery (ask user once, skip if Phase 0 found an existing file)
 
 **Q1:** "Feature นี้ต้องใช้ Database มั้ย?
 1) มี — พร้อมให้ SQL แล้ว
@@ -66,11 +70,12 @@ test.afterEach(async () => {
 - Add `db-scripts/` to `tsconfig.json` exclude
 
 ## Schema Consistency Check
-MUST run after logical design and before test script design:
+MUST run after logical design and before test script design (skip if Phase 0 found an existing `knowledge/arch/{feature}-db-schema.md` — schema already captured):
 1. Extract API schema — fields per endpoint with types
 2. Extract DB schema — columns per table with types
 3. Compare and report mismatches
 4. Fix mismatches before proceeding
+5. Write result to `knowledge/arch/{feature}-db-schema.md` — sections: `## Tables` (columns + types), `## Service Methods` (seed/verify/cleanup signatures), `## Dependency Order` (FK levels)
 
 ## Mocking Fallback
 When DB is unavailable during test execution:

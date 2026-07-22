@@ -8,12 +8,13 @@ Design the file structure and service layer for API test automation using Playwr
 
 ## Process
 1. Read implementation plan — extract test cases, DB strategy, existing assets, templates found
-2. Read coding rules from `playwright-rules` skill (api.md + pw-coding-standards.md) — ALL parts
-3. Analyze requirements (CoT) — count endpoints, group by domain, check DB integration, determine complexity
-4. Generate patterns (LATS) — simulate 3-4 architectures, score on reusability/maintainability/compliance, select hybrid
-5. Validate design — check against all coding standards (Constitutional AI)
-6. Self-reflect — test isolation? over-engineering? unverified assumptions about API or DB?
-7. Generate architecture — services, file structure, schema mapping, test structure blueprint, compliance checklist
+2. **Reuse API knowledge** — check `knowledge/arch/{feature}-api-spec.md` first (if it exists). If it exists, read endpoint/schema data straight from there instead of re-deriving from scratch
+3. Read coding rules from `playwright-rules` skill (api.md + pw-coding-standards.md) — ALL parts
+4. Analyze requirements (CoT) — count endpoints, group by domain, check DB integration, determine complexity
+5. Generate patterns (LATS) — simulate 3-4 architectures, score on reusability/maintainability/compliance, select hybrid
+6. Validate design — check against all coding standards (Constitutional AI)
+7. Self-reflect — test isolation? over-engineering? unverified assumptions about API or DB?
+8. Generate architecture — services, file structure, schema mapping, test structure blueprint, compliance checklist
 
 ## Architecture pattern: Multi-Service
 ```text
@@ -64,11 +65,18 @@ tests/shared-fixtures/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/
 4. What stays in layer-specific fixtures: viewport sizes, device capabilities, request headers
 
 ## Schema Consistency Check
-MUST run after logical design and before test script design:
+MUST run after logical design and before test script design (skip if `knowledge/arch/{feature}-api-spec.md` already exists — schema already captured):
 1. Extract API schema — list all request/response fields per endpoint with types
 2. Extract DB schema — list all columns per table with types
 3. Compare and report mismatches (missing fields, type mismatches, constraint mismatches)
 4. Fix mismatches before proceeding
+5. Write result to `knowledge/arch/{feature}-api-spec.md` — sections: `## Endpoints` (method + path + auth), `## Request/Response Schema` (per endpoint, with types), `## Error Cases` (status codes + conditions), `## Status` (`assumed` or `verified` — see Mock-API Prefix Rule below)
+
+## Mock-API Prefix Rule (Backend Not Ready)
+
+If a feature's real backend doesn't exist yet, don't block API test design on it — point `ApiService` at a mock endpoint under a `mock-api/` prefix (e.g. `/mock-api/orders` served by a local mock server/msw/json-server) instead of the real path (`/api/orders`), derived from the intended contract (frontend calls, design notes). Mark `knowledge/arch/{feature}-api-spec.md`'s `## Status` section `assumed` so it's visually distinct from a confirmed-real design.
+
+When the real backend lands: swap the endpoint prefix from `mock-api/` to the real path, re-run Schema Consistency Check against it, fix mismatches, then flip `## Status` to `verified`. Never leave a test asserting an exact schema against an `assumed` endpoint without that status traveling into the test file header as a TODO.
 
 ## Test Structure Blueprint
 Generate a blueprint mapping test cases to services:

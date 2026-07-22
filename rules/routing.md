@@ -111,6 +111,8 @@ Because of that constraint, **always confirm the project with the user before do
 | verify this / self-verify / verification loop | `verification-loop` |
 | graph report / knowledge graph / project graph | `mcp__graphify__query_graph` |
 | ui design / wireframe / mockup / design component | `ui-designer` |
+| #figjam | `rules/figjam-to-markdown.md` — paste text copied from a FigJam board, convert to structured markdown |
+| gen user flow | `rules/gen-userflow.md` — paste a requirement, generate a Mermaid flowchart |
 | domain model / ubiquitous language / ddd / bounded context / glossary | `ubiquitous-language` |
 | stakeholder update / write for management / exec summary / slack message / standup | `management-talk-workflow` |
 | launch checklist / ship to prod / pre-release / staged rollout | `shipping-launch` |
