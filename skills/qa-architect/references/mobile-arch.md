@@ -8,13 +8,14 @@ Design the page object structure for Android/iOS test automation using Robot Fra
 
 ## Process
 1. Read implementation plan — extract test cases, platform (Android/iOS), DB strategy, templates found
-2. Read coding rules from `robotframework-rules` skill (standards.md + android.md or ios.md)
-3. Parse XML source (if available) — extract accessibility_id, resource-id, content-desc, text
-4. Analyze requirements (CoT) — count screens, identify shared vs feature keywords
-5. Generate patterns (LATS) — simulate 3 patterns (Simple vs Hybrid vs Expert), select hybrid
-6. Validate design — AAA pattern, mandatory tags, locator priority
-7. Self-reflect — test isolation? over-abstracted keywords? assumed identical locators?
-8. Generate architecture — page objects, unified keyword mapping table, file structure
+2. Read Lessons Learnt: check `knowledge/qa/` for device/gesture behaviors (locator flakiness, timing quirks, OS-version differences)
+3. Read coding rules from `robotframework-rules` skill (standards.md + android.md or ios.md)
+4. Parse XML source (if available) — extract accessibility_id, resource-id, content-desc, text
+5. Analyze requirements (CoT) — count screens, identify shared vs feature keywords
+6. Generate patterns (LATS) — simulate 3 patterns (Simple vs Hybrid vs Expert), select hybrid
+7. Validate design — AAA pattern, mandatory tags, locator priority
+8. Self-reflect — test isolation? over-abstracted keywords? assumed identical locators?
+9. Generate architecture — page objects, unified keyword mapping table, file structure
 
 ## Architecture pattern: Page Object (Hybrid API + Mobile)
 ```text
