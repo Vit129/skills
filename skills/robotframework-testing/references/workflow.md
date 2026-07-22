@@ -59,7 +59,7 @@ Run tests and capture results.
 1. Verify .robot file exists and Robot Framework is installed
 2. Run: `robot --outputdir results --variable ENV:sit --console dotted [path]`
 3. Parse `output.xml` — total, passed, failed, error messages, screenshot paths
-4. If failures → trigger healer (max 3 attempts)
+4. If failures → trigger healer (**1 attempt only** — no retry loop). Still failing → stop, route to `debug-mantra-workflow` with the diagnosis.
 5. Record lessons to Reflexion Log — only technical patterns (custom keyboards, page source quirks, device-specific timeouts, locator stability)
 
 ## 4. Self-Healing (Reflexion Pattern)
@@ -87,7 +87,8 @@ Run tests and capture results.
 | Flaky mobile | Add small delay, re-fetch locator, device-specific wait |
 
 **Rules:**
-- Max 3 attempts per test case
+- **1 attempt per test case — no retry loop.** If the single fix attempt fails, stop immediately.
+- On failed attempt: write root cause + suggested fix to Reflexion Log, then invoke `debug-mantra-workflow` — apply a fix only after it validates a root cause.
 - Never delete keywords or tests
 - Ensure Identical Naming preserved after fix
 - Log every fix attempt to Reflexion Log
