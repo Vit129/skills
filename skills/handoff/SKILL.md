@@ -6,10 +6,9 @@ description: >
   "continue in another session", or wants to prepare the current task
   for another AI agent, tool, or a fresh session to pick up.
 argument-hint: "What should the next agent/session focus on?"
-disable-model-invocation: true
-version: 3.0.0
-last_improved: 2026-07-02
-improvement_count: 2
+version: 3.1.0
+last_improved: 2026-07-22
+improvement_count: 3
 ---
 
 # Handoff
@@ -20,9 +19,13 @@ scratch — into `agent-memory/HANDOFF.md`, a small standalone pointer file.
 Not auto-printed by any hook — the next agent reads it on request, same as
 this skill: on-demand only.
 
-Name-only invocation — never auto-triggered by keyword match, only runs when
-asked for explicitly (frontmatter `disable-model-invocation: true`, mirrored
-in `settings.json` → `skillOverrides.handoff` for this repo's own convention).
+Callable by the user typing `/handoff`, or by the AI invoking this skill
+directly when a handoff is clearly warranted (context limit approaching, end
+of session, explicit "handoff this to X" in natural language). This is a
+judgment call, not a keyword-match reflex — the routing hook fires on any
+mention of "handoff", but don't invoke this skill just because the word
+appeared in conversation. Only write the doc when there's an actual
+in-progress task worth handing off; if there isn't one, say so and skip it.
 If the user passed arguments, treat them as what the next session should
 focus on and tailor the doc accordingly.
 

@@ -59,6 +59,17 @@ tags: [language, learning, japanese, grammar]
 | Conversation role-play | `references/scenarios.md` |
 | Track progress, kanji log, weekly check-in | `references/progression.md` |
 | Grammar patterns, polite forms, past mistakes | `references/grammar-patterns.md` |
+| Real practice history (voice + text combined) | `/Users/supavit.cho/Git/Personal/Hanashi/progress.md` |
+
+## Shared Practice History (Hanashi)
+
+Voice practice happens in **Hanashi** (`/Users/supavit.cho/Git/Personal/Hanashi`), a
+native macOS conversation app that reuses this same correction methodology. Before
+giving feedback in a session, check `Hanashi/progress.md`'s **Common Mistakes
+Tracked** table (frequency/status per mistake — particle confusion, tense mixing,
+etc.) for patterns already surfaced from voice practice — apply the same focus there
+too, so text and voice practice build on one shared history instead of two
+disconnected ones. Don't edit that file from here; it's Hanashi's own log.
 
 ## Practice Modes
 

@@ -62,6 +62,17 @@ When this skill is invoked (`/english-practice`), follow these rules **in place 
 | Conversation role-play scripts | `references/scenarios.md` |
 | Track progress, rubric, weekly check-in | `references/progression.md` |
 | Grammar rules, Thai-speaker patterns | `references/grammar-patterns.md` |
+| Real practice history (voice + text combined) | `/Users/supavit.cho/Git/Personal/Hanashi/progress.md` |
+
+## Shared Practice History (Hanashi)
+
+Voice practice happens in **Hanashi** (`/Users/supavit.cho/Git/Personal/Hanashi`), a
+native macOS conversation app that reuses this same correction methodology. Before
+giving feedback in a session, check `Hanashi/progress.md`'s **Common Mistakes
+Tracked** table (frequency/status per mistake) for patterns already surfaced from
+voice practice — apply the same focus there too, so text and voice practice build on
+one shared history instead of two disconnected ones. Don't edit that file from here;
+it's Hanashi's own log.
 
 ## Practice Modes
 
