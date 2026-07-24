@@ -10,9 +10,9 @@ description: >
   Non-coding tasks (research, analysis, finance, fitness, accounting)
   use this memory system alongside coding tasks — it is cross-domain.
 credit: Inspired by Hermes Agent (https://github.com/NousResearch/hermes-agent) and Memento-Skills (https://github.com/memento-teams/memento-skills) — adapted into our own session flow + knowledge pipeline pattern
-version: 2.0.0
-last_improved: 2026-06-17
-improvement_count: 1
+version: 2.1.0
+last_improved: 2026-07-24
+improvement_count: 2
 ---
 
 # Agent Memory
@@ -114,6 +114,7 @@ The script is idempotent (safe to run multiple times) and creates all required f
 - Subagent delegation: use when 5+ playbook cases OR 3+ knowledge files same domain
 - Drafts are ephemeral — deleted after Save/Discard Gate evaluation
 - Never store secrets, credentials, or PII in any memory file
+- Cross-reference with `[[relative/path/without/extension]]` when writing or promoting a `knowledge/` file that genuinely relates to another knowledge file or plan (e.g. a bug lesson that traces back to the feature's `plans/[FEATURE]/design.md`). Link by path since `knowledge/` files have no separate name-slug field (unlike the global auto-memory system). Only link a real relation — a `[[link]]` to a file that doesn't exist yet is fine (marks something worth writing later), but don't force a link between unrelated cases just to have one.
 
 ## Closed Learning Loops
 

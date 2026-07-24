@@ -30,3 +30,12 @@ if [[ -d "$CLAUDE_MEM" ]]; then
     sep
   fi
 fi
+
+# ── agent-memory/maintenance.log: pending scheduled maintenance report ──
+MAINT_LOG="$PROJ/agent-memory/maintenance.log"
+if [[ -s "$MAINT_LOG" ]]; then
+  echo "## Pending memory maintenance report (agent-memory/maintenance.log)"
+  cat "$MAINT_LOG"
+  echo "(Apply genuine archive/crystallize candidates per agent-memory SKILL.md rules, then clear this log.)"
+  sep
+fi
