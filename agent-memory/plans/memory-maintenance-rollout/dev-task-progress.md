@@ -16,13 +16,18 @@ report-only in practice.
 - [x] Commit + push all touched repos (`~/.claude`, Hanashi, Accountant-Learning,
       Fitness-Tracker, QA-Automation-Coding-Course) (2026-07-24)
 
-## Next (blocked on time, not on anything technical)
+## Next (waiting on real Sunday data, not blocked on anything technical)
 
-- [ ] Review Hanashi's first real Sunday run — check `maintenance.log` content, check
-      `session-start.sh` surfaces it correctly, check no false positives
-- [ ] Review kouen-terminal's first real Sunday run — same, plus confirm the
-      `[[feedback_infoplist_staging]]` dangling link gets a human decision (fix or
-      remove the reference) during that session
+- [ ] Review Hanashi's first real Sunday run — check `maintenance.log` content, and
+      **check whether PLAYBOOK/knowledge files actually got edited** (not just
+      reasoning logged) — this is the open question from `design.md`: our own
+      testing (nested inside this background-job session) got unattended writes
+      denied, but that may not represent how a plain launchd process behaves.
+      Update `design.md`'s verdict once this is known either way.
+- [ ] Review kouen-terminal's first real Sunday run — same file-change check, plus
+      confirm the `[[feedback_infoplist_staging]]` dangling link gets a human
+      decision (fix or remove the reference) if the apply stage didn't already
+      handle it
 - [ ] Fix the one confirmed dangling link: `kouen-terminal/agent-memory/COMPLETED-TASKS-ARCHIVE.md`
       references `[[feedback_infoplist_staging]]` — no such file exists anywhere in
       the project. Needs a human to decide: was it renamed, or should the reference
