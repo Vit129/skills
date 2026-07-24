@@ -20,3 +20,4 @@
 | File | Goal | Created | Status |
 |------|------|---------|--------|
 | [understand-anything-graphify-plugin-plan.md](plans/understand-anything-graphify-plugin-plan.md) | Graphify plugin integration with Understand-Anything | 2026-06-13 | draft |
+| [memory-maintenance-rollout/design.md](plans/memory-maintenance-rollout/design.md) | Scheduled agent-memory maintenance (link-check, archive/crystallize report) rolled out project by project | 2026-07-24 | in-progress |
