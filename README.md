@@ -10,11 +10,12 @@ Personal skill + memory system for Claude Code.
   settings.json          — hooks, skillOverrides, MCP
   rules/                 — core, routing, coding (loaded on-demand)
   agent-memory/
-    USER-PROFILE.md      — identity + preferences (always-on)
-    LANGUAGE.md           — active task state
-    MEMORY.md            — decisions + lessons (grep only)
-    knowledge/           — promoted patterns (≥2 features)
-    plans/               — feature planning artifacts ([feature]/LANGUAGE.md, tasks, outputs)
+    PLAYBOOK.md          — problem-resolution cases, scored (Applied/Prevented)
+    INDEX.md             — catalog of knowledge/ and plans/
+    SKILL-LOG.md         — skill improvement proposals (append-only)
+    knowledge/           — promoted patterns (Applied >= 3, or 3+ same-domain cases)
+    plans/               — feature planning artifacts ([feature]/design.md,
+                            [feature]/GLOSSARY.md, dev-task-progress.md, outputs)
   hooks/                 — UserPromptSubmit, PostToolUse, Stop
   skills/{name}/
     SKILL.md             — trigger, format, routing (~60-90 lines)
@@ -36,10 +37,11 @@ This keeps `Skill(handoff)` on-demand only (see `skills/handoff/SKILL.md`) — w
 
 | Phase | Action |
 |-------|--------|
-| Task start | Read `LANGUAGE.md`; grep `knowledge/` for patterns |
-| During | Update `LANGUAGE.md` inline |
-| Task end | Rewrite `LANGUAGE.md` → idle; append decisions to `MEMORY.md` |
-| Promote | Pattern used ≥2 features → `knowledge/{domain}.md` |
+| Task start | Search `PLAYBOOK.md` (trigger keywords); read the active feature's `dev-task-progress.md`/`qa-task-progress.md` on continuation |
+| Problem resolved | Draft a case (trigger, fix, domain, outcome), append to `PLAYBOOK.md` |
+| During a new feature/interview | Resolve domain terms inline into `plans/[feature]/GLOSSARY.md` — never batch (see `skills/interview/references/domain-modeling.md`) |
+| Case reused | Applied++/Prevented++ on the `PLAYBOOK.md` row |
+| Promote | `PLAYBOOK.md` row reaches Applied >= 3, or 3+ cases share a domain → `knowledge/{domain}.md` |
 
 ## Feature Planning Artifacts
 
@@ -47,8 +49,9 @@ All artifacts live in `agent-memory/` — same standard for every project:
 
 | Artifact | Location |
 |---|---|
-| Decisions | `MEMORY.md` Decisions section |
+| Problem-resolution cases | `PLAYBOOK.md` |
+| Domain glossary | `plans/[feature]/GLOSSARY.md` (per-feature) or project-root `GLOSSARY.md` (whole-project terms) |
 | Dev/QA tasks | `plans/[feature]/dev-task-progress.md` / `qa-task-progress.md` |
+| Design | `plans/[feature]/design.md` |
 | Outputs | `plans/[feature]/outputs/` |
-| Progress | `LANGUAGE.md` Now section |
-| History | `LANGUAGE.md` Completed section |
+| Durable patterns | `knowledge/{domain}.md`, cataloged in `INDEX.md` |

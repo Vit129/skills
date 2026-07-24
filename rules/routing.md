@@ -9,8 +9,8 @@
 When the Skill Map entry is a chain (`A → B → C → implement`), execute the whole chain in one pass — do not stop after the first skill and wait for the user to say "continue" or "run the full pipeline." A skill finishing and printing a summary (e.g. interview's "Ready for `/plan`") is a handoff to the next stage, not a checkpoint to pause at.
 
 - Only pause mid-chain for a **genuine unknown** — something no amount of reading code/docs resolves, answered via `AskUserQuestion` inline within a stage.
-- Finishing a stage's own output (LANGUAGE.md, design.md, task list) is not itself a reason to stop — immediately invoke the next skill in the chain.
-- If a stage is legitimately not applicable (e.g. no new domain term → no LANGUAGE.md write), say so in one line and proceed — don't treat "nothing to do here" as a stopping point either.
+- Finishing a stage's own output (GLOSSARY.md, design.md, task list) is not itself a reason to stop — immediately invoke the next skill in the chain.
+- If a stage is legitimately not applicable (e.g. no new domain term → no GLOSSARY.md write), say so in one line and proceed — don't treat "nothing to do here" as a stopping point either.
 - Exception: stop before an action with real-world blast radius (destructive ops, writes to shared/external state, git push, etc.) per the "Executing actions with care" rules — that's a different gate, not a pipeline-stage pause.
 - Applies equally to Dev and QA chains — `test-scenario → qa-architect → playwright-rules/robotframework-rules + playwright-testing/robotframework-testing → task-design (QA section) → build/run scripts` runs end-to-end the same as the Dev chain does. Finishing test scenarios/architecture is a handoff into the next stage, not a stop.
   - Skip `test-scenario` only if a `testScenarioPbi{ID}-{platform}.md` already exists for this feature (check before invoking) — `qa-architect` reads that file as its mandatory input either way; don't regenerate scenarios that already exist, but don't skip straight to `qa-architect` on a brand-new feature with no scenario file either.
@@ -93,7 +93,7 @@ Because of that constraint, **always confirm the project with the user before do
 | review / code review / critique | `review-personas` — findings hand off downstream: bugs → `debug-mantra-workflow`, design issues surfaced during `/plan` → `dev-architect`, unresolved pre-commit ambiguity → `interview` (doubt mode) |
 | scrutinize / sanity-check / second opinion on **a single plan, PR, diff, or design doc** / is this necessary | `9arm-skills:scrutinize` |
 | analyze codebase / gap analysis / extract requirements / **what exists before building** / step by step analysis / chain of thought / lats / compare approaches / big picture thinking / วิเคราะห์ | `analysis-skills` (`ai-techniques` was merged in — CoT/LATS/AoT now live here too) |
-| new feature / architecture / unclear scope / requirements unclear | `interview` (full gather) → write LANGUAGE.md → `dev-architect` (design + graphify) → `task-design` (Dev section) → implement |
+| new feature / architecture / unclear scope / requirements unclear | `interview` (full gather) → write GLOSSARY.md → `dev-architect` (design + graphify) → `task-design` (Dev section) → implement |
 | huge project / spans multiple sessions / too big to spec in one interview / wayfinder / chart the way | `wayfinder` (chart destination as a decision map, resolve tickets one at a time across sessions) → per resolved ticket, re-enter this table normally (`interview`/`dev-architect`/`debug-mantra-workflow`/etc.) |
 | macos / swiftui / appkit / metal / swift | `macos-swiftui` — for testing `@Observable`/`@MainActor` models, chain into `xctest-macos` |
 | finance / stocks / portfolio / earnings | matching finance skill |

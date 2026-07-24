@@ -1,7 +1,7 @@
 ---
 name: ubiquitous-language
 description: >
-  Post-hoc extraction of domain terms from the current conversation into LANGUAGE.md.
+  Post-hoc extraction of domain terms from the current conversation into GLOSSARY.md.
   Triggers: "extract glossary", "build glossary", "scan terms", "ubiquitous language",
   "define domain terms", "harden terminology", "domain model", "DDD".
 version: 1.0.0
@@ -9,7 +9,7 @@ version: 1.0.0
 
 # Ubiquitous Language
 
-Scan the current conversation for domain terms, resolve ambiguities, and write canonical definitions to LANGUAGE.md.
+Scan the current conversation for domain terms, resolve ambiguities, and write canonical definitions to GLOSSARY.md.
 
 ## Process
 
@@ -17,9 +17,9 @@ Scan the conversation for domain-relevant nouns, verbs, and concepts (skip gener
 
 Be opinionated. When multiple words exist for the same concept, pick the best one and list the rest as aliases to avoid. Flag conflicts explicitly — never silently pick a side.
 
-Update LANGUAGE.md following the `domain-modeling` reference (glossary only, no impl details) — merge into an existing file or create a new one.
+Update GLOSSARY.md following the `domain-modeling` reference (glossary only, no impl details) — merge into an existing file or create a new one.
 
-LANGUAGE.md format:
+GLOSSARY.md format:
 ```markdown
 # [Project] Domain Language
 
@@ -39,7 +39,7 @@ LANGUAGE.md format:
 Report inline:
 ```
 Extracted: N terms
-Added to LANGUAGE.md: [list]
+Added to GLOSSARY.md: [list]
 Updated: [list]
 Flagged ambiguities: [list]
 Aliases removed: [list]
@@ -47,7 +47,7 @@ Aliases removed: [list]
 
 ## Rules
 
-- **Glossary only.** LANGUAGE.md gets term definitions — no implementation details, no specs, no decision notes.
+- **Glossary only.** GLOSSARY.md gets term definitions — no implementation details, no specs, no decision notes.
 - **One sentence per definition.** Define what it IS, not what it does.
 - **Show relationships.** Use bold term names, express cardinality where obvious.
 - **Group by subdomain** when natural clusters emerge. One table is fine if everything is cohesive.
@@ -55,4 +55,4 @@ Aliases removed: [list]
 
 ## Re-running
 
-When invoked again in the same session, read the existing LANGUAGE.md first, incorporate new terms from the subsequent discussion, update evolved definitions, and re-flag any new ambiguities.
+When invoked again in the same session, read the existing GLOSSARY.md first, incorporate new terms from the subsequent discussion, update evolved definitions, and re-flag any new ambiguities.
