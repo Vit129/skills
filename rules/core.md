@@ -71,6 +71,10 @@ Enforced via `~/.gitconfig` (`[user]` = Vit129 default + `includeIf "gitdir:..."
 - `~/.kiro/**`, `~/Git/Company/**` → `Supavit Cho <supavit.cho@axonstech.com>` (work identity)
 - Everywhere else (personal projects) → `Vit129 <vitosk129@gmail.com>`
 
+### No-Touch Paths
+
+- `~/Git/Personal/9arm-skills/**` — read-only, never edit/add/commit/push anything here, no exceptions. It's a clone of a third party's repo (`thananon/9arm-skills.git`, not owned by this user — push already confirmed denied with 403). A prior sweep committed `graphify-out/` here by mistake; reverted 2026-07-25. Do not regenerate graphify output, do not stage files, do not commit locally even if not pushing — treat it as if it weren't writable at all.
+
 ### Skill/Workflow Precedence by Path
 
 `~/.claude/skills/` and `~/.claude/rules/` (this file, `routing.md`, etc.) load globally regardless of cwd — but `~/.kiro/**` and `~/Git/Company/**` have their own local skill/steering set (`~/.kiro/skills/`, `~/.kiro/steering/`) built for a company team workflow: AIDLC governance gate, Azure DevOps tracker integration, TH/EN bilingual `Labels.ts`, stricter QA-only Mode Lock, hand-off-to-human heal policy. These two sets were deliberately diverged (see [[kiro-claude-skill-porting]] memory) — company process on one side, solo personal process on the other. Silently applying the wrong side's workflow inside the other's project is the failure mode this section exists to prevent.
