@@ -106,7 +106,10 @@ merge_skills_dir() {
   fi
 
   mkdir -p "$dst"
-  rsync -a --exclude="*.DS_Store" "$src/" "$dst/" > /dev/null 2>&1
+  # candidates/ is shadow-mode skill staging (unverified, write-only) — never
+  # propagate to Codex/Gemini/Agents until a human promotes a candidate out
+  # of it via skill-creator.
+  rsync -a --exclude="*.DS_Store" --exclude="candidates/" "$src/" "$dst/" > /dev/null 2>&1
   local count
   count=$(find "$dst" -type f | wc -l | tr -d ' ')
   echo -e "    ${GREEN}✅ $label → $dst ($count files, merged)${NC}"
