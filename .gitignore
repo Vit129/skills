@@ -48,4 +48,6 @@ skills/**/.claude/
 .claude/worktrees/
 .claude/settings.local.json
 agent-memory/skill-usage.log
+agent-memory/session-search.db
+agent-memory/session-search.db-*
 hooks/__pycache__/

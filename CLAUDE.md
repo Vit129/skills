@@ -70,6 +70,13 @@ Task progress lives in `agent-memory/plans/[FEATURE]/dev-task-progress.md` / `qa
 
 ~/.claude/scripts/sync-all.sh
 # Sync skills/rules/commands from ~/.claude/ → Codex + Gemini
+
+python3 ~/.claude/scripts/session_search.py "<query>" [--project SLUG] [--limit N]
+# Full-text search across every past session transcript, all projects (auto-reindexes
+# incrementally first). The one real gap found comparing against Hermes Agent's FTS5
+# cross-session recall — native SQLite FTS5 addition, not the Hermes runtime itself.
+# Use when the user references something from an earlier session you don't have in
+# context ("we talked about this before", "what did we decide about X last time").
 ```
 
 @RTK.md
