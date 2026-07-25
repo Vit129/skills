@@ -40,11 +40,19 @@ fi
 
 echo ""
 
-# ── 3. Weekly skill eval check (global, not per-project) ──────────────────
+# ── 3. Daily skill eval check (global, not per-project) ───────────────────
 EVAL_SCHEDULER="$HOME/.claude/scripts/eval-scheduler.sh"
 if [[ -f "$EVAL_SCHEDULER" ]]; then
   echo "▸ Skill eval"
   bash "$EVAL_SCHEDULER" 2>&1 | sed 's/^/  /' || true
+  echo ""
+fi
+
+# ── 4. Daily skill-candidate check (global, not per-project) ──────────────
+CANDIDATE_SCHEDULER="$HOME/.claude/scripts/candidate-scheduler.sh"
+if [[ -f "$CANDIDATE_SCHEDULER" ]]; then
+  echo "▸ Skill candidates"
+  bash "$CANDIDATE_SCHEDULER" 2>&1 | sed 's/^/  /' || true
   echo ""
 fi
 
