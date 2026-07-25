@@ -24,7 +24,7 @@ from pathlib import Path
 
 CLAUDE_HOME = Path.home() / ".claude"
 PROJECTS_DIR = CLAUDE_HOME / "projects"
-DB_PATH = CLAUDE_HOME / "agent-memory" / "session-search.db"
+DB_PATH = CLAUDE_HOME / "agent-memory" / ".state" / "session-search.db"
 
 
 def _extract_text(entry: dict) -> str | None:

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# End-of-session: update INDEX.md + graphify.
+# End-of-session: update index.md + graphify.
 # Usage: session-end.sh [project-dir]
 set -euo pipefail
 
@@ -11,7 +11,7 @@ echo ""
 
 # ── 1. Checklist: what the AI must do before running this ─────────────────
 echo "▸ Memory update checklist (AI task — do before running this script)"
-echo "  [ ] Update agent-memory/INDEX.md     → if new plans/ or knowledge/ files added"
+echo "  [ ] Update agent-memory/index.md     → if new plans/ or knowledge/ files added"
 echo ""
 
 # ── 2. Update graphify for current project ────────────────────────────────

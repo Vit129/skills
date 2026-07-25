@@ -50,4 +50,5 @@ skills/**/.claude/
 agent-memory/skill-usage.log
 agent-memory/session-search.db
 agent-memory/session-search.db-*
+agent-memory/.state/
 hooks/__pycache__/

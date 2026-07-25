@@ -1,7 +1,7 @@
 # Plan: Understand-Anything + Graphify Plugin Integration
 
 Date: 2026-06-13
-Status: draft
+Status: STALLED — no activity since 2026-06, re-scope or archive
 Owner: agent-memory/plans
 
 ## Decision

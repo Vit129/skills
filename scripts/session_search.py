@@ -13,7 +13,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-DB_PATH = Path.home() / ".claude" / "agent-memory" / "session-search.db"
+DB_PATH = Path.home() / ".claude" / "agent-memory" / ".state" / "session-search.db"
 INDEXER = Path(__file__).parent / "session_search_index.py"
 
 

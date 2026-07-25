@@ -11,7 +11,7 @@ bash ~/.claude/scripts/session-start.sh [project-dir]
 
 - New task → read `rules/coding.md` before writing code
 - Continuation ("ทำต่อ", "continue") → read the feature's `agent-memory/plans/[FEATURE]/dev-task-progress.md` or `qa-task-progress.md` → resume at first unchecked task
-- Search/plan → read `INDEX.md` on-demand
+- Search/plan → read `index.md` on-demand
 
 ---
 
@@ -19,7 +19,7 @@ bash ~/.claude/scripts/session-start.sh [project-dir]
 
 ```bash
 bash ~/.claude/scripts/session-end.sh [project-dir]
-# 1. Update INDEX.md if new plans/knowledge files added
+# 1. Update index.md if new plans/knowledge files added
 # 2. Update graphify + GRAPH_SUMMARY (current project, if git HEAD changed)
 ```
 
@@ -50,7 +50,7 @@ Graphified projects auto-load `@graphify-out/GRAPH_SUMMARY.md` via their own CLA
 
 ## Memory Lifecycle
 
-Task progress lives in `agent-memory/plans/[FEATURE]/dev-task-progress.md` / `qa-task-progress.md` (per-feature, checkbox-tracked). Durable lessons: `knowledge/cases/` + `PLAYBOOK.md` index; domain patterns → `knowledge/{domain}.md`.
+Task progress lives in `agent-memory/plans/[FEATURE]/dev-task-progress.md` / `qa-task-progress.md` (per-feature, checkbox-tracked). Durable lessons: `knowledge/cases/` + `playbook.md` index; domain patterns → `knowledge/{domain}.md`.
 
 **Skill-candidate shadow capture** (`~/.claude/skills/candidates/`, see its `README.md` for the format): when solving something took 2+ real attempts (wrong approach, corrected) AND the pattern is genuinely reusable — not project-specific — write a candidate file there instead of just a feedback memory. Write-only right now: nothing reads this directory automatically (no context loading, no auto-promotion), and `sync-all.sh` excludes it from Codex/Gemini propagation. This produces real examples toward `routing.md`'s existing 3x-occurrence promotion bar — it does not lower or replace that bar. Promotion to a real skill stays manual (`skill-creator`), same as today.
 

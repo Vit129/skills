@@ -1,5 +1,7 @@
 # Plan: Install mobilewright (deferred — not currently installed)
 
+Status: REJECTED — decided against implementation, kept for reference
+
 ## Context
 
 Researched `mobilewright` (Playwright-style mobile test framework, TS) + `mobilecli` (Go device-control backend) as an alternative to Robot Framework+AppiumLibrary for native iOS/Android app testing. Conclusion: good fit for Swift UIKit/SwiftUI, Kotlin Compose/Views, RN, MAUI, KMP, Cordova/Capacitor, NativeScript — **not** Flutter (pending upstream), **not** macOS desktop (harness-terminal stays on RF+HarnessUILibrary).
