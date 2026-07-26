@@ -64,4 +64,12 @@ if [[ -f "$DECAY_SCHEDULER" ]]; then
   echo ""
 fi
 
+# ── 6. Weekly build/cache cleanup check (global, not per-project) ─────────
+BUILD_CACHE_SCHEDULER="$HOME/.claude/scripts/build-cache-scheduler.sh"
+if [[ -f "$BUILD_CACHE_SCHEDULER" ]]; then
+  echo "▸ Build/cache cleanup"
+  bash "$BUILD_CACHE_SCHEDULER" 2>&1 | sed 's/^/  /' || true
+  echo ""
+fi
+
 echo "═══ done ════════════════════════════════════════"

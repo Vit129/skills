@@ -1,0 +1,3 @@
+# BEGIN claude-managed (build-cache-scheduler)
+0 9 * * 1 $HOME/.claude/scripts/build-cache-scheduler.sh >> $HOME/.claude/agent-memory/build-cache-checks/cron.log 2>&1
+# END claude-managed (build-cache-scheduler)

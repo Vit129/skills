@@ -95,6 +95,25 @@ uv run ~/.claude/scripts/memory_vector_search.py "<query>" [--limit N]
 # files untouched >90d (mtime proxy, review not auto-action) and PLAYBOOK.md rows
 # already meeting its own documented archive rule (Applied+Prevented >= 5).
 # Never auto-deletes/auto-archives — output is a flag list for human/AI review.
+
+~/.claude/scripts/clean-build-cache.sh [root-dir] [--apply] [--days N]
+# Find build/cache dirs under a projects root (default ~/Git/Personal): node_modules,
+# dist, build, .next, .nuxt, .turbo, .cache, .venv, .build, __pycache__, .pytest_cache,
+# *.egg-info, DerivedData. Dry-run by default (lists path + size) — pass --apply to
+# actually delete. Skips 9arm-skills (No-Touch Paths, third-party repo).
+
+~/.claude/scripts/build-cache-scheduler.sh [--force]
+# Weekly wrapper around clean-build-cache.sh (wired into session-end.sh) — same
+# daily-cadence-state-file pattern as eval/candidate/decay schedulers but 7-day
+# interval. Runs the dry-run scan and logs the report; never auto-deletes — review
+# the report, then run clean-build-cache.sh --apply by hand.
+
+~/.claude/scripts/install-cron.sh
+# Installs/refreshes the real OS crontab entry for build-cache-scheduler.sh (runs it
+# weekly independent of any Claude Code session — session-end.sh only fires when a
+# session actually ends). Idempotent (marker-delimited block in scripts/crontab.claude,
+# safe to re-run, never touches unrelated personal crontab lines). New machine setup:
+# clone this repo, run this script once — crontab entry is portable, no manual re-add.
 ```
 
 @RTK.md
