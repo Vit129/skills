@@ -1,9 +1,13 @@
 #!/bin/bash
 # Memory Decay Scheduler
-# Daily staleness sweep of agent-memory/*.md, agent-memory/knowledge/**/*.md, and
-# skills/candidates/*.md — flags files untouched past STALE_DAYS (mtime proxy, no
-# per-fact timestamp exists) and PLAYBOOK.md rows that already meet the file's own
-# documented archive rule (Applied+Prevented >= 5) so they can be reviewed/archived.
+# Daily staleness sweep of agent-memory/*.md + agent-memory/knowledge/**/*.md
+# (global ~/.claude AND every project under ~/Git/Personal/* that has its own
+# agent-memory/ dir, auto-discovered — a new project just needs an agent-memory/
+# dir to be picked up next run, no manual registration) plus skills/candidates/*.md
+# (global only — no project has its own candidates staging dir). Flags files
+# untouched past STALE_DAYS (mtime proxy, no per-fact timestamp exists) and
+# PLAYBOOK.md/playbook.md rows that already meet the file's own documented
+# archive rule (Applied+Prevented >= 5) so they can be reviewed/archived.
 # Same daily-cadence-state-file pattern as eval-scheduler.sh / candidate-scheduler.sh.
 # Usage: ./memory-decay-scheduler.sh [--force]
 # Returns exit 0 + report if due, exit 1 if not due.
@@ -18,8 +22,10 @@ CHECK_INTERVAL_DAYS=1
 LOG_RETENTION_DAYS=7
 STALE_DAYS=90
 
-AGENT_MEMORY="$HOME/.claude/agent-memory"
 CANDIDATES_DIR="$HOME/.claude/skills/candidates"
+PROJECTS_ROOT="$HOME/Git/Personal"
+# no-touch: third-party repo, read-only per rules/core.md — never scan it
+SKIP_PROJECTS=(9arm-skills)
 
 mkdir -p "$LOG_DIR"
 
@@ -42,26 +48,27 @@ fi
 
 LOG_FILE="$LOG_DIR/${TODAY}.md"
 
-{
-  echo "DECAY_CHECK_DUE"
-  echo "---"
-  echo "## Memory Decay Snapshot ($TODAY)"
-  echo ""
+# scan_project <label> <agent-memory-dir>
+scan_project() {
+  local label="$1" mem="$2"
+  [ -d "$mem" ] || return
 
-  echo "### Files untouched >${STALE_DAYS}d (mtime proxy — review, don't assume wrong):"
-  stale_count=0
+  echo "### $label"
+  echo ""
+  echo "Files untouched >${STALE_DAYS}d (mtime proxy — review, don't assume wrong):"
+  local stale_count=0
   while IFS= read -r f; do
     [ -z "$f" ] && continue
-    echo "- ${f#$HOME/.claude/}"
+    echo "- ${f#$HOME/}"
     stale_count=$((stale_count + 1))
-  done < <(find "$AGENT_MEMORY" "$CANDIDATES_DIR" -maxdepth 3 -name "*.md" ! -name "README.md" -mtime "+${STALE_DAYS}" 2>/dev/null)
+  done < <(find "$mem" -maxdepth 3 -name "*.md" ! -name "README.md" -mtime "+${STALE_DAYS}" 2>/dev/null)
   [ "$stale_count" -eq 0 ] && echo "_(none)_"
 
   echo ""
-  echo "### PLAYBOOK.md rows meeting archive rule (Applied+Prevented >= 5):"
-  playbook="$AGENT_MEMORY/PLAYBOOK.md"
-  archive_count=0
-  if [ -f "$playbook" ]; then
+  echo "PLAYBOOK rows meeting archive rule (Applied+Prevented >= 5):"
+  local playbook archive_count=0
+  playbook=$(find "$mem" -maxdepth 1 -iname "playbook.md" | head -1)
+  if [ -n "$playbook" ] && [ -f "$playbook" ]; then
     while IFS='|' read -r _ id trigger fix domain outcome applied prevented _; do
       id=$(echo "$id" | xargs)
       [[ "$id" != CASE-* ]] && continue
@@ -77,8 +84,37 @@ LOG_FILE="$LOG_DIR/${TODAY}.md"
     done < "$playbook"
   fi
   [ "$archive_count" -eq 0 ] && echo "_(none)_"
-
   echo ""
+}
+
+{
+  echo "DECAY_CHECK_DUE"
+  echo "---"
+  echo "## Memory Decay Snapshot ($TODAY)"
+  echo ""
+
+  scan_project "Global (~/.claude)" "$HOME/.claude/agent-memory"
+
+  echo "### Global skill-candidates untouched >${STALE_DAYS}d:"
+  cand_count=0
+  while IFS= read -r f; do
+    [ -z "$f" ] && continue
+    echo "- ${f#$HOME/}"
+    cand_count=$((cand_count + 1))
+  done < <(find "$CANDIDATES_DIR" -maxdepth 1 -name "*.md" ! -name "README.md" -mtime "+${STALE_DAYS}" 2>/dev/null)
+  [ "$cand_count" -eq 0 ] && echo "_(none)_"
+  echo ""
+
+  for proj_dir in "$PROJECTS_ROOT"/*/; do
+    proj=$(basename "$proj_dir")
+    skip=0
+    for s in "${SKIP_PROJECTS[@]}"; do
+      [[ "$proj" == "$s" ]] && skip=1 && break
+    done
+    [ "$skip" -eq 1 ] && continue
+    scan_project "$proj" "${proj_dir}agent-memory"
+  done
+
   echo "## Result"
   echo ""
   echo "_(review above — this is a flag list, not an action list. Archive/update manually, or ask before bulk-editing.)_"

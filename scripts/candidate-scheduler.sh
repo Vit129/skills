@@ -3,6 +3,12 @@
 # Daily snapshot of ~/.claude/skills/candidates/ (shadow-capture staging, see
 # skills/candidates/README.md), logged and rotated the same way
 # eval-scheduler.sh handles skill eval checks.
+#
+# Global-only by design, not an oversight: the candidate/promotion pipeline
+# (routing.md's 3x-occurrence bar -> skill-creator) only ever produces global
+# skills, and no project under ~/Git/Personal/* has its own candidates/ dir
+# (checked 2026-07-26) — there is nothing per-project to scan. Contrast with
+# memory-decay-scheduler.sh, which DOES walk every project's agent-memory/.
 # Usage: ./candidate-scheduler.sh [--force]
 # Returns exit 0 + snapshot if due, exit 1 if not due.
 #
