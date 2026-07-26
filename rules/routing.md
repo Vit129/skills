@@ -15,8 +15,17 @@ When the Skill Map entry is a chain (`A → B → C → implement`), execute the
 - Applies equally to Dev and QA chains — `test-scenario → qa-architect → playwright-rules/robotframework-rules + playwright-testing/robotframework-testing → task-design (QA section) → build/run scripts` runs end-to-end the same as the Dev chain does. Finishing test scenarios/architecture is a handoff into the next stage, not a stop.
   - Skip `test-scenario` only if a `testScenarioPbi{ID}-{platform}.md` already exists for this feature (check before invoking) — `qa-architect` reads that file as its mandatory input either way; don't regenerate scenarios that already exist, but don't skip straight to `qa-architect` on a brand-new feature with no scenario file either.
 - Applies to the bug lifecycle chain too — `debug-mantra → regression test → post-mortem → agent-memory` runs through to lesson-capture, not just "fix landed." Don't stop at a validated fix; write the regression test and offer the post-mortem in the same pass.
-  - Exception within this one chain: `debug-mantra-workflow`'s own **Human-in-the-Loop Points** (repro confirmed, hypothesis picked, fix approved, fix validated) are real gates by design — hypothesis selection needs human judgment, a proposed fix needs sign-off before landing. Don't collapse those into "run to completion" either; they're not the same as the between-skill "should I continue" anti-pattern this section targets.
+  - Exception within this one chain: `debug-mantra-workflow`'s own **Human-in-the-Loop Points** (repro confirmed, hypothesis picked, fix approved, fix validated) are real gates by design — hypothesis selection needs human judgment, a proposed fix needs sign-off before landing. Don't collapse those into "run to completion" either; they're not the same as the between-skill "should I continue" anti-pattern this section targets. Each of these gates persists across a session boundary via `agent-memory/GATE-STATE.md` (see `debug-mantra-workflow/SKILL.md`) — if the session ends before the user answers, the next session resumes at the gate instead of restarting the mantra.
   - "Runs through to lesson-capture" is proportionate per `9arm-skills:post-mortem`'s own When-NOT-to-Use, not unconditional — a trivial fix closes at the regression test/PR description, no post-mortem manufactured for it.
+
+## Mid-Chain Re-Routing
+
+The Skill Map row is picked once at intake from the signal available then — that signal can turn out wrong once real evidence comes in mid-chain (a report that reads `frontend-dev` turns out, three steps in, to be a backend API bug). Finishing the wrong chain because it was already started is not "running to completion," it's sunk-cost.
+
+- If mid-chain evidence shows the task actually belongs to a different Skill Map row, stop the current chain and re-enter routing with the corrected signal — don't force the original chain to a close first.
+- Re-entry doesn't need a fresh full `interview` elicitation if the new signal is unambiguous (e.g. the actual bug is plainly in `server/api/`, not the component the report named) — jump straight to the correct row. Re-run `interview` Step 0 only if the corrected scope is itself unclear.
+- State the re-route in one line before switching ("actually a backend issue, not frontend — switching to `backend-dev`") — this is a visible correction, not a silent restart.
+- This is not license to second-guess a correctly-picked chain over minor friction — only re-route on a genuine signal mismatch (wrong domain/platform/skill entirely), not because a step is harder than expected.
 
 ## Cross-Project Stack Detection
 

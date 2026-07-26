@@ -31,6 +31,19 @@ if [[ -d "$CLAUDE_MEM" ]]; then
   fi
 fi
 
+# ── agent-memory/GATE-STATE.md: paused HITL gates from a prior session ──
+GATE_STATE="$PROJ/agent-memory/GATE-STATE.md"
+if [[ -f "$GATE_STATE" ]] && grep -q "^- Status: OPEN *$" "$GATE_STATE" 2>/dev/null; then
+  echo "## ⏸ Paused gate(s) — agent-memory/GATE-STATE.md"
+  awk 'BEGIN{RS="## GATE-"; ORS=""} NR>1{
+    open=0; n=split($0, lines, "\n")
+    for (i=1; i<=n; i++) if (lines[i] ~ /^- Status: OPEN[ \t]*$/) open=1
+    if (open) print "## GATE-" $0
+  }' "$GATE_STATE"
+  echo "(Resume the named skill at the stated gate — don't restart from scratch. Mark RESOLVED once the question is answered.)"
+  sep
+fi
+
 # ── agent-memory/maintenance.log: pending scheduled maintenance report ──
 MAINT_LOG="$PROJ/agent-memory/maintenance.log"
 if [[ -s "$MAINT_LOG" ]]; then

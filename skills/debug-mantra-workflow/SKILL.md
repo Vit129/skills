@@ -27,6 +27,14 @@ must load before Step 1 of the mantra begins, so the gates below can interleave 
 
 Never commit to a single hypothesis without presenting ranked alternatives first.
 
+**Survive a session boundary at any gate** — before asking the gate question, append an entry
+to `agent-memory/GATE-STATE.md` (template in that file) with `Status: OPEN`, the gate name, and
+the evidence gathered so far (ranked hypotheses, repro steps, whatever the next session would
+otherwise have to redo). `session-start.sh` surfaces open entries automatically, so if the
+session ends before the user answers, the next session sees the paused gate immediately instead
+of restarting the mantra from scratch. The moment the user answers, flip that entry to
+`Status: RESOLVED` (or delete it) before moving on — don't let it linger past its gate.
+
 ## Step 3 — After fix lands
 
 - `knowledge/lessons/{platform}/{bug-class}.md` — root cause + fix approach

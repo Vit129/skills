@@ -75,6 +75,37 @@ root-causing ever failing, so there was no evidence bar for the panel to
 clear in the first place. Re-test only if a real (not synthetic) bug is
 found where single-hypothesis genuinely produced a wrong root cause.
 
+## Adaptive fan-out sizing (heuristic, not yet measured)
+
+Gap flagged 2026-07-26 comparing this workspace's orchestration against
+Anthropic's own multi-agent research pattern: their lead agent picks
+subagent *count* from query complexity at runtime; a `Workflow` script's
+`DIMENSIONS` array here is fixed-width by the author, same size regardless
+of whether the target is a 3-line diff or a 3000-line one.
+
+**Heuristic** (ponytail: unmeasured starting default, not a tested finding
+like the batch-size section above — recalibrate once real cases accumulate):
+size fan-out to the actual scope signal (diff line count / files touched /
+"whole codebase" vs "this PR"), not a fixed constant:
+- **Trivial scope** (single small diff, one clear target) — skip fan-out
+  entirely, do it directly. Spawning agents to review a 3-line diff wastes
+  the round-trip.
+- **Known, bounded scope** (a normal diff review, a handful of files) — the
+  existing fixed-dimension pipeline default applies as-is; the dimension
+  count IS the right sizing signal here, don't add agents beyond it.
+- **Unbounded/broad scope** (whole-codebase audit, cross-project sweep) —
+  this is already the flock pattern's territory; size rounds via
+  loop-until-dry (keep going until K consecutive rounds find nothing new)
+  rather than guessing a round count upfront. Batch size still caps at 2-3
+  per round per the measured collision-rate finding above — "adaptive"
+  means round *count*, not batch *size*.
+
+This does not change the fixed-dimension-vs-flock decision rule itself
+(still: dimensions knowable upfront → pipeline, not knowable → flock) — it
+only adds sizing *within* whichever pattern already applies. Re-test this
+heuristic against a real case (not synthetic) before trusting it the way
+the batch-size finding above is trusted.
+
 ## Reference
 
 Full 13-repo flock-review experiment (findings, collision log, token cost:

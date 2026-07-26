@@ -11,6 +11,7 @@ bash ~/.claude/scripts/session-start.sh [project-dir]
 
 - New task → read `rules/coding.md` before writing code
 - Continuation ("ทำต่อ", "continue") → read the feature's `agent-memory/plans/[FEATURE]/dev-task-progress.md` or `qa-task-progress.md` → resume at first unchecked task
+- Paused HITL gate → `session-start.sh` surfaces any `Status: OPEN` entry in `agent-memory/GATE-STATE.md` automatically — resume the named skill at the stated gate, don't restart cold (see that file's template; `debug-mantra-workflow` is the reference implementation)
 - Search/plan → read `index.md` on-demand
 
 ---
