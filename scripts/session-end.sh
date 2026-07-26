@@ -56,4 +56,12 @@ if [[ -f "$CANDIDATE_SCHEDULER" ]]; then
   echo ""
 fi
 
+# ── 5. Daily memory decay check (global, not per-project) ─────────────────
+DECAY_SCHEDULER="$HOME/.claude/scripts/memory-decay-scheduler.sh"
+if [[ -f "$DECAY_SCHEDULER" ]]; then
+  echo "▸ Memory decay"
+  bash "$DECAY_SCHEDULER" 2>&1 | sed 's/^/  /' || true
+  echo ""
+fi
+
 echo "═══ done ════════════════════════════════════════"

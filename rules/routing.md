@@ -78,6 +78,12 @@ Because of that constraint, **always confirm the project with the user before do
 5. Only after the resulting plan actually exists (`agent-memory/plans/[FEATURE]/design.md` + `dev-task-progress.md` created and confirmed with the user) — call `kouenTaskDelete` on the original Kouen Task. It's graduated; leaving it around is stale, duplicate tracking.
 6. Never auto-delete a Task before its plan is confirmed to exist — same "ask before any write stage" discipline as Tracker Sync above.
 
+**Cleanup of already-`done:true` tasks (separate sub-flow, confirmed 2026-07-26):** a task can sit `done:true` in Kouen's dashboard indefinitely without ever being deleted — checking the box and deleting the row are two different actions, and nothing links a Task to the plan/case file that resolved it. For these:
+1. `kouenTaskList`, filter `done:true`.
+2. For each, search `agent-memory/plans/**` and `agent-memory/knowledge/cases/**` (title keywords) for a plan/case file that plausibly resolved it. Still do the project cross-reference from step 2 above first — don't skip that just because the task is already marked done.
+3. If a matching plan/case file is found (regardless of whether the feature shipped or was reverted — reverted-with-writeup still counts as "resolved, not abandoned") — call `kouenTaskDelete` directly, no extra per-task confirmation. This is a narrower exception to step 6 above: step 6 still governs graduating an *open* task into a *brand-new* plan; this is deleting a *done* task once a resolving artifact is independently verified to already exist.
+4. If no matching plan/case file turns up, don't delete — surface it and ask, same as the open-task flow.
+
 ## Skill Map
 
 | Task signal | Skill |

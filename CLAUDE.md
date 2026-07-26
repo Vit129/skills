@@ -77,6 +77,23 @@ python3 ~/.claude/scripts/session_search.py "<query>" [--project SLUG] [--limit 
 # cross-session recall — native SQLite FTS5 addition, not the Hermes runtime itself.
 # Use when the user references something from an earlier session you don't have in
 # context ("we talked about this before", "what did we decide about X last time").
+
+uv run ~/.claude/scripts/memory_vector_search.py "<query>" [--limit N]
+# Semantic (embedding) search over the CURATED memory layer — agent-memory/*.md,
+# knowledge/**/*.md, skills/candidates/*.md, projects/*/memory/*.md. Complements
+# session_search.py: that one is raw-transcript keyword search, this one is
+# meaning-based search over distilled facts (catches a query phrased differently
+# than the memory file's own wording). Local sentence-transformers model
+# (all-MiniLM-L6-v2, same model class as graphify's optional `embeddings` extra),
+# no hosted API. First run downloads the model (~90MB, cached after).
+# Use when a keyword/FTS5 memory search comes up empty but the fact might still
+# be there under different phrasing.
+
+~/.claude/scripts/memory-decay-scheduler.sh [--force]
+# Daily staleness sweep (wired into session-end.sh) — flags agent-memory/knowledge
+# files untouched >90d (mtime proxy, review not auto-action) and PLAYBOOK.md rows
+# already meeting its own documented archive rule (Applied+Prevented >= 5).
+# Never auto-deletes/auto-archives — output is a flag list for human/AI review.
 ```
 
 @RTK.md

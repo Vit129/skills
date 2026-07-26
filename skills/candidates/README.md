@@ -10,12 +10,11 @@ be noticed by memory alone.
 - **Excluded from `sync-all.sh`** (`merge_skills_dir`'s rsync `--exclude`) — never reaches Codex/
   Gemini/Agents until a human promotes it manually.
 
-This exists to produce real candidate examples before deciding the open question: should
-promotion stay gated by `routing.md`'s 3x-occurrence rule (automate the *counting*, keep the
-manual sign-off), or go threshold-free like Hermes Agent (auto-promote on first real hit)? That's
-a real reversal of a decision the user made on purpose (anti-sprawl) — not to be decided by
-silently building one or the other. See `agent-memory/knowledge/` (if a decision doc exists there)
-before assuming.
+**Resolved 2026-07-26** (see `agent-memory` reference/project memory: Hermes Agent gap-comparison
+follow-up): promotion stays gated by `routing.md`'s 3x-occurrence rule, manual sign-off via
+`skill-creator`. Considered and rejected: threshold-free auto-promotion like Hermes Agent (auto-
+promote on first real hit) — that would reverse the user's own anti-sprawl decision, not just
+automate a mechanical step. Do not revisit this without the user explicitly reopening it.
 
 ## When to write one
 
