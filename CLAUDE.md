@@ -115,6 +115,14 @@ uv run ~/.claude/scripts/memory_vector_search.py "<query>" [--limit N]
 # session actually ends). Idempotent (marker-delimited block in scripts/crontab.claude,
 # safe to re-run, never touches unrelated personal crontab lines). New machine setup:
 # clone this repo, run this script once — crontab entry is portable, no manual re-add.
+
+python3 ~/.claude/scripts/install-hooks.py [path-to-settings.json]
+# settings.json is gitignored (personal, machine-local) so hook wiring (interview-gate,
+# design-gate, memory-write-scan, skill-usage-log, etc.) doesn't survive a git clone the
+# way scripts/hooks/ do. scripts/settings-hooks.template.json is the checked-in source
+# of truth; this merges it in. Idempotent and additive-only — adds any (event, matcher,
+# command) missing, never touches/removes anything already there (hand-added hooks
+# survive). New machine setup: clone this repo, run this script once (after install-cron.sh).
 ```
 
 @RTK.md

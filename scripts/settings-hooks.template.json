@@ -1,0 +1,137 @@
+{
+  "Notification": [
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "printf '\\033]26;identity=claude-code;status=working\\007'; PATH=\"$HOME/Library/Application Support/Kouen/bin:$PATH\" kouen-cli notify --surface \"$KOUEN_SURFACE\" --title \"Claude Code\" --from-hook"
+        }
+      ]
+    }
+  ],
+  "PostToolUse": [
+    {
+      "matcher": "Edit|Write",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 $HOME/.claude/hooks/design-doc-sync.py",
+          "statusMessage": "checking design-doc sync"
+        }
+      ]
+    },
+    {
+      "matcher": "Skill",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 $HOME/.claude/hooks/skill-usage-log.py",
+          "statusMessage": "✓ Skill invoked"
+        }
+      ]
+    }
+  ],
+  "PreToolUse": [
+    {
+      "matcher": "Edit|Write",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 $HOME/.claude/hooks/interview-gate.py",
+          "statusMessage": "checking interview gate"
+        },
+        {
+          "type": "command",
+          "command": "python3 $HOME/.claude/hooks/design-gate.py",
+          "statusMessage": "checking design gate"
+        },
+        {
+          "type": "command",
+          "command": "python3 $HOME/.claude/hooks/mandatory-skill-gate.py",
+          "statusMessage": "checking project-mandatory skill gate"
+        },
+        {
+          "type": "command",
+          "command": "python3 $HOME/.claude/hooks/memory-write-scan.py",
+          "statusMessage": "scanning memory write for injection markers"
+        }
+      ]
+    },
+    {
+      "matcher": "mcp__claude-in-chrome__.*|mcp__chrome-devtools__.*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 $HOME/.claude/hooks/kouen-browser-gate.py",
+          "statusMessage": "checking kouen browser priority gate"
+        }
+      ]
+    },
+    {
+      "matcher": "Bash",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "rtk hook claude"
+        }
+      ]
+    },
+    {
+      "matcher": "Task",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "PATH=\"$HOME/Library/Application Support/Kouen/bin:$PATH\" kouen-cli notify --surface \"$KOUEN_SURFACE\" --subagent start"
+        }
+      ]
+    }
+  ],
+  "SessionStart": [
+    {
+      "matcher": "startup|resume",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash \"$HOME/.claude/scripts/session-start.sh\" \"$PWD\"",
+          "timeout": 30,
+          "statusMessage": "↺ session context loaded"
+        }
+      ]
+    }
+  ],
+  "Stop": [
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "printf '\\033]26;identity=claude-code;status=idle\\007'; PATH=\"$HOME/Library/Application Support/Kouen/bin:$PATH\" kouen-cli notify --surface \"$KOUEN_SURFACE\" --title \"Claude Code\" --body \"Done\""
+        }
+      ]
+    }
+  ],
+  "SubagentStop": [
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "PATH=\"$HOME/Library/Application Support/Kouen/bin:$PATH\" kouen-cli notify --surface \"$KOUEN_SURFACE\" --subagent stop"
+        }
+      ]
+    }
+  ],
+  "UserPromptSubmit": [
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 $HOME/.claude/hooks/user-prompt-submit.py",
+          "statusMessage": "checking routing triggers + passive memory review"
+        }
+      ]
+    }
+  ]
+}
