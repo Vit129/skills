@@ -6,7 +6,6 @@
 
 EVAL_STATE="$HOME/.claude/agent-memory/EVAL-STATE.md"
 SKILL_LOG="$HOME/.claude/agent-memory/SKILL-LOG.md"
-MEMORY="$HOME/.claude/agent-memory/index.md"
 EVALS_DIR="$HOME/.claude/agent-memory/evals"
 EVAL_INTERVAL_DAYS=1
 LOG_RETENTION_DAYS=7
@@ -40,17 +39,12 @@ LOG_FILE="$EVALS_DIR/${TODAY}.md"
   echo "## Skills to Evaluate ($TODAY)"
   echo ""
 
-  # Priority 1: Flagged skills from memory.md
-  echo "### Flagged (priority):"
-  grep -A 100 "Skill_Flags" "$MEMORY" | grep "^|" | grep -v "Skill.*Domain" | grep -v "^|---" | while read -r line; do
-    skill=$(echo "$line" | cut -d'|' -f2 | xargs)
-    if [ -n "$skill" ]; then
-      echo "- $skill (flagged in memory)"
-    fi
-  done
-
-  # Priority 2: Skills with proposed improvements in skill-log
-  echo ""
+  # Skills with proposed improvements in skill-log (only real input this
+  # scheduler has -- a prior "Skill_Flags in memory.md" priority tier was
+  # removed 2026-07-27: memory.md doesn't exist in this workspace and nothing
+  # ever wrote that table -- leftover from an unported ~/.kiro-only workflow,
+  # see eval-check.kiro.hook. skill-usage-log.py's repeat-invocation nudge is
+  # what feeds SKILL-LOG.md now.)
   echo "### Pending improvements:"
   grep "proposed" "$SKILL_LOG" 2>/dev/null | while read -r line; do
     skill=$(echo "$line" | cut -d'|' -f3 | xargs)
