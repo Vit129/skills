@@ -1,14 +1,15 @@
 #!/bin/bash
 # Build/Cache Cleanup Scheduler
-# Weekly scan of ~/Git/Personal for stale build/cache dirs (node_modules, .venv,
+# Weekly scan+delete of ~/Git/Personal stale build/cache dirs (node_modules, .venv,
 # .build, __pycache__, dist, build, egg-info, DerivedData, etc. — see
-# clean-build-cache.sh) via that script's dry-run mode. Same weekly-cadence
+# clean-build-cache.sh) via that script's --apply mode. Same weekly-cadence
 # state-file pattern as eval-scheduler.sh / candidate-scheduler.sh / memory-decay-scheduler.sh.
 # Usage: ./build-cache-scheduler.sh [--force]
 # Returns exit 0 + report if due, exit 1 if not due.
 #
-# ponytail: flag-only, same as memory-decay-scheduler.sh — never auto-deletes.
-# Review the report, then run `clean-build-cache.sh --apply` by hand.
+# Auto-applies (2026-07-27): plain deterministic script, fixed dir-name list,
+# no AI in the loop -- unlike memory-decay-scheduler.sh which stays flag-only
+# on purpose. Worst case: a cache regenerates on next build, no data loss.
 
 STATE="$HOME/.claude/agent-memory/BUILD-CACHE-STATE.md"
 LOG_DIR="$HOME/.claude/agent-memory/build-cache-checks"
@@ -44,14 +45,14 @@ LOG_FILE="$LOG_DIR/${TODAY}.md"
   echo "## Build/Cache Cleanup Snapshot ($TODAY)"
   echo ""
   if [ -f "$CLEAN_SCRIPT" ]; then
-    bash "$CLEAN_SCRIPT"
+    bash "$CLEAN_SCRIPT" --apply
   else
     echo "_(clean-build-cache.sh not found)_"
   fi
   echo ""
   echo "## Result"
   echo ""
-  echo "_(review above — dry-run list only. Run \`clean-build-cache.sh --apply\` manually to delete.)_"
+  echo "_(above is the deletion record for this run.)_"
 } | tee "$LOG_FILE"
 
 echo "last_check: $TODAY" > "$STATE"
