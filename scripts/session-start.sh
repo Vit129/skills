@@ -44,6 +44,28 @@ if [[ -f "$GATE_STATE" ]] && grep -q "^- Status: OPEN *$" "$GATE_STATE" 2>/dev/n
   sep
 fi
 
+# ── Auto-act: unattended-detected eval/candidate DUE reports needing action,
+# not just review. Cron (eval-scheduler.sh, candidate-scheduler.sh) detects
+# unattended; the actual write/promote step only ever runs inside a real
+# session (hooks/gates stay live) — this is that trigger. Global only
+# (skills/SKILL-LOG.md are global, not per-project), regardless of $PROJ.
+auto_act_check() {
+  local dir="$1" label="$2"
+  local logdir="$HOME/.claude/agent-memory/$dir"
+  local latest
+  latest=$(find "$logdir" -maxdepth 1 -name "20*.md" 2>/dev/null | sort | tail -1)
+  [[ -z "$latest" ]] && return
+  grep -q "^ACTED:" "$latest" 2>/dev/null && return
+  grep -qE '^- ' "$latest" 2>/dev/null || return
+  echo "## Auto-act due — $label (${latest#$HOME/.claude/})"
+  cat "$latest"
+  echo ""
+  echo "(This session's first action, before the user's own ask: act on the items above — promote skill-candidates at hit_count>=3 via skill-creator, run pass@3 eval / apply safe SKILL-LOG.md 'proposed' improvements, otherwise leave proposed with a one-line reason. Don't just report it to the user as a to-do. Once handled, append a line 'ACTED: <date>' to $latest so it doesn't resurface next session.)"
+  sep
+}
+auto_act_check "evals" "Skill Eval"
+auto_act_check "candidate-checks" "Skill Candidates"
+
 # ── agent-memory/maintenance.log: pending scheduled maintenance report ──
 MAINT_LOG="$PROJ/agent-memory/maintenance.log"
 if [[ -s "$MAINT_LOG" ]]; then
