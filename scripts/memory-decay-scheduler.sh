@@ -8,6 +8,13 @@
 # untouched past STALE_DAYS (mtime proxy, no per-fact timestamp exists) and
 # PLAYBOOK.md/playbook.md rows that already meet the file's own documented
 # archive rule (Applied+Prevented >= 5) so they can be reviewed/archived.
+# Also flags auto-memory (~/.claude/projects/*/memory/*.md, the per-project
+# curated-fact layer) name collisions across active vs archive/ — the mechanical
+# signal for "this fact got superseded but the stale copy is still sitting active,
+# or reappeared after being archived": same `name:` frontmatter slug in both
+# places. Recency (mtime) decides which one is presumed current; never auto-merges
+# semantic content (no NLP here — this is a duplicate-slug detector, not a
+# contradiction detector like "moved city" — that needs a human/AI read).
 # Same daily-cadence-state-file pattern as eval-scheduler.sh / candidate-scheduler.sh.
 # Usage: ./memory-decay-scheduler.sh [--force]
 # Returns exit 0 + report if due, exit 1 if not due.
@@ -87,6 +94,50 @@ scan_project() {
   echo ""
 }
 
+# scan_memory_conflicts <auto-memory-dir> — flag `name:` frontmatter slugs that
+# appear both in the active dir and its archive/ subfolder (superseded-but-not-
+# cleaned-up), or twice within the active dir itself (literal duplicate).
+scan_memory_conflicts() {
+  local dir="$1"
+  [ -d "$dir" ] || return
+  local active_names archive_names name f newer older
+  active_names=$(grep -l "^name:" "$dir"/*.md 2>/dev/null | while IFS= read -r f; do
+    name=$(grep -m1 "^name:" "$f" | sed 's/^name: *//')
+    echo "$name|$f"
+  done)
+  archive_names=""
+  if [ -d "$dir/archive" ]; then
+    archive_names=$(grep -l "^name:" "$dir/archive"/*.md 2>/dev/null | while IFS= read -r f; do
+      name=$(grep -m1 "^name:" "$f" | sed 's/^name: *//')
+      echo "$name|$f"
+    done)
+  fi
+
+  local found=0
+  # active vs archive collisions
+  while IFS='|' read -r name f; do
+    [ -z "$name" ] && continue
+    local match
+    match=$(echo "$archive_names" | grep "^${name}|" | cut -d'|' -f2)
+    if [ -n "$match" ]; then
+      if [ "$(stat -f %m "$f" 2>/dev/null)" -ge "$(stat -f %m "$match" 2>/dev/null)" ]; then
+        newer="$f"; older="$match"
+      else
+        newer="$match"; older="$f"
+      fi
+      echo "- \"$name\" — active AND archived copy both exist. Newer: \`${newer#$HOME/}\`, older: \`${older#$HOME/}\` — review whether the older one should be deleted or the newer one is itself wrong"
+      found=1
+    fi
+  done <<< "$active_names"
+  # duplicate within active
+  while IFS= read -r dup; do
+    [ -z "$dup" ] && continue
+    echo "- \"$dup\" — appears in more than one active memory file — check for a literal duplicate"
+    found=1
+  done < <(echo "$active_names" | cut -d'|' -f1 | sort | uniq -d)
+  [ "$found" -eq 0 ] && echo "_(none)_"
+}
+
 {
   echo "DECAY_CHECK_DUE"
   echo "---"
@@ -94,6 +145,18 @@ scan_project() {
   echo ""
 
   scan_project "Global (~/.claude)" "$HOME/.claude/agent-memory"
+
+  echo "### Auto-memory name collisions (active vs archive, or duplicate active):"
+  for mem_dir in "$HOME"/.claude/projects/*/memory; do
+    [ -d "$mem_dir" ] || continue
+    proj_label=$(basename "$(dirname "$mem_dir")")
+    conflicts=$(scan_memory_conflicts "$mem_dir")
+    if ! echo "$conflicts" | grep -q "^_(none)_$"; then
+      echo "**$proj_label:**"
+      echo "$conflicts"
+    fi
+  done
+  echo ""
 
   echo "### Global skill-candidates untouched >${STALE_DAYS}d:"
   cand_count=0

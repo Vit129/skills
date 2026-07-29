@@ -139,6 +139,7 @@ Because of that constraint, **always confirm the project with the user before do
 | kouen task / sync kouen task / check kouen tasks / task dashboard | see Kouen Task Sync section above |
 | handoff / hand off / ส่งต่องาน / pass to codex/gemini/kiro / switch agent | `handoff` |
 | ask agy / second opinion from agy / have agy try | `agy` |
+| choosing between agy vs codex rescue / which CLI companion | `cli-companions` |
 | management talk / เขียนสำหรับ management / rewrite for vp | `management-talk-workflow` |
 | explain / summarize / search / brainstorm / diagnose | `interview` Step 0 clears in 1 line → direct, no further skill |
 | everything else | `interview` → then pick closest skill |

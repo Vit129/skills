@@ -11,7 +11,7 @@
 # Usage:
 #   bash ~/.claude/scripts/sync-all.sh              # sync everything
 #   bash ~/.claude/scripts/sync-all.sh --dry-run    # preview without changes
-#   bash ~/.claude/scripts/sync-all.sh --only skills|rules|commands|agents|instructions
+#   bash ~/.claude/scripts/sync-all.sh --only skills|rules|commands|agents|memory|instructions
 #   bash ~/.claude/scripts/sync-all.sh --list       # show config summary
 
 set -euo pipefail
@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     -h|--help)
       echo "Usage: bash sync-all.sh [--dry-run] [--only <step>] [--list]"
       echo ""
-      echo "Steps: skills | rules | commands | agents | instructions"
+      echo "Steps: skills | rules | commands | agents | memory | instructions"
       echo ""
       echo "Examples:"
       echo "  bash ~/.claude/scripts/sync-all.sh"
@@ -55,11 +55,14 @@ done
 # ── Helpers ──────────────────────────────────────────────────────────────────
 expand_path() { echo "${1/#\~/$HOME}"; }
 
-# Mirror a source directory to a target directory via rsync
+# Mirror a source directory to a target directory via rsync.
+# Extra --exclude patterns (if any) are passed after the first 3 args.
 mirror_dir() {
   local label="$1"
   local src="$2"
   local dst="$3"
+  shift 3
+  local extra_excludes=("$@")
 
   src="$(expand_path "$src")"
   dst="$(expand_path "$dst")"
@@ -77,7 +80,7 @@ mirror_dir() {
   fi
 
   mkdir -p "$dst"
-  rsync -a --delete --exclude="*.DS_Store" "$src/" "$dst/" > /dev/null 2>&1
+  rsync -a --delete --exclude="*.DS_Store" "${extra_excludes[@]}" "$src/" "$dst/" > /dev/null 2>&1
   local count
   count=$(find "$dst" -type f | wc -l | tr -d ' ')
   echo -e "    ${GREEN}✅ $label → $dst ($count files)${NC}"
@@ -184,6 +187,7 @@ if [ "$LIST_MODE" -eq 1 ]; then
   printf "  %-14s %-30s %s\n" "rules"        "~/.claude/rules/"          "~/.codex/rules/   ~/.gemini/rules/"
   printf "  %-14s %-30s %s\n" "commands"     "~/.claude/commands/"       "~/.codex/commands/ ~/.gemini/commands/"
   printf "  %-14s %-30s %s\n" "agents"       "~/.claude/.claude/agents/" "~/.codex/agents/  ~/.gemini/agents/"
+  printf "  %-14s %-30s %s\n" "memory"       "~/.claude/agent-memory/"   "~/.codex/agent-memory/  ~/.gemini/agent-memory/ (durable knowledge only)"
   printf "  %-14s %-30s %s\n" "instructions" "~/.claude/CLAUDE.md"       "~/.codex/AGENTS.md  ~/.gemini/GEMINI.md"
   echo ""
   echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
@@ -200,7 +204,7 @@ echo ""
 
 # ── 1. Skills ────────────────────────────────────────────────────────────────
 if should_run "skills"; then
-  echo -e "  ${BLUE}[1/5] Skills${NC}  ~/.claude/skills/ → ~/.agents/skills/ + ~/.codex/skills/ + ~/.gemini/antigravity-cli/skills/"
+  echo -e "  ${BLUE}[1/6] Skills${NC}  ~/.claude/skills/ → ~/.agents/skills/ + ~/.codex/skills/ + ~/.gemini/antigravity-cli/skills/"
   merge_skills_dir "agents/skills" "~/.claude/skills" "~/.agents/skills"
   merge_skills_dir "codex/skills" "~/.claude/skills" "~/.codex/skills"
   merge_skills_dir "agy/skills"   "~/.claude/skills" "~/.gemini/antigravity-cli/skills"
@@ -209,7 +213,7 @@ fi
 
 # ── 2. Rules ─────────────────────────────────────────────────────────────────
 if should_run "rules"; then
-  echo -e "  ${BLUE}[2/5] Rules${NC}   ~/.claude/rules/ → codex + gemini"
+  echo -e "  ${BLUE}[2/6] Rules${NC}   ~/.claude/rules/ → codex + gemini"
   mirror_dir "codex/rules"  "~/.claude/rules" "~/.codex/rules"
   mirror_dir "gemini/rules" "~/.claude/rules" "~/.gemini/rules"
   echo ""
@@ -217,7 +221,7 @@ fi
 
 # ── 3. Commands ───────────────────────────────────────────────────────────────
 if should_run "commands"; then
-  echo -e "  ${BLUE}[3/5] Commands${NC} ~/.claude/commands/ → codex + gemini"
+  echo -e "  ${BLUE}[3/6] Commands${NC} ~/.claude/commands/ → codex + gemini"
   mirror_dir "codex/commands"  "~/.claude/commands" "~/.codex/commands"
   mirror_dir "gemini/commands" "~/.claude/commands" "~/.gemini/commands"
   echo ""
@@ -225,15 +229,24 @@ fi
 
 # ── 4. Agent personas ─────────────────────────────────────────────────────────
 if should_run "agents"; then
-  echo -e "  ${BLUE}[4/5] Agents${NC}  ~/.claude/.claude/agents/ → codex + gemini"
+  echo -e "  ${BLUE}[4/6] Agents${NC}  ~/.claude/.claude/agents/ → codex + gemini"
   mirror_dir "codex/agents"  "~/.claude/.claude/agents" "~/.codex/agents"
   mirror_dir "gemini/agents" "~/.claude/.claude/agents" "~/.gemini/agents"
   echo ""
 fi
 
-# ── 5. Instruction files (AGENTS.md / GEMINI.md) ─────────────────────────────
+# ── 5. Memory (durable knowledge only — cron/automation bookkeeping stays Claude-only) ──
+if should_run "memory"; then
+  echo -e "  ${BLUE}[5/6] Memory${NC}  ~/.claude/agent-memory/ → codex + gemini (PLAYBOOK/SKILL-LOG/knowledge/plans only)"
+  MEMORY_EXCLUDES=(--exclude=".state" --exclude="*-STATE.md" --exclude="build-cache-checks" --exclude="candidate-checks" --exclude="decay-checks" --exclude="evals")
+  mirror_dir "codex/agent-memory"  "~/.claude/agent-memory" "~/.codex/agent-memory"  "${MEMORY_EXCLUDES[@]}"
+  mirror_dir "gemini/agent-memory" "~/.claude/agent-memory" "~/.gemini/agent-memory" "${MEMORY_EXCLUDES[@]}"
+  echo ""
+fi
+
+# ── 6. Instruction files (AGENTS.md / GEMINI.md) ─────────────────────────────
 if should_run "instructions"; then
-  echo -e "  ${BLUE}[5/5] Instructions${NC} CLAUDE.md → AGENTS.md + GEMINI.md"
+  echo -e "  ${BLUE}[6/6] Instructions${NC} CLAUDE.md → AGENTS.md + GEMINI.md"
   generate_instruction_file "CODEX"  "AGENTS.md" "~/.codex/AGENTS.md"
   generate_instruction_file "GEMINI" "GEMINI.md" "~/.gemini/GEMINI.md"
   echo ""
