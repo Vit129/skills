@@ -1,8 +1,7 @@
-# Graph Report - .claude  (2026-07-29)
+# Graph Report - /Users/supavit.cho/.claude  (2026-07-29)
 
 ## Corpus Check
-- 492 files · ~243,245 words
-- Verdict: corpus is large enough that graph structure adds value.
+- cluster-only mode — file stats not available
 
 ## Summary
 - 4331 nodes · 4115 edges · 451 communities (390 shown, 61 thin omitted)
@@ -10,7 +9,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `3c9cebf6`
+- Built from commit: `51ee0a5a`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -53,7 +52,7 @@ node's neighbors span, not by raw edge count.
 
 ## Communities (451 total, 61 thin omitted)
 
-### Community 0 - "DateHelper"
+### Community 0 - "API Date & Utility Helpers"
 Cohesion: 0.07
 Nodes (3): DateHelper, DateOptions, DateRange
 
@@ -61,23 +60,23 @@ Nodes (3): DateHelper, DateOptions, DateRange
 Cohesion: 0.04
 Nodes (47): 10. Request Body Types 📦, 11. Response Headers 📋, 12. Path Parameters & Query Parameters 🔗, 13. Postman Dynamic Variables 🎲, 14. Folder-level Auth Inheritance 🔐, 15. Folder-level Pre-request Script → beforeAll / beforeEach 🔧, 16. Nested Folders → File Structure 📁, 17. Collection Runner + Data File (Data-Driven) 📊 (+39 more)
 
-### Community 2 - "readPostmanCollection.ts"
+### Community 2 - "Postman Collection Parser & Converter"
 Cohesion: 0.06
 Nodes (38): args, buildResponseSnippet(), collectionVarMap, convertPreRequest(), convertTestScript(), describeTree, detectResponseType(), extractVarsFromText() (+30 more)
 
-### Community 3 - "Appium Testing (Android) - Rules & Templates"
+### Community 3 - "Appium Testing (Android) - Rules &"
 Cohesion: 0.05
 Nodes (36): 1. Deep Linking (Fast Navigation Gem), 1. 🎯 Locator Strategy (Android DOM Lookup Strategy), 1. 🏷️ Naming Conventions, 1. 🔑 Testcase ID Requirements, 2. ADB Command Integration (Power User Gem), 2. 🤖 Android-Specific Actions, 2. 🏷️ Required Tags, 2. 🏗️ Test Structure (AAA Pattern) (+28 more)
 
-### Community 4 - "Appium Testing (iOS) - Rules & Templates"
+### Community 4 - "Appium Testing (iOS) - Rules &"
 Cohesion: 0.05
 Nodes (36): 1. iOS Deep Linking (Fast Navigation Gem), 1. 🎯 Locator Strategy (iOS DOM Lookup Strategy), 1. 🏷️ Naming Conventions, 1. 🔑 Testcase ID Requirements, 2. Biometric Simulation (FaceID/TouchID Gem), 2. 🤖 iOS-Specific Actions, 2. 🏷️ Required Tags, 2. 🏗️ Test Structure (AAA Pattern) (+28 more)
 
-### Community 5 - "DatabaseHelper"
+### Community 5 - "Database Connection & Query Helpers"
 Cohesion: 0.10
 Nodes (5): DatabaseConfig, DatabaseHelper, PgClient, QueryBuilder, QueryResult
 
-### Community 6 - "Reference: Training Protocols & Program Design (Unit-Aware)"
+### Community 6 - "Training Protocols & Program Design (Unit-Aware)"
 Cohesion: 0.06
 Nodes (31): Accessory Lifts (Priority 2), Cardio & Conditioning Integration, Cardio + Strength Interference Effect, Compound Lifts (Priority 1), Conversion Guide, Day 1: Chest + Triceps, Day 2: Back + Biceps, Day 3: Legs A (Squat) (+23 more)
 
@@ -89,27 +88,27 @@ Nodes (31): 1. URL Placeholders, 2. Auth Header, 3. Fixtures & Schemas (MANDATOR
 Cohesion: 0.06
 Nodes (30): Agent Memory, Bootstrap (Auto-Setup), Closed Learning Loops, Compression Rules, Compression Strategy, Context Compression (inspired by Hermes /compress), File Roles, Hooks (4 total) (+22 more)
 
-### Community 9 - "Reference: Nutrition & Protein Tracking (Parameterized)"
+### Community 9 - "Nutrition & Protein Tracking (Parameterized)"
 Cohesion: 0.06
 Nodes (30): 1. Unit System & Demographics, 2. Dietary Profile, 2. Protein Targets (User-Defined), 3. Meal Distribution Strategy, 4. Reset Schedule, Balanced (Standard), Calculation Workflow (Dynamic), Dietary Paradigm Adjustments (+22 more)
 
-### Community 10 - "Finance Industry Rules (21 Rules)"
+### Community 10 - "Finance Industry Rules"
 Cohesion: 0.07
 Nodes (29): 10. Accessibility for Vision Impairment, 11. Trust & Security (Navy, Dark Gray), 12. Growth & Gain (Deep Green), 13. Caution & Loss (Dark Red), 14. Traditional Yet Modern, 15. Numbers Are Content, 16. Clear Instructions & Warnings, 17. Subtle Feedback on Input (+21 more)
 
-### Community 11 - "Robot Framework Testing - Global Coding Standards (Constitution)"
+### Community 11 - "AI Governance & Behavior"
 Cohesion: 0.07
 Nodes (29): 1. AI Roles & Perspectives (Core Methodology), 1. Automation Priority Table, 1. File & Folder Naming, 1. Hybrid Setup (API + Mobile), 2. Communication Protocol (Interaction Rules), 2. Element Locator Strategy (Priority Order), 2. Expert Locators Fallback, 2. Hybrid Execution Strategy (+21 more)
 
-### Community 12 - "E-commerce Industry Rules (20 Rules)"
+### Community 12 - "E-commerce Industry Rules"
 Cohesion: 0.07
 Nodes (28): 10. Fast, Smooth Performance, 11. Action & Energy (Orange/Red), 12. Trust & Confidence (Blue), 13. Value & Savings (Green), 14. Product-Focused Clarity, 15. Scannable Product Descriptions, 16. Trust-Building Microcopy, 17. Smooth Cart & Checkout Interactions (+20 more)
 
-### Community 13 - "Healthcare Industry Rules (20 Rules)"
+### Community 13 - "Healthcare Industry Rules"
 Cohesion: 0.07
 Nodes (28): 10. Calm, Minimal Aesthetic, 11. Trust & Care (Soft Blue), 12. Health & Wellness (Green), 13. Caution & Urgency (Orange/Red), 14. Clear, Accessible Fonts, 15. Patient-Friendly Language, 16. Hierarchical Information, 17. Reassuring Feedback (+20 more)
 
-### Community 14 - "Tech & SaaS Industry Rules (20 Rules)"
+### Community 14 - "Tech & SaaS Industry Rules"
 Cohesion: 0.07
 Nodes (28): 10. Dense Information Display, 11. Trust & Stability (Blues), 12. Growth & Success (Greens), 13. Caution & Urgency (Reds/Oranges), 14. Sans-Serif + Monospace Combination, 15. Clear Hierarchy, 16. Readability Over Personality, 17. Consistent Font Weights (+20 more)
 
@@ -125,7 +124,7 @@ Nodes (28): Anti-Patterns (Hard Bans), Color, Command Workflows, Context Gatheri
 Cohesion: 0.08
 Nodes (23): Android (Macrobenchmark), Android Profiling, Android Studio Profiler, App Startup, Automated Performance Testing (CI), Common iOS Memory Issues, Common Mobile Performance Issues, Decision Framework (+15 more)
 
-### Community 19 - "Reference: Thai Accounting Compliance (กฎหมายบัญชีไทย)"
+### Community 19 - "Thai Accounting Compliance (กฎหมายบัญชีไทย)"
 Cohesion: 0.08
 Nodes (23): 1. กฎหมายหลัก, 2. มาตรฐานบัญชีไทย, 3. หน่วยงานกำกับดูแล, 4. จรรยาวิชาชีพบัญชี (FAP Code of Ethics), 5. การรายงานต่อหน่วยงาน, 6. บทลงโทษ, DBD, Reference: Thai Accounting Compliance (กฎหมายบัญชีไทย) (+15 more)
 
@@ -137,15 +136,15 @@ Nodes (23): 161 Industry Rules, Accessibility Check (WCAG AA), BM25 Ranking, Del
 Cohesion: 0.09
 Nodes (22): Architecture Patterns, ASP.NET Core Patterns, C# / .NET Development Standards, Clean Architecture (Recommended), Controller-Based (Preferred for large APIs), DbContext Configuration, Dependency Injection, Entity Configuration (Fluent API) (+14 more)
 
-### Community 22 - "readPostmanEnv.ts"
+### Community 22 - "Postman Environment Variables Parser"
 Cohesion: 0.12
 Nodes (20): analyzeVar(), args, collectionIndex, detectType(), DYNAMIC_TEMP_KEYWORDS, filePath, findProjectRoot(), isDynamicTemp() (+12 more)
 
-### Community 23 - "1. ภาษีเงินได้นิติบุคคล (Corporate Income Tax - CIT)"
+### Community 23 - "Tax Accounting (บัญชีภาษี)"
 Cohesion: 0.09
 Nodes (22): 1. ภาษีเงินได้นิติบุคคล (Corporate Income Tax - CIT), 2. ภาษีมูลค่าเพิ่ม (VAT), 3. ภาษีหัก ณ ที่จ่าย (Withholding Tax - WHT), 4. ภาษีเงินได้บุคคลธรรมชาติ (PIT), 5. ภาษีอื่นๆ, Input VAT ที่ไม่สามารถเครดิตได้, Reference: Tax Accounting (บัญชีภาษี), การคำนวณ (+14 more)
 
-### Community 24 - "Reference: Working Capital & Internal Controls"
+### Community 24 - "Working Capital & Internal Controls"
 Cohesion: 0.09
 Nodes (22): 1. การจัดการเงินสด (Cash Management), 2. บัญชีลูกหนี้ (Accounts Receivable), 3. บัญชีสินค้าคงคลัง (Inventory), 4. บัญชีเจ้าหนี้ (Accounts Payable), 5. Internal Controls (COSO Framework), 5 องค์ประกอบ, 6. Fraud Prevention, Aging Analysis (+14 more)
 
@@ -153,11 +152,11 @@ Nodes (22): 1. การจัดการเงินสด (Cash Management), 
 Cohesion: 0.09
 Nodes (21): API Data Lessons, Context, Context, Context, Context, Context, LESSON-DATA-001: 404 Not Found — Resource Missing or Wrong Endpoint, LESSON-DATA-002: 400 Bad Request — Validation Error (+13 more)
 
-### Community 26 - "Reference: Digital Tax Systems (ระบบภาษีดิจิทัล)"
+### Community 26 - "Digital Tax Systems (ระบบภาษีดิจิทัล)"
 Cohesion: 0.09
 Nodes (21): 1. e-Tax Invoice & e-Receipt, 2. e-Withholding Tax (e-WHT), 3. e-Filing (การยื่นแบบออนไลน์), 4. Digital Services Tax, 5. การเตรียมความพร้อมสำหรับ e-Tax, 6. แหล่งข้อมูล, Reference: Digital Tax Systems (ระบบภาษีดิจิทัล), ขั้นตอน (+13 more)
 
-### Community 27 - "How it works"
+### Community 27 - "Discovery & Domain Analysis"
 Cohesion: 0.10
 Nodes (20): Analogical Reasoning, Deep Abstraction Protocol, Discovery & Domain Analysis, How it works, Output Format (written to file, not chat), Phase 1: Load Implementation Context, Phase 2: Index Scan (Concrete), Phase 3.1: Similar Features (In-Context Learning) (+12 more)
 
@@ -165,7 +164,7 @@ Nodes (20): Analogical Reasoning, Deep Abstraction Protocol, Discovery & Domain 
 Cohesion: 0.10
 Nodes (20): Build & Run, C++20 Additions, C/C++ Development Standards, C-Specific Notes (When Writing Pure C), CMake Test Setup, CMakeLists.txt (Modern CMake), Error Handling, Memory Safety (+12 more)
 
-### Community 29 - "Part 2: QA — Test Scenario Design + Automation"
+### Community 29 - "Security — Dev + QA Rules"
 Cohesion: 0.10
 Nodes (20): Anti-Rationalization (Dev + QA), Automation Patterns (Playwright), Dev Review Checklist, Fixture Structure + Pipeline, Input Validation, Internal Analysis (auto-run when loaded during test scenario design), Minimum Scenarios, Mobile Patterns (Robot Framework) (+12 more)
 
@@ -173,23 +172,23 @@ Nodes (20): Anti-Rationalization (Dev + QA), Automation Patterns (Playwright), D
 Cohesion: 0.10
 Nodes (19): LESSON-WF-001: Multi-Outcome Click — Use Promise.race() Not isVisible(), LESSON-WF-002: Backend Transient Errors — Retry with Promise.race(), LESSON-WF-003: Check Default Values Before Adding Interaction Code, LESSON-WF-004: Debugging Workflow — Use DevTools MCP First, LESSON-WF-005: MUI Dropdown Locator Pattern, LESSON-WF-006: Test Data Minimalism, Problem, Problem (+11 more)
 
-### Community 31 - "PART 6: Test Structure Patterns (by Design Technique)"
+### Community 31 - "Playwright Testing - Global Coding Standards"
 Cohesion: 0.10
 Nodes (19): 1. AI Roles & Perspectives (Core Methodology), 1. Automation Priority Table, 1. Base-Choice (BC) Pattern, 1. File & Data Handling, 2. Communication Protocol (Interaction Rules), 2. Hybrid Execution Strategy, 2. Multiple-Choice (MC) Pattern — Data-Driven from Fixture, 2. Standard Helper Patterns (+11 more)
 
-### Community 32 - "Reference: Advanced Accounting (บัญชีขั้นสูง)"
+### Community 32 - "Advanced Accounting (บัญชีขั้นสูง)"
 Cohesion: 0.10
 Nodes (19): 1. TFRS 15 — Revenue Recognition (5-Step Model), 2. TFRS 9 — Financial Instruments, 3. TFRS 16 — Leases, 4. Business Combination (TFRS 3), 5. Consolidated Financial Statements, 6. Foreign Currency (TAS 21), Acquisition Method, ECL (Expected Credit Loss) (+11 more)
 
-### Community 33 - "Reference: BOI Tax Incentives (สิทธิประโยชน์ BOI)"
+### Community 33 - "BOI Tax Incentives (สิทธิประโยชน์ BOI)"
 Cohesion: 0.10
 Nodes (19): 1. ภาพรวม BOI, 2. การบัญชีสำหรับกิจการ BOI, 3. เงื่อนไขการรักษาสิทธิ์, 4. การบัญชีเมื่อสิทธิ์หมดอายุ, 5. การรายงานต่อ BOI, 6. ประเภทกิจการที่ได้รับส่งเสริม (2025), Deferred Tax สำหรับกิจการ BOI, Reference: BOI Tax Incentives (สิทธิประโยชน์ BOI) (+11 more)
 
-### Community 34 - "Web Frameworks"
+### Community 34 - "Supported Tech Stacks"
 Cohesion: 0.10
 Nodes (19): Angular, Astro, Design Token Output Format, Flutter, HTML + Tailwind CSS, Jetpack Compose, Laravel, Mobile & Native (+11 more)
 
-### Community 35 - "Checklist — All Frameworks"
+### Community 35 - "Backend Code Review"
 Cohesion: 0.11
 Nodes (18): API Design (see `api-design.md`), Architecture, Authentication (see `authentication.md`), Backend Code Review, Checklist — All Frameworks, Database (see `database-design.md`), Django, Docker (see `docker.md`) (+10 more)
 
@@ -201,7 +200,7 @@ Nodes (18): Adapt to project type, API Field Optionality (MANDATORY), Client App
 Cohesion: 0.11
 Nodes (18): Artifact Output Locations (resolves the `{path}` fields below), Before Marking Complete, Critical Success Criteria, Entry Point Requirements, Mock Strategy (QA only, MANDATORY for external dependencies), Next Step, Output, Platform Routing (QA only, MANDATORY — read before creating tasks) (+10 more)
 
-### Community 38 - "Reference: Data Auditing & Body Composition Analysis (Unit-Aware)"
+### Community 38 - "Data Auditing & Body Composition Analysis"
 Cohesion: 0.11
 Nodes (18): Assessment Framework: 28-Day Trend Analysis, Auto-Conversion Reference, BIA (Bioelectrical Impedance Analysis) Review Protocol, Common BIA Artifacts (Not Real Changes), Data Quality: Visual Evidence Hierarchy, Imperial System, Interpretation Rules, Key Metrics to Track (+10 more)
 
@@ -209,11 +208,11 @@ Nodes (18): Assessment Framework: 28-Day Trend Analysis, Auto-Conversion Referen
 Cohesion: 0.11
 Nodes (18): Chrome DevTools MCP — Still Used For, Common Anti-Patterns + Fixes, Core Web Vitals Targets, Embedded HTML Report Format, Frontend Performance, Implementation Pattern, Integration with Phase 2.5, Markdown Report Format (+10 more)
 
-### Community 41 - "Appium MCP Setup — Installation & Integration"
+### Community 41 - "Appium MCP Setup — Installation &"
 Cohesion: 0.11
 Nodes (18): Appium MCP Setup — Installation & Integration, Create Emulator (if needed), Enable when ready:, How It All Connects, Or manually add to mcp.json:, Prerequisites, Quick Verification, Required SDK Components (+10 more)
 
-### Community 42 - "Reference: Cost Accounting (บัญชีต้นทุน)"
+### Community 42 - "Cost Accounting (บัญชีต้นทุน)"
 Cohesion: 0.11
 Nodes (18): 1. Job Order Costing, 2. Process Costing, 3. Activity-Based Costing (ABC), 4. Standard Costing & Variance Analysis, 5. Target Costing, 6. Throughput Accounting (Theory of Constraints), Equivalent Units, Joint Products & By-Products (+10 more)
 
@@ -225,7 +224,7 @@ Nodes (18): 1. UI Styles (67 Total), 2. Color Palettes (161 Total), 3. Typograph
 Cohesion: 0.11
 Nodes (17): After Each Category Completes, After Each Task (Dev), Artifacts (MANDATORY), Checklist Rules, Context (MANDATORY), File Behavior, Incremental Update Rule (MANDATORY), Lessons Learnt (+9 more)
 
-### Community 45 - "Part 2: Strength Prediction & Load Prescription"
+### Community 45 - "Movement, Biomechanics & Load Prescription (Unit-Aware)"
 Cohesion: 0.11
 Nodes (17): 1RM Calculation, Core Principles, Exercise Form Checklist, Load Prescription Workflow, Load Ranges by Goal, Pain vs. Discomfort, Part 1: Biomechanics & Movement Modification, Part 2: Strength Prediction & Load Prescription (+9 more)
 
@@ -233,7 +232,7 @@ Nodes (17): 1RM Calculation, Core Principles, Exercise Form Checklist, Load Pres
 Cohesion: 0.11
 Nodes (17): Connection Pool Tuning, Database Performance, Decision Framework, EXPLAIN — Reading Execution Plans, Finding Slow Queries, Index Optimization, K6 + Database Monitoring, Key indicators (+9 more)
 
-### Community 49 - "Knowledge Base — Ingest & Maintenance Guide"
+### Community 49 - "Knowledge Base — Ingest & Maintenance"
 Cohesion: 0.12
 Nodes (16): Architecture: 2 Layers, Compound Effect, Cross-Linking Rules, Ingest Steps (for screenshots — most common), Ingest Workflow, Integration with the QA Flow, KB File Format (per-project biz), Knowledge Base — Ingest & Maintenance Guide (+8 more)
 
@@ -249,7 +248,7 @@ Nodes (16): 3-Phase Workflow, Auto-fallback: real service → HAR, Basic replay,
 Cohesion: 0.12
 Nodes (16): Android, Appium Server Setup for Flutter, Build Requirements, Capabilities — Flutter Driver, Common Issues, Context Switching, Flutter Code Preparation (Dev Team), iOS (+8 more)
 
-### Community 53 - "Reference: Financial Planning & Capital Budgeting"
+### Community 53 - "Financial Planning & Capital Budgeting"
 Cohesion: 0.12
 Nodes (16): 1. งบประมาณประจำปี (Annual Budget), 2. Capital Budgeting, 3. Cost-Volume-Profit Analysis, 4. Relevant Costing for Decisions, 5. Risk Management, Discontinuance Decision, Hedging, Make or Buy (+8 more)
 
@@ -265,11 +264,11 @@ Nodes (15): Current Local State, Decision, Implementation Phases, Layer 1: Graph
 Cohesion: 0.12
 Nodes (15): 10. Common Mistake Patterns (Your Recurring Errors), 1. Free Writing (Any Time), 2. Grammar Drills (Focus on One Rule), 3. Sentence Builders (Specific Context), 4. Tense Correction (Past/Present/Future), 5. Article Practice (a/an/the), 6. Conversation Scenarios (Role-Play), 7. Email/Formal Writing (Professional English) (+7 more)
 
-### Community 57 - "Part 1: Recovery & Sleep"
+### Community 57 - "Recovery, Sleep & Supplements"
 Cohesion: 0.12
 Nodes (15): Core Principle, HRV Readiness Scoring, Overtraining Detection, Part 1: Recovery & Sleep, Part 2: Supplement Stack, Recovery Nutrition, Reference: Recovery, Sleep & Supplements, Sleep Protocol (+7 more)
 
-### Community 58 - "Checklist — All Platforms"
+### Community 58 - "Frontend Code Review"
 Cohesion: 0.12
 Nodes (15): Android (Kotlin / Jetpack Compose), Architecture, Checklist — All Platforms, Environment Config (see `env-config-standards.md`), Error Handling (see `error-handling-standards.md`), Flutter, Frontend Code Review, iOS (Swift / SwiftUI) (+7 more)
 
@@ -277,7 +276,7 @@ Nodes (15): Android (Kotlin / Jetpack Compose), Architecture, Checklist — All 
 Cohesion: 0.12
 Nodes (15): Anti-Rationalization Table, Consistency Contract, Frontend Development, ⚠️ Gotchas, Human-in-the-Loop Points, Inline Process, LLM-Friendly Code Comments, Mobile (+7 more)
 
-### Community 62 - "Reference: Macro & Market Context"
+### Community 62 - "Macro & Market Context"
 Cohesion: 0.12
 Nodes (15): Dollar Strength (DXY), Earnings Revision Cycle, Economic Cycle → Sector Leadership, Fed Rate Cycle → Sector Impact, Growth Indicators, Inflation & Rates, Interest Rate Impact on P/E, Key Macro Indicators to Monitor (+7 more)
 
@@ -293,11 +292,11 @@ Nodes (14): Accountant-Learning, agy-plugin-cc, agy-plugin-codex, Fitness-Tracke
 Cohesion: 0.13
 Nodes (14): Accountant-Learning, agy-plugin-cc, agy-plugin-codex, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d:, graphify, Hanashi (+6 more)
 
-### Community 66 - "Agent Sync Protocol"
+### Community 66 - "Skill Sync Protocol.Md Script"
 Cohesion: 0.13
 Nodes (14): Adding/updating a personal skill (Claude-only), Adding/updating a shared skill, Agent Sync Protocol, Full sync (all at once), Runtime Targets, Safe Update Workflow, Skill Structure (New Flat Layout), Source of Truth Hierarchy (+6 more)
 
-### Community 67 - "PART 4: Structure & Design"
+### Community 67 - "Structure & Design"
 Cohesion: 0.13
 Nodes (15): 1. Centralized Shared Resources (Mandatory), 2. Thinking Process (CoT) - Page Object Design, 3. Page Object Model Pattern (Layout-Based Architecture), 4. Shared UI Helpers (Use Templates), 5. Categorizing Page Objects by Feature (Feature-Based), 6.1 Multi-Role Auth (Login Once per Role) 👥, 6.2 Database Fixture 🗄️, 6. Additional UI Patterns (+7 more)
 
@@ -305,7 +304,7 @@ Nodes (15): 1. Centralized Shared Resources (Mandatory), 2. Thinking Process (Co
 Cohesion: 0.13
 Nodes (14): Effort Scale (ALL platforms: API, Web UI, Mobile UI), File & Folder Naming (MANDATORY), Format (HTML for Azure DevOps), Format Rules (for md2csv.sh compatibility), Language, Metadata (Mandatory for CSV Export), Output Format (Mandatory), PBI Header (MANDATORY — must appear at top of file before any scenario) (+6 more)
 
-### Community 69 - "Reference: Financial Reporting & Disclosure"
+### Community 69 - "Financial Reporting & Disclosure"
 Cohesion: 0.13
 Nodes (14): 1. องค์ประกอบงบการเงินฉบับเต็ม, 2. งบกระแสเงินสด (Cash Flow Statement), 3 กิจกรรม, 3. หมายเหตุประกอบงบการเงิน, 4. Segment Reporting (TFRS 8), 5. ประเภทความเห็นผู้สอบบัญชี, 6. Deferred Tax (TAS 12), Key Audit Matters (KAM) (+6 more)
 
@@ -313,7 +312,7 @@ Nodes (14): 1. องค์ประกอบงบการเงินฉบ�
 Cohesion: 0.14
 Nodes (13): Core Rules, Do, Don't, Done-gate (MANDATORY — last action before Done), Git, Git Identity by Path, Memory Protocol, No-Touch Paths (+5 more)
 
-### Community 71 - "process_file"
+### Community 71 - "Batch Update Skills Script"
 Cohesion: 0.22
 Nodes (13): add_aidlc_gate(), add_consistency_contract(), add_improvement_tracking(), add_version_to_frontmatter(), get_domain(), main(), process_file(), Add AIDLC Gate section after the first # heading. (+5 more)
 
@@ -345,7 +344,7 @@ Nodes (13): API Network Lessons, Context, Context, Context, LESSON-NET-001: 500 
 Cohesion: 0.14
 Nodes (13): LESSON-TIME-001: Timeout Waiting for Selector, LESSON-TIME-002: Element Covered by Loading Overlay, LESSON-TIME-003: Data Not Loaded — Wait for API Response, LESSON-TIME-004: Navigation Timeout — Page Loads Slowly, Problem, Problem, Problem, Problem (+5 more)
 
-### Community 79 - "Checklist"
+### Community 79 - "Playwright Code Review"
 Cohesion: 0.14
 Nodes (13): API Tests (if applicable), Checklist, Code Quality, Database (if applicable), Locators (Critical), Performance & Reliability, Playwright Code Review, Review Process (+5 more)
 
@@ -357,7 +356,7 @@ Nodes (13): 1. Code Writer, 2. Code Review, 3. Test Execution, 4. Self-Healing (
 Cohesion: 0.14
 Nodes (13): API Automation Architecture, Approval, Architecture pattern: Multi-Service, File structure, Key rules, LATS Forbidden Patterns, Mock-API Prefix Rule (Backend Not Ready), Process (+5 more)
 
-### Community 82 - "Checklist"
+### Community 82 - "Robot Framework Code Review"
 Cohesion: 0.14
 Nodes (13): Appium Configuration, Checklist, Code Quality, Database (if applicable), Expert Gems (Advanced), Keywords Quality, Locators (Critical — Mobile), Review Process (+5 more)
 
@@ -365,11 +364,11 @@ Nodes (13): Appium Configuration, Checklist, Code Quality, Database (if applicab
 Cohesion: 0.14
 Nodes (13): Anti-Rationalization, Batch Skip Guard (fires immediately on any skip signal), Full Workflow (MANDATORY for new PBI/feature — execute ALL steps in order), Gotchas, Human-in-the-Loop Points, Red Flags, Required Context, Requirements Source (before Step 1) (+5 more)
 
-### Community 84 - "Reference: Financial Analysis (วิเคราะห์งบการเงิน)"
+### Community 84 - "Financial Analysis (วิเคราะห์งบการเงิน)"
 Cohesion: 0.14
 Nodes (13): 1. อัตราส่วนสภาพคล่อง (Liquidity Ratios), 2. อัตราส่วนประสิทธิภาพ (Efficiency Ratios), 3. อัตราส่วนความสามารถชำระหนี้ (Solvency Ratios), 4. อัตราส่วนความสามารถทำกำไร (Profitability Ratios), 5. DuPont Analysis, 6. Trend Analysis, 7. EVA (Economic Value Added), 8. WACC (+5 more)
 
-### Community 85 - "Typography"
+### Community 85 - "Classic Typography Principles"
 Cohesion: 0.14
 Nodes (13): Accessibility, Choosing Distinctive Fonts, Classic Typography Principles, Fluid Type, Font Selection & Pairing, Modern Web Typography, Modular Scale & Hierarchy, OpenType Features (+5 more)
 
@@ -409,7 +408,7 @@ Nodes (12): Architecture, Concurrency, Cross-Platform Standards, Data Persistenc
 Cohesion: 0.15
 Nodes (12): Authentication Flow, Basic Script, Data Parameterization, Folder Structure, Groups & Tags, HTTP Requests, Installation, K6 Scripting (+4 more)
 
-### Community 95 - "4. Advanced Fixtures & Patterns 🏗️"
+### Community 95 - "Structure & Design"
 Cohesion: 0.15
 Nodes (13): 1. Service Layer Pattern (Atomic Services), 2.1 Conditional Mocking (Fallback), 2.2 GraphQL Interception (By Operation Name), 2. Advanced API Mocking & Interception, 3. API Service Architecture (Multi-Service Pattern), 4.1 Multi-Role API Auth Fixture 👥, 4.2 Database Fixture (API Integration) 🗄️, 4.3 API Response Cache Fixture 📦 (+5 more)
 
@@ -425,7 +424,7 @@ Nodes (12): Basic Component Test, Best Practices, Component Testing — Playwrig
 Cohesion: 0.15
 Nodes (12): Comparison: Explore Tools, Decision Matrix: Which Tool When, Explore-to-Test Workflow, Full Workflow, Integration with Existing Skills, Rules, Step 1: Explore with Chrome DevTools MCP, Step 2: Capture HAR (+4 more)
 
-### Community 99 - "8-Step Workflow"
+### Community 99 - "Runtime Inspection Workflow"
 Cohesion: 0.15
 Nodes (12): 1. Reproduce in Browser, 2. Inspect Console Errors, 3. Inspect Network Requests/Responses, 4. Inspect DOM and Accessibility Tree, 5. Check Storage/State, 6. Capture Screenshot or Trace, 7. Use Evidence to Fix, 8. Add Regression Test (+4 more)
 
@@ -449,15 +448,15 @@ Nodes (12): Divider (MANDATORY — same as test scenario files):, Human-in-the-L
 Cohesion: 0.15
 Nodes (12): Best Practices for RF 7.x, Improved Argument Conversion, Inline IF (RF 5+), Listener API v3 (RF 7), Native JSON Support, Robot Framework 7.x New Features, Secret Variables (RF 7.4), Skip Tests Conditionally (+4 more)
 
-### Community 105 - "Options Flow Analysis"
+### Community 105 - "Short Interest & Options Flow"
 Cohesion: 0.15
 Nodes (12): Integration with Stock Report, Interpretation, Key Metrics, Key Options Metrics, Options Flow Analysis, Put/Call Ratio (Stock-Specific), Reference: Short Interest & Options Flow, Search Queries (+4 more)
 
-### Community 106 - "Reference: Transfer Pricing (ราคาโอน)"
+### Community 106 - "Transfer Pricing (ราคาโอน)"
 Cohesion: 0.15
 Nodes (12): 1. กฎหมายและข้อบังคับ, 2. หลักการ Arm's Length, 3. เอกสารที่ต้องจัดทำ, 4. Global Minimum Tax (Pillar Two), 5. Related Party Transactions, 6. บทลงโทษ, Local File Documentation, Master File (สำหรับ MNE ขนาดใหญ่) (+4 more)
 
-### Community 107 - "_gate_common.py"
+### Community 107 - "Design Gate Hook"
 Cohesion: 0.21
 Nodes (8): main(), Shared helpers for PreToolUse gate hooks. Fail-open: callers catch all errors., Return True if a Skill tool_use appears in the transcript.      skill_name=None, skill_invoked(), main(), find_mandatory_skill(), main(), Return (skill_name, section_title) from the first '## ... MANDATORY ...'     sec
 
@@ -473,15 +472,15 @@ Nodes (11): Cross-Language Standards, Error Handling, Framework Choice, NestJS S
 Cohesion: 0.17
 Nodes (11): Critical Constraints, DB Strategy Injection, Defaults (auto-applied unless user specifies otherwise), DevOps Pipeline, Naming, Path Resolution, Pipeline Templates, Required Questions (ask one at a time) (+3 more)
 
-### Community 112 - "Playwright API Testing - Rules & Templates"
+### Community 112 - "Playwright API Testing - Rules &"
 Cohesion: 0.17
 Nodes (11): 1. Global Authentication (Storage State), 2. Parallel Execution Strategy, 3. CI/CD Optimization, Auth / Token Rules, ✅ DO's, ❌ DON'Ts, PART 10: Performance & Reliability, PART 11: CLI Commands & Execution (Quick Commands) (+3 more)
 
-### Community 113 - "PART 9: Infrastructure & Scripts Standard (package.json)"
+### Community 113 - "Infrastructure & Scripts Standard (package.json)"
 Cohesion: 0.17
 Nodes (12): 1. Environment Variables, 2. Configuration File, 3. Test Directory, 4. Mode Options, ✅ Correct Script Examples, 📝 Format Components, 🚨 Generation Requirements, MANDATORY Requirements (+4 more)
 
-### Community 114 - "PART 8: Infrastructure & Scripts Standard (package.json)"
+### Community 114 - "Infrastructure & Scripts Standard (package.json)"
 Cohesion: 0.17
 Nodes (12): **1. Environment Variables**, **2. Configuration File**, **3. Test Directory**, **4. Mode Options**, ✅ Correct Script Examples, 📝 Format Components, 🚨 Generation Requirements, **MANDATORY Requirements:** (+4 more)
 
@@ -493,7 +492,7 @@ Nodes (11): Extraction Checklist, Form Filling, Hard Waits, Locator priority, Pa
 Cohesion: 0.17
 Nodes (11): Basic Screenshot Comparison, Best Practices, CI Integration, Cross-Browser Visual Testing, Folder Structure, Masking Dynamic Content, Multi-Viewport Testing, Playwright Config for Screenshots (+3 more)
 
-### Community 117 - "Portfolio & ETF Analysis — Investment Review"
+### Community 117 - "Portfolio & ETF Analysis — Investment"
 Cohesion: 0.17
 Nodes (11): Critical Rules, Mode Detection, Output Format — ETF Sections (9–15), Output Format — Portfolio Sections (1–8), Persona & Focus, Portfolio & ETF Analysis — Investment Review, Safety & Disclaimer, Step 1 — Collect Input (+3 more)
 
@@ -505,11 +504,11 @@ Nodes (11): Assertions, Auto-Wait (Key Advantage over Selenium), Basic Usage, In
 Cohesion: 0.17
 Nodes (11): Anti-Rationalization Table, Consistency Contract, Human-in-the-Loop Points, Inline Process, Property-based Testing Pattern (Hypothesis), Red Flags, Required Context, Robot Framework Testing (+3 more)
 
-### Community 120 - "Stock Deep Analysis — Investment Specialist (20 Sections)"
+### Community 120 - "Persona & Focus"
 Cohesion: 0.17
 Nodes (11): Complete Workflow, Critical Rules (MANDATORY), Language & Tone, Output Format — 20 Sections (Template), Persona & Focus, Reference Loading Guide, Safety & Disclaimer, Step 1 — Receive Ticker (+3 more)
 
-### Community 121 - "Section Details"
+### Community 121 - "HTML Report Structure"
 Cohesion: 0.17
 Nodes (11): Design System, HTML Report Structure, Section 1 — Snapshot Table, Section 2 — Revenue and Net Income, Section 3 — EPS Deep Dive, Section 4 — Valuation, Section 5 — Dividend Snapshot, Section 6 — News, MD&A and Guidance (+3 more)
 
@@ -521,11 +520,11 @@ Nodes (11): Alpha Is A Design Smell, Building Functional Palettes, Color & Contr
 Cohesion: 0.17
 Nodes (11): Cards Are Not Required, Container Queries, Depth & Elevation, Grid Systems, Hierarchy Through Multiple Dimensions, Optical Adjustments, Spacing Systems, Spatial Design (+3 more)
 
-### Community 124 - "Next.js 15 — App Router & Server Components"
+### Community 124 - "Core Mental Model"
 Cohesion: 0.17
 Nodes (11): Caching Strategy, Core Mental Model, Data Fetching, Folder Structure (Production), Middleware, Next.js 15 — App Router & Server Components, React 19 Hooks in Next.js, Route Handlers (API Routes) (+3 more)
 
-### Community 125 - "Headroom — Context Compression for AI Agents"
+### Community 125 - "Headroom — Context Compression for AI"
 Cohesion: 0.18
 Nodes (11): Agent Compatibility, Architecture, Core Commands, Cross-Agent Memory, Headroom — Context Compression for AI Agents, headroom learn (auto-improve CLAUDE.md), MCP Server, Routing Table (+3 more)
 
@@ -537,7 +536,7 @@ Nodes (10): Browser Automation Tool Priority, Chained Routes Run to Completion, 
 Cohesion: 0.18
 Nodes (10): Algorithm of Thought (AoT), Comparison with Other Techniques, Example, How it works, Key Principles, Phase 1: Define the Search Space, Phase 2: Explore (DFS-style), Phase 3: Evaluate & Select (+2 more)
 
-### Community 128 - "Error Handling Standards — Backend (All Languages)"
+### Community 128 - "Error Handling Standards — Backend"
 Cohesion: 0.18
 Nodes (10): Error Code Convention, Error Handling Standards — Backend (All Languages), Error Response Format (All Services), HTTP Status Code Mapping, Node.js (Express), Node.js (NestJS), Platform Implementation, Python (Django REST Framework) (+2 more)
 
@@ -557,7 +556,7 @@ Nodes (10): Anti-Rationalization Table, Consistency Contract, DevOps Pipeline, H
 Cohesion: 0.18
 Nodes (10): Android (Kotlin), Environment Config Standards — All Platforms, Environments, Flutter, iOS (Swift), Key Naming Convention, Platform Implementation, React / Web (+2 more)
 
-### Community 133 - "Testability Standards — Test Identifier (All Platforms)"
+### Community 133 - "Testability Standards — Test Identifier"
 Cohesion: 0.18
 Nodes (10): Android (Compose), Flutter, i18n / Bi-language (TH/EN), iOS (SwiftUI), Naming Convention (All Platforms), Platform Implementation, React / Web, Rules (+2 more)
 
@@ -569,11 +568,11 @@ Nodes (10): LESSON-UI-001: Replace CSS ID Selectors with getByRole for Button Lo
 Cohesion: 0.18
 Nodes (10): Anti-Rationalization Table, Consistency Contract, Human-in-the-Loop Points, Inline Process, Performance Testing, Red Flags, Required Context, Self-Learning (+2 more)
 
-### Community 137 - "PART 6: Advanced Contract Testing (Gems)"
+### Community 137 - "Advanced Contract Testing (Gems)"
 Cohesion: 0.18
 Nodes (11): 1. AJV Schema Validation (Full Body Contract), 2. Time Manipulation (Clock Mocking), 3. API Performance Assertions (Efficiency Gem), 3. JSDoc Template, 3. Schema Validation, 4. Logging Template, 🔄 API Error Workflow (CoT), Issue 2: Rate Limiting (+3 more)
 
-### Community 138 - "Playwright UI Testing - Rules & Templates"
+### Community 138 - "Playwright UI Testing - Rules &"
 Cohesion: 0.18
 Nodes (10): ✅ DO's, ❌ DON'Ts, File Structure, Helper Creation Guidelines, Login / Auth Rules, PART 11: CLI Commands & Execution (Quick Commands), PART 12: Quick Reference, PART 7: HELPERS (+2 more)
 
@@ -581,7 +580,7 @@ Nodes (10): ✅ DO's, ❌ DON'Ts, File Structure, Helper Creation Guidelines, Lo
 Cohesion: 0.18
 Nodes (10): 1. CSV Format, 2. 23 Columns, 3. Data Handling Rules, 4. PBI Row Rules, 5. Test Scenario Row Rules, 6. Sprint Tag Rules, 7. Validation Checklist, 8. Export Process (+2 more)
 
-### Community 140 - "Reference: General Accounting (บัญชีทั่วไป)"
+### Community 140 - "General Accounting (บัญชีทั่วไป)"
 Cohesion: 0.18
 Nodes (10): 1. การบันทึกรายการ (Journal Entries), 2. การจัดสรรค่าใช้จ่าย (Cost Allocation), 3. Bank Reconciliation, 4. ระบบเอกสาร, 5. Period-End Procedures, Reference: General Accounting (บัญชีทั่วไป), รายการพิเศษ, รายได้และค่าใช้จ่าย (+2 more)
 
@@ -601,7 +600,7 @@ Nodes (10): Destructive Actions: Undo > Confirm, Dropdown Positioning, Focus Rin
 Cohesion: 0.18
 Nodes (10): Anti-Patterns, Layer Boundary — XCTest vs Robot, Minimal Runnable Check (ponytail rule), Reference, Running, Swift 6 Test Patterns, Testability Rule for HarnessApp Models, Trigger (+2 more)
 
-### Community 145 - "Step-by-step"
+### Community 145 - "1. Find the marketplace name"
 Cohesion: 0.20
 Nodes (10): 1. Find the marketplace name, 2. Clone repo to marketplaces dir (dir name MUST match marketplace name), 3. Get version + commit SHA, 4. Copy plugin to cache (dir name MUST match marketplace name), 5. Create .claude-plugin/plugin.json in BOTH locations, 6. Register in known_marketplaces.json, 7. Register in installed_plugins.json, 8. Enable the plugin (CRITICAL — all plugins start disabled) (+2 more)
 
@@ -621,23 +620,23 @@ Nodes (9): Additional Output (append to Business Rules), Concurrency Rules (MAND
 Cohesion: 0.20
 Nodes (9): Anti-patterns to avoid, Guidelines, Process, TDD with existing code, Test-Driven Development (TDD), Test structure (Arrange-Act-Assert), The Cycle: Red → Green → Refactor, When to use (+1 more)
 
-### Community 150 - "Find Mismatch — Systematic Bug Detection + Bug Life Cycle"
+### Community 150 - "Operating Rules"
 Cohesion: 0.20
 Nodes (9): 7 Detection Categories (detail → detection-checklist.md), Anti-Patterns, Find Mismatch — Systematic Bug Detection + Bug Life Cycle, Integration with the Dev Flow, Invoke, Operating Rules, Self-Learning, Verification (+1 more)
 
-### Community 151 - "Conversation Flow by User Intent"
+### Community 151 - "Fitness Coach"
 Cohesion: 0.20
 Nodes (9): Conversation Flow by User Intent, Fitness Coach, Intent 1: Direct Training Plan Request, Intent 2: Nutrition Query, Intent 3: Movement Correction, Intent 4: Body Composition Review, Intent 5: General Fitness Knowledge, Personal Context First (+1 more)
 
-### Community 152 - "graph-report-update.kiro.hook"
+### Community 152 - "Hook Creator Graph Report Update.Kiro.Hook Reference"
 Cohesion: 0.20
 Nodes (9): description, disabled, name, then, prompt, type, version, when (+1 more)
 
-### Community 153 - "phase-gate-enforcer.kiro.hook"
+### Community 153 - "Hook Creator Phase Gate Enforcer.Kiro.Hook Reference"
 Cohesion: 0.20
 Nodes (9): description, name, then, prompt, type, version, when, toolTypes (+1 more)
 
-### Community 154 - "setup-agent-memory.kiro.hook"
+### Community 154 - "Hook Creator Setup Agent Memory.Kiro.Hook Reference"
 Cohesion: 0.20
 Nodes (9): description, name, then, command, timeout, type, version, when (+1 more)
 
@@ -653,7 +652,7 @@ Nodes (9): 1. Free Writing (Any Time), 2. Sentence Builders (Grammar Focus), 3. 
 Cohesion: 0.20
 Nodes (9): Common Error Examples (From Sessions), Japanese Practice — Grammar Patterns Reference, Kanji Reading Guide, Mistake: Mixed request pattern, Pattern 1: ～てくれませんか (Can you [do this] for me?), Pattern 2: ～くださいませんか (Could you please [do this]?), Pattern 3: ～てもらえますか (Can I get you to [do this]?), Polite Request Forms (+1 more)
 
-### Community 158 - "LESSON-VAL-001: Mock Database for Demo/POC Environments"
+### Community 158 - "API Validation Lessons"
 Cohesion: 0.20
 Nodes (9): API Validation Lessons, Context, Context, LESSON-VAL-001: Mock Database for Demo/POC Environments, LESSON-VAL-002: Environment vs Code Logic Error — Know When NOT to Heal, Problem, Problem, Solution (+1 more)
 
@@ -661,7 +660,7 @@ Nodes (9): API Validation Lessons, Context, Context, LESSON-VAL-001: Mock Databa
 Cohesion: 0.20
 Nodes (9): 1. Smart Reset Strategy, 2. Explicit Teardown, 3. Hide Keyboard Pattern, 4. Appium Health Check (CI), AI Instruction, Context, L-MOB-004: Mobile Infrastructure & Session Stability, Problem (+1 more)
 
-### Community 160 - "PART 7: HELPERS"
+### Community 160 - "Helper Creation Guidelines"
 Cohesion: 0.20
 Nodes (10): 1. Response Validation Helper, 2. Mock Data Generator, 3. API Test Helper, API-Specific Helper Patterns, File Structure, Helper Creation Guidelines, JSDoc Template, Logging Template (+2 more)
 
@@ -685,7 +684,7 @@ Nodes (9): Figma & UI Analysis, How it works, Output, Step 1: Check for Visual C
 Cohesion: 0.20
 Nodes (9): Anti-Rationalization, Load Right Reference, Quick Reference, Red Flags, Report Format, Rules, Self-Learning, Verification (+1 more)
 
-### Community 166 - "User Flow Generator — Mermaid from Requirements"
+### Community 166 - "User Flow Generator — Mermaid from"
 Cohesion: 0.22
 Nodes (8): Command, Flow Types (create only when needed), Mermaid Nodes, Output Format, Output Template, Process, Rules, User Flow Generator — Mermaid from Requirements
 
@@ -693,7 +692,7 @@ Nodes (8): Command, Flow Types (create only when needed), Mermaid Nodes, Output 
 Cohesion: 0.22
 Nodes (8): Anti-Patterns, Review Fork Constraints, Save/Discard Rubric (for drafts), Self-Review Rubric, Skill Flag Rubric, Skill Improvement Rubric, What Gets Reviewed, When This Runs
 
-### Community 168 - "appium-mcp Setup (Kiro / other MCP clients)"
+### Community 168 - "appium-mcp Setup"
 Cohesion: 0.22
 Nodes (8): 1. `"command": "npx"` alone will not resolve, 2. `timeout` is milliseconds, not seconds, After any mcp.json edit, appium-mcp Setup (Kiro / other MCP clients), Config location (Kiro), Debugging a "connection failed" with no visible error in the UI, Full working entry, Two GUI-app gotchas that cause silent connection failures
 
@@ -701,11 +700,11 @@ Nodes (8): 1. `"command": "npx"` alone will not resolve, 2. `timeout` is millise
 Cohesion: 0.22
 Nodes (8): Database Design, Database Types, Indexing, Migrations, Naming, Query Patterns, Schema Design, Tips
 
-### Community 170 - "Environment Config Standards — Backend (All Languages)"
+### Community 170 - "Environment Config Standards — Backend"
 Cohesion: 0.22
 Nodes (8): Environment Config Standards — Backend (All Languages), Environments, Key Naming Convention, Node.js, Platform Implementation, Python (FastAPI — pydantic-settings), Rules, What Goes Where
 
-### Community 171 - "Platform Implementation"
+### Community 171 - "Input Validation Standards — Backend"
 Cohesion: 0.22
 Nodes (8): Input Validation Standards — Backend (All Languages), Node.js — NestJS (class-validator), Node.js — Zod, Platform Implementation, Python — Django REST Framework, Python — FastAPI (Pydantic), Rules, Validation Rules
 
@@ -713,23 +712,23 @@ Nodes (8): Input Validation Standards — Backend (All Languages), Node.js — N
 Cohesion: 0.22
 Nodes (8): 1. Cross-Boundary Contract Mismatches, 2. Serialization & Encoding Gaps, 3. Logic Bugs, 4. Property & Method Access Errors, 5. Async & Concurrency Bugs, 6. Placeholder & Stub Code, 7. Language-Specific Checks, Detection Checklist (7 Categories)
 
-### Community 173 - "aidlc-gate-check.kiro.hook"
+### Community 173 - "Hook Creator Aidlc Gate Check.Kiro.Hook Reference"
 Cohesion: 0.22
 Nodes (8): description, name, then, prompt, type, version, when, type
 
-### Community 174 - "eval-check.kiro.hook"
+### Community 174 - "Hook Creator Eval Check.Kiro.Hook Reference"
 Cohesion: 0.22
 Nodes (8): description, name, then, prompt, type, version, when, type
 
-### Community 175 - "session-save.kiro.hook"
+### Community 175 - "Hook Creator Session Save.Kiro.Hook Reference"
 Cohesion: 0.22
 Nodes (8): description, name, then, prompt, type, version, when, type
 
-### Community 176 - "skill-improve.kiro.hook"
+### Community 176 - "Hook Creator Skill Improve.Kiro.Hook Reference"
 Cohesion: 0.22
 Nodes (8): description, name, then, prompt, type, version, when, type
 
-### Community 177 - "During a session"
+### Community 177 - "Domain Modeling"
 Cohesion: 0.22
 Nodes (8): Challenge against the glossary, Cross-reference with code, Domain Modeling, During a session, GLOSSARY.md — strict glossary only, Record the decision — offer sparingly, Sharpen fuzzy language, Update GLOSSARY.md inline — never batch
 
@@ -741,7 +740,7 @@ Nodes (8): App Structure, Lifecycle, Navigation, Previews, Review Checks, State 
 Cohesion: 0.22
 Nodes (8): Example, How It Works, Japanese Language Practice Skill, Load Right Reference, Practice Modes, Response Format, Script Support, Shared Practice History (Hanashi)
 
-### Community 182 - "L-MOB-003: Reliable Mobile Gestures (Scrolling & Swiping)"
+### Community 182 - "L-MOB-003: Reliable Mobile Gestures"
 Cohesion: 0.22
 Nodes (8): 1. Use Percentage-Based Swiping, 2. Implement a Scroll-Limit, 3. Handle Overlay & Sticky Headers, AI Instruction, Context, L-MOB-003: Reliable Mobile Gestures (Scrolling & Swiping), Problem, Solution: Percentage-Based Gestures
 
@@ -749,7 +748,7 @@ Nodes (8): 1. Use Percentage-Based Swiping, 2. Implement a Scroll-Limit, 3. Hand
 Cohesion: 0.22
 Nodes (8): 1. Unified Locator Priority, 2. Smart XPath Pattern, 3. Page Object Encapsulation, AI Instruction, Context, L-MOB-002: Cross-Platform Locator Strategy, Problem, Solution: AccessibilityId-First
 
-### Community 184 - "L-MOB-001: UI Synchronization (UI Slower than Code)"
+### Community 184 - "L-MOB-001: UI Synchronization"
 Cohesion: 0.22
 Nodes (8): 1. Wait Until Clickable, 2. Post-Action Verification, 3. Handle Animations, AI Instruction, Context, L-MOB-001: UI Synchronization (UI Slower than Code), Problem, Solution: Wait-Action-Verify
 
@@ -757,7 +756,7 @@ Nodes (8): 1. Wait Until Clickable, 2. Post-Action Verification, 3. Handle Anima
 Cohesion: 0.22
 Nodes (8): Decision Framework, Grafana Dashboard (Local), Identifying Bottlenecks, JSON Output Analysis, K6 Results Analysis, Key Metrics, Reading K6 Terminal Output, Trend Analysis (Compare Runs)
 
-### Community 186 - "🏷️ Test Describe Naming Conventions"
+### Community 186 - "Test Naming Conventions"
 Cohesion: 0.22
 Nodes (9): Default Testcase ID Format, 📝 Describe Format Rules, Multiple ID IDs, Multiple Testcase IDs, PART 3: Test Naming Conventions, Single ID ID, Single Testcase ID, 🏷️ Test Describe Naming Conventions (+1 more)
 
@@ -809,7 +808,7 @@ Nodes (8): Dev Flow Integration, Failure Handling, Step 1: Build Check, Step 2: 
 Cohesion: 0.22
 Nodes (8): Async Tests, Isolating from SessionCoordinator / NSApp, @MainActor Tests, Naming Convention, Package.swift — Adding a Test Target, Swift 6 XCTest Reference, Task.detached in Production Code, Testing @Observable Models
 
-### Community 199 - "index.md"
+### Community 199 - "Agent Memory Index"
 Cohesion: 0.25
 Nodes (4): Agent Memory Index, Knowledge, Plans, Archived Decisions (settled > 30 days, no longer "active")
 
@@ -825,11 +824,11 @@ Nodes (7): Claude Agent Workspace — ~/.claude, Graphify, Infrastructure, Maint
 Cohesion: 0.25
 Nodes (7): Authoring, How skills use these files, Known instances, PRODUCT.md / DESIGN.md Convention, Qualifying projects, Staying in sync, What each file is
 
-### Community 203 - "memory_vector_search.py"
+### Community 203 - "Memory Vector Search Script"
 Cohesion: 0.46
 Nodes (7): build_index(), collect_files(), load_index(), main(), Path, save_index(), search()
 
-### Community 204 - "scripts/setup — Setup Scripts"
+### Community 204 - "Setup/Script Readme.Md Script"
 Cohesion: 0.25
 Nodes (7): All Scripts, Architecture, Hooks copied to the new project, How to Use, scripts/setup — Setup Scripts, Skill Auto-Improvement System, 🚀 Start Here — Main Entry Point
 
@@ -849,7 +848,7 @@ Nodes (7): API Rules, EF Core Rules, Modern C# and .NET Backend Reference, Offic
 Cohesion: 0.25
 Nodes (7): Fetch and Network, HTTP and Framework Rules, Modern Node.js Backend Reference, Official Documentation Anchors, Review Checklist, Runtime Rules, Testing
 
-### Community 209 - "Architect"
+### Community 209 - "When to Load Each Reference"
 Cohesion: 0.25
 Nodes (7): Anti-Rationalization Table, Architect, Inline Process, Next Step, Output, Red Flags, When to Load Each Reference
 
@@ -873,7 +872,7 @@ Nodes (7): Bug Life Cycle + Output Format, Classification Rules, Classify Tags (
 Cohesion: 0.25
 Nodes (7): Anti-Pattern Check, Cross-Industry Pattern, Industry Rules (81 Total), Quick Lookup, Rule Structure, Single Industry, Usage
 
-### Community 215 - "3 Amigos — Multi-Role Review"
+### Community 215 - "Scale (auto-detect)"
 Cohesion: 0.25
 Nodes (7): 3 Amigos — Multi-Role Review, Dev Perspective, Input, Output, PO Perspective, QA Perspective, Scale (auto-detect)
 
@@ -885,7 +884,7 @@ Nodes (7): Interview Doc, Step 1 — Load Context First, Step 2 — Interview (O
 Cohesion: 0.25
 Nodes (7): Change History, Default Rule, Model Rules, Query and Cache Rules, Review Checks, SwiftData Reference, Testing
 
-### Community 219 - "LESSON-VIS-001: Element Not Visible — Hidden by CSS or Not Yet Loaded"
+### Community 219 - "Web UI Visibility Lessons"
 Cohesion: 0.25
 Nodes (7): LESSON-VIS-001: Element Not Visible — Hidden by CSS or Not Yet Loaded, LESSON-VIS-002: Element Is Disabled — Fill Required Fields Before Clicking, Problem, Problem, Solution, Solution, Web UI Visibility Lessons
 
@@ -893,19 +892,19 @@ Nodes (7): LESSON-VIS-001: Element Not Visible — Hidden by CSS or Not Yet Load
 Cohesion: 0.25
 Nodes (7): Azure DevOps Pipeline, GitHub Actions, Grafana Cloud K6 (Optional — for team dashboards), K6 CI/CD Integration, Performance Gate Pattern, Rules, When to Run Performance Tests
 
-### Community 221 - "2. 🚨 Common API Issues (Root Cause)"
+### Community 221 - "Assertions & Error Handling"
 Cohesion: 0.25
 Nodes (8): 1.1 Assertions Best Practices, 1.2 API Response Validation, 1. API Response Assertions, 2. 🚨 Common API Issues (Root Cause), Issue 1: Network Timeout, Issue 2: Eventual Consistency (Data not ready), Issue 3: Concurrent Request Testing (Race Conditions), PART 5: Assertions & Error Handling
 
-### Community 222 - "PART 9: Performance & Reliability"
+### Community 222 - "Performance & Reliability"
 Cohesion: 0.25
 Nodes (8): 1. Global Setup (Authentication State), 2. Parallel Execution Strategy, 3. CI/CD Insight, 4.1 Worker-Scoped Fixtures (Fast Setup), 4.2 Automatic Fixtures (Global Diagnostic), 4.3 API-First Authentication (High-Speed Auth), 4. Advanced Fixtures (Technical Templates), PART 9: Performance & Reliability
 
-### Community 223 - "3. 🚨 Common Timeout Issues (Root Cause)"
+### Community 223 - "Interactions & Assertions"
 Cohesion: 0.25
 Nodes (8): 1. UI Interaction Patterns, 2. Best Practices for UI Verification (Assertions), 3. 🚨 Common Timeout Issues (Root Cause), Issue 1: Loading Overlay/Dialog Overlapping Element, Issue 2: Data Loading (API Response Pending), Issue 3: Element is Disabled, PART 6: Interactions & Assertions, 🔄 Timeout Error Workflow (CoT)
 
-### Community 224 - "🔑 Testcase ID Requirements"
+### Community 224 - "Test Naming Conventions"
 Cohesion: 0.25
 Nodes (8): Default Testcase ID Format, Multiple ID IDs, Multiple Testcase IDs, PART 3: Test Naming Conventions, Single ID ID, Single Testcase ID, 🏷️ Test Describe Naming Conventions, 🔑 Testcase ID Requirements
 
@@ -917,11 +916,11 @@ Nodes (7): Concentration Red Flags, Core Metrics, Correlation Interpretation, ET
 Cohesion: 0.25
 Nodes (7): FX Impact (USD/THB), Key Thai Market Indices, Recommended Data Sources, SET vs US Market Comparison, Thai Market Context — Portfolio Reference, Thai Tax-Advantaged Funds, Withholding Tax on US Dividends
 
-### Community 227 - "📊 Postman → Playwright Migration Progress"
+### Community 227 - "Postman → Playwright Migration Progress"
 Cohesion: 0.25
 Nodes (7): 📊 Postman → Playwright Migration Progress, Shared Files, Step 1+2: JSON → Markdown (USER runs in terminal), Step 2.5: AI Design Structure, Step 3: Markdown → Playwright (AI generates), Step 4: Run Tests → Fix Failures (USER runs, AI fixes), Summary
 
-### Community 228 - "compilerOptions"
+### Community 228 - "Tsconfig.Json Script"
 Cohesion: 0.25
 Nodes (7): compilerOptions, esModuleInterop, module, moduleResolution, skipLibCheck, strict, target
 
@@ -929,7 +928,7 @@ Nodes (7): compilerOptions, esModuleInterop, module, moduleResolution, skipLibCh
 Cohesion: 0.25
 Nodes (7): 23-Column Enforcement, Auto-Fix Actions, CSV Validator, Process, Scripts, Validation Rules, When to use
 
-### Community 230 - "Process"
+### Community 230 - "Test Scenario Reuse Analysis"
 Cohesion: 0.25
 Nodes (7): Abstract Test Pattern Protocol, Part 1: Test Pattern Matching, Part 2: Gap & Adaptation Strategy, Process, Rules, Test Scenario Reuse Analysis, When to use
 
@@ -937,7 +936,7 @@ Nodes (7): Abstract Test Pattern Protocol, Part 1: Test Pattern Matching, Part 2
 Cohesion: 0.25
 Nodes (7): Duration: The 100/300/500 Rule, Easing, Motion Design, Only Animate transform and opacity, Perceived Performance, Reduced Motion (NOT optional), Staggered Animations
 
-### Community 232 - "Wayfinder"
+### Community 232 - "Ticket types"
 Cohesion: 0.25
 Nodes (7): Charting (one session — plan only, don't resolve tickets yet), Rules, Ticket types, Tracker, Wayfinder, When to use, Working through (repeat across sessions)
 
@@ -965,11 +964,11 @@ Nodes (6): Adaptive fan-out sizing (heuristic, not yet measured), Batch size vs.
 Cohesion: 0.29
 Nodes (6): Artifact Mapping, Config (`~/.claude/.claude/aidlc.json`), Decision, Files Changed, Plan: AIDLC Configurable Artifact Path, Problem
 
-### Community 239 - "Plan: Install mobilewright (deferred — not currently installed)"
+### Community 239 - "Known issue"
 Cohesion: 0.29
 Nodes (6): Context, Install steps (when needed), Known issue, Not yet decided, Plan: Install mobilewright (deferred — not currently installed), Uninstall
 
-### Community 240 - "[Unreleased]"
+### Community 240 - "CHANGELOG.md Module"
 Cohesion: 0.29
 Nodes (6): Added, Changed, Changelog, Documentation, Fixed, [Unreleased]
 
@@ -977,7 +976,7 @@ Nodes (6): Added, Changed, Changelog, Documentation, Fixed, [Unreleased]
 Cohesion: 0.29
 Nodes (6): Output Format, Phase 1 — Read Usage Log, Phase 2 — Diff Against skill-log.md, Phase 3 — Generate Proposals, Phase 4 — Auto-Draft (Crystallized Only), /skill-review — Skill Evolution Engine
 
-### Community 242 - "_index_file"
+### Community 242 - "Session Search Index Script"
 Cohesion: 0.48
 Nodes (6): Connection, _ensure_schema(), _extract_text(), _index_file(), main(), Path
 
@@ -985,7 +984,7 @@ Nodes (6): Connection, _ensure_schema(), _extract_text(), _index_file(), main(),
 Cohesion: 0.29
 Nodes (6): FigJam to Markdown Converter, Input, Notes, Output, Process, Required: Source Note
 
-### Community 244 - "sync-all.sh"
+### Community 244 - "Sync All Script"
 Cohesion: 0.48
 Nodes (5): generate_instruction_file(), merge_skills_dir(), mirror_dir(), sync-all.sh script, should_run()
 
@@ -1001,7 +1000,7 @@ Nodes (6): Agy Companion, Delegation scope, Result handling, Routing controls, T
 Cohesion: 0.29
 Nodes (6): Authentication & Authorization, Authentication Methods, Authorization Patterns, Security Checklist, Tips, Token Refresh Flow
 
-### Community 248 - "Docker"
+### Community 248 - "Dockerfile Best Practices"
 Cohesion: 0.29
 Nodes (6): Docker, Docker Compose, Dockerfile Best Practices, Environment Variables, Rules, Tips
 
@@ -1045,11 +1044,11 @@ Nodes (6): Default Rule, Main Actor, Migration Rules, Property Wrapper Rules, Re
 Cohesion: 0.29
 Nodes (6): Accessibility Contract, Accessibility Review, iOS Testing and Accessibility Reference, Review Checks, UI Test Identifiers, XCTest and XCUITest
 
-### Community 259 - "Japanese Practice — Progress Tracking & Levels"
+### Community 259 - "Japanese Practice — Progress Tracking &"
 Cohesion: 0.29
 Nodes (6): Assessment Rubric, Common Mistake Patterns, Difficulty Levels, Japanese Practice — Progress Tracking & Levels, Kanji Tracker, Weekly Check-In
 
-### Community 261 - "LESSON-AUTH-001: 401 Unauthorized — Token Expired or Incorrect"
+### Community 261 - "AI Instruction"
 Cohesion: 0.29
 Nodes (6): AI Instruction, Antipattern, Context, LESSON-AUTH-001: 401 Unauthorized — Token Expired or Incorrect, Problem, Solution
 
@@ -1065,7 +1064,7 @@ Nodes (6): Context Menu, Keyboard Shortcuts, List — Hierarchical (File Tree), 
 Cohesion: 0.29
 Nodes (6): data-testid Naming Convention, Naming Rules, Pattern, Shared Components, Type Abbreviation Table, Usage
 
-### Community 265 - "PART 5: Locator Strategy"
+### Community 265 - "Locator Strategy"
 Cohesion: 0.29
 Nodes (7): 🛑 Anti-Patterns (Zero Tolerance), 🔀 Hybrid Locator Pattern (Recommended), ⚠️ i18n / Bi-language Consideration, 🌐 Labels File Pattern (Bi-language TH/EN), PART 5: Locator Strategy, Priority Order (Stability First), WebSocket Testing Pattern
 
@@ -1109,7 +1108,7 @@ Nodes (6): Component Rules, Hook Rules, Modern React Reference, Performance, Rea
 Cohesion: 0.33
 Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-07-29)
 
-### Community 276 - "/resume — Pick up where you left off"
+### Community 276 - "Decision Tree"
 Cohesion: 0.33
 Nodes (5): Decision Tree, Done When, Instructions, Prerequisites, /resume — Pick up where you left off
 
@@ -1169,11 +1168,11 @@ Nodes (5): Simplification Process, Step 1: Understand (Chesterton's Fence), Step
 Cohesion: 0.33
 Nodes (5): Critical Rules, Earnings Preview — Pre-Earnings Setup, Load Right Reference, Output Format, Persona and Safety
 
-### Community 291 - "English Practice — Progress Tracking & Levels"
+### Community 291 - "English Practice — Progress Tracking &"
 Cohesion: 0.33
 Nodes (5): Assessment Rubric, Common Mistake Patterns (Tracked Over Time), English Practice — Progress Tracking & Levels, Milestones, Weekly Check-In
 
-### Community 292 - "Navigation & Deep Link Standards — All Platforms"
+### Community 292 - "Route Naming Convention"
 Cohesion: 0.33
 Nodes (5): Deep Link Scheme, Navigation & Deep Link Standards — All Platforms, Route Naming Convention, Rules, Rules
 
@@ -1185,19 +1184,19 @@ Nodes (5): Rules, State Model Pattern (All Platforms), Test Identifier Requireme
 Cohesion: 0.33
 Nodes (5): Lessons, Page Objects, Shared Resources, Templates, Web UI Automation Templates Index
 
-### Community 295 - "LESSON-FILE-001: Multipart Upload Error — Wrong MIME Type or File Path"
+### Community 295 - "AI Instruction"
 Cohesion: 0.33
 Nodes (5): AI Instruction, Context, LESSON-FILE-001: Multipart Upload Error — Wrong MIME Type or File Path, Problem, Solution
 
-### Community 296 - "LESSON-SETUP-001: Playwright request Fixture from beforeAll Cannot Be Reused"
+### Community 296 - "AI Instruction"
 Cohesion: 0.33
 Nodes (5): AI Instruction, Context, LESSON-SETUP-001: Playwright request Fixture from beforeAll Cannot Be Reused, Problem, Solution
 
-### Community 297 - "LESSON-FILE-001: File Upload Failed — Incorrect File Path"
+### Community 297 - "AI Instruction"
 Cohesion: 0.33
 Nodes (5): AI Instruction, Context, LESSON-FILE-001: File Upload Failed — Incorrect File Path, Problem, Solution
 
-### Community 298 - "LESSON-LOC-001: Multiple Elements Match — Locator Not Specific Enough"
+### Community 298 - "AI Instruction"
 Cohesion: 0.33
 Nodes (5): AI Instruction, Context, LESSON-LOC-001: Multiple Elements Match — Locator Not Specific Enough, Problem, Solution
 
@@ -1209,19 +1208,19 @@ Nodes (5): @Observable (macOS 14+ / Swift 5.9) — prefer this, @Observable vs O
 Cohesion: 0.33
 Nodes (5): Anti-Patterns, Load Right Reference, macOS SwiftUI Skill, Trigger, When to Fall Back to AppKit
 
-### Community 301 - "PART 2: Coding Standards"
+### Community 301 - "Coding Standards"
 Cohesion: 0.33
 Nodes (6): 1. ⏰ Async/Await Usage, 2. 🏷️ Naming Conventions, 3. 📁 File and Folder Naming Standards, 4. 🏗️ Test Structure (AAA Pattern), 5. 📦 Import Organization, PART 2: Coding Standards
 
-### Community 302 - "PART 1: Overview"
+### Community 302 - "Project Structure: API Testing"
 Cohesion: 0.33
 Nodes (6): 🔗 API Setup Pattern (Seed via API before UI test), 🔗 Cross-Layer Shared Fixtures (API + Web UI), PART 1: Overview, 📁 Project Structure: API Testing, 🔑 Standard Environment Variables, 🔍 Terminology: Service vs Helper
 
-### Community 303 - "PART 2: Coding Standards"
+### Community 303 - "Coding Standards"
 Cohesion: 0.33
 Nodes (6): 1. ⏰ Async/Await Usage, 2. 🏷️ Naming Conventions, 3. 📁 File and Folder Naming Standards, 4. 🏗️ Test Structure (AAA Pattern), 5. 📦 Import Organization, PART 2: Coding Standards
 
-### Community 304 - "PART 1: Overview"
+### Community 304 - "Project Structure: Web UI Testing"
 Cohesion: 0.33
 Nodes (6): 🔗 API Setup Pattern (Seed via API before UI test), 🔗 Cross-Layer Shared Fixtures (API + Web UI), PART 1: Overview, 📁 Project Structure: Web UI Testing, 🔑 Standard Environment Variables, 🔍 Terminology: Service vs Helper
 
@@ -1245,7 +1244,7 @@ Nodes (5): Forbidden Patterns, Python Database Writer, Rules, Steps, When to use
 Cohesion: 0.33
 Nodes (5): Documentation, Infrastructure, Performance, Pre-Launch Checklist, Security
 
-### Community 310 - "Stock Peer Comparison Report — HTML Artifact"
+### Community 310 - "Stock Peer Comparison Report — HTML"
 Cohesion: 0.33
 Nodes (5): Critical Rules (MANDATORY), Load Right Reference, Persona and Safety, Stock Peer Comparison Report — HTML Artifact, Workflow Overview
 
@@ -1257,7 +1256,7 @@ Nodes (5): Column Timeline, Divider (MANDATORY between Quick Review and Full Det
 Cohesion: 0.33
 Nodes (5): Mode Detection (Step 0), Process, Quick Scenario, Rules, When to use
 
-### Community 313 - "Appendices (use when applicable)"
+### Community 313 - "Output Format Template"
 Cohesion: 0.33
 Nodes (5): Appendices (use when applicable), Appendix A — Deep-Dive Data Table (Batch only), Appendix B — Portfolio Fit and ETF Lens, Appendix C — Peer Comparison, Output Format Template
 
@@ -1269,7 +1268,7 @@ Nodes (5): Critical Rules (MANDATORY), Load Right Reference, Persona and Safety,
 Cohesion: 0.33
 Nodes (5): Best Practices, Design System, Integration, Responsiveness, Tailwind CSS v4 Standards
 
-### Community 316 - "Claude Code Plugin — Manual Install Guide"
+### Community 316 - "Claude Code Plugin — Manual Install"
 Cohesion: 0.40
 Nodes (4): Claude Code Plugin — Manual Install Guide, Common mistakes, Verify, When to use
 
@@ -1285,19 +1284,19 @@ Nodes (4): Config location, If statusline shows nothing, Statusline Setup & Trou
 Cohesion: 0.40
 Nodes (4): Design — Scheduled agent-memory Maintenance Rollout, Known limitations (real, not hypothetical — found during rollout), Rollout order, What exists (built once, reused by every project)
 
-### Community 320 - "Task Progress — Scheduled agent-memory Maintenance Rollout"
+### Community 320 - "Task Progress — Scheduled agent-memory Maintenance"
 Cohesion: 0.40
 Nodes (4): Done, Next (waiting on real Sunday data, not blocked on anything technical), Pending — remaining projects (not scheduled yet), Task Progress — Scheduled agent-memory Maintenance Rollout
 
-### Community 321 - "code-reviewer.md"
+### Community 321 - "Five-Axis Review"
 Cohesion: 0.40
 Nodes (4): Five-Axis Review, Output Format, Rules, Severity Labels
 
-### Community 322 - "security-auditor.md"
+### Community 322 - "Review Scope"
 Cohesion: 0.40
 Nodes (4): Output Format, Review Scope, Rules, Severity Classification
 
-### Community 323 - "test-engineer.md"
+### Community 323 - "Coverage Scenarios"
 Cohesion: 0.40
 Nodes (4): Approach, Coverage Scenarios, Output Format, Rules
 
@@ -1305,7 +1304,7 @@ Nodes (4): Approach, Coverage Scenarios, Output Format, Rules
 Cohesion: 0.40
 Nodes (4): /build — Implement incrementally, Done When, Instructions, Prerequisites
 
-### Community 325 - "/plan — Design + break into tasks"
+### Community 325 - "/plan — Design + break into"
 Cohesion: 0.40
 Nodes (4): Done When, Instructions, /plan — Design + break into tasks, Prerequisites
 
@@ -1325,7 +1324,7 @@ Nodes (4): Done When, Instructions, Prerequisites, /spec — Define what to buil
 Cohesion: 0.40
 Nodes (4): Done When, Instructions, Prerequisites, /test — Prove it works
 
-### Community 330 - "install-hooks.py"
+### Community 330 - "Install Hooks Script"
 Cohesion: 0.70
 Nodes (4): load_template(), main(), merge(), normalize()
 
@@ -1345,7 +1344,7 @@ Nodes (4): Error Categories, Error Handling Standards — All Platforms, Respons
 Cohesion: 0.40
 Nodes (4): Log Levels, Logging Standards — All Platforms, Rules, Security Rules
 
-### Community 335 - "Handoff"
+### Community 335 - "Handoff Skill Architecture"
 Cohesion: 0.40
 Nodes (4): Handoff, Instructions, Output, When to Use
 
@@ -1361,7 +1360,7 @@ Nodes (4): Process, Rules, Source-Driven Development, Unverified Flag
 Cohesion: 0.40
 Nodes (4): API Templates & Lessons Index, Lessons, Shared Resources, Templates
 
-### Community 339 - "Automation Templates & Lessons — Master Index"
+### Community 339 - "Automation Templates & Lessons — Master"
 Cohesion: 0.40
 Nodes (4): Automation Templates & Lessons — Master Index, Categories, Reading Protocol, Summary
 
@@ -1409,11 +1408,11 @@ Nodes (4): Bridging Actions: SwiftUI → AppKit Host, Embedding: AppKit ↔ Swif
 Cohesion: 0.40
 Nodes (4): Drag and Drop, Generation 1: NSItemProvider (macOS 11+), Generation 2: Transferable (macOS 13+) — prefer for in-app, UTType Reference
 
-### Community 351 - "PART 8: API Schema Definition"
+### Community 351 - "API Schema Definition"
 Cohesion: 0.40
 Nodes (5): 1️⃣ Basic Schema Structure, 2️⃣ Optional: Advanced Validation, 3️⃣ Common Patterns, PART 8: API Schema Definition, 🎯 Purpose
 
-### Community 352 - "PART 10: Advanced UI (Expert Tier)"
+### Community 352 - "Advanced UI (Expert Tier)"
 Cohesion: 0.40
 Nodes (5): 1. Bot Detection Bypass (Security Evasion), 2. Time Manipulation (UI Time Travel), 3. Atomic Web UI+API Integration (Seed Data Gem), 4. Network Fuzzing & Mutation (Chaos Gem), PART 10: Advanced UI (Expert Tier)
 
@@ -1429,7 +1428,7 @@ Nodes (4): Feature Flag Lifecycle, Feature Flags and Staged Rollout, Rollout Dec
 Cohesion: 0.40
 Nodes (4): Anti-Rationalization, Load Right Reference, Red Flags, Shipping and Launch
 
-### Community 356 - "Thai Accountant & Finance — Senior/Manager Level"
+### Community 356 - "Thai Accountant & Finance — Senior/Manager"
 Cohesion: 0.40
 Nodes (4): Persona & Principles, Quick Decision Framework, Reference Loading Guide, Thai Accountant & Finance — Senior/Manager Level
 
@@ -1437,19 +1436,19 @@ Nodes (4): Persona & Principles, Quick Decision Framework, Reference Loading Gui
 Cohesion: 0.40
 Nodes (4): Process, Re-running, Rules, Ubiquitous Language
 
-### Community 358 - "memory-write-scan.py"
+### Community 358 - "Memory Write Scan Hook"
 Cohesion: 0.83
 Nodes (3): is_memory_path(), main(), scan()
 
-### Community 359 - "user-prompt-submit.py"
+### Community 359 - "User Prompt Submit Hook"
 Cohesion: 0.83
 Nodes (3): check_memory_passive_review(), check_skill_trigger(), main()
 
-### Community 361 - "session-start.sh"
+### Community 361 - "Session Start Script"
 Cohesion: 1.00
 Nodes (3): auto_act_check(), sep(), session-start.sh script
 
-### Community 362 - "setupTests.sh"
+### Community 362 - "Setup/Setuptests Script"
 Cohesion: 0.50
 Nodes (3): PATH, setupTests.sh script, VOLTA_HOME
 
@@ -1457,7 +1456,7 @@ Nodes (3): PATH, setupTests.sh script, VOLTA_HOME
 Cohesion: 0.50
 Nodes (3): Agent Memory Index, Knowledge, Plans
 
-### Community 364 - "awk multiline-record anchor gotcha + grep-substring false-positive"
+### Community 364 - "awk multiline-record anchor gotcha + grep-substring"
 Cohesion: 0.50
 Nodes (3): awk multiline-record anchor gotcha + grep-substring false-positive, Context & Problem, Learned Solution
 
@@ -1505,7 +1504,7 @@ Nodes (3): Management Talk — Workspace Workflow, Step 1 — Load the method fi
 Cohesion: 0.50
 Nodes (3): ⚠️ Gotchas, Key Mandates, Playwright Standards
 
-### Community 376 - "Security"
+### Community 376 - "When to Load This Skill"
 Cohesion: 0.50
 Nodes (3): Load, Security, When to Load This Skill
 
@@ -1521,11 +1520,11 @@ Nodes (3): Load Order, Official Documentation Anchors, React and Web Frontend
 Cohesion: 0.13
 Nodes (13): Body Composition Defaults, Chat Style, Current Data Policy, Fitness Personal Context, Logging Patterns, Personal Defaults, Personal Movement Constraints, Protein Defaults (+5 more)
 
-### Community 434 - "project.md"
+### Community 434 - "Memory Index — My Investment Port"
 Cohesion: 0.15
 Nodes (9): Key Red Flags (from primary sources), Technology Summary, Watch Triggers → BUY Reconsideration, Memory Index — My Investment Port, Active BUY Positions (Terry / Nora) — as of 2026-06-16, Key Files, Known Bug — import-kb-decisions.mjs, Pipeline Flow (updated 2026-06-18) (+1 more)
 
-### Community 435 - "ac_ownership_refactor.md"
+### Community 435 - "The Pattern: Timer State = Ownership"
 Cohesion: 0.40
 Nodes (4): Concrete Examples, Files Updated (Apr 14, 2026), Key Insight, The Pattern: Timer State = Ownership Marker
 
@@ -1551,17 +1550,17 @@ Nodes (3): Current Threads, Recent Sessions, Session State
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Playwright API Testing - Rules & Templates` connect `Playwright API Testing - Rules & Templates` to `PART 7: HELPERS`, `PART 8: API Schema Definition`, `PART 6: Advanced Contract Testing (Gems)`, `PART 2: Coding Standards`, `PART 1: Overview`, `PART 9: Infrastructure & Scripts Standard (package.json)`, `🏷️ Test Describe Naming Conventions`, `2. 🚨 Common API Issues (Root Cause)`, `4. Advanced Fixtures & Patterns 🏗️`?**
+- **Why does `Playwright API Testing - Rules & Templates` connect `Playwright API Testing - Rules &` to `Helper Creation Guidelines`, `API Schema Definition`, `Advanced Contract Testing (Gems)`, `Coding Standards`, `Project Structure: API Testing`, `Infrastructure & Scripts Standard (package.json)`, `Test Naming Conventions`, `Assertions & Error Handling`, `Structure & Design`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **What connects `changelog`, `git`, `Shared helpers for PreToolUse gate hooks. Fail-open: callers catch all errors.` to the rest of the system?**
   _2831 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `DateHelper` be split into smaller, more focused modules?**
+- **Should `API Date & Utility Helpers` be split into smaller, more focused modules?**
   _Cohesion score 0.06901960784313725 - nodes in this community are weakly interconnected._
 - **Should `Fix Generated Playwright Files (Postman Migration)` be split into smaller, more focused modules?**
   _Cohesion score 0.041666666666666664 - nodes in this community are weakly interconnected._
-- **Should `readPostmanCollection.ts` be split into smaller, more focused modules?**
+- **Should `Postman Collection Parser & Converter` be split into smaller, more focused modules?**
   _Cohesion score 0.06448202959830866 - nodes in this community are weakly interconnected._
-- **Should `Appium Testing (Android) - Rules & Templates` be split into smaller, more focused modules?**
+- **Should `Appium Testing (Android) - Rules &` be split into smaller, more focused modules?**
   _Cohesion score 0.05405405405405406 - nodes in this community are weakly interconnected._
-- **Should `Appium Testing (iOS) - Rules & Templates` be split into smaller, more focused modules?**
+- **Should `Appium Testing (iOS) - Rules &` be split into smaller, more focused modules?**
   _Cohesion score 0.05405405405405406 - nodes in this community are weakly interconnected._
