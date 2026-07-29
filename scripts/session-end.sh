@@ -72,4 +72,12 @@ if [[ -f "$BUILD_CACHE_SCHEDULER" ]]; then
   echo ""
 fi
 
+# ── 7. Weekly graphify semantic-label staleness check (global) ────────────
+GRAPHIFY_LABEL_SCHEDULER="$HOME/.claude/scripts/graphify-label-scheduler.sh"
+if [[ -f "$GRAPHIFY_LABEL_SCHEDULER" ]]; then
+  echo "▸ Graphify semantic labels"
+  bash "$GRAPHIFY_LABEL_SCHEDULER" 2>&1 | sed 's/^/  /' || true
+  echo ""
+fi
+
 echo "═══ done ════════════════════════════════════════"

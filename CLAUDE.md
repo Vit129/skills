@@ -110,6 +110,20 @@ uv run ~/.claude/scripts/memory_vector_search.py "<query>" [--limit N]
 # interval. Runs the dry-run scan and logs the report; never auto-deletes — review
 # the report, then run clean-build-cache.sh --apply by hand.
 
+~/.claude/scripts/graphify-label-scheduler.sh [--force]
+# Weekly scan (wired into session-end.sh, surfaced via session-start.sh's Auto-act
+# check) of every graphified project for communities still sitting as unlabeled
+# "Community N" placeholders (>10% threshold). Flag-only, NEVER auto-labels —
+# a 2026-07-29 incident showed a single unsupervised batch labeling pass across
+# 11 projects at once silently produced garbage for 6 of them (e.g. "Fixed"
+# reused as a community name 563 times) while self-reporting 100% success.
+# When acting on a DUE report: dispatch labeling ONE PROJECT AT A TIME (never
+# a batch), then quality-check each result (duplicate-label ratio + spot-check
+# community membership in graph.json — a real duplicate like near-identical
+# platform-doc copies is fine, a duplicate across unrelated content is not)
+# before trusting it. Revert via git checkout or the graphify-out/<date>/
+# backup folder if it fails the check.
+
 ~/.claude/scripts/install-cron.sh
 # Installs/refreshes the real OS crontab entry for build-cache-scheduler.sh (runs it
 # weekly independent of any Claude Code session — session-end.sh only fires when a
