@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Full new-machine bootstrap for ~/.claude ONLY (never touches ~/.kiro).
 # Clone this repo to ~/.claude on a fresh machine, run this once, restart
-# Claude Code -- hooks, MCP servers (graphify/kouen), the agy plugin, and
-# cron are all wired.
+# Claude Code -- hooks, MCP servers (graphify/kouen), the agy + 9arm-skills
+# plugins, and cron are all wired.
 #
 # Idempotent -- every step it calls is additive-only and safe to re-run.
 # Usage: bash ~/.claude/scripts/bootstrap-new-machine.sh
@@ -36,6 +36,18 @@ echo "== agy plugin =="
 if command -v claude &>/dev/null; then
   claude plugin marketplace add Vit129/agy-plugin-cc
   claude plugin install agy@agy-plugin-cc
+else
+  echo "  claude CLI not found -- skipping (run this script from inside Claude Code's shell)"
+fi
+
+echo "== 9arm-skills plugin =="
+if command -v claude &>/dev/null; then
+  # thananon/9arm-skills has no .claude-plugin/marketplace.json of its own (only a
+  # plugin.json), so it can't be added as a marketplace directly -- this small
+  # wrapper manifest (checked into this repo) declares it as one, matching the
+  # existing "9arm-marketplace" name so the enabledPlugins key never changes.
+  claude plugin marketplace add "$HOME/.claude/scripts/marketplace-manifests/9arm"
+  claude plugin install 9arm-skills@9arm-marketplace
 else
   echo "  claude CLI not found -- skipping (run this script from inside Claude Code's shell)"
 fi

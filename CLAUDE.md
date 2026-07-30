@@ -167,11 +167,15 @@ bash ~/.claude/scripts/bootstrap-new-machine.sh
 # PyPI, since upstream graphifyy[mcp] resolves mcp>=2.0 and breaks graphify-mcp at
 # startup; the fork pins mcp<2.0) if missing, adds+installs the agy plugin
 # (github.com/Vit129/agy-plugin-cc, via `claude plugin marketplace add` + `install` —
-# idempotent, no-ops if already present), then runs install-hooks.py + install-mcp.py +
-# install-cron.sh in order. Idempotent, safe to re-run. Clone this repo to ~/.claude on
-# a fresh machine, run this once, restart Claude Code — hooks, MCP servers, the agy
-# plugin, and cron are all wired without any manual step. kouen MCP entry lands
-# disabled by default (Kouen.app is a personal Mac app, not on brew — install it
+# idempotent, no-ops if already present) and the 9arm-skills plugin (upstream
+# github.com/thananon/9arm-skills has no marketplace.json of its own, so it's added
+# via scripts/marketplace-manifests/9arm/ — a small checked-in wrapper manifest
+# declaring it, name-matched to the existing "9arm-marketplace" so the enabledPlugins
+# key never changes), then runs install-hooks.py + install-mcp.py + install-cron.sh in
+# order. Idempotent, safe to re-run. Clone this repo to ~/.claude on a fresh machine,
+# run this once, restart Claude Code — hooks, MCP servers, both plugins, and cron are
+# all wired without any manual step. kouen MCP entry lands disabled by default
+# (Kouen.app is a personal Mac app, not on brew — install it
 # separately if wanted).
 ```
 

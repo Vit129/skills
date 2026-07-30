@@ -1,0 +1,16 @@
+{
+  "name": "9arm-marketplace",
+  "owner": {
+    "name": "Vit129"
+  },
+  "plugins": [
+    {
+      "name": "9arm-skills",
+      "source": {
+        "source": "github",
+        "repo": "thananon/9arm-skills"
+      },
+      "description": "9arm-skills: debug-mantra, post-mortem, scrutinize, management-talk, qwen-agent, qwenchance"
+    }
+  ]
+}
