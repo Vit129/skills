@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Full new-machine bootstrap for ~/.claude ONLY (never touches ~/.kiro).
 # Clone this repo to ~/.claude on a fresh machine, run this once, restart
-# Claude Code -- hooks, MCP servers (graphify/kouen), and cron are all wired.
+# Claude Code -- hooks, MCP servers (graphify/kouen), the agy plugin, and
+# cron are all wired.
 #
 # Idempotent -- every step it calls is additive-only and safe to re-run.
 # Usage: bash ~/.claude/scripts/bootstrap-new-machine.sh
@@ -29,6 +30,14 @@ else
   # pins mcp<2.0; this fix is not upstreamed.
   echo "  installing from $GRAPHIFY_FORK"
   uv tool install --from "$GRAPHIFY_FORK" graphifyy
+fi
+
+echo "== agy plugin =="
+if command -v claude &>/dev/null; then
+  claude plugin marketplace add Vit129/agy-plugin-cc
+  claude plugin install agy@agy-plugin-cc
+else
+  echo "  claude CLI not found -- skipping (run this script from inside Claude Code's shell)"
 fi
 
 echo "== hooks =="
