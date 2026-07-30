@@ -4,6 +4,7 @@
 # Track only these
 !.gitignore
 !CLAUDE.md
+!MAINTENANCE.md
 !README.md
 !cliff.toml
 !CHANGELOG.md
