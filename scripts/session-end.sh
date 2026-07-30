@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# End-of-session: update index.md + graphify.
+# End-of-session: update INDEX.md + graphify.
 # Usage: session-end.sh [project-dir]
 set -euo pipefail
 
@@ -11,7 +11,7 @@ echo ""
 
 # ── 1. Checklist: what the AI must do before running this ─────────────────
 echo "▸ Memory update checklist (AI task — do before running this script)"
-echo "  [ ] Update agent-memory/index.md     → if new plans/ or knowledge/ files added"
+echo "  [ ] Update agent-memory/INDEX.md     → if new plans/ or knowledge/ files added"
 echo ""
 
 # ── 2. Update graphify for current project ────────────────────────────────
@@ -77,6 +77,14 @@ GRAPHIFY_LABEL_SCHEDULER="$HOME/.claude/scripts/graphify-label-scheduler.sh"
 if [[ -f "$GRAPHIFY_LABEL_SCHEDULER" ]]; then
   echo "▸ Graphify semantic labels"
   bash "$GRAPHIFY_LABEL_SCHEDULER" 2>&1 | sed 's/^/  /' || true
+  echo ""
+fi
+
+# ── 8. Daily routing-adherence check (global, not per-project) ────────────
+ROUTING_ADHERENCE_SCHEDULER="$HOME/.claude/scripts/routing-adherence-scheduler.sh"
+if [[ -f "$ROUTING_ADHERENCE_SCHEDULER" ]]; then
+  echo "▸ Routing adherence"
+  bash "$ROUTING_ADHERENCE_SCHEDULER" 2>&1 | sed 's/^/  /' || true
   echo ""
 fi
 

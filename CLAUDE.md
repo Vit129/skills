@@ -12,8 +12,8 @@ bash ~/.claude/scripts/session-start.sh [project-dir]
 - New task → read `rules/coding.md` before writing code
 - Continuation ("ทำต่อ", "continue") → read the feature's `agent-memory/plans/[FEATURE]/dev-task-progress.md` or `qa-task-progress.md` → resume at first unchecked task
 - Paused HITL gate → `session-start.sh` surfaces any `Status: OPEN` entry in `agent-memory/GATE-STATE.md` automatically — resume the named skill at the stated gate, don't restart cold (see that file's template; `debug-mantra-workflow` is the reference implementation)
-- **Auto-act due** → `session-start.sh` surfaces any unmarked `agent-memory/evals/*.md` or `agent-memory/candidate-checks/*.md` DUE report (written unattended by the daily cron — see Skill Eval / Skill Candidates in Maintenance Scripts) as this session's first action, not a to-do to mention and skip: promote candidates at `hit_count>=3` via `skill-creator`, run pass@3 eval / apply safe `SKILL-LOG.md` `proposed` rows (otherwise leave `proposed` with a one-line reason). Append `ACTED: <date>` to that log file once handled so it stops resurfacing. This is the deliberate, safer alternative to a fully unattended cron-triggered write (rejected 2026-07-27 — `--dangerously-skip-permissions` on a real non-sandboxed machine has no permission gate left if any read content carries a prompt injection); this way the actual write only ever happens inside a real session, where hooks/gates stay live.
-- Search/plan → read `index.md` on-demand
+- **Auto-act due** → `session-start.sh` surfaces any unmarked `agent-memory/evals/*.md`, `agent-memory/candidate-checks/*.md`, or `agent-memory/routing-adherence-checks/*.md` DUE report (written unattended by the daily cron — see Skill Eval / Skill Candidates / Routing Adherence in Maintenance Scripts) as this session's first action, not a to-do to mention and skip: promote candidates at `hit_count>=3` via `skill-creator`, run pass@3 eval / apply safe `SKILL-LOG.md` `proposed` rows (otherwise leave `proposed` with a one-line reason), or for routing-adherence review each gap and only act on real misses (not correctly-ignored keyword false positives). Append `ACTED: <date>` to that log file once handled so it stops resurfacing. This is the deliberate, safer alternative to a fully unattended cron-triggered write (rejected 2026-07-27 — `--dangerously-skip-permissions` on a real non-sandboxed machine has no permission gate left if any read content carries a prompt injection); this way the actual write only ever happens inside a real session, where hooks/gates stay live.
+- Search/plan → read `INDEX.md` on-demand
 - Curated facts (user prefs, feedback, project decisions) also live in `/Users/supavit.cho/.claude/projects/-Users-supavit-cho--claude/memory/MEMORY.md` (Claude Code's own per-project memory index) — read it too when working in this `~/.claude` workspace itself, alongside `agent-memory/`. It's plain markdown, no special tooling needed to read it.
 
 ---
@@ -22,7 +22,7 @@ bash ~/.claude/scripts/session-start.sh [project-dir]
 
 ```bash
 bash ~/.claude/scripts/session-end.sh [project-dir]
-# 1. Update index.md if new plans/knowledge files added
+# 1. Update INDEX.md if new plans/knowledge files added
 # 2. Update graphify + GRAPH_SUMMARY (current project, if git HEAD changed)
 ```
 
@@ -123,6 +123,20 @@ uv run ~/.claude/scripts/memory_vector_search.py "<query>" [--limit N]
 # platform-doc copies is fine, a duplicate across unrelated content is not)
 # before trusting it. Revert via git checkout or the graphify-out/<date>/
 # backup folder if it fails the check.
+
+~/.claude/scripts/routing-adherence-scheduler.sh [--force]
+# Daily check (wired into session-end.sh, surfaced via session-start.sh's Auto-act
+# check) cross-referencing agent-memory/routing-nudges.log (every keyword-triggered
+# routing suggestion, written by hooks/user-prompt-submit.py's check_skill_trigger)
+# against agent-memory/skill-usage.log (every actual Skill() call, written by
+# hooks/skill-usage-log.py) to flag nudges that fired but whose suggested skill was
+# never invoked in that session. interview-gate.py/mandatory-skill-gate.py are hard
+# PreToolUse blocks but only cover Edit/Write + interview/a project's own MANDATORY
+# skill — this catches the rest of routing.md's Skill Map, which was previously a
+# soft nudge with zero audit trail either way. A flagged gap is NOT proof of a miss —
+# it can be a correctly-ignored false positive (keyword matched quoted/reported text,
+# not the user's actual ask). Review-not-auto-act, same contract as every other
+# scheduler here.
 
 ~/.claude/scripts/install-cron.sh
 # Installs/refreshes the real OS crontab entry for build-cache-scheduler.sh (runs it

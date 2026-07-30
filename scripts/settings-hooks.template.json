@@ -30,6 +30,16 @@
           "statusMessage": "✓ Skill invoked"
         }
       ]
+    },
+    {
+      "matcher": "Workflow",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 $HOME/.claude/hooks/workflow-usage-log.py",
+          "statusMessage": "✓ Workflow invoked"
+        }
+      ]
     }
   ],
   "PreToolUse": [

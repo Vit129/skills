@@ -1,8 +1,17 @@
 #!/usr/bin/env python3
 """PostToolUse hook (matcher: Skill).
 
-Logs every invocation to agent-memory/skill-usage.log (unchanged behavior,
-previously an inline settings.json command). Also nudges toward SKILL-LOG.md:
+Logs every invocation to agent-memory/skill-usage.log as
+`date|session_id|skill` (session_id added 2026-07-29 so
+routing-adherence-scheduler.sh can cross-reference actual Skill() calls
+against hooks/user-prompt-submit.py's keyword-nudge log on a per-session
+basis -- date|skill alone couldn't distinguish "this session ignored the
+nudge" from "a different session used the skill that day"). skill stays the
+last field so memory-decay-scheduler.sh's grep "|${name}$" dormancy check
+still matches unchanged. This file also holds Workflow tool invocations as
+`date|session_id|workflow:name` (merged 2026-07-30, see
+hooks/workflow-usage-log.py) -- the `workflow:` prefix keeps them from ever
+matching a bare skill-name lookup. Also nudges toward SKILL-LOG.md:
 if the same skill is invoked a 2nd time in one session, that's a decent
 proxy for "the first attempt had friction" -- print a reminder once (per
 skill per session) to log a proposal if that's actually what happened.
@@ -27,7 +36,7 @@ def main():
 
     if skill != "unknown":
         with USAGE_LOG.open("a") as f:
-            f.write(f"{datetime.date.today().isoformat()}|{skill}\n")
+            f.write(f"{datetime.date.today().isoformat()}|{session_id}|{skill}\n")
 
     print(f"[Skill invoked: {skill}]", flush=True)
 

@@ -69,6 +69,7 @@ auto_act_check() {
 }
 auto_act_check "evals" "Skill Eval"
 auto_act_check "candidate-checks" "Skill Candidates"
+auto_act_check "routing-adherence-checks" "Routing Adherence" "review each gap — a keyword nudge firing with no matching Skill() call can be a real routing miss or a correctly-judged false positive (keyword matched quoted/reported text, not the user's actual ask). Only act on real misses: note a recurring pattern in a feedback memory, or flag the specific skill-keywords.json rule if it's producing noise. Don't blanket-treat every listed gap as a violation."
 auto_act_check "graphify-label-checks" "Graphify Semantic Labels" "dispatch labeling to agy/an agent ONE PROJECT AT A TIME (never a single batch across all flagged projects — that produced garbage labels silently before), then quality-check each result (duplicate-label ratio + spot-check community membership in graph.json) before trusting it, reverting via git checkout or the graphify-out/<date>/ backup folder if it fails. Otherwise leave 'proposed' with a one-line reason."
 
 # ── agent-memory/maintenance.log: pending scheduled maintenance report ──

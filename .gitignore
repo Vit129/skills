@@ -48,6 +48,7 @@ skills/**/.claude/
 .claude/worktrees/
 .claude/settings.local.json
 agent-memory/skill-usage.log
+agent-memory/routing-nudges.log
 agent-memory/session-search.db
 agent-memory/session-search.db-*
 agent-memory/.state/

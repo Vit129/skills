@@ -9,6 +9,7 @@ edited independently; only the process and stdin/stdout plumbing is
 shared. Fail-open per check: one broken check must not suppress the
 other or block the prompt.
 """
+import datetime
 import json
 import re
 import sys
@@ -16,6 +17,7 @@ from pathlib import Path
 
 HOOKS_DIR = Path(__file__).resolve().parent
 STATE_PATH = Path.home() / ".claude" / "agent-memory" / ".state" / "memory-passive-review-state.json"
+NUDGES_LOG = Path.home() / ".claude" / "agent-memory" / "routing-nudges.log"
 COOLDOWN_TURNS = 3
 
 CORRECTION_PATTERNS = [
@@ -50,13 +52,28 @@ MEMORY_NUDGE = (
 )
 
 
-def check_skill_trigger(prompt):
+def check_skill_trigger(prompt, session_id):
+    """Soft nudge only -- this does not block, and a match is not proof of a
+    routing miss (a keyword can land inside quoted/reported text that isn't
+    the user's actual ask). Every fire is logged to routing-nudges.log so
+    scripts/routing-adherence-scheduler.sh can later check whether the
+    suggested skill actually got invoked in this session -- previously the
+    nudge fired and vanished with no record either way."""
     try:
         rules = json.loads((HOOKS_DIR / "skill-keywords.json").read_text())
         low = prompt.lower()
         for rule in rules:
             for kw in rule["keywords"]:
                 if re.search(r"\b" + re.escape(kw.lower()) + r"\b", low):
+                    try:
+                        NUDGES_LOG.parent.mkdir(parents=True, exist_ok=True)
+                        with NUDGES_LOG.open("a") as f:
+                            f.write(
+                                f"{datetime.date.today().isoformat()}|{session_id}|"
+                                f"{kw}|{rule['skill']}\n"
+                            )
+                    except Exception:
+                        pass
                     return (
                         f"Skill-trigger keyword detected: {kw} -> invoke "
                         f"Skill({rule['skill']}) before responding, per rules/routing.md."
@@ -99,7 +116,7 @@ def main():
 
     messages = [
         m for m in (
-            check_skill_trigger(prompt),
+            check_skill_trigger(prompt, session_id),
             check_memory_passive_review(prompt, session_id),
         ) if m
     ]

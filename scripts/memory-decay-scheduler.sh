@@ -16,6 +16,24 @@
 # semantic content (no NLP here — this is a duplicate-slug detector, not a
 # contradiction detector like "moved city" — that needs a human/AI read).
 # Same daily-cadence-state-file pattern as eval-scheduler.sh / candidate-scheduler.sh.
+#
+# Also runs a global skill-dormancy flag (2026-07-29, prompted by comparing this
+# workspace against Boris/Anthropic's system-prompt ablation practice — see
+# agent-memory memory "project_orchestration_vs_agent_frameworks"): reuses
+# agent-memory/skill-usage.log (already written by hooks/skill-usage-log.py on
+# every Skill invocation) to flag skills/*/SKILL.md with zero hits since the log
+# started. This is NOT measured ablation — there is no eval/scoring harness for
+# prose skills the way Boris's team has for models, so removal impact can't be
+# remeasured. It is a dormancy flag only, same review-not-auto-act contract as
+# every other section in this file. Scope is deliberately narrow: only
+# ~/.claude/skills/*/SKILL.md (the routing.md-registered catalog). rules/*.md are
+# NOT covered — they load via CLAUDE.md @import on every session regardless of
+# use, so there is no invocation signal to measure them by; that gap is a known,
+# accepted limit, not an oversight. Plugin-namespaced skills (caveman:*, codex:*,
+# fable-advisor:*, watch:*, 9arm-skills:*) and command-based skills
+# (commands/*.md) are also out of scope — different lifecycle/ownership than the
+# skills/ catalog this check targets.
+#
 # Usage: ./memory-decay-scheduler.sh [--force]
 # Returns exit 0 + report if due, exit 1 if not due.
 #
@@ -30,6 +48,8 @@ LOG_RETENTION_DAYS=7
 STALE_DAYS=90
 
 CANDIDATES_DIR="$HOME/.claude/skills/candidates"
+SKILLS_DIR="$HOME/.claude/skills"
+USAGE_LOG="$HOME/.claude/agent-memory/skill-usage.log"
 PROJECTS_ROOT="$HOME/Git/Personal"
 # no-touch: third-party repo, read-only per rules/core.md — never scan it
 SKIP_PROJECTS=(9arm-skills)
@@ -138,6 +158,52 @@ scan_memory_conflicts() {
   [ "$found" -eq 0 ] && echo "_(none)_"
 }
 
+# scan_skill_dormancy — flag skills/*/SKILL.md with zero hits in
+# agent-memory/skill-usage.log since the log's first recorded entry. Gated on
+# the log having at least STALE_DAYS of history so day-one/early runs don't
+# flag the whole catalog as noise.
+scan_skill_dormancy() {
+  echo "Dormancy flag, not measured ablation — no eval/scoring harness exists for"
+  echo "skill prose the way Boris/Anthropic's team has for models, so removal"
+  echo "impact can't be remeasured. Zero hits over a long window is a proxy for"
+  echo "'unused lately or ever' — the real recurring cost is the skill's one-line"
+  echo "entry in the available-skills listing injected into every session's"
+  echo "context, not the file itself. Seasonal/conditional skills (thai-accountant,"
+  echo "japanese-practice, fitness, finance/*, platform-specific skills, etc.) are"
+  echo "EXPECTED to show zero hits for long stretches — that's normal, not a"
+  echo "defect. Only act if a skill is provably superseded/duplicated by another"
+  echo "routing.md row, or the user confirms it's dead weight — review, don't"
+  echo "auto-retire."
+  echo ""
+
+  if [ ! -f "$USAGE_LOG" ]; then
+    echo "_(no skill-usage.log yet — check not yet meaningful)_"
+    return
+  fi
+
+  local first_date first_epoch log_age_days
+  first_date=$(head -1 "$USAGE_LOG" | cut -d'|' -f1)
+  first_epoch=$(date -j -f "%Y-%m-%d" "$first_date" "+%s" 2>/dev/null || echo "0")
+  log_age_days=$(( (NOW_EPOCH - first_epoch) / 86400 ))
+
+  if [ "$log_age_days" -lt "$STALE_DAYS" ]; then
+    echo "_(usage log only ${log_age_days}d old (starts ${first_date}) — needs >= ${STALE_DAYS}d of history before this check is meaningful, skipping)_"
+    return
+  fi
+
+  local dormant_count=0
+  for d in "$SKILLS_DIR"/*/; do
+    local name
+    name=$(basename "$d")
+    [ -f "${d}SKILL.md" ] || continue
+    if ! grep -q "|${name}\$" "$USAGE_LOG"; then
+      echo "- $name (0 hits in ${log_age_days}d of usage log)"
+      dormant_count=$((dormant_count + 1))
+    fi
+  done
+  [ "$dormant_count" -eq 0 ] && echo "_(none)_"
+}
+
 {
   echo "DECAY_CHECK_DUE"
   echo "---"
@@ -166,6 +232,10 @@ scan_memory_conflicts() {
     cand_count=$((cand_count + 1))
   done < <(find "$CANDIDATES_DIR" -maxdepth 1 -name "*.md" ! -name "README.md" -mtime "+${STALE_DAYS}" 2>/dev/null)
   [ "$cand_count" -eq 0 ] && echo "_(none)_"
+  echo ""
+
+  echo "### Global skills — zero recorded uses since usage-log start:"
+  scan_skill_dormancy
   echo ""
 
   for proj_dir in "$PROJECTS_ROOT"/*/; do

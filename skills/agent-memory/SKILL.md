@@ -10,32 +10,35 @@ description: >
   Non-coding tasks (research, analysis, finance, fitness, accounting)
   use this memory system alongside coding tasks — it is cross-domain.
 credit: Inspired by Hermes Agent (https://github.com/NousResearch/hermes-agent) and Memento-Skills (https://github.com/memento-teams/memento-skills) — adapted into our own session flow + knowledge pipeline pattern
-version: 2.1.0
-last_improved: 2026-07-24
-improvement_count: 2
+version: 2.1.1
+last_improved: 2026-07-30
+improvement_count: 3
 ---
 
 # Agent Memory
 
 Bootstrap, manage, and reference the agent memory system.
 
-## Memory Structure (v2)
+## Memory Structure
 
 ```text
 agent-memory/
 ├── PLAYBOOK.md        ← Problem resolution cases (scored)
 ├── SKILL-LOG.md       ← Skill improvement proposals (append-only)
-├── EVAL-STATE.md      ← Last eval date tracker (updated by eval-check hook)
-├── index.md           ← Catalog of knowledge/ and plans/
-├── skill-usage.log    ← Auto-captured skill usage (hook-written, do not edit)
+├── INDEX.md           ← Catalog of knowledge/ and plans/
+├── skill-usage.log    ← Auto-captured skill + workflow usage (hook-written, do not edit)
 ├── plans/             ← Implementation plans (per-feature dev-task-progress.md / qa-task-progress.md)
-├── evals/             ← Eval results (skill stocktake, pass@3 reports)
-├── drafts/            ← Temporary resolution drafts (ephemeral)
 └── knowledge/         ← Promoted cases + crystallized patterns
     └── archive-playbook.md  ← Zero-score/retired cases
 ```
 
 All files are **UPPERCASE** (except `skill-usage.log` which is hook-written).
+
+`~/.claude`'s own instance additionally has `EVAL-STATE.md`/`evals/`/`drafts/` — these are
+**global-only, not part of per-project bootstrap** (removed from the bootstrap scope 2026-07-30:
+checked real usage across 7 projects, 0/7 ever had them; `EVAL-STATE.md` is read by
+`scripts/eval-scheduler.sh`'s hardcoded `$HOME/.claude` path, never per-project). Don't recreate
+them for a new project unless it's actually running its own eval cadence.
 
 ## Bootstrap (Auto-Setup)
 
@@ -43,17 +46,21 @@ Before any memory operation, check if `agent-memory/` exists in the current proj
 
 ```bash
 # Check and auto-create if missing
-[ -d agent-memory ] || bash ~/.kiro/scripts/setup/setupMemory.sh .
+[ -d agent-memory ] || bash ~/.claude/scripts/setup-agent-memory.sh .
 ```
 
-**Rule:** NEVER skip silently if `agent-memory/` is missing — always run `setupMemory.sh .` to create it.
-The script is idempotent (safe to run multiple times) and creates all required files from templates.
+**Rule:** NEVER skip silently if `agent-memory/` is missing — always run the script to create it.
+Self-contained under `~/.claude` (no dependency on `~/.kiro`, a separate, optional, company-scoped
+directory not guaranteed to exist wherever this repo is cloned). Idempotent (safe to run multiple times, top-up-only —
+an existing-but-incomplete `agent-memory/` gets only its missing files added) and builds the
+structure above from `references/templates/`, the single source of truth `~/.kiro/scripts/setup/setupMemory.sh`
+(the older, company-workspace equivalent) reads from too, so the two scripts can't drift apart again.
 
 ## When to Load Each Reference
 
 | User says | Load |
 |-----------|------|
-| "bootstrap memory", "setup memory", "initialize", "reset" | Run `bash ~/.kiro/scripts/setup/setupMemory.sh .` then read `references/templates/` |
+| "bootstrap memory", "setup memory", "initialize", "reset" | Run `bash ~/.claude/scripts/setup-agent-memory.sh .` then read `references/templates/` |
 | "session flow", "how does memory work", "save/discard gate" | `references/session-flow.md` |
 | "draft format", "playbook format" | `references/templates/` — show the relevant template |
 | "subagent", "memory curator", "knowledge curation", "delegate memory" | `references/subagent-patterns.md` |
