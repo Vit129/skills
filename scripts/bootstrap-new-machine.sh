@@ -2,7 +2,8 @@
 # Full new-machine bootstrap for ~/.claude ONLY (never touches ~/.kiro).
 # Clone this repo to ~/.claude on a fresh machine, run this once, restart
 # Claude Code -- hooks, MCP servers (graphify/kouen), the agy + 9arm-skills
-# plugins, and cron are all wired.
+# plugins (Claude Code), 9arm-skills for Codex/Gemini (cross-agent, via
+# npx skills), and cron are all wired.
 #
 # Idempotent -- every step it calls is additive-only and safe to re-run.
 # Usage: bash ~/.claude/scripts/bootstrap-new-machine.sh
@@ -50,6 +51,23 @@ if command -v claude &>/dev/null; then
   claude plugin install 9arm-skills@9arm-marketplace
 else
   echo "  claude CLI not found -- skipping (run this script from inside Claude Code's shell)"
+fi
+
+echo "== 9arm-skills (Codex/Gemini) =="
+if command -v npx &>/dev/null; then
+  npx skills add thananon/9arm-skills --agent codex gemini-cli -g -y || true
+  # npx skills has proven unreliable propagating every skill to every agent dir in
+  # one pass (silently dropped 3 of 6 on a real run) -- verify against its own
+  # canonical ~/.agents/skills/ output and backfill anything it skipped.
+  for s in debug-mantra post-mortem qwen-agent scrutinize management-talk qwenchance; do
+    src="$HOME/.agents/skills/$s"
+    [ -d "$src" ] || continue
+    for dst in "$HOME/.codex/skills/$s" "$HOME/.gemini/antigravity-cli/skills/$s"; do
+      [ -e "$dst" ] || { mkdir -p "$(dirname "$dst")" && cp -r "$src" "$dst" && echo "  backfilled $dst"; }
+    done
+  done
+else
+  echo "  npx not found -- skip (need Node.js/npm)"
 fi
 
 echo "== hooks =="

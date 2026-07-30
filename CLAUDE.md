@@ -171,9 +171,16 @@ bash ~/.claude/scripts/bootstrap-new-machine.sh
 # github.com/thananon/9arm-skills has no marketplace.json of its own, so it's added
 # via scripts/marketplace-manifests/9arm/ — a small checked-in wrapper manifest
 # declaring it, name-matched to the existing "9arm-marketplace" so the enabledPlugins
-# key never changes), then runs install-hooks.py + install-mcp.py + install-cron.sh in
-# order. Idempotent, safe to re-run. Clone this repo to ~/.claude on a fresh machine,
-# run this once, restart Claude Code — hooks, MCP servers, both plugins, and cron are
+# key never changes). Also installs 9arm-skills for Codex/Gemini via `npx skills add
+# thananon/9arm-skills --agent codex gemini-cli -g` — the Claude Code plugin above only
+# reaches Claude Code, this is what makes debug-mantra/scrutinize/etc. usable from
+# Codex/Gemini too. That CLI has proven unreliable propagating every skill to every
+# agent dir in one pass (silently dropped 3 of 6 on a real run), so the step verifies
+# its own canonical ~/.agents/skills/ output against ~/.codex/skills/ and
+# ~/.gemini/antigravity-cli/skills/ and backfills anything skipped. Then runs
+# install-hooks.py + install-mcp.py + install-cron.sh in order. Idempotent, safe to
+# re-run. Clone this repo to ~/.claude on a fresh machine, run this once, restart
+# Claude Code — hooks, MCP servers, both plugins, and cron are
 # all wired without any manual step. kouen MCP entry lands disabled by default
 # (Kouen.app is a personal Mac app, not on brew — install it
 # separately if wanted).
