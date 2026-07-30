@@ -162,7 +162,11 @@ python3 ~/.claude/scripts/install-mcp.py [path-to-settings.json]
 # adds) if the resolved binary isn't on disk yet — install the dependency, re-run.
 
 bash ~/.claude/scripts/bootstrap-new-machine.sh
-# New-machine setup, ~/.claude only (never touches ~/.kiro) — installs rtk (brew) and
+# New-machine setup, ~/.claude only (never touches ~/.kiro) — checks for the CLI
+# companions (claude, codex via `npm install -g @openai/codex`, agy) first; claude/agy
+# use a curl|bash installer so this only prints the command and stops rather than
+# auto-running it unattended — run it yourself, then re-run this script. Then installs
+# rtk (brew) and
 # graphify (uv tool, always from github.com/Vit129/graphify — the personal fork, never
 # PyPI, since upstream graphifyy[mcp] resolves mcp>=2.0 and breaks graphify-mcp at
 # startup; the fork pins mcp<2.0) if missing, adds+installs the agy plugin

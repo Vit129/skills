@@ -1,13 +1,43 @@
 #!/usr/bin/env bash
 # Full new-machine bootstrap for ~/.claude ONLY (never touches ~/.kiro).
 # Clone this repo to ~/.claude on a fresh machine, run this once, restart
-# Claude Code -- hooks, MCP servers (graphify/kouen), the agy + 9arm-skills
-# plugins (Claude Code), 9arm-skills for Codex/Gemini (cross-agent, via
-# npx skills), and cron are all wired.
+# Claude Code -- CLI companions (claude/codex/agy), hooks, MCP servers
+# (graphify/kouen), the agy + 9arm-skills plugins (Claude Code), 9arm-skills
+# for Codex/Gemini (cross-agent, via npx skills), and cron are all wired.
+#
+# claude/agy install via curl|bash -- deliberately NOT auto-run here (piping
+# a remote script to bash unattended is exactly what you don't want in a
+# script meant to be run non-interactively). This prints the command and
+# stops; run it yourself, then re-run this script.
 #
 # Idempotent -- every step it calls is additive-only and safe to re-run.
 # Usage: bash ~/.claude/scripts/bootstrap-new-machine.sh
 set -euo pipefail
+
+echo "== claude CLI =="
+if command -v claude &>/dev/null; then
+  echo "  already installed: $(claude --version 2>&1)"
+else
+  echo "  not installed. Run this yourself, then re-run this script:"
+  echo "    curl -fsSL https://claude.ai/install.sh | bash"
+fi
+
+echo "== codex CLI (for the codex plugin / codex-rescue) =="
+if command -v codex &>/dev/null; then
+  echo "  already installed: $(codex --version 2>&1)"
+elif command -v npm &>/dev/null; then
+  npm install -g @openai/codex
+else
+  echo "  npm not found -- install Node.js first, then: npm install -g @openai/codex"
+fi
+
+echo "== agy CLI (for the agy plugin) =="
+if command -v agy &>/dev/null; then
+  echo "  already installed: $(agy --version 2>&1)"
+else
+  echo "  not installed. Run this yourself, then re-run this script:"
+  echo "    curl -fsSL https://antigravity.google/cli/install.sh | bash"
+fi
 
 echo "== rtk =="
 if command -v rtk &>/dev/null; then
