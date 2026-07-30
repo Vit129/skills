@@ -1,0 +1,21 @@
+{
+  "graphify": {
+    "args": [],
+    "autoApprove": [
+      "query_graph",
+      "get_node",
+      "get_neighbors",
+      "shortest_path"
+    ],
+    "command": "$HOME/.local/bin/graphify-mcp",
+    "disabled": false
+  },
+  "kouen": {
+    "args": [],
+    "command": "/Applications/Kouen.app/Contents/MacOS/kouen-mcp",
+    "disabled": true,
+    "env": {
+      "KOUEN_MCP_ALLOW_CONTROL": "1"
+    }
+  }
+}

@@ -151,7 +151,24 @@ python3 ~/.claude/scripts/install-hooks.py [path-to-settings.json]
 # way scripts/hooks/ do. scripts/settings-hooks.template.json is the checked-in source
 # of truth; this merges it in. Idempotent and additive-only — adds any (event, matcher,
 # command) missing, never touches/removes anything already there (hand-added hooks
-# survive). New machine setup: clone this repo, run this script once (after install-cron.sh).
+# survive).
+
+python3 ~/.claude/scripts/install-mcp.py [path-to-settings.json]
+# Same pattern as install-hooks.py above, but for settings.json's mcpServers block
+# (graphify, kouen) — also gitignored, also doesn't survive a git clone. Reads from
+# scripts/settings-mcp.template.json ($HOME-relative paths resolved on write).
+# Idempotent and additive-only — adds a server entry only if that name is missing,
+# never touches an existing one (hand-toggled disabled/env survive). Warns (but still
+# adds) if the resolved binary isn't on disk yet — install the dependency, re-run.
+
+bash ~/.claude/scripts/bootstrap-new-machine.sh
+# New-machine setup, ~/.claude only (never touches ~/.kiro) — installs rtk (brew) and
+# graphify (uv tool, prefers a local ~/git/personal/graphify fork if cloned, else PyPI
+# graphifyy[mcp,pagerank]) if missing, then runs install-hooks.py + install-mcp.py +
+# install-cron.sh in order. Idempotent, safe to re-run. Clone this repo to ~/.claude on
+# a fresh machine, run this once, restart Claude Code — hooks, MCP servers, and cron
+# are all wired without any manual step. kouen MCP entry lands disabled by default
+# (Kouen.app is a personal Mac app, not on brew — install it separately if wanted).
 ```
 
 @RTK.md
