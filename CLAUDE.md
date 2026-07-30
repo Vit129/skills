@@ -163,12 +163,14 @@ python3 ~/.claude/scripts/install-mcp.py [path-to-settings.json]
 
 bash ~/.claude/scripts/bootstrap-new-machine.sh
 # New-machine setup, ~/.claude only (never touches ~/.kiro) — installs rtk (brew) and
-# graphify (uv tool, prefers a local ~/git/personal/graphify fork if cloned, else PyPI
-# graphifyy[mcp,pagerank]) if missing, then runs install-hooks.py + install-mcp.py +
-# install-cron.sh in order. Idempotent, safe to re-run. Clone this repo to ~/.claude on
-# a fresh machine, run this once, restart Claude Code — hooks, MCP servers, and cron
-# are all wired without any manual step. kouen MCP entry lands disabled by default
-# (Kouen.app is a personal Mac app, not on brew — install it separately if wanted).
+# graphify (uv tool, always from github.com/Vit129/graphify — the personal fork, never
+# PyPI, since upstream graphifyy[mcp] resolves mcp>=2.0 and breaks graphify-mcp at
+# startup; the fork pins mcp<2.0) if missing, then runs install-hooks.py +
+# install-mcp.py + install-cron.sh in order. Idempotent, safe to re-run. Clone this repo
+# to ~/.claude on a fresh machine, run this once, restart Claude Code — hooks, MCP
+# servers, and cron are all wired without any manual step. kouen MCP entry lands
+# disabled by default (Kouen.app is a personal Mac app, not on brew — install it
+# separately if wanted).
 ```
 
 @RTK.md
