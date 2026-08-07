@@ -22,10 +22,10 @@ Read these references before editing React code:
 3. `nextjs.md` when the app uses Next.js App Router or Server Components.
 4. `vite-config.md` when Vite setup or environment handling is involved.
 5. `tailwind-standards.md` when Tailwind classes or config are involved.
-6. `../shared/testability-standards.md` for `data-testid` rules.
-7. `../shared/ui-states-standards.md` for loading, success, empty, and error states.
-8. `../shared/error-handling-standards.md` for user-safe errors.
-9. `../shared/navigation-standards.md` when routing or deep links are involved.
+6. `../frontend-dev/references/shared/testability-standards.md` for `data-testid` rules.
+7. `../frontend-dev/references/shared/ui-states-standards.md` for loading, success, empty, and error states.
+8. `../frontend-dev/references/shared/error-handling-standards.md` for user-safe errors.
+9. `../frontend-dev/references/shared/navigation-standards.md` when routing or deep links are involved.
 
 ## Official Documentation Anchors
 

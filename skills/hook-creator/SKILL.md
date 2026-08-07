@@ -16,14 +16,14 @@ Create hooks for Kiro. Schema: `references/kiro-hook-schema.md`
 
 ## Agent Memory Hook Set
 
-4 hooks สำหรับ agent-memory system — copy จาก templates ไป `.kiro/hooks/`:
+2 hooks สำหรับ agent-memory system exist today — copy จาก templates ไป `.kiro/hooks/`:
 
 | Hook | Event | Template |
 |------|-------|----------|
-| session-load | `promptSubmit` | `templates/kiro/agent-memory-session-load.kiro.hook` |
-| session-save | `agentStop` | `templates/kiro/agent-memory-session-save.kiro.hook` |
-| checkpoint | `postTaskExecution` | `templates/kiro/agent-memory-checkpoint.kiro.hook` |
-| skill-check | `postToolUse` (write) | `templates/kiro/agent-memory-skill-check.kiro.hook` |
+| session-load (bootstrap agent-memory/) | `promptSubmit` | `templates/kiro/setup-agent-memory.kiro.hook` |
+| session-save (skill-log reflection) | `agentStop` | `templates/kiro/session-save.kiro.hook` |
+
+No `checkpoint` (`postTaskExecution`) or `skill-check` (`postToolUse` write) template exists yet — create one from `references/kiro-hook-schema.md` if needed.
 
 ## Process
 

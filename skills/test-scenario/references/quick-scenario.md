@@ -21,7 +21,7 @@ Quickly add, modify, or delete test scenarios in an existing Markdown file and r
 5. Apply changes to Markdown
 6. Test Data Review — check if existing data still valid, offer to add if needed
 7. Self-Check — no duplicate IDs, sequential within sections, all fields present
-8. Re-generate CSV via `csvValidatorSkill`
+8. Re-generate CSV via `references/csv-validator.md`
 
 ## Rules
 - Never rewrite entire file unless necessary — surgical edits only

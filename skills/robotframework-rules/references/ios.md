@@ -162,9 +162,10 @@ class InvoiceService:
 > **🎯 Purpose:** Prevent duplicate code and missed existing assets.
 > **⏱️ When:** Before writing any code — workflow or manual.
 
-EXECUTE `resourcesDiscoverySkill.md` — **Step 1 (index scan) + Step 2 (existing code scan) + lessons scan only.**
+Scan `agent-memory/plans/` and existing `pages/ios/` for reusable page objects/keywords, and check `knowledge/qa/` lessons learnt, before writing any new code.
 - workflow_type = `ios_automation`
 - OUTPUT the Pre-Implementation Check summary before writing any code.
+- No dedicated resource-discovery skill exists yet for this — do the scan manually until one is built.
 
 ---
 
@@ -283,7 +284,7 @@ Input Username
 ### 🦋 Flutter App Locator Strategy (iOS)
 
 > **When:** App is built with Flutter + `automationName=Flutter` in capabilities.
-> **Reference:** See `qa/robotframework-testing/references/flutter-appium.md` for full details.
+> **Reference:** See `robotframework-testing/references/flutter-appium.md` for full details.
 
 | Priority | Locator | RF Syntax | Stability |
 |----------|---------|-----------|-----------|

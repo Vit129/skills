@@ -23,12 +23,12 @@ Read these references before editing iOS code:
 3. `observation.md` for `@Observable`, `@State`, `@Bindable`, and migration rules.
 4. `swiftdata.md` when persistence, offline cache, or model history is involved.
 5. `testing-accessibility.md` for accessibility and UI test identifiers.
-6. `../shared/testability-standards.md` for cross-platform testability rules.
-7. `../shared/ui-states-standards.md` for loading, success, empty, and error states.
-8. `../shared/error-handling-standards.md` for user-safe errors.
-9. `../shared/navigation-standards.md` when routing or deep links are involved.
-10. `../shared/logging-standards.md` when adding diagnostics.
-11. `../shared/env-config-standards.md` when touching configuration or secrets.
+6. `../frontend-dev/references/shared/testability-standards.md` for cross-platform testability rules.
+7. `../frontend-dev/references/shared/ui-states-standards.md` for loading, success, empty, and error states.
+8. `../frontend-dev/references/shared/error-handling-standards.md` for user-safe errors.
+9. `../frontend-dev/references/shared/navigation-standards.md` when routing or deep links are involved.
+10. `../frontend-dev/references/shared/logging-standards.md` when adding diagnostics.
+11. `../frontend-dev/references/shared/env-config-standards.md` when touching configuration or secrets.
 
 ## Testability
 

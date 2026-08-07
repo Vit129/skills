@@ -46,10 +46,13 @@ LOG_FILE="$EVALS_DIR/${TODAY}.md"
   # see eval-check.kiro.hook. skill-usage-log.py's repeat-invocation nudge is
   # what feeds SKILL-LOG.md now.)
   echo "### Pending improvements:"
-  grep "proposed" "$SKILL_LOG" 2>/dev/null | while read -r line; do
-    skill=$(echo "$line" | cut -d'|' -f3 | xargs)
-    echo "- $skill"
-  done | sort -u
+  grep -E '^\| *[0-9]{4}-[0-9]{2}-[0-9]{2} *\|' "$SKILL_LOG" 2>/dev/null | awk -F'|' '{
+    status=$6; gsub(/^[ \t]+|[ \t]+$/, "", status)
+    if (status == "proposed") {
+      skill=$3; gsub(/^[ \t]+|[ \t]+$/, "", skill)
+      print "- " skill
+    }
+  }' | sort -u
 
   echo ""
   echo "### Run: pass@3 eval on each skill above"

@@ -25,28 +25,23 @@ Create CI/CD pipelines and manage pull requests across Azure DevOps, GitHub Acti
 
 | User says | Load |
 |-----------|------|
-| "create pipeline", "CI/CD YAML", "schedule tests", "cron" | `references/pipeline.md` |
-| "create PR", "pull request", "link work items", "test summary" | `references/pull-request.md` |
-| "sync to DevOps", "create work items", "create tasks via MCP" | `references/azure-sync.md` |
-| "GitHub Actions", "workflow YAML", "GitHub CI", "branch protection" | `references/github-actions.md` |
-| "commit", "push", "git commit" | `references/git-commit.md` |
+| "create pipeline", "CI/CD YAML", "schedule tests", "cron", "GitHub Actions", "workflow YAML", "GitHub CI", "branch protection" | `references/ci-cd-and-automation.md` |
+| "create PR", "pull request", "link work items", "test summary", "commit", "push", "git commit" | `references/git-workflow-and-versioning.md` |
 | "scan image", "Trivy", "CodeQL", "Gitleaks", "SAST", "SCA", "secret scan", "security gate" | `references/security-scanning.md` |
 
 Ask which platform if not stated, then follow the appropriate reference:
 
-- Azure DevOps → `azure-sync.md` for work items + `pipeline.md` for YAML
-- GitHub → `github-actions.md` for workflow YAML + `pull-request.md` for PRs
-- GitLab CI → follow GitHub Actions patterns but adapt syntax to `.gitlab-ci.yml` (stages, jobs, artifacts)
+- Azure DevOps → `references/ci-cd-and-automation.md` for pipeline YAML + `references/git-workflow-and-versioning.md` for work items/PRs
+- GitHub → `references/ci-cd-and-automation.md` for workflow YAML + `references/git-workflow-and-versioning.md` for PRs
+- GitLab CI → follow the same patterns but adapt syntax to `.gitlab-ci.yml` (stages, jobs, artifacts)
 
-- **Pipeline** — Generate pipeline YAML files with scheduling, test commands, and notifications. (Read `references/pipeline.md`)
-- **Pull Request** — Create PRs linked to work items with test result summaries. (Read `references/pull-request.md`)
-- **Azure DevOps Sync** — Auto-create work items, tasks, and test cases via MCP. (Read `references/azure-sync.md`)
-- **GitHub Actions** — Workflow YAML for GitHub repositories: triggers, jobs, OIDC keyless auth, reusable workflows, concurrency control, and branch protection. (Read `references/github-actions.md`)
+- **Pipeline** — Generate pipeline YAML files with scheduling, test commands, and notifications. Written for Azure DevOps Pipeline YAML; GitHub Actions/GitLab CI follow the same patterns (triggers, jobs, branch protection) — adapt syntax accordingly. (Read `references/ci-cd-and-automation.md`)
+- **Pull Request** — Create PRs linked to work items with test result summaries. (Read `references/git-workflow-and-versioning.md`)
 - **Security Scanning** — Shift-left DevSecOps: Trivy (image/deps), CodeQL (SAST), Gitleaks (secrets), Semgrep. Used by both dev and QA pipelines. (Read `references/security-scanning.md`)
 
 ## Inline Process
 
-1. **Identify the task** — Determine: Pipeline YAML creation, PR creation, Git commit/push, Azure DevOps sync, or Security scanning. Ask which platform (Azure DevOps / GitHub / GitLab) if not stated.
+1. **Identify the task** — Determine: Pipeline YAML creation, PR creation, Git commit/push, or Security scanning. Ask which platform (Azure DevOps / GitHub / GitLab) if not stated.
 2. **Pipeline creation** — Ask: trigger type, branch, schedule time (convert to UTC cron), test command. Auto-detect: path, feature name, DB strategy, variable groups. Include test stage (non-negotiable) + security scanning.
 3. **Git commit & push** — Format: `[AB#xxxxx] Description` (direct) or `[PR][AB#xxxxx] Description` (feature branch). Stage specific files, not `git add .`. Never force push without permission.
 4. **Create PR** — Prerequisites: all tests must pass (0 failures). Link to work items. Update work item status. FORBIDDEN to create PR with failing tests.

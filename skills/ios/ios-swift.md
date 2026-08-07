@@ -107,12 +107,12 @@ struct UserView: View {
 
 ## Cross-Platform Standards
 
-- **Testability (accessibilityIdentifier):** `../shared/testability-standards.md`
-- **UI States (Loading/Empty/Error):** `../shared/ui-states-standards.md`
-- **Error Handling:** `../shared/error-handling-standards.md`
-- **Environment Config:** `../shared/env-config-standards.md`
-- **Logging:** `../shared/logging-standards.md`
-- **Navigation & Deep Links:** `../shared/navigation-standards.md`
+- **Testability (accessibilityIdentifier):** `../frontend-dev/references/shared/testability-standards.md`
+- **UI States (Loading/Empty/Error):** `../frontend-dev/references/shared/ui-states-standards.md`
+- **Error Handling:** `../frontend-dev/references/shared/error-handling-standards.md`
+- **Environment Config:** `../frontend-dev/references/shared/env-config-standards.md`
+- **Logging:** `../frontend-dev/references/shared/logging-standards.md`
+- **Navigation & Deep Links:** `../frontend-dev/references/shared/navigation-standards.md`
 
 ## Tips
 - Swift first — no Objective-C for new code

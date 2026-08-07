@@ -68,4 +68,4 @@ Only when ALL three are true:
 2. **Surprising without context** — future reader will wonder "why this way?"
 3. **Real trade-off** — genuine alternatives existed, one was chosen for specific reasons
 
-If any of the three is missing, skip it. Otherwise record it as an ADR (`documentation-adrs`).
+If any of the three is missing, skip it. Otherwise record it directly as `docs/adr/NNNN-title.md` (no dedicated ADR skill exists — write it inline): Context, Decision, Alternatives considered, Consequences.

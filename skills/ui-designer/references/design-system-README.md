@@ -56,12 +56,12 @@ ui-designer/
     ├── tech-stacks.md                          ← 15 platforms, output format
     ├── reasoning-engine/
     │   └── four-stage-process.md               ← How the engine works
-    ├── industry-rules/
-    │   ├── README.md                           ← Overview of 161 rules
-    │   ├── tech-saas.md                        ← 20 rules for SaaS
-    │   ├── finance.md                          ← 21 rules for finance
-    │   ├── healthcare.md                       ← 20 rules for healthcare
-    │   └── ecommerce.md                        ← 20 rules for e-commerce
+    ├── industry-rules/                         ← NOT YET BUILT (see Next Steps below)
+    │   ├── README.md                           ← planned: overview of 161 rules
+    │   ├── tech-saas.md                        ← planned: 20 rules for SaaS
+    │   ├── finance.md                          ← planned: 21 rules for finance
+    │   ├── healthcare.md                       ← planned: 20 rules for healthcare
+    │   └── ecommerce.md                        ← planned: 20 rules for e-commerce
     └── design-patterns/
         ├── overview.md                         ← 67 styles, 161 palettes, 57 fonts, 25 charts, 99 guidelines
         └── colors-index.md                     ← Quick color reference
@@ -93,4 +93,4 @@ To complete the skill, create:
 ---
 
 *Last Updated: 2026-04-16*
-*Status: Core structure complete; 4/8 industry rule files created*
+*Status: Core structure complete; industry-rules/ not yet built (0/8 files created)*

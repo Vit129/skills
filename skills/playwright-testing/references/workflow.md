@@ -9,7 +9,7 @@ Generate Playwright test files from architecture design.
 **Input:** Architecture Design + Test Structure Blueprint from implementation plan.
 
 **Steps:**
-1. Read coding rules from `playwright-rules` skill (api.md or webUi.md + pw-coding-standards.md) — ALL parts
+1. Read coding rules from `playwright-rules` skill (api.md or web-ui.md + pw-coding-standards.md) — ALL parts
 2. Read architecture and test structure blueprint from implementation plan
 3. Check discovery results — if Resources Discovery found reusable templates, import them instead of creating from scratch
 4. Create directory structure (mkdir -p) — folders kebab-case
@@ -192,27 +192,24 @@ Analyze failures and auto-fix code.
 
 **Visual-First Debugging (before changing code):**
 
-⚠️ ก่อนใช้งาน playwright-cli ทุกครั้ง → ตรวจสอบ prerequisite ใน SKILL.md (Step 1-2) ก่อน
-
-Use `playwright-cli` to inspect the live app before modifying any code. **บังคับ screenshot ทุก action:**
+Follow `references/runtime-inspection.md`'s 8-step workflow to inspect the live app before modifying any code. **บังคับ screenshot ทุก action:**
 
 ```bash
-# 1. เปิด browser
-playwright-cli -s=debug open http://localhost:5173
-playwright-cli -s=debug screenshot --filename=step-01-initial.png
-playwright-cli -s=debug snapshot
+# 1. Reproduce in headed/debug mode
+npx playwright test --headed --grep "failing test name"
+npx playwright test --debug
 
-# 2. navigate ไป URL ที่ fail
-playwright-cli -s=debug goto http://localhost:5173/target-page
-playwright-cli -s=debug screenshot --filename=step-02-target-page.png
-playwright-cli -s=debug snapshot
+# 2. Full session trace (view with show-trace)
+npx playwright test --trace on
+npx playwright show-trace test-results/trace.zip
+```
 
-# 3. interact กับ element (ถ้ามี)
-playwright-cli -s=debug click e15
-playwright-cli -s=debug screenshot --filename=step-03-after-click.png
+```typescript
+// 3. Screenshot at point of failure (see runtime-inspection.md § 6)
+await page.screenshot({ path: 'step-01-initial.png', fullPage: true });
 
-# 4. ดู element เฉพาะจุดที่ fail
-playwright-cli -s=debug screenshot e5 --filename=step-04-element-focus.png
+// 4. Inspect the DOM/element in question (see runtime-inspection.md § 4)
+const count = await page.getByTestId('target-element').count();
 ```
 
 Checklist:

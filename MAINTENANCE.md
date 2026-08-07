@@ -81,11 +81,19 @@ uv run ~/.claude/scripts/memory_vector_search.py "<query>" [--limit N]
 # scheduler here.
 
 ~/.claude/scripts/install-cron.sh
-# Installs/refreshes the real OS crontab entry for build-cache-scheduler.sh (runs it
-# weekly independent of any Claude Code session — session-end.sh only fires when a
+# Installs/refreshes the real OS crontab entry for build-cache-scheduler.sh only (runs
+# it weekly independent of any Claude Code session — session-end.sh only fires when a
 # session actually ends). Idempotent (marker-delimited block in scripts/crontab.claude,
 # safe to re-run, never touches unrelated personal crontab lines). New machine setup:
 # clone this repo, run this script once — crontab entry is portable, no manual re-add.
+#
+# eval-scheduler.sh, candidate-scheduler.sh, memory-decay-scheduler.sh moved OUT of
+# crontab to launchd 2026-08-07 (~/Library/LaunchAgents/com.claude.{eval,candidate,
+# memory-decay}-scheduler.plist, StartCalendarInterval 08:00) — plain cron silently
+# skips a run if the machine is asleep at the scheduled minute (observed: 2 real misses
+# in an 8-day sample), launchd coalesces missed StartCalendarInterval events on wake.
+# Not portable via install-cron.sh; the plists themselves are the source of truth and
+# must be copied + `launchctl load`ed manually on a new machine.
 
 python3 ~/.claude/scripts/install-hooks.py [path-to-settings.json]
 # settings.json is gitignored (personal, machine-local) so hook wiring (interview-gate,

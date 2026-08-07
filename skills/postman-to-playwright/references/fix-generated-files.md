@@ -999,7 +999,7 @@ Before generating code for each folder, check `agent-memory/knowledge/lessons/` 
 ### What to check
 
 - `agent-memory/knowledge/lessons/` — scan for lessons with keywords: postman, playwright, migration, stateStore, auth, collection
-- `agent-memory/palace/state.md` — check Open Threads for in-progress migration context
+- This migration's own `progress.md` (see SKILL.md § Gotchas → Progress tracking) — check for in-progress migration context from a prior session
 
 ### Known lessons to apply (examples)
 

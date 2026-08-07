@@ -54,14 +54,33 @@ LOG_FILE="$LOG_DIR/${TODAY}.md"
   echo "$count candidate(s) staged."
   echo ""
   if [ "$count" -gt 0 ]; then
+    ready=""
+    watching=""
     for f in "$CANDIDATES_DIR"/*.md; do
       base=$(basename "$f")
       [ "$base" = "README.md" ] && continue
       name=$(grep -m1 "^name:" "$f" | cut -d' ' -f2-)
       hit=$(grep -m1 "^hit_count:" "$f" | cut -d' ' -f2-)
       created=$(grep -m1 "^created_at:" "$f" | cut -d' ' -f2-)
-      echo "- $base -- name=${name:-?} hit_count=${hit:-?} created_at=${created:-?}"
+      case "$hit" in ''|*[!0-9]*) hit_n=0 ;; *) hit_n=$hit ;; esac
+      line="$base -- name=${name:-?} hit_count=${hit:-?} created_at=${created:-?}"
+      if [ "$hit_n" -ge 3 ]; then
+        ready="${ready}- ${line}
+"
+      else
+        watching="${watching}  watching: ${line}
+"
+      fi
     done
+    if [ -n "$ready" ]; then
+      echo "Ready to promote (hit_count>=3):"
+      printf '%s' "$ready"
+      echo ""
+    fi
+    if [ -n "$watching" ]; then
+      echo "Below promotion bar, not surfaced as action:"
+      printf '%s' "$watching"
+    fi
   fi
   echo ""
   echo "## Result"

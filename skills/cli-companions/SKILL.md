@@ -34,4 +34,4 @@ Quick lookups, small edits, anything resolvable in 1-2 tool calls, or repo explo
 
 ## Note
 
-A third companion, `gemini-rescue` (`plugins/gemini-plugin-cc`), exists in this workspace but wasn't in scope for this comparison — same selection shape likely applies (explicit name → gemini, otherwise pick per criteria above) but unverified.
+Only two CLI-companion plugins are installed in this workspace: `agy-plugin-cc` and `openai-codex`. No `gemini-plugin-cc`/`gemini-rescue` companion is installed — don't route to one.

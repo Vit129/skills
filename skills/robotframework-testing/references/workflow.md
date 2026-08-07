@@ -41,7 +41,7 @@ helpers/shared-services/[system_feature_snake]_db_service.py
 Static quality audit — no running tests.
 
 **Check against:**
-- robotFrameworkCodingStandards.md (all parts)
+- robotframework-rules/references/rf-coding-standards.md (all parts)
 - Platform-specific rules (android.md or ios.md)
 - Identical Naming across platforms
 - AAA pattern, mandatory tags, [TC-xxxx] prefix

@@ -116,17 +116,19 @@ Before generating YAML, check `### 🗄️ Database Strategy` in the implementat
 
 Choose the correct template based on the agent pool:
 
-| Pool | OS | Template |
-|---|---|---|
-| `windows-agent-pool` | Windows | #[[file:templates/pipeline-templates/windows-pipeline-template.md]] |
-| `linux-agent-pool` | Linux | #[[file:templates/pipeline-templates/linux-pipeline-template.md]] |
+| Pool | OS |
+|---|---|
+| `windows-agent-pool` | Windows |
+| `linux-agent-pool` | Linux |
 
-**How to select:**
-- If user says "BCIBOT" or project uses Windows agent → use `windows-pipeline-template.md`
-- If user says "linux-agent-pool" or project uses Linux agent → use `linux-pipeline-template.md`
+No template file exists in this skill yet — generate the pipeline YAML inline from the sections above (Required Questions, Defaults, DB Strategy Injection, Test Command Patterns) rather than reading a template.
+
+**How to select the pool:**
+- If user says "BCIBOT" or project uses Windows agent → target Windows (`windows-agent-pool`)
+- If user says "linux-agent-pool" or project uses Linux agent → target Linux (`linux-agent-pool`)
 - If not specified → ask: "ใช้ pool ไหนครับ? (windows-agent-pool / linux-agent-pool)"
 
-Both templates support:
+Both pools support:
 - Multi-folder test execution with isolated results per folder
 - Per-folder JUnit publishing
 - HTML report index generation

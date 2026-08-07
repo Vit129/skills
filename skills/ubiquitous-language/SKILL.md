@@ -17,7 +17,7 @@ Scan the conversation for domain-relevant nouns, verbs, and concepts (skip gener
 
 Be opinionated. When multiple words exist for the same concept, pick the best one and list the rest as aliases to avoid. Flag conflicts explicitly — never silently pick a side.
 
-Update GLOSSARY.md following the `domain-modeling` reference (glossary only, no impl details) — merge into an existing file or create a new one.
+Update GLOSSARY.md following the `../interview/references/domain-modeling.md` reference (glossary only, no impl details) — merge into an existing file or create a new one.
 
 GLOSSARY.md format:
 ```markdown

@@ -344,7 +344,7 @@ Does the feature involve auth, permissions, or user input?
 
 ### 11.8 Security Testing
 
-> **Full rules in dedicated skill:** `rules/security/SKILL.md`
+> **Full rules in dedicated skill:** `skills/security/SKILL.md`
 > Load when Pre-flight Q5 = Yes (security concern) or feature has auth/permission/user input.
 
 **Quick summary:**

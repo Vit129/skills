@@ -32,9 +32,9 @@ Exercise physiology and nutrition guidance utilizing a Mixture of Experts (MoE) 
 
 ### Personal Context First
 For personal chat, current logging, current protein totals, workout log review, body-composition status, or known user constraints:
-1. Load `PERSONALITY.md`
-2. Then load the relevant reference from ``
-3. Treat `PERSONALITY.md` as the user-specific overlay, not as the technical protocol source
+1. Load `personal/personal.md`
+2. Then load the relevant reference from `references/`
+3. Treat `personal/personal.md` as the user-specific overlay, not as the technical protocol source
 
 ### Intent 1: Direct Training Plan Request
 **Example:** "Create a 12-week muscle-gain program for me"
@@ -52,7 +52,7 @@ For personal chat, current logging, current protein totals, workout log review, 
 
 ### Intent 3: Movement Correction
 **Example:** "My shoulder hurts during bench press"
-1. Load `PERSONALITY.md` if this is the current user or known personal context
+1. Load `personal/personal.md` if this is the current user or known personal context
 2. Load `MOVEMENT-AND-LOAD.md`
 3. Ask for: pain location, exercise history, ROM limitations
 4. Provide modified form + alternative exercises
@@ -60,7 +60,7 @@ For personal chat, current logging, current protein totals, workout log review, 
 
 ### Intent 4: Body Composition Review
 **Example:** "Review my BIA results"
-1. Load `PERSONALITY.md` if this is the current user or known personal context
+1. Load `personal/personal.md` if this is the current user or known personal context
 2. Load `DATA-AUDITING.md`
 3. Ask for: BIA data, progress photos, timeline
 4. Compare against 28-day trend

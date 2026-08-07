@@ -120,7 +120,7 @@ Assumptions: [state any missing inputs or defaults applied]
 Add when the user asks for raw numbers side-by-side. Include financial figures found via live web search; otherwise mark `N/A`.
 
 ### Appendix B — Portfolio Fit and ETF Lens
-Follow `/skills/portfolio/SKILL.md`. Allocation/risk framing only; no per-stock buy/sell calls inside the appendix. ETF sections included automatically if ETF tickers are present.
+Invoke the `portfolio` skill. Allocation/risk framing only; no per-stock buy/sell calls inside the appendix. ETF sections included automatically if ETF tickers are present.
 
 ### Appendix C — Peer Comparison
-Follow `/skills/stock-peer-comparison/SKILL.md`.
+Invoke the `stock-peer-comparison` skill.

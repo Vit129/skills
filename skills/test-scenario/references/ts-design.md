@@ -21,7 +21,7 @@ Generate detailed test scenarios and steps using AI reasoning, adhering to 2026 
 1. Load `references/ts-standards.md` for design standards
 2. Check `## QA Config` section below for `qaEmail` — if empty, ask user via `userInput` then save it here
 3. **Figma Analysis (MANDATORY — run ONCE before Batch 1, applies to ALL platforms):**
-   - Load `ux-ui/ui-designer/references/figma.md`
+   - Load `skills/ui-designer/references/figma.md`
    - Follow Step 1: Check for Visual Context — if PBI has Figma links → try to access (2 attempts max)
    - If no Figma link → ask user to upload screenshot or type "ไม่มีรูปภาพ"
    - Follow Step 2+3: Extract screens, components, interactions, Visual-to-Business Rules mapping

@@ -243,9 +243,9 @@ To ensure consistent understanding within the team:
 > **🎯 Purpose:** Prevent duplicate code and missed existing assets.
 > **⏱️ When:** Before writing any code — workflow or manual.
 
-EXECUTE `resourcesDiscoverySkill.md` — **Step 1 (index scan) + Step 2 (existing code scan) + lessons scan only.**
+Check `knowledge/arch/{feature}-api-spec.md` (existing spec, if this feature went through architecture design before) and `agent-memory/knowledge/lessons/webUi/` (prior patterns/pitfalls) before writing any code. No dedicated resource-discovery skill exists yet for a fuller index/existing-code scan — if that gap becomes a real bottleneck, build one with `skill-creator` rather than citing a file that doesn't exist.
 - workflow_type = `webui_automation`
-- OUTPUT the Pre-Implementation Check summary before writing any code.
+- OUTPUT a short Pre-Implementation Check summary (what was reused / what's new) before writing any code.
 
 ---
 
@@ -694,12 +694,12 @@ test('[TC-002] user cannot access admin panel', async ({ page }) => {
 
 #### 6.2 Database Fixture 🗄️
 
-> **📚 Full pattern & DbService implementation:** See `databaseStrategySkill.md` → "Example: Database Service Pattern"
+> **📚 Full pattern & DbService implementation:** See `qa-architect/references/test-db-strategy.md` → "Phase 2: Architecture Design" (Service Methods pattern)
 
 **⚠️ Notes:**
 
 - Auth setup requires `auth.setup.ts` to create storage state first.
-- DB pattern follows `databaseStrategySkill.md` — seed/verify/cleanup with `testId` isolation.
+- DB pattern follows `qa-architect/references/test-db-strategy.md` — seed/verify/cleanup with `testId` isolation.
 - Use only when project complexity justifies it.
 
 ---

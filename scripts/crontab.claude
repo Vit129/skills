@@ -1,12 +1,9 @@
-# BEGIN claude-managed (eval-scheduler)
-0 8 * * * $HOME/.claude/scripts/eval-scheduler.sh >> $HOME/.claude/agent-memory/evals/cron.log 2>&1
-# END claude-managed (eval-scheduler)
-# BEGIN claude-managed (candidate-scheduler)
-0 8 * * * $HOME/.claude/scripts/candidate-scheduler.sh >> $HOME/.claude/agent-memory/candidate-checks/cron.log 2>&1
-# END claude-managed (candidate-scheduler)
-# BEGIN claude-managed (memory-decay-scheduler)
-0 8 * * * $HOME/.claude/scripts/memory-decay-scheduler.sh >> $HOME/.claude/agent-memory/decay-checks/cron.log 2>&1
-# END claude-managed (memory-decay-scheduler)
+# eval-scheduler, candidate-scheduler, memory-decay-scheduler migrated to launchd
+# 2026-08-07 (~/Library/LaunchAgents/com.claude.{eval,candidate,memory-decay}-scheduler.plist)
+# -- plain cron silently skips a run if the machine is asleep at 08:00 (observed:
+# 2026-07-31, 2026-08-04 both missed); launchd's StartCalendarInterval coalesces
+# missed events on wake, same mechanism the per-project memory-maintenance jobs
+# already use. build-cache-scheduler stays here: no missed-run gap observed for it.
 # BEGIN claude-managed (build-cache-scheduler)
 0 9 * * 1 $HOME/.claude/scripts/build-cache-scheduler.sh >> $HOME/.claude/agent-memory/build-cache-checks/cron.log 2>&1
 # END claude-managed (build-cache-scheduler)

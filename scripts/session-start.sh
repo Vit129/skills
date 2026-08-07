@@ -56,7 +56,7 @@ auto_act_check() {
   latest=$(find "$logdir" -maxdepth 1 -name "20*.md" 2>/dev/null | sort | tail -1)
   [[ -z "$latest" ]] && return
   grep -q "^ACTED:" "$latest" 2>/dev/null && return
-  grep -qE '^- ' "$latest" 2>/dev/null || return
+  grep -qE '^- .+' "$latest" 2>/dev/null || return
   echo "## Auto-act due — $label (${latest#$HOME/.claude/})"
   cat "$latest"
   echo ""

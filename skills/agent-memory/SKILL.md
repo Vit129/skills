@@ -100,14 +100,17 @@ structure above from `references/templates/`, the single source of truth `~/.kir
 - `SKILL-LOG.md` answers: "What should the skill system learn or change?"
 - `knowledge/` answers: "What should be kept as durable reference knowledge?"
 
-## Hooks (4 total)
+## Hooks (3 total, as wired in settings.json)
 
 | Hook | Event | Files Touched |
 |------|-------|---------------|
-| session-load v3.1 | promptSubmit | reads: PLAYBOOK.md |
-| skill-evolve v1.0 | postTaskExecution | writes: SKILL-LOG.md |
-| knowledge-curate v1.0 | agentStop | writes: PLAYBOOK.md, knowledge/; deletes: drafts/ |
-| session-save v4.0 | agentStop | writes: PLAYBOOK.md, SKILL-LOG.md |
+| session-start.sh | SessionStart (startup\|resume) | reads: memory index (feedback + user prefs) |
+| user-prompt-submit.py | UserPromptSubmit | passive memory review + routing-trigger check |
+| skill-usage-log.py | PostToolUse (matcher: Skill) | writes: skill-usage.log |
+
+PLAYBOOK.md/SKILL-LOG.md/knowledge/ updates described elsewhere in this file (Promotion Flow, Quick
+Reference) are agent-driven during a live session, not automated by a hook — no hook currently reads
+or writes those files.
 
 ## Rules
 
@@ -249,7 +252,7 @@ After memory operations:
 ## Skill Stocktake (Audit & Health Check)
 
 > Trigger: "skill stocktake", "audit skills", "skill health", "ตรวจ skills"
-> Run manually or schedule via eval-check hook (weekly)
+> Run manually, or via the daily launchd job `com.claude.eval-scheduler.plist` (runs `~/.claude/scripts/eval-scheduler.sh` at 08:00)
 
 ### What it checks
 
@@ -290,6 +293,6 @@ After memory operations:
 
 ### Integration
 
-- Add to `qa/eval-harness/` eval rotation (weekly)
+- Scheduled via launchd job `com.claude.eval-scheduler.plist` → `~/.claude/scripts/eval-scheduler.sh` (daily, 08:00)
 - Results stored in `agent-memory/evals/skill-stocktake-{date}.md`
 - If Critical > 0 → block session-save from marking session as healthy

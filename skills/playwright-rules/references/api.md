@@ -71,7 +71,7 @@ tests/
 │   │           └── [SYSTEM_FEATURE_CAMEL].spec.ts
 │   ├── db-scripts/                                # 🗄️ Database Strategy (Domain-Driven & Isolation)
 │   │   └── [SYSTEM_KEBAB]/
-│   │       └── [SYSTEM_FEATURE_KEBAB]/                # ⚠️ See detailed file structure in @databaseStrategySkill.md
+│   │       └── [SYSTEM_FEATURE_KEBAB]/                # ⚠️ See detailed file structure in qa-architect/references/test-db-strategy.md
 │   │                                              # ⚠️ Add db-scripts/ to tsconfig.json exclude to prevent Windows CI compile errors
 │   │                                              # ⚠️ NEVER use static import from 'pg' — use dynamic import only (await import('pg'))
 │   ├── postman/                                   # Postman Migration
@@ -247,9 +247,9 @@ To ensure consistent understanding within the team:
 > **🎯 Purpose:** Prevent duplicate code and missed existing assets.
 > **⏱️ When:** Before writing any code — workflow or manual.
 
-EXECUTE `resourcesDiscoverySkill.md` — **Step 1 (index scan) + Step 2 (existing code scan) + lessons scan only.**
+Check `knowledge/arch/{feature}-api-spec.md` (existing API spec, if this feature went through architecture design before) and `agent-memory/knowledge/lessons/` (prior patterns/pitfalls) before writing any code. No dedicated resource-discovery skill exists yet for a fuller index/existing-code scan — if that gap becomes a real bottleneck, build one with `skill-creator` rather than citing a file that doesn't exist.
 - workflow_type = `api_automation`
-- OUTPUT the Pre-Implementation Check summary before writing any code.
+- OUTPUT a short Pre-Implementation Check summary (what was reused / what's new) before writing any code.
 
 ---
 
@@ -686,7 +686,7 @@ test.beforeAll(async () => {
 
 #### 4.2 Database Fixture (API Integration) 🗄️
 
-> **📚 Full pattern & DbService implementation:** See `databaseStrategySkill.md` → "Example: Database Service Pattern"
+> **📚 Full pattern & DbService implementation:** See `qa-architect/references/test-db-strategy.md` → "Phase 2: Architecture Design" (Service Methods pattern)
 
 #### 4.3 API Response Cache Fixture 📦
 

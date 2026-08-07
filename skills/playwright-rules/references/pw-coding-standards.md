@@ -101,8 +101,8 @@ import testData from '../fixtures/[SYSTEM_KEBAB]/[SYSTEM_FEATURE_KEBAB]/[SYSTEM_
 
 For in-depth practical implementation (Technical Details), follow the Domain Rules:
 
-- 🌐 **UI Standards:** `@ai-agent/rules/playwright/webUi.md`
-- 🔌 **API Standards:** `@ai-agent/rules/playwright/api.md`
+- 🌐 **UI Standards:** `references/web-ui.md`
+- 🔌 **API Standards:** `references/api.md`
 
 ---
 
@@ -277,7 +277,7 @@ export class OrderHelper {
 
 ### 6. Security Testing Patterns
 
-> **Full rules in dedicated skill:** `rules/security/SKILL.md`
+> **Full rules in dedicated skill:** the `security` skill (`skills/security/SKILL.md`)
 > Covers: unauthorized access, permission matrix, IDOR, injection, rate limit, file upload, mobile.
 > Load when Pre-flight Q5 = Yes or feature has auth/permission/user input.
 

@@ -26,13 +26,12 @@ Use `ui-designer` first if design tokens, visual language, or component specs ha
 
 | User says | Load |
 |-----------|------|
-| "React component", "hooks", "state management", "React 19", "useActionState", "useOptimistic" | `references/web/SKILL.md` |
-| "Next.js", "App Router", "Server Components", "Server Actions", "RSC", "streaming" | `references/web/nextjs.md` |
-| "Tailwind", "utility classes", "Tailwind v4" | `references/web/tailwind-standards.md` |
-| "Vite config", "Vite + React", "Tailwind plugin" | `references/web/vite-config.md` |
-| "Flutter", "widget", "navigation", "networking" | `references/flutter/SKILL.md` |
-| "Android", "Kotlin", "Jetpack Compose", "Hilt", "Coroutines" | `references/android/SKILL.md` |
-| "iOS", "Swift", "SwiftUI", "async/await", "Combine", "@Observable" | `references/ios/SKILL.md` |
+| "React component", "hooks", "state management", "React 19", "useActionState", "useOptimistic" | `Skill(web)` (`~/.claude/skills/web/react.md`, `react-modern.md`) |
+| "Next.js", "App Router", "Server Components", "Server Actions", "RSC", "streaming" | `Skill(web)` (`~/.claude/skills/web/nextjs.md`) |
+| "Tailwind", "utility classes", "Tailwind v4" | `Skill(web)` (`~/.claude/skills/web/tailwind-standards.md`) |
+| "Vite config", "Vite + React", "Tailwind plugin" | `Skill(web)` (`~/.claude/skills/web/vite-config.md`) |
+| "Android", "Kotlin", "Jetpack Compose", "Hilt", "Coroutines" | `Skill(android)` |
+| "iOS", "Swift", "SwiftUI", "async/await", "Combine", "@Observable" | `Skill(ios)` |
 | "code review", "review frontend code", "check quality", "audit code" | `references/shared/frontend-code-review.md` |
 | "env config", "environment variables", "feature flags" | `references/shared/env-config-standards.md` |
 | "error handling", "error boundary", "catch error" | `references/shared/error-handling-standards.md` |
@@ -42,15 +41,16 @@ Use `ui-designer` first if design tokens, visual language, or component specs ha
 | "loading state", "empty state", "error state", "UI states" | `references/shared/ui-states-standards.md` |
 
 ## Web
-- **React** — Component design, hooks, React 19 new hooks (useActionState, useOptimistic, useFormStatus). (Read `references/web/SKILL.md`)
-- **Next.js 15** — App Router, Server Components, Server Actions, streaming, middleware. (Read `references/web/nextjs.md`)
-- **Tailwind CSS** — Tailwind v4 utility classes and best practices. (Read `references/web/tailwind-standards.md`)
-- **Vite Config** — Vite configuration with React + Tailwind plugin. (Read `references/web/vite-config.md`)
+- **React** — Component design, hooks, React 19 new hooks (useActionState, useOptimistic, useFormStatus). (Use `Skill(web)`, reads `react.md` + `react-modern.md`)
+- **Next.js 15** — App Router, Server Components, Server Actions, streaming, middleware. (Use `Skill(web)`, reads `nextjs.md`)
+- **Tailwind CSS** — Tailwind v4 utility classes and best practices. (Use `Skill(web)`, reads `tailwind-standards.md`)
+- **Vite Config** — Vite configuration with React + Tailwind plugin. (Use `Skill(web)`, reads `vite-config.md`)
 
 ## Mobile
-- **Flutter** — Widget design, state management, navigation, networking. (Read `references/flutter/SKILL.md`)
-- **Android Native (Kotlin)** — MVVM, Jetpack Compose, Hilt, Coroutines. (Read `references/android/SKILL.md`)
-- **iOS Native (Swift)** — MVVM, SwiftUI, @Observable (iOS 17+), async/await. (Read `references/ios/SKILL.md`)
+- **Android Native (Kotlin)** — MVVM, Jetpack Compose, Hilt, Coroutines. (Use `Skill(android)`)
+- **iOS Native (Swift)** — MVVM, SwiftUI, @Observable (iOS 17+), async/await. (Use `Skill(ios)`)
+
+No Flutter skill exists in this workspace (deliberately not added — audited as generic best-practice only, no non-obvious convention worth a dedicated skill). For a Flutter task, fall back to `dev-architect`/general `rules/coding.md` conventions and match the existing repo's patterns.
 
 ## Shared Standards (All Platforms)
 - **Frontend Code Review** — Static audit checklist for all platforms: architecture, UI states, testability, error handling. (Read `references/shared/frontend-code-review.md`)
@@ -64,7 +64,7 @@ Use `ui-designer` first if design tokens, visual language, or component specs ha
 ## Inline Process
 
 1. **Check prerequisites** — If design tokens/component specs don't exist yet, use `ui-designer` skill first. This skill is for IMPLEMENTATION, not design decisions.
-2. **Identify the stack** — Match to ONE platform: React, Next.js 15, Tailwind CSS, Vite, Flutter, Android Kotlin, or iOS Swift. Load the corresponding reference.
+2. **Identify the stack** — Match to ONE platform: React, Next.js 15, Tailwind CSS, Vite, Android Kotlin, or iOS Swift. Load the corresponding reference.
 3. **Implement with testability** — Add `data-testid` on ALL interactive elements during component creation. Use platform equivalents: `accessibilityIdentifier` (iOS), `testTag` (Android).
 4. **Handle all 4 UI states** — Every component must handle: Loading, Success, Empty, and Error states. These are part of the component contract, not polish for later.
 5. **Write LLM-friendly comments** — Non-trivial functions get JSDoc/TSDoc with: what + why + who calls + params/return/throws.
@@ -143,7 +143,7 @@ Before declaring frontend implementation complete, confirm:
 |-----------|------|---------|
 | Design system / component library | Design reference | Tokens, component specs, visual language |
 | Existing component patterns in codebase | Source code | Match conventions, reuse patterns |
-| `references/web/*.md` or `references/flutter/*.md` | Skill reference | Platform-specific implementation patterns |
+| `Skill(web)`, `Skill(android)`, `Skill(ios)` | Skill reference | Platform-specific implementation patterns |
 | `ui-designer` skill output (if exists) | Design spec | Component specs and design tokens |
 | `knowledge/lessons/` | Lessons learnt | Check before execute |
 

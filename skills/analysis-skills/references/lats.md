@@ -31,7 +31,7 @@ Compare multiple strategies side-by-side and select the best hybrid combination.
 | --- | --- | --- |
 | Reusability (R) | Can services/components be reused? Independent and composable? | 0-10 |
 | Maintainability (M) | Easy to understand/modify? Files < 300 lines? Clear separation? | 0-10 |
-| Compliance (C) | Follows api.md/webUi.md rules? Integrates with DB Strategy? | 0-10 |
+| Compliance (C) | Follows api.md/web-ui.md rules? Integrates with DB Strategy? | 0-10 |
 
 Final Score: (R + M + C) / 3
 

@@ -19,17 +19,9 @@ improvement_count: 1
 | Dependency | Purpose |
 |-----------|---------|
 | `playwright-rules` | MUST read before writing/reviewing any code |
-| `playwright-cli` skill | Navigate, screenshot, interact live pages |
+| `references/runtime-inspection.md` | Navigate, screenshot, inspect live pages via plain `npx playwright` commands |
 | `knowledge/automation/` | Check before writing new test patterns |
 | `knowledge/lessons/webUi/` | Past mistakes — prevent repeat failures |
-
-## playwright-CLI Prerequisite (do before every workflow)
-
-```bash
-npx --no-install playwright-cli --version
-```
-- Missing → `bash ~/.claude/scripts/setup/mcpSetup.sh` or `npm install -g @playwright/cli@latest`
-- Always read `.claude/skills/playwright-cli/SKILL.md` before using playwright-cli
 
 ## When to Load Each Reference
 
@@ -46,12 +38,13 @@ npx --no-install playwright-cli --version
 | "HAR mock", "routeFromHAR", "offline test", "network mock" | `references/har-mocking.md` |
 | "explore API", "discover endpoints", "explore-to-test" | `references/explore-to-test.md` |
 | "property test", "fast-check", "invariant test" | `references/property-testing.md` |
+| "why did it fail", "inspect live app", "debug in browser" | `references/runtime-inspection.md` |
 
 ## Key Rules
 
 Selector/wait/`waitForTimeout` rules live in `playwright-rules` (loaded via Required Context above) — not restated here. Workflow-specific rules only:
 
-- Self-heal exhausted (per `workflow.md` § 3-4 attempt policy) → route `debug-mantra`, don't keep retrying yourself
+- Self-heal exhausted (`workflow.md`'s Test Execution/Self-Healing sections: 1 attempt only, no retry loop) → route `debug-mantra`, don't keep retrying yourself
 - Heal: review assertions before committing — never silently weaken
 - Screenshot baselines: generate on CI (Linux), not locally (macOS font diff)
 - Uploading results to an issue tracker (Jira/Azure DevOps/etc.) is project-specific plumbing — write a small upload script for your tracker if you need it; don't hardcode one vendor's API here

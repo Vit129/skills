@@ -54,11 +54,11 @@ Step 4:     USER runs tests in terminal → AI fixes failures
 
 ```bash
 # Step 1: Analyze Collection → Markdown
-npx tsx {skills_root}/postman-to-playwright/postman/scripts/readPostmanCollection.ts \
+npx tsx {skills_root}/postman-to-playwright/scripts/readPostmanCollection.ts \
   "postman/collections/xxx.postman_collection.json"
 
 # Step 2: Analyze Environment → Markdown (optional, run after Step 1)
-npx tsx {skills_root}/postman-to-playwright/postman/scripts/readPostmanEnv.ts \
+npx tsx {skills_root}/postman-to-playwright/scripts/readPostmanEnv.ts \
   "postman/environments/yyy.postman_environment.json"
 ```
 
@@ -339,7 +339,7 @@ npx cross-env ENV=sit npx playwright test --config=playwright.config.ts tests-ap
 
 ## ⚠️ Gotchas
 
-- **Progress tracking:** At migration start, AI creates `progress.md` from `references/progress-template.md` in the target project's `tests-api/<collection>/` folder. Update status (⬜→✅/❌) after each step completes. Link to `agent-memory/palace/state.md` Open Threads for cross-session continuity.
+- **Progress tracking:** At migration start, AI creates `progress.md` from `references/progress-template.md` in the target project's `tests-api/<collection>/` folder. Update status (⬜→✅/❌) after each step completes — this file itself is the cross-session continuity mechanism; read it back at the start of any resumed session instead of restarting the migration.
 - **Postman exports lack Current Values** — only "Initial Values" are exported. Secrets and runtime-set values will be empty. Always check with user.
 - **`pm.environment.set()` chains** — requests that set variables used by later requests need `stateStore` + `test.describe.serial`, not `process.env`.
 - **Auth inheritance missed** — Postman folder-level auth is invisible in request JSON. AI must check `resolveAuth` chain in collection.md.

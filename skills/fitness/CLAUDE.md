@@ -43,25 +43,25 @@ Modifications mandatory for all lower-body and overhead exercise recommendations
 ## Skill Files
 
 State which file used before answering.
-Format: `Using: SKILL.md (Fitness Coach)` or `Using: nutrition.md`.
+Format: `Using: SKILL.md (Fitness Coach)` or `Using: NUTRITION.md`.
 
 - Entry point for all fitness requests → `SKILL.md`
-- Personal context, current logs, protein totals, user constraints → `personal.md`
-- Training split, progression, periodization, cardio → `training-protocols.md`
-- Nutrition, protein, meal planning, macros → `nutrition.md`
-- Movement, form, pain, biomechanics, 1RM, load, RPE → `movement-and-load.md`
-- BIA, body composition, progress trend → `data-auditing.md`
-- Sleep, recovery, HRV, supplements → `recovery-and-supplements.md`
+- Personal context, current logs, protein totals, user constraints → `personal/personal.md`
+- Training split, progression, periodization, cardio → `TRAINING-PROTOCOLS.md`
+- Nutrition, protein, meal planning, macros → `NUTRITION.md`
+- Movement, form, pain, biomechanics, 1RM, load, RPE → `MOVEMENT-AND-LOAD.md`
+- BIA, body composition, progress trend → `DATA-AUDITING.md`
+- Sleep, recovery, HRV, supplements → `RECOVERY-AND-SUPPLEMENTS.md`
 
-For personal/current chat: load `personal.md` first, add relevant reference.
+For personal/current chat: load `personal/personal.md` first, add relevant reference.
 Skill files = source of truth for protocols, constraints, targets — don't rely on values hardcoded here.
 
 ## Composition
 
 For complete plan or review:
 1. `SKILL.md` — main workflow, routing
-2. `personal.md` — when user-specific or current tracking involved
-3. Add relevant reference(s) from ``
+2. `personal/personal.md` — when user-specific or current tracking involved
+3. Add relevant reference(s) from `references/`
 
 ## Response Format
 

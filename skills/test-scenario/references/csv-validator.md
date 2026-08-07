@@ -32,5 +32,5 @@ Final CSV must contain exactly 23 columns in correct order.
 - Validate Priority Level and Test Type
 
 ## Scripts
-- Primary: `skills/test-scenario-skills/scripts/md2csv.sh`
-- Auto-fix: `skills/test-scenario-skills/scripts/csvValidator.sh`
+- Primary: `skills/test-scenario/references/scripts/md2csv.sh`
+- Auto-fix: `skills/test-scenario/references/scripts/csvValidator.sh`

@@ -23,12 +23,12 @@ Read these references before editing Android code:
 2. `compose.md` for Compose state, UI structure, navigation, and lifecycle.
 3. `coroutines-flow.md` for `StateFlow`, lifecycle collection, and dispatcher rules.
 4. `testing-accessibility.md` for semantics, `testTag`, and Compose UI tests.
-5. `../shared/testability-standards.md` for cross-platform testability rules.
-6. `../shared/ui-states-standards.md` for loading, success, empty, and error states.
-7. `../shared/error-handling-standards.md` for user-safe errors.
-8. `../shared/navigation-standards.md` when routes or deep links are involved.
-9. `../shared/logging-standards.md` when adding diagnostics.
-10. `../shared/env-config-standards.md` when touching configuration or secrets.
+5. `../frontend-dev/references/shared/testability-standards.md` for cross-platform testability rules.
+6. `../frontend-dev/references/shared/ui-states-standards.md` for loading, success, empty, and error states.
+7. `../frontend-dev/references/shared/error-handling-standards.md` for user-safe errors.
+8. `../frontend-dev/references/shared/navigation-standards.md` when routes or deep links are involved.
+9. `../frontend-dev/references/shared/logging-standards.md` when adding diagnostics.
+10. `../frontend-dev/references/shared/env-config-standards.md` when touching configuration or secrets.
 
 ## Default Stack
 
