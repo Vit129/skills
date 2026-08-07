@@ -9,10 +9,10 @@ description: >
   knowledge pipeline, or subagent delegation patterns.
   Non-coding tasks (research, analysis, finance, fitness, accounting)
   use this memory system alongside coding tasks — it is cross-domain.
-credit: Inspired by Hermes Agent (https://github.com/NousResearch/hermes-agent) and Memento-Skills (https://github.com/memento-teams/memento-skills) — adapted into our own session flow + knowledge pipeline pattern
-version: 2.1.1
-last_improved: 2026-07-30
-improvement_count: 3
+credit: Inspired by Memento-Skills (https://github.com/memento-teams/memento-skills) — adapted into our own session flow + knowledge pipeline pattern
+version: 2.1.2
+last_improved: 2026-08-07
+improvement_count: 4
 ---
 
 # Agent Memory
