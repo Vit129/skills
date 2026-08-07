@@ -36,12 +36,12 @@ Output includes:
 | Feature | Count | Benefit |
 |---------|-------|---------|
 | **Industry Rules** | 161 | Domain-specific, battle-tested patterns |
-| **UI Styles** | 67 | Visual approaches (minimalism, brutalism, etc.) |
-| **Color Palettes** | 161 | Psychology-backed, industry-aligned colors |
-| **Font Pairings** | 57 | Google Fonts combinations, accessibility-tested |
+| **UI Styles** | 84 | Visual approaches (minimalism, brutalism, etc.) |
+| **Color Palettes** | 192 | Psychology-backed, industry-aligned colors |
+| **Font Pairings** | 74 | Google Fonts combinations, accessibility-tested |
 | **Chart Types** | 25 | Data visualization for dashboards |
-| **UX Guidelines** | 99 | Detailed, interactive patterns |
-| **Tech Stacks** | 15 | Web, mobile, native platforms |
+| **UX Guidelines** | 98 | Detailed, interactive patterns |
+| **Tech Stacks** | 22 | Web, mobile, native platforms |
 
 ---
 
@@ -50,6 +50,12 @@ Output includes:
 ```
 ui-designer/
 ├── SKILL.md                                    ← Skill entry point
+├── scripts/                                    ← Design search engine (BM25 over CSV databases)
+│   ├── search.py                               ← CLI entry point
+│   ├── core.py                                 ← Search/ranking logic
+│   ├── design_system.py                        ← --design-system generator
+│   └── validate_data.py                        ← Data integrity checker
+├── data/                                       ← CSV databases the engine searches (+ stacks/)
 └── references/
     ├── figma.md                                ← Figma integration
     ├── design-system-README.md                 ← You are here
@@ -62,10 +68,12 @@ ui-designer/
     │   ├── finance.md                          ← planned: 21 rules for finance
     │   ├── healthcare.md                       ← planned: 20 rules for healthcare
     │   └── ecommerce.md                        ← planned: 20 rules for e-commerce
-    └── design-patterns/
-        ├── overview.md                         ← 67 styles, 161 palettes, 57 fonts, 25 charts, 99 guidelines
-        └── colors-index.md                     ← Quick color reference
+    └── design-search/                          ← 84 styles, 192 palettes, 74 fonts, 25 charts, 98 guidelines (via scripts/search.py)
+        ├── quick-reference.md                  ← Full rule categories
+        └── pro-rules.md                        ← Pre-delivery checklist (native/mobile)
 ```
+
+[source:github.com/nextlevelbuilder/ui-ux-pro-max-skill] — the design-patterns/ static snapshot referenced above was retired 2026-08-07 in favor of the live search engine at scripts/ + data/.
 
 ---
 
@@ -87,8 +95,8 @@ To complete the skill, create:
 2. `industry-rules/creative.md` (20 rules)
 3. `industry-rules/lifestyle.md` (20 rules)
 4. `industry-rules/emerging-tech.md` (20 rules)
-5. `design-patterns/typography.md` (font pairing index)
-6. `design-patterns/components.md` (UI component patterns)
+5. ~~`design-patterns/typography.md` (font pairing index)~~ — superseded: `python3 ~/.claude/skills/ui-designer/scripts/search.py "<query>" --domain typography` now covers this live, no static file needed
+6. `design-patterns/components.md` (UI component patterns) — still open, unrelated to the design-search sync
 
 ---
 

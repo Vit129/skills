@@ -2,44 +2,56 @@
 name: ui-designer
 description: >
   Use when: design UI, ออกแบบ UI, create design system, make it look better, polish UI,
-  audit design, improve colors, fix typography, add animations, avoid generic design,
-  recommend colors for industry, build landing page, define design tokens.
+  audit design, redesign a page, study a design reference/screenshot/URL, improve colors,
+  fix typography, add animations, avoid generic design, recommend colors for industry,
+  build landing page, define design tokens.
   Covers design decisions (what to build) AND implementation quality (how it looks/feels).
   Industry-validated patterns (8 sectors) + pbakaus/impeccable anti-slop principles.
-credit: >
-  Inspired by impeccable (https://github.com/pbakaus/impeccable) by Paul Bakaus
-  and UI-UX Pro skill (https://github.com/saifyxpro/ui-ux-design-pro-skill) by saifyxpro
-  — merged and adapted into our own design system workflow
-version: 2.0.0
-last_improved: 2026-06-01
-improvement_count: 1
+credit: See "Credits" section below for the full source list.
+version: 2.2.0
+last_improved: 2026-08-07
+improvement_count: 3
 ---
 
 # UI Designer
 
 Design and implement distinctive, production-grade interfaces — from aesthetic direction to pixel-perfect code that doesn't look like "AI slop."
 
+## Credits
+
+| Source | License | Contributes | Status |
+| ------ | ------- | ------------ | ------ |
+| [pbakaus/impeccable](https://github.com/pbakaus/impeccable) | — | Original anti-slop principles this skill was first built around | inspiration, 2026-06-01 |
+| [saifyxpro/ui-ux-design-pro-skill](https://github.com/saifyxpro/ui-ux-design-pro-skill) | — | Early UI-UX Pro structure this skill's design-patterns approach was modeled on | inspiration, 2026-06-01 |
+| [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | MIT | Live design search engine — `scripts/{core,design_system,search,validate_data}.py` + `data/*.csv` (styles, colors, typography, industry reasoning, tech stacks). Replaced this skill's own stale, uncredited 2026-06-01 data snapshot. | synced 2026-08-07 |
+| [Nutlope/hallmark](https://github.com/Nutlope/hallmark) | MIT | Diversification memory (`references/diversification-memory.md`) + Audit/Redesign/Study modes (`references/{audit,redesign,study}-verb.md`) — mechanisms ported, prose translated to this skill's own pattern/style/color/typography vocabulary, not Hallmark's macrostructure/theme catalog. | ported 2026-08-07 |
+
 ## Core Capabilities
 
 | Capability | Count | Use Case |
 | ---------- | ----- | -------- |
 | **Industry Rules** | 161 | Domain-specific patterns (finance ≠ e-commerce) |
-| **UI Styles** | 67 | Visual approaches (minimalism, brutalism, etc.) |
-| **Color Palettes** | 161 | Psychology-backed, industry-aligned colors |
-| **Font Pairings** | 57 | Google Fonts, accessibility-tested combinations |
+| **UI Styles** | 84 | Visual approaches (minimalism, brutalism, etc.) |
+| **Color Palettes** | 192 | Psychology-backed, industry-aligned colors |
+| **Font Pairings** | 74 | Google Fonts, accessibility-tested combinations |
 | **Chart Types** | 25 | Data visualization for dashboards & analytics |
-| **UX Guidelines** | 99 | Detailed interactive patterns |
+| **UX Guidelines** | 98 | Detailed interactive patterns |
 | **Anti-Patterns** | 24+ | Explicit bans to avoid generic AI aesthetics |
 | **Slash Commands** | 17 | Targeted design operations (audit, polish, critique, etc.) |
 
-## Two Modes
+All counts above are live, searchable via `scripts/search.py` (BM25-ranked over `data/*.csv`) — not a static snapshot. See "Run the Design Search Engine" below.
+
+## Modes
 
 | Mode | Trigger | Output |
 | ---- | ------- | ------ |
 | **Design** | "ออกแบบ", "design system", "pick colors", "industry rules" | Design spec, tokens, system rules |
-| **Implement** | "polish", "make it look better", "build this UI", "audit" | Working code with high aesthetic quality |
+| **Implement** | "polish", "make it look better", "build this UI" | Working code with high aesthetic quality |
+| **Audit** | "audit", "score this design", "check for anti-patterns", "quality check" — **read-only** | Ranked punch list, grouped by severity — zero edits. See `references/audit-verb.md`. |
+| **Redesign** | "redesign this", "this looks templated/generic", "same content, different structure" | Restructured code — same copy/IA, different structural fingerprint. See `references/redesign-verb.md`. |
+| **Study** | "study this design", "extract the DNA from [screenshot/URL]", "what makes this design work", a pasted URL/screenshot of an admired design with no build request yet | Diagnosis report; optional portable system on explicit request. See `references/study-verb.md`. |
 
-Both modes share the same principles and anti-patterns.
+All modes share the same principles and anti-patterns. `audit` and `study` never edit or write code on their own — they hand off to `Implement`/`Redesign` only after the user confirms.
 
 ## Workflow
 
@@ -47,12 +59,14 @@ Both modes share the same principles and anti-patterns.
 
 1. **Phase 0** — Detect existing design system
 2. **Identify Industry** — SaaS, Finance, Healthcare, E-commerce, Services, Creative, Lifestyle, Emerging Tech
-3. **Context Gathering** — Audience, use cases, brand personality/tone
-4. **Aesthetic Direction** — Commit to BOLD tone + differentiation
-5. **Run Reasoning Engine** — 4-stage analysis (search → match → generate → validate)
-6. **Apply Industry Rules** — Match product type → style → color mood → anti-patterns
-7. **Tokens** — Define colors, spacing, typography as CSS variables
-8. **Validate** — AI Slop Test + WCAG AA + responsive + dark mode
+3. **Run Design Search** — `python3 ~/.claude/skills/ui-designer/scripts/search.py "<product type + industry + keywords>" --design-system -p "<Project Name>"` — pulls live-reasoned pattern, style, color, typography, and anti-pattern recommendations (see "Run the Design Search Engine" below)
+4. **Context Gathering** — Audience, use cases, brand personality/tone
+5. **Aesthetic Direction** — Commit to BOLD tone + differentiation
+6. **Run Reasoning Engine** — 4-stage analysis (search → match → generate → validate)
+7. **Apply Industry Rules** — Match product type → style → color mood → anti-patterns, using the Step 3 design-search results as the source of truth (supplement with `--domain` searches as needed)
+8. **Diversification Check (MANDATORY)** — Read `.ui-designer/log.json` in the target project (if present). The pattern + style pick must differ from the log's last entry on at least one axis (pattern / style / accent hue band) — state the rotation in plain text before locking it in. Skip this check only if a locked `DESIGN.md`/`design-system/<project>/MASTER.md` governs the project (consistency wins there instead — see `references/redesign-verb.md` § Diversification rule — inverted for multi-page). Full protocol: `references/diversification-memory.md`.
+9. **Tokens** — Define colors, spacing, typography as CSS variables. Stamp the output's CSS with `/* ui-designer · pattern: <name> · style: <name> · accent: <band> */` per `references/diversification-memory.md`.
+10. **Validate** — AI Slop Test + WCAG AA + responsive + dark mode. Append this build to `.ui-designer/log.json` (create the file if absent) so future runs on this project can diversify against it.
 
 ### Implement Mode (structure → polish)
 
@@ -78,6 +92,25 @@ Before designing, check if a design system already exists:
 | Nothing exists | Build new following industry rules + reasoning engine |
 
 **Always ask:** "Do you have an existing design system or Figma file?"
+
+## Run the Design Search Engine
+
+`scripts/search.py` is a standalone BM25 search engine over `data/*.csv` (styles, colors, typography, products, ux-guidelines, charts, icons, motion, react-performance, and 22 stack files under `data/stacks/`) plus `ui-reasoning.csv` for `--design-system` mode. No external dependencies — Python 3.x only.
+
+```bash
+# Full design system recommendation (pattern, style, colors, typography, effects, anti-patterns)
+python3 ~/.claude/skills/ui-designer/scripts/search.py "<product type + industry + keywords>" --design-system -p "<Project Name>"
+
+# Deep-dive a single dimension
+python3 ~/.claude/skills/ui-designer/scripts/search.py "<keyword>" --domain <style|color|typography|product|ux|chart|icons|google-fonts|landing>
+
+# Stack-specific guidance (react, nextjs, vue, svelte, astro, swiftui, flutter, jetpack-compose, html-tailwind, shadcn, angular, laravel, and more)
+python3 ~/.claude/skills/ui-designer/scripts/search.py "<keyword>" --stack <stack>
+```
+
+If a search returns 0 results: retry once with broader/different keywords before falling back to the Anti-Patterns/Quick Reference sections below, and say explicitly that the recommendation came from defaults, not a database match — never present a 0-result search as if it returned data.
+
+For the full rule-category priority table and the pre-delivery checklist read `references/design-search/quick-reference.md` and `references/design-search/pro-rules.md`.
 
 ## Context Gathering (REQUIRED)
 
@@ -137,7 +170,7 @@ If you showed this interface to someone and said "AI made this," would they beli
 
 | Command | Purpose |
 | ------- | ------- |
-| `/audit` | Comprehensive quality check (accessibility, performance, anti-patterns) |
+| `/audit` | Read-only quality check — anti-patterns, structural fingerprint, `design-system` drift. Zero edits. See `references/audit-verb.md`. |
 | `/critique` | UX evaluation with actionable feedback |
 | `/polish` | Final pass — alignment, spacing, consistency, detail |
 | `/normalize` | Align with design system standards |
@@ -162,6 +195,8 @@ Quality:     /audit → /normalize → /harden → /polish
 Enhancement: /critique → /distill → /colorize → /animate → /polish
 New Project: /teach → /critique → /normalize → /animate → /audit → /polish
 ```
+
+`/audit` is diagnosis-only (see `references/audit-verb.md`) — get the user's confirmation on which findings to act on before continuing into `/normalize`/`/harden`/`/polish` in these chains. `redesign` and `study` (see Modes above) are separate top-level triggers, not slash commands — they operate on an existing page or an external reference rather than polishing the current build.
 
 ## Stack Detection
 
@@ -231,11 +266,16 @@ PRE-DELIVERY CHECKLIST:
 | "copy", "labels", "error messages", "empty states" | `references/ux-writing.md` |
 | "craft", "build feature", "shape then build" | `references/craft.md` |
 | "extract", "design system", "tokens", "reusable components" | `references/extract.md` |
-| "industry rules", "finance", "healthcare", "SaaS" | `references/design-patterns/overview.md` |
+| "industry rules", "finance", "healthcare", "SaaS", "product type" | Run `python3 ~/.claude/skills/ui-designer/scripts/search.py "<query>" --design-system` (see "Run the Design Search Engine" above); for the full priority table read `references/design-search/quick-reference.md` |
 | "reasoning engine", "4-stage process" | `references/reasoning-engine/four-stage-process.md` |
-| "color palette options", "color index" | `references/design-patterns/colors-index.md` |
+| "color palette options", "color index" | Run `python3 ~/.claude/skills/ui-designer/scripts/search.py "<query>" --domain color` |
+| "pre-delivery checklist", "app polish rules", "native/mobile UI" | `references/design-search/pro-rules.md` |
 | "tech stack", "React", "Flutter", "SwiftUI" | `references/tech-stacks.md` |
 | "figma", "existing design system" | `references/figma.md` |
+| "audit", "score this design", "check for anti-patterns", "quality check" (read-only) | `references/audit-verb.md` |
+| "redesign", "looks templated/generic", "same content different structure" | `references/redesign-verb.md` |
+| "study this design", "extract the DNA", "what makes this design work", pasted URL/screenshot of an admired design | `references/study-verb.md` |
+| "diversification", "don't repeat the same design", "vary this from last time", "design memory" | `references/diversification-memory.md` |
 
 ## Conventions
 
@@ -273,3 +313,4 @@ Before declaring complete, confirm:
 - [ ] `prefers-reduced-motion` respected
 - [ ] Pre-delivery checklist passed (responsive, touch targets, dark mode, focus states)
 - [ ] Tokens defined BEFORE component design
+- [ ] Diversification check run against `.ui-designer/log.json` and the pick stamped/logged (Design Mode only — skip on a locked `DESIGN.md`/`MASTER.md` project)

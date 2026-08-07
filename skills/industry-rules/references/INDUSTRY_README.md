@@ -1,6 +1,8 @@
-# Industry Rules (81 Total)
+# Industry Rules (161 Total)
 
-This directory contains 81 specialized design rules organized by 4 industry sectors.
+`[source:github.com/nextlevelbuilder/ui-ux-pro-max-skill] (MIT)` — structure and initial rule set derived from upstream; individual rules expanded with additional rationale/accessibility/mobile detail not in the source data. See `../SKILL.md` for the full citation note.
+
+This directory contains 161 specialized design rules organized by 8 industry sectors.
 
 ## Sectors
 
@@ -10,6 +12,10 @@ This directory contains 81 specialized design rules organized by 4 industry sect
 | **Finance** | Trust, security, data clarity, regulatory compliance | Banking, investing, insurance, accounting |
 | **Healthcare** | Accessibility, empathy, data privacy, patient-centric | Medical records, telemedicine, fitness, mental health |
 | **E-commerce** | Conversion, trust, browsability, checkout simplicity | Retail, marketplaces, subscription, services |
+| **Services** | Booking flows, provider trust, hospitality vs. professional authority | Legal, home services, restaurants, hotels, coworking, CRM |
+| **Creative** | Portfolio storytelling, immersive media, creation-tool chrome | Agencies, portfolios, gaming, music streaming, photo/video editors |
+| **Lifestyle** | Daily-use habit loops, personal/sensitive data | Habit trackers, journals, recipe apps, weather, mood tracking |
+| **Emerging Tech** | Credibility signaling for unfamiliar technology | Web3/NFT, spatial computing, quantum computing, AI/chatbot, biotech, climate tech |
 
 ## Rule Structure
 
@@ -42,8 +48,12 @@ Each industry includes:
 - `finance.md` - 21 rules
 - `healthcare.md` - 20 rules
 - `ecommerce.md` - 20 rules
+- `services.md` - 20 rules
+- `creative.md` - 20 rules
+- `lifestyle.md` - 20 rules
+- `emerging-tech.md` - 20 rules
 
-**Total: 81 rules**
+**Total: 161 rules**
 
 ## Usage
 
@@ -67,5 +77,5 @@ Validate: Current design against known pitfalls
 
 ---
 
-*Rules Database Last Updated: 2026-04-16*
-*Total Rules: 81 across 4 sectors*
+*Rules Database Last Updated: 2026-08-07 (original 4 sectors: 2026-04-16)*
+*Total Rules: 161 across 8 sectors*
