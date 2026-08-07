@@ -1,5 +1,7 @@
+# Ignore everything by default
+*
 
-__pycache__/
+# Track only these
 !.claude/
 !.claude/**
 !.github/
@@ -32,15 +34,8 @@ __pycache__/
 !skills/
 !skills/**
 !statusline-command.sh
-.claude/settings.local.json
-.claude/worktrees/
-*
-**/.DS_Store
-# Ignore everything by default
-# Personal health/fitness logs (PII — do not commit)
-# Personal sync scripts (contain company-specific replace patterns — do not commit)
+
 # Re-ignore noise inside tracked folders
-# Track only these
 agent-memory/.state/
 agent-memory/routing-nudges.log
 agent-memory/session-search.db
@@ -53,3 +48,11 @@ skills/**/_internal/
 skills/**/.claude/
 skills/fitness/personal/
 skills/ui-designer/scripts/__pycache__/
+__pycache__/
+
+# Personal health/fitness logs (PII — do not commit)
+# Personal sync scripts (contain company-specific replace patterns — do not commit)
+
+.claude/settings.local.json
+.claude/worktrees/
+**/.DS_Store
