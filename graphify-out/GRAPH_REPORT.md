@@ -1,15 +1,16 @@
-# Graph Report - /Users/supavit.cho/.claude  (2026-07-29)
+# Graph Report - .claude  (2026-08-07)
 
 ## Corpus Check
-- cluster-only mode — file stats not available
+- 506 files · ~271,812 words
+- Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 4331 nodes · 4115 edges · 451 communities (390 shown, 61 thin omitted)
-- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.65)
+- 4664 nodes · 4478 edges · 482 communities (406 shown, 76 thin omitted)
+- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.71)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `51ee0a5a`
+- Built from commit: `ee5f33e9`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -18,10 +19,10 @@
 2. `Fix Generated Playwright Files (Postman Migration)` - 33 edges
 3. `LoginHelper` - 23 edges
 4. `DatabaseHelper` - 23 edges
-5. `ToastHelper` - 18 edges
-6. `FileUploadHelper` - 17 edges
-7. `Agent Memory` - 17 edges
-8. `UI Designer` - 17 edges
+5. `UI Designer` - 19 edges
+6. `ToastHelper` - 18 edges
+7. `FileUploadHelper` - 17 edges
+8. `Agent Memory` - 17 edges
 9. `PaginationHelper` - 16 edges
 10. `Task Design` - 16 edges
 
@@ -32,16 +33,18 @@ ever touching one area. This ranks by how many DIFFERENT communities a
 node's neighbors span, not by raw edge count.
 1. `Playwright API Testing - Rules & Templates` - bridges 9 areas (15 edges)
 2. `Playwright UI Testing - Rules & Templates` - bridges 9 areas (15 edges)
-3. `Headroom — Context Compression for AI Agents` - bridges 1 areas (11 edges)
-4. `Step-by-step` - bridges 1 areas (10 edges)
-5. `Ponytail — Lazy Senior Dev Mode` - bridges 1 areas (8 edges)
-6. `PART 4: Structure & Design` - bridges 1 areas (8 edges)
-7. `PART 6: Advanced Contract Testing (Gems)` - bridges 1 areas (7 edges)
-8. `PART 5: Locator Strategy` - bridges 1 areas (7 edges)
-9. `PART 1: Overview` - bridges 1 areas (6 edges)
-10. `PART 2: Coding Standards` - bridges 1 areas (6 edges)
+3. `search()` - bridges 2 areas (8 edges)
+4. `_resolve_color_mode()` - bridges 2 areas (5 edges)
+5. `_select_palette_for_mode()` - bridges 2 areas (4 edges)
+6. `DesignSystemGenerator` - bridges 1 areas (11 edges)
+7. `Headroom — Context Compression for AI Agents` - bridges 1 areas (11 edges)
+8. `Step-by-step` - bridges 1 areas (10 edges)
+9. `BM25` - bridges 1 areas (8 edges)
+10. `Ponytail — Lazy Senior Dev Mode` - bridges 1 areas (8 edges)
 
 ## Surprising Connections (you probably didn't know these)
+- `_generate_intelligent_overrides()` --calls--> `search()`  [INFERRED]
+  skills/ui-designer/scripts/design_system.py → skills/ui-designer/scripts/core.py
 - `main()` --calls--> `skill_invoked()`  [INFERRED]
   hooks/design-gate.py → hooks/_gate_common.py
 - `main()` --calls--> `skill_invoked()`  [INFERRED]
@@ -50,7 +53,7 @@ node's neighbors span, not by raw edge count.
 ## Import Cycles
 - None detected.
 
-## Communities (451 total, 61 thin omitted)
+## Communities (482 total, 76 thin omitted)
 
 ### Community 0 - "API Date & Utility Helpers"
 Cohesion: 0.07
@@ -86,7 +89,7 @@ Nodes (31): 1. URL Placeholders, 2. Auth Header, 3. Fixtures & Schemas (MANDATOR
 
 ### Community 8 - "Agent Memory"
 Cohesion: 0.06
-Nodes (30): Agent Memory, Bootstrap (Auto-Setup), Closed Learning Loops, Compression Rules, Compression Strategy, Context Compression (inspired by Hermes /compress), File Roles, Hooks (4 total) (+22 more)
+Nodes (30): Agent Memory, Bootstrap (Auto-Setup), Closed Learning Loops, Compression Rules, Compression Strategy, Context Compression (inspired by Hermes /compress), File Roles, Hooks (3 total, as wired in settings.json) (+22 more)
 
 ### Community 9 - "Nutrition & Protein Tracking (Parameterized)"
 Cohesion: 0.06
@@ -117,8 +120,8 @@ Cohesion: 0.07
 Nodes (28): 10. Automation Requirements, 11.1 Equivalence Partitioning (EP), 11.2 Boundary Value Analysis (BVA), 11.3 Base-Choice Coverage (BC), 11.4 Multiple-Choice Coverage (MC), 11.5 State Transition (ST), 11.6 Chow W-method / Transition Tree, 11.7 Technique Selection Decision Tree (+20 more)
 
 ### Community 16 - "UI Designer"
-Cohesion: 0.07
-Nodes (28): Anti-Patterns (Hard Bans), Color, Command Workflows, Context Gathering (REQUIRED), Conventions, Core Capabilities, Design Direction, Design Mode (spec → tokens → components) (+20 more)
+Cohesion: 0.06
+Nodes (30): Anti-Patterns (Hard Bans), Color, Command Workflows, Context Gathering (REQUIRED), Conventions, Core Capabilities, Credits, Design Direction (+22 more)
 
 ### Community 18 - "Mobile Performance"
 Cohesion: 0.08
@@ -217,8 +220,8 @@ Cohesion: 0.11
 Nodes (18): 1. Job Order Costing, 2. Process Costing, 3. Activity-Based Costing (ABC), 4. Standard Costing & Variance Analysis, 5. Target Costing, 6. Throughput Accounting (Theory of Constraints), Equivalent Units, Joint Products & By-Products (+10 more)
 
 ### Community 43 - "Design Patterns Library"
-Cohesion: 0.11
-Nodes (18): 1. UI Styles (67 Total), 2. Color Palettes (161 Total), 3. Typography Pairings (57 Total), 4. Chart Types (25 Total), 5. UX Guidelines (99 Total), Accessibility Checklist, Categories, Categories (+10 more)
+Cohesion: 0.07
+Nodes (28): 10. Vibrant High-Energy for Viral/Social Creative Tools, 11. Bold Primaries & Artistic Freedom, 12. Dark Studio + Neon Accents, 13. AI Purple + Aurora Gradients, 14. Bold Expressive Display Type, 15. Minimal/Elegant for Portfolio & Photography, 16. Gaming & Music Impact Type, 17. Parallax & Scroll-Triggered Reveals (+20 more)
 
 ### Community 44 - "Task Progress Guide"
 Cohesion: 0.11
@@ -253,8 +256,8 @@ Cohesion: 0.12
 Nodes (16): 1. งบประมาณประจำปี (Annual Budget), 2. Capital Budgeting, 3. Cost-Volume-Profit Analysis, 4. Relevant Costing for Decisions, 5. Risk Management, Discontinuance Decision, Hedging, Make or Buy (+8 more)
 
 ### Community 54 - "Memory Decay Snapshot (2026-07-29)"
-Cohesion: 0.12
-Nodes (15): Accountant-Learning, agy-plugin-cc, agy-plugin-codex, Auto-memory name collisions (active vs archive, or duplicate active):, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d:, graphify (+7 more)
+Cohesion: 0.07
+Nodes (28): 10. Minimal Chrome for AI-Native Interfaces, 11. Neon on Deep Black, 12. AI Purple + Aurora Gradients, 13. Earth Green + Solar Yellow for Climate/Sustainability, 14. Futuristic Monospace/Technical Type, 15. Spatial Clear System Type, 16. Scientific/Academic Clarity, 17. Wallet-Connect & Transaction State Animations (+20 more)
 
 ### Community 55 - "Plan: Understand-Anything + Graphify Plugin Integration"
 Cohesion: 0.12
@@ -285,12 +288,12 @@ Cohesion: 0.12
 Nodes (15): Component Design, Critical — Eliminating Waterfalls, Cross-Platform Standards, Folder Structure, High — Bundle Size, Hooks, Medium — Re-render Optimization, Naming (+7 more)
 
 ### Community 64 - "Memory Decay Snapshot (2026-07-26)"
-Cohesion: 0.13
-Nodes (14): Accountant-Learning, agy-plugin-cc, agy-plugin-codex, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d:, graphify, Hanashi (+6 more)
+Cohesion: 0.07
+Nodes (28): 10. Shared Color-Coding for Family/Couple Apps, 11. Warm Streak Amber + Progress Green, 12. Calm Lavender & Midnight Pastels, 13. Nature Green + Earth Tones, 14. Playful Rounded for Habit & Family Apps, 15. Calm Wellness Serif/Sans, 16. Handwritten/Sketch for Journaling, 17. Breathing & Ambient Micro-Animations (+20 more)
 
 ### Community 65 - "Memory Decay Snapshot (2026-07-27)"
-Cohesion: 0.13
-Nodes (14): Accountant-Learning, agy-plugin-cc, agy-plugin-codex, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d:, graphify, Hanashi (+6 more)
+Cohesion: 0.07
+Nodes (28): 10. Accessibility First for Vulnerable Users, 11. Trust Navy + Gold (Professional Services), 12. Warm Hospitality (Restaurant, Beauty, Wedding), 13. Booking-Blue + Confirm-Green (Transactional Services), 14. Formal Authority Serif/Sans, 15. Warm Editorial for Hospitality, 16. Clean Functional for Booking & Operator Tools, 17. Confirmation & Reminder Feedback (+20 more)
 
 ### Community 66 - "Skill Sync Protocol.Md Script"
 Cohesion: 0.13
@@ -429,8 +432,8 @@ Cohesion: 0.15
 Nodes (12): 1. Reproduce in Browser, 2. Inspect Console Errors, 3. Inspect Network Requests/Responses, 4. Inspect DOM and Accessibility Tree, 5. Check Storage/State, 6. Capture Screenshot or Trace, 7. Use Evidence to Fix, 8. Add Regression Test (+4 more)
 
 ### Community 100 - "Playwright Testing"
-Cohesion: 0.15
-Nodes (12): Anti-Rationalization, Bug Life Cycle Integration (GUARD state), Gotchas, Human-in-the-Loop Points, Key Rules, playwright-CLI Prerequisite (do before every workflow), Playwright Testing, Red Flags (+4 more)
+Cohesion: 0.17
+Nodes (11): Anti-Rationalization, Bug Life Cycle Integration (GUARD state), Gotchas, Human-in-the-Loop Points, Key Rules, Playwright Testing, Red Flags, Required Context (+3 more)
 
 ### Community 101 - "Mobile Automation Architecture"
 Cohesion: 0.15
@@ -585,8 +588,8 @@ Cohesion: 0.18
 Nodes (10): 1. การบันทึกรายการ (Journal Entries), 2. การจัดสรรค่าใช้จ่าย (Cost Allocation), 3. Bank Reconciliation, 4. ระบบเอกสาร, 5. Period-End Procedures, Reference: General Accounting (บัญชีทั่วไป), รายการพิเศษ, รายได้และค่าใช้จ่าย (+2 more)
 
 ### Community 141 - "Color Palettes Index (161 Total)"
-Cohesion: 0.18
-Nodes (10): Color Palettes Index (161 Total), Creative (16 Palettes), E-commerce (20 Palettes), Emerging Tech (6 Palettes), Finance (21 Palettes), Healthcare (20 Palettes), How to Use, Lifestyle (20 Palettes) (+2 more)
+Cohesion: 0.12
+Nodes (24): ansi_ljust(), _detect_page_type(), format_ascii_box(), format_markdown(), format_master_md(), format_page_override_md(), generate_design_system(), _generate_intelligent_overrides() (+16 more)
 
 ### Community 142 - "@design-system Skill"
 Cohesion: 0.18
@@ -642,7 +645,7 @@ Nodes (9): description, name, then, command, timeout, type, version, when (+1 mo
 
 ### Community 155 - "Industry Rules (81 Total)"
 Cohesion: 0.20
-Nodes (9): Anti-Pattern Check, By Industry File, Cross-Industry Pattern, Industry Rules (81 Total), Quick Lookup, Rule Structure, Sectors, Single Industry (+1 more)
+Nodes (9): Anti-Pattern Check, By Industry File, Cross-Industry Pattern, Industry Rules (161 Total), Quick Lookup, Rule Structure, Sectors, Single Industry (+1 more)
 
 ### Community 156 - "Japanese Practice — Exercise Types"
 Cohesion: 0.20
@@ -810,7 +813,7 @@ Nodes (8): Async Tests, Isolating from SessionCoordinator / NSApp, @MainActor Te
 
 ### Community 199 - "Agent Memory Index"
 Cohesion: 0.25
-Nodes (4): Agent Memory Index, Knowledge, Plans, Archived Decisions (settled > 30 days, no longer "active")
+Nodes (4): Archived Decisions (settled > 30 days, no longer "active"), Agent Memory Index, Knowledge, Plans
 
 ### Community 200 - "Ponytail — Lazy Senior Dev Mode"
 Cohesion: 0.25
@@ -870,7 +873,7 @@ Nodes (7): Bug Life Cycle + Output Format, Classification Rules, Classify Tags (
 
 ### Community 214 - "Industry Rules (81 Total)"
 Cohesion: 0.25
-Nodes (7): Anti-Pattern Check, Cross-Industry Pattern, Industry Rules (81 Total), Quick Lookup, Rule Structure, Single Industry, Usage
+Nodes (7): Anti-Pattern Check, Cross-Industry Pattern, Industry Rules (161 Total), Quick Lookup, Rule Structure, Single Industry, Usage
 
 ### Community 215 - "Scale (auto-detect)"
 Cohesion: 0.25
@@ -941,16 +944,16 @@ Cohesion: 0.25
 Nodes (7): Charting (one session — plan only, don't resolve tickets yet), Rules, Ticket types, Tracker, Wayfinder, When to use, Working through (repeat across sessions)
 
 ### Community 233 - "Skills to Evaluate (2026-07-25)"
-Cohesion: 0.29
-Nodes (6): Flagged (priority):, Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-07-25)
+Cohesion: 0.09
+Nodes (22): 1. Surface (color), 2. Type, 3. Structure (pattern), 4. Motion, 5. Rhythm, Emission-refusal layer (tighter than diagnosis refusal), Emitting a portable system from `study`, If the user says "build it" (+14 more)
 
 ### Community 234 - "Skills to Evaluate (2026-07-26)"
-Cohesion: 0.29
-Nodes (6): Flagged (priority):, Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-07-26)
+Cohesion: 0.12
+Nodes (13): DesignSystemGenerator, _filter_anti_patterns_for_mode(), Drop "avoid dark mode" advice once dark mode is the resolved answer., Generates design system recommendations from aggregated searches., Load reasoning rules from CSV., Execute searches across multiple domains., Find matching reasoning rule for a category., Apply reasoning rules to search results. (+5 more)
 
 ### Community 235 - "Skills to Evaluate (2026-07-27)"
-Cohesion: 0.29
-Nodes (6): Flagged (priority):, Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-07-27)
+Cohesion: 0.12
+Nodes (16): Accountant-Learning, agy-plugin-cc, agy-plugin-codex, Auto-memory name collisions (active vs archive, or duplicate active):, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d:, Global skills — zero recorded uses since usage-log start: (+8 more)
 
 ### Community 236 - "Japanese Learning Patterns — Vit"
 Cohesion: 0.29
@@ -1105,8 +1108,8 @@ Cohesion: 0.29
 Nodes (6): Component Rules, Hook Rules, Modern React Reference, Performance, React 19 Form and Optimistic Patterns, Server State
 
 ### Community 275 - "Skills to Evaluate (2026-07-29)"
-Cohesion: 0.33
-Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-07-29)
+Cohesion: 0.12
+Nodes (16): Accountant-Learning, agy-plugin-cc, agy-plugin-codex, Auto-memory name collisions (active vs archive, or duplicate active):, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d:, Global skills — zero recorded uses since usage-log start: (+8 more)
 
 ### Community 276 - "Decision Tree"
 Cohesion: 0.33
@@ -1441,8 +1444,12 @@ Cohesion: 0.83
 Nodes (3): is_memory_path(), main(), scan()
 
 ### Community 359 - "User Prompt Submit Hook"
-Cohesion: 0.83
-Nodes (3): check_memory_passive_review(), check_skill_trigger(), main()
+Cohesion: 0.60
+Nodes (4): check_memory_passive_review(), check_skill_trigger(), main(), Soft nudge only -- this does not block, and a match is not proof of a     routin
+
+### Community 360 - "Memory Decay Scheduler Script"
+Cohesion: 0.60
+Nodes (3): scan_project(), scan_skill_dormancy(), memory-decay-scheduler.sh script
 
 ### Community 361 - "Session Start Script"
 Cohesion: 1.00
@@ -1516,44 +1523,114 @@ Nodes (3): Load Right Reference, Red Flags, Skill Creator
 Cohesion: 0.50
 Nodes (3): Load Order, Official Documentation Anchors, React and Web Frontend
 
+### Community 382 - "Candidate Snapshot (2026-07-25)"
+Cohesion: 0.12
+Nodes (16): Accountant-Learning, agy-plugin-cc, agy-plugin-codex, Auto-memory name collisions (active vs archive, or duplicate active):, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d:, Global skills — zero recorded uses since usage-log start: (+8 more)
+
+### Community 383 - "Candidate Snapshot (2026-07-26)"
+Cohesion: 0.12
+Nodes (16): Accountant-Learning, agy-plugin-cc, agy-plugin-codex, Auto-memory name collisions (active vs archive, or duplicate active):, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d:, Global skills — zero recorded uses since usage-log start: (+8 more)
+
+### Community 384 - "Candidate Snapshot (2026-07-27)"
+Cohesion: 0.12
+Nodes (16): Accountant-Learning, agy-plugin-cc, agy-plugin-codex, Auto-memory name collisions (active vs archive, or duplicate active):, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d:, Global skills — zero recorded uses since usage-log start: (+8 more)
+
+### Community 385 - "Candidate Snapshot (2026-07-29)"
+Cohesion: 0.12
+Nodes (16): Accountant-Learning, agy-plugin-cc, agy-plugin-codex, Auto-memory name collisions (active vs archive, or duplicate active):, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d:, Global skills — zero recorded uses since usage-log start: (+8 more)
+
+### Community 416 - "Setup/Setupmemory Script"
+Cohesion: 0.12
+Nodes (16): Accountant-Learning, agy-plugin-cc, agy-plugin-codex, Auto-memory name collisions (active vs archive, or duplicate active):, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d:, Global skills — zero recorded uses since usage-log start: (+8 more)
+
+### Community 431 - "Agent Memory Eval State Reference"
+Cohesion: 0.33
+Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-07-30)
+
 ### Community 433 - "Fitness Personal Context"
-Cohesion: 0.13
-Nodes (13): Body Composition Defaults, Chat Style, Current Data Policy, Fitness Personal Context, Logging Patterns, Personal Defaults, Personal Movement Constraints, Protein Defaults (+5 more)
+Cohesion: 0.19
+Nodes (16): detect_domain(), _domain_keywords(), _get_bm25(), _load_csv(), _load_product_keywords(), Load CSV and return list of dicts, with mtime-based caching., Fitted BM25 index for this file+columns, with mtime-based caching., Core search function using BM25. Returns (results, bm25_or_none). (+8 more)
 
 ### Community 434 - "Memory Index — My Investment Port"
 Cohesion: 0.15
-Nodes (9): Key Red Flags (from primary sources), Technology Summary, Watch Triggers → BUY Reconsideration, Memory Index — My Investment Port, Active BUY Positions (Terry / Nora) — as of 2026-06-16, Key Files, Known Bug — import-kb-decisions.mjs, Pipeline Flow (updated 2026-06-18) (+1 more)
+Nodes (12): Accessibility, Common Rules for Professional UI + Pre-Delivery Checklist, Icons & Visual Elements, Interaction, Interaction (App), Layout, Layout & Spacing, Light/Dark Mode (+4 more)
 
 ### Community 435 - "The Pattern: Timer State = Ownership"
-Cohesion: 0.40
-Nodes (4): Concrete Examples, Files Updated (Apr 14, 2026), Key Insight, The Pattern: Timer State = Ownership Marker
+Cohesion: 0.15
+Nodes (12): 10. Charts & Data (LOW), 1. Accessibility (CRITICAL), 2. Touch & Interaction (CRITICAL), 3. Performance (HIGH), 4. Style Selection (HIGH), 5. Layout & Responsive (HIGH), 6. Typography & Color (MEDIUM), 7. Animation (MEDIUM) (+4 more)
 
 ### Community 436 - "Critical: Variable Scoping in Templates"
-Cohesion: 0.40
-Nodes (4): ✅ CORRECT Pattern (self-contained per line):, Critical: Variable Scoping in Templates, Exception: `condition: template` CAN use `{% set %}`, ❌ WRONG Pattern (lines can't reference earlier lines):
+Cohesion: 0.18
+Nodes (8): BM25, _normalize(), Apply synonym substitution before tokenizing., BM25 ranking algorithm for text search, Lowercase, normalize synonyms, split, remove punctuation, filter stopwords, Build BM25 index from documents, Score all documents against query, All indexed terms, for suggestion/typo-recovery purposes.
 
 ### Community 437 - "Memory Palace: Home Assistant Project"
-Cohesion: 0.40
-Nodes (3): Archived (>7 days old), Memory Palace: Home Assistant Project, Quick Links
+Cohesion: 0.22
+Nodes (8): Append to project memory, Diversification Memory, Schema, Scope, Stamp the output, State file location, The diversification rule (mandatory), Why this exists
 
 ### Community 440 - "Session State"
+Cohesion: 0.25
+Nodes (7): `design-system/<project>/MASTER.md` / `DESIGN.md` audit, Output shape, Stamp-vs-page check, Structural fingerprint check, The `audit` Trigger — Read-Only Quality Check, What `audit` does, When to hand off
+
+### Community 441 - "Memory Index"
+Cohesion: 0.33
+Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-08-01)
+
+### Community 442 - "MEMORY.md Module"
+Cohesion: 0.33
+Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-08-02)
+
+### Community 443 - "MEMORY.md Module"
+Cohesion: 0.33
+Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-08-03)
+
+### Community 444 - "Memory Index"
+Cohesion: 0.33
+Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-08-05)
+
+### Community 449 - "project_mode.md Module"
+Cohesion: 0.33
+Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-08-06)
+
+### Community 451 - "2026-07-29.md"
 Cohesion: 0.50
-Nodes (3): Current Threads, Recent Sessions, Session State
+Nodes (3): Graphify Semantic-Label Snapshot (2026-07-29), Projects with unlabeled communities (>10% placeholder):, Result
+
+### Community 464 - "Skills to Evaluate (2026-08-07)"
+Cohesion: 0.33
+Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-08-07)
+
+### Community 465 - "The `redesign` Trigger — Same Content, Different Structural Fingerprint"
+Cohesion: 0.33
+Nodes (5): Multi-page flow — lock a system first, then redesign each page, Non-destructive implementation rule, Single-page flow, Step 0 — Detect scope first, The `redesign` Trigger — Same Content, Different Structural Fingerprint
+
+### Community 466 - "_palette_is_dark"
+Cohesion: 0.33
+Nodes (6): _palette_is_dark(), WCAG relative luminance of a #RRGGBB string, or None if unparseable., True when a colors.csv row's Background is a dark surface., Pick the highest-ranked palette matching the resolved mode.      Only the dark c, _relative_luminance(), _select_palette_for_mode()
+
+### Community 467 - "_resolve_color_mode"
+Cohesion: 0.33
+Nodes (6): _query_wants_dark(), True when a styles.csv row describes itself as dark-first., True when the query explicitly asks for a dark theme., Resolve the mode the rest of the output has to agree with., _resolve_color_mode(), _style_is_dark_primary()
+
+### Community 468 - "validate_data.py"
+Cohesion: 0.83
+Nodes (3): _check_file(), main(), _read_rows()
 
 ## Knowledge Gaps
-- **2822 isolated node(s):** `changelog`, `git`, `build-cache-scheduler.sh script`, `candidate-scheduler.sh script`, `clean-build-cache.sh script` (+2817 more)
+- **3005 isolated node(s):** `changelog`, `git`, `bootstrap-new-machine.sh script`, `build-cache-scheduler.sh script`, `candidate-scheduler.sh script` (+3000 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **61 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **76 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 - **1 possibly unreachable function(s):** `_resolveTarget.sh script`
   Not reached from any recognized entry point - could be dead code, or dynamically dispatched/decorator-registered.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Playwright API Testing - Rules & Templates` connect `Playwright API Testing - Rules &` to `Helper Creation Guidelines`, `API Schema Definition`, `Advanced Contract Testing (Gems)`, `Coding Standards`, `Project Structure: API Testing`, `Infrastructure & Scripts Standard (package.json)`, `Test Naming Conventions`, `Assertions & Error Handling`, `Structure & Design`?**
+- **Why does `Playwright UI Testing - Rules & Templates` connect `Playwright UI Testing - Rules &` to `Advanced UI (Expert Tier)`, `Test Naming Conventions`, `Structure & Design`, `Locator Strategy`, `Coding Standards`, `Project Structure: Web UI Testing`, `Infrastructure & Scripts Standard (package.json)`, `Performance & Reliability`, `Interactions & Assertions`?**
+  _High betweenness centrality (0.001) - this node is a cross-community bridge._
+- **Why does `PART 1: Overview` connect `Project Structure: Web UI Testing` to `Playwright UI Testing - Rules &`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **What connects `changelog`, `git`, `Shared helpers for PreToolUse gate hooks. Fail-open: callers catch all errors.` to the rest of the system?**
-  _2831 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _3057 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `API Date & Utility Helpers` be split into smaller, more focused modules?**
   _Cohesion score 0.06901960784313725 - nodes in this community are weakly interconnected._
 - **Should `Fix Generated Playwright Files (Postman Migration)` be split into smaller, more focused modules?**
@@ -1561,6 +1638,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **Should `Postman Collection Parser & Converter` be split into smaller, more focused modules?**
   _Cohesion score 0.06448202959830866 - nodes in this community are weakly interconnected._
 - **Should `Appium Testing (Android) - Rules &` be split into smaller, more focused modules?**
-  _Cohesion score 0.05405405405405406 - nodes in this community are weakly interconnected._
-- **Should `Appium Testing (iOS) - Rules &` be split into smaller, more focused modules?**
   _Cohesion score 0.05405405405405406 - nodes in this community are weakly interconnected._
