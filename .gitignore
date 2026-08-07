@@ -1,29 +1,19 @@
-# Ignore everything by default
-*
 
-# Track only these
-!.gitignore
-!CLAUDE.md
-!MAINTENANCE.md
-!README.md
-!cliff.toml
-!CHANGELOG.md
-!.github/
-!.github/**
+__pycache__/
 !.claude/
 !.claude/**
-!agent-memory/
-!agent-memory/**
-!skills/
-!skills/**
-!scripts/
-!scripts/**
-!rules/
-!rules/**
+!.github/
+!.github/**
+!.gitignore
 !.kiro/
 !.kiro/**
-!hooks/
-!hooks/**
+!agent-memory/
+!agent-memory/**
+!CHANGELOG.md
+!CLAUDE.md
+!cliff.toml
+!commands/
+!commands/**
 !GRAPH_REPORT.md
 !GRAPHIFY_USAGE.md
 !graphify-out/
@@ -31,26 +21,35 @@
 !graphify-out/graph.html
 !graphify-out/graph.json
 !graphify-out/manifest.json
-!commands/**
-!commands/
+!hooks/
+!hooks/**
+!MAINTENANCE.md
+!README.md
+!rules/
+!rules/**
+!scripts/
+!scripts/**
+!skills/
+!skills/**
 !statusline-command.sh
-
-# Personal sync scripts (contain company-specific replace patterns — do not commit)
-scripts/sync-skills-to-claude.sh
-
-# Personal health/fitness logs (PII — do not commit)
-skills/fitness/personal/
-
-# Re-ignore noise inside tracked folders
-**/.DS_Store
-skills/**/_internal/
-skills/.claude/
-skills/**/.claude/
-.claude/worktrees/
 .claude/settings.local.json
-agent-memory/skill-usage.log
+.claude/worktrees/
+*
+**/.DS_Store
+# Ignore everything by default
+# Personal health/fitness logs (PII — do not commit)
+# Personal sync scripts (contain company-specific replace patterns — do not commit)
+# Re-ignore noise inside tracked folders
+# Track only these
+agent-memory/.state/
 agent-memory/routing-nudges.log
 agent-memory/session-search.db
 agent-memory/session-search.db-*
-agent-memory/.state/
+agent-memory/skill-usage.log
 hooks/__pycache__/
+scripts/sync-skills-to-claude.sh
+skills/.claude/
+skills/**/_internal/
+skills/**/.claude/
+skills/fitness/personal/
+skills/ui-designer/scripts/__pycache__/
