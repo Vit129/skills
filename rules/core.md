@@ -53,7 +53,10 @@ No task is complete until: build passes + relevant tests pass. If tests cannot r
 
 ## Git
 
-- New branch before coding unless instructed otherwise
+- New feature branch before coding unless instructed otherwise — never commit work-in-progress directly on `main`/`master`
+- After a branch's work is merged (PR merged, or user confirms it landed), delete the branch immediately — local and remote (`git branch -d`, `git push origin --delete`) — don't let it linger
+  - Before deleting anything, verify merged status for real: `git branch --merged main` alone isn't enough post-squash-merge (hash changes) — cross-check the branch's own commit message(s) against `git log --grep` on the target branch, or diff actual file content, not just commit ancestry. See `[[kouen-terminal branch cleanup 2026-07-31]]` case: a squash-merged PR changes the commit hash, so naive ancestry checks alone under-report what's actually shipped.
+  - Never bulk-delete branches on a guess ("this is probably done") — confirm each one has concrete evidence (matching commit message on the target branch, or the actual file diff showing the change is present) before deleting. If evidence is genuinely absent, keep the branch and say so rather than assuming a later redesign superseded it.
 - Never push directly to `main`/`master` without permission
 
 ### VCS Remote by Path

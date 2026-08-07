@@ -7,3 +7,9 @@
 # BEGIN claude-managed (build-cache-scheduler)
 0 9 * * 1 $HOME/.claude/scripts/build-cache-scheduler.sh >> $HOME/.claude/agent-memory/build-cache-checks/cron.log 2>&1
 # END claude-managed (build-cache-scheduler)
+# BEGIN claude-managed (clean-old-chat-history)
+0 8 1 * * $HOME/.claude/scripts/clean-old-chat-history.sh --force >> $HOME/.claude/agent-memory/chat-cleanup.log 2>&1
+# END claude-managed (clean-old-chat-history)
+# BEGIN claude-managed (clean-merged-worktrees)
+0 8 1 * * $HOME/.claude/scripts/clean-merged-worktrees.sh --force >> $HOME/.claude/agent-memory/worktree-cleanup.log 2>&1
+# END claude-managed (clean-merged-worktrees)

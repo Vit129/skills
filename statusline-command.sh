@@ -93,6 +93,23 @@ if [ -n "$branch" ]; then
   [ -n "$_sym" ] && git_status_display="$(printf '\033[1;31m[%s]\033[0m' "$_sym")"
 fi
 
+# --- bar_render pct width -> colored block bar (threshold-colored like screenshot) ---
+bar_render() {
+  local pct="$1" width="${2:-10}"
+  [ -z "$pct" ] && { printf '\033[0;90m%s\033[0m' "$(printf '░%.0s' $(seq 1 "$width"))"; return; }
+  local filled=$(( pct * width / 100 ))
+  [ "$filled" -gt "$width" ] && filled="$width"
+  local empty=$(( width - filled ))
+  local c
+  if   [ "$pct" -gt 75 ]; then c='\033[0;31m'
+  elif [ "$pct" -gt 45 ]; then c='\033[0;33m'
+  else c='\033[0;32m'; fi
+  local fill_str="" empty_str=""
+  [ "$filled" -gt 0 ] && fill_str=$(printf '█%.0s' $(seq 1 "$filled"))
+  [ "$empty" -gt 0 ] && empty_str=$(printf '░%.0s' $(seq 1 "$empty"))
+  printf "${c}%s\033[0;90m%s\033[0m" "$fill_str" "$empty_str"
+}
+
 # --- Build output ---
 sep=" $(printf '\033[0;90m|\033[0m') "
 
@@ -112,15 +129,16 @@ if [ -n "$model_short" ]; then
   model_part="$(printf '\033[0;33m%s\033[0m' "$label")"
 fi
 
-# 4. Context usage — Claude-specific (green/yellow/red by threshold)
+# 4. Context usage — Claude-specific (green/yellow/red by threshold), bar + %
 if [ -n "$ctx" ]; then
   ctx_rem_int="${ctx_rem:-$(( 100 - ctx ))}"
   if   [ "$ctx" -gt 75 ]; then c='\033[0;31m'
   elif [ "$ctx" -gt 45 ]; then c='\033[0;33m'
   else c='\033[0;32m'; fi
-  ctx_part="$(printf "${c}ctx:%d%% rem:%d%%\033[0m" "$ctx" "$ctx_rem_int")"
+  ctx_bar="$(bar_render "$ctx" 10)"
+  ctx_part="$(printf "ctx %b ${c}%d%%\033[0m rem:%d%%" "$ctx_bar" "$ctx" "$ctx_rem_int")"
 else
-  ctx_part="$(printf '\033[0;90mctx:--%% rem:--%%\033[0m')"
+  ctx_part="$(printf 'ctx %b \033[0;90m--%% rem:--%%\033[0m' "$(bar_render '' 10)")"
 fi
 
 # 5. 5h rate limit + countdown — Claude-specific
@@ -144,9 +162,10 @@ if [ -n "$five_pct" ]; then
   if   [ "$five_pct" -gt 75 ]; then c='\033[0;31m'
   elif [ "$five_pct" -gt 45 ]; then c='\033[0;33m'
   else c='\033[0;32m'; fi
-  five_part="$(printf "${c}5h:%d%% rem:%d%%%s\033[0m" "$five_pct" "$(( 100 - five_pct ))" "$timer")"
+  five_bar="$(bar_render "$five_pct" 10)"
+  five_part="$(printf "5h %b ${c}%d%%\033[0m rem:%d%%%s" "$five_bar" "$five_pct" "$(( 100 - five_pct ))" "$timer")"
 else
-  five_part="$(printf '\033[0;90m5h:--%% rem:--%% --\033[0m')"
+  five_part="$(printf '5h %b \033[0;90m--%% rem:--%% --\033[0m' "$(bar_render '' 10)")"
 fi
 
 # 6. 7d rate limit + reset day — Claude-specific
@@ -163,9 +182,10 @@ if [ -n "$week_pct" ]; then
   if   [ "$week_pct" -gt 75 ]; then c='\033[0;31m'
   elif [ "$week_pct" -gt 45 ]; then c='\033[0;33m'
   else c='\033[0;32m'; fi
-  week_part="$(printf "${c}7d:%d%% rem:%d%%%s\033[0m" "$week_pct" "$(( 100 - week_pct ))" "$wtimer")"
+  week_bar="$(bar_render "$week_pct" 10)"
+  week_part="$(printf "7d %b ${c}%d%%\033[0m rem:%d%%%s" "$week_bar" "$week_pct" "$(( 100 - week_pct ))" "$wtimer")"
 else
-  week_part="$(printf '\033[0;90m7d:--%% rem:--%% --\033[0m')"
+  week_part="$(printf '7d %b \033[0;90m--%% rem:--%% --\033[0m' "$(bar_render '' 10)")"
 fi
 
 # Join helper — skips empty segments, joins the rest with sep
@@ -178,13 +198,16 @@ join_parts() {
   printf '%s' "$out"
 }
 
-# Narrow pane (split v/h) -> wrap onto 2 lines: dir+git | model+ctx+5h+7d.
+# Narrow pane (split v/h) -> full vertical stack, one segment per line.
 # Claude Code sets $COLUMNS to the pane width (v2.1.153+); 0/unset means unknown, stay single-line.
 if [ -n "$COLUMNS" ] && [ "$COLUMNS" -gt 0 ] && [ "$COLUMNS" -lt 100 ]; then
   line1=$(join_parts "$dir_part" "$git_part")
-  line2=$(join_parts "$model_part" "$ctx_part" "$five_part" "$week_part")
-  printf '%b\n%b\n' "$line1" "$line2"
+  for p in "$line1" "$model_part" "$ctx_part" "$five_part" "$week_part"; do
+    [ -n "$p" ] && printf '%b\n' "$p"
+  done
 else
-  result=$(join_parts "$dir_part" "$git_part" "$model_part" "$ctx_part" "$five_part" "$week_part")
-  printf '%b\n' "$result"
+  line1=$(join_parts "$dir_part" "$git_part" "$model_part" "$ctx_part")
+  for p in "$line1" "$five_part" "$week_part"; do
+    [ -n "$p" ] && printf '%b\n' "$p"
+  done
 fi
