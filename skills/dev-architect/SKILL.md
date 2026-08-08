@@ -6,9 +6,9 @@ description: >
   "create API contracts", "do logical design",
   "use TDD", or needs DDD Strategic & Tactical Design, Logical Design,
   or Test-Driven Development guidance.
-version: 1.1.0
-last_improved: 2026-07-10
-improvement_count: 1
+version: 1.2.0
+last_improved: 2026-08-08
+improvement_count: 2
 ---
 
 # Architect
@@ -34,6 +34,8 @@ Design systems from requirements to implementation-ready blueprints.
 ## Inline Process
 
 0. **Entry (mandatory)** — `Skill(interview)` must have already run (its Step 0 scope-check or full gather). If it hasn't, stop and call it first — don't design on top of an unconfirmed scope. Then: run `mcp__graphify__query_graph` on the relevant symbol/module if `graphify-out/` exists in the project root — know the blast radius before Strategic/Tactical Design, not after. If `PRODUCT.md` exists at project root (see `rules/product-design.md`), read it and check the feature against its Core Features/Out of Scope before Strategic Design — don't design a feature the product doc explicitly excludes without flagging it.
+
+   **Claude Code only:** call `EnterPlanMode` here, before Strategic Design starts — this workspace's own chain never used the native plan-mode gate before 2026-08-08, relying only on this skill's own discipline. Not Claude Code (Codex/agy/Gemini): skip straight to step 1, native plan mode doesn't exist there — this skill's own steps are the only gate.
 1. **Identify the design phase** — Match to ONE phase: Strategic Design (bounded contexts), Architecture Patterns (monolith vs microservices), Tactical Design (entities/aggregates/events), Logical Design (API contracts/DB schemas), or TDD (Red→Green→Refactor). Execute phases in order — don't skip ahead.
 2. **Strategic Design** — Group user stories by business function → identify domain boundaries → assess complexity → choose architecture pattern with documented tradeoffs → define bounded contexts.
 3. **Architecture Pattern** — If microservices: define integration patterns per context pair, specify failure handling. If monolith: define module boundaries.
@@ -44,7 +46,9 @@ Design systems from requirements to implementation-ready blueprints.
 
 ## Output
 
-One file: `agent-memory/plans/[FEATURE]/design.md`, with 3 sections in process order — `## Strategic Design`, `## Tactical Design`, `## Logical Design`. All three phases happen in one sitting within this skill; no demonstrated reason to split them into separate files (no separate audience, no separate revisit cadence).
+**Claude Code only:** write the drafted design (Strategic/Tactical/Logical sections, in process order) to the plan-mode file the harness designated when `EnterPlanMode` was called in step 0, then call `ExitPlanMode` — this is the hard approval gate (native tool-level, not just this skill's own discipline). Only after the user approves: copy the approved content verbatim into `agent-memory/plans/[FEATURE]/design.md` — that copy is what makes the design durable across sessions/days, since the native plan-mode file is not guaranteed to persist past this session. Not Claude Code: skip the plan-mode file, write directly to `agent-memory/plans/[FEATURE]/design.md` and get approval the way this skill already did before 2026-08-08 (present the design in chat, confirm before moving to `task-design.md`).
+
+Either way, the durable artifact is the same: one file, `agent-memory/plans/[FEATURE]/design.md`, with 3 sections in process order — `## Strategic Design`, `## Tactical Design`, `## Logical Design`. All three phases happen in one sitting within this skill; no demonstrated reason to split them into separate files (no separate audience, no separate revisit cadence).
 
 ## Next Step
 
@@ -71,4 +75,5 @@ Design complete → continue with `references/task-design.md` (Dev section) to b
 - 🚩 Multiple references loaded simultaneously → Each reference is a distinct design phase; load only the one matching the current step.
 - 🚩 Domain events defined but no aggregate boundaries drawn → Events without aggregates means you don't know who owns what; define aggregate roots first.
 - 🚩 TDD reference loaded but no failing test written before implementation code → TDD means Red FIRST; if implementation exists without a prior failing test, the cycle was skipped.
+- 🚩 In Claude Code, design.md written to `agent-memory/plans/` before `ExitPlanMode` was ever called → the native approval gate was bypassed; the design may not actually have user sign-off.
 
