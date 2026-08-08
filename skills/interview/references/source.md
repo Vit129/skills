@@ -12,6 +12,7 @@ package.json / pyproject.toml / go.mod / Cargo.toml
 If ambiguous → ask. Never guess.
 
 **FETCH** — get the specific doc page for the feature (not the homepage).
+If the `context7` MCP is available (Claude Code only, plugin — `mcp__context7__*`), prefer it for version-pinned library docs/examples over generic WebFetch/WebSearch. Not Claude Code, or context7 unavailable: fall back to the order below.
 Prefer in order: official docs → GitHub source → changelog → community guides.
 
 **IMPLEMENT** — follow the documented pattern exactly.

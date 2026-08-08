@@ -93,6 +93,14 @@ Because of that constraint, **always confirm the project with the user before do
 3. If a matching plan/case file is found (regardless of whether the feature shipped or was reverted — reverted-with-writeup still counts as "resolved, not abandoned") — call `kouenTaskDelete` directly, no extra per-task confirmation. This is a narrower exception to step 6 above: step 6 still governs graduating an *open* task into a *brand-new* plan; this is deleting a *done* task once a resolving artifact is independently verified to already exist.
 4. If no matching plan/case file turns up, don't delete — surface it and ask, same as the open-task flow.
 
+## Claude Code Plugin vs Portable Skill
+
+Official/third-party Claude Code plugins (anything under `~/.claude/plugins/marketplaces/*`, turned on via `enabledPlugins` in `settings.json`) only run inside an actual Claude Code session — the plugin mechanism itself is Claude-Code-specific and is **not** propagated by `sync-all.sh` (which only syncs `~/.claude/skills/`, `rules/`, `commands/`, `agents/`, `agent-memory/` out to `~/.codex/`, `~/.gemini/`, `~/.agents/`).
+
+A Skill Map row marked **(Claude Code only, plugin)** means: if the current session *is* Claude Code, invoke the plugin. If the current agent is Codex, agy/Antigravity, Gemini, or anything else running off a synced copy of this workspace, the plugin does not exist there at all — fall back to the portable skill named alongside it, or if none is named, say plainly that the capability isn't available outside Claude Code rather than improvising a substitute.
+
+How to tell which you are: if you're reading this file from `~/.claude/`, you're Claude Code — plugins apply. If you're reading a synced copy under `~/.codex/`, `~/.gemini/`, or `~/.agents/`, you're not — skip straight to the fallback.
+
 ## Skill Map
 
 | Task signal | Skill |
@@ -105,7 +113,11 @@ Because of that constraint, **always confirm the project with the user before do
 | robot framework / rf / mobile test | `test-scenario` (scenarios are qa-architect's mandatory input) → `qa-architect` → `robotframework-rules` + `robotframework-testing` → `task-design` (QA section) → build/run scripts — optional tracker sync at each stage, see Tracker Sync |
 | install/setup/fix appium / appium driver / appium version / xcuitest / uiautomator2 / appium doctor / appium mcp / appium capabilities / appium inspector | `appium-ops` — environment/tooling only (install, version compat, npm troubleshooting, MCP wiring, capabilities JSON). Writing/running RF+Appium test code is still `robotframework-testing`. |
 | postman → playwright | `postman-to-playwright` — reads `playwright-rules` + `playwright-testing` before writing/reviewing generated code (required deps, not just triggers) |
-| review / code review / critique | `review-personas` — findings hand off downstream: bugs → `debug-mantra-workflow`, design issues surfaced during `/plan` → `dev-architect`, unresolved pre-commit ambiguity → `interview` (doubt mode) |
+| review / code review / critique (in-session, no GitHub write) | `review-personas` — findings hand off downstream: bugs → `debug-mantra-workflow`, design issues surfaced during `/plan` → `dev-architect`, unresolved pre-commit ambiguity → `interview` (doubt mode) |
+| review this GitHub pull request / post a PR review comment | `/code-review` (Claude Code only, plugin; personal projects only — uses `gh`, excluded under `~/.kiro/**`/`~/Git/Company/**` per VCS Remote by Path below) — not Claude Code: run `review-personas` then post the comment manually via `gh pr comment` |
+| silent failures / error handling audit / catch block review | `pr-review-toolkit`'s `silent-failure-hunter` (Claude Code only, plugin) — not Claude Code: no equivalent, review manually |
+| type design review / invariant check / new type audit | `pr-review-toolkit`'s `type-design-analyzer` (Claude Code only, plugin) — not Claude Code: no equivalent |
+| comment accuracy / doc rot / stale comments check | `pr-review-toolkit`'s `comment-analyzer` (Claude Code only, plugin) — not Claude Code: no equivalent |
 | scrutinize / sanity-check / second opinion on **a single plan, PR, diff, or design doc** / is this necessary | `9arm-skills:scrutinize` |
 | analyze codebase / gap analysis / extract requirements / **what exists before building** / step by step analysis / chain of thought / lats / compare approaches / big picture thinking / วิเคราะห์ | `analysis-skills` (`ai-techniques` was merged in — CoT/LATS/AoT now live here too) |
 | new feature / architecture / unclear scope / requirements unclear | `interview` (full gather) → write GLOSSARY.md → `dev-architect` (design + graphify) → `task-design` (Dev section) → implement |
@@ -117,13 +129,21 @@ Because of that constraint, **always confirm the project with the user before do
 | react / vue / next.js / frontend / html / css / browser dom | `frontend-dev` → `web` |
 | api server / express / fastapi / django / go service / backend / C#/.NET / C/C++ / dockerize | `backend-dev` (covers Node.js, Python, C#/.NET, C/C++, Docker per its own description — not just JS APIs) |
 | database schema / db design / migration | `backend-dev` (schema design, dev-side) — test data seed/verify/cleanup for automation is a separate concern, see `qa-architect`'s `test-db-strategy.md` (QA-side) |
-| security / vulnerability / owasp / cve / pentest | `security` |
+| secure coding / security test design / OWASP scenario / auth test / permission matrix / injection prevention | `security` |
+| security scan / vulnerability scan / pentest / CVE scan / "find vulnerabilities in this repo" / "scan for exploitable bugs" | `/claude-security` (Claude Code only, plugin) — not Claude Code: no automated scan available, apply `security` skill's checklist manually instead |
 | ci/cd / github actions / docker / kubernetes / deploy pipeline | `devops-pipeline` |
 | simplify code / reduce complexity / too complex | `code-simplification` |
 | load test / performance test / k6 / jmeter / stress test | `performance-testing` |
 | test scenario / test case design / scenario list | `test-scenario` (design standards + CSV rules now live in its own `references/ts-standards.md`+`references/csv-export.md` — `test-scenario-rules` was merged in) |
-| create hook / new hook / hook builder | `hook-creator` |
-| create skill / new skill / skill template | `skill-creator` |
+| create hook / new hook / hook builder (Kiro project — `.kiro/hooks/*.kiro.hook`) | `hook-creator` |
+| hookify rule / write a hook rule / configure hookify / warn on pattern / block dangerous command (Claude Code project — `.claude/hookify.*.local.md`) | `hookify` (Claude Code only, plugin) — not Claude Code: no equivalent, hookify's mechanism is Claude-Code-hook-specific |
+| create skill / new skill / skill template | `skill-creator` (ours, portable — works identically in Claude Code, Codex, Gemini) |
+| run skill eval / benchmark skill / optimize skill description / test skill triggering accuracy | `skill-creator` plugin's eval/benchmark tooling (Claude Code only) — not Claude Code: fall back to manual pass@3 via `eval-scheduler.sh`'s flagged report (weaker, no automated benchmark or description-optimization loop) |
+| audit CLAUDE.md / check CLAUDE.md quality / improve CLAUDE.md / CLAUDE.md maintenance | `claude-md-management` (Claude Code only, plugin) — not Claude Code: review CLAUDE.md manually against its own structure, no automated quality report |
+| recommend claude code automations / how should I set up claude code for this project / suggest hooks or skills for this project | `claude-code-setup` (Claude Code only, plugin) — not Claude Code: use this file's own Skill Map + `agent-memory`'s bootstrap flow manually |
+| project status page / status artifact / share progress with teammates / stakeholder-facing project overview | `project-artifact` (Claude Code only, plugin — requires the Artifact tool + claude.ai login) — not Claude Code: no equivalent, the Artifact tool itself is Claude-Code/claude.ai-specific |
+| token usage report / cache hit rate / expensive prompts / optimize my Claude Code spend / usage analysis over time | `session-report` (Claude Code only, plugin) — not Claude Code: no equivalent |
+| impact report / usage report for manager / prove Claude Code value / what have I shipped | `receipts` (Claude Code only, plugin) — not Claude Code: no equivalent |
 | verify this / self-verify / verification loop | `verification-loop` |
 | graph report / knowledge graph / project graph | `mcp__graphify__query_graph` |
 | ui design / wireframe / mockup / design component | `ui-designer` |

@@ -8,9 +8,9 @@ description: >
   Covers design decisions (what to build) AND implementation quality (how it looks/feels).
   Industry-validated patterns (8 sectors) + pbakaus/impeccable anti-slop principles.
 credit: See "Credits" section below for the full source list.
-version: 2.2.0
-last_improved: 2026-08-07
-improvement_count: 3
+version: 2.2.1
+last_improved: 2026-08-08
+improvement_count: 4
 ---
 
 # UI Designer
@@ -138,6 +138,7 @@ If you showed this interface to someone and said "AI made this," would they beli
 - ❌ Gray text on colored backgrounds
 - ❌ The AI color palette: cyan-on-dark, purple-to-blue gradients, neon accents on dark
 - ❌ Default to dark mode with glowing accents
+- ❌ Another AI-cluster tell: warm cream (`~#F4F1EA`) + high-contrast serif + terracotta accent — this skill's own "tint neutrals toward brand hue" rule below actually funnels toward this cluster, so watch for it specifically rather than assuming the rule already avoids it [source: Anthropic's official `frontend-design` Claude Code plugin — compared 2026-08-08, not otherwise adopted, see routing.md's SKIP verdict]
 - ❌ Heavy `rgba()` / alpha transparency (design smell = incomplete palette)
 - ✅ Use OKLCH, not HSL
 - ✅ 60-30-10 rule: 60% neutral, 30% secondary, 10% accent
@@ -148,6 +149,7 @@ If you showed this interface to someone and said "AI made this," would they beli
 - ❌ Nest cards inside cards
 - ❌ Identical card grids (same-sized cards with icon + heading + text, repeated)
 - ❌ Center everything — left-aligned with asymmetric layouts feels more designed
+- ❌ Numbered markers (01/02/03) as decoration — only use them when order is real information (steps, ranking), not to fake structure
 - ✅ Use `gap` instead of margins for sibling spacing
 - ✅ 4pt base spacing scale: 4, 8, 12, 16, 24, 32, 48, 64, 96px
 
@@ -252,6 +254,7 @@ PRE-DELIVERY CHECKLIST:
 - **Theme = context** — Dark/light derived from audience, not preference.
 - **Alpha = design smell** — Heavy transparency means incomplete palette.
 - **Cards are overused** — Spacing and alignment create grouping naturally.
+- **Selector specificity can cancel your own spacing rules** — e.g. `.section` and `.cta` both setting padding/margin on the same element can silently cancel each other out; check computed styles, not just the rule you just wrote.
 
 ## When to Load Each Reference
 
