@@ -20,6 +20,30 @@ STATE_PATH = Path.home() / ".claude" / "agent-memory" / ".state" / "memory-passi
 NUDGES_LOG = Path.home() / ".claude" / "agent-memory" / "routing-nudges.log"
 COOLDOWN_TURNS = 3
 
+# "project"-type memory only ever gets written via explicit correction/
+# confirmation phrases (the check above) or session-end/manual memory-curator
+# — neither fires on "did substantial work happen." A 2026-08-11 session
+# built 5 real features over ~2 hours with zero memory capture until the
+# user asked directly whether the newest work would show up in the journey
+# timeline, and it didn't. This closes that gap: count Write/Edit calls to
+# non-memory paths since the last memory write in THIS session's own
+# transcript: cross MEMORY_WORK_THRESHOLD un-captured edits -> nudge.
+#
+# Markers deliberately match scripts/journey_timeline.py's exact 3 source
+# roots (Claude Code memory, agent-memory/knowledge, skills/candidates) --
+# NOT memory-write-scan.py's broader "/agent-memory/" marker, which also
+# covers plans/, digest/, .state/ etc. A live check against this session's
+# own transcript caught the bug: with the broader marker, an ordinary
+# dev-task-progress.md edit falsely counted as "closing the loop" even
+# though journey_timeline.py never reads that file.
+MEMORY_PATH_MARKERS = (
+    "/projects/-Users-supavit-cho--claude/memory/",
+    "/agent-memory/knowledge/",
+    "/skills/candidates/",
+)
+MEMORY_WORK_THRESHOLD = 6
+MEMORY_WORK_COOLDOWN_TURNS = 5
+
 CORRECTION_PATTERNS = [
     r"\bstop doing\b",
     r"\bdon'?t do that\b",
@@ -109,15 +133,86 @@ def check_memory_passive_review(prompt, session_id):
     return None
 
 
+def count_uncaptured_work(transcript_path):
+    """Walk this session's own transcript. Return the count of Write/Edit
+    calls to non-memory paths since the most recent Write/Edit to a
+    memory-path (agent-memory/, skills/candidates/, or a Claude Code
+    projects/*/memory/*.md file) -- 0 if a memory write is the most recent
+    matching call, or if there's no transcript yet."""
+    if not transcript_path:
+        return 0
+    last_memory_idx = -1
+    non_memory_calls = []
+    idx = 0
+    with open(transcript_path) as f:
+        for line in f:
+            try:
+                obj = json.loads(line)
+            except Exception:
+                continue
+            content = obj.get("message", {}).get("content")
+            if not isinstance(content, list):
+                continue
+            for block in content:
+                if not (isinstance(block, dict) and block.get("type") == "tool_use"):
+                    continue
+                if block.get("name") not in ("Write", "Edit"):
+                    continue
+                file_path = block.get("input", {}).get("file_path", "")
+                if any(marker in file_path for marker in MEMORY_PATH_MARKERS):
+                    last_memory_idx = idx
+                else:
+                    non_memory_calls.append(idx)
+                idx += 1
+    return sum(1 for i in non_memory_calls if i > last_memory_idx)
+
+
+def check_project_memory_nudge(session_id, transcript_path):
+    try:
+        try:
+            state = json.loads(STATE_PATH.read_text())
+        except Exception:
+            state = {}
+
+        key = f"{session_id}:work"
+        session_state = state.get(key, {"count": 0, "last_fired": -MEMORY_WORK_COOLDOWN_TURNS})
+        session_state["count"] += 1
+
+        uncaptured = count_uncaptured_work(transcript_path)
+        should_fire = (
+            uncaptured >= MEMORY_WORK_THRESHOLD
+            and session_state["count"] - session_state["last_fired"] >= MEMORY_WORK_COOLDOWN_TURNS
+        )
+        if should_fire:
+            session_state["last_fired"] = session_state["count"]
+
+        state[key] = session_state
+        STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
+        STATE_PATH.write_text(json.dumps(state))
+
+        if should_fire:
+            return (
+                f"Passive memory review: {uncaptured} Write/Edit calls to non-memory "
+                "files this session with no memory write since -- if durable, "
+                "non-obvious decisions or facts came out of that work, capture a "
+                "project/feedback memory now rather than waiting for session-end."
+            )
+    except Exception:
+        pass
+    return None
+
+
 def main():
     data = json.load(sys.stdin)
     prompt = data.get("prompt", "")
     session_id = data.get("session_id", "unknown")
+    transcript_path = data.get("transcript_path")
 
     messages = [
         m for m in (
             check_skill_trigger(prompt, session_id),
             check_memory_passive_review(prompt, session_id),
+            check_project_memory_nudge(session_id, transcript_path),
         ) if m
     ]
 
