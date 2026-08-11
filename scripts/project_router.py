@@ -24,6 +24,8 @@ from pathlib import Path
 
 CLAUDE_DIR = Path.home() / ".claude"
 INDEX_PATH = CLAUDE_DIR / "agent-memory" / ".state" / "project-router-index.json"
+THRESHOLDS_PATH = CLAUDE_DIR / "agent-memory" / ".state" / "router-thresholds.json"
+CALIBRATION_LOG_PATH = CLAUDE_DIR / "agent-memory" / "router-calibration-log.jsonl"
 MODEL_NAME = "all-MiniLM-L6-v2"
 MAX_CHARS_PER_SOURCE = 900  # explicit cutoff ahead of MiniLM's own silent 256-wordpiece truncation
 
@@ -32,9 +34,22 @@ COMPANY_ROOT = Path.home() / "Git" / "Company"
 SKIP_PROJECTS = {"9arm-skills"}  # read-only third-party clone, core.md No-Touch Paths
 SKIP_DIR_NAMES = {"untitled folder"}  # confirmed junk, not a real project
 
-# Placeholders — not yet calibrated against real task titles. See design.md.
-MIN_ABS_SCORE = 0.15
-MIN_MARGIN = 0.03
+# Defaults — used until scripts/router-calibration-scheduler.sh has enough
+# real confirm/reject outcomes (from CALIBRATION_LOG_PATH) to write real
+# values to THRESHOLDS_PATH. --min-score/--margin CLI flags always win over
+# both.
+DEFAULT_MIN_ABS_SCORE = 0.15
+DEFAULT_MIN_MARGIN = 0.03
+
+
+def load_calibrated_thresholds() -> tuple[float, float]:
+    if THRESHOLDS_PATH.exists():
+        try:
+            data = json.loads(THRESHOLDS_PATH.read_text())
+            return float(data["min_abs_score"]), float(data["min_margin"])
+        except Exception:
+            pass
+    return DEFAULT_MIN_ABS_SCORE, DEFAULT_MIN_MARGIN
 
 
 def discover_projects(include_company: bool) -> list[Path]:
@@ -134,6 +149,8 @@ def query(text: str, include_company: bool, limit: int, model=None) -> list[tupl
 
 
 def main() -> None:
+    default_min_score, default_margin = load_calibrated_thresholds()
+
     parser = argparse.ArgumentParser(
         description="Content-based project guess for a free-text task title "
         "(Kouen Task Sync signal #2 — candidate guess only, never a silent action)"
@@ -154,11 +171,16 @@ def main() -> None:
         help="also index ~/Git/Company/* (opt-in, see routing.md)",
     )
     parser.add_argument("--limit", type=int, default=3)
-    parser.add_argument("--min-score", type=float, default=MIN_ABS_SCORE)
-    parser.add_argument("--margin", type=float, default=MIN_MARGIN)
+    parser.add_argument("--min-score", type=float, default=default_min_score)
+    parser.add_argument("--margin", type=float, default=default_margin)
     parser.add_argument(
         "--show-all", action="store_true",
         help="bypass confidence gating, print raw ranked list (for calibration)",
+    )
+    parser.add_argument(
+        "--json", action="store_true",
+        help="machine-readable output for the calibration-logging step "
+        "(scripts/router_log_outcome.py) instead of the human-readable text",
     )
     parser.add_argument("--reindex-all", action="store_true")
     args = parser.parse_args()
@@ -177,7 +199,12 @@ def main() -> None:
         build_index(args.include_company, force=True, model=model)
 
     results = query(query_text, args.include_company, max(args.limit, 2), model=model)
+    home = str(Path.home())
+
     if not results:
+        if args.json:
+            print(json.dumps({"error": "no_projects_discovered"}))
+            sys.exit(1)
         print(
             "No index yet — no projects discovered under ~/Git/Personal "
             "(and ~/Git/Company if --include-company).",
@@ -185,19 +212,34 @@ def main() -> None:
         )
         sys.exit(1)
 
-    if not args.show_all:
-        top_score = results[0][1]
-        second_score = results[1][1] if len(results) > 1 else -1.0
-        confident = (top_score >= args.min_score) and (top_score - second_score >= args.margin)
-        if not confident:
-            print(
-                "No confident content-based match (best guess below threshold "
-                "or too close to runner-up) — cwd cross-reference and manual "
-                "confirm are still required."
-            )
-            sys.exit(0)
+    top_score = results[0][1]
+    second_score = results[1][1] if len(results) > 1 else -1.0
+    confident = (top_score >= args.min_score) and (top_score - second_score >= args.margin)
 
-    home = str(Path.home())
+    if args.json:
+        # For scripts/router_log_outcome.py -- write this straight to a file
+        # (untrusted-text-safe, same reasoning as --query-file) and pass that
+        # file's path to router_log_outcome.py rather than re-typing scores
+        # into a shell command.
+        print(json.dumps({
+            "query": query_text,
+            "top_project": results[0][0].replace(home + "/", "~/"),
+            "top_score": top_score,
+            "second_score": second_score,
+            "confident": confident,
+            "min_score_used": args.min_score,
+            "margin_used": args.margin,
+        }))
+        return
+
+    if not args.show_all and not confident:
+        print(
+            "No confident content-based match (best guess below threshold "
+            "or too close to runner-up) — cwd cross-reference and manual "
+            "confirm are still required."
+        )
+        sys.exit(0)
+
     index = load_index()
     for path, score in results[: args.limit]:
         rel = path.replace(home + "/", "~/")
