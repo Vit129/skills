@@ -28,6 +28,20 @@ INJECTION_PATTERNS = [
     re.compile(r"reveal (your|the) (system prompt|instructions)", re.I),
     re.compile(r"do not tell (the )?user", re.I),
     re.compile(r"<\s*system\s*>", re.I),
+    # Credential/SSH-key exfiltration — match the *exfiltrate* shape (an
+    # instruction to send a secret somewhere), not bare secret vocabulary.
+    # This workspace's own memories discuss .env/API keys/credentials
+    # constantly as ordinary content; a word-presence pattern would deny
+    # legitimate writes. See the false-positive self-test below.
+    re.compile(
+        r"(send|post|upload|exfiltrate|email)\s+(your|my|the)?\s*"
+        r"(ssh key|private key|id_rsa|api[_ ]?key|access token|credentials?|password)s?\s+to\s+\S",
+        re.I,
+    ),
+    re.compile(
+        r"\bcat\b.{0,30}(id_rsa|\.ssh/|\.aws/credentials|\.env\b).{0,40}\|\s*(curl|nc|wget|ssh)\b",
+        re.I,
+    ),
 ]
 
 

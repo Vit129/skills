@@ -25,3 +25,15 @@ Deleted.
 ## Result
 
 _(above is the deletion record for this run.)_
+BUILD_CACHE_CHECK_DUE
+---
+## Build/Cache Cleanup Snapshot (2026-08-10)
+
+Scanning /Users/supavit.cho/Git/Personal ...
+  4.9G  /Users/supavit.cho/Git/Personal/CodexBar/.build
+  2.6G  /Users/supavit.cho/Git/Personal/kouen-terminal/.build
+Deleted.
+
+## Result
+
+_(above is the deletion record for this run.)_

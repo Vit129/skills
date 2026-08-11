@@ -54,9 +54,15 @@ auto_act_check() {
   local logdir="$HOME/.claude/agent-memory/$dir"
   local latest
   latest=$(find "$logdir" -maxdepth 1 -name "20*.md" 2>/dev/null | sort | tail -1)
-  [[ -z "$latest" ]] && return
-  grep -q "^ACTED:" "$latest" 2>/dev/null && return
-  grep -qE '^- .+' "$latest" 2>/dev/null || return
+  # return 0 explicitly on every early exit — a bare `return` after `grep || return`
+  # inherits grep's failing status, which set -e does NOT exempt (it's the command
+  # on the right of the final ||), and that killed the whole script whenever a
+  # report had zero actionable bullets — the common case, so this silently
+  # truncated session-start.sh's output (GATE-STATE/digest/maintenance sections
+  # never ran) far more often than the empty auto-act case alone would suggest.
+  [[ -z "$latest" ]] && return 0
+  grep -q "^ACTED:" "$latest" 2>/dev/null && return 0
+  grep -qE '^- .+' "$latest" 2>/dev/null || return 0
   echo "## Auto-act due — $label (${latest#$HOME/.claude/})"
   cat "$latest"
   echo ""
@@ -71,6 +77,14 @@ auto_act_check "evals" "Skill Eval"
 auto_act_check "candidate-checks" "Skill Candidates"
 auto_act_check "routing-adherence-checks" "Routing Adherence" "review each gap — a keyword nudge firing with no matching Skill() call can be a real routing miss or a correctly-judged false positive (keyword matched quoted/reported text, not the user's actual ask). Only act on real misses: note a recurring pattern in a feedback memory, or flag the specific skill-keywords.json rule if it's producing noise. Don't blanket-treat every listed gap as a violation."
 auto_act_check "graphify-label-checks" "Graphify Semantic Labels" "dispatch labeling to agy/an agent ONE PROJECT AT A TIME (never a single batch across all flagged projects — that produced garbage labels silently before), then quality-check each result (duplicate-label ratio + spot-check community membership in graph.json) before trusting it, reverting via git checkout or the graphify-out/<date>/ backup folder if it fails. Otherwise leave 'proposed' with a one-line reason."
+
+# ── agent-memory/digest: today's daily digest, if generated ──
+DIGEST_FILE="$HOME/.claude/agent-memory/digest/$(date '+%Y-%m-%d').md"
+if [[ -f "$DIGEST_FILE" ]]; then
+  echo "## Today's digest (agent-memory/digest/$(date '+%Y-%m-%d').md)"
+  cat "$DIGEST_FILE"
+  sep
+fi
 
 # ── agent-memory/maintenance.log: pending scheduled maintenance report ──
 MAINT_LOG="$PROJ/agent-memory/maintenance.log"

@@ -1,0 +1,210 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.10"
+# dependencies = ["sentence-transformers", "numpy"]
+# ///
+"""Content-based project guess for a free-text note (e.g. a Kouen Task title).
+
+Second signal for rules/routing.md's Kouen Task Sync flow, alongside the
+existing live-session cwd cross-reference — fires even after the originating
+session is closed. Always prints a candidate guess or an explicit
+"no confident match"; never picks silently. The confirm-with-user step in
+routing.md is unchanged by this script.
+
+Usage:
+    uv run project_router.py "<task title>" [--include-company] [--limit N]
+        [--min-score S] [--margin M] [--show-all] [--reindex-all]
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+CLAUDE_DIR = Path.home() / ".claude"
+INDEX_PATH = CLAUDE_DIR / "agent-memory" / ".state" / "project-router-index.json"
+MODEL_NAME = "all-MiniLM-L6-v2"
+MAX_CHARS_PER_SOURCE = 900  # explicit cutoff ahead of MiniLM's own silent 256-wordpiece truncation
+
+PERSONAL_ROOT = Path.home() / "Git" / "Personal"
+COMPANY_ROOT = Path.home() / "Git" / "Company"
+SKIP_PROJECTS = {"9arm-skills"}  # read-only third-party clone, core.md No-Touch Paths
+SKIP_DIR_NAMES = {"untitled folder"}  # confirmed junk, not a real project
+
+# Placeholders — not yet calibrated against real task titles. See design.md.
+MIN_ABS_SCORE = 0.15
+MIN_MARGIN = 0.03
+
+
+def discover_projects(include_company: bool) -> list[Path]:
+    roots = [PERSONAL_ROOT] + ([COMPANY_ROOT] if include_company else [])
+    projects = []
+    for root in roots:
+        if not root.exists():
+            continue
+        for d in sorted(root.iterdir()):
+            if not d.is_dir():
+                continue
+            if d.name.startswith("."):
+                continue
+            if d.name in SKIP_PROJECTS or d.name in SKIP_DIR_NAMES:
+                continue
+            projects.append(d)
+    return projects
+
+
+def build_identity_text(project_dir: Path) -> tuple[str, list[str], float]:
+    parts, sources, mtimes = [], [], []
+    for fname in ("README.md", "PRODUCT.md"):
+        f = project_dir / fname
+        if f.exists():
+            raw = f.read_text(errors="ignore")[:MAX_CHARS_PER_SOURCE]
+            parts.append(raw)
+            sources.append(fname)
+            mtimes.append(f.stat().st_mtime)
+    if parts:
+        return "\n\n".join(parts), sources, max(mtimes)
+    return project_dir.name, [], project_dir.stat().st_mtime
+
+
+def load_index() -> dict:
+    if INDEX_PATH.exists():
+        return json.loads(INDEX_PATH.read_text())
+    return {}
+
+
+def save_index(index: dict) -> None:
+    INDEX_PATH.parent.mkdir(parents=True, exist_ok=True)
+    INDEX_PATH.write_text(json.dumps(index))
+
+
+def build_index(include_company: bool, force: bool = False, model=None) -> dict:
+    index = {} if force else load_index()
+    projects = discover_projects(include_company)
+    to_embed = []
+    live_keys = set()
+    for p in projects:
+        key = str(p)
+        live_keys.add(key)
+        text, sources, mtime = build_identity_text(p)
+        cached = index.get(key)
+        if cached and cached.get("mtime") == mtime and cached.get("sources") == sources:
+            continue
+        to_embed.append((key, mtime, sources, text))
+
+    for k in list(index):
+        if k not in live_keys:
+            del index[k]
+
+    if to_embed:
+        if model is None:
+            from sentence_transformers import SentenceTransformer
+            model = SentenceTransformer(MODEL_NAME)
+        texts = [t for *_, t in to_embed]
+        vectors = model.encode(texts, normalize_embeddings=True).tolist()
+        for (key, mtime, sources, _), vec in zip(to_embed, vectors):
+            index[key] = {"mtime": mtime, "sources": sources, "vector": vec}
+
+    save_index(index)
+    return index
+
+
+def query(text: str, include_company: bool, limit: int, model=None) -> list[tuple[str, float]]:
+    import numpy as np
+
+    # Loaded once (or reused from the caller, e.g. main()'s --reindex-all pass)
+    # and reused for build_index()'s re-embedding pass too — avoids paying
+    # model-load cost twice in the common case of an actively edited workspace
+    # (some project's README/PRODUCT.md changed since last run).
+    if model is None:
+        from sentence_transformers import SentenceTransformer
+        model = SentenceTransformer(MODEL_NAME)
+    index = build_index(include_company, model=model)
+    if not index:
+        return []
+
+    q_vec = model.encode([text], normalize_embeddings=True)[0]
+
+    keys = list(index.keys())
+    matrix = np.array([index[k]["vector"] for k in keys])
+    scores = matrix @ q_vec
+    ranked = sorted(zip(keys, scores.tolist()), key=lambda x: x[1], reverse=True)
+    return ranked[:limit]
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        description="Content-based project guess for a free-text task title "
+        "(Kouen Task Sync signal #2 — candidate guess only, never a silent action)"
+    )
+    parser.add_argument(
+        "text", nargs="?", default=None,
+        help="free-text query, typically a Kouen task title. Prefer --query-file "
+        "for text from an untrusted/free-text source (e.g. a Kouen task title) — "
+        "avoids shell-interpolating arbitrary content into the command string.",
+    )
+    parser.add_argument(
+        "--query-file", type=str, default=None,
+        help="read the query text from this file instead of argv (write the task "
+        "title here with the Write tool first) — the safe path for untrusted text",
+    )
+    parser.add_argument(
+        "--include-company", action="store_true",
+        help="also index ~/Git/Company/* (opt-in, see routing.md)",
+    )
+    parser.add_argument("--limit", type=int, default=3)
+    parser.add_argument("--min-score", type=float, default=MIN_ABS_SCORE)
+    parser.add_argument("--margin", type=float, default=MIN_MARGIN)
+    parser.add_argument(
+        "--show-all", action="store_true",
+        help="bypass confidence gating, print raw ranked list (for calibration)",
+    )
+    parser.add_argument("--reindex-all", action="store_true")
+    args = parser.parse_args()
+
+    if args.query_file:
+        query_text = Path(args.query_file).read_text().strip()
+    elif args.text is not None:
+        query_text = args.text
+    else:
+        parser.error("provide either a positional query or --query-file")
+
+    model = None
+    if args.reindex_all:
+        from sentence_transformers import SentenceTransformer
+        model = SentenceTransformer(MODEL_NAME)
+        build_index(args.include_company, force=True, model=model)
+
+    results = query(query_text, args.include_company, max(args.limit, 2), model=model)
+    if not results:
+        print(
+            "No index yet — no projects discovered under ~/Git/Personal "
+            "(and ~/Git/Company if --include-company).",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    if not args.show_all:
+        top_score = results[0][1]
+        second_score = results[1][1] if len(results) > 1 else -1.0
+        confident = (top_score >= args.min_score) and (top_score - second_score >= args.margin)
+        if not confident:
+            print(
+                "No confident content-based match (best guess below threshold "
+                "or too close to runner-up) — cwd cross-reference and manual "
+                "confirm are still required."
+            )
+            sys.exit(0)
+
+    home = str(Path.home())
+    index = load_index()
+    for path, score in results[: args.limit]:
+        rel = path.replace(home + "/", "~/")
+        sources = index.get(path, {}).get("sources", [])
+        tag = "" if sources else "  (name only — no README.md/PRODUCT.md, weak signal)"
+        print(f"{score:.3f}  {rel}{tag}")
+
+
+if __name__ == "__main__":
+    main()
