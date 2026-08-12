@@ -26,7 +26,15 @@ CLAUDE_DIR = Path.home() / ".claude"
 INDEX_PATH = CLAUDE_DIR / "agent-memory" / ".state" / "project-router-index.json"
 THRESHOLDS_PATH = CLAUDE_DIR / "agent-memory" / ".state" / "router-thresholds.json"
 CALIBRATION_LOG_PATH = CLAUDE_DIR / "agent-memory" / "router-calibration-log.jsonl"
-MODEL_NAME = "all-MiniLM-L6-v2"
+# paraphrase-multilingual-MiniLM-L12-v2, not all-MiniLM-L6-v2: the latter is
+# English-only and was found (2026-08-12, live testing) to collapse EVERY
+# pure-Thai query to the identical embedding vector regardless of content
+# (cosine similarity 1.0 across 3 unrelated Thai sentences) -- its tokenizer
+# has no Thai vocabulary. Verified the multilingual model actually
+# discriminates by meaning AND recognizes cross-lingual equivalence: Thai
+# "went to gym" vs English "went to the gym" (same meaning) scored 0.66,
+# vs 0.31-0.49 against unrelated Thai sentences.
+MODEL_NAME = "paraphrase-multilingual-MiniLM-L12-v2"
 MAX_CHARS_PER_SOURCE = 900  # explicit cutoff ahead of MiniLM's own silent 256-wordpiece truncation
 
 PERSONAL_ROOT = Path.home() / "Git" / "Personal"
@@ -46,6 +54,12 @@ def load_calibrated_thresholds() -> tuple[float, float]:
     if THRESHOLDS_PATH.exists():
         try:
             data = json.loads(THRESHOLDS_PATH.read_text())
+            if data.get("model") != MODEL_NAME:
+                # Same reasoning as load_index()'s _model check -- a
+                # threshold calibrated against a different model's score
+                # distribution is meaningless here, fall back to defaults
+                # rather than applying a wrong-scale number silently.
+                return DEFAULT_MIN_ABS_SCORE, DEFAULT_MIN_MARGIN
             return float(data["min_abs_score"]), float(data["min_margin"])
         except Exception:
             pass
@@ -84,14 +98,22 @@ def build_identity_text(project_dir: Path) -> tuple[str, list[str], float]:
 
 
 def load_index() -> dict:
-    if INDEX_PATH.exists():
-        return json.loads(INDEX_PATH.read_text())
-    return {}
+    if not INDEX_PATH.exists():
+        return {}
+    data = json.loads(INDEX_PATH.read_text())
+    if data.get("_model") != MODEL_NAME:
+        # Different embedding space -- vectors from another model are not
+        # comparable (this is exactly the class of bug that produced the
+        # cosine=1.0-for-everything failure mode: silently mixing
+        # incompatible embeddings). Discard entirely, forces a full
+        # re-embed on next build_index() rather than serving nonsense.
+        return {}
+    return data.get("entries", {})
 
 
 def save_index(index: dict) -> None:
     INDEX_PATH.parent.mkdir(parents=True, exist_ok=True)
-    INDEX_PATH.write_text(json.dumps(index))
+    INDEX_PATH.write_text(json.dumps({"_model": MODEL_NAME, "entries": index}))
 
 
 def build_index(include_company: bool, force: bool = False, model=None) -> dict:

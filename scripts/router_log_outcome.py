@@ -28,6 +28,9 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).parent))
+from project_router import MODEL_NAME  # noqa: E402
+
 LOG_PATH = Path.home() / ".claude" / "agent-memory" / "router-calibration-log.jsonl"
 REQUIRED_FIELDS = ("query", "top_score", "second_score", "guessed_project", "outcome")
 VALID_OUTCOMES = ("confirmed", "rejected")
@@ -54,6 +57,8 @@ def main() -> None:
 
     entry = {
         "logged_at": datetime.now(timezone.utc).isoformat(),
+        "model": MODEL_NAME,  # scores from different embedding models aren't comparable --
+        # router-calibration-scheduler.py must filter on this, never mix
         "query": data["query"],
         "top_score": float(data["top_score"]),
         "second_score": float(data["second_score"]),

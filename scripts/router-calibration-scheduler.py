@@ -33,6 +33,9 @@ import json
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).parent))
+from project_router import MODEL_NAME  # noqa: E402
+
 CLAUDE_DIR = Path.home() / ".claude"
 LOG_PATH = CLAUDE_DIR / "agent-memory" / "router-calibration-log.jsonl"
 STATE_PATH = CLAUDE_DIR / "agent-memory" / "ROUTER-CALIBRATION-STATE.md"
@@ -42,19 +45,28 @@ MIN_NEW_SAMPLES = 8
 MIN_CONFIRMED = 3
 
 
-def read_log() -> list[dict]:
+def read_log() -> tuple[list[dict], int]:
+    """Returns (entries matching MODEL_NAME, count of stale-model entries
+    skipped). Scores from a different embedding model are on a different,
+    incompatible scale -- never mixed into calibration, silently or
+    otherwise (this exact failure mode is why the model got versioned in
+    the first place, see router_log_outcome.py)."""
     if not LOG_PATH.exists():
-        return []
-    entries = []
+        return [], 0
+    entries, stale = [], 0
     for line in LOG_PATH.read_text().splitlines():
         line = line.strip()
         if not line:
             continue
         try:
-            entries.append(json.loads(line))
+            e = json.loads(line)
         except json.JSONDecodeError:
             continue
-    return entries
+        if e.get("model") == MODEL_NAME:
+            entries.append(e)
+        else:
+            stale += 1
+    return entries, stale
 
 
 def read_state() -> dict:
@@ -107,12 +119,13 @@ def main() -> None:
     force = "--force" in sys.argv
     LOG_DIR.mkdir(parents=True, exist_ok=True)
 
-    entries = read_log()
+    entries, stale = read_log()
     state = read_state()
     new_count = len(entries) - state["last_calibrated_count"]
+    stale_note = f" ({stale} stale-model entr{'y' if stale == 1 else 'ies'} skipped, model changed since logged)" if stale else ""
 
     if not force and new_count < MIN_NEW_SAMPLES:
-        print(f"NOT_DUE ({len(entries)} total logged, {new_count} new since last calibration, need {MIN_NEW_SAMPLES})")
+        print(f"NOT_DUE ({len(entries)} total logged, {new_count} new since last calibration, need {MIN_NEW_SAMPLES}){stale_note}")
         sys.exit(1)
 
     result = calibrate(entries)
@@ -121,9 +134,12 @@ def main() -> None:
     log_file = LOG_DIR / f"{today}.md"
 
     lines = [f"## Router Calibration Check ({today})", ""]
+    if stale:
+        lines.append(f"_{stale} entr{'y' if stale == 1 else 'ies'} skipped -- logged under a different embedding model, scores not comparable._")
+        lines.append("")
     if result is None:
         lines.append(
-            f"{new_count} new outcome(s) logged ({len(entries)} total), but fewer than "
+            f"{new_count} new outcome(s) logged ({len(entries)} total for current model), but fewer than "
             f"{MIN_CONFIRMED} confirmed outcomes exist -- not enough true-positive signal "
             "to calibrate yet. Thresholds unchanged."
         )
@@ -135,6 +151,7 @@ def main() -> None:
             "min_margin": min_margin,
             "calibrated_at": today,
             "sample_count": len(entries),
+            "model": MODEL_NAME,
         }))
         lines.append(f"Recalibrated from {len(entries)} logged outcome(s) ({new_count} new). {note}")
         lines.append(f"- min_abs_score: {min_abs_score}")
