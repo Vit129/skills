@@ -22,3 +22,4 @@
 | [understand-anything-graphify-plugin-plan.md](plans/understand-anything-graphify-plugin-plan.md) | Graphify plugin integration with Understand-Anything | 2026-06-13 | draft |
 | [memory-maintenance-rollout/design.md](plans/memory-maintenance-rollout/design.md) | Scheduled agent-memory maintenance (link-check, archive/crystallize report) rolled out project by project | 2026-07-24 | in-progress |
 | [line-claude-bot/design.md](plans/line-claude-bot/design.md) | Personal LINE chatbot — launchd-managed webhook + cloudflared quick-tunnel auto-reregister + `claude -p` headless backend | 2026-08-12 | done (Step 6 reboot test pending user) |
+| [stock-report-bot/design.md](plans/stock-report-bot/design.md) | Bi-weekly portfolio sector-pulse reporter — groups My-Investment-Port holdings by custom category, `claude -p` + WebSearch, LINE push, launchd self-throttle | 2026-08-12 | done |
