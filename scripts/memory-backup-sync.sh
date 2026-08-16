@@ -16,10 +16,11 @@
 # independent copy, not the only one, same as item 1.
 set -euo pipefail
 
+BACKUP_REPO="$HOME/Git/Personal/claude-memory-private"
 CLAUDE_SRC="$HOME/.claude/projects"
-CLAUDE_DST="$HOME/.claude-memory-backup/projects"
+CLAUDE_DST="$BACKUP_REPO/projects"
 PERSONAL_SRC="$HOME/Git/Personal"
-PERSONAL_DST="$HOME/.claude-memory-backup/agent-memory"
+PERSONAL_DST="$BACKUP_REPO/agent-memory"
 
 mkdir -p "$CLAUDE_DST"
 
@@ -38,13 +39,18 @@ mkdir -p "$PERSONAL_DST"
 
 for project_dir in "$PERSONAL_SRC"/*/; do
   name="$(basename "$project_dir")"
+  # claude-memory-private itself now lives under ~/Git/Personal/ (2026-08-16
+  # rename, was ~/.claude-memory-backup) -- its own agent-memory/ subtree is
+  # the destination, not a source; without this guard every run would rsync
+  # it into itself one level deeper.
+  [ "$name" = "claude-memory-private" ] && continue
   am_dir="${project_dir}agent-memory"
   [ -d "$am_dir" ] || continue
   mkdir -p "$PERSONAL_DST/$name"
   rsync -a --delete "$am_dir/" "$PERSONAL_DST/$name/"
 done
 
-cd "$HOME/.claude-memory-backup"
+cd "$BACKUP_REPO"
 git add -A
 
 if git diff --cached --quiet; then
