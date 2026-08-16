@@ -36,11 +36,25 @@ COOLDOWN_TURNS = 3
 # own transcript caught the bug: with the broader marker, an ordinary
 # dev-task-progress.md edit falsely counted as "closing the loop" even
 # though journey_timeline.py never reads that file.
+#
+# The Claude Code memory marker used to be hardcoded to this one project's
+# own memory dir (/projects/-Users-supavit-cho--claude/memory/), so a memory
+# write made while working in any OTHER project (Home-Assistant, wiremock,
+# etc.) was invisible to this check -- 2026-08-16, found via journey_timeline.py
+# showing zero new nodes since 2026-08-12 despite real memory writes landing
+# in other projects' memory dirs the whole time. journey_timeline.py had the
+# same bug, fixed there first (scans all projects/*/memory/ now).
+PROJECT_MEMORY_RE = re.compile(r"/projects/[^/]+/memory/")
 MEMORY_PATH_MARKERS = (
-    "/projects/-Users-supavit-cho--claude/memory/",
     "/agent-memory/knowledge/",
     "/skills/candidates/",
 )
+
+
+def is_memory_path(file_path: str) -> bool:
+    return bool(PROJECT_MEMORY_RE.search(file_path)) or any(
+        marker in file_path for marker in MEMORY_PATH_MARKERS
+    )
 MEMORY_WORK_THRESHOLD = 6
 MEMORY_WORK_COOLDOWN_TURNS = 5
 
@@ -159,7 +173,7 @@ def count_uncaptured_work(transcript_path):
                 if block.get("name") not in ("Write", "Edit"):
                     continue
                 file_path = block.get("input", {}).get("file_path", "")
-                if any(marker in file_path for marker in MEMORY_PATH_MARKERS):
+                if is_memory_path(file_path):
                     last_memory_idx = idx
                 else:
                     non_memory_calls.append(idx)

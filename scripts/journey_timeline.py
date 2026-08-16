@@ -25,7 +25,7 @@ from datetime import datetime
 from pathlib import Path
 
 CLAUDE_DIR = Path.home() / ".claude"
-CC_MEMORY_DIR = CLAUDE_DIR / "projects" / "-Users-supavit-cho--claude" / "memory"
+PROJECTS_DIR = CLAUDE_DIR / "projects"
 KNOWLEDGE_DIR = CLAUDE_DIR / "agent-memory" / "knowledge"
 CANDIDATES_DIR = CLAUDE_DIR / "skills" / "candidates"
 
@@ -58,19 +58,26 @@ def parse_iso(ts: str) -> datetime | None:
 
 def collect_cc_memory() -> list[dict]:
     nodes = []
-    for f in sorted(CC_MEMORY_DIR.glob("*.md")):
-        if f.name == "MEMORY.md":
+    if not PROJECTS_DIR.exists():
+        return nodes
+    for project_dir in sorted(PROJECTS_DIR.iterdir()):
+        memory_dir = project_dir / "memory"
+        if not memory_dir.is_dir():
             continue
-        fm = parse_frontmatter(f.read_text(errors="ignore"))
-        ts = parse_iso(fm.get("modified", "")) or datetime.fromtimestamp(f.stat().st_mtime)
-        nodes.append({
-            "type": "memory",
-            "subtype": fm.get("type", "?"),
-            "name": fm.get("name", f.stem),
-            "description": fm.get("description", ""),
-            "timestamp": ts.isoformat(),
-            "path": str(f.relative_to(Path.home())),
-        })
+        for f in sorted(memory_dir.glob("*.md")):
+            if f.name == "MEMORY.md":
+                continue
+            fm = parse_frontmatter(f.read_text(errors="ignore"))
+            ts = parse_iso(fm.get("modified", "")) or datetime.fromtimestamp(f.stat().st_mtime)
+            nodes.append({
+                "type": "memory",
+                "subtype": fm.get("type", "?"),
+                "name": fm.get("name", f.stem),
+                "description": fm.get("description", ""),
+                "timestamp": ts.isoformat(),
+                "path": str(f.relative_to(Path.home())),
+                "project": project_dir.name,
+            })
     return nodes
 
 
@@ -133,7 +140,8 @@ def main() -> None:
     for n in nodes:
         date = n["timestamp"][:10]
         desc = f" — {n['description']}" if n["description"] else ""
-        print(f"- {date}  [{n['type']}/{n['subtype']}]  **{n['name']}**{desc}")
+        project = f" ({n['project']})" if n.get("project") else ""
+        print(f"- {date}  [{n['type']}/{n['subtype']}]{project}  **{n['name']}**{desc}")
         print(f"  `{n['path']}`")
 
 
