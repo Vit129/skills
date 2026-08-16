@@ -109,13 +109,16 @@ python3 "$HOME/.claude/scripts/install-mcp.py"
 echo "== cron =="
 bash "$HOME/.claude/scripts/install-cron.sh"
 
-echo "== claude code memory (private backup) =="
-# ~/.claude/projects/*/memory/ (Claude Code's own memory) is gitignored from
-# this public repo on purpose -- restored separately from the private
-# claude-memory-private repo. Company-* project memories are NOT in that
-# backup either (2026-08-16 decision) -- those stay company-side only.
-# Clone-to-temp-then-rsync, not a direct clone: ~/.claude/projects/ may
-# already exist and be non-empty (Claude Code creates it on first run).
+echo "== claude code + per-project memory (private backup) =="
+# Two things are gitignored from this public repo on purpose and restored
+# separately from the private claude-memory-private repo:
+#   1. ~/.claude/projects/*/memory/   -- Claude Code's own auto-memory
+#   2. ~/Git/Personal/*/agent-memory/ -- per-project memory, untracked from
+#      each project's own repo since 2026-08-16 (repo-cleanliness migration;
+#      see project_new_machine_memory_backup memory entry). Company-* is
+#      never in this backup (2026-08-16 decision) -- company-side only.
+# Clone-to-temp-then-rsync, not a direct clone: both targets may already
+# exist and be non-empty on a machine that's run before.
 if command -v git &>/dev/null; then
   TMP_MEMORY_CLONE="$(mktemp -d)"
   if git clone --quiet --depth 1 https://github.com/Vit129/claude-memory-private.git "$TMP_MEMORY_CLONE" 2>/dev/null; then
@@ -126,9 +129,22 @@ if command -v git &>/dev/null; then
       mkdir -p "$HOME/.claude/projects/$name/memory"
       rsync -a "$project_dir/memory/" "$HOME/.claude/projects/$name/memory/"
     done
-    rm -rf "$TMP_MEMORY_CLONE"
     restored_count="$(find "$HOME/.claude/projects" -path '*/memory/*.md' 2>/dev/null | wc -l | tr -d ' ')"
-    echo "  restored $restored_count memory files from claude-memory-private"
+    echo "  restored $restored_count claude code memory files from claude-memory-private"
+
+    for am_dir in "$TMP_MEMORY_CLONE"/agent-memory/*/; do
+      [ -d "$am_dir" ] || continue
+      name="$(basename "$am_dir")"
+      target="$HOME/Git/Personal/$name/agent-memory"
+      if [ -d "$HOME/Git/Personal/$name" ]; then
+        mkdir -p "$target"
+        rsync -a "$am_dir" "$target/"
+        echo "  restored agent-memory/ for $name"
+      else
+        echo "  skip agent-memory/ for $name -- ~/Git/Personal/$name not cloned yet"
+      fi
+    done
+    rm -rf "$TMP_MEMORY_CLONE"
   else
     rm -rf "$TMP_MEMORY_CLONE"
     echo "  could not clone claude-memory-private (needs gh/git auth to a private repo you own) -- skipping"
