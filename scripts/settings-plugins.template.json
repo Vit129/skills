@@ -1,0 +1,60 @@
+{
+  "extraKnownMarketplaces": {
+    "claude-skills-kit": {
+      "source": {
+        "source": "github",
+        "repo": "claude-skills-kit/claude-skills-kit"
+      }
+    },
+    "openai-codex": {
+      "source": {
+        "source": "github",
+        "repo": "openai/codex-plugin-cc"
+      },
+      "autoUpdate": true
+    },
+    "claude-video": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/bradautomates/claude-video.git"
+      }
+    },
+    "agy-plugin-cc": {
+      "source": {
+        "source": "github",
+        "repo": "Vit129/agy-plugin-cc"
+      }
+    },
+    "9arm-marketplace": {
+      "source": {
+        "source": "directory",
+        "path": "$HOME/.claude/scripts/marketplace-manifests/9arm"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "agy@cc-agy-plugin": true,
+    "codex@openai-codex": true,
+    "fable-advisor@claude-skills-kit": true,
+    "ponytail@DietrichGebert": true,
+    "swift-lsp@claude-plugins-official": true,
+    "watch@claude-video": true,
+    "agy@agy-plugin-cc": true,
+    "9arm-skills@9arm-marketplace": true,
+    "claude-security@claude-plugins-official": true,
+    "security-guidance@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "pr-review-toolkit@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true,
+    "hookify@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "claude-code-setup@claude-plugins-official": true,
+    "project-artifact@claude-plugins-official": true,
+    "session-report@claude-plugins-official": true,
+    "receipts@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "firebase@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true
+  }
+}

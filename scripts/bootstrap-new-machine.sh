@@ -63,22 +63,18 @@ else
   uv tool install --from "$GRAPHIFY_FORK" graphifyy
 fi
 
-echo "== agy plugin =="
+echo "== plugins + marketplaces =="
+# All 23 currently-enabled plugins (was hardcoded to just agy + 9arm-skills --
+# the other 21, including claude-security/code-review/skill-creator/hookify/
+# pr-review-toolkit, had zero reinstall path at all before this). Driven by
+# scripts/settings-plugins.template.json, a checked-in snapshot of
+# enabledPlugins/extraKnownMarketplaces; additive-only, safe to re-run.
+# thananon/9arm-skills has no .claude-plugin/marketplace.json of its own (only
+# a plugin.json), so it can't be added as a marketplace directly -- the
+# template points its entry at the small wrapper manifest checked into this
+# repo (scripts/marketplace-manifests/9arm) instead.
 if command -v claude &>/dev/null; then
-  claude plugin marketplace add Vit129/agy-plugin-cc
-  claude plugin install agy@agy-plugin-cc
-else
-  echo "  claude CLI not found -- skipping (run this script from inside Claude Code's shell)"
-fi
-
-echo "== 9arm-skills plugin =="
-if command -v claude &>/dev/null; then
-  # thananon/9arm-skills has no .claude-plugin/marketplace.json of its own (only a
-  # plugin.json), so it can't be added as a marketplace directly -- this small
-  # wrapper manifest (checked into this repo) declares it as one, matching the
-  # existing "9arm-marketplace" name so the enabledPlugins key never changes.
-  claude plugin marketplace add "$HOME/.claude/scripts/marketplace-manifests/9arm"
-  claude plugin install 9arm-skills@9arm-marketplace
+  python3 "$HOME/.claude/scripts/install-plugins.py"
 else
   echo "  claude CLI not found -- skipping (run this script from inside Claude Code's shell)"
 fi
@@ -102,6 +98,9 @@ fi
 
 echo "== hooks =="
 python3 "$HOME/.claude/scripts/install-hooks.py"
+
+echo "== prefs (statusLine etc. -- functional wiring only, not cosmetic taste) =="
+python3 "$HOME/.claude/scripts/install-prefs.py"
 
 echo "== mcp servers =="
 python3 "$HOME/.claude/scripts/install-mcp.py"
