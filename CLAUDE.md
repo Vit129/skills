@@ -57,6 +57,8 @@ Task progress lives in `agent-memory/plans/[FEATURE]/dev-task-progress.md` / `qa
 
 **Skill-candidate shadow capture** (`~/.claude/skills/candidates/`, see its `README.md` for the format): when solving something took 2+ real attempts (wrong approach, corrected) AND the pattern is genuinely reusable — not project-specific — write a candidate file there instead of just a feedback memory. Write-only right now: nothing reads this directory automatically (no context loading, no auto-promotion), and `sync-all.sh` excludes it from Codex/Gemini propagation. This produces real examples toward `routing.md`'s existing 3x-occurrence promotion bar — it does not lower or replace that bar. Promotion to a real skill stays manual (`skill-creator`), same as today.
 
+**Per-project `agent-memory/` (2026-08-16+):** for `~/Git/Personal/*` projects, `agent-memory/` is gitignored from that project's own repo, not deleted — it still lives on disk at the same path, every skill/rule/CLAUDE.md reference in that project keeps working unchanged. It's centrally mirrored (daily + on-demand) to the private `github.com/Vit129/claude-memory-private` repo (second top-level dir, `agent-memory/<project>/`, alongside the `projects/*/memory/` mirror of Claude Code's own auto-memory) via `scripts/memory-backup-sync.sh`, and restored on a fresh machine by `scripts/bootstrap-new-machine.sh`. Known accepted tradeoff: graphify does not index a project's gitignored `agent-memory/` (its `.graphifyignore` semantics can only exclude more than `.gitignore`, never re-include) — agent-memory search in those projects goes through grep, not `graphify query`. See `project_new_machine_memory_backup` (Claude Code memory, this project) for the full migration record.
+
 ---
 
 ## Maintenance Scripts
