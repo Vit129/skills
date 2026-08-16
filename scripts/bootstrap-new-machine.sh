@@ -109,8 +109,44 @@ python3 "$HOME/.claude/scripts/install-mcp.py"
 echo "== cron =="
 bash "$HOME/.claude/scripts/install-cron.sh"
 
+echo "== claude code memory (private backup) =="
+# ~/.claude/projects/*/memory/ (Claude Code's own memory) is gitignored from
+# this public repo on purpose -- restored separately from the private
+# claude-memory-private repo. Company-* project memories are NOT in that
+# backup either (2026-08-16 decision) -- those stay company-side only.
+# Clone-to-temp-then-rsync, not a direct clone: ~/.claude/projects/ may
+# already exist and be non-empty (Claude Code creates it on first run).
+if command -v git &>/dev/null; then
+  TMP_MEMORY_CLONE="$(mktemp -d)"
+  if git clone --quiet --depth 1 https://github.com/Vit129/claude-memory-private.git "$TMP_MEMORY_CLONE" 2>/dev/null; then
+    mkdir -p "$HOME/.claude/projects"
+    for project_dir in "$TMP_MEMORY_CLONE"/projects/*/; do
+      [ -d "$project_dir" ] || continue
+      name="$(basename "$project_dir")"
+      mkdir -p "$HOME/.claude/projects/$name/memory"
+      rsync -a "$project_dir/memory/" "$HOME/.claude/projects/$name/memory/"
+    done
+    rm -rf "$TMP_MEMORY_CLONE"
+    restored_count="$(find "$HOME/.claude/projects" -path '*/memory/*.md' 2>/dev/null | wc -l | tr -d ' ')"
+    echo "  restored $restored_count memory files from claude-memory-private"
+  else
+    rm -rf "$TMP_MEMORY_CLONE"
+    echo "  could not clone claude-memory-private (needs gh/git auth to a private repo you own) -- skipping"
+  fi
+else
+  echo "  git not found -- skipping"
+fi
+
 echo ""
 echo "done -- restart Claude Code to pick up the new MCP servers."
 echo "kouen MCP entry is added but disabled by default (Kouen.app is a personal"
 echo "Mac app, not on brew -- install it manually, then flip \"disabled\": false"
 echo "and KOUEN_MCP_ALLOW_CONTROL if you want it live)."
+echo ""
+echo "== manual secrets (never backed up anywhere, re-enter by hand) =="
+echo "  ~/.claude/settings.json -> mcpServers.line-bot.env:"
+echo "    CHANNEL_ACCESS_TOKEN, DESTINATION_USER_ID"
+echo "  A git repo, even a private one, is not a secrets manager -- these are"
+echo "  deliberately absent from both the public skills repo and the private"
+echo "  memory backup. Pull them from wherever they're actually kept (password"
+echo "  manager / LINE Developers console) and paste into settings.json by hand."
