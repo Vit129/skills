@@ -97,9 +97,22 @@
       ]
     }
   ],
+  "SessionEnd": [
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash \"$HOME/.claude/scripts/memory-backup-sync.sh\"",
+          "timeout": 45,
+          "statusMessage": "syncing agent-memory backup"
+        }
+      ]
+    }
+  ],
   "SessionStart": [
     {
-      "matcher": "startup|resume",
+      "matcher": "*",
       "hooks": [
         {
           "type": "command",
