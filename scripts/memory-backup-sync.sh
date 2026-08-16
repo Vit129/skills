@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # memory-backup-sync.sh — mirror two things into the private
-# claude-memory-private repo, then commit+push if anything changed:
+# agent-memory-private repo, then commit+push if anything changed:
 #   1. ~/.claude/projects/*/memory/       -> projects/<name>/memory/
 #   2. ~/Git/Personal/*/agent-memory/     -> agent-memory/<name>/
 #
@@ -16,7 +16,7 @@
 # independent copy, not the only one, same as item 1.
 set -euo pipefail
 
-BACKUP_REPO="$HOME/Git/Personal/claude-memory-private"
+BACKUP_REPO="$HOME/Git/Personal/agent-memory-private"
 CLAUDE_SRC="$HOME/.claude/projects"
 CLAUDE_DST="$BACKUP_REPO/projects"
 PERSONAL_SRC="$HOME/Git/Personal"
@@ -39,11 +39,11 @@ mkdir -p "$PERSONAL_DST"
 
 for project_dir in "$PERSONAL_SRC"/*/; do
   name="$(basename "$project_dir")"
-  # claude-memory-private itself now lives under ~/Git/Personal/ (2026-08-16
+  # agent-memory-private itself now lives under ~/Git/Personal/ (2026-08-16
   # rename, was ~/.claude-memory-backup) -- its own agent-memory/ subtree is
   # the destination, not a source; without this guard every run would rsync
   # it into itself one level deeper.
-  [ "$name" = "claude-memory-private" ] && continue
+  [ "$name" = "agent-memory-private" ] && continue
   am_dir="${project_dir}agent-memory"
   [ -d "$am_dir" ] || continue
   mkdir -p "$PERSONAL_DST/$name"

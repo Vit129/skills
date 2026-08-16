@@ -111,7 +111,7 @@ bash "$HOME/.claude/scripts/install-cron.sh"
 
 echo "== claude code + per-project memory (private backup) =="
 # Two things are gitignored from this public repo on purpose and restored
-# separately from the private claude-memory-private repo:
+# separately from the private agent-memory-private repo:
 #   1. ~/.claude/projects/*/memory/   -- Claude Code's own auto-memory
 #   2. ~/Git/Personal/*/agent-memory/ -- per-project memory, untracked from
 #      each project's own repo since 2026-08-16 (repo-cleanliness migration;
@@ -121,7 +121,7 @@ echo "== claude code + per-project memory (private backup) =="
 # exist and be non-empty on a machine that's run before.
 if command -v git &>/dev/null; then
   TMP_MEMORY_CLONE="$(mktemp -d)"
-  if git clone --quiet --depth 1 https://github.com/Vit129/claude-memory-private.git "$TMP_MEMORY_CLONE" 2>/dev/null; then
+  if git clone --quiet --depth 1 https://github.com/Vit129/agent-memory-private.git "$TMP_MEMORY_CLONE" 2>/dev/null; then
     mkdir -p "$HOME/.claude/projects"
     for project_dir in "$TMP_MEMORY_CLONE"/projects/*/; do
       [ -d "$project_dir" ] || continue
@@ -130,7 +130,7 @@ if command -v git &>/dev/null; then
       rsync -a "$project_dir/memory/" "$HOME/.claude/projects/$name/memory/"
     done
     restored_count="$(find "$HOME/.claude/projects" -path '*/memory/*.md' 2>/dev/null | wc -l | tr -d ' ')"
-    echo "  restored $restored_count claude code memory files from claude-memory-private"
+    echo "  restored $restored_count claude code memory files from agent-memory-private"
 
     for am_dir in "$TMP_MEMORY_CLONE"/agent-memory/*/; do
       [ -d "$am_dir" ] || continue
@@ -147,7 +147,7 @@ if command -v git &>/dev/null; then
     rm -rf "$TMP_MEMORY_CLONE"
   else
     rm -rf "$TMP_MEMORY_CLONE"
-    echo "  could not clone claude-memory-private (needs gh/git auth to a private repo you own) -- skipping"
+    echo "  could not clone agent-memory-private (needs gh/git auth to a private repo you own) -- skipping"
   fi
 else
   echo "  git not found -- skipping"
