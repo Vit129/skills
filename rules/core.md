@@ -59,6 +59,15 @@ No task is complete until: build passes + relevant tests pass. If tests cannot r
   - Never bulk-delete branches on a guess ("this is probably done") — confirm each one has concrete evidence (matching commit message on the target branch, or the actual file diff showing the change is present) before deleting. If evidence is genuinely absent, keep the branch and say so rather than assuming a later redesign superseded it.
 - Never push directly to `main`/`master` without permission
 
+### Local Worktree Dirs Must Be Gitignored
+
+`.kouen-worktrees/` (created by Kouen's `kouenWorktreeCreate`) and `.claude/worktrees/` (created by this session's own `EnterWorktree`) are local scratch dirs, never meant to be committed — same class of thing as `node_modules/` or `.env`.
+
+- Before/while working in any repo, check `.gitignore` for both entries. If either dir exists on disk (`ls -d .kouen-worktrees .claude/worktrees 2>/dev/null`) and isn't ignored yet, add it — don't wait to be asked.
+- If a repo has no `.gitignore` at all yet, create one with just these lines rather than skipping the check (real case, `salesreturn-wiremock`, 2026-08-19 — had neither the dir ignored nor a `.gitignore` file).
+- Also check `git ls-files | grep -i worktree` for accidentally-tracked files under either dir — if any come up, `git rm -r --cached` them before adding the ignore rule (verified clean across all Company/Personal repos as of 2026-08-19, but don't assume that stays true).
+- This is a repo-hygiene fix, small and low-risk — safe to do inline as part of whatever task is already touching that repo. Don't proactively sweep *other*, unrelated repos on the same pass without asking first, even if you happen to know they have the same gap.
+
 ### VCS Remote by Path
 
 - `~/.kiro/**`, `~/Git/Company/**` → Azure DevOps only. Never `gh`/GitHub CLI.
