@@ -58,6 +58,13 @@ When a task needs live browser automation (navigate, click, screenshot, read net
 2. **`mcp__claude-in-chrome__*` next** if Kouen isn't running or the user's regular Chrome (with their real login/session state) is specifically needed.
 3. **`mcp__chrome-devtools__*` last** — spins up a separate, disconnected browser instance. Fine for throwaway one-off checks, but prefer 1 or 2 when the user might want to see/interact with the session themselves.
 
+## Worktree Creation Authority
+
+**Always create git worktrees via Claude Code's own `EnterWorktree` tool** (lands under `.claude/worktrees/`), even when Kouen is running and would otherwise be the default per Browser Automation Tool Priority above. This overrides that default specifically for worktree creation — the AI agent always creates it, full stop, no "whoever starts the task" exception.
+
+- Verified 2026-08-19: a worktree created by `EnterWorktree` can be opened directly from a Kouen pane afterward (point `spawnSession`/`splitPane`'s `cwd` at the `.claude/worktrees/<name>` path). Creating it the other way round doesn't give the same reach.
+- `.claude/worktrees/` needs gitignoring — see `~/.claude/rules/core.md` → **Local Worktree Dirs Must Be Gitignored**.
+
 ## Tracker Sync (optional — tracker-agnostic, portable across Jira/Azure DevOps/Linear/etc.)
 
 `~/.claude/` is shared across every project regardless of which issue tracker that workspace uses — never hardcode one tracker's API/script path here. The pipeline has 4 generic sync points; whether any of them exist as a real script depends entirely on the current workspace:
