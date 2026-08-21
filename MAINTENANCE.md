@@ -16,6 +16,13 @@ when running, debugging, or explaining a maintenance/setup script under `scripts
 ~/.claude/scripts/sync-all.sh
 # Sync skills/rules/commands from ~/.claude/ → Codex + Gemini
 
+/doctor (native Claude Code slash command, alias /checkup)
+# Full setup diagnostic — finds AND fixes hook/MCP/plugin config drift. Not a
+# ~/.claude script, run it directly in a session. Worth a periodic manual check
+# (no scheduler wired to it) — catches issues local scripts can't see, like
+# whether Claude Code's own default-permission-mode changes (e.g. Auto mode
+# becoming the Pro/Max/Team default 2026-08-14) affected hook firing.
+
 python3 ~/.claude/scripts/session_search.py "<query>" [--project SLUG] [--limit N]
 # Full-text search across every past session transcript, all projects (auto-reindexes
 # incrementally first). The one real gap found comparing against Hermes Agent's FTS5
@@ -44,18 +51,36 @@ uv run ~/.claude/scripts/memory_vector_search.py "<query>" [--limit N]
 # Find build/cache dirs under a projects root (default ~/Git/Personal): node_modules,
 # dist, build, .next, .nuxt, .turbo, .cache, .venv, .build, __pycache__, .pytest_cache,
 # *.egg-info, DerivedData. Dry-run by default (lists path + size) — pass --apply to
-# actually delete. Skips 9arm-skills (No-Touch Paths, third-party repo).
+# actually delete. SKIP_DIRS excludes subtrees that look like build cache by name but
+# aren't disposable: 9arm-skills (No-Touch Paths, third-party repo), ~/.kiro/extensions
+# (installed editor extensions — their dist/node_modules IS the shipped runtime, not a
+# local build artifact; verified 2026-08-21 against ms-python/robocorp/rainbow-csv/
+# rest-client), ~/.claude/plugins/marketplaces (plugin source, may include committed
+# dist/), ~/.claude/jobs (other background jobs' live working dirs, not this script's
+# to touch). These are hardcoded absolute paths, not relative to root-dir, since this
+# script runs against multiple roots (see below).
 
 ~/.claude/scripts/build-cache-scheduler.sh [--force]
 # Weekly wrapper around clean-build-cache.sh (wired into session-end.sh) — same
 # daily-cadence-state-file pattern as eval/candidate/decay schedulers but 7-day
-# interval. Runs the dry-run scan and logs the report; never auto-deletes — review
-# the report, then run clean-build-cache.sh --apply by hand.
+# interval. Auto-applies (2026-07-27) — see clean-build-cache.sh's own header for
+# why that's safe (deterministic dir-name list, no AI in the loop, worst case a
+# cache regenerates on next build). Scans ~/Git/Personal, ~/.claude, and ~/.kiro
+# (extended 2026-08-21, at the user's request, "in case I forget to clean these
+# up too") — the SKIP_DIRS above are what make the latter two safe to auto-apply
+# against without risking installed software. First real run freed ~68MB+ of
+# regenerable __pycache__/node_modules across all three roots with zero breakage.
 
 ~/.claude/scripts/graphify-label-scheduler.sh [--force]
 # Weekly scan (wired into session-end.sh, surfaced via session-start.sh's Auto-act
 # check) of every graphified project for communities still sitting as unlabeled
-# "Community N" placeholders (>10% threshold). Flag-only, NEVER auto-labels —
+# "Community N" placeholders (>10% threshold). Runs update-graphify-all.sh first
+# (2026-08-21) so the graph itself doesn't go stale just because nobody remembered
+# to update it manually — that script only rebuilds a project whose git HEAD moved
+# since its last graphify build, so a quiet week costs nothing extra. This refresh
+# immediately surfaced a real, previously-hidden finding on first run: My-Investment-
+# Port at 77% (387/497) unlabeled communities, invisible until its graph was current.
+# Flag-only, NEVER auto-labels —
 # a 2026-07-29 incident showed a single unsupervised batch labeling pass across
 # 11 projects at once silently produced garbage for 6 of them (e.g. "Fixed"
 # reused as a community name 563 times) while self-reporting 100% success.
@@ -94,6 +119,52 @@ uv run ~/.claude/scripts/memory_vector_search.py "<query>" [--limit N]
 # in an 8-day sample), launchd coalesces missed StartCalendarInterval events on wake.
 # Not portable via install-cron.sh; the plists themselves are the source of truth and
 # must be copied + `launchctl load`ed manually on a new machine.
+
+~/.claude/scripts/kouen-task-scheduler.sh [--force]
+# Daily passive check (launchd, com.claude.kouen-task-scheduler, 08:05) of Kouen's
+# Task Dashboard -- reads ~/Library/Application Support/Kouen/tasks.json directly
+# (same store kouenTaskList reads from), zero MCP/session cost. Writes a dated
+# report to agent-memory/kouen-task-checks/ only when it finds an open task,
+# surfaced via session-start.sh's auto_act_check like evals/candidate-checks.
+# Replaced the old kouenAutomationCreate daily-spawn trigger (2026-08-21) that
+# fired a full interactive session every day regardless of whether anything
+# was due -- see rules/routing.md's Kouen Task Sync section for the full story.
+
+~/.claude/scripts/lib/kouen-spawn.sh
+# Shared function kouen_spawn_and_prompt "<prompt>" -- spawns a real Kouen
+# session via kouen-cli (~/Library/Application Support/Kouen/bin/kouen-cli,
+# a separate binary from the MCP server, no agent context needed) and types a
+# prompt into it. Polls capture-pane for the "Claude Code" TUI marker before
+# sending the prompt (a flat sleep raced a slow boot in testing and silently
+# dropped it). Sourced by kouen-task-watch.sh and scheduler-event-watch.sh.
+
+~/.claude/scripts/kouen-task-watch.sh
+# Event-driven companion to kouen-task-scheduler.sh (launchd WatchPaths on
+# tasks.json itself, com.claude.kouen-task-watch -- no interval, fires the
+# instant the file changes). On a genuinely new open task ID (de-duped via
+# agent-memory/.state/kouen-task-watch-seen.txt), spawns a real session
+# immediately instead of waiting for the next passive check. Proactive ping
+# restored without the old design's waste: cost is paid only when a task
+# genuinely exists.
+
+~/.claude/scripts/scheduler-event-watch.sh <scheduler-script> <report-dir> <label>
+# Generalizes kouen-task-watch.sh's pattern to any other DUE-report scheduler
+# whose trigger is really "a specific file changed": eval-scheduler.sh
+# (agent-memory/SKILL-LOG.md, com.claude.eval-scheduler-watch), candidate-
+# scheduler.sh (skills/candidates/, com.claude.candidate-scheduler-watch),
+# routing-adherence-scheduler.sh (agent-memory/routing-nudges.log,
+# com.claude.routing-adherence-watch). On the watched path changing: re-runs
+# the scheduler script --force, and if today's report now has an actionable
+# bullet (same test auto_act_check uses) and hasn't already spawned today
+# (per-label per-date marker in agent-memory/.state/), spawns a session told
+# to run session-start.sh and act on its Auto-act section for that label --
+# no per-scheduler instructions duplicated here, they live in session-start.sh
+# once. Deliberately NOT extended to graphify-label-scheduler.sh (scans many
+# dynamic per-project paths, no single file to watch), build-cache-scheduler.sh
+# (auto-applies, no human/AI review step to wake a session for), or
+# memory-decay-scheduler.sh (staleness is elapsed time, not a discrete event --
+# also an informational digest, not an auto_act_check item). The daily launchd
+# timer for each covered scheduler still runs too, as a fallback.
 
 python3 ~/.claude/scripts/install-hooks.py [path-to-settings.json]
 # settings.json is gitignored (personal, machine-local) so hook wiring (interview-gate,

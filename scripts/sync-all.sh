@@ -80,7 +80,19 @@ mirror_dir() {
   fi
 
   mkdir -p "$dst"
-  rsync -a --delete --exclude="*.DS_Store" "${extra_excludes[@]}" "$src/" "$dst/" > /dev/null 2>&1
+  # Bash 3.2 (macOS system default) treats "${extra_excludes[@]}" on a
+  # zero-length array as an unbound-variable error under `set -u` -- every
+  # mirror_dir call with no extra excludes (rules/commands/agents, i.e.
+  # everything except the memory step) aborted the whole script here.
+  # Confirmed live 2026-08-21: `sync-all.sh --only rules` failed with
+  # "extra_excludes[@]: unbound variable"; an unfiltered `sync-all.sh` run
+  # would have died at the very first Rules call, likely explaining why
+  # CLAUDE.md's propagation to AGENTS.md/GEMINI.md had drifted 3+ weeks.
+  if [ ${#extra_excludes[@]} -gt 0 ]; then
+    rsync -a --delete --exclude="*.DS_Store" "${extra_excludes[@]}" "$src/" "$dst/" > /dev/null 2>&1
+  else
+    rsync -a --delete --exclude="*.DS_Store" "$src/" "$dst/" > /dev/null 2>&1
+  fi
   local count
   count=$(find "$dst" -type f | wc -l | tr -d ' ')
   echo -e "    ${GREEN}✅ $label → $dst ($count files)${NC}"

@@ -44,6 +44,37 @@ if [[ -f "$GATE_STATE" ]] && grep -q "^- Status: OPEN *$" "$GATE_STATE" 2>/dev/n
   sep
 fi
 
+# ── agent-memory/PLAYBOOK.md: corroborated patterns, most-proven first ──
+# Applied+Prevented is our existing evidence-count signal (same role as
+# Atlaso's manual thin/settled/contested labels, or Memento/MEMTIER's
+# episodic->semantic promotion weight) — it already exists in the file but
+# was never surfaced at the point memory actually gets read. Same
+# `while IFS='|' read` row-parse memory-decay-scheduler.sh already uses.
+PLAYBOOK_FILE=$(find "$PROJ/agent-memory" -maxdepth 1 -iname "playbook.md" 2>/dev/null | head -1 || true)
+if [[ -n "${PLAYBOOK_FILE:-}" && -f "$PLAYBOOK_FILE" ]]; then
+  trim() { sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' <<< "$1"; }
+  playbook_lines=$(
+    while IFS='|' read -r _ id trigger fix domain outcome applied prevented _; do
+      id=$(trim "$id")
+      [[ "$id" != CASE-* ]] && continue
+      applied=$(trim "$applied")
+      prevented=$(trim "$prevented")
+      [[ "$applied" =~ ^[0-9]+$ ]] || continue
+      [[ "$prevented" =~ ^[0-9]+$ ]] || continue
+      total=$((applied + prevented))
+      domain=$(trim "$domain")
+      trigger=$(trim "$trigger")
+      printf '%03d|%s (%dx: %d applied + %d prevented) %s — %s\n' \
+        "$total" "$id" "$total" "$applied" "$prevented" "$domain" "$trigger"
+    done < "$PLAYBOOK_FILE" | sort -t'|' -k1,1rn | cut -d'|' -f2- | head -10
+  )
+  if [[ -n "$playbook_lines" ]]; then
+    echo "## Playbook — corroborated patterns, most-proven first (agent-memory/PLAYBOOK.md)"
+    while IFS= read -r line; do echo "- $line"; done <<< "$playbook_lines"
+    sep
+  fi
+fi
+
 # ── Auto-act: unattended-detected eval/candidate DUE reports needing action,
 # not just review. Cron (eval-scheduler.sh, candidate-scheduler.sh) detects
 # unattended; the actual write/promote step only ever runs inside a real
@@ -77,6 +108,7 @@ auto_act_check "evals" "Skill Eval"
 auto_act_check "candidate-checks" "Skill Candidates"
 auto_act_check "routing-adherence-checks" "Routing Adherence" "review each gap — a keyword nudge firing with no matching Skill() call can be a real routing miss or a correctly-judged false positive (keyword matched quoted/reported text, not the user's actual ask). Only act on real misses: note a recurring pattern in a feedback memory, or flag the specific skill-keywords.json rule if it's producing noise. Don't blanket-treat every listed gap as a violation."
 auto_act_check "graphify-label-checks" "Graphify Semantic Labels" "dispatch labeling to agy/an agent ONE PROJECT AT A TIME (never a single batch across all flagged projects — that produced garbage labels silently before), then quality-check each result (duplicate-label ratio + spot-check community membership in graph.json) before trusting it, reverting via git checkout or the graphify-out/<date>/ backup folder if it fails. Otherwise leave 'proposed' with a one-line reason."
+auto_act_check "kouen-task-checks" "Kouen Tasks" "run rules/routing.md's Kouen Task Sync flow for each open task listed above — confirm the project per task with the user via AskUserQuestion first, never auto-file or auto-act on a guess."
 
 # ── agent-memory/digest: today's daily digest, if generated ──
 DIGEST_FILE="$HOME/.claude/agent-memory/digest/$(date '+%Y-%m-%d').md"
