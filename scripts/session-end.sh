@@ -88,4 +88,16 @@ if [[ -f "$ROUTING_ADHERENCE_SCHEDULER" ]]; then
   echo ""
 fi
 
+# ── 9. Memory backup sync (global, not per-project) ────────────────────────
+# Mirrors this project's agent-memory/ + ~/.claude/projects/*/memory/ into
+# agent-memory-private and pushes. Script itself is idempotent (no-op commit
+# skipped if nothing changed), so safe to run on every session end rather
+# than waiting for the daily 08:45 launchd run.
+MEMORY_BACKUP_SYNC="$HOME/.claude/scripts/memory-backup-sync.sh"
+if [[ -f "$MEMORY_BACKUP_SYNC" ]]; then
+  echo "▸ Memory backup sync"
+  bash "$MEMORY_BACKUP_SYNC" 2>&1 | sed 's/^/  /' || true
+  echo ""
+fi
+
 echo "═══ done ════════════════════════════════════════"

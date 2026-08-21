@@ -58,6 +58,15 @@ if git diff --cached --quiet; then
   exit 0
 fi
 
+# Refresh the fact-graph (graphify-out/) over the synced memory content --
+# wikilinks ([[name]]) between memory files resolve as real graph edges, this
+# is what closes the Hermes "Holographic" fact-graph gap. AST-only, no LLM/API
+# cost. Re-stage afterward to catch graphify-out/*.md changes in this commit.
+if command -v graphify &>/dev/null; then
+  graphify update "$BACKUP_REPO" 2>&1 | tail -3
+  git add -A
+fi
+
 git commit -q -m "sync: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 git push -q origin main
 echo "synced and pushed"
