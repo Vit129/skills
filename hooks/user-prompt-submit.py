@@ -20,6 +20,17 @@ STATE_PATH = Path.home() / ".claude" / "agent-memory" / ".state" / "memory-passi
 NUDGES_LOG = Path.home() / ".claude" / "agent-memory" / "routing-nudges.log"
 COOLDOWN_TURNS = 3
 
+# Headless automation projects whose `claude -p` worker prompts are never
+# interactive routing decisions -- routing.md's Skill Map governs live
+# sessions, not a scripted one-shot report-generation prompt. Confirmed
+# noise source 2026-08-21: stock-report-bot/claude_worker.py's daily
+# "portfolio pulse" prompt fired the "portfolio" keyword nudge 4 days
+# running (08-18 through 08-21) with no session ever able to call Skill()
+# in response, since no interactive agent is present to act on the nudge.
+HEADLESS_AUTOMATION_PROJECTS = (
+    "/Git/Personal/stock-report-bot",
+)
+
 # "project"-type memory only ever gets written via explicit correction/
 # confirmation phrases (the check above) or session-end/manual memory-curator
 # — neither fires on "did substantial work happen." A 2026-08-11 session
@@ -90,13 +101,19 @@ MEMORY_NUDGE = (
 )
 
 
-def check_skill_trigger(prompt, session_id):
+def check_skill_trigger(prompt, session_id, cwd=None):
     """Soft nudge only -- this does not block, and a match is not proof of a
     routing miss (a keyword can land inside quoted/reported text that isn't
     the user's actual ask). Every fire is logged to routing-nudges.log so
     scripts/routing-adherence-scheduler.sh can later check whether the
     suggested skill actually got invoked in this session -- previously the
-    nudge fired and vanished with no record either way."""
+    nudge fired and vanished with no record either way.
+
+    Skips entirely for HEADLESS_AUTOMATION_PROJECTS: a scripted `claude -p`
+    worker prompt has no interactive agent present to act on the nudge, so
+    firing it there is guaranteed noise, not a routing decision point."""
+    if cwd and any(p in cwd for p in HEADLESS_AUTOMATION_PROJECTS):
+        return None
     try:
         rules = json.loads((HOOKS_DIR / "skill-keywords.json").read_text())
         low = prompt.lower()
@@ -221,10 +238,11 @@ def main():
     prompt = data.get("prompt", "")
     session_id = data.get("session_id", "unknown")
     transcript_path = data.get("transcript_path")
+    cwd = data.get("cwd")
 
     messages = [
         m for m in (
-            check_skill_trigger(prompt, session_id),
+            check_skill_trigger(prompt, session_id, cwd),
             check_memory_passive_review(prompt, session_id),
             check_project_memory_nudge(session_id, transcript_path),
         ) if m

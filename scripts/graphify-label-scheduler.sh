@@ -12,6 +12,13 @@
 # labels for 6 of them — e.g. "Fixed"/"Added"/"Changed" reused as community
 # names hundreds of times — while self-reporting 100% success. Labeling
 # quality needs a human/AI in the loop per project, not a cron job.
+#
+# Runs update-graphify-all.sh first (2026-08-21) so the graph itself doesn't
+# go stale just because the user forgets to update it manually -- that script
+# already only rebuilds a project whose git HEAD has moved since its last
+# graphify build (no --force here), so this stays cheap on weeks with no new
+# commits. Was a real gap: update-graphify-all.sh existed but nothing ever
+# called it automatically.
 
 STATE="$HOME/.claude/agent-memory/GRAPHIFY-LABEL-STATE.md"
 LOG_DIR="$HOME/.claude/agent-memory/graphify-label-checks"
@@ -43,6 +50,8 @@ fi
 
 LOG_FILE="$LOG_DIR/${TODAY}.md"
 
+UPDATE_LOG=$(bash "$HOME/.claude/scripts/update-graphify-all.sh" 2>&1)
+
 # check_project <label> <project-dir>
 check_project() {
   local label="$1" proj="$2"
@@ -66,6 +75,12 @@ check_project() {
   echo "GRAPHIFY_LABEL_CHECK_DUE"
   echo "---"
   echo "## Graphify Semantic-Label Snapshot ($TODAY)"
+  echo ""
+  echo "### Graph refresh (update-graphify-all.sh, this run)"
+  echo ""
+  echo '```'
+  echo "$UPDATE_LOG"
+  echo '```'
   echo ""
   echo "### Projects with unlabeled communities (>${PLACEHOLDER_THRESHOLD_PCT}% placeholder):"
   echo ""

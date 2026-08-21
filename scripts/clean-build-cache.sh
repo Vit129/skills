@@ -18,8 +18,23 @@ for arg in "$@"; do
   esac
 done
 
-# no-touch: third-party repo, read-only per rules/core.md
-SKIP_DIRS=("$ROOT/9arm-skills")
+# no-touch: subtrees that look like build/cache dirs by name but aren't
+# disposable -- deleting them breaks working software, not just frees space.
+#   9arm-skills           -- third-party repo, read-only per rules/core.md
+#   .kiro/extensions      -- installed editor extensions; their dist/
+#                            node_modules IS the shipped runtime, not a
+#                            locally-generated cache (verified 2026-08-21:
+#                            ms-python, robocorp, rainbow-csv, rest-client)
+#   .claude/plugins/marketplaces -- plugin source, may include committed dist/
+#   .claude/jobs                 -- OTHER background jobs' live working dirs
+# Hardcoded absolute paths (not relative to $ROOT) since this script now
+# also runs against ~/.claude and ~/.kiro as roots, not just ~/Git/Personal.
+SKIP_DIRS=(
+  "$HOME/Git/Personal/9arm-skills"
+  "$HOME/.kiro/extensions"
+  "$HOME/.claude/plugins/marketplaces"
+  "$HOME/.claude/jobs"
+)
 
 NAMES=(node_modules dist build .next .nuxt .turbo .cache .venv .build __pycache__ .pytest_cache DerivedData)
 
