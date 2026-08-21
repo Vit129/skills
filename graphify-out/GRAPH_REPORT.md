@@ -1,16 +1,16 @@
-# Graph Report - .claude  (2026-08-07)
+# Graph Report - .claude  (2026-08-21)
 
 ## Corpus Check
-- 506 files · ~271,812 words
+- 579 files · ~318,779 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 4664 nodes · 4478 edges · 482 communities (406 shown, 76 thin omitted)
-- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.71)
+- 4974 nodes · 4824 edges · 521 communities (435 shown, 86 thin omitted)
+- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 17 edges (avg confidence: 0.68)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ee5f33e9`
+- Built from commit: `114521ff`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -24,7 +24,7 @@
 7. `FileUploadHelper` - 17 edges
 8. `Agent Memory` - 17 edges
 9. `PaginationHelper` - 16 edges
-10. `Task Design` - 16 edges
+10. `Memory Decay Snapshot (2026-08-17)` - 16 edges
 
 ## Cross-Cutting Nodes (span the most distinct areas of the codebase)
 A high-degree node isn't always architecturally central - a widely-used
@@ -49,11 +49,15 @@ node's neighbors span, not by raw edge count.
   hooks/design-gate.py → hooks/_gate_common.py
 - `main()` --calls--> `skill_invoked()`  [INFERRED]
   hooks/interview-gate.py → hooks/_gate_common.py
+- `content_scan_verdict()` --calls--> `scan()`  [INFERRED]
+  hooks/project-skill-trust-gate.py → hooks/memory-write-scan.py
+- `cmd_list()` --calls--> `build_timeline()`  [INFERRED]
+  scripts/journey_tui.py → scripts/journey_timeline.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (482 total, 76 thin omitted)
+## Communities (521 total, 86 thin omitted)
 
 ### Community 0 - "API Date & Utility Helpers"
 Cohesion: 0.07
@@ -312,8 +316,8 @@ Cohesion: 0.13
 Nodes (14): 1. องค์ประกอบงบการเงินฉบับเต็ม, 2. งบกระแสเงินสด (Cash Flow Statement), 3 กิจกรรม, 3. หมายเหตุประกอบงบการเงิน, 4. Segment Reporting (TFRS 8), 5. ประเภทความเห็นผู้สอบบัญชี, 6. Deferred Tax (TAS 12), Key Audit Matters (KAM) (+6 more)
 
 ### Community 70 - "Core Rules"
-Cohesion: 0.14
-Nodes (13): Core Rules, Do, Don't, Done-gate (MANDATORY — last action before Done), Git, Git Identity by Path, Memory Protocol, No-Touch Paths (+5 more)
+Cohesion: 0.13
+Nodes (14): Core Rules, Do, Don't, Done-gate (MANDATORY — last action before Done), Git, Git Identity by Path, Local Worktree Dirs Must Be Gitignored, Memory Protocol (+6 more)
 
 ### Community 71 - "Batch Update Skills Script"
 Cohesion: 0.22
@@ -532,8 +536,8 @@ Cohesion: 0.18
 Nodes (11): Agent Compatibility, Architecture, Core Commands, Cross-Agent Memory, Headroom — Context Compression for AI Agents, headroom learn (auto-improve CLAUDE.md), MCP Server, Routing Table (+3 more)
 
 ### Community 126 - "Skill Routing"
-Cohesion: 0.18
-Nodes (10): Browser Automation Tool Priority, Chained Routes Run to Completion, Continuation, Cross-Project Stack Detection, Kouen Task Sync (Kouen's own Task Dashboard → a real project plan), Mid-Chain Re-Routing, Principle, Skill Map (+2 more)
+Cohesion: 0.13
+Nodes (14): Browser Automation Tool Priority, Chained Routes Run to Completion, Claude Code Plugin vs Portable Skill, Continuation, Cross-Project Stack Detection, Kouen Task Sync (Kouen's own Task Dashboard → a real project plan), Mid-Chain Re-Routing, Principle (+6 more)
 
 ### Community 127 - "Algorithm of Thought (AoT)"
 Cohesion: 0.18
@@ -812,8 +816,8 @@ Cohesion: 0.22
 Nodes (8): Async Tests, Isolating from SessionCoordinator / NSApp, @MainActor Tests, Naming Convention, Package.swift — Adding a Test Target, Swift 6 XCTest Reference, Task.detached in Production Code, Testing @Observable Models
 
 ### Community 199 - "Agent Memory Index"
-Cohesion: 0.25
-Nodes (4): Archived Decisions (settled > 30 days, no longer "active"), Agent Memory Index, Knowledge, Plans
+Cohesion: 0.15
+Nodes (8): Agent Memory Index, Knowledge, Plans, Archived Decisions (settled > 30 days, no longer "active"), Active Patterns, English Grammar Patterns — Vit, Notes, Session Log
 
 ### Community 200 - "Ponytail — Lazy Senior Dev Mode"
 Cohesion: 0.25
@@ -952,8 +956,8 @@ Cohesion: 0.12
 Nodes (13): DesignSystemGenerator, _filter_anti_patterns_for_mode(), Drop "avoid dark mode" advice once dark mode is the resolved answer., Generates design system recommendations from aggregated searches., Load reasoning rules from CSV., Execute searches across multiple domains., Find matching reasoning rule for a category., Apply reasoning rules to search results. (+5 more)
 
 ### Community 235 - "Skills to Evaluate (2026-07-27)"
-Cohesion: 0.12
-Nodes (16): Accountant-Learning, agy-plugin-cc, agy-plugin-codex, Auto-memory name collisions (active vs archive, or duplicate active):, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d:, Global skills — zero recorded uses since usage-log start: (+8 more)
+Cohesion: 0.19
+Nodes (15): build_identity_text(), build_index(), discover_projects(), load_calibrated_thresholds(), load_index(), main(), Path, query() (+7 more)
 
 ### Community 236 - "Japanese Learning Patterns — Vit"
 Cohesion: 0.29
@@ -1108,8 +1112,8 @@ Cohesion: 0.29
 Nodes (6): Component Rules, Hook Rules, Modern React Reference, Performance, React 19 Form and Optimistic Patterns, Server State
 
 ### Community 275 - "Skills to Evaluate (2026-07-29)"
-Cohesion: 0.12
-Nodes (16): Accountant-Learning, agy-plugin-cc, agy-plugin-codex, Auto-memory name collisions (active vs archive, or duplicate active):, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d:, Global skills — zero recorded uses since usage-log start: (+8 more)
+Cohesion: 0.11
+Nodes (17): Accountant-Learning, agent-memory-private, agy-plugin-cc, agy-plugin-codex, Auto-memory name collisions (active vs archive, or duplicate active):, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d: (+9 more)
 
 ### Community 276 - "Decision Tree"
 Cohesion: 0.33
@@ -1276,8 +1280,8 @@ Cohesion: 0.40
 Nodes (4): Claude Code Plugin — Manual Install Guide, Common mistakes, Verify, When to use
 
 ### Community 317 - "English Grammar Patterns — Vit"
-Cohesion: 0.40
-Nodes (4): Active Patterns, English Grammar Patterns — Vit, Notes, Session Log
+Cohesion: 0.11
+Nodes (17): Accountant-Learning, agent-memory-private, agy-plugin-cc, agy-plugin-codex, Auto-memory name collisions (active vs archive, or duplicate active):, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d: (+9 more)
 
 ### Community 318 - "Statusline Setup & Troubleshooting"
 Cohesion: 0.40
@@ -1440,12 +1444,12 @@ Cohesion: 0.40
 Nodes (4): Process, Re-running, Rules, Ubiquitous Language
 
 ### Community 358 - "Memory Write Scan Hook"
-Cohesion: 0.83
-Nodes (3): is_memory_path(), main(), scan()
+Cohesion: 0.23
+Nodes (12): is_memory_path(), main(), scan(), content_scan_verdict(), find_project_root(), is_trusted(), _load_content_scanner(), main() (+4 more)
 
 ### Community 359 - "User Prompt Submit Hook"
-Cohesion: 0.60
-Nodes (4): check_memory_passive_review(), check_skill_trigger(), main(), Soft nudge only -- this does not block, and a match is not proof of a     routin
+Cohesion: 0.07
+Nodes (36): BaseHTTPRequestHandler, datetime, check_memory_passive_review(), check_project_memory_nudge(), check_skill_trigger(), count_uncaptured_work(), is_memory_path(), main() (+28 more)
 
 ### Community 360 - "Memory Decay Scheduler Script"
 Cohesion: 0.60
@@ -1524,18 +1528,22 @@ Cohesion: 0.50
 Nodes (3): Load Order, Official Documentation Anchors, React and Web Frontend
 
 ### Community 382 - "Candidate Snapshot (2026-07-25)"
-Cohesion: 0.12
-Nodes (16): Accountant-Learning, agy-plugin-cc, agy-plugin-codex, Auto-memory name collisions (active vs archive, or duplicate active):, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d:, Global skills — zero recorded uses since usage-log start: (+8 more)
+Cohesion: 0.11
+Nodes (17): Accountant-Learning, agent-memory-private, agy-plugin-cc, agy-plugin-codex, Auto-memory name collisions (active vs archive, or duplicate active):, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d: (+9 more)
 
 ### Community 383 - "Candidate Snapshot (2026-07-26)"
-Cohesion: 0.12
-Nodes (16): Accountant-Learning, agy-plugin-cc, agy-plugin-codex, Auto-memory name collisions (active vs archive, or duplicate active):, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d:, Global skills — zero recorded uses since usage-log start: (+8 more)
+Cohesion: 0.11
+Nodes (17): Accountant-Learning, agent-memory-private, agy-plugin-cc, agy-plugin-codex, Auto-memory name collisions (active vs archive, or duplicate active):, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d: (+9 more)
 
 ### Community 384 - "Candidate Snapshot (2026-07-27)"
+Cohesion: 0.11
+Nodes (17): Accountant-Learning, agent-memory-private, agy-plugin-cc, agy-plugin-codex, Auto-memory name collisions (active vs archive, or duplicate active):, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d: (+9 more)
+
+### Community 385 - "Candidate Snapshot (2026-07-29)"
 Cohesion: 0.12
 Nodes (16): Accountant-Learning, agy-plugin-cc, agy-plugin-codex, Auto-memory name collisions (active vs archive, or duplicate active):, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d:, Global skills — zero recorded uses since usage-log start: (+8 more)
 
-### Community 385 - "Candidate Snapshot (2026-07-29)"
+### Community 398 - "Skill Usage Log Hook"
 Cohesion: 0.12
 Nodes (16): Accountant-Learning, agy-plugin-cc, agy-plugin-codex, Auto-memory name collisions (active vs archive, or duplicate active):, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d:, Global skills — zero recorded uses since usage-log start: (+8 more)
 
@@ -1544,8 +1552,8 @@ Cohesion: 0.12
 Nodes (16): Accountant-Learning, agy-plugin-cc, agy-plugin-codex, Auto-memory name collisions (active vs archive, or duplicate active):, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d:, Global skills — zero recorded uses since usage-log start: (+8 more)
 
 ### Community 431 - "Agent Memory Eval State Reference"
-Cohesion: 0.33
-Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-07-30)
+Cohesion: 0.12
+Nodes (16): Accountant-Learning, agy-plugin-cc, agy-plugin-codex, Auto-memory name collisions (active vs archive, or duplicate active):, Fitness-Tracker, Global (~/.claude), Global skill-candidates untouched >90d:, Global skills — zero recorded uses since usage-log start: (+8 more)
 
 ### Community 433 - "Fitness Personal Context"
 Cohesion: 0.19
@@ -1572,32 +1580,48 @@ Cohesion: 0.25
 Nodes (7): `design-system/<project>/MASTER.md` / `DESIGN.md` audit, Output shape, Stamp-vs-page check, Structural fingerprint check, The `audit` Trigger — Read-Only Quality Check, What `audit` does, When to hand off
 
 ### Community 441 - "Memory Index"
-Cohesion: 0.33
-Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-08-01)
+Cohesion: 0.16
+Nodes (10): Architecture (confirmed 2026-08-13, from source + a live DB query — not guessed), docs/wiremock-playbook.html — added 2026-08-13, Full `/confirm` saga scope — investigated 2026-08-13, NOT attempted (correctly, not a gap), Full pass over dev-sales-return's external integrations — 2026-08-13, Local end-to-end verification — CONFIRMED WORKING, 2026-08-13, Next concrete step, Real SAP response capture — resolved 2026-08-13, no live call needed, sap-mock/ — SAP-facing endpoints (RMA + CN/DN), port 8093 (+2 more)
 
 ### Community 442 - "MEMORY.md Module"
-Cohesion: 0.33
-Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-08-02)
+Cohesion: 0.18
+Nodes (10): Context, Critical files, Critical findings baked into the design (verified this session, not guesses), Directory — `~/Git/Personal/stock-report-bot/` (new, standalone, sibling to `line-claude-bot`), `.env` (independent copy of the LINE secrets already sitting in `line-claude-bot/.env` — no shared runtime between the two standalone processes), Flow (`main.py`, called by `scripts/run.sh` only after the throttle gate passes), Recommended Approach, Scheduling — `scripts/run.sh` (throttle pattern copied from `~/.claude/scripts/candidate-scheduler.sh`, `CHECK_INTERVAL_DAYS=14`) (+2 more)
 
 ### Community 443 - "MEMORY.md Module"
-Cohesion: 0.33
-Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-08-03)
+Cohesion: 0.20
+Nodes (9): Context, Critical files, Directory layout — `~/Git/Personal/line-claude-bot/`, `.env` (gitignored — copy of the two secrets already known from this session, kept independent of `~/.claude/settings.json`'s `mcpServers.line-bot` block since this is a standalone always-on process, not a Claude Code MCP client), launchd (plists live in `~/Library/LaunchAgents/`, NOT checked into the repo — matches this workspace's existing convention that plists are loaded manually via `launchctl load`, not installed by any script), LINE → Claude chatbot (personal, single-user), Recommended Approach, Request flow (`server.py` + `claude_worker.py` + `line_client.py`) (+1 more)
 
 ### Community 444 - "Memory Index"
-Cohesion: 0.33
-Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-08-05)
+Cohesion: 0.24
+Nodes (6): Corrections to prior scope findings, How to apply going forward, Progress log (2026-08-16 gap-fill run, user instruction "เอาหมดเลยอ่ะ" = fill everything), Tier 1 — entire standards with ZERO lessons currently (highest priority, no overlap to reconcile), Tier 2 — existing lesson is shallow vs a much deeper/broader source (depth extensions, highest exam-value first), Memory Index
 
 ### Community 449 - "project_mode.md Module"
-Cohesion: 0.33
-Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-08-06)
+Cohesion: 0.22
+Nodes (8): `~/.claude/rules/routing.md` diff (Kouen Task Sync section — 3 line edits only), `~/.claude/scripts/project_router.py` (new), Content-based project router for Kouen Task Sync — Design, Context, Logical Design, Strategic Design, Tactical Design, Verification
 
 ### Community 451 - "2026-07-29.md"
 Cohesion: 0.50
 Nodes (3): Graphify Semantic-Label Snapshot (2026-07-29), Projects with unlabeled communities (>10% placeholder):, Result
 
+### Community 452 - "2026-07-30.md"
+Cohesion: 0.25
+Nodes (7): Artifacts, Context, Dev Task Progress — line-claude-bot, Infrastructure, Integration — launchd + tunnel auto-registration, Server Logic — Webhook receipt + dispatch, Summary
+
+### Community 453 - "2026-07-29.md"
+Cohesion: 0.25
+Nodes (7): Artifacts, Context, Dev Task Progress — stock-report-bot, Infrastructure, Integration — launchd throttle + scheduling, Server Logic — data + claude + delivery, Summary
+
+### Community 454 - "2026-07-30.md"
+Cohesion: 0.33
+Nodes (5): Daily Digest (2026-08-14), Decay flags, In-progress plans (first unchecked task), Paused gates, Pending auto-act reports
+
+### Community 455 - "workflow-usage-log.py"
+Cohesion: 0.33
+Nodes (5): Daily Digest (2026-08-15), Decay flags, In-progress plans (first unchecked task), Paused gates, Pending auto-act reports
+
 ### Community 464 - "Skills to Evaluate (2026-08-07)"
 Cohesion: 0.33
-Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-08-07)
+Nodes (5): Daily Digest (2026-08-16), Decay flags, In-progress plans (first unchecked task), Paused gates, Pending auto-act reports
 
 ### Community 465 - "The `redesign` Trigger — Same Content, Different Structural Fingerprint"
 Cohesion: 0.33
@@ -1615,22 +1639,96 @@ Nodes (6): _query_wants_dark(), True when a styles.csv row describes itself as d
 Cohesion: 0.83
 Nodes (3): _check_file(), main(), _read_rows()
 
+### Community 470 - "2026-08-01.md"
+Cohesion: 0.33
+Nodes (5): Daily Digest (2026-08-17), Decay flags, In-progress plans (first unchecked task), Paused gates, Pending auto-act reports
+
+### Community 471 - "2026-08-02.md"
+Cohesion: 0.33
+Nodes (5): Daily Digest (2026-08-18), Decay flags, In-progress plans (first unchecked task), Paused gates, Pending auto-act reports
+
+### Community 472 - "2026-08-03.md"
+Cohesion: 0.33
+Nodes (5): Daily Digest (2026-08-19), Decay flags, In-progress plans (first unchecked task), Paused gates, Pending auto-act reports
+
+### Community 473 - "2026-08-05.md"
+Cohesion: 0.33
+Nodes (5): Daily Digest (2026-08-20), Decay flags, In-progress plans (first unchecked task), Paused gates, Pending auto-act reports
+
+### Community 474 - "2026-08-06.md"
+Cohesion: 0.33
+Nodes (5): Daily Digest (2026-08-21), Decay flags, In-progress plans (first unchecked task), Paused gates, Pending auto-act reports
+
+### Community 475 - "2026-08-07.md"
+Cohesion: 0.33
+Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-08-14)
+
+### Community 476 - "2026-08-01.md"
+Cohesion: 0.33
+Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-08-15)
+
+### Community 477 - "2026-08-02.md"
+Cohesion: 0.33
+Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-08-16)
+
+### Community 482 - "Skills to Evaluate (2026-08-17)"
+Cohesion: 0.33
+Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-08-17)
+
+### Community 483 - "Skills to Evaluate (2026-08-18)"
+Cohesion: 0.33
+Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-08-18)
+
+### Community 484 - "Skills to Evaluate (2026-08-19)"
+Cohesion: 0.33
+Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-08-19)
+
+### Community 485 - "Skills to Evaluate (2026-08-20)"
+Cohesion: 0.33
+Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-08-20)
+
+### Community 486 - "Skills to Evaluate (2026-08-21)"
+Cohesion: 0.33
+Nodes (5): Pending improvements:, Report result here (append below this line, before the next scheduled run overwrites nothing -- this file is dated, not appended-over), Result, Run: pass@3 eval on each skill above, Skills to Evaluate (2026-08-21)
+
+### Community 489 - "2026-08-19.md"
+Cohesion: 0.50
+Nodes (3): Graphify Semantic-Label Snapshot (2026-08-19), Projects with unlabeled communities (>10% placeholder):, Result
+
+### Community 490 - "Task Progress — Content-based Project Router"
+Cohesion: 0.50
+Nodes (3): Done, Next (deferred, out of this feature's scope), Task Progress — Content-based Project Router
+
+### Community 491 - "cloudflared quick tunnel unreachable — QUIC blocked by local network"
+Cohesion: 0.50
+Nodes (3): cloudflared quick tunnel unreachable — QUIC blocked by local network, Context & Problem, Learned Solution
+
+### Community 492 - "Script works when run manually, hangs/fails silently under launchd"
+Cohesion: 0.50
+Nodes (3): Context & Problem, Learned Solution, Script works when run manually, hangs/fails silently under launchd
+
+### Community 493 - "An empty launchd log file can mean "succeeded silently," not "broken""
+Cohesion: 0.50
+Nodes (3): An empty launchd log file can mean "succeeded silently," not "broken", Context & Problem, Learned Solution
+
+### Community 494 - "Generating a launchd plist via bash heredoc — the `2>&1` XML trap"
+Cohesion: 0.50
+Nodes (3): Context & Problem, Generating a launchd plist via bash heredoc — the `2>&1` XML trap, Learned Solution
+
 ## Knowledge Gaps
-- **3005 isolated node(s):** `changelog`, `git`, `bootstrap-new-machine.sh script`, `build-cache-scheduler.sh script`, `candidate-scheduler.sh script` (+3000 more)
+- **3152 isolated node(s):** `changelog`, `git`, `bootstrap-new-machine.sh script`, `build-cache-scheduler.sh script`, `candidate-scheduler.sh script` (+3147 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **76 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
-- **1 possibly unreachable function(s):** `_resolveTarget.sh script`
+- **86 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **2 possibly unreachable function(s):** `_resolveTarget.sh script`, `resolve_and_validate()`
   Not reached from any recognized entry point - could be dead code, or dynamically dispatched/decorator-registered.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Playwright UI Testing - Rules & Templates` connect `Playwright UI Testing - Rules &` to `Advanced UI (Expert Tier)`, `Test Naming Conventions`, `Structure & Design`, `Locator Strategy`, `Coding Standards`, `Project Structure: Web UI Testing`, `Infrastructure & Scripts Standard (package.json)`, `Performance & Reliability`, `Interactions & Assertions`?**
-  _High betweenness centrality (0.001) - this node is a cross-community bridge._
-- **Why does `PART 1: Overview` connect `Project Structure: Web UI Testing` to `Playwright UI Testing - Rules &`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **What connects `changelog`, `git`, `Shared helpers for PreToolUse gate hooks. Fail-open: callers catch all errors.` to the rest of the system?**
-  _3057 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _3211 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `API Date & Utility Helpers` be split into smaller, more focused modules?**
   _Cohesion score 0.06901960784313725 - nodes in this community are weakly interconnected._
 - **Should `Fix Generated Playwright Files (Postman Migration)` be split into smaller, more focused modules?**
@@ -1638,4 +1736,6 @@ _Questions this graph is uniquely positioned to answer:_
 - **Should `Postman Collection Parser & Converter` be split into smaller, more focused modules?**
   _Cohesion score 0.06448202959830866 - nodes in this community are weakly interconnected._
 - **Should `Appium Testing (Android) - Rules &` be split into smaller, more focused modules?**
+  _Cohesion score 0.05405405405405406 - nodes in this community are weakly interconnected._
+- **Should `Appium Testing (iOS) - Rules &` be split into smaller, more focused modules?**
   _Cohesion score 0.05405405405405406 - nodes in this community are weakly interconnected._
